@@ -1,0 +1,4 @@
+
+TARGETS = DIR/submission.cgi \
+	  DIR/getpub.cgi
+	 

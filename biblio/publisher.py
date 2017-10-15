@@ -1,0 +1,152 @@
+#!_PYTHONLOC
+#
+#     (C) COPYRIGHT 2005-2017   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#       ALL RIGHTS RESERVED
+#
+#     The copyright notice above does not evidence any actual or
+#     intended publication of such source code.
+#
+#     Version: $Revision: 1.40 $
+#     Date: $Date: 2017/06/23 21:10:38 $
+
+
+import sys
+import os
+import string
+from SQLparsing import *
+from common import *
+from login import *
+
+
+if __name__ == '__main__':
+
+        try:
+                publisher_id = str(int(sys.argv[1]))
+                publisher = SQLGetPublisher(publisher_id)
+                if not publisher:
+                        raise
+	except:
+		PrintHeader('Publisher error')
+		PrintNavbar('publisher', '', 0, 'ea.cgi', '')
+                print '<h2>Error: Publisher not found.</h2>'
+		PrintTrailer('publisher', '', 0)
+		sys.exit(0)
+
+        user = User()
+        user.load()
+        
+	title = 'Publisher: %s' % publisher[PUBLISHER_NAME]
+	PrintHeader(title)
+	PrintNavbar('publisher', publisher_id, publisher_id, 'publisher.cgi', publisher_id)
+
+	print '<div class="ContentBox">'
+        other_publishers = SQLGetSimilarRecords(publisher_id, publisher[PUBLISHER_NAME], 'publishers', 'publisher_id', 'publisher_name')
+        if other_publishers:
+                print '<h3>Note: There are other publishers with the same name:'
+                displayRecordList('publisher', other_publishers)
+                print '</h3>'
+	print '<ul>'
+        # Transliterated name(s)
+        trans_names = SQLloadTransPublisherNames(publisher_id)
+        print '<li><b>Publisher: </b>%s' % translit_mouseover(trans_names, publisher[PUBLISHER_NAME], 'span')
+        printRecordID('Publisher', publisher_id, user.id)
+
+	# Webpages
+	webpages = SQLloadPublisherWebpages(int(publisher_id))
+	PrintWebPages(webpages)
+
+	# Local Wiki Link
+	if SQLwikiLinkExists('Publisher', publisher[PUBLISHER_NAME]):
+                print "<li><b>Publisher Comments:</b>"
+                publisher_name = 'Publisher:%s' % publisher[PUBLISHER_NAME]
+		print '<a href="http://%s/index.php/%s">%s</a>' % (WIKILOC, publisher_name, publisher_name)
+
+	# Publisher Note
+	if publisher[PUBLISHER_NOTE]:
+		print '<li>'
+		notes = SQLgetNotes(publisher[PUBLISHER_NOTE])
+		print FormatNote(notes, 'Note', 'short', publisher_id, 'Publisher')
+
+	print '</ul>'
+	print '</div>'
+
+        print '<div class="ContentBox">'
+        print '<h3 class="contentheader">Publication series data</h3>'
+        print '<ul class="unindent">'
+        # Retrieve the count of this publisher's publications not in a publication series
+        pubs_not_in_series = SQLCountPubsNotInPubSeries(publisher_id)
+        if pubs_not_in_series:
+                plural = ''
+                if pubs_not_in_series > 1:
+                        plural = 's'
+                display = '%d publication%s not in a publication series' % (pubs_not_in_series, plural)
+                if pubs_not_in_series > 500:
+                        display += ' (too many to display on one page)'
+                else:
+                        display = '<a href="http:/%s/pubs_not_in_series.cgi?%d">%s</a>' % (HTFAKE, int(publisher_id), display)
+                print '<li><b>%s</b>' % display
+
+        # Retrieve all Publication Series IDs used by this publisher
+        all_pub_series = SQLFindPubSeriesForPublisher(publisher_id)
+        if all_pub_series:
+                # Convert the list of series IDs into a comma-delimited string suitable for the SQL IN clause
+                list_of_series = []
+                for pub_series_id in all_pub_series:
+                        list_of_series.append(str(pub_series_id[0]))
+                list_of_series_as_string = ",".join(list_of_series)
+                all_pub_series = SQLLoadPubSeries(list_of_series_as_string)
+                for pub_series in all_pub_series:
+                        trans_names = SQLloadTransPubSeriesNames(pub_series[PUB_SERIES_ID])
+                        display_line = '<a href="http:/%s/pubseries.cgi?%s" dir="ltr">%s</a>' % (HTFAKE,
+                                        pub_series[PUB_SERIES_ID], pub_series[PUB_SERIES_NAME])
+                        print '<li>%s</li>' % translit_mouseover(trans_names, display_line, 'span')
+        print '</ul>'
+        print '</div>'
+
+        print '<div class="ContentBox">'
+        print '<h3 class="contentheader">Years When Books Were Published</h3>'
+	years = SQLGetPublisherYears(publisher_id)
+
+	print '<table class="yearblock">'
+
+	low_decade = 10000
+	hi_decade  = 0
+	for year in years:
+                exception = ''
+		if year == 0:
+                        exception = 'unknown'
+
+		if year == 8888:
+                        exception = unpublishedDate()
+
+		if year == 9999:
+                        exception = 'forthcoming'
+
+                if exception:
+			print '<tr>'
+			print '<td colspan="10">%s</td>' % ISFDBLink("publisheryear.cgi", "%s+%s" % (publisher_id, year), exception)
+			print '</tr>'
+
+		if (year != 0) and (year < 2100):
+			decade = 10*(int(year)/10)
+			if decade < low_decade:
+				low_decade = decade
+			if decade > hi_decade:
+				hi_decade = decade
+
+	decade = low_decade
+	while decade <= hi_decade:
+		year = decade
+		print '<tr>'
+		while year < decade+10:
+			if year in years:
+				print '<td>%s</td>' % ISFDBLink("publisheryear.cgi", "%s+%s" % (publisher_id, year), year)
+			else:
+				print "<td>------</td>"
+			year += 1
+		print "</tr>"
+		decade += 10
+	print '</table>'
+        print '</div>'
+
+	PrintTrailer('publisher', publisher_id, publisher_id)

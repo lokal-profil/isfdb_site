@@ -1,0 +1,21 @@
+
+######################################################################
+                  INSTALLATION INSTRUCTIONS
+######################################################################
+
+1] Update common/localdefs.py
+
+	HTMLLOC         = Base URL to html files
+	HTFAKE          = Base URL to cgi scripts
+	DBASEHOST       = Domain name of MySQL server; may be localhost
+	HTMLHOST        = Domain name
+	COOKIEHOST      = Domain name
+	USERNAME        = MySQL user name
+	PASSWORD        = MySQL user password
+
+2] Update INSTALLDIRS
+
+	INSTALL_CGI     = Local CGI binary directory
+	INSTALL_HTML    = Local HTML directory
+
+3] Run: make install

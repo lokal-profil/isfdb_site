@@ -1,0 +1,13 @@
+
+TARGETS = DIR/CurrentBanner \
+	  DIR/IsfdbBanner2.jpg \
+	  DIR/IsfdbBanner3.jpg \
+	  DIR/IsfdbBanner4.jpg \
+	  DIR/IsfdbBanner5.jpg \
+	  DIR/IsfdbBanner6.jpg \
+	  DIR/IsfdbBanner7.jpg \
+	  DIR/IsfdbBanner8.jpg \
+	  DIR/IsfdbBanner9.jpg \
+	  DIR/IsfdbBanner10.jpg \
+	  DIR/IsfdbBanner11.jpg \
+	  DIR/nightly_update.py

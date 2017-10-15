@@ -1,0 +1,6210 @@
+#!_PYTHONLOC
+# -*- coding: cp1252 -*-
+#
+#     (C) COPYRIGHT 2011-2017   Ahasuerus and Bill Longley
+#         ALL RIGHTS RESERVED
+#
+#     The copyright notice above does not evidence any actual or
+#     intended publication of such source code.
+#
+#     Version: $Revision: 1.139 $
+#     Date: $Date: 2017/08/31 20:10:54 $
+
+import string
+import sys
+import MySQLdb
+from isfdb import *
+from isfdblib import *
+from SQLparsing import *
+from library import *
+from login import User
+
+
+def PrintTableColumns(columns):
+	print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
+	print "<tr align=left bgcolor=\"#d6d6d6\">"
+	for column in columns:
+                if not column:
+                        data = '&nbsp;'
+                else:
+                        data = column
+                # Skip 'Ignore' and 'Resolve' columns if the user is not a moderator
+                if ('Ignore' in column or 'Resolve' in column) and not user.moderator:
+                        continue
+                print "<td><b>%s</b></td>" % data
+ 	print "</tr>"
+
+def nonModeratorMessage():
+        if not user.moderator:
+                print """<h2>If you find a record that is listed erroneously,
+                please post on the Moderator Noticeboard and a moderator will
+                remove it from this report.</h2>"""
+
+def function1():
+        query = """select c.cleanup_id, c.record_id, t.title_title  
+                from cleanup c, titles t
+                where c.record_id = t.title_id
+                and not exists
+                 (select ca.title_id from canonical_author ca where ca.title_id = t.title_id)
+                and c.report_type=1 
+                order by t.title_title"""
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Title',))
+                bgcolor = 1
+                count = 1
+                while record:
+                        title_id = record[0][1]
+                        title_title = record[0][2]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table><p>'
+        else:
+                print "<h2>No titles without authors found</h2>"
+
+def function2():
+        nonModeratorMessage()
+        query = """select c.cleanup_id, c.record_id, t.title_title
+                from cleanup c, titles t
+                where c.record_id=t.title_id and c.report_type=2 and c.resolved IS NULL
+                and t.title_parent is not null and t.title_parent <> 0
+                and not exists ( 
+                  select * from canonical_author vca, canonical_author pca 
+                  where vca.title_id = t.title_id and pca.title_id = t.title_parent 
+                  and vca.author_id = pca.author_id 
+                ) 
+                and not exists ( 
+                  select * from canonical_author vca, canonical_author pca, pseudonyms p 
+                  where vca.title_id = t.title_id and pca.title_id = t.title_parent 
+                  and p.pseudonym = vca.author_id and p.author_id = pca.author_id 
+                ) 
+                and not exists ( 
+                  select * from canonical_author vca, canonical_author pca 
+                  where vca.title_id = t.title_id and pca.title_id = t.title_parent 
+                  and (pca.author_id = 20754 or pca.author_id = 2862 or pca.author_id = 38721 
+                  or vca.author_id = 20754 or vca.author_id = 2862 or vca.author_id = 38721 
+                  or vca.author_id = 7977 or vca.author_id = 1449 or vca.author_id = 1414 
+                  or vca.author_id = 3781 or vca.author_id = 6358 or vca.author_id = 38941 
+                  or pca.author_id = 6677 or vca.author_id = 6677)
+                  )
+                 order by t.title_title"""
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('Count', 'Title','Ignore'))
+                bgcolor = 1
+                count = 1
+                while record:
+                        cleanup_id = record[0][0]
+                        title_id = record[0][1]
+                        title_title = record[0][2]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id, 2)
+                        bgcolor = bgcolor ^ 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table><p>'
+        else:
+                print "<h2>No VT-pseudonym mismatches found</h2>"
+
+def function3():
+        nonModeratorMessage()
+
+        query = """select c.cleanup_id, c.record_id, t1.title_title, t1.title_ttype 
+                from cleanup c, titles t1 where 
+                not exists (select 1 from pub_content p where t1.title_id=p.title_id) 
+                and not exists (select 1 from titles t2 where t1.title_id=t2.title_parent) 
+                and c.report_type=3
+                and c.record_id=t1.title_id 
+                and c.resolved IS NULL
+                order by t1.title_ttype, t1.title_title"""
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if not num:
+                print "<h2>No eligible titles without publications.</h2>"
+                return
+
+        record = result.fetch_row()
+        titles = {}
+        while record:
+                cleanup_id = record[0][0]
+                title_id = record[0][1]
+                title_title = record[0][2]
+                title_type = record[0][3]
+                if title_type not in titles:
+                        titles[title_type] = []
+                titles[title_type].append((cleanup_id, title_id, title_title))
+                record = result.fetch_row()
+
+        for title_type in titles.keys():
+                if not titles[title_type]:
+                        print "<h3>No %s titles without publications.</h3>" % title_type
+                        continue
+                PrintTableColumns(('', '%s titles' % title_type, 'Ignore'))
+                bgcolor = 1
+                count = 1
+                for title in titles[title_type]:
+                        cleanup_id = title[0]
+                        title_id = title[1]
+                        title_title = title[2]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id, 3)
+                        bgcolor ^= 1
+                        count += 1
+                print '</table><p>'
+
+def function4():
+        query = """select cleanup.record_id,
+                LENGTH(notes.note_note) - LENGTH(REPLACE(notes.note_note, '\"', '')) as count 
+                from cleanup, notes where cleanup.record_id=notes.note_id
+                and cleanup.report_type=4 and notes.note_note like '%http%' having count%2=1"""
+        MismatchesInNotes(query, 'Mismatched Double Quotes')
+
+def function5():
+        query = """select cleanup.record_id, notes.note_id,
+                LENGTH(notes.note_note) - LENGTH(REPLACE(notes.note_note, '<', '')) openquote, 
+                LENGTH(notes.note_note) - LENGTH(REPLACE(notes.note_note, '>', '')) closequote 
+                from cleanup, notes where cleanup.record_id=notes.note_id
+                and cleanup.report_type=5 having openquote != closequote"""
+        MismatchesInNotes(query, 'Mismatched Angle Brackets')
+
+def MismatchesInNotes(query, header):
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+	if not num:
+                print '<h2>No %s in Notes/Synopses</h2>' % header
+                return
+
+	record = result.fetch_row()
+        note_ids = []
+	while record:
+                note_id = str(record[0][0])
+                if not note_ids:
+                        note_ids = note_id
+                else:
+                        note_ids += ",%s" % note_id
+        	record = result.fetch_row()
+
+        OneType('pub_id', 'pub_title', 'pubs', 'Publications', 'pl', 'note_id', 'Notes', note_ids, header)
+        OneType('title_id', 'title_title', 'titles', 'Title Notes', 'title', 'note_id', 'Notes', note_ids, header)
+        OneType('title_id', 'title_title', 'titles', 'Title Synopses', 'title', 'title_synopsis', 'Synopses', note_ids, header)
+        OneType('series_id', 'series_title', 'series', 'Series', 'pe', 'series_note_id', 'Notes', note_ids, header)
+        OneType('publisher_id', 'publisher_name', 'publishers', 'Publishers', 'publisher', 'note_id', 'Notes', note_ids, header)
+        OneType('pub_series_id', 'pub_series_name', 'pub_series', 'Publication Series', 'pubseries', 'pub_series_note_id', 'Notes', note_ids, header)
+        OneType('award_id', 'award_title', 'awards', 'Awards', 'award_details', 'award_note_id', 'Notes', note_ids, header)
+        OneType('award_type_id', 'award_type_short_name', 'award_types', 'Award Types', 'awardtype', 'award_type_note_id', 'Notes', note_ids, header)
+        OneType('award_cat_id', 'award_cat_name', 'award_cats', 'Award Categories', 'award_category', 'award_cat_note_id', 'Notes', note_ids, header)
+
+def OneType(record_id, record_title, table, record_name, cgi_script, note_id, term, note_ids, header):
+        query = "select %s, %s from %s where %s in (%s) order by %s" % (record_id, record_title, table, note_id, note_ids, record_title)
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		PrintTableColumns(('', record_name))
+		bgcolor = 1
+                count = 1
+		while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print "<td>%d</td>" % count
+                        print '<td><a href="http:/%s/%s.cgi?%s">%s</a></td>' % (HTFAKE, cgi_script, record[0][0], record[0][1])
+                        print "</tr>"
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+                print "<h3>No %s with %s in %s</h3>" % (record_name, header, term)
+	print '<p>'
+
+def function6():
+	query = """select cleanup.cleanup_id, authors.author_id, authors.author_canonical, authors.author_lastname 
+                from cleanup, authors where REPLACE(authors.author_lastname,'&#','') REGEXP '^[[:punct:]]' 
+                and cleanup.record_id=authors.author_id and cleanup.report_type=6 and cleanup.resolved IS NULL"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('Author', 'Family Name', ''))
+		while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, record[0][1], record[0][2])
+                        print '<td>%s</td>' % record[0][3]
+                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+6">Ignore this family name</a></td>' % (HTFAKE, record[0][0])
+                        print '</tr>'
+			bgcolor ^= 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function7():
+        print 'This report identifies author names with:'
+        print '<ul>'
+        print '<li>Double spaces, leading spaces or trailing spaces'
+        print '<li>Double quotes (should be changed to single quotes)'
+        print """<li>Unrecognized suffixes or other cases where a period is adjacent to a letter.
+                The list of currently recognized suffixes includes
+                .com, .co.uk, B.A., B.Sc., D.D., D.Sc., Ed.D., Lit.D., Litt.D., M.A., M.B.I.S.,
+                M.B.I.F., M.D., M.E., M.S., Ph.D., P.J.F., R.I., U.S.A."""
+        print '</ul>'
+        print """If you would like to add another suffix to the list of recognized
+                suffixes, please post your request on the Community Portal."""
+        
+	query = """select cleanup.cleanup_id, authors.author_id, authors.author_canonical
+                   from cleanup, authors
+                   where cleanup.record_id = authors.author_id
+                   and cleanup.report_type = 7
+                   and cleanup.resolved IS NULL
+                   and authors.author_id in (
+                   select author_id from authors where author_canonical like ' %' UNION
+                   select author_id from authors where author_canonical like '% ' UNION
+                   select author_id from authors where author_canonical like '%  %' UNION
+                   select author_id from authors where author_canonical like '%\"%' UNION
+                   select author_id from authors where author_canonical REGEXP '[\\.|,][a-z]' = 1
+                   and author_canonical NOT LIKE '%.com'
+                   and author_canonical NOT LIKE '%.co.uk'
+                   and author_canonical NOT LIKE '%, B.A.%'
+                   and author_canonical NOT LIKE '%, B.Sc.%'
+                   and author_canonical NOT LIKE '%, D.D.%'
+                   and author_canonical NOT LIKE '%, D.Sc.%'
+                   and author_canonical NOT LIKE '%, Ed.D.%'
+                   and author_canonical NOT LIKE '%, Lit.D.%'
+                   and author_canonical NOT LIKE '%, Litt.D.%'
+                   and author_canonical NOT LIKE '%, M.A.%'
+                   and author_canonical NOT LIKE '%, M.B.I.S.%'
+                   and author_canonical NOT LIKE '%, M.B.I.F.%'
+                   and author_canonical NOT LIKE '%, M.D.%'
+                   and author_canonical NOT LIKE '%, M.E.%'
+                   and author_canonical NOT LIKE '%, M.S.%'
+                   and author_canonical NOT LIKE '%, Ph.D.%'
+                   and author_canonical NOT LIKE '%, P.J.F.%'
+                   and author_canonical NOT LIKE '%, R.I.%'
+                   and author_canonical NOT LIKE '%, U.S.A.%')"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Author', ''))
+		while record:
+                        cleanup_id = record[0][0]
+                        author_id = record[0][1]
+                        author_name = record[0][2]
+			PrintAuthorRecord(author_id, author_name, bgcolor, count, cleanup_id, 7)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function8():
+	query = """select t.title_id, t.title_title
+                from canonical_author ca, authors a, titles t, cleanup c
+                where ca.ca_status = 3 and ca.author_id = a.author_id
+                and ca.title_id = t.title_id and not exists
+                 (SELECT 1 from canonical_author ca2, titles t
+                  where ca.author_id = ca2.author_id and ca2.title_id = t.title_id
+                  and t.title_ttype != 'REVIEW' and ca2.ca_status = 1)
+                and c.report_type=8 and c.record_id=t.title_id and c.resolved IS NULL"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if not num:
+		print "<h2>No records found</h2>"
+                return
+        record = result.fetch_row()
+        bgcolor = 1
+        PrintTableColumns(('Title', 'Author(s)', 'Reviewer(s)'))
+        while record:
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, record[0][0], record[0][1])
+                
+                reviewees = SQLReviewBriefAuthorRecords(record[0][0])
+                print '<td>'
+                for reviewee in reviewees:
+                        print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, reviewee[0], reviewee[1])
+                print '</td>'
+                
+                authors = SQLTitleBriefAuthorRecords(record[0][0])
+                print '<td>'
+                for author in authors:
+                        print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                print '</td>'
+                print '</tr>'
+                bgcolor ^= 1
+                record = result.fetch_row()
+        print "</table>"
+
+def function9():
+        query = """select titles.title_id, titles.title_title
+                from cleanup, titles
+                where cleanup.record_id=titles.title_id 
+                and titles.series_id IS NOT NULL
+                and titles.series_id !=0
+                and titles.title_parent !=0"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Title',))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+			PrintTitleRecord(title_id, title_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function10():
+        query = """select a.author_id, a.author_canonical 
+                from cleanup, authors a where a.author_id=cleanup.record_id and cleanup.report_type=10 
+                and exists (select 1 from canonical_author c, titles t where a.author_id=c.author_id 
+                and c.ca_status=1 and c.title_id=t.title_id and t.title_parent=0) 
+                order by a.author_lastname"""
+        db.query(query)
+        result = db.store_result()
+        if not result.num_rows():
+                print '<h2>No pseudonyms with canonical titles found</h2>'
+                return
+
+        # Print table headers
+        PrintTableColumns(('Pseudonym', 'Count'))
+        record = result.fetch_row()
+        bgcolor = 1
+        while record:
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print "<td>%s</td>" % ISFDBLink("ea.cgi", record[0][0], record[0][1])
+                # Retrieve the number of canonical titles for this pseudonym
+                query2 = """select count(t.title_id) from canonical_author c, titles t
+                        where c.author_id=%d and c.ca_status=1 and c.title_id=t.title_id
+                        and t.title_parent=0""" % int(record[0][0])
+                db.query(query2)
+                result2 = db.store_result()
+                record2 = result2.fetch_row()
+                print "<td>%s</td>" % record2[0][0]
+                print "</tr>"
+                bgcolor ^= 1
+                record = result.fetch_row()
+        print "</table>"
+
+def function11():
+        # Ignore the following authors: unknown, Anonymous, various, uncredited, The Readers, The Editors
+        query = """select c.author_id,count(c.author_id),a.author_canonical from canonical_author as c, authors as a, cleanup 
+                where c.author_id=a.author_id and a.author_language IS NULL 
+                and cleanup.report_type=11 and cleanup.record_id=a.author_id 
+                group by c.author_id order by count(c.author_id) desc"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Author', '# of Titles'))
+                record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, record[0][0], record[0][2])
+                        print '<td>%s</td>' % record[0][1]
+                        print '</tr>'
+                        record = result.fetch_row()
+                        bgcolor ^= 1
+                        count += 1
+		print "</table>"
+	else:
+		print "<h2>No authors without a defined language found</h2>"
+
+def function12():
+	query = """select titles.* from titles, cleanup
+                where titles.title_ttype = 'EDITOR'
+                and titles.series_id IS NULL 
+                and titles.title_parent = 0
+                and titles.title_id=cleanup.record_id
+                and cleanup.report_type=12"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('Year', 'Title', 'Editors'))
+		while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%s</td>' % record[0][TITLE_YEAR][:4]
+                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, record[0][TITLE_PUBID], record[0][TITLE_TITLE])
+                        authors = SQLTitleBriefAuthorRecords(record[0][TITLE_PUBID])
+                        print '<td>'
+                        for author in authors:
+                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                        print '</td>'
+                        print '</tr>'
+			bgcolor ^= 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function13():
+	query = """select t.* from titles as t, cleanup where t.title_ttype = 'EDITOR' 
+                and t.series_id IS NOT NULL and t.title_parent != 0 
+                and t.title_id=cleanup.record_id and cleanup.report_type=13"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('Year', 'Title', 'Editors'))
+		while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print "<td>%s</td>" % record[0][TITLE_YEAR][:4]
+                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, record[0][TITLE_PUBID], record[0][TITLE_TITLE])
+
+                        authors = SQLTitleBriefAuthorRecords(record[0][TITLE_PUBID])
+                        print "<td>"
+                        for author in authors:
+                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                        print "</td>"
+
+                        print "</tr>"
+			bgcolor ^= 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function14():
+	query = """select pubs.pub_id, pubs.pub_title
+                from pubs, cleanup
+                where pubs.pub_id = cleanup.record_id
+                and cleanup.report_type=14"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Publication',))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+			PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function15():
+	query =  """select pubs.pub_id, pubs.pub_title
+                from pubs, cleanup
+                where pubs.pub_id = cleanup.record_id
+                and cleanup.report_type=15
+                order by pubs.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Publication',))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+			PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function16():
+	query = """select s1.series_id, s1.series_title from series s1, cleanup 
+                where s1.series_id=cleanup.record_id and cleanup.report_type=16 and not exists 
+                (select 1 from titles t where t.series_id = s1.series_id) and not exists 
+                (select 1 from series s2 where s2.series_parent = s1.series_id)"""
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Series Name',))
+		while record:
+                        series_id = record[0][0]
+                        series_name = record[0][1]
+			PrintSeriesRecord(series_id, series_name, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print '</table>'
+	else:
+		print '<h2>No records found</h2>'
+
+def function17():
+        query = """select titles.series_id, titles.title_seriesnum, titles.title_seriesnum_2, count(*) cnt 
+                from titles, cleanup where series_id IS NOT NULL and title_seriesnum IS NOT NULL 
+                and titles.series_id = cleanup.record_id and cleanup.report_type=17 
+                group by series_id, title_seriesnum, title_seriesnum_2 having cnt >1"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Series', 'Series Number'))
+		while record:
+                        series_id = record[0][0]
+                        series_number = record[0][1]
+                        series_number_2 = record[0][2]
+                        series_data = SQLget1Series(series_id)
+                        series_name = series_data[SERIES_NAME]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % count
+                        print '<td><a href="http:/%s/pe.cgi?%s">%s</a></td>' % (HTFAKE, series_id, series_name)
+                        display_series_num = str(series_number)
+                        if series_number_2 is not None:
+                                display_series_num += '.%s' % series_number_2
+                        print '<td>%s</td>' % (display_series_num)
+                        print '</tr>'
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No series with duplicate series numbers found</h2>"
+
+def function18():
+        query = """select t.title_id, t.title_title from titles t, cleanup c 
+                where t.title_title like '%. . .%' and c.report_type=18 
+                and t.title_id=c.record_id order by t.title_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+	if not num:
+		print "<h2>No titles with bad ellipses found.</h2>"
+		return
+        PrintTableColumns(('', 'Title'))
+        bgcolor = 1
+        count = 1
+        record = result.fetch_row()
+        while record:
+                title_id = record[0][0]
+                title_title = record[0][1]
+                PrintTitleRecord(title_id, title_title, bgcolor, count)
+                record = result.fetch_row()
+                bgcolor ^= 1
+                count += 1
+        print "</table>"
+
+def function19():
+	query = """select ca.title_id, t.title_title from 
+                titles t, canonical_author ca, authors a, cleanup 
+                where t.title_ttype = 'INTERVIEW' and ca.title_id = t.title_id 
+                and ca.author_id = a.author_id and ca.ca_status = 2 
+                and a.author_canonical != 'uncredited' and exists 
+                (select 1 from pseudonyms p where a.author_id = p.pseudonym) 
+                and t.title_id=cleanup.record_id and cleanup.report_type=19"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Title',))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+			PrintTitleRecord(title_id, title_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function20():
+	query = """select t.title_id, t.title_title from titles t, titles tp, cleanup 
+                where tp.title_id = t.title_parent and tp.title_parent != 0 
+                and t.title_id=cleanup.record_id and cleanup.report_type=20"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Title',))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+			PrintTitleRecord(title_id, title_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function21():
+	query = """select t.title_id, t.title_title from titles t, cleanup where t.title_parent<>0 
+                and not exists (select 1 from titles pt where t.title_parent=pt.title_id) 
+                and t.title_id=cleanup.record_id and cleanup.report_type=21"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Title',))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+			PrintTitleRecord(title_id, title_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function22():
+        query = """select t.title_id,t.title_title from titles t, cleanup where 
+                t.title_ttype='SERIAL' and title_parent=0 and 
+                t.title_id=cleanup.record_id and cleanup.report_type=22 
+                order by t.title_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Serial'))
+                record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count)
+                        record = result.fetch_row()
+                        bgcolor ^= 1
+                        count += 1
+		print "</table>"
+	else:
+		print "<h2>No SERIALs without a Parent Title found</h2>"
+
+def function23():
+        from awardClass import awards
+        records = []
+	query = """select awards.* from awards, title_awards, cleanup where 
+                awards.award_id=title_awards.award_id and not exists
+                (select 1 from titles where titles.title_id=title_awards.title_id) 
+                and cleanup.record_id=awards.award_id and cleanup.report_type=23 
+                order by award_type_id, award_year, award_level"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+	if not num:
+		print "<h2>No records found</h2>"
+		return
+
+        PrintTableColumns(('Award Title', 'Award Name', 'Award Year', 'Award Category', 'Award Level'))
+	record = result.fetch_row()
+        bgcolor = 1
+	while record:
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                award = awards(db)
+                award.load(record[0][AWARD_ID])
+
+                print '<td><a href="http:/%s/award_details.cgi?%s">%s</a></td>' % (HTFAKE, award.award_id, award.award_title)
+                print '<td><a href="http:/%s/awardtype.cgi?%s">%s</a></td>' % (HTFAKE, award.award_type_id, award.award_type_name)
+                print '<td><a href="http:/%s/ay.cgi?%s+%s">%s</a></td>' % (HTFAKE, award.award_type_id, award.award_year[:4], award.award_year[:4])
+                print '<td>%s</td>' % award.award_cat_name
+                print '<td>%s</td>' % award.award_displayed_level
+                print '</tr>'
+                bgcolor ^= 1
+        	record = result.fetch_row()
+        print "</table>"
+
+def function24():
+        from awardClass import awards
+        records = []
+	query = """select cleanup.cleanup_id, a.award_id from awards as a, cleanup where 
+                 a.award_id=cleanup.record_id and cleanup.report_type=24 and cleanup.resolved IS NULL 
+                 order by a.award_type_id, a.award_year, a.award_level"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+	if not result.num_rows():
+		print "<h2>No records found</h2>"
+		return
+
+        PrintTableColumns(('Award Title', 'Award Name', 'Award Year', 'Award Category', 'Award Level', ''))
+	record = result.fetch_row()
+        bgcolor = 1
+	while record:
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                award = awards(db)
+                award.load(record[0][1])
+
+                print '<td><a href="http:/%s/award_details.cgi?%s">%s</a></td>' % (HTFAKE, award.award_id, award.award_title)
+                print '<td><a href="http:/%s/awardtype.cgi?%s">%s</a></td>' % (HTFAKE, award.award_type_id, award.award_type_short_name)
+                print '<td><a href="http:/%s/ay.cgi?%s+%s">%s</a></td>' % (HTFAKE, award.award_type_id, award.award_year[:4], award.award_year[:4])
+                print '<td><a href="http:/%s/award_category.cgi?%s+0">%s</td>' % (HTFAKE, award.award_cat_id, award.award_cat_name)
+                print '<td>%s</td>' % award.award_displayed_level
+                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+24">Ignore this award</a></td>' % (HTFAKE, record[0][0])
+                print '</tr>'
+                bgcolor ^= 1
+        	record = result.fetch_row()
+        print "</table>"
+
+def function25():
+        query = """select * from award_types, cleanup where NOT EXISTS 
+                (select 1 from awards where awards.award_type_id=award_types.award_type_id) 
+                and cleanup.record_id=award_types.award_type_id and cleanup.report_type=25"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('Award Type',))
+                record = result.fetch_row()
+                bgcolor = 1
+                while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        award_type_id = record[0][AWARD_TYPE_ID]
+                        award_type_name = record[0][AWARD_TYPE_NAME]
+                        print '<td><a href="http:/%s/awardtype.cgi?%s">%s</a></td>' % (HTFAKE, award_type_id, award_type_name)
+                        print '</tr>'
+                        record = result.fetch_row()
+                        bgcolor ^= 1
+
+		print "</table>"
+	else:
+		print "<h3>No empty Award Types found</h3>"
+
+def function26():
+        query = """select award_cats.* from award_cats, cleanup where NOT EXISTS 
+                (select 1 from awards where awards.award_cat_id=award_cats.award_cat_id) 
+                and cleanup.record_id=award_cats.award_cat_id and cleanup.report_type=26"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('Award Category',))
+                record = result.fetch_row()
+                bgcolor = 1
+                while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        award_cat_id = record[0][AWARD_CAT_ID]
+                        award_cat_name = record[0][AWARD_CAT_NAME]
+                        print '<td><a href="http:/%s/award_category.cgi?%s">%s</a></td>' % (HTFAKE, award_cat_id, award_cat_name)
+                        print '</tr>'
+                        record = result.fetch_row()
+                        bgcolor ^= 1
+		print "</table>"
+	else:
+		print "<h3>No empty Award Categories found</h3>"
+
+def function27():
+	query = """select s.series_id, s.series_title from series s, cleanup c where 
+                c.record_id=s.series_id and c.report_type=27 and exists 
+                (select 1 from titles t where t.title_ttype='CHAPBOOK'
+                and t.series_id = s.series_id) 
+                order by s.series_title"""
+	db.query(query)
+	result = db.store_result()
+        if not result.num_rows():
+		print "<h2>No records found</h2>"
+		return
+
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        PrintTableColumns(('', 'Series',))
+        while record:
+                series_id = record[0][0]
+                series_name = record[0][1]
+                PrintSeriesRecord(series_id, series_name, bgcolor, count)
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+def function28():
+	query = """select t.title_id, t.title_title from titles t, cleanup c 
+                where t.title_ttype='CHAPBOOK' and t.title_synopsis !=0 
+                and c.record_id=t.title_id and c.report_type=28 order by t.title_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Title',))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+			PrintTitleRecord(title_id, title_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function29():
+        query = """select pub_id, pub_title from pubs, cleanup 
+                   where pub_ctype='CHAPBOOK' and NOT EXISTS 
+                   (select 1 from pub_content,titles where pubs.pub_id=pub_content.pub_id 
+                   and pub_content.title_id=titles.title_id and (titles.title_ttype='SHORTFICTION' 
+                   or titles.title_ttype='POEM' or titles.title_ttype='SERIAL')) 
+                   and pubs.pub_id=cleanup.record_id and cleanup.report_type=29 
+                   order by pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		PrintTableColumns(('', 'Publication Title'))
+		bgcolor = 1
+		count = 1
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+			PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function30():
+	query = """select t1.title_id, t1.title_title from titles t1, titles t2, cleanup c where 
+                t1.title_ttype='CHAPBOOK' and t2.title_parent=t1.title_id and t2.title_ttype!='CHAPBOOK' 
+                and (t1.title_id=c.record_id or t2.title_id=c.record_id) and c.report_type=30 
+                UNION select t1.title_id,t1.title_title from titles t1, titles t2, cleanup c where 
+                t1.title_ttype!='CHAPBOOK' and t2.title_parent=t1.title_id and t2.title_ttype='CHAPBOOK' 
+                and (t1.title_id=c.record_id or t2.title_id=c.record_id) and c.report_type=30"""
+	db.query(query)
+	result = db.store_result()
+	if not result.num_rows():
+		print "<h2>No records found</h2>"
+		return
+
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        PrintTableColumns(('', 'Title',))
+	while record:
+                title_id = record[0][0]
+                title_title = record[0][1]
+                PrintTitleRecord(title_id, title_title, bgcolor, count)
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+def function31():
+	query = """select c.cleanup_id, p.pub_id, p.pub_isbn, p.pub_year from pubs p, cleanup c 
+                where ((p.pub_isbn like '97%' and length(replace(p.pub_isbn,'-',''))=13 
+                and p.pub_year <'2005-00-00' and p.pub_year !='0000-00-00') or 
+                (p.pub_isbn not like '#%' and length(replace(p.pub_isbn,'-',''))=10 
+                and p.pub_year>'2008-00-00' and p.pub_year !='8888-00-00' and 
+                p.pub_year !='9999-00-00')) and p.pub_id=c.record_id and 
+                c.report_type=31 and c.resolved IS NULL order by pub_year, pub_isbn"""
+		
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('Count', 'Date', 'ISBN', ''))
+		while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % count
+                        print '<td>%s</td>' % record[0][3]
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, record[0][1], record[0][2])
+                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+31">Ignore this ISBN</a></td>' % (HTFAKE, record[0][0])
+                        print '</tr>'
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function32():
+	query = """select p1.pub_id, p1.pub_tag, p1.pub_title from pubs p1, 
+                (select pub_tag, count(*) from pubs, cleanup c where pubs.pub_id=c.record_id 
+                and c.report_type=32 group by pub_tag having count(*) > 1) p2 
+                where p1.pub_tag = p2.pub_tag order BY 2,1,3"""
+	
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('Publication Title', 'Publication Tag'))
+		while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, record[0][0], record[0][2])
+                        print "<td>%s</td>" % record[0][1]
+                        print "</tr>"
+			bgcolor ^= 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function33():
+	query = """select p.pub_id, p.pub_title as order_title, pa.author_id, a.author_canonical
+                from pub_authors pa, pubs p, pub_content pc, titles t, authors a, cleanup 
+                where pa.pub_id = p.pub_id 
+                and pc.title_id = t.title_id 
+                and pc.pub_id = p.pub_id 
+                and pa.author_id = a.author_id 
+                and p.pub_ctype in ('ANTHOLOGY','NOVEL','COLLECTION','NONFICTION','OMNIBUS','CHAPBOOK') 
+                and t.title_ttype in ('ANTHOLOGY','NOVEL','COLLECTION','OMNIBUS','NONFICTION','CHAPBOOK') 
+                and t.title_ttype = p.pub_ctype 
+                and not exists
+                  (select 1 from canonical_author ca
+                  where ca.title_id = t.title_id and pa.author_id = ca.author_id) 
+                and p.pub_id=cleanup.record_id and cleanup.report_type=33
+                UNION
+                select p.pub_id, p.pub_title as order_title, pa.author_id, a.author_canonical
+                from pub_authors pa, pubs p, pub_content pc, titles t, authors a, cleanup 
+                where pa.pub_id = p.pub_id 
+                and pc.title_id = t.title_id 
+                and pc.pub_id = p.pub_id 
+                and pa.author_id = a.author_id 
+                and p.pub_ctype in ('FANZINE','MAGAZINE')
+                and t.title_ttype = 'EDITOR'
+                and t.title_language != 26
+                and not exists
+                  (select 1 from canonical_author ca
+                  where ca.title_id = t.title_id and pa.author_id = ca.author_id) 
+                and p.pub_id=cleanup.record_id and cleanup.report_type=33
+                order by order_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Title', 'Author'))
+		while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % count
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, record[0][0], record[0][1])
+                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, record[0][2], record[0][3])
+                        print "</tr>"
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function34():
+	query =  """select pub_id, pub_title from pubs, cleanup
+                where not exists
+                (select 1 from pub_content pc, titles t
+                where pubs.pub_id = pc.pub_id
+                and pc.title_id = t.title_id
+                and t.title_ttype != 'COVERART')
+                and pubs.pub_id=cleanup.record_id
+                and cleanup.report_type=34
+                order by pubs.pub_title"""
+		
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Publication Title',))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+			PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function35():
+        bindings = "'" + "','".join(BINDINGS) + "'"
+	query = """select pubs.pub_ptype, pubs.pub_id, pubs.pub_title from pubs, cleanup where 
+                pubs.pub_ptype not in (%s) and pubs.pub_ptype IS NOT NULL and pubs.pub_ptype !='' 
+                and pubs.pub_id=cleanup.record_id and cleanup.report_type=35 
+                order by pubs.pub_ptype, pubs.pub_title""" % (bindings)
+
+	db.query(query)
+	result = db.store_result()
+	if not result.num_rows():
+                print '<h2>No matching records</h2>'
+                return
+        
+        PrintTableColumns(('Binding', 'Publication'))
+        bgcolor = 1
+        record = result.fetch_row()
+        while record:
+                binding = record[0][0]
+                pub_id = record[0][1]
+                pub_title = record[0][2]
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td>%s</td>' % binding
+                print '<td>'
+                print '<a href="http:/%s/pl.cgi?%s">%s</a>' % (HTFAKE, pub_id, pub_title)
+                print '</td>'
+                print '</tr>'
+                bgcolor ^= 1
+                record = result.fetch_row()
+        print '</table>'
+
+def function36():
+	query = """select pub_id, pub_title, pub_frontimage from pubs, cleanup 
+                where pubs.pub_frontimage!='' and pubs.pub_frontimage is not null 
+                and pubs.pub_id=cleanup.record_id and cleanup.report_type=36"""
+	domains = RecognizedDomains()
+        for domain in domains:
+                # Skip domains that are "recognized", but we don't have permission to link to
+                if domains[domain][2] == 0:
+                        continue
+                query += " and pubs.pub_frontimage not like '%"
+                query += "%s" % domain
+                query += "%'"
+        query += " order by pubs.pub_frontimage"
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+        if not record:
+		print "<h2>No records found</h2>"
+		return
+
+        bgcolor = 1
+        PrintTableColumns(('Publication', 'URL'))
+        while record:
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, record[0][0], record[0][1])
+                print '<td><a href="%s">%s</a></td>' % (record[0][2], record[0][2])
+                print '</tr>'
+                bgcolor ^= 1
+                record = result.fetch_row()
+        print "</table>"
+
+def function37():
+        query = """select p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, cleanup c
+                where p.pub_ctype='OMNIBUS' and 
+                p.pub_id=c.record_id
+                and c.report_type=37
+                and c.resolved is NULL
+                and NOT EXISTS 
+                (select 1 from pub_content pc, titles t
+                 where p.pub_id=pc.pub_id 
+                 and pc.title_id=t.title_id
+                 and (t.title_ttype='NOVEL' 
+                  or t.title_ttype='COLLECTION' 
+                  or t.title_ttype='ANTHOLOGY'
+                  or t.title_ttype='NONFICTION'
+                  )
+                ) 
+                order by p.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		PrintTableColumns(('', 'Publication Title', 'Ignore'))
+		bgcolor = 1
+		count = 1
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        cleanup_id = record[0][2]
+			PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, 37)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function38():
+        query = 'select pc.pub_id, pc.title_id, count(*) as cnt \
+                from pub_content pc, cleanup c \
+                where pc.pub_id=c.record_id and c.report_type=38 \
+                group by pc.pub_id, pc.title_id having cnt>1'
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        pubs = {}
+        titles = {}
+        pub_data = {}
+        title_data = {}
+        record = result.fetch_row()
+        while record:
+                pub_id = record[0][0]
+                # Skip records where pub_id is NULL -- they will have to be cleaned up manually
+                if not pub_id:
+                        record = result.fetch_row()
+                        continue
+                title_id = record[0][1]
+                count = record[0][2]
+                pub_data[pub_id] = SQLGetPubById(pub_id)
+                title_data[title_id] = SQLloadTitle(title_id)
+                if pub_id not in pubs:
+                        pubs[pub_id] = [(title_id, count), ]
+                else:
+                        pubs[pub_id].append((title_id, count), )
+                record = result.fetch_row()
+
+	if not pubs:
+		print "<h2>No publications with duplicate titles found</h2>"
+		return
+        bgcolor = 1
+        PrintTableColumns(('Publication', 'Duplicate Titles (count)'))
+        for pub_id in pubs:
+                titles = pubs[pub_id]
+                pub_title = pub_data[pub_id][PUB_TITLE]
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                print '<td>'
+                first = 1
+                for title in titles:
+                        title_id = title[0]
+                        count = title[1]
+                        title_title = title_data[title_id][TITLE_TITLE]
+                        if first:
+                                first = 0
+                        else:
+                                print '<br>'
+                        print '<a href="http:/%s/title.cgi?%s">%s</a> (%s)' % (HTFAKE, title_id, title_title, count)
+                print '</td>'
+                print "</tr>"
+                bgcolor ^= 1
+        print "</table>"
+
+def function39():
+        query = """select p.pub_id, p.pub_title from pubs p, cleanup c 
+                where p.pub_title like '%. . .%' and c.report_type=39 
+                and p.pub_id=c.record_id order by p.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+	if not num:
+		print "<h2>No publications with bad ellipses found.</h2>"
+		return
+        PrintTableColumns(('', 'Publication'))
+        bgcolor = 1
+        count = 1
+        record = result.fetch_row()
+        while record:
+                pub_id = record[0][0]
+                pub_title = record[0][1]
+                PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+                record = result.fetch_row()
+                bgcolor ^= 1
+                count += 1
+        print "</table>"
+
+def function40():
+        query = """select t.* from titles t, cleanup c where title_ttype='REVIEW' and not exists 
+                (select 1 from canonical_author ca where ca.title_id=t.title_id and ca.ca_status=3) 
+                and t.title_id=c.record_id and c.report_type=40 order by t.title_title"""
+
+        db.query(query)
+        result = db.store_result()
+        if not result.num_rows():
+                print '<h2>No Reviews without Reviewed Authors</h2>'
+                return
+
+        # Print table headers
+        PrintTableColumns(('', 'Review',))
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        while record:
+                title_id = record[0][0]
+                title_title = record[0][1]
+                PrintTitleRecord(title_id, title_title, bgcolor, count)
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+def function41():
+        query = """select t1.title_id, t1.title_title, c.cleanup_id from titles t1, cleanup c
+                where title_ttype='REVIEW' and not exists 
+                (select 1 from title_relationships tr where tr.review_id=t1.title_id) 
+                and not exists (select 1 from titles t2 where t2.title_parent=t1.title_id) 
+                and t1.title_id=c.record_id and c.report_type=41
+                order by t1.title_title"""
+
+        db.query(query)
+        result = db.store_result()
+        if not result.num_rows():
+                print '<h2>No Reviews not Linked to Titles</h2>'
+                return
+
+        # Print table headers
+        PrintTableColumns(('', 'Review'))
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        while record:
+                title_id = record[0][0]
+                title_title = record[0][1]
+                PrintTitleRecord(title_id, title_title, bgcolor, count)
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+def function42():
+        print '<h3>This report finds reviews of CHAPBOOK, COVERART, INTERIORART, INTERVIEW and REVIEW records.</h3>'
+
+        query = """select c.cleanup_id, t1.title_id, t1.title_title, t2.title_ttype 
+                from titles t1, titles t2, cleanup c, title_relationships tr 
+                where t1.title_ttype='REVIEW' and t1.title_id=tr.review_id 
+                and t2.title_id=tr.title_id and t2.title_ttype in 
+                ('CHAPBOOK', 'COVERART', 'INTERIORART', 'INTERVIEW', 'REVIEW') 
+                and c.report_type=42 and c.record_id=t1.title_id 
+                and c.resolved IS NULL order by t2.title_ttype, t2.title_title"""
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if not num:
+                print "<h2>No Reviews of Uncommon Title Types.</h2>"
+                return
+
+        record = result.fetch_row()
+        titles = {}
+        while record:
+                cleanup_id = record[0][0]
+                title_id = record[0][1]
+                title_title = record[0][2]
+                title_type = record[0][3]
+                if title_type not in titles:
+                        titles[title_type] = []
+                titles[title_type].append((cleanup_id, title_id, title_title))
+                record = result.fetch_row()
+
+        for title_type in titles.keys():
+                if not titles[title_type]:
+                        print "<h3>No reviews of %ss.</h3>" % title_type
+                        continue
+                PrintTableColumns(('', 'Reviews of %s records' % title_type, ''))
+                color = 0
+                count = 1
+                for title in titles[title_type]:
+                        if color:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        cleanup_id = title[0]
+                        title_id = title[1]
+                        title_title = title[2]
+                        print '<td>%d</td>' % count
+                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+42">Ignore this title</a></td>' % (HTFAKE, cleanup_id)
+                        print '</tr>'
+                        color = color ^ 1
+                        count += 1
+                print '</table><p>'
+
+def function43():
+        query = """select p1.publisher_name from publishers p1, publishers p2, cleanup c where 
+                p1.publisher_id!=p2.publisher_id and p1.publisher_name=p2.publisher_name 
+                and p1.publisher_id=c.record_id and c.report_type=43 order by p1.publisher_name"""
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		while record:
+                        PrintTableColumns(('', 'Publisher', ))
+                        publisher_name = record[0][0]
+                        query2 = "select publisher_id from publishers where publisher_name = '%s'" % db.escape_string(publisher_name)
+                        db.query(query2)
+                        result2 = db.store_result()
+                        record2 = result2.fetch_row()
+                        bgcolor = 1
+                        count = 1
+                        while record2:
+                                publisher_id = record2[0][0]
+                                PrintPublisherRecord(publisher_id, publisher_name, bgcolor, count)
+                                bgcolor ^= 1
+                                count += 1
+                                record2 = result2.fetch_row()
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function44():
+        query = """select c.record_id, p1.publisher_name,
+                c.record_id_2, p2.publisher_name, c.cleanup_id
+                from cleanup c, publishers p1, publishers p2
+                where c.report_type=44 and c.resolved IS NULL
+                and c.record_id = p1.publisher_id
+                and c.record_id_2 = p2.publisher_id
+                order by p1.publisher_name"""
+	db.query(query)
+	result = db.store_result()
+
+	if not result.num_rows():
+		print "<h2>No similar publisher records found</h2>"
+		return
+
+        PrintTableColumns(('', 'Publisher 1', 'Publisher 2', 'Ignore'))
+        bgcolor = 1
+        count = 1
+        record = result.fetch_row()
+        while record:
+                publisher_id_1 = record[0][0]
+                publisher_name_1 = record[0][1]
+                publisher_id_2 = record[0][2]
+                publisher_name_2 = record[0][3]
+                cleanup_id = record[0][4]
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+                print '<td>%d</td>' % count
+                print '<td><a href="http:/%s/publisher.cgi?%s">%s</a></td>' % (HTFAKE, publisher_id_1, publisher_name_1)
+                print '<td><a href="http:/%s/publisher.cgi?%s">%s</a></td>' % (HTFAKE, publisher_id_2, publisher_name_2)
+                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+44">Ignore</a></td>' % (HTFAKE, int(cleanup_id))
+                print '</tr>'
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+def function45():
+        query = """select v.title_id, v.title_title, v.title_ttype, p.title_ttype, c.cleanup_id 
+                from titles v, titles p, cleanup c where v.title_parent>0 
+                and v.title_parent=p.title_id and v.title_ttype!=p.title_ttype 
+                and not (v.title_ttype='SERIAL' and p.title_ttype='NOVEL') 
+                and not (v.title_ttype='SERIAL' and p.title_ttype='SHORTFICTION') 
+                and not (v.title_ttype='INTERIORART' and p.title_ttype='COVERART') 
+                and v.title_id=c.record_id and c.report_type=45 and c.resolved IS NULL"""
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if not num:
+                print "<h2>No variant title type mismatches</h2>"
+                return
+
+        record = result.fetch_row()
+        titles = {}
+        while record:
+                variant_type = record[0][2]
+                if variant_type not in titles:
+                        titles[variant_type] = []
+                titles[variant_type].append(record[0])
+                record = result.fetch_row()
+
+        for variant_type in titles.keys():
+                if not titles[variant_type]:
+                        print "<h3>No %s title type mismatches</h3>" % variant_type
+                        continue
+                PrintTableColumns(('', '%s titles' % variant_type, 'Parent type', ''))
+                color = 0
+                count = 1
+                for title in titles[variant_type]:
+                        if color:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        variant_id = title[0]
+                        variant_title = title[1]
+                        parent_type = title[3]
+                        cleanup_id = title[4]
+                        print '<td>%d</td>' % count
+                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, variant_id, variant_title)
+                        print '<td>%s</td>' % parent_type
+                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+45">Ignore this title</a></td>' % (HTFAKE, cleanup_id)
+                        print '</tr>'
+                        color = color ^ 1
+                        count += 1
+                print '</table><p>'
+
+def function46():
+	query = """select DISTINCT t.* from titles t, pubs p, pub_content pc, cleanup c 
+                where t.title_ttype='EDITOR' and t.title_id=pc.title_id and 
+                p.pub_id=pc.pub_id and p.pub_ctype not in ('MAGAZINE','FANZINE') 
+                and t.title_id=c.record_id and c.report_type=46"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('Year', 'Title', 'Editors'))
+		while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%s</td>' % record[0][TITLE_YEAR][:4]
+                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, record[0][TITLE_PUBID], record[0][TITLE_TITLE])
+
+                        authors = SQLTitleBriefAuthorRecords(record[0][TITLE_PUBID])
+                        print '<td>'
+                        for author in authors:
+                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                        print '</td>'
+                        print '</tr>'
+			bgcolor ^= 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function47():
+        query = """select distinct t.title_id, t.title_title, t.title_ttype 
+                from titles t, pub_content pc, pubs p, cleanup c
+                where pc.title_id = t.title_id
+                and pc.pub_id = p.pub_id
+                and p.pub_year != '0000-00-00'
+                and YEAR(t.title_copyright) > YEAR(p.pub_year)
+                and t.title_id=c.record_id
+                and c.report_type=47"""
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if not num:
+                print "<h2>No Title Dates after Publication Dates.</h2>"
+                return
+
+        record = result.fetch_row()
+        titles = {}
+        while record:
+                title_id = record[0][0]
+                title_title = record[0][1]
+                title_type = record[0][2]
+                if title_type not in titles:
+                        titles[title_type] = []
+                titles[title_type].append((title_id, title_title))
+                record = result.fetch_row()
+
+        for title_type in sorted(titles.keys()):
+                if not titles[title_type]:
+                        print "<h3>No %s with Title Dates after Publication Dates.</h3>" % title_type
+                        continue
+                PrintTableColumns(('', '%s titles' % title_type))
+                bgcolor = 1
+                count = 1
+                for title in titles[title_type]:
+                        title_id = title[0]
+                        title_title = title[1]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count)
+                        bgcolor = bgcolor ^ 1
+                        count += 1
+                print '</table><p>'
+
+def function48():
+        if user.moderator:
+                print """<h3>If a series can't be fixed, please document the details
+                        in the series' Note field before marking it "Ignored".</h3>"""
+
+        nonModeratorMessage()
+        
+        # First retrieve all series IDs found by the nightly cleanup report
+        query = "select record_id from cleanup where report_type=48 and resolved IS NULL"
+        db.query(query)
+        result = db.store_result()
+        if not result.num_rows():
+                print '<h2>No Series with Numbering Gaps</h2>'
+                return
+
+        series_ids = []
+        record = result.fetch_row()
+        while record:
+                series_ids.append(str(record[0][0]))
+                record = result.fetch_row()
+        # Convert the resulting list to a comma-delimited string
+        series_string = ",".join(series_ids)
+
+        # Next retrieve the series/cleanup data - the logic may not be optimal, needs to be reviewed
+        query = """select tmp2.series_id, tmp2.series_title, c.cleanup_id from 
+                        (select tmp.series_id, s.series_title from 
+                                (select t.series_id from titles t where t.series_id IS NOT NULL 
+                                and t.title_seriesnum IS NOT NULL and t.title_seriesnum!=8888 
+                                and t.series_id in (%s) 
+                                group by t.series_id having count(t.title_seriesnum) < 
+                                (max(t.title_seriesnum)-min(t.title_seriesnum)+1) 
+                                union 
+                                select s.series_id from series s where not exists 
+                                        (select 1 from titles t where t.series_id=s.series_id 
+                                         and t.title_seriesnum=1) 
+                                 and exists 
+                                         (select 1 from titles t where t.series_id=s.series_id 
+                                         and t.title_seriesnum>1 and t.title_seriesnum<1800) 
+                                and s.series_id in (%s)) 
+                        tmp, series s where tmp.series_id=s.series_id order by s.series_title) 
+                tmp2, cleanup c where c.record_id=tmp2.series_id and c.report_type=48 
+                order by tmp2.series_title""" % (series_string, series_string)
+
+        db.query(query)
+        result = db.store_result()
+        if not result.num_rows():
+                print '<h2>No Series with Numbering Gaps</h2>'
+                return
+
+        # Print table headers
+        PrintTableColumns(('', 'Series', 'Ignore'))
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        while record:
+                series_id = record[0][0]
+                series_name = record[0][1]
+                cleanup_id = record[0][2]
+                PrintSeriesRecord(series_id, series_name, bgcolor, count, cleanup_id, 48)
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+
+def function49():
+	query = """select p.pub_isbn, p.pub_id, p.pub_title from pubs p, cleanup c
+                where substr(pub_isbn,1,1)!='#'
+                and p.pub_isbn is not NULL
+                and p.pub_isbn != ''
+                and REPLACE(p.pub_isbn,'-','') not REGEXP '^[[:digit:]]{9}[Xx]{1}$'
+                and REPLACE(p.pub_isbn,'-','') not REGEXP '^[[:digit:]]{10}$'
+                and REPLACE(p.pub_isbn,'-','') not REGEXP '^[[:digit:]]{13}$'
+                and p.pub_id=c.record_id and c.report_type=49 
+                order by p.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	if not result.num_rows():
+                print '<h2>No Publications with Invalid Catalog IDs</h2>'
+                return
+        PrintTableColumns(('', 'Catalog ID', 'Publication'))
+        bgcolor = 1
+        count = 1
+        record = result.fetch_row()
+        while record:
+                pub_isbn = record[0][0]
+                pub_id = record[0][1]
+                pub_title = record[0][2]
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td>%d</td>' % count
+                print '<td>%s</td>' % pub_isbn
+                print '<td>'
+                print '<a href="http:/%s/pl.cgi?%s">%s</a>' % (HTFAKE, pub_id, pub_title)
+                print '</td>'
+                print '</tr>'
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print '</table>'
+
+def function50():
+	query = """(select tmp.pub_id, tmp.isbn, tmp.pub_title as pub_title, tmp.cleanup_id from
+                 (select p.pub_id, REPLACE(p.pub_isbn,'-','') AS isbn, p.pub_title, c.cleanup_id
+                 from pubs p, cleanup c
+                 where SUBSTR(p.pub_isbn,1,1)!='#'
+                 and LENGTH(REPLACE(p.pub_isbn,'-',''))=10
+                 and p.pub_id=c.record_id and c.report_type=50 and c.resolved IS NULL) tmp
+                 where CONVERT((11-MOD( 
+        	 (substr(isbn,1,1)*10) 
+        	+(substr(isbn,2,1)*9) 
+        	+(substr(isbn,3,1)*8) 
+        	+(substr(isbn,4,1)*7) 
+        	+(substr(isbn,5,1)*6) 
+        	+(substr(isbn,6,1)*5) 
+        	+(substr(isbn,7,1)*4) 
+        	+(substr(isbn,8,1)*3) 
+        	+(substr(isbn,9,1)*2) 
+        	, 11)),CHAR) 
+                 != REPLACE(REPLACE(SUBSTR(tmp.isbn,10,1),0,11),'X',10)) 
+                union 
+                (select tmp.pub_id, tmp.isbn, tmp.pub_title as pub_title, tmp.cleanup_id from 
+                 (select p.pub_id, REPLACE(p.pub_isbn,'-','') AS isbn, p.pub_title, c.cleanup_id 
+                 from pubs p, cleanup c 
+                 where SUBSTR(p.pub_isbn,1,1)!='#' 
+                 and LENGTH(REPLACE(p.pub_isbn,'-',''))=13 
+                 and p.pub_id=c.record_id and c.report_type=50 and c.resolved IS NULL) tmp 
+                 where MOD(10-MOD( 
+        	 (substr(isbn,1,1)*1) 
+        	+(substr(isbn,2,1)*3) 
+        	+(substr(isbn,3,1)*1) 
+        	+(substr(isbn,4,1)*3) 
+        	+(substr(isbn,5,1)*1) 
+        	+(substr(isbn,6,1)*3) 
+        	+(substr(isbn,7,1)*1) 
+        	+(substr(isbn,8,1)*3) 
+        	+(substr(isbn,9,1)*1) 
+        	+(substr(isbn,10,1)*3) 
+        	+(substr(isbn,11,1)*1) 
+                +(substr(isbn,12,1)*3) 
+        	,10),10) 
+                 != SUBSTR(isbn,13,1)) 
+                 order by pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	if not result.num_rows():
+                print '<h2>No Publications with Invalid ISBNs</h2>'
+                return
+
+        PrintTableColumns(('', 'ISBN', 'Publication', ''))
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        while record:
+                pub_id = record[0][0]
+                pub_isbn = record[0][1]
+                pub_title = record[0][2]
+                cleanup_id = record[0][3]
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td>%d</td>' % count
+                print '<td>%s</td>' % pub_isbn
+                print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+50">Ignore this pub</a></td>' % (HTFAKE, cleanup_id)
+                print '</tr>'
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print '</table>'
+
+def function51():
+	query = """select p.pub_id, p.pub_title, p.pub_isbn, p.pub_year, c.cleanup_id 
+                from pubs p, cleanup c where p.pub_isbn!='' and p.pub_isbn IS NOT NULL 
+                and p.pub_id=c.record_id and c.report_type=51 and c.resolved IS NULL"""
+	db.query(query)
+	result = db.store_result()
+	if not result.num_rows():
+                print '<h2>No Publications with Identical ISBNs and Different Titles</h2>'
+                return
+
+        isbns = {}
+        record = result.fetch_row()
+        while record:
+                normalized_isbn = string.replace(record[0][2],"-",'')
+                if normalized_isbn not in isbns:
+                        isbns[normalized_isbn] = []
+                isbns[normalized_isbn].append(record[0])
+                record = result.fetch_row()
+
+        # Blank out ISBNs whose titles have been made identical since the report last ran
+        for isbn in isbns:
+                title_set = set()
+                for pub in isbns[isbn]:
+                        pub_title = pub[1]
+                        title_set.add(pub_title)
+                if len(title_set) == 1:
+                        isbns[isbn] = ''
+        
+        PrintTableColumns(('#', 'ISBN', 'Publications'))
+        bgcolor = 1
+        count = 1
+        for isbn in sorted(isbns):
+                if not isbns[isbn]:
+                        continue
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td>%d</td>' % count
+                print '<td>%s</td>' % isbn
+                print '<td>'
+                print '<table class="review">'
+                for pub in isbns[isbn]:
+                        print '<tr>'
+                        print '<td>'
+                        print '<a href="http:/%s/pl.cgi?%s">%s</a>' % (HTFAKE, pub[0], pub[1])
+                        print '</td>'
+                        print '<td>%s</td>' % pub[3]
+                        print '<td>'
+                        print '<a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+51">Ignore this pub</a>' % (HTFAKE, pub[4])
+                        print '</td>'
+                        print '</tr>'
+                print '</table>'
+                print '</td>'
+                print '</tr>'
+                bgcolor ^= 1
+                count += 1
+        print '</table>'
+
+def function52():
+        print """<h3>This report currently checks that each publication has one 
+                (and only one) title of the matching type.</h3>"""
+
+        only_one = {'ANTHOLOGY': ['ANTHOLOGY'],
+                    'COLLECTION': ['COLLECTION'],
+                    'CHAPBOOK': ['CHAPBOOK'],
+                    'MAGAZINE': ['EDITOR'],
+                    'FANZINE': ['EDITOR'],
+                    'NONFICTION': ['NONFICTION'],
+                    'NOVEL': ['NOVEL'],
+                    'OMNIBUS': ['OMNIBUS']
+                    }
+
+        query = ""
+        for pub_type in only_one:
+                if query:
+                        query += " UNION "
+                query += "(select p.pub_id, p.pub_ctype, p.pub_title, c.cleanup_id"
+                query += " from pubs p, cleanup c where p.pub_ctype='%s'" % pub_type
+                query += " and p.pub_id=c.record_id and c.report_type=52 and c.resolved is NULL"
+                query += " and (select count(*) from pub_content pc, titles t"
+                query += " where pc.pub_id=p.pub_id and t.title_id=pc.title_id"
+                query += " and "
+                subquery = ""
+                for title_type in only_one[pub_type]:
+                        if subquery:
+                                subquery += " or "
+                        subquery += "(t.title_ttype='%s')" % title_type
+                query += "(" + subquery + "))!=1)"
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if not num:
+                print "<h2>No Publication-Title Type Mismatches.</h2>"
+                return
+
+        record = result.fetch_row()
+        pubs = {}
+        while record:
+                pub_id = record[0][0]
+                pub_type = record[0][1]
+                pub_title = record[0][2]
+                if pub_type not in pubs:
+                        pubs[pub_type] = []
+                pubs[pub_type].append(record[0])
+                record = result.fetch_row()
+
+        for pub_type in sorted(pubs.keys()):
+                if not pubs[pub_type]:
+                        print "<h3>No %s Publication-Title Type Mismatches.</h3>" % pub_type
+                        continue
+                PrintTableColumns(('', '%s publications' % pub_type, ''))
+                bgcolor = 1
+                count = 1
+                for pub in pubs[pub_type]:
+                        pub_id = pub[0]
+                        pub_title = pub[2]
+                        cleanup_id = pub[3]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, 52)
+                        bgcolor ^= bgcolor
+                        count += 1
+                print '</table><p>'
+
+def function53():
+        query = "select a1.author_id, a1.author_canonical, a2.author_id, a2.author_canonical, count(*) \
+                from pseudonyms p, authors a1, authors a2, cleanup c \
+                where p.pseudonym = a1.author_id \
+                and p.author_id = a2.author_id \
+                and p.author_id = c.record_id and c.report_type = 53 \
+                group by p.author_id, p.pseudonym \
+                having count(*) > 1"
+        db.query(query)
+        result = db.store_result()
+        if not result.num_rows():
+                print '<h2>No Authors with Duplicate Pseudonyms Found</h2>'
+                return
+
+        # Print table headers
+        PrintTableColumns(('','Pseudonym', 'Author', 'Count'))
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        while record:
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td>%d</td>' % count
+                print '<td>%s</td>' % ISFDBLink("ea.cgi", record[0][0], record[0][1])
+                print '<td>%s</td>' % ISFDBLink("ea.cgi", record[0][2], record[0][3])
+                print '<td>%s</td>' % record[0][4]
+                print '</tr>'
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+def function54():
+        print """<h3>This report is currently limited to COLLECTION and ANTHOLOGY
+                titles which have at least one publication with fiction contents
+                and one publication without fiction contents. The displayed list
+                is limited to 1000 publications for performance reasons.</h3>"""
+
+        query ="""select t.title_id, t.title_title, p.pub_id, p.pub_title, p.pub_year
+                from titles t, pubs p, pub_content pc, cleanup c where
+                t.title_id=c.record_id and c.report_type=54 and
+                t.title_id=pc.title_id and pc.pub_id=p.pub_id limit 1000"""
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	num = result.num_rows()
+        if not num:
+                print "<h2>No Collections/Anthologies without Contents Whose Other Editions Have Contents</h2>"
+                return
+        titles = {}
+        pubs_set = set()
+        count = 1
+        while record:
+                count += 1
+                title_id = record[0][0]
+                title_title = record[0][1]
+                pub_id = record[0][2]
+                pub_title = record[0][3]
+                pub_year = record[0][4]
+                if title_title not in titles:
+                        titles[title_title] = {}
+                if title_id not in titles[title_title]:
+                        titles[title_title][title_id] = []
+                titles[title_title][title_id].append((pub_id, pub_title, pub_year))
+                pubs_set.add(str(pub_id))
+                record = result.fetch_row()
+
+        pubs_string = ",".join(pubs_set)
+        query = """select p.pub_id from pubs p
+                 where p.pub_id in (%s) and
+                 not exists (select 1 from pub_content pc, titles t
+                	where pc.pub_id=p.pub_id and
+                	t.title_id=pc.title_id and
+                	t.title_ttype in ('SHORTFICTION','POEM','SERIAL'))""" % pubs_string
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+        empty_pubs = []
+	while record:
+                empty_pubs.append(record[0][0])
+                record = result.fetch_row()
+
+        PrintTableColumns(('#', 'Title', 'Publications'))
+        count = 0
+        color = 0
+        for title_title in sorted(titles.keys()):
+                for title_id in titles[title_title]:
+                        # First check if there are any empty pubs for this titles --
+                        # if we have already fixed all of them, then do not display this title
+                        empty_count = 0
+                        for pub in titles[title_title][title_id]:
+                                if pub[0] in empty_pubs:
+                                        empty_count += 1
+                        if not empty_count:
+                                break
+                        count += 1
+                        if color:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % count
+                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        print '<td>'
+                        for pub in titles[title_title][title_id]:
+                                if pub[0] in empty_pubs:
+                                        suffix = ' [EMPTY]'
+                                else:
+                                        suffix = ''
+                                print '<a href="http:/%s/pl.cgi?%s">%s</a> (%s)%s<br>' % (HTFAKE, pub[0], pub[1], pub[2], suffix)
+                        print '</td>'
+                        print '</tr>'
+                        color = color ^ 1
+                        record = result.fetch_row()
+        print '</table><p>'
+
+def function55():
+        query = """select title_id, title_title from titles t, cleanup c
+                where t.title_id=c.record_id and c.report_type=55
+                and (t.title_title like '%<i>%' or t.title_title like '%<u>%')"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Title'))
+                record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count)
+                        record = result.fetch_row()
+                        bgcolor ^= 1
+                        count += 1
+
+		print "</table>"
+	else:
+		print "<h2>No Title records with HTML in Titles.</h2>"
+
+def function56():
+        query = """select pub_id, pub_title from pubs p, cleanup c
+        where p.pub_id=c.record_id and c.report_type=56
+        and (p.pub_title like '%<i>%' or p.pub_title like '%<u>%')"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Publication'))
+                record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+                        record = result.fetch_row()
+                        bgcolor ^= 1
+                        count += 1
+
+		print "</table>"
+	else:
+		print "<h2>No Publications with HTML in Titles.</h2>"
+
+def function57():
+        print """<h3>For SFE3-hosted images, only links to /clute/,
+                /langford/ and /robinson/ sub-directories are allowed.
+                In addition, the associated Gallery Web page 
+                must be entered in the Image field after a '|'.</h3>"""
+        
+        query = """select pub_id, pub_title from pubs, cleanup c
+                   where c.report_type=57 and pubs.pub_id=c.record_id
+                   and pub_frontimage like '%sf-encyclopedia.uk%'
+                   and ((pub_frontimage not like '%/clute/%'
+                   and pub_frontimage not like '%/langford/%'
+                   and pub_frontimage not like '%/robinson/%')
+                   or (pub_frontimage not like '%|%'))"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('', 'Publication'))
+		count = 1
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+			PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No invalid SFE3 image links found</h2>"
+
+def function58():
+	query = """select a.author_id, a.author_canonical
+                from authors a, cleanup c
+                where a.author_language is null
+                and (
+                 select count(t.title_id) from titles t, canonical_author ca
+                 where a.author_id = ca.author_id
+                 and ca.title_id = t.title_id
+                 and t.title_language is not null
+                 and t.title_language = 16
+                 )>0
+                and c.record_id=a.author_id
+                and c.report_type=58
+                order by a.author_lastname"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Author',))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+			PrintAuthorRecord(author_id, author_name, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No matching records found</h2>"
+
+def function59():
+	query = """select a.author_id, a.author_canonical
+                from authors a, cleanup c
+                where a.author_language is null
+                and (
+                 select count(t.title_id) from titles t, canonical_author ca
+                 where a.author_id = ca.author_id
+                 and ca.title_id = t.title_id
+                 and t.title_language is not null
+                 and t.title_language = 22
+                 )>0
+                and c.record_id=a.author_id
+                and c.report_type=59
+                order by a.author_lastname"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Author',))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+			PrintAuthorRecord(author_id, author_name, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No matching records found</h2>"
+
+def function60():
+	query = """select a.author_id, a.author_canonical
+                from authors a, cleanup c
+                where a.author_language is null
+                and (
+                 select count(t.title_id) from titles t, canonical_author ca
+                 where a.author_id = ca.author_id
+                 and ca.title_id = t.title_id
+                 and t.title_language is not null
+                 and t.title_language = 26
+                 )>0
+                and c.record_id=a.author_id
+                and c.report_type=60
+                order by a.author_lastname"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Author',))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+			PrintAuthorRecord(author_id, author_name, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No matching records found</h2>"
+
+def function61():
+	query = """select a.author_id, a.author_canonical
+                from authors a, cleanup c
+                where a.author_language is null
+                and (
+                 select count(t.title_id) from titles t, canonical_author ca
+                 where a.author_id = ca.author_id
+                 and ca.title_id = t.title_id
+                 and t.title_language is not null
+                 and t.title_language not in (16,17,22,26)
+                 )>0
+                and c.record_id=a.author_id
+                and c.report_type=61
+                order by a.author_lastname"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Author',))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+			PrintAuthorRecord(author_id, author_name, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No matching records found</h2>"
+
+def function62():
+        query = """select t.title_id,t.title_title
+                from cleanup c, titles t
+                where (
+                (t.title_storylen is not null
+                and t.title_storylen not in ('ss','nt','nv'))
+                or (t.title_storylen in ('ss','nt','nv')
+                and t.title_ttype!='SHORTFICTION')
+                )
+                and c.record_id=t.title_id and c.report_type=62
+                order by t.title_title"""
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Title'))
+                bgcolor = 1
+                count = 1
+                while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count)
+                        bgcolor = bgcolor ^ 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table><p>'
+        else:
+                print "<h2>No Titles with Invalid Length Values found</h2>"
+
+def function63():
+        query = """select distinct t1.title_id, t1.title_title
+                from titles t1, titles t2, cleanup c
+                where t1.title_parent = t2.title_id
+                and t1.title_non_genre != t2.title_non_genre
+                and t1.title_id = c.record_id
+                and c.report_type = 63
+                order by t1.title_title"""
+        
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if not num:
+                print "<h2>No Genre/Non-Genre Mismatches.</h2>"
+                return
+
+        PrintTableColumns(('', 'Title'))
+        bgcolor = 1
+        count = 1
+        record = result.fetch_row()
+        while record:
+                title_id = record[0][0]
+                title_title = record[0][1]
+                PrintTitleRecord(title_id, title_title, bgcolor, count)
+                bgcolor = bgcolor ^ 1
+                count += 1
+                record = result.fetch_row()
+        print '</table>'
+
+def function64():
+        print """<h3>If a series legitimately contains EDITOR and non-EDITOR titles,
+                please mention this fact in the series' Note field before marking it "Ignored".</h3>"""
+
+        query = """select s.series_id, s.series_title, c.cleanup_id from series s, cleanup c
+                 where s.series_id = c.record_id and c.report_type = 64 and c.resolved IS NULL
+                 and exists(select 1 from titles t where t.series_id = s.series_id and t.title_ttype = 'EDITOR')
+                 and exists(select 1 from titles t where t.series_id = s.series_id and t.title_ttype != 'EDITOR')
+                 order by s.series_title"""
+        db.query(query)
+        result = db.store_result()
+        if not result.num_rows():
+                print '<h2>No Series with EDITOR and non-EDITOR Titles</h2>'
+                return
+
+        # Print table headers
+        PrintTableColumns(('', 'Series', 'Ignore'))
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        while record:
+                series_id = record[0][0]
+                series_name = record[0][1]
+                cleanup_id = record[0][2]
+                PrintSeriesRecord(series_id, series_name, bgcolor, count, cleanup_id, 64)
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+def function65():
+        pattern_match = badUnicodePatternMatch('publisher_name')
+        query = """select publisher_id, publisher_name
+                from publishers p, cleanup c where (%s)
+                and p.publisher_id=c.record_id and c.report_type=65
+                order by p.publisher_name""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publisher'))
+		while record:
+                        id = record[0][0]
+                        name = record[0][1]
+                        PrintPublisherRecord(id, name, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publishers with Invalid Unicode Characters Found</h2>"
+	return
+
+def function66():
+        pattern_match = badUnicodePatternMatch('pub_series_name')
+        query = """select pub_series_id, pub_series_name
+                from pub_series p, cleanup c where (%s)
+                and p.pub_series_id=c.record_id and c.report_type=66
+                order by p.pub_series_name""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication Series'))
+		while record:
+                        id = record[0][0]
+                        title = record[0][1]
+                        PrintPubSeriesRecord(id, title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publication Series with Invalid Unicode Characters Found</h2>"
+	return
+
+def function67():
+        pattern_match = badUnicodePatternMatch('series_title')
+        query = """select series_id, series_title
+                from series s, cleanup c where (%s)
+                and s.series_id=c.record_id and c.report_type=67
+                order by s.series_title""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Series'))
+		while record:
+                        id = record[0][0]
+                        name = record[0][1]
+                        PrintSeriesRecord(id, name, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Series with Invalid Unicode Characters Found</h2>"
+	return
+
+def function68():
+        pattern_match = badUnicodePatternMatch('author_canonical')
+        query = """select author_id, author_canonical
+                from authors a, cleanup c where (%s)
+                and a.author_id=c.record_id and c.report_type=68
+                order by a.author_lastname""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Author'))
+		while record:
+                        id = record[0][0]
+                        name = record[0][1]
+                        PrintAuthorRecord(id, name, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Authors with Invalid Unicode Characters Found</h2>"
+	return
+
+def function69():
+        pattern_match = badUnicodePatternMatch('title_title')
+        query = """select title_id, title_title
+                from titles t, cleanup c where (%s)
+                and t.title_id=c.record_id and c.report_type=69
+                order by t.title_title""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title'))
+		while record:
+                        id = record[0][0]
+                        title = record[0][1]
+                        PrintTitleRecord(id, title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Titles with Invalid Unicode Characters Found</h2>"
+	return
+
+def function70():
+        pattern_match = badUnicodePatternMatch('pub_title')
+        query = """select pub_id, pub_title
+                from pubs p, cleanup c where (%s)
+                and p.pub_id=c.record_id and c.report_type=70
+                order by p.pub_title""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication'))
+		while record:
+                        id = record[0][0]
+                        title = record[0][1]
+                        PrintPublicationRecord(id, title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publications with Invalid Unicode Characters Found</h2>"
+	return
+
+
+def function71():
+        print """<h3>This report lists all 9999-00-00 titles and titles expected
+                     to be published more than 3 months in the future.</h3>"""
+        query = """select t.title_id, t.title_title, t.title_copyright
+                from titles t, cleanup c
+                where t.title_copyright > DATE_ADD(NOW(), INTERVAL 3 MONTH)
+                and t.title_copyright != '8888-00-00'
+                and t.title_id=c.record_id and c.report_type=71
+                order by t.title_title"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title', 'Date'))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        title_date = record[0][2]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        print '<td>%s</td>' % title_date
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Forthcoming Titles Found</h2>"
+	return
+
+def function72():
+        print """<h3>This report lists all 9999-00-00 publications and publications
+                     expected to be published more than 3 months in the future.</h3>"""
+        query = """select pub_id, pub_title, p.pub_year from pubs p, cleanup c
+                where p.pub_year > DATE_ADD(NOW(), INTERVAL 3 MONTH)
+                and p.pub_year != '8888-00-00'
+                and p.pub_id=c.record_id and c.report_type=72
+                order by p.pub_title"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication', 'Date'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        pub_date = record[0][2]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        print '<td>%s</td>' % pub_date
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Forthcoming Publications Found</h2>"
+	return
+
+def function73():
+        pattern_match = suspectUnicodePatternMatch('publisher_name')
+        query = """select publisher_id, publisher_name, c.cleanup_id
+                from publishers p, cleanup c where (%s)
+                and p.publisher_id=c.record_id and c.report_type=73
+                and c.resolved IS NULL
+                order by p.publisher_name""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publisher', 'Ignore'))
+		while record:
+                        id = record[0][0]
+                        name = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPublisherRecord(id, name, bgcolor, count, cleanup_id, 73)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publishers with Suspect Unicode Characters Found</h2>"
+	return
+
+def function74():
+        pattern_match = suspectUnicodePatternMatch('title_title')
+        query = """select title_id, title_title, c.cleanup_id
+                from titles t, cleanup c where (%s)
+                and t.title_id=c.record_id and c.report_type=74
+                and c.resolved IS NULL
+                order by t.title_title""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title', 'Ignore'))
+		while record:
+                        id = record[0][0]
+                        title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintTitleRecord(id, title, bgcolor, count, cleanup_id, 74)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Titles with Suspect Unicode Characters Found</h2>"
+	return
+
+def function75():
+        pattern_match = suspectUnicodePatternMatch('pub_title')
+        query = """select pub_id, pub_title, c.cleanup_id
+                from pubs p, cleanup c where (%s)
+                and p.pub_id=c.record_id and c.report_type=75
+                and c.resolved IS NULL
+                order by p.pub_title""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication', 'Ignore'))
+		while record:
+                        id = record[0][0]
+                        name = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPublicationRecord(id, name, bgcolor, count, cleanup_id, 75)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publications with Suspect Unicode Characters Found</h2>"
+	return
+
+def function76():
+        pattern_match = suspectUnicodePatternMatch('series_title')
+        query = """select series_id, series_title, c.cleanup_id
+                from series s, cleanup c where (%s)
+                and s.series_id=c.record_id and c.report_type=76
+                and c.resolved IS NULL
+                order by s.series_title""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Series', 'Ignore'))
+		while record:
+                        id = record[0][0]
+                        name = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintSeriesRecord(id, name, bgcolor, count, cleanup_id, 76)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Series with Suspect Unicode Characters Found</h2>"
+	return
+
+def function77():
+        pattern_match = suspectUnicodePatternMatch('pub_series_name')
+        query = """select pub_series_id, pub_series_name, c.cleanup_id
+                from pub_series p, cleanup c where (%s)
+                and p.pub_series_id=c.record_id and c.report_type=77
+                and c.resolved IS NULL
+                order by p.pub_series_name""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication Series', 'Ignore'))
+		while record:
+                        id = record[0][0]
+                        name = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPubSeriesRecord(id, name, bgcolor, count, cleanup_id, 77)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publication Series with Suspect Unicode Characters Found</h2>"
+	return
+
+def function78():
+        pattern_match = suspectUnicodePatternMatch('author_canonical')
+        query = """select author_id, author_canonical, c.cleanup_id
+                from authors a, cleanup c where (%s)
+                and a.author_id=c.record_id and c.report_type=78
+                and c.resolved IS NULL
+                order by a.author_canonical""" % pattern_match
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Author', 'Ignore'))
+		while record:
+                        id = record[0][0]
+                        name = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintAuthorRecord(id, name, bgcolor, count, cleanup_id, 78)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Authors with Suspect Unicode Characters Found</h2>"
+	return
+
+def function79():
+        query = """select p.pub_id, p.pub_title, c.cleanup_id from pubs p, cleanup c
+                where
+                (
+                  (REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(pub_pages,'[',''),']',''),'+',''),'v',''),'i',''),'x','') < 80
+                  and pub_pages!='' and pub_pages!='0'
+                  and pub_pages not like '%+%')
+                or
+                  (pub_pages like '%+%' and pub_pages not REGEXP '[[:digit:]]{3}')
+                )
+                and p.pub_ctype='NOVEL'
+                and p.pub_id=c.record_id and c.report_type=79
+                and c.resolved IS NULL
+                order by p.pub_title"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication', ''))
+		while record:
+                        id = record[0][0]
+                        name = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPublicationRecord(id, name, bgcolor, count, cleanup_id, 79)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No NOVEL publications with fewer than 80 pages</h2>"
+	return
+
+def function80():
+        query = """select p.pub_id, p.pub_title, t.title_id, t.title_title, c.cleanup_id
+                from pubs p, pub_content pc, titles t, cleanup c
+                where pc.pub_id = p.pub_id
+                and (p.pub_ctype = 'MAGAZINE' or p.pub_ctype = 'FANZINE')
+                and pc.title_id = t.title_id and t.title_ttype = 'SHORTFICTION'
+                and p.pub_id=c.record_id and c.report_type=80 and c.resolved is NULL
+                GROUP BY p.pub_id, p.pub_title, t.title_title HAVING count(*) > 1"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if not result.num_rows():
+		print "<h2>No Duplicate SHORTFICTION in Magazines/Fanzines</h2>"
+		return
+
+        record = result.fetch_row()
+        data = {}
+        while record:
+                pub_id = record[0][0]
+                if pub_id not in data:
+                        data[pub_id] = []
+                data[pub_id].append(record[0])
+                record = result.fetch_row()
+
+        PrintTableColumns(('', 'Publication', 'Title(s)', ''))
+        bgcolor = 1
+        count = 1
+        for pub_id in data:
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+                print '<td>%d</td>' % count
+                pub_title = data[pub_id][0][1]
+                print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                print '<td>'
+                for pub_data in data[pub_id]:
+                        title_id = pub_data[2]
+                        title_title = pub_data[3]
+                        print '<a href="http:/%s/title.cgi?%s">%s</a><br>' % (HTFAKE, title_id, title_title)
+                print '</td>'
+                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+80">Ignore</a></td>' % (HTFAKE, int(data[pub_id][0][4]))
+                print '</tr>'
+                bgcolor ^= 1
+                count += 1
+        print "</table>"
+
+def function81():
+        query = """select s.series_id, s.series_title, c.cleanup_id
+                from series s, cleanup c
+                where s.series_title like '%/%'
+                and s.series_title not like '% / %'
+                and s.series_id=c.record_id
+                and c.report_type=81
+                and c.resolved IS NULL"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Series', ''))
+		while record:
+                        series_id = record[0][0]
+                        series_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintSeriesRecord(series_id, series_title, bgcolor, count, cleanup_id, 81)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Series with Slashes and No Spaces</h2>"
+	return
+
+def function82():
+        query = """select a.award_type_id, a.award_type_name, c.cleanup_id
+                from award_types a, cleanup c
+                where c.record_id=a.award_type_note_id
+                and c.report_type=82"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+                print '<h2>Award Types</h2>'
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Award Type', 'Resolve'))
+		while record:
+                        award_type_id = record[0][0]
+                        award_type_name = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintAwardTypeRecord(award_type_id, award_type_name, bgcolor, count, cleanup_id, 82, 0)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Invalid Record URLs in Award Type Notes</h2>"
+
+        query = """select a.award_cat_id, a.award_cat_name, c.cleanup_id
+                from award_cats a, cleanup c
+                where c.record_id=a.award_cat_note_id
+                and c.report_type=82"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+                print '<h2>Award Categories</h2>'
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Award Category', 'Resolve'))
+		while record:
+                        award_cat_id = record[0][0]
+                        award_cat_name = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintAwardCatRecord(award_cat_id, award_cat_name, bgcolor, count, cleanup_id, 82, 0)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Invalid Record URLs in Award Category Notes</h2>"
+
+        query = """select a.award_id, a.award_title, c.cleanup_id
+                from awards a, cleanup c
+                where c.record_id=a.award_note_id
+                and c.report_type=82"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+                print '<h2>Awards</h2>'
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Award', 'Resolve'))
+		while record:
+                        award_id = record[0][0]
+                        award_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintAwardRecord(award_id, award_title, bgcolor, count, cleanup_id, 82, 0)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Invalid Record URLs in Award Notes</h2>"
+
+        query = """select s.series_id, s.series_title, c.cleanup_id
+                from series s, cleanup c
+                where c.record_id=s.series_note_id
+                and c.report_type=82"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+                print '<h2>Series</h2>'
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Series', 'Resolve'))
+		while record:
+                        series_id = record[0][0]
+                        series_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintSeriesRecord(series_id, series_title, bgcolor, count, cleanup_id, 82, 0)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Invalid Record URLs in Series Notes</h2>"
+
+        query = """select p.publisher_id, p.publisher_name, c.cleanup_id
+                from publishers p, cleanup c
+                where c.record_id=p.note_id
+                and c.report_type=82"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+                print '<h2>Publishers</h2>'
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publisher', 'Resolve'))
+		while record:
+                        publisher_id = record[0][0]
+                        publisher_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPublisherRecord(publisher_id, publisher_title, bgcolor, count, cleanup_id, 82, 0)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Invalid Record URLs in Publisher Notes</h2>"
+
+        query = """select p.pub_series_id, p.pub_series_name, c.cleanup_id
+                from pub_series p, cleanup c
+                where c.record_id=p.pub_series_note_id
+                and c.report_type=82"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+                print '<h2>Publication Series</h2>'
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication Series', 'Resolve'))
+		while record:
+                        pub_series_id = record[0][0]
+                        pub_series_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPubSeriesRecord(pub_series_id, pub_series_title, bgcolor, count, cleanup_id, 82, 0)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Invalid Record URLs in Publication Series Notes</h2>"
+
+        query = """select t.title_id, t.title_title, c.cleanup_id
+                from titles t, cleanup c
+                where c.record_id=t.note_id
+                and c.report_type=82"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+                print '<h2>Title Notes</h2>'
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title', 'Resolve'))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id, 82, 0)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Invalid Record URLs in Title Notes</h2>"
+
+        query = """select t.title_id, t.title_title, c.cleanup_id
+                from titles t, cleanup c
+                where c.record_id=t.title_synopsis
+                and c.report_type=82"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+                print '<h2>Synopses</h2>'
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title', 'Resolve'))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id, 82, 0)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Invalid Record URLs in Synopses</h2>"
+
+        query = """select p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, cleanup c
+                where c.record_id=p.note_id
+                and c.report_type=82"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+                print '<h2>Publications</h2>'
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication', 'Resolve'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, 82, 0)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Invalid Record URLs in Publication Notes</h2>"
+
+def function83():
+        nonModeratorMessage()
+        # Serials without parenthetical disambiguation
+        query = """select t.title_id, t.title_title, c.cleanup_id
+                from titles t, cleanup c where
+                (title_title not like '%(Complete Novel)')
+                and (title_title not like '%(Part % of %)')
+                and title_ttype='SERIAL'
+                and c.report_type=83
+                and c.record_id=t.title_id
+                and c.resolved is NULL
+                order by t.title_title"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title', 'Ignore'))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id, 83)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Serials without Standard Parenthetical Disambiguators Found</h2>"
+
+def function84():
+        nonModeratorMessage()
+        # Serials with Potentially Unnecessary Disambiguation
+        query = """select x.title_id, x.title_title, c.cleanup_id
+                from (
+                select min(t.title_id) as "title_id",
+                t.title_title,
+                substring(t.title_title,1,LOCATE("(", t.title_title)) y,
+                count(*)
+                from titles t
+                where t.title_ttype = 'SERIAL'
+                and t.title_title like '%(Part % of %)'
+                group by y
+                having count(*) = 1
+                ) x, cleanup c
+                where x.title_id = c.record_id
+                and c.report_type = 84
+                and c.resolved IS NULL
+                order by x.title_title"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title', 'Ignore'))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id, 84)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Serials with Potentially Unnecessary Disambiguation Found</h2>"
+
+def function85():
+        query = """select a.author_id, a.author_canonical, a.author_legalname, l.lang_name
+                from authors a, languages l, cleanup c
+                where a.author_language = l.lang_id
+                and l.latin_script='No'
+                and a.author_legalname regexp'[[:alpha:]]'
+                and a.author_id = c.record_id
+                and c.report_type = 85
+                order by a.author_lastname"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Canonical Name', 'Legal Name', 'Language'))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+                        author_legalname = record[0][2]
+                        if not author_legalname:
+                                author_legalname = '-'
+                        lang_name = record[0][3]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_name)
+                        print '<td>%s</td>' % author_legalname
+                        print '<td>%s</td>' % lang_name
+                        print '</tr>'
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function86():
+        query = """select distinct p.pub_id, p.pub_title
+                from pubs p, primary_verifications pv, cleanup c, mw_user u
+                where p.pub_id = pv.pub_id
+                and p.pub_ptype = 'unknown'
+                and p.pub_id=c.record_id and c.report_type=86
+                and pv.user_id = u.user_id
+                order by u.user_name, p.pub_title"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Verifiers', 'Publication'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % int(count)
+                        verifiers = SQLPrimaryVerifiers(pub_id)
+                        print '<td>'
+                        verifier_count = 0
+                        for verifier in verifiers:
+                                user_name = verifier[1]
+                                if verifier_count > 0:
+                                        print ', '
+                                print '<a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, user_name, user_name)
+                                verifier_count += 1
+                        if not verifier_count:
+                                print '&nbsp;'
+                        print '</td>'
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Primary-Verified Publications with Unknown Binding</h2>"
+	return
+
+def function87():
+        # Author/title language mismatches
+        nonModeratorMessage()
+
+        print '<h3>Note: This report is currently limited to EDITOR, NOVEL and NONFICTION titles.</h3>'
+        query = """select distinct t.title_id, t.title_title, t.title_ttype, c.cleanup_id
+                from titles t, canonical_author ca, authors a, cleanup c
+                where t.title_id=ca.title_id
+                and ca.author_id=a.author_id
+                and ca.ca_status=1
+                and t.title_parent=0
+                and t.title_language IS NOT NULL
+                and a.author_language IS NOT NULL
+                and t.title_language != a.author_language
+                and t.title_ttype in ('NOVEL', 'EDITOR', 'NONFICTION')
+                and c.report_type=87 and c.resolved IS NULL
+                and c.record_id=t.title_id
+                order by t.title_ttype, a.author_lastname, t.title_title
+                 """
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title Type', 'Author', 'Title', 'Ignore'))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        title_ttype = record[0][2]
+                        cleanup_id = record[0][3]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % count
+                        print '<td>%s</td>' % title_ttype
+                        authors = SQLTitleBriefAuthorRecords(title_id)
+                        print '<td>'
+                        author_counter = 0
+                        for author in authors:
+                                if author_counter:
+                                        print " <b>and</b> "
+                                print '<a href="http:/%s/ea.cgi?%s" dir="ltr">%s</a>' % (HTFAKE, author[0], author[1])
+                                author_counter += 1
+                        print '</td>'
+                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        if user.moderator:
+                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                                        Ignore this title</a></td>""" % (HTFAKE, int(cleanup_id), 1, 87)
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Author/Title Language Mismatches Found.</h2>"
+
+def function88():
+        # Pubs with multiple COVERART titles
+        nonModeratorMessage()
+
+        query = """select p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, cleanup c
+                where (select count(t.title_id)
+                      from titles t, pub_content pc
+                      where p.pub_id = pc.pub_id
+                      and t.title_id = pc.title_id
+                      and t.title_ttype='COVERART')
+                > 1
+                and p.pub_id=c.record_id
+                and c.report_type=88
+                and c.resolved IS NULL
+                order by p.pub_title"""
+	db.query(query)
+	result = db.store_result()
+
+	if not result.num_rows():
+		print "<h2>No publications with multiple COVERART titles</h2>"
+
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        PrintTableColumns(('', 'Publication', 'Authors', 'Primary Verifiers', 'Ignore'))
+        while record:
+                pub_id = record[0][0]
+                pub_title = record[0][1]
+                cleanup_id = record[0][2]
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td>%s</td>' % count
+
+                print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
+                
+                authors = SQLPubBriefAuthorRecords(pub_id)
+                print '<td>'
+                for author in authors:
+                        print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                print '</td>'
+                
+                verifiers = SQLPrimaryVerifiers(pub_id)
+                ver_count = 0
+                print '<td>'
+                for verifier in verifiers:
+                        user_id = verifier[0]
+                        user_name = verifier[1]
+                        if ver_count > 0:
+                                print '<br>'
+                        print '<a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, user_name, user_name)
+                        ver_count += 1
+                if not verifiers:
+                        print '&nbsp;'
+                print '</td>'
+                                
+                if user.moderator:
+                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+88">Ignore this pub</a></td>' % (HTFAKE, cleanup_id)
+                print '</tr>'
+
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+	return
+
+def function89():
+        # Authors with Invalid Birthplaces
+        query = """select author_id, author_canonical, author_birthplace, author_birthdate
+                from authors, cleanup c
+                where (
+                (author_birthplace like '%US' COLLATE latin1_general_cs)
+                or
+                (author_birthplace like "%England%"
+                and author_birthplace not like "%Kingdom of England"
+                and author_birthplace not like "%England, Kingdom of Great Britain"
+                and author_birthplace not like "%England, UK")
+                or
+                (author_birthplace like "%Scotland%"
+                and author_birthplace not like "%Kingdom of Scotland"
+                and author_birthplace not like "%Scotland, Kingdom of Great Britain"
+                and author_birthplace not like "%Scotland, UK")
+                or
+                (YEAR(author_birthdate) <1801 and YEAR(author_birthdate) != '0000'
+                and author_birthplace like '%, UK')
+                or
+                (author_birthplace like '%United Kingdom')
+                or (author_birthplace like '%Alabama%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Alaska%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Arizona%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Arkansas%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%California%' and author_birthplace not like '%, USA'
+                    and author_birthplace not like '%Baja California%')
+                or (author_birthplace like '%Colorado%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Connecticut%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Delaware%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Florida%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Georgia%' and author_birthplace not like '%, USA'
+                    and author_birthplace not like '%USSR' and author_birthplace not like '%Russia%')
+                or (author_birthplace like '%Hawaii%' and author_birthplace not like '%, USA'
+                    and author_birthplace not like '%Kingdom of Hawaii')
+                or (author_birthplace like '%Idaho%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Illinois%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Indiana%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Iowa%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Kansas%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Kentucky%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Louisiana%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Maine%' and author_birthplace not like '%, USA'
+                    and author_birthplace not like '%Maine-et-Loire%'
+                    and author_birthplace not like '%Domaine de la Devi%'
+                    and author_birthplace not like '%Castlemaine%')
+                or (author_birthplace like '%Maryland%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Massachusetts%' and author_birthplace not like '%, USA'
+                    and author_birthplace not like '%British Empire')
+                or (author_birthplace like '%Michigan%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Minnesota%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Mississippi%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Missouri%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Montana%' and author_birthplace not like '%, USA'
+                    and author_birthplace not like '%Bulgaria')
+                or (author_birthplace like '%Nebraska%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Nevada%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%New Hampshire%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%New Jersey%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%New Mexico%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%New York%' and author_birthplace not like '%, USA'
+                    and author_birthplace not like '%British Empire')
+                or (author_birthplace like '%North Carolina%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%North Dakota%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Ohio%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Oklahoma%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Oregon%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Pennsylvania%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Rhode Island%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%South Carolina%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%South Dakota%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Tennessee%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Texas%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Utah%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Vermont%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Virginia%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Washington%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%West Virginia%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Wisconsin%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Wyoming%' and author_birthplace not like '%, USA')
+                or
+                  (YEAR(author_birthdate) < 1917 and YEAR(author_birthdate) != '0000'
+                  and
+                    (author_birthplace like '%, Russia%'
+                    or
+                    author_birthplace like '%, Ukraine%')
+                  and author_birthplace not like '%Russian Empire')
+                or
+                  (YEAR(author_birthdate) > 1922 and YEAR(author_birthdate) < 1992
+                  and YEAR(author_birthdate) != '0000'
+                  and author_birthplace like '%, Russia%'
+                  and author_birthplace not like '%, USSR')
+                or
+                  (YEAR(author_birthdate) < 1923 and YEAR(author_birthdate) != '0000'
+                  and author_birthplace like '%, USSR')
+                or
+                  (YEAR(author_birthdate) > 1991 and author_birthplace like '%, USSR')
+                or
+                  (author_birthplace like '%Russian Federation%')
+                )
+                and c.report_type=89 and c.record_id=authors.author_id
+                order by authors.author_lastname
+        """
+        db.query(query)
+        result = db.store_result()
+
+        if result.num_rows() > 0:
+                record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Name', 'Birthplace', 'Birthdate'))
+                while record:
+                        author_id = record[0][0]
+                        name = record[0][1]
+                        birthplace = record[0][2]
+                        birthdate = record[0][3]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/ea.cgi?%s" dir="ltr">%s</a></td>' % (HTFAKE, author_id, name)
+                        print '<td>%s</td>' % birthplace
+                        print '<td>%s</td>' % birthdate
+                        bgcolor ^= 1
+                        count += 1
+                        record = result.fetch_row()
+                print "</table>"
+        else:
+                print "<h2>No authors with invalid birthplaces</h2>"
+        return
+
+def function90():
+        # Duplicate sub-series numbers within a series
+        query = """select series_id from series
+                where series_parent_position is not null
+                group by series_parent, series_parent_position
+                having count(*) >1
+                """
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Parent Series', 'Position', 'Sub-series'))
+		while record:
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        series_id = record[0][0]
+                        print '<td>%d</td>' % count
+                        
+                        # Retrieve the parent series information
+                        query1 = """select s2.series_id, s2.series_title
+                                        from series s1, series s2
+                                        where s1.series_parent = s2.series_id
+                                        and s1.series_id = %s""" % series_id
+                        db.query(query1)
+                        result1 = db.store_result()
+                        record1 = result1.fetch_row()
+                        parent_series_id = record1[0][0]
+                        parent_series_name = record1[0][1]
+                        print '<td><a href="http:/%s/pe.cgi?%s">%s</a></td>' % (HTFAKE, parent_series_id, parent_series_name)
+                        
+                        # Retrieve the sub-series position
+                        query2 = """select series_parent_position from series where
+                                        series_id = %s""" % series_id
+                        db.query(query2)
+                        result2 = db.store_result()
+                        record2 = result2.fetch_row()
+                        parent_position = record2[0][0]
+                        print '<td>%d</td>' % parent_position
+                        
+                        # Retrieve duplicate sub_series for this parent position
+                        query3 = """select series_id, series_title from series where
+                                        series_parent = %s and series_parent_position
+                                        = %s""" % (parent_series_id, parent_position)
+                        db.query(query3)
+                        result3 = db.store_result()
+                        record3 = result3.fetch_row()
+                        print '<td>'
+                        while record3:
+                                subseries_id = record3[0][0]
+                                subseries_name = record3[0][1]
+                                print '<a href="http:/%s/pe.cgi?%s">%s</a><br>' % (HTFAKE, subseries_id, subseries_name)
+                                record3 = result3.fetch_row()
+                        print '</td>'
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No duplicate sub-series numbers within a series found</h2>"
+
+def function91():
+        # Non-Art Titles by Non-English Authors without a Language
+        query = """select distinct t.title_ttype, t.title_id, t.title_title
+                   from authors a, titles t, canonical_author ca, cleanup c
+                   where a.author_language != 17
+                   and a.author_language is not null
+                   and a.author_id = ca.author_id
+                   and ca.title_id = t.title_id
+                   and ca.ca_status = 1
+                   and t.title_ttype not in ('COVERART', 'INTERIORART')
+                   and t.title_language is null
+                   and c.report_type = 91 and c.record_id = t.title_id
+                   order by t.title_ttype, a.author_lastname, t.title_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if num:
+                PrintTitlesWithoutLanguage(result)
+	else:
+		print "<h2>No non-art titles by non-English authors without a language found</h2>"
+
+def function92():
+        # Primary-Verified Anthologies/Collections without Contents Titles
+        query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, primary_verifications pv, cleanup c,
+                authors a, pub_authors pa, mw_user u
+                where p.pub_ctype in ('ANTHOLOGY', 'COLLECTION')
+                and c.report_type = 92 and c.record_id = p.pub_id
+                and c.resolved is NULL
+                and p.pub_id = pv.pub_id
+                and NOT EXISTS
+                  (select 1 from pub_content pc, titles t
+                  where p.pub_id=pc.pub_id 
+                  and pc.title_id=t.title_id
+                  and (t.title_ttype in ('NOVEL', 'SHORTFICTION', 'POEM', 'SERIAL'))
+                  )
+                and p.pub_id = pa.pub_id
+                and pa.author_id = a.author_id
+                and pv.user_id = u.user_id
+                order by u.user_name, a.author_lastname, p.pub_title"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+                if not user.moderator:
+                        print """<h2>If you find a legitimate Contents-less publication,
+                        please post on the Moderator Noticeboard and a moderator will
+                        remove it from this report.</h2>"""
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Verifier', 'Authors', 'Publication', 'Ignore'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%s</td>' % count
+                        verifiers = SQLPrimaryVerifiers(pub_id)
+                        print '<td>'
+                        verifier_count = 0
+                        for verifier in verifiers:
+                                if verifier_count > 0:
+                                        print ', '
+                                user_name = verifier[1]
+                                print '<a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, user_name, user_name)
+                                verifier_count += 1
+                        if not verifier_count:
+                                print '&nbsp;'
+                        print '</td>'
+                        authors = SQLPubBriefAuthorRecords(pub_id)
+                        print '<td>'
+                        for author in authors:
+                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                        print '</td>'
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        if user.moderator:
+                                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+92">Ignore this pub</a></td>' % (HTFAKE, cleanup_id)
+                        print '</tr>'
+			bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Primary-Verified Anthologies/Collections without Contents Titles found</h2>"
+	return
+
+def function93():
+        # Publication Title-Reference Title Mismatches
+
+        if not user.moderator:
+                print """<h2>If you find a legitimate mismatch,
+                please post on the Moderator Noticeboard and a moderator will
+                remove it from this report.</h2>"""
+
+        query = """select p.pub_id, p.pub_title, c.cleanup_id from pubs p,
+          cleanup c, authors a, pub_authors pa
+          where p.pub_ctype in ('CHAPBOOK', 'OMNIBUS', 'ANTHOLOGY', 'COLLECTION', 'NONFICTION', 'NOVEL')
+          and not exists
+           (select 1 from titles t, pub_content pc
+           where p.pub_id = pc.pub_id
+           and pc.title_id = t.title_id
+           and t.title_ttype = p.pub_ctype
+           and (
+                (
+                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(p.pub_title,',',''),".",''),":",''),";",''),"-",''),' ',''),"\\\\",'')
+                LIKE CONCAT('%', 
+                 REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(t.title_title,',',''),".",''),":",''),";",''),"-",''),' ',''),"\\\\",''),
+                '%')
+                )
+            or
+                (
+                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(t.title_title,',',''),".",''),":",''),";",''),"-",''),' ',''),"\\\\",'')
+                LIKE CONCAT('%',
+                 REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(p.pub_title,',',''),".",''),":",''),";",''),"-",''),' ',''),"\\\\",''),
+                '%')
+                )
+            )
+           )
+          and c.report_type = 93 and c.record_id = p.pub_id and c.resolved IS NULL
+          and p.pub_id = pa.pub_id and a.author_id = pa.author_id
+          order by a.author_lastname"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Authors', 'Publication', 'Ignore'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%s</td>' % count
+                        authors = SQLPubBriefAuthorRecords(pub_id)
+                        print '<td>'
+                        for author in authors:
+                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                        print '</td>'
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        if user.moderator:
+                                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+93">Ignore this pub</a></td>' % (HTFAKE, cleanup_id)
+                        print '</tr>'
+			bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publication Title-Reference Title Mismatches found</h2>"
+	return
+
+def function94():
+	query = """select a.author_id, a.author_canonical from authors a, cleanup c
+                 where
+                 not exists (select 1 from canonical_author ca
+                    where ca.author_id = a.author_id)
+                 and not exists (select 1 from pub_authors pa
+                    where pa.author_id = a.author_id)
+                 and a.author_id = c.record_id and c.report_type=94
+                 order by a.author_lastname
+                 """
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Author'))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+			PrintAuthorRecord(author_id, author_name, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function95():
+	query = """select a.author_id, a.author_canonical from authors a, cleanup c
+                 where
+                 not exists (select 1 from canonical_author ca
+                    where ca.author_id = a.author_id)
+                 and exists (select 1 from pub_authors pa
+                    where pa.author_id = a.author_id)
+                 and a.author_id = c.record_id and c.report_type=95
+                 order by a.author_lastname
+                 """
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Author'))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+			PrintAuthorRecord(author_id, author_name, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function96():
+        query = """select t.title_id, t.title_title
+                   from titles t, trans_titles tt, cleanup c
+                   where t.title_ttype = 'COVERART'
+                   and (t.title_title like 'Cover:%'
+                   or (tt.trans_title_title like 'Cover:%' and tt.title_id = t.title_id)
+                   )
+                   and t.title_id = c.record_id and c.report_type=96
+                   order by t.title_title"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title'))
+		while record:
+                        id = record[0][0]
+                        title = record[0][1]
+                        PrintTitleRecord(id, title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No COVERART Titles with a 'Cover: ' Prefix</h2>"
+	return
+
+def function97():
+        nonModeratorMessage()
+
+	query = """select distinct ps.pub_series_id, ps.pub_series_name, c.cleanup_id
+                from pub_series ps, cleanup c
+                where ps.pub_series_name regexp'[[:alpha:]]'
+                and ps.pub_series_id = c.record_id
+                and c.report_type=97 and c.resolved IS NULL
+                order by ps.pub_series_name"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication Series', 'Ignore'))
+		while record:
+                        pub_series_id = record[0][0]
+                        pub_series_name = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPubSeriesRecord(pub_series_id, pub_series_name, bgcolor, count, cleanup_id, 97)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publication Series with Latin Characters in the Pub. Series Name and non-Latin Title Records Found</h2>"
+	return
+
+def function98():
+        query = """select ps1.pub_series_name
+                from pub_series ps1, pub_series ps2, cleanup c
+                where ps1.pub_series_id != ps2.pub_series_id
+                and ps1.pub_series_name=ps2.pub_series_name
+                and ps1.pub_series_id=c.record_id and c.report_type=98
+                order by ps1.pub_series_name"""
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		while record:
+                        PrintTableColumns(('', 'Publication Series', ))
+                        pub_series_name = record[0][0]
+                        query2 = "select pub_series_id from pub_series where pub_series_name = '%s'" % db.escape_string(pub_series_name)
+                        db.query(query2)
+                        result2 = db.store_result()
+                        record2 = result2.fetch_row()
+                        bgcolor = 1
+                        count = 1
+                        while record2:
+                                pub_series_id = record2[0][0]
+                                PrintPubSeriesRecord(pub_series_id, pub_series_name, bgcolor, count)
+                                bgcolor ^= 1
+                                count += 1
+                                record2 = result2.fetch_row()
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function99():
+        nonModeratorMessage()
+
+	query = """select distinct p.publisher_id, p.publisher_name, c.cleanup_id
+                from publishers p, cleanup c
+                where p.publisher_name regexp'[[:alpha:]]'
+                and p.publisher_id = c.record_id
+                and c.report_type=99 and c.resolved IS NULL
+                order by p.publisher_name"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publisher', 'Problem Pubs', 'Ignore'))
+		while record:
+                        publisher_id = record[0][0]
+                        publisher_name = record[0][1]
+                        cleanup_id = record[0][2]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % count
+                        print '<td><a href="http:/%s/publisher.cgi?%d">%s</a></td>' % (HTFAKE, publisher_id, publisher_name)
+                        print '<td><a href="http:/%s/edit/publisher_exceptions.cgi?%s">Link</a></td>' % (HTFAKE, publisher_id)
+                        if user.moderator:
+                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                                        %s this publisher</a></td>""" % (HTFAKE, int(cleanup_id), 1, 99, 'Ignore')
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publishers with Latin Characters and non-Latin Title Records Found</h2>"
+	return
+
+def function100():
+	query = """select distinct p.pub_id, p.pub_title, p.pub_price
+                from pubs p, cleanup c
+                where p.pub_id = c.record_id
+                and c.report_type = 100
+                and (p.pub_price like '%$ %'
+                or p.pub_price like '%£ %'
+                or p.pub_price like '%¥ %'
+                or p.pub_price like '%CDN%'
+                or (p.pub_price like '%$%,%' and pub_price not like '%$%.%')
+                or (p.pub_price like '%£%,%' and pub_price not like '%£%.%')
+                or p.pub_price regexp '^[[:digit:]]{1,20}[.]*[[:digit:]]{1,20}$'
+                )
+                order by p.pub_title
+                """
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication', 'Price'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        pub_price = record[0][2]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        print '<td>%s</td>' % pub_price
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publication Records with Invalid Prices Found</h2>"
+	return
+
+def function101():
+        WikiPages(101, 108, 'Publication', 'Publication', 'pubs', 'pub_id', 'pub_title', 'pub_tag', 'pl')
+
+def function102():
+        WikiPages(102, 109, 'Publication_Talk', 'Publication', 'pubs', 'pub_id', 'pub_title', 'pub_tag', 'pl')
+
+def function103():
+        StrandedWikiPages(103, 108, 'Publication')
+
+def function104():
+        StrandedWikiPages(104, 109, 'Publication_Talk')
+
+def function105():
+        WikiPages(105, 112, 'Series', 'Series', 'series', 'series_id', 'series_title', 'series_title', 'pe')
+
+def function106():
+        WikiPages(106, 113, 'Series_Talk', 'Series', 'series', 'series_id', 'series_title', 'series_title', 'pe')
+
+def function107():
+        StrandedWikiPages(107, 112, 'Series')
+
+def function108():
+        StrandedWikiPages(108, 113, 'Series_Talk')
+
+def function109():
+        WikiPages(109, 110, 'Publisher', 'Publisher', 'publishers', 'publisher_id', 'publisher_name', 'publisher_name', 'publisher')
+
+def function110():
+        WikiPages(110, 111, 'Publisher_Talk', 'Publisher', 'publishers', 'publisher_id', 'publisher_name', 'publisher_name', 'publisher')
+
+def function111():
+        StrandedWikiPages(111, 110, 'Publisher')
+
+def function112():
+        StrandedWikiPages(112, 111, 'Publisher_Talk')
+
+def function113():
+        WikiPages(113, 106, 'Magazine', 'Magazine', 'series', 'series_id', 'series_title', 'series_title', 'pe')
+
+def function114():
+        WikiPages(114, 107, 'Magazine_Talk', 'Magazine', 'series', 'series_id', 'series_title', 'series_title', 'pe')
+
+def function115():
+        StrandedWikiPages(115, 106, 'Magazine')
+
+def function116():
+        StrandedWikiPages(116, 107, 'Magazine_Talk')
+
+def function117():
+        WikiPages(117, 104, 'Fanzine', 'Fanzine', 'series', 'series_id', 'series_title', 'series_title', 'pe')
+
+def function118():
+        WikiPages(118, 105, 'Fanzine_Talk', 'Fanzine', 'series', 'series_id', 'series_title', 'series_title', 'pe')
+
+def function119():
+        StrandedWikiPages(119, 104, 'Fanzine')
+
+def function120():
+        StrandedWikiPages(120, 105, 'Fanzine_Talk')
+
+def WikiPages(report_number, namespace_number, namespace_name, record_name,
+              table, record_id_field, record_title_field, linking_field,
+              script, sort_name = ''):
+        import urllib
+        if not sort_name:
+                sort_name = record_title_field
+        # First check that Wiki tables exist in this instance of ISFDB
+        if not WikiExists():
+                print '<h2>Wiki data does not exist in this instance of ISFDB, so this report is not available.</h2>'
+                return
+
+        # Step 1: Find all record IDs with a matching Wiki page
+	query = """select %s.%s, mw.page_title from mw_page mw, %s, cleanup c
+                where c.record_id=%s.%s and c.report_type=%d
+                and mw.page_namespace=%d and mw.page_title=REPLACE(%s.%s,' ','_')
+                order by %s.%s
+                """ % (table, record_id_field, table, table, record_id_field, int(report_number),
+                       int(namespace_number), table, linking_field, table, sort_name)
+
+	db.query(query)
+	result = db.store_result()
+
+	if not result.num_rows():
+		print "<h2>No records found</h2>"
+		return
+
+        record = result.fetch_row()
+        records = {}
+        while record:
+                record_id = record[0][0]
+                page_title = record[0][1]
+                records[record_id] = page_title
+                record = result.fetch_row()
+
+        # Step 2:
+        #  Branch A: For publications only, build a query to find all records with a link 
+        #  to the ISFDB Wiki in the Note field
+        if record_name == 'Publication':
+                records_in_clause = dict_to_in_clause(records)
+                query = """select distinct pub_id from pubs p, notes n
+                           where pub_id in (%s)
+                           and p.note_id = n.note_id
+                           and n.note_note like '%%www.isfdb.org%%'
+                           """ % records_in_clause
+
+        # Step 2:
+        #  Branch B: If not publications, build a query to find all records with
+        #  a "webpages" link to the ISFDB Wiki 
+        else:
+                query = """select distinct %s from webpages
+                           where %s is not null
+                           and url like '%%www.isfdb.org%%'""" % (record_id_field, record_id_field)
+
+        # Step 3:
+        #  Retrieve records and delete them from the record ID list built in Step 1
+        db.query(query)
+        result = db.store_result()
+        record = result.fetch_row()
+        while record:
+                record_id = record[0][0]
+                if record_id in records:
+                        del records[record_id]
+                record = result.fetch_row()
+
+	if not records:
+		print "<h2>No records found</h2>"
+		return
+
+        # Step 4:
+        # Convert the trimmed list of record IDs to a list and then to a SQL "in" clause.
+        # Retrieve the final list of records from the database
+        records_list = []
+        for record_id in records:
+                records_list.append(record_id)
+        records_in_clause = list_to_in_clause(records_list)
+
+        query = """select %s, %s from %s where %s in (%s) order by %s
+                """ % (record_id_field, record_title_field, table, record_id_field, records_in_clause, sort_name)
+        db.query(query)
+        result = db.store_result()
+
+	if not result.num_rows():
+		print "<h2>No records found</h2>"
+		return
+
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        PrintTableColumns(('', record_name, 'Wiki Link'))
+        while record:
+                record_id = record[0][0]
+                record_title = record[0][1]
+                wiki_title = records[record_id]
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td>%d</td>' % int(count)
+                print '<td><a href="http:/%s/%s.cgi?%s">%s</a></td>' % (HTFAKE, script, record_id, record_title)
+                print '<td><a href="http://%s/index.php/%s:%s">%s</a></td>' % (WIKILOC, namespace_name, urllib.quote(wiki_title), wiki_title)
+                print '</tr>'
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+def StrandedWikiPages(report_number, namespace_number, namespace_name):
+        import urllib
+        # First check that Wiki tables exist in this instance of ISFDB
+        if not WikiExists():
+                print '<h2>Wiki data does not exist in this instance of ISFDB, so this report is not available.</h2>'
+                return
+
+	query = """select mw.page_title from mw_page mw, cleanup c
+                        where mw.page_namespace=%d
+                        and c.record_id=mw.page_id
+                        and c.report_type=%d order by mw.page_title
+                        """ % (int(namespace_number), int(report_number))
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Wiki Link'))
+		while record:
+                        page_title = record[0][0]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http://%s/index.php/%s:%s">%s</a></td>' % (WIKILOC, namespace_name, urllib.quote(page_title), page_title)
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function121():
+	query = """select distinct ps.pub_series_id, ps.pub_series_name, c.cleanup_id
+                from pub_series ps, cleanup c
+                where not exists
+                  (select 1 from trans_pub_series tps where tps.pub_series_id = ps.pub_series_id)
+                and ps.pub_series_id = c.record_id and c.report_type=121
+                order by ps.pub_series_name"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication Series'))
+		while record:
+                        pub_series_id = record[0][0]
+                        pub_series_name = record[0][1]
+                        PrintPubSeriesRecord(pub_series_id, pub_series_name, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publication Series with Latin Characters in the Pub. Series Name and no Transliterated Names.</h2>"
+	return
+
+def function122():
+	query = """select distinct p.publisher_id, p.publisher_name, c.cleanup_id
+                from publishers p, cleanup c
+                where not exists
+                  (select 1 from trans_publisher tp where tp.publisher_id = p.publisher_id)
+                and p.publisher_id = c.record_id and c.report_type=122
+                order by p.publisher_name"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publisher'))
+		while record:
+                        publisher_id = record[0][0]
+                        publisher_name = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPublisherRecord(publisher_id, publisher_name, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Publishers with Latin Characters and no Transliterated Names.</h2>"
+	return
+
+def function123():
+        query = """select a.author_id, a.author_canonical, a.author_legalname, l.lang_name
+                from authors a, languages l, cleanup c
+                where a.author_language = l.lang_id
+                and (a.author_legalname = '' or a.author_legalname IS NULL)
+                and a.author_id = c.record_id
+                and c.report_type = 123
+                order by a.author_lastname"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Canonical Name', 'Legal Name', 'Language'))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+                        author_legalname = record[0][2]
+                        if not author_legalname:
+                                author_legalname = '-'
+                        lang_name = record[0][3]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_name)
+                        print '<td>%s</td>' % author_legalname
+                        print '<td>%s</td>' % lang_name
+                        print '</tr>'
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function124():
+        transliteratedTitles(124)
+
+def function125():
+        transliteratedTitles(125)
+
+def function126():
+        transliteratedTitles(126)
+
+def function127():
+        transliteratedTitles(127)
+
+def function128():
+        transliteratedTitles(128)
+
+def function129():
+        transliteratedTitles(129)
+
+def function130():
+        transliteratedTitles(130)
+
+def function131():
+        transliteratedTitles(131)
+
+def function132():
+        transliteratedTitles(132)
+
+def function133():
+        transliteratedTitles(133)
+
+def function134():
+        transliteratedTitles(134)
+
+def function135():
+        transliteratedTitles(135)
+
+def function136():
+        transliteratedTitles(136)
+
+def function137():
+        reports = transliteratedReports('titles')
+        languages = []
+        for report in reports:
+                language_name = report[0]
+                languages.append(language_name)
+        languages_in_clause = list_to_in_clause(languages)
+        query = """select distinct t.title_id, t.title_title
+                        from titles t, languages l, cleanup c
+                        where t.title_title regexp '&#'
+                        and ((t.title_language = l.lang_id and l.lang_name not in (%s))
+                              or t.title_language is null)
+                        and not exists
+                          (select 1 from trans_titles tt where tt.title_id = t.title_id)
+                        and t.title_id = c.record_id and c.report_type=137
+                        order by t.title_title
+                        """ % languages_in_clause
+        transliteratedTitlesDisplay(query, 'Other')
+
+def transliteratedTitles(report_id):
+        reports = transliteratedReports('titles')
+        for report in reports:
+                if report_id == report[1]:
+                        language = report[0]
+                        break
+        
+        query = """select distinct t.title_id, t.title_title
+                        from titles t, languages l, cleanup c
+                        where t.title_title regexp '&#'
+                        and t.title_language = l.lang_id
+                        and l.lang_name = '%s'
+                        and not exists
+                          (select 1 from trans_titles tt where tt.title_id = t.title_id)
+                        and t.title_id = c.record_id and c.report_type=%d
+                        order by t.title_title
+                        """ % (language, report_id)
+        transliteratedTitlesDisplay(query, language)
+
+def transliteratedTitlesDisplay(query, language):
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title', 'Authors'))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        authors = SQLTitleBriefAuthorRecords(title_id)
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        print '<td>'
+                        for author in authors:
+                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                        print '</td>'
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+                print "<h2>No %s Titles with no Transliterated Names.</h2>" % language
+	return
+
+def function138():
+        nonLatinTitles(138)
+
+def function139():
+        nonLatinTitles(139)
+
+def function140():
+        nonLatinTitles(140)
+
+def function141():
+        nonLatinTitles(141)
+
+def function142():
+        nonLatinTitles(142)
+
+def function143():
+        reports = popularNonLatinLanguages('titles')
+        languages = []
+        for report in reports:
+                languages.append(report[0])
+        languages_in_clause = list_to_in_clause(languages)
+
+        query = """select distinct t.title_id, t.title_title, c.cleanup_id
+                   from titles t, languages l, cleanup c
+                   where t.title_language = l.lang_id
+                   and l.lang_name not in (%s)
+                   and l.latin_script = 'No'
+                   and t.title_title regexp'[[:alpha:]]'
+                   and t.title_id = c.record_id and c.report_type=143
+                   and c.resolved is NULL
+                   order by t.title_title
+                   """ % languages_in_clause
+        nonLatinTitlesDisplay(143, query, 'Other')
+
+def nonLatinTitles(report_id):
+        reports = popularNonLatinLanguages('titles')
+        for report in reports:
+                if report_id == report[1]:
+                        language = report[0]
+                        break
+
+        query = """select distinct t.title_id, t.title_title, c.cleanup_id
+                   from titles t, languages l, cleanup c
+                   where t.title_language = l.lang_id
+                   and l.lang_name = '%s'
+                   and t.title_title regexp'[[:alpha:]]'
+                   and t.title_id = c.record_id and c.report_type=%d
+                   and c.resolved is NULL
+                   order by t.title_title
+                   """ % (language, report_id)
+        nonLatinTitlesDisplay(report_id, query, language)
+
+def nonLatinTitlesDisplay(report_id, query, language):
+        nonModeratorMessage()
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title', 'Ignore'))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id, report_id)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+                print "<h2>No %s Titles with Latin characters.</h2>" % language
+	return
+
+def function144():
+        nonModeratorMessage()
+
+	query = """select x.series_id, x.series_title, c.cleanup_id
+		   from cleanup c,
+		    (select distinct s1.series_id, s1.series_title
+                    from series s1, series s2
+                    where s1.series_id != s2.series_id
+                    and s1.series_title = substring(s2.series_title, 1, LOCATE(' (', s2.series_title)-1)
+		    ) as x
+                   where c.report_type=144 and c.resolved IS NULL
+                   and c.record_id = x.series_id
+                   order by x.series_title"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Series Title', 'Other Series Titles', 'Ignore'))
+		while record:
+                        series_id = record[0][0]
+                        series_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % count
+                        print '<td>%s</td>' % ISFDBLink("pe.cgi", series_id, series_title)
+
+                        print '<td>'
+                        query2 = """select series_id, series_title from series where series_title like '%s (%%'
+                        """ % db.escape_string(series_title)
+                        db.query(query2)
+                        result2 = db.store_result()
+                        record2 = result2.fetch_row()
+                        count2 = 1
+                        while record2:
+                                parenthetical_id = record2[0][0]
+                                parenthetical_title = record2[0][1]
+                                if count2 > 1:
+                                        print '<br>'
+                                print ISFDBLink("pe.cgi", parenthetical_id, parenthetical_title)
+                                count2 += 1
+                                record2 = result2.fetch_row()
+                        
+                        if user.moderator:
+                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                                        %s this series</a></td>""" % (HTFAKE, int(cleanup_id), 1, 144, 'Ignore')
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Series Names That May Need Disambiguation Found</h2>"
+	return
+
+def function145():
+	query = """select t.title_id, t.title_title from titles t, cleanup c
+                   where t.title_id = c.record_id and c.report_type=145
+                   and t.title_language = 54
+                   and (
+                           title_title like '%&#350%'
+                           or title_title like '%&#351%'
+                           or title_title like '%&#354%'
+                           or title_title like '%&#355%'
+                        )
+                order by t.title_title"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title'))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Romanian titles with s-cedilla or t-cedilla in the title.</h2>"
+	return
+
+def function146():
+	query = """select distinct p.pub_id, p.pub_title
+                   from pubs p, pub_content pc, titles t, cleanup c
+                   where p.pub_id = pc.pub_id
+                   and pc.title_id = t.title_id
+                   and t.title_language = 54
+                   and p.pub_id = c.record_id and c.report_type=146
+                   and (
+                           p.pub_title like '%&#350%'
+                           or p.pub_title like '%&#351%'
+                           or p.pub_title like '%&#354%'
+                           or p.pub_title like '%&#355%'
+                        )
+                order by p.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No pubs with Romanian titles with s-cedilla or t-cedilla.</h2>"
+	return
+
+def function147():
+	query = """select distinct p.pub_id, p.pub_title
+                   from pubs p, cleanup c
+                   where p.pub_price like '%&#65509;%'
+                   and p.pub_id = c.record_id and c.report_type=147
+                   order by p.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No pubs with fullwidth yen signs.</h2>"
+	return
+
+def function148():
+        transliteratedPubs(148)
+
+def function149():
+        transliteratedPubs(149)
+
+def function150():
+        transliteratedPubs(150)
+
+def function151():
+        transliteratedPubs(151)
+
+def function152():
+        transliteratedPubs(152)
+
+def function153():
+        transliteratedPubs(153)
+
+def function154():
+        transliteratedPubs(154)
+
+def function155():
+        transliteratedPubs(155)
+
+def function156():
+        transliteratedPubs(156)
+
+def function157():
+        transliteratedPubs(157)
+
+def function158():
+        transliteratedPubs(158)
+
+def function159():
+        transliteratedPubs(159)
+
+def function160():
+        transliteratedPubs(160)
+
+def function161():
+        reports = transliteratedReports('pubs')
+        languages = []
+        for report in reports:
+                language_name = report[0]
+                languages.append(language_name)
+        languages_in_clause = list_to_in_clause(languages)
+        query = """select distinct p.pub_id, p.pub_title
+                        from pubs p, pub_content pc, titles t, languages l, cleanup c
+                        where p.pub_title regexp '&#'
+                        and p.pub_id = pc.pub_id
+                        and pc.title_id = t.title_id
+                        and t.title_language = l.lang_id
+                        and l.lang_name not in (%s)
+                        and not exists
+                          (select 1 from trans_pubs tp where tp.pub_id = p.pub_id)
+                        and p.pub_id = c.record_id and c.report_type=161
+                        order by t.title_title
+                        """ % languages_in_clause
+        transliteratedPubsDisplay(query, 'Other')
+
+def transliteratedPubs(report_id):
+        reports = transliteratedReports('pubs')
+        for report in reports:
+                if report_id == report[1]:
+                        language = report[0]
+                        break
+        
+        query = """select distinct p.pub_id, p.pub_title
+                        from pubs p, pub_content pc, titles t, languages l, cleanup c
+                        where p.pub_title regexp '&#'
+                        and p.pub_id = pc.pub_id
+                        and pc.title_id = t.title_id
+                        and t.title_language = l.lang_id
+                        and l.lang_name = '%s'
+                        and not exists
+                          (select 1 from trans_pubs tp where tp.pub_id = p.pub_id)
+                        and p.pub_id = c.record_id and c.report_type=%d
+                        order by p.pub_title
+                        """ % (language, report_id)
+        transliteratedPubsDisplay(query, language)
+
+def transliteratedPubsDisplay(query, language):
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+                print "<h2>No %s Publications without Transliterated Titles.</h2>" % language
+	return
+
+def function162():
+        nonLatinPubs(162)
+
+def function163():
+        nonLatinPubs(163)
+
+def function164():
+        nonLatinPubs(164)
+
+def function165():
+        nonLatinPubs(165)
+
+def function166():
+        nonLatinPubs(166)
+
+def function167():
+        reports = popularNonLatinLanguages('pubs')
+        languages = []
+        for report in reports:
+                languages.append(report[0])
+        languages_in_clause = list_to_in_clause(languages)
+
+        query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
+                   from pubs p, pub_content pc, titles t, languages l, cleanup c
+                   where t.title_language = l.lang_id
+                   and p.pub_id = pc.pub_id
+                   and pc.title_id = t.title_id
+                   and l.lang_name not in (%s)
+                   and l.latin_script = 'No'
+                   and p.pub_title regexp'[[:alpha:]]'
+                   and p.pub_id = c.record_id and c.report_type=167
+                   and c.resolved is NULL
+                   order by p.pub_title
+                   """ % languages_in_clause
+        nonLatinPubsDisplay(167, query, 'Other')
+
+def nonLatinPubs(report_id):
+        reports = popularNonLatinLanguages('pubs')
+        for report in reports:
+                if report_id == report[1]:
+                        language = report[0]
+                        break
+
+        query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
+                   from pubs p, pub_content pc, titles t, languages l, cleanup c
+                   where t.title_language = l.lang_id
+                   and p.pub_id = pc.pub_id
+                   and pc.title_id = t.title_id
+                   and l.lang_name = '%s'
+                   and p.pub_title regexp'[[:alpha:]]'
+                   and p.pub_id = c.record_id and c.report_type=%d
+                   and c.resolved is NULL
+                   order by p.pub_title
+                   """ % (language, report_id)
+        nonLatinPubsDisplay(report_id, query, language)
+
+def nonLatinPubsDisplay(report_id, query, language):
+        nonModeratorMessage()
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication', 'Ignore'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, report_id)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+                print "<h2>No %s Publications with Latin characters.</h2>" % language
+	return
+
+def function168():
+	query = """select a.author_id, a.author_canonical, a.author_lastname, a.author_language
+                   from authors a, languages l, canonical_author ca1, titles t, cleanup c
+                   where (select count(*) from canonical_author ca2
+                        where ca2.author_id = a.author_id) = 1
+                   and ca1.author_id = a.author_id
+                   and ca1.title_id = t.title_id
+                   and t.title_language = l.lang_id
+                   and l.latin_script = 'No'
+                   and not exists(select 1 from trans_authors ta
+                                  where ta.author_id = a.author_id)
+                   and a.author_id = c.record_id and c.report_type=168
+                   order by a.author_lastname"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Author', 'Language'))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+                        author_language = record[0][3]
+                        if not author_language:
+                                author_language = 0
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % int(count)
+                        print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id, author_name)
+                        print '<td>%s</td>' % LANGUAGES[author_language]
+                        print '</tr>'
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function169():
+        transliteratedAuthors(169)
+
+def function170():
+        transliteratedAuthors(170)
+
+def function171():
+        transliteratedAuthors(171)
+
+def function172():
+        transliteratedAuthors(172)
+
+def function173():
+        transliteratedAuthors(173)
+
+def function174():
+        transliteratedAuthors(174)
+
+def function175():
+        transliteratedAuthors(175)
+
+def function176():
+        transliteratedAuthors(176)
+
+def function177():
+        transliteratedAuthors(177)
+
+def function178():
+        transliteratedAuthors(178)
+
+def function179():
+        transliteratedAuthors(179)
+
+def function180():
+        transliteratedAuthors(180)
+
+def function181():
+        transliteratedAuthors(181)
+
+def function182():
+        reports = transliteratedReports('titles')
+        languages = []
+        for report in reports:
+                language_name = report[0]
+                languages.append(language_name)
+        languages_in_clause = list_to_in_clause(languages)
+        query = """select distinct a.author_id, a.author_canonical
+                        from authors a, languages l, cleanup c
+                        where not exists
+                          (select 1 from trans_authors ta
+                           where ta.author_id = a.author_id)
+                        and a.author_canonical regexp '&#'
+                        and a.author_language = l.lang_id
+                        and l.lang_name not in (%s)
+                        and a.author_id = c.record_id and c.report_type=182
+                        order by a.author_canonical
+                        """ % languages_in_clause
+        transliteratedAuthorsDisplay(query, 'Other')
+
+def transliteratedAuthors(report_id):
+        reports = transliteratedReports('authors')
+        for report in reports:
+                if report_id == report[1]:
+                        language = report[0]
+                        break
+        
+        query = """select distinct a.author_id, a.author_canonical
+                        from authors a, languages l, cleanup c
+                        where not exists
+                          (select 1 from trans_authors ta
+                           where ta.author_id = a.author_id)
+                        and a.author_canonical regexp '&#'
+                        and a.author_language = l.lang_id
+                        and l.lang_name = '%s'
+                        and a.author_id = c.record_id and c.report_type=%d
+                        order by a.author_canonical
+                        """ % (language, report_id)
+        transliteratedAuthorsDisplay(query, language)
+
+def transliteratedAuthorsDisplay(query, language):
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Author'))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+                        PrintAuthorRecord(author_id, author_name, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+                print "<h2>No %s Authors without Transliterated Names.</h2>" % language
+	return
+
+def function183():
+        nonLatinAuthors(183)
+
+def function184():
+        nonLatinAuthors(184)
+
+def function185():
+        nonLatinAuthors(185)
+
+def function186():
+        nonLatinAuthors(186)
+
+def function187():
+        nonLatinAuthors(187)
+
+def function188():
+        reports = popularNonLatinLanguages('authors')
+        languages = []
+        for report in reports:
+                languages.append(report[0])
+        languages_in_clause = list_to_in_clause(languages)
+
+        query = """select distinct t.title_id, t.title_title, t.title_ttype, c.cleanup_id
+                   from titles t, languages l, authors a, canonical_author ca, cleanup c
+                   where t.title_language = l.lang_id
+                   and l.lang_name not in (%s)
+                   and l.latin_script = 'No'
+                   and a.author_canonical not regexp '&#'
+                   and ca.title_id = t.title_id
+                   and ca.author_id = a.author_id
+                   and ca.ca_status = 1
+                   and t.title_id = c.record_id and c.report_type=188
+                   and c.resolved is NULL
+                   order by t.title_title
+                   """ % languages_in_clause
+        nonLatinAuthorsDisplay(188, query, 'Other')
+
+def nonLatinAuthorsDisplay(report_id, query, language):
+        nonModeratorMessage()
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title', 'Title Type', 'Authors', 'Ignore'))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        title_ttype = record[0][2]
+                        cleanup_id = record[0][3]
+                        authors = SQLTitleBriefAuthorRecords(title_id)
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        print '<td>%s</td>' % title_ttype
+                        print '<td>'
+                        for author in authors:
+                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                        print '</td>'
+                        if cleanup_id and user.moderator:
+                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+%d">
+                                        Ignore this title</a></td>""" % (HTFAKE, int(cleanup_id), int(report_id))
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+                print "<h2>No %s Titles with a Latin author name.</h2>" % language
+	return
+                  
+def nonLatinAuthors(report_id):
+        reports = popularNonLatinLanguages('authors')
+        for report in reports:
+                if report_id == report[1]:
+                        language = report[0]
+                        break
+
+        query = """select distinct t.title_id, t.title_title, t.title_ttype, c.cleanup_id
+                   from titles t, languages l, authors a, canonical_author ca, cleanup c
+                   where t.title_language = l.lang_id
+                   and l.lang_name = '%s'
+                   and a.author_canonical not regexp '&#'
+                   and ca.title_id = t.title_id
+                   and ca.author_id = a.author_id
+                   and ca.ca_status = 1
+                   and t.title_id = c.record_id and c.report_type=%d
+                   and c.resolved is NULL
+                   order by t.title_title
+                   """ % (language, report_id)
+        nonLatinAuthorsDisplay(report_id, query, language)
+
+def function189():
+	query = """select a.author_id, a.author_canonical,
+                a.author_lastname, a.author_language
+                from cleanup c, authors a
+                where c.record_id = a.author_id
+                and a.author_lastname regexp '&#'
+                and c.report_type=189
+                order by a.author_lastname"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Family Name', 'Author', 'Working Language'))
+		while record:
+                        author_id = record[0][0]
+                        author_canonical = record[0][1]
+                        author_lastname = record[0][2]
+                        author_language = record[0][3]
+                        if not author_language:
+                                author_language = 0
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % int(count)
+                        print '<td>%s</td>' % author_lastname
+                        print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id, author_canonical)
+                        print '<td>%s</td>' % LANGUAGES[author_language]
+                        print '</tr>'
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No records found</h2>"
+
+def function190():
+	query = """select a.award_id, a.award_movie
+                   from awards a, cleanup c
+                   where a.award_id=c.record_id and c.report_type=190
+                   and a.award_movie is not NULL
+                   and a.award_movie != ''
+                   and SUBSTRING(a.award_movie, 1, 2) != 'tt'
+                   order by a.award_movie"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Movie/TV Show'))
+		while record:
+                        award_id = record[0][0]
+                        award_movie = record[0][1]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % int(count)
+                        print '<td>%s</td>' % ISFDBLink('award_details.cgi', award_id, award_movie)
+                        print '</tr>'
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No invalid award records found</h2>"
+
+def function191():
+	query = """select p.pub_id, p.pub_title
+                from pubs p, notes n, cleanup c
+                where p.note_id = n.note_id
+                and c.record_id=p.pub_id and c.report_type=191
+                and
+                (lower(REPLACE(n.note_note, ' ', '')) like '%<ahref=""%'
+                or n.note_note regexp 'a href=http')
+                order by p.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print '</table>'
+	else:
+		print '<h2>No publications with invalid HREFs.</h2>'
+	return
+
+def function192():
+        # Authors without a Working Language
+        print """<h2>This report is currently limited to authors whose names
+                     start with the letters X-Z</h2>"""
+        query = """select a.author_id, a.author_canonical
+                   from authors a, cleanup c
+                   where a.author_language is null
+                   and c.record_id = a.author_id and c.report_type = 192
+                   order by a.author_lastname, a.author_canonical"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Author'))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+                        PrintAuthorRecord(author_id, author_name, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No eligible authors without a working language.</h2>"
+	return
+
+def function193():
+        # Multilingual Publications
+        query = """select pc.pub_id, p.pub_title, p.pub_ctype, c.cleanup_id
+                   from titles t, pub_content pc, pubs p, cleanup c
+                   where pc.title_id = t.title_id
+                   and pc.pub_id = p.pub_id
+                   and t.title_language is not null
+                   and t.title_language != ''
+                   and c.report_type = 193
+                   and c.record_id = pc.pub_id
+                   and c.resolved is NULL
+                   group by pc.pub_id
+                   HAVING COUNT(distinct t.title_language) > 1
+                   order by p.pub_ctype, p.pub_title
+                """
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if num:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Pub. Type', 'Publication', 'Ignore'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        pub_ctype = record[0][2]
+                        cleanup_id = record[0][3]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % int(count)
+                        print '<td>%s</td>' % pub_ctype
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        if cleanup_id and user.moderator:
+                                message = {0: 'Resolve', 1: 'Ignore'}
+                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                                        %s this publication</a></td>""" % (HTFAKE, int(cleanup_id), 1, 193, 'Ignore')
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No outstanding multilingual publications found</h2>"
+
+def function194():
+	query = """select title_id, t.title_title, t.title_ttype
+                   from titles t, cleanup c
+                   where t.title_language is null
+                   and t.title_id = c.record_id
+                   and c.report_type = 194
+                   order by t.title_ttype, t.title_title"""
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Title Type', 'Title', 'Author'))
+		while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        title_type = record[0][2]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%s</td>' % count
+                        print '<td>%s</td>' % title_type
+                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        authors = SQLTitleBriefAuthorRecords(title_id)
+                        print '<td>'
+                        for author in authors:
+                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                        print '</td>'
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No titles without a language found.</h2>"
+	return
+
+def function195():
+        print """<h2>This report identifies non-Omnibus titles with content values.
+                   It also identifies Content values starting with a slash, which
+                   is no longer necessary.</h2>"""
+        query = """select t.title_id, t.title_title
+                   from titles t, cleanup c
+                   where (
+                   (t.title_ttype != 'OMNIBUS' and t.title_content is not null)
+                   or SUBSTRING(title_content,1,1) = '/'
+                   )
+                   and c.record_id = t.title_id and c.report_type = 195
+                   order by t.title_title"""
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Title'))
+                bgcolor = 1
+                count = 1
+                while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count)
+                        bgcolor = bgcolor ^ 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table><p>'
+        else:
+                print "<h2>No Titles with invalid content values found</h2>"
+
+def function196():
+        query = """select distinct t1.title_id, t1.title_title
+                from titles t1, titles t2, cleanup c
+                where t1.title_parent = t2.title_id
+                and t1.title_jvn != t2.title_jvn
+                and t1.title_id = c.record_id
+                and c.report_type = 196
+                order by t1.title_title"""
+        
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if not num:
+                print "<h2>No Juvenile/Non-Juvenile Mismatches.</h2>"
+                return
+
+        PrintTableColumns(('', 'Title'))
+        bgcolor = 1
+        count = 1
+        record = result.fetch_row()
+        while record:
+                title_id = record[0][0]
+                title_title = record[0][1]
+                PrintTitleRecord(title_id, title_title, bgcolor, count)
+                bgcolor = bgcolor ^ 1
+                count += 1
+                record = result.fetch_row()
+        print '</table>'
+
+def function197():
+        query = """select distinct t1.title_id, t1.title_title
+                from titles t1, titles t2, cleanup c
+                where t1.title_parent = t2.title_id
+                and t1.title_nvz != t2.title_nvz
+                and t1.title_id = c.record_id
+                and c.report_type = 197
+                order by t1.title_title"""
+        
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if not num:
+                print "<h2>No Novelization/Non-Novelization Mismatches.</h2>"
+                return
+
+        PrintTableColumns(('', 'Title'))
+        bgcolor = 1
+        count = 1
+        record = result.fetch_row()
+        while record:
+                title_id = record[0][0]
+                title_title = record[0][1]
+                PrintTitleRecord(title_id, title_title, bgcolor, count)
+                bgcolor = bgcolor ^ 1
+                count += 1
+                record = result.fetch_row()
+        print '</table>'
+
+def function198():
+        # Author/Pseudonym language mismatches
+        query = """select distinct a2.author_id, a2.author_canonical, c.cleanup_id
+                from authors a1, authors a2, pseudonyms p, cleanup c
+                where a1.author_id = p.author_id
+                and p.pseudonym = a2.author_id
+                and a2.author_language is not null
+                and a1.author_language is not null
+		and a1.author_language != a2.author_language
+		and c.record_id = a2.author_id
+		and c.report_type = 198
+		and c.resolved IS NULL
+		order by a2.author_canonical"""
+        
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Author', 'Ignore'))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+                        cleanup_id = record[0][2]
+			PrintAuthorRecord(author_id, author_name, bgcolor, count, cleanup_id, 198)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No author/pseudonym language mismatches found.</h2>"
+	return
+
+def function199():
+        # Author Notes to be Migrated from ISFDB 1.0"
+        query = """select a.author_id, a.author_canonical, a.author_note, n.note_note
+                   from authors a, notes n
+                   where a.note_id is not null
+                   and a.note_id=n.note_id
+                   order by a.author_lastname"""
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Author', 'Old Note', 'New Note'))
+		while record:
+                        author_id = record[0][0]
+                        author_name = record[0][1]
+                        new_note = record[0][2]
+                        if not new_note:
+                                new_note = '&nbsp;'
+                        old_note = record[0][3]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_name)
+                        print '<td>%s</td>' % old_note
+                        print '<td>%s</td>' % new_note
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No author/pseudonym language mismatches found.</h2>"
+	return
+
+def function200():
+        WikiPages(200, 100, 'Author', 'Author', 'authors', 'author_id', 'author_canonical', 'author_canonical', 'ea', 'author_lastname')
+
+def function201():
+        WikiPages(201, 101, 'Author_talk', 'Author', 'authors', 'author_id', 'author_canonical', 'author_canonical', 'ea', 'author_lastname')
+
+def function202():
+        StrandedWikiPages(202, 100, 'Author')
+
+def function203():
+        StrandedWikiPages(203, 101, 'Author_talk')
+
+def function204():
+        WikiPages(204, 102, 'Bio', 'Author', 'authors', 'author_id', 'author_canonical', 'author_canonical', 'ea', 'author_lastname')
+
+def function205():
+        WikiPages(205, 103, 'Bio_talk', 'Author', 'authors', 'author_id', 'author_canonical', 'author_canonical', 'ea', 'author_lastname')
+
+def function206():
+        StrandedWikiPages(206, 102, 'Bio')
+
+def function207():
+        StrandedWikiPages(207, 103, 'Bio_talk')
+
+def function208():
+        Nightly_html(208, 'pubs', 'note_id', 'pub_id', 'pub_title', 'pl')
+
+def function209():
+        Nightly_html(209, 'titles', 'note_id', 'title_id', 'title_title', 'title')
+
+def function210():
+        Nightly_html(210, 'publishers', 'note_id', 'publisher_id', 'publisher_name', 'publisher')
+
+def function211():
+        Nightly_html(211, 'series', 'series_note_id', 'series_id', 'series_title', 'pe')
+
+def function212():
+        Nightly_html(212, 'pub_series', 'pub_series_note_id', 'pub_series_id', 'pub_series_name', 'pubseries')
+
+def function213():
+        Nightly_html(213, 'awards', 'award_note_id', 'award_id', 'award_title', 'award_details')
+
+def function214():
+        Nightly_html(214, 'award_types', 'award_type_note_id', 'award_type_id', 'award_type_name', 'award_type')
+
+def function215():
+        Nightly_html(215, 'award_cats', 'award_cat_note_id', 'award_cat_id', 'award_cat_name', 'award_category')
+
+def function216():
+        Nightly_html(216, 'titles', 'title_synopsis', 'title_id', 'title_title', 'title')
+
+def function217():
+        Nightly_html(217, 'authors', 'author_note', 'author_id', 'author_canonical', 'ea')
+
+def function218():
+        ids_in_notes(218, '%ASIN%', 'ASINs', 1, 'binary')
+
+def function219():
+        ids_in_notes(219, '%.bl.%', 'British Library IDs', 1)
+
+def function220():
+        ids_in_notes(220, '%.sfbg.us%', 'SFBG IDs')
+
+def function221():
+        ids_in_notes(221, '%/d-nb.info/%', 'direct Deutsche Nationalbibliothek links')
+
+def function222():
+        ids_in_notes(222, '%fantlab.ru/%', 'FantLab links', 1)
+
+def function223():
+        ids_in_notes(223, '%.amazon.%dp%', 'direct Amazon links', 1)
+
+def function224():
+        ids_in_notes(224, '%catalogue.bnf.fr%', 'direct BNF links')
+
+def function225():
+        ids_in_notes(225, '%lccn.loc%', 'direct Library of Congress links')
+
+def function226():
+        ids_in_notes(226, '%worldcat.org/%', 'direct OCLC/WorldCat links')
+
+def ids_in_notes(report_number, pattern_match, display_name, allow_ignore = 0, like_modifier = ''):
+        if allow_ignore:
+                nonModeratorMessage()
+	query = """select p.pub_id, p.pub_title, c.cleanup_id
+                 from notes n, pubs p, cleanup c
+                 where p.note_id = n.note_id
+                 and n.note_note like %s '%s'
+                 and p.pub_id = c.record_id
+                 and c.report_type=%d
+                 and c.resolved is NULL
+                 order by p.pub_title""" % (like_modifier, pattern_match, int(report_number))
+
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                if allow_ignore:
+                        PrintTableColumns(('', 'Publication', 'Ignore'))
+                else:
+                        PrintTableColumns(('', 'Publication'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        if allow_ignore:
+                                cleanup_id = record[0][2]
+                                PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, report_number)
+                        else:
+                                PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No publications with %s in Notes.</h2>" % display_name
+
+def function227():
+        nonModeratorMessage()
+        query = """select t.title_id, t.title_title, c.cleanup_id,
+                LENGTH(REPLACE(t.title_title, ')', '')) - LENGTH(REPLACE(t.title_title, '(', '')) as cnt
+                from titles t, cleanup c
+                where t.title_id = c.record_id
+                and c.report_type = 227
+                and c.resolved is NULL
+                having cnt != 0
+                order by t.title_title"""
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Title', 'Ignore'))
+                bgcolor = 1
+                count = 1
+                while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id, 227)
+                        bgcolor ^= 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table><p>'
+        else:
+                print "<h2>No titles with mismatched parentheses found</h2>"
+
+def function228():
+        nonModeratorMessage()
+        query = """select p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, cleanup c
+                where p.pub_isbn is null
+                and p.pub_ptype = 'ebook'
+                and p.pub_ctype not in ('FANZINE','MAGAZINE')
+                and not exists(
+                         select 1 from identifiers
+                         where identifier_type_id = 1 and pub_id = p.pub_id)
+                and p.pub_id = c.record_id
+                and c.report_type = 228
+                and c.resolved is null
+                order by p.pub_title"""
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Publication', 'Ignore'))
+                bgcolor = 1
+                count = 1
+                while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, 228)
+                        bgcolor ^= 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table><p>'
+        else:
+                print "<h2>No ISBN-less e-publications without an ASIN found</h2>"
+
+def function229():
+        paired_tags = ['b', 'i', 'u', 'ol', 'ul', 'em', 'table', 'th',
+                       'tr', 'td', 'cite', 'sub', 'sup', 'span', 'blockquote', 'pre',
+                       'h1', 'h2', 'h3', 'strong', 'abbr', 'center', 'del', 'tbody',
+                       'caption', 'q']
+        query = """select p.pub_id, p.pub_title
+                from pubs p, notes n, cleanup c
+                where p.note_id = n.note_id and ("""
+        count = 0
+        for tag in paired_tags:
+                if count:
+                        query += " or "
+                query += """round((length(lower(n.note_note)) - length(replace(lower(n.note_note),'<%s>','')))/%d) !=
+                round((length(lower(n.note_note)) - length(replace(lower(n.note_note),'</%s>','')))/%d)""" % (tag, len(tag)+2, tag, len(tag)+3)
+                count += 1
+        query += """) and p.pub_id = c.record_id
+                and c.report_type = 229
+                order by p.pub_title"""
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Publication'))
+                bgcolor = 1
+                count = 1
+                while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table><p>'
+        else:
+                print "<h2>No publications with mismatches HTML tags found.</h2>"
+
+def function230():
+        query = """select p.pub_id, n.note_note
+                from notes n, pubs p, cleanup c
+                where p.note_id = n.note_id
+                and n.note_note regexp
+                '<a href=\"http:\/\/www.worldcat.org\/oclc\/[[:digit:]]{1,11}"\>[[:digit:]]{1,11}\<\/a>'
+                and p.pub_id = c.record_id
+                and c.report_type = 230"""
+        db.query(query)
+        result = db.store_result()
+        record = result.fetch_row()
+        pubs = []
+        while record:
+                pub_id = int(record[0][0])
+                note_note = record[0][1]
+                record = result.fetch_row()
+                two_numbers = note_note.lower().split('/oclc/')[1].split('</a>')[0]
+                number_list = two_numbers.split('">')
+                if number_list[0] != number_list[1]:
+                        pubs.append(pub_id)
+
+        if pubs:
+                in_clause = list_to_in_clause(pubs)
+                query = "select pub_id, pub_title from pubs where pub_id in (%s) order by pub_title" % in_clause
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                num = result.num_rows()
+                if num:
+                        PrintTableColumns(('', 'Publication'))
+                        bgcolor = 1
+                        count = 1
+                        while record:
+                                pub_id = record[0][0]
+                                pub_title = record[0][1]
+                                PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+                                bgcolor ^= 1
+                                count += 1
+                                record = result.fetch_row()
+                        print '</table><p>'
+        else:
+                print "<h2>No publications with mismatched OCLC URLs in Notes.</h2>"
+
+def function231():
+        print """<h3>For Smashwords-hosted images, the publication-specific Web page 
+                must be entered in the Image field after a '|'.</h3>"""
+        
+        query = """select pub_id, pub_title from pubs, cleanup c
+                   where c.report_type=231
+                   and pubs.pub_id=c.record_id
+                   and pub_frontimage like '%dwtr67e3ikfml.cloudfront.net%'
+                   and pub_frontimage not like '%|%'
+                   order by pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('', 'Publication'))
+		count = 1
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+			PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No invalid Smashwords image links found.</h2>"
+
+def function232():
+        query = """select award_id, award_title from awards
+                   where award_year not like '%-00-00' order by award_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('', 'Award'))
+		count = 1
+		while record:
+                        award_id = record[0][0]
+                        award_title = record[0][1]
+			PrintAwardRecord(award_id, award_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print '</table>'
+	else:
+		print '<h2>No invalid award years found.</h2>'
+
+def function233():
+        query = """select distinct p1.pub_id, p1.pub_title,
+                   p2.pub_id, p2.pub_title, c.cleanup_id
+                   from titles t, pub_content pc1, pub_content pc2,
+                   pubs p1, pubs p2, cleanup c
+                   where t.title_id = pc1.title_id
+                   and pc1.pubc_id != pc2.pubc_id
+                   and pc1.pub_id = p1.pub_id
+                   and p1.pub_ptype = 'ebook'
+                   and t.title_id = pc2.title_id
+                   and p2.pub_ptype = 'ebook'
+                   and pc2.pub_id = p2.pub_id
+                   and YEAR(p1.pub_year) = YEAR(p2.pub_year)
+                   and MONTH(p1.pub_year) = MONTH(p2.pub_year)
+                   and (p1.pub_isbn is null or p2.pub_isbn is null or p1.pub_isbn = p2.pub_isbn)
+                   and p1.pub_ctype = p2.pub_ctype
+                   and p1.pub_title = p2.pub_title
+                   and c.report_type = 233
+                   and p1.pub_id = c.record_id
+                   and c.resolved is null
+                   group by t.title_id
+                   order by p1.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('', 'Publication 1', 'Publication 2', 'Ignore'))
+		count = 1
+		while record:
+                        pub_id1 = record[0][0]
+                        pub_title1 = record[0][1]
+                        pub_id2 = record[0][2]
+                        pub_title2 = record[0][3]
+                        cleanup_id = record[0][4]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id1, pub_title1)
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id2, pub_title2)
+                        if user.moderator:
+                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+233">
+                                        Ignore</a></td>""" % (HTFAKE, int(cleanup_id))
+                        print '</tr>'
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No potential duplicate e-book publications found.</h2>"
+
+def function234():
+       
+        query = """select p.pub_id, p.pub_title
+                   from notes n, pubs p, cleanup c
+                   where p.note_id = n.note_id
+                   and n.note_note like '%http://picarta.pica.nl/%'
+                   and c.report_type = 234
+                   and p.pub_id = c.record_id
+                   order by pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('', 'Publication'))
+		count = 1
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+			PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No publications with direct De Nederlandse Bibliografie links in Notes.</h2>"
+
+
+def function9999():
+        nonModeratorMessage()
+        query = """select c.record_id, a1.author_canonical,
+                c.record_id_2, a2.author_canonical, c.cleanup_id
+                from cleanup c, authors a1, authors a2
+                where report_type=9999 and resolved IS NULL
+                and c.record_id = a1.author_id and c.record_id_2 = a2.author_id
+                and not exists(select 1 from pseudonyms p
+                where c.record_id=p.pseudonym)
+                and not exists(select 1 from pseudonyms p
+                where c.record_id_2=p.pseudonym)
+                order by a1.author_canonical"""
+	db.query(query)
+	result = db.store_result()
+
+	if not result.num_rows():
+		print "<h2>No Suspected Duplicate Authors</h2>"
+		return
+
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        PrintTableColumns(('', 'Author 1', 'Author 2', 'Ignore'))
+        while record:
+                author_id_1 = record[0][0]
+                author_name_1 = record[0][1]
+                author_id_2 = record[0][2]
+                author_name_2 = record[0][3]
+                cleanup_id = record[0][4]
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+                print '<td>%d</td>' % count
+                print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id_1, author_name_1)
+                print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id_2, author_name_2)
+                if cleanup_id and user.moderator:
+                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+9999">Ignore</a></td>' % (HTFAKE, int(cleanup_id))
+                print '</tr>'
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+def Nightly_html(report_id, table, note_field, record_id_field, record_title_field, cgi_script):
+        import cgi
+        valid_tags = valid_html_tags()
+
+        if report_id == 217:
+                query = """select t.%s, t.%s, t.%s
+                           from %s t, cleanup c where %s
+                           and t.%s = c.record_id
+                           and c.report_type = %s
+                           """ % (record_id_field, record_title_field, note_field, table,
+                                  BadHtmlClause('t.%s' % note_field), record_id_field, report_id)
+        else:
+                query = """select t.%s, t.%s, n.note_note
+                           from %s t, notes n, cleanup c where %s
+                           and t.%s = n.note_id
+                           and t.%s = c.record_id
+                           and c.report_type = %s
+                        """ % (record_id_field, record_title_field, table, BadHtmlClause('n.note_note'),
+                               note_field, record_id_field, report_id)
+        #print cgi.escape(query)
+	db.query(query)
+	result = db.store_result()
+
+	if not result.num_rows():
+		print "<h2>No invalid HTML for records of this type.</h2>"
+		return
+
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        PrintTableColumns(('', 'Record', 'Invalid HTML starts close to'))
+        while record:
+                record_id = record[0][0]
+                record_name = record[0][1]
+                note = record[0][2]
+                for tag in valid_tags:
+                        note = string.replace(note, tag.lower(), '')
+                        note = string.replace(note, tag.upper(), '')
+                problem_part = note
+                if '<' in note:
+                        problem_part = cgi.escape(note.split('<')[1][:20])
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+                print '<td>%d</td>' % count
+                print '<td><a href="http:/%s/%s.cgi?%s">%s</a></td>' % (HTFAKE, cgi_script, record_id, record_name)
+                print '<td>&lt;%s</td>' % problem_part
+                print '</tr>'
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+
+def PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+
+        print '<td>%d</td>' % int(count)
+        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+        if cleanup_id and user.moderator:
+                message = {0: 'Resolve', 1: 'Ignore'}
+                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                        %s this publication</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+	print '</tr>'
+
+def PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+
+        print '<td>%d</td>' % int(count)
+        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+        if cleanup_id and user.moderator:
+                message = {0: 'Resolve', 1: 'Ignore'}
+                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                        %s this title</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+	print '</tr>'
+
+def PrintAuthorRecord(author_id, author_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+
+        print '<td>%d</td>' % int(count)
+        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_name)
+        if cleanup_id:
+                message = {0: 'Resolve', 1: 'Ignore'}
+                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                        %s this author</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+	print '</tr>'
+
+def PrintPublisherRecord(pub_id, pub_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+
+        print '<td>%d</td>' % count
+        print '<td><a href="http:/%s/publisher.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_name)
+        if cleanup_id and user.moderator:
+                message = {0: 'Resolve', 1: 'Ignore'}
+                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                        %s this publisher</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+        print '</tr>'
+        print '<p>'
+
+def PrintPubSeriesRecord(pub_series_id, pub_series_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+
+        print '<td>%d</td>' % count
+        print '<td><a href="http:/%s/pubseries.cgi?%s">%s</a></td>' % (HTFAKE, pub_series_id, pub_series_name)
+        if cleanup_id and user.moderator:
+                message = {0: 'Resolve', 1: 'Ignore'}
+                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                        %s this publication series</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+        print '</tr>'
+        print '<p>'
+
+def PrintSeriesRecord(series_id, series_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+
+        print '<td>%d</td>' % count
+        print '<td>%s</td>' % ISFDBLink("pe.cgi", series_id, series_name)
+        if cleanup_id and user.moderator:
+                message = {0: 'Resolve', 1: 'Ignore'}
+                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                        %s this series</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+        print '</tr>'
+
+def PrintAwardTypeRecord(award_type_id, award_type_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+
+        print '<td>%d</td>' % count
+        print '<td><a href="http:/%s/awardtype.cgi?%s">%s</a></td>' % (HTFAKE, award_type_id, award_type_name)
+        if cleanup_id:
+                message = {0: 'Resolve', 1: 'Ignore'}
+                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                        %s this award type</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+        print '</tr>'
+
+def PrintAwardCatRecord(award_cat_id, award_cat_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+
+        print '<td>%d</td>' % count
+        print '<td><a href="http:/%s/award_category.cgi?%s">%s</a></td>' % (HTFAKE, award_cat_id, award_cat_name)
+        if cleanup_id:
+                message = {0: 'Resolve', 1: 'Ignore'}
+                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                        %s this award category</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+        print '</tr>'
+
+def PrintAwardRecord(award_id, award_title, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+
+        print '<td>%d</td>' % count
+        print '<td><a href="http:/%s/award_details.cgi?%s">%s</a></td>' % (HTFAKE, award_id, award_title)
+        if cleanup_id:
+                message = {0: 'Resolve', 1: 'Ignore'}
+                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                        %s this award</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+        print '</tr>'
+
+def PrintTitlesWithoutLanguage(result):
+        PrintTableColumns(('', 'Title Type', 'Author', 'Title'))
+        record = result.fetch_row()
+        bgcolor = 1
+        count = 1
+        while record:
+                title_ttype = record[0][0]
+                title_id = record[0][1]
+                title_name = record[0][2]
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td>%s</td>' % count
+                print '<td>%s</td>' % title_ttype
+                authors = SQLTitleBriefAuthorRecords(title_id)
+                print '<td>'
+                for author in authors:
+                        print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                print '</td>'
+                print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_name)
+                print '</tr>'
+                bgcolor ^= 1
+                count += 1
+                record = result.fetch_row()
+        print "</table>"
+
+def printError():
+        PrintPreSearch('Non-Existent Cleanup Report')
+        PrintNavBar(0, 0)
+        print '<div id="ErrorBox">'
+        print '<h3>Error: Non-Existent Cleanup Report</h3>'
+        print '</div>'
+        PrintPostSearch(0, 0, 0, 0, 0)
+        sys.exit(0)
+
+	
+if __name__ == '__main__':
+
+        # Retrieve all supported reports
+        (reports, sections, non_moderator) = reportsDict()
+
+	try:
+		type_id = int(sys.argv[1])
+		if type_id not in reports:
+                        raise
+                # Determine the name of the function to be called for this report
+                function = getattr(sys.modules[__name__], 'function' + str(type_id))
+	except:
+                printError()
+
+        user = User()
+        user.load()
+        user.load_moderator_flag()
+        if not user.moderator and (type_id not in non_moderator):
+                PrintPreSearch('Inaccessible Cleanup Report')
+                PrintNavBar(0, 0)
+                print '<div id="ErrorBox">'
+                print '<h3>Error: Only moderators can access the specified cleanup report</h3>'
+                print '</div>'
+                PrintPostSearch(0, 0, 0, 0, 0)
+                sys.exit(0)
+
+	PrintPreSearch(reports[type_id])
+        PrintNavBar('edit/cleanup_report.cgi', type_id)
+
+        function()
+
+        PrintPostSearch(0, 0, 0, 0, 0)
+        

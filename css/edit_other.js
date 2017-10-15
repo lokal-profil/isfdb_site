@@ -1,0 +1,47 @@
+/*     Version: $Revision: 1.1 $
+      Date: $Date: 2015/10/28 00:19:04 $ */
+
+function validateSeriesForm() {
+	if (validateRequired("series_name", "Series Name") == false) {
+		return false;
+	}
+	// Retrieve the id of the Series Number field
+	var element_name = document.getElementsByName("series_parentposition")[0];
+	// Retrieve the value of the field
+	var element_value = element_name.value.split(" ").join("");
+	// If the value doesn't match 0-9 numbers (the first one can't be 0), display an error
+	if (element_value != "") {
+		if (element_value.match(/^[1-9]{1}[0-9]{0,8}$/) == null) {
+			alert("Series Parent Position must be an integer greater than 0 and contain 1-9 digits.");
+			element_name.focus();
+			return false;
+		}
+	}
+	// Validate the Web Page URLs
+	if (validateWebPages("AddWebPage", "series_webpages") == false) {
+		return false;
+	}
+	return true;
+}
+
+function validatePubSeriesForm() {
+	if (validateRequired("pub_series_name", "Publication Series Name") == false) {
+		return false;
+	}
+	// Validate the Web Page URLs
+	if (validateWebPages("AddWebPage", "pub_series_webpages") == false) {
+		return false;
+	}
+	return true;
+}
+
+function validatePublisherForm() {
+	if (validateRequired("publisher_name", "Publisher Name") == false) {
+		return false;
+	}
+	// Validate the Web Page URLs
+	if (validateWebPages("AddWebPage", "publisher_webpages") == false) {
+		return false;
+	}
+	return true;
+}

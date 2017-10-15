@@ -1,0 +1,61 @@
+#!_PYTHONLOC
+#
+#     (C) COPYRIGHT 2004-2014   Al von Ruff, Bill Longley and Ahasuerus
+#         ALL RIGHTS RESERVED
+#
+#     The copyright notice above does not evidence any actual or
+#     intended publication of such source code.
+#
+#     Version: $Revision: 1.11 $
+#     Date: $Date: 2014/11/15 16:53:26 $
+
+	
+import cgi
+import sys
+import MySQLdb
+from isfdb import *
+from isfdblib import *
+from pubClass import *
+from login import *
+from library import *
+from SQLparsing import *
+from navbar import *
+from viewers import DisplayDeletePub
+
+
+if __name__ == '__main__':
+
+        submission = Submission()
+        submission.header = 'Publication Delete Submission'
+        submission.cgi_script = 'deletepub'
+        submission.type = MOD_PUB_DELETE
+        submission.viewer = DisplayDeletePub
+
+        form = cgi.FieldStorage()
+        try:
+		pub_id = int(form['pub_id'].value)
+		pubname = SQLgetPubTitle(pub_id)
+		if not pubname:
+                        raise
+	except:
+                submission.error('Publication does not exist any more')
+
+	if not submission.user.id:
+                submission.error('', pub_id)
+        
+        if form.has_key('reason'):
+		reason = form['reason'].value
+	else:
+		reason = 'No reason given.'
+
+	update_string =  '<?xml version="1.0" encoding="' +UNICODE+ '" ?>\n'
+	update_string += "<IsfdbSubmission>\n"
+	update_string += "  <PubDelete>\n"
+	update_string += "    <Subject>%s</Subject>\n" % (db.escape_string(XMLescape(pubname)))
+	update_string += "    <Submitter>%s</Submitter>\n" % (db.escape_string(XMLescape(submission.user.name)))
+	update_string += "    <Record>%d</Record>\n" % (pub_id)
+	update_string += "    <Reason>%s</Reason>\n" % db.escape_string(XMLescape(reason))
+	update_string += "  </PubDelete>\n"
+	update_string += "</IsfdbSubmission>\n"
+
+	submission.file(update_string)
