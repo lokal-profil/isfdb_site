@@ -1,13 +1,13 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2007-2013   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2007-2017   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
 #     Version: $Revision: 1.4 $
-#     Date: $Date: 2014/09/06 22:52:07 $
+#     Date: $Date: 2017/10/23 22:52:07 $
 
 
 import string
@@ -39,6 +39,11 @@ if __name__ == '__main__':
 	print "<p>"
 
 	print '<table cellpadding="3" bgcolor="#FFFFFF">'
+	print '<tr class="table1">'
+	print '<th>User</th>'
+	print '<th>Tags</th>'
+	print '<th>Last User Activity Date</th>'
+	print '</tr>'
 
 	query = "select distinct user_id,count(user_id) as xx from tag_mapping group by user_id order by xx desc"
 	db.query(query)
@@ -47,10 +52,12 @@ if __name__ == '__main__':
 
 	color = 0
 	while record:
+                user_id = record[0][0]
+                count = record[0][1]
                 # Only display users with 10+ tags
-                if record[0][1] <10:
+                if count < 10:
                         break
-		query = "select user_name from mw_user where user_id=%d" % (record[0][0])
+		query = "select user_name from mw_user where user_id=%d" % user_id
 		db.query(query)
 		res2 = db.store_result()
         	rec2 = res2.fetch_row()
@@ -62,7 +69,8 @@ if __name__ == '__main__':
                         print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, rec2[0][0], rec2[0][0])
                 else:
                         print '<td>&nbsp;</td>'
-		print '<td>%d</td>' % (record[0][1])
+		print '<td>%d</td>' % count
+		print '<td>%s</td>' % SQLLastUserActivity(user_id)
 		print '</tr>'
 		color = color ^ 1
         	record = result.fetch_row()
