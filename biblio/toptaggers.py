@@ -7,7 +7,7 @@
 #     intended publication of such source code.
 #
 #     Version: $Revision: 1.4 $
-#     Date: $Date: 2017/10/23 22:52:07 $
+#     Date: $Date: 2017/10/25 22:52:07 $
 
 
 import string
@@ -20,29 +20,19 @@ from SQLparsing import *
 from xml.dom import minidom
 from xml.dom import Node
 
-#mysql> show columns from tag_mapping;
-#+-----------+---------+------+-----+---------+----------------+
-#| Field     | Type    | Null | Key | Default | Extra          |
-#+-----------+---------+------+-----+---------+----------------+
-#| tagmap_id | int(11) | NO   | PRI | NULL    | auto_increment |
-#| tag_id    | int(11) | YES  | MUL | 0       |                |
-#| title_id  | int(11) | YES  | MUL | 0       |                |
-#| user_id   | int(11) | YES  | MUL | 0       |                |
-#+-----------+---------+------+-----+---------+----------------+
 
 if __name__ == '__main__':
 
 	PrintHeader("Top Taggers")
 	PrintNavbar('top', 0, 0, 'topmods.cgi', 0)
 
-	print "<h2>Top ISFDB Taggers</h2>"
-	print "<p>"
-
-	print '<table cellpadding="3" bgcolor="#FFFFFF">'
+	print '<h2>Top ISFDB Taggers</h2>'
+	print '<p>'
+	print '<table class="generic_table">'
 	print '<tr class="table1">'
 	print '<th>User</th>'
 	print '<th>Tags</th>'
-	print '<th>Last User Activity Date</th>'
+	print '<th>Last User Activity</th>'
 	print '</tr>'
 
 	query = "select distinct user_id,count(user_id) as xx from tag_mapping group by user_id order by xx desc"
@@ -57,18 +47,12 @@ if __name__ == '__main__':
                 # Only display users with 10+ tags
                 if count < 10:
                         break
-		query = "select user_name from mw_user where user_id=%d" % user_id
-		db.query(query)
-		res2 = db.store_result()
-        	rec2 = res2.fetch_row()
+                user_name = SQLgetUserName(user_id)
 		if color:
 			print '<tr align=left class="table1">'
 		else:
 			print '<tr align=left class="table2">'
-		if rec2:
-                        print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, rec2[0][0], rec2[0][0])
-                else:
-                        print '<td>&nbsp;</td>'
+                print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
 		print '<td>%d</td>' % count
 		print '<td>%s</td>' % SQLLastUserActivity(user_id)
 		print '</tr>'

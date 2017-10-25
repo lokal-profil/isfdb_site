@@ -357,7 +357,12 @@ def contributorStatistics(parent_dir):
 
 
 def oneTypeContributorStatistics(query):
-	print '<table cellpadding="3" bgcolor="#FFFFFF">'
+	print '<table class="generic_table">'
+	print '<tr class="table1">'
+	print '<th>User</th>'
+	print '<th>Count</th>'
+	print '<th>Last User Activity</th>'
+	print '</tr>'
 
 	db.query(query)
 	result = db.store_result()
@@ -365,24 +370,19 @@ def oneTypeContributorStatistics(query):
 
 	color = 0
 	while record:
-                # Stop once we have reached the first user with less than 10 contributions
-                if record[0][1] <10:
+                user_id = record[0][0]
+                count = record[0][1]
+                # Stop once we have reached the first user with fewer than 10 contributions
+                if count <10:
                         break
-		query = "select user_name from mw_user where user_id=%d" % (record[0][0])
-		db.query(query)
-		res2 = db.store_result()
-        	rec2 = res2.fetch_row()
-		#print '<tr>'
+                user_name = SQLgetUserName(user_id)
 		if color:
 			print '<tr align=left class="table1">'
 		else:
 			print '<tr align=left class="table2">'
-		if rec2:
-                        print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, rec2[0][0], rec2[0][0])
-                # If no user name is defined, display a blank cell
-                else:
-                        print '<td>&nbsp;</td>'
-		print '<td>%d</td>' % (record[0][1])
+                print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
+		print '<td>%d</td>' % count
+		print '<td>%s</td>' % SQLLastUserActivity(user_id)
 		print '</tr>'
 		color = color ^ 1
         	record = result.fetch_row()
@@ -481,14 +481,15 @@ def topVerifiers(parent_dir):
 def topModerators(parent_dir):
         file_name = parent_dir + os.sep + "top_moderators.html"
         sys.stdout = open(file_name, 'w')
-	print "<h2>Top ISFDB Moderators</h2>"
-	print "<p>"
-	print '<table cellpadding="3" bgcolor="#FFFFFF">'
+	print '<h2>Top ISFDB Moderators</h2>'
+	print '<p>'
+	print '<table class="generic_table">'
 	print '<tr align=left class="table1">'
-	print '<td><b>Moderator</b></td>'
-	print '<td><b>Total</b></td>'
-	print '<td><b>Others</b></td>'
-	print '<td><b>Self</b></td>'
+	print '<th>Moderator</th>'
+	print '<th>Total</th>'
+	print '<th>Others</th>'
+	print '<th>Self</th>'
+	print '<th>Last User Activity</th>'
 
         query = "select sub_reviewer, count(*) as total, sum(case when sub_reviewer <> sub_submitter then 1 else 0 end) from submissions where sub_state='I' and sub_reviewer != 0 group by sub_reviewer order by total desc"
 	#query = "select distinct sub_reviewer,count(sub_reviewer) as xx from submissions where sub_state='I' group by sub_reviewer order by xx desc"
@@ -498,23 +499,17 @@ def topModerators(parent_dir):
 
 	color = 0
 	while record:
-		query = "select user_name from mw_user where user_id=%d" % (record[0][0])
-		db.query(query)
-		res2 = db.store_result()
-        	rec2 = res2.fetch_row()
-		#print '<tr>'
+                user_id = record[0][0]
+                user_name = SQLgetUserName(user_id)
 		if color:
 			print '<tr align=left class="table1">'
 		else:
 			print '<tr align=left class="table2">'
-		if rec2:
-                        print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, rec2[0][0], rec2[0][0])
-                # If no user name is defined, display a blank cell
-                else:
-                        print '<td>&nbsp;</td>'
+                print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
 		print '<td>%d</td>' % (record[0][1])
 		print '<td>%d</td>' % (record[0][2])
 		print '<td>%d</td>' % (record[0][1] - record[0][2])
+		print '<td>%s</td>' % SQLLastUserActivity(user_id)
 		print '</tr>'
 		color = color ^ 1
         	record = result.fetch_row()
