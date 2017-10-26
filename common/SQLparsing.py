@@ -1199,7 +1199,7 @@ def SQLFindPubsByIsbn(targets):
 		for target in targets:
 			if not first:
 				query += "' or pub_isbn like '"
-			query += db.escape_string('%'+target+'%')
+			query += db.escape_string(target)
 			first = 0
 		query += "' order by pub_isbn limit 300"
 		db.query(query)
