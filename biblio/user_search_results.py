@@ -41,14 +41,18 @@ if __name__ == '__main__':
                 print "<h2>Specified user name does not exist</h2>"
                 PrintTrailer('search', '', 0)
                 sys.exit(0)
-        
+        moderator = 'No'
+        if SQLisUserModerator(user_id):
+                moderator = 'Yes'
         print '<table>'
         print '<tr class="table1">'
         print '<th>User Name</th>'
+        print '<th>Moderator</th>'
         print '<th>Last User Activity Date</th>'
         print '</tr>'
         print '<tr class="table2">'
         print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
+        print '<td>%s</td>' % moderator
         print '<td>%s</td>' % SQLLastUserActivity(user_id)
         print '</tr>'
         print '</table>'

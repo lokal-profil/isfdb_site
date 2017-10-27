@@ -361,6 +361,7 @@ def oneTypeContributorStatistics(query):
 	print '<tr class="table1">'
 	print '<th>User</th>'
 	print '<th>Count</th>'
+	print '<th>Moderator</th>'
 	print '<th>Last User Activity</th>'
 	print '</tr>'
 
@@ -376,12 +377,16 @@ def oneTypeContributorStatistics(query):
                 if count <10:
                         break
                 user_name = SQLgetUserName(user_id)
+                moderator = 'No'
+                if SQLisUserModerator(user_id):
+                        moderator = 'Yes'
 		if color:
 			print '<tr align=left class="table1">'
 		else:
 			print '<tr align=left class="table2">'
                 print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
 		print '<td>%d</td>' % count
+		print '<td>%s</td>' % moderator
 		print '<td>%s</td>' % SQLLastUserActivity(user_id)
 		print '</tr>'
 		color = color ^ 1
