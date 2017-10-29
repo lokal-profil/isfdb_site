@@ -63,7 +63,11 @@ def PrintPubRecord(count, record, previous_last_viewed, bgcolor):
                         if doc.getElementsByTagName(field):
                                 if fields:
                                         fields += ', '
-                                fields += field
+                                if field in SUBMISSION_DISPLAY:
+                                        display_field = SUBMISSION_DISPLAY[field]
+                                else:
+                                        display_field = field
+                                fields += display_field
                 if not fields:
                         fields = '&nbsp;'
         print '<td>%s</td>' % fields

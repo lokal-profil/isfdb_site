@@ -112,22 +112,29 @@ def CheckImage(value):
 # with no side-by-side changes.
 #################################################################
 
+def PrintLabel(Label):
+        if Label in SUBMISSION_DISPLAY:
+                display_label = SUBMISSION_DISPLAY[Label]
+        else:
+                display_label = Label
+        print '<td class="label"><b>%s</b></td>' % display_label
+
 def PrintField1(Label, Used, Value):
-        print "<tr>"
-        print '<td class="label"><b>' +Label+ '</b></td>'
+        print '<tr>'
+        PrintLabel(Label)
         if Used:
                 print '<td class="keep">'
                 print Value
-                print "</td>"
+                print '</td>'
         else:
                 print '<td class="drop">'
-                print "-"
-                print "</td>"
-        print "</tr>"
+                print '-'
+                print '</td>'
+        print '</tr>'
 
 def PrintField2Columns(Label, Used, Value, Warning):
         print '<tr>'
-        print '<td class="label"><b>%s</b></td>' % Label
+        PrintLabel(Label)
         if Used:
                 print '<td class="keep">'
                 print Value
@@ -206,8 +213,8 @@ def PrintField2(Label, value, Changed, ExistsNow, Current, warning = '', warning
                 display_author = 1
         else:
                 display_author = 0
-        print "<tr>"
-        print '<td class="label"><b>' +Label+ '</b></td>'
+        print '<tr>'
+        PrintLabel(Label)
         if Changed:
                 print '<td class="drop">'
                 if ExistsNow:
@@ -312,8 +319,8 @@ def PrintComparison2(Label, Proposed, Original, warning = ''):
 ###########################################################
 
 def PrintComparison3(Label, XmlData, KeepId, KeepUsed, DropUsed, KeepData, DropData):
-        print "<tr>"
-        print '<td class="label"><b>' +Label+ '</b></td>'
+        print '<tr>'
+        PrintLabel(Label)
         id = GetElementValue(XmlData, Label)
 	if id == '':
 		id = KeepId
@@ -353,7 +360,7 @@ def PrintMultField1(ParentLabel, ChildLabel, Separator, Used, Current, warnings 
                 Separator = '<span class="mergesign">+</span>'
 
 	print '<tr>'
-	print '<td class="label"><b>%s</b></td>' % ParentLabel
+        PrintLabel(ParentLabel)
 	print '<td class="keep">'
 	if Used:
                 if ParentLabel == 'Authors':
@@ -386,7 +393,7 @@ def PrintMultField2XML(ParentLabel, ChildLabel, Separator, doc, XmlData):
                 Separator = '<span class="mergesign">+</span>'
 
 	print '<tr>'
-	print '<td class="label"><b>%s</b></td>' % ParentLabel
+        PrintLabel(ParentLabel)
 	value = GetElementValue(XmlData, ParentLabel)
 	if value:
 		print '<td class="keep">'
@@ -480,8 +487,8 @@ def PrintMultField(ParentLabel, ChildLabel, Separator, doc, XmlData, Used, Curre
         # Change the formatting of 'pluses' to look nicer
         if Separator == '+':
                 Separator = '<span class="mergesign">+</span>'
-	print "<tr>"
-	print '<td class="label"><b>' +ParentLabel+ '</b></td>'
+	print '<tr>'
+        PrintLabel(ParentLabel)
 	value = GetElementValue(XmlData, ParentLabel)
        	if value:
 		print '<td class="drop">'
