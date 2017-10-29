@@ -165,7 +165,7 @@ def PrintPubSelectors(number):
 	print '<option VALUE="pub_price">Price'
 	print '<option VALUE="pub_pages">Page Count'
         print '<option VALUE="pub_coverart">Cover Artist'
-	print '<option VALUE="pub_ptype">Binding'
+	print '<option VALUE="pub_ptype">Format'
 	print '<option VALUE="pub_verifier">Primary Verifier'
         print '<option VALUE="pub_note">Notes'
 	print '<option VALUE="pub_frontimage">Image URL'
@@ -187,7 +187,7 @@ def PrintPubSortBy():
 	print '<option VALUE="pub_isbn">ISBN/Catalog #'
 	print '<option VALUE="pub_price">Price'
 	print '<option VALUE="pub_pages">Page Count'
-	print '<option VALUE="pub_ptype">Binding'
+	print '<option VALUE="pub_ptype">Format'
 	print '<option VALUE="pub_frontimage">Image URL'
        	print '</select>'
 

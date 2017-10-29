@@ -490,11 +490,11 @@ def HelpPub():
         link = 'http://%s/index.php?title=Template:PublicationFields:Pages' % (WIKILOC)
         help['Pages'] = [text, link]
 
-        text = 'The binding format of the publication. hc stands for hardcovers, pb for '
+        text = 'The format of the publication. hc stands for hardcovers, pb for '
         text += '7\'\' by 4.25\'\' (18 cm by 11 cm) paperbacks, tp for other paperbacks, ph for pamphlets. '
         text += 'Follow this link for an explanation of the other supported formats.'
-        link = 'http://%s/index.php?title=Template:PublicationFields:Binding' % (WIKILOC)
-        help['Binding'] = [text, link]
+        link = 'http://%s/index.php?title=Template:PublicationFields:Format' % (WIKILOC)
+        help['Format'] = [text, link]
 
         text = 'Type of publication. Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:PublicationFields:PubType' % (WIKILOC)

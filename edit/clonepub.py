@@ -53,7 +53,7 @@ def printpubrecord(pub, image_url, reuse_external_ids):
 
 	printfield("Pages", "pub_pages", help, pub.pub_pages)
 	
-	printbinding("pub_ptype", "Binding", help, pub.pub_ptype)
+	printformat("pub_ptype", "Format", help, pub.pub_ptype)
 
 	print '<tr>'
 	printContentHeader('Pub Type:', help)

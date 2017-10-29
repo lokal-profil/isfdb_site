@@ -418,7 +418,7 @@ if __name__ == '__main__':
 		print '  <b>Pages:</b>', pub.pub_pages
 	if pub.pub_ptype:
 		print '<li>'
-		print '  <b>Binding:</b>', pub.pub_ptype
+		print '  <b>Format:</b>', pub.pub_ptype
 	reference_title = None
 	if pub.pub_ctype:
 		print '<li>'
@@ -467,9 +467,9 @@ if __name__ == '__main__':
                 else:
                         publisher_string = 'Unknown'
                 if pub.pub_ptype:
-                        binding = pub.pub_ptype
+                        format = pub.pub_ptype
                 else:
-                        binding = ''
+                        format = ''
                 pub_year = convertYear(pub.pub_year)
                 if pub_year == 'unknown':
                         pub_year = 'Unknown year'
@@ -498,8 +498,8 @@ if __name__ == '__main__':
                 if publisher_string == 'Unknown':
                         param += ' publisher'
                 param += ' ' + pub_year
-                if binding:
-                        param += ' ' + binding
+                if format:
+                        param += ' ' + format
                 param += '\n|Pub=' + tag
                 if publisher_string:
                         param += '\n|Publisher=' + publisher_string

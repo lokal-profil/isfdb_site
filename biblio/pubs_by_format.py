@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2016   Ahasuerus
+#     (C) COPYRIGHT 2014-2017   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -40,7 +40,7 @@ if __name__ == '__main__':
                 Yellow - pulp,
                 Orange - digest,
                 Pink - ebook,
-                Black - other formats/bindings</h3>"""
+                Black - other formats</h3>"""
 	# Set the start year to 1900
 	startyear = 1900
 	# Set the end year to the last year (current year may not have enough data points)

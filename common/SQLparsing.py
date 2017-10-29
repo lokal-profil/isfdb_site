@@ -2405,7 +2405,7 @@ def SQLGetPseudIdByAuthorAndPseud(parent,author):
 		pub = result.fetch_row()
 	return results
 
-def LoadWebSites(isbn, user_id = None, binding = None):
+def LoadWebSites(isbn, user_id = None, format = None):
         from urlparse import urlparse
         from library import toISBN10, toISBN13
         from isbn import convertISBN
@@ -2438,7 +2438,7 @@ def LoadWebSites(isbn, user_id = None, binding = None):
                 site_isbn13 = site[0][2]
                 # For Amazon ebook links and 979 ISBN-13s, link to the Amazon search
                 # page because direct links using ISBN-10s do not work
-                if site_name[0:6] == 'Amazon' and (binding == 'ebook' or (len(newisbn) == 13 and isbn13[:3] == '979')):
+                if site_name[0:6] == 'Amazon' and (format == 'ebook' or (len(newisbn) == 13 and isbn13[:3] == '979')):
                         parsed_url = urlparse(site_url)
                         scheme = parsed_url[0]
                         # Extract the "domain:port" part of the URL

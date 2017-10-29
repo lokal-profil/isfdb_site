@@ -372,8 +372,8 @@ LANGUAGES = ('None','Afrikaans','Albanian','Ancient Greek','Arabic','Armenian',
              'Mayan languages', 'Akkadian', 'Sumerian', 'Norwegian (Bokmal)',
              'Norwegian (Nynorsk)')
 
-# List of all supported binding codes
-BINDINGS = ('unknown','hc','tp','pb','ph','digest','dos','ebook','webzine','pulp',
+# List of all supported format codes
+FORMATS = ('unknown','hc','tp','pb','ph','digest','dos','ebook','webzine','pulp',
             'bedsheet','tabloid','A4','A5','quarto','octavo','audio CD','audio MP3 CD',
             'audio cassette','audio LP','digital audio player','digital audio download','other')
 
@@ -418,8 +418,10 @@ SUBMISSION_DISPLAY = {
     'PubSeriesTransNames': 'Transliterated Name',
     'PubType': 'Pub Type',
     'Seriesnum': 'Series Number',
+    'SeriesNum': 'Series Number',
     'ShortName': 'Short Name',
     'Storylen': 'Length',
+    'TitleNote': 'Title Note',
     'TranslitTitles': 'Transliterated Title',
     'TransTitles': 'Transliterated Title',
     'Webpages': 'Web Page',

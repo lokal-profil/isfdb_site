@@ -176,8 +176,8 @@ def PrintField1XML(Label, XmlData, title):
                                 warning = DuplicateISBN(value)
 
                 elif Label == 'Binding':
-                        if value and (value not in BINDINGS):
-                                warning = 'Uncommon binding'
+                        if value and (value not in FORMATS):
+                                warning = 'Uncommon format'
                         elif value == 'ebook':
                                 pub_date = GetElementValue(XmlData, 'Year')
                                 if Compare2Dates(pub_date, '2000-01-01') == 1:

@@ -90,7 +90,7 @@ def printlanguage(current_language_code='', field='language', label='Language', 
         print '</td>'
         print '</tr>'
 
-def printbinding(field='pub_ptype', label='Binding', help = None, value='unknown'):
+def printformat(field='pub_ptype', label='Format', help = None, value='unknown'):
         if not value:
                 value = 'unknown'
 	print '<tr>'
@@ -98,12 +98,12 @@ def printbinding(field='pub_ptype', label='Binding', help = None, value='unknown
 
         print '<td><select tabindex="1" name="%s">' %(field)
 
-        # Iterate over the list of recognized bindings and display them in a drop-down list
-        for binding in BINDINGS:
-		if binding.lower() == value.lower():
-        		print '<option selected="selected">%s</option>' % (binding)
+        # Iterate over the list of recognized formats and display them in a drop-down list
+        for format in FORMATS:
+		if format.lower() == value.lower():
+        		print '<option selected="selected">%s</option>' % format
 		else:
-        		print '<option>%s</option>' % (binding)
+        		print '<option>%s</option>' % format
 
         print '</select>'
         print '</td>'

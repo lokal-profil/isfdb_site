@@ -453,7 +453,7 @@ def display_sources(submission_id):
         merge = doc.getElementsByTagName('NewPub')
 
         isbn = GetElementValue(merge, 'Isbn')
-        binding = GetElementValue(merge, 'Binding')
+        format = GetElementValue(merge, 'Binding')
 
         if not isbn:
                 return
@@ -466,7 +466,7 @@ def display_sources(submission_id):
                 return
 
         # Retrieve all Web sites that ISFDB knows about
-        websites = LoadWebSites(isbn, None, binding)
+        websites = LoadWebSites(isbn, None, format)
         print '<ul>Additional sources: '
         for website in websites:
                 print '<li><a href="%s" target="_blank">%s</a>' % (website[1], website[0])

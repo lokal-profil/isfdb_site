@@ -704,7 +704,7 @@ if __name__ == '__main__':
 
 			if pub[PUB_PTYPE]:
 				if pub[PUB_PTYPE] == 'unknown':
-					print '<li> Unknown publication binding:'
+					print '<li> Unknown publication format:'
 					print '%s (%s)' % (ISFDBLink("pl.cgi", pub[PUB_PUBID], pub[PUB_TITLE]), convertDate(pub[PUB_YEAR], 1))
 					nonefound = 0
 

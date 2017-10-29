@@ -332,7 +332,7 @@ class PublicationMonth:
                 print "<td><b>ISBN</b></td>"
                 print "<td><b>Price</b></td>"
                 print "<td><b>Pages</b></td>"
-                print "<td><b>Binding</b></td>"
+                print "<td><b>Format</b></td>"
                 print "</tr>"
 
         def PrintOneRecord(self):

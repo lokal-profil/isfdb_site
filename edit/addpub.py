@@ -80,7 +80,7 @@ if __name__ == '__main__':
 	printfield("Publisher", "pub_publisher", help)
 	printfield("Pages", "pub_pages", help)
 
-	printbinding("pub_ptype", "Binding", help)
+	printformat("pub_ptype", "Format", help)
 
 	printfield("Pub Type", "pub_ctype", help, pub_type, 1)
 

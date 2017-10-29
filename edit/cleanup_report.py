@@ -1174,11 +1174,11 @@ def function34():
 		print "<h2>No records found</h2>"
 
 def function35():
-        bindings = "'" + "','".join(BINDINGS) + "'"
+        formats = "'" + "','".join(FORMATS) + "'"
 	query = """select pubs.pub_ptype, pubs.pub_id, pubs.pub_title from pubs, cleanup where 
                 pubs.pub_ptype not in (%s) and pubs.pub_ptype IS NOT NULL and pubs.pub_ptype !='' 
                 and pubs.pub_id=cleanup.record_id and cleanup.report_type=35 
-                order by pubs.pub_ptype, pubs.pub_title""" % (bindings)
+                order by pubs.pub_ptype, pubs.pub_title""" % (formats)
 
 	db.query(query)
 	result = db.store_result()
@@ -1186,11 +1186,11 @@ def function35():
                 print '<h2>No matching records</h2>'
                 return
         
-        PrintTableColumns(('Binding', 'Publication'))
+        PrintTableColumns(('Format', 'Publication'))
         bgcolor = 1
         record = result.fetch_row()
         while record:
-                binding = record[0][0]
+                format = record[0][0]
                 pub_id = record[0][1]
                 pub_title = record[0][2]
                 if bgcolor:
@@ -1198,7 +1198,7 @@ def function35():
                 else:
                         print '<tr align=left class="table2">'
 
-                print '<td>%s</td>' % binding
+                print '<td>%s</td>' % format
                 print '<td>'
                 print '<a href="http:/%s/pl.cgi?%s">%s</a>' % (HTFAKE, pub_id, pub_title)
                 print '</td>'
@@ -3304,7 +3304,7 @@ def function86():
 			record = result.fetch_row()
 		print "</table>"
 	else:
-		print "<h2>No Primary-Verified Publications with Unknown Binding</h2>"
+		print "<h2>No Primary-Verified Publications with Unknown Format</h2>"
 	return
 
 def function87():

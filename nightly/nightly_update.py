@@ -327,11 +327,11 @@ def nightly_cleanup_reports():
                 and t.title_ttype != 'COVERART')"""
         standardReport(query, 34)
 
-        #   Report 35: Invalid Publication Bindings
-        bindings = "'" + "','".join(BINDINGS) + "'"
+        #   Report 35: Invalid Publication Formats
+        formats = "'" + "','".join(FORMATS) + "'"
 	query = "select pub_id from pubs where pub_ptype not in (%s) \
                 and pub_ptype IS NOT NULL and pub_ptype!='' \
-                order by pub_ptype, pub_title" % (bindings)
+                order by pub_ptype, pub_title" % (formats)
         standardReport(query, 35)
 
         #   Report 36: Images Which We Don't Have Permission to Link to
@@ -952,7 +952,7 @@ def nightly_cleanup_reports():
                 ) x"""
         standardReport(query, 84)
 
-        #   Report 86: Primary-verified pubs with "unknown" binding
+        #   Report 86: Primary-verified pubs with "unknown" format
         query = """select distinct p.pub_id
                 from pubs p, primary_verifications pv
                 where p.pub_id = pv.pub_id 

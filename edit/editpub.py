@@ -269,7 +269,7 @@ def printpubrecord(pub):
 	printfield("Date", "pub_year", help, pub.pub_year)
         printfield("Publisher", "pub_publisher", help, pub.pub_publisher)
 	printfield("Pages", "pub_pages", help, pub.pub_pages)
-	printbinding("pub_ptype", "Binding", help, pub.pub_ptype)
+	printformat("pub_ptype", "Format", help, pub.pub_ptype)
 
 	print '<tr>'
 	printContentHeader('Pub Type:', help)
