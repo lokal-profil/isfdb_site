@@ -7,8 +7,8 @@
 #     intended publication of such source code.
 #
 #
-#     Version: $Revision: 1.2 $
-#     Date: $Date: 2008/05/18 23:35:27 $
+#     Version: $Revision$
+#     Date: $Date$
 
 set -x
 #######################################
