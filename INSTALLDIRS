@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008   Al von Ruff
+#     (C) COPYRIGHT 2008-2017   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -8,5 +8,5 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-INSTALL_CGI	= /usr/local/apache2/cgi-bin 
-INSTALL_HTML	= /usr/local/apache2/htdocs 
+INSTALL_CGI	= /var/www/cgi-bin
+INSTALL_HTML	= /var/www/html
