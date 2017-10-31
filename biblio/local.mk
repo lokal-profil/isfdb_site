@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.12 $
-#     Date: $Date: 2016/05/30 19:55:30 $
+#     Version: $Revision$
+#     Date: $Date$
 
 
 include .TARGETS

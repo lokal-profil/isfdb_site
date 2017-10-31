@@ -6,8 +6,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.20 $
-#     Date: $Date: 2016/10/25 01:12:42 $
+#     Version: $Revision$
+#     Date: $Date$
 
 
 import string
