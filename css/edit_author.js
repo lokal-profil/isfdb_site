@@ -1,5 +1,5 @@
-/*     Version: $Revision: 1.1 $
-      Date: $Date: 2015/10/26 04:08:27 $ */
+/*     Version: $Revision$
+      Date: $Date$ */
 
 function validateAuthorForm() {
 	// Validate that a non-empty author name has been entered

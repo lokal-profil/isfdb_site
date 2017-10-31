@@ -1,7 +1,7 @@
-/*     Version: $Revision: 1.28 $
+/*     Version: $Revision$
       (C) COPYRIGHT 2015-2017   Ahasuerus
          ALL RIGHTS RESERVED
-      Date: $Date: 2017/06/14 20:21:17 $ */
+      Date: $Date$ */
 
 function validatePubURL(field_name) {
 	// First check that the entered URL contains only valid URL characters

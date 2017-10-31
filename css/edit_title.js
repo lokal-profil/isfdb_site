@@ -1,7 +1,7 @@
-/*     Version: $Revision: 1.10 $
+/*     Version: $Revision$
       (C) COPYRIGHT 2015-2017   Ahasuerus
          ALL RIGHTS RESERVED
-      Date: $Date: 2017/03/05 17:20:11 $ */
+      Date: $Date$ */
 
 function validateParentTitle() {
 	// Validate that a non-empty parent ID has been entered

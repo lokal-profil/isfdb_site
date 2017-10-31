@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.5 $
-#     Date: $Date: 2010/12/04 01:58:53 $
+#     Version: $Revision$
+#     Date: $Date$
 
 from localdefs import *
 import sys

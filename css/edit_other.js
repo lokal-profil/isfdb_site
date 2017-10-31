@@ -1,5 +1,5 @@
-/*     Version: $Revision: 1.1 $
-      Date: $Date: 2015/10/28 00:19:04 $ */
+/*     Version: $Revision$
+      Date: $Date$ */
 
 function validateSeriesForm() {
 	if (validateRequired("series_name", "Series Name") == false) {

@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.14 $
-#     Date: $Date: 2015/10/28 23:25:50 $
+#     Version: $Revision$
+#     Date: $Date$
 
 
 # Need to create index.html

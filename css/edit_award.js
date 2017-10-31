@@ -1,5 +1,5 @@
-/*     Version: $Revision: 1.1 $
-      Date: $Date: 2015/10/27 23:20:40 $ */
+/*     Version: $Revision$
+      Date: $Date$ */
 
 function validateAwardForm() {
 	// Validate the award year

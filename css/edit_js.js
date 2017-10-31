@@ -1,7 +1,7 @@
-/*     Version: $Revision: 1.15 $
+/*     Version: $Revision$
       (C) COPYRIGHT 2015-2017   Ahasuerus
          ALL RIGHTS RESERVED
-      Date: $Date: 2017/03/05 17:20:11 $ */
+      Date: $Date$ */
 
 function validateURL(field_name) {
 	// Retrieve the URL field - use [0] because JS returns an array in case there are many fields with this name
