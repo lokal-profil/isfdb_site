@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.4 $
-#     Date: $Date: 2010/11/24 07:59:18 $
+#     Version: $Revision$
+#     Date: $Date$
 
 
 LOCAL:

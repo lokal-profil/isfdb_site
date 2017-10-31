@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.31 $
-#     Date: $Date: 2017/04/19 00:33:52 $
+#     Version: $Revision$
+#     Date: $Date$
 
 
 import MySQLdb
