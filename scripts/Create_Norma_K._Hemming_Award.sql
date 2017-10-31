@@ -1,8 +1,8 @@
 /* 
    Create_Norma_K._Hemming_Award.sql is a MySQL script intended to create an entry for the Norma K. Hemming Award.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2013/07/07 05:50:12 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2013   Ahasuerus
       ALL RIGHTS RESERVED

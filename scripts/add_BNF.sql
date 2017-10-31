@@ -2,8 +2,8 @@
    add_BNF.sql is a MySQL script intended to add Bibliotheque nationale de France
    as another "Other Sites" option. 
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2011/12/29 06:11:58 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Ahasuerus
       ALL RIGHTS RESERVED

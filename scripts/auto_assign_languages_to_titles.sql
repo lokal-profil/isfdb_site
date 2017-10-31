@@ -4,8 +4,8 @@
    stages after a manual review of language-less titles. See
    FR 965 for the associated cleanup report. 
 
-   Version: $Revision: 1.26 $
-   Date:    $Date: 2017/02/27 20:41:39 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

@@ -2,8 +2,8 @@
    add_googlebooks.sql is a MySQL script intended to add Google Books
    as another "Other Sites" option. 
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2011/10/30 18:39:57 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Bill Longley
       ALL RIGHTS RESERVED

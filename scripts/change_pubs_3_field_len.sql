@@ -5,8 +5,8 @@
    pub_isbn (was 32)
    pub_pages (was 16)
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2013/10/31 20:39:47 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2013 Ahasuerus
       ALL RIGHTS RESERVED

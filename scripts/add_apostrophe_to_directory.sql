@@ -3,8 +3,8 @@
    add a new "letter" to the directory table to cover an apostrophe as
    second letter in the author last name.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2011/07/08 22:50:26 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Bill Longley
       ALL RIGHTS RESERVED

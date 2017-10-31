@@ -2,8 +2,8 @@
    add_middle_english_language.sql is a MySQL script intended to add
    Middle English to ISFDB
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/02/13 18:53:39 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

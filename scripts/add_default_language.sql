@@ -2,8 +2,8 @@
    add_default_language.sql is a MySQL script intended to add a new
    column to user_preferences to let a user indicate a default language
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2011/07/16 16:31:11 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Bill Longley
       ALL RIGHTS RESERVED

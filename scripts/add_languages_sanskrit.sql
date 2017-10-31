@@ -1,8 +1,8 @@
 /* 
    add_languages_sanskrit.sql is a MySQL script intended to add Sanskrit to the list of recognized languages. 
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2012/10/04 01:09:42 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2012 Ahasuerus
       ALL RIGHTS RESERVED

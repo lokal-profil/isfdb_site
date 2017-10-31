@@ -3,8 +3,8 @@
    alter table "cleanup" as follows: rename column "data" to "resolve and
    change its type from mediumtext to tinyint
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/09/01 01:37:12 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

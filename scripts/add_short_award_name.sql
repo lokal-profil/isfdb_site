@@ -2,8 +2,8 @@
    add_short_award_name.sql is a MySQL script intended to
    alter table "award_types" to add field award_type_short_name
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/02/25 22:13:03 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

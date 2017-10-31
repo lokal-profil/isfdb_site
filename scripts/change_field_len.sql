@@ -5,8 +5,8 @@
    series_title in table series_title
    publisher_name in table publishers
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2012/04/08 05:09:26 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2012 Ahasuerus
       ALL RIGHTS RESERVED

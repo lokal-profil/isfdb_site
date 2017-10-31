@@ -1,8 +1,8 @@
 /* 
    add_parent_series_index.sql is a MySQL script intended
    to add a parent series index to the series table
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/04/24 00:15:32 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

@@ -3,8 +3,8 @@
    change the ISBN13 flag to link to third party sites using
    ISBN13 rather than ISBN10.
 
-   Version: $Revision: 1.5 $
-   Date:    $Date: 2015/08/10 23:42:40 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

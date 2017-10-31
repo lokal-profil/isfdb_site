@@ -1,8 +1,8 @@
 /* 
    add_BLIC.sql is a MySQL script intended to add linking to BLIC by ISBN
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/04/12 23:14:11 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

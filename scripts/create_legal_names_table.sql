@@ -2,8 +2,8 @@
    create_legal_names_table.sql is a MySQL script intended to
    create a table of transliterated legal names
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/04/16 23:45:07 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

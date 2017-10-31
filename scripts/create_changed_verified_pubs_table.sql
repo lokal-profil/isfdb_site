@@ -2,8 +2,8 @@
    create_changed_verified_pubs_table.sql is a MySQL script intended to
    create a table of changed verified publications
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/10/29 00:14:22 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

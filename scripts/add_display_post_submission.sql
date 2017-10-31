@@ -2,8 +2,8 @@
    add_display_post_submission.sql is a MySQL script intended to
    alter table "user_preferences" to add field display_post_submission
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/11/14 05:08:09 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

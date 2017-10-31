@@ -3,8 +3,8 @@
    alter table "submissions" to add value "P" ("In Progress") to field
    sub_state
 
-   Version: $Revision: 1.2 $
-   Date:    $Date: 2015/04/03 23:10:38 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

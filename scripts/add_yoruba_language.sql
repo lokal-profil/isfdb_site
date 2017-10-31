@@ -2,8 +2,8 @@
    add_yoruba_language.sql is a MySQL script intended to add
    Yoruba to ISFDB
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/10/04 23:55:12 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

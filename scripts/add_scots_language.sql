@@ -2,8 +2,8 @@
    add_scots_language.sql is a MySQL script intended to add
    Scots to ISFDB
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/09/14 21:59:37 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

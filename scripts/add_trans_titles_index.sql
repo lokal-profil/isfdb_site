@@ -2,8 +2,8 @@
    add_trans_titles_index.sql is a MySQL script intended to
    add a new index (trans_title_title ) to table "trans_titles"
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/07/11 16:56:13 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

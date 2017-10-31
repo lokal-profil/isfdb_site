@@ -3,8 +3,8 @@
    add links to Amazon web sites in a number of countries:
 	
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/06/25 19:19:53 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

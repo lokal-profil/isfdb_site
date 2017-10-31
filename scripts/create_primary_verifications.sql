@@ -3,8 +3,8 @@
    create a table of primary verifications and move all primary
    verifications to it
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/04/15 23:46:19 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

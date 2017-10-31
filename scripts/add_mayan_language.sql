@@ -2,8 +2,8 @@
    add_mayan_language.sql is a MySQL script intended to add
    mayan language to ISFDB
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/03/02 21:12:49 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

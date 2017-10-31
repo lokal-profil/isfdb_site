@@ -2,8 +2,8 @@
    add_display_cover_links.sql is a MySQL script intended to
    alter table "user_preferences" to add field cover_links_display
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/03/01 02:34:39 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

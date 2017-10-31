@@ -2,8 +2,8 @@
    create_seiun_and_nihon_SF_awards.sql is a MySQL script intended
    to create entries for Seiun and Nihon SF Taisho awards
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/08/07 04:06:37 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015   Ahasuerus
       ALL RIGHTS RESERVED

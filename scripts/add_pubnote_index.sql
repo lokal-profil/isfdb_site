@@ -2,8 +2,8 @@
    add_pubnote_index.sql is a MySQL script intended to
    alter table "pubs" to index the "note_id" column.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2011/04/07 23:17:20 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Bill Longley
       ALL RIGHTS RESERVED

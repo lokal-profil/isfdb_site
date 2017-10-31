@@ -3,8 +3,8 @@
    add a "state_reviewed" (i.e. a ombination of "sub_state" and "sub_reviewed")
    index to the table "submissions"
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/01/22 01:05:34 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

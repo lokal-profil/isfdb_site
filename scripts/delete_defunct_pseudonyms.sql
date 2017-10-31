@@ -1,8 +1,8 @@
 /* 
    Delete defunct pseudonyms as per Bug 2834693
 
-   Version: $Revision: 1.2 $
-   Date:    $Date: 2009/11/02 04:47:26 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2009  Al von Ruff
       ALL RIGHTS RESERVED

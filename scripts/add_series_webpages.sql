@@ -3,8 +3,8 @@
    alter table "webpages" to add column "series_id" and
    table "series" to add column "series_note_id"
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/01/20 03:46:58 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

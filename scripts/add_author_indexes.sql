@@ -3,8 +3,8 @@
    add a new index (author_id) to table "webpages" and
    a new index (author_id) to table "emails"
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/08/18 23:11:25 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

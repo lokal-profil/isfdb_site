@@ -3,8 +3,8 @@
    the storylen field in the titles table into 4 fields. See
    FR 163 for details.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/03/08 21:53:19 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

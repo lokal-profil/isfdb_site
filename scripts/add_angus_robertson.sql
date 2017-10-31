@@ -2,8 +2,8 @@
    add_angus_robertson.sql is a MySQL script intended to add 
    Angus & Robertson as an "Other Sites" option.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/03/07 06:30:55 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

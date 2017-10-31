@@ -2,8 +2,8 @@
    delete_bad_awards.sql is a MySQL script intended to
    delete bad award entries from "awards"
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/03/31 01:42:17 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

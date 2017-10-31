@@ -1,10 +1,12 @@
 #!/usr/bin/python
-#    (C) COPYRIGHT 2008   Al von Ruff
+#    (C) COPYRIGHT 2008-2017   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
+#     Version: $Revision: 1.4 $
+#     Date: $Date: 2011/11/13 07:02:29 $
 
 import cgi
 import sys

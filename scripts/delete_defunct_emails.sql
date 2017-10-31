@@ -3,8 +3,8 @@
    delete authors' e-mail addresses for previously deleted
    authors.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/01/19 22:42:13 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

@@ -3,8 +3,8 @@
    delete one note record that is no longer associated with a
    publisher record
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/09/30 00:14:16 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

@@ -1,8 +1,8 @@
 /* 
    add_languages_2011.sql is a MySQL script intended to add 17 languages to ISFDB. 
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2011/12/30 09:17:12 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Ahasuerus
       ALL RIGHTS RESERVED

@@ -3,8 +3,8 @@
    alter table "user_preferences" to add two field:
    suppress_awards and suppress_reviews
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/10/16 04:36:09 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

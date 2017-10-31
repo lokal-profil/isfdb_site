@@ -2,8 +2,8 @@
    change_missing_pub_formats_to_unknown.sql is a MySQL script intended to
    change empty or NULL publication format values to 'unknown'
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/01/09 23:23:51 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014   Ahasuerus
       ALL RIGHTS RESERVED

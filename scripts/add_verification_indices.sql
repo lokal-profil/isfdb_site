@@ -2,8 +2,8 @@
    add_verification_indices.sql is a MySQL script intended
    to add indices to primary and secondary verification tables
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/04/16 20:32:05 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

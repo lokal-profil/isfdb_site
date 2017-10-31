@@ -2,8 +2,8 @@
    add_goodreads.sql is a MySQL script intended to add Open Library 
    as another "Other Sites" option. 
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2011/11/03 16:37:26 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Bill Longley
       ALL RIGHTS RESERVED

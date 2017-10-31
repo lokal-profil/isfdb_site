@@ -3,8 +3,8 @@
    change the empty ("") storylen values in the titles table
    to NULLS
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/01/17 21:29:20 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

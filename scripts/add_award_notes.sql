@@ -2,8 +2,8 @@
    add_award_notes.sql is a MySQL script intended to
    alter table "awards" to add field award_note_id
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/08/12 03:17:24 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

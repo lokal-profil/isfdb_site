@@ -3,8 +3,8 @@
    delete one of the two European Library rows in the websites tables
    and correct the other one.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/08/07 23:04:37 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

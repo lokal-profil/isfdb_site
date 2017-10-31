@@ -1,8 +1,8 @@
 /* 
    Create_Sir_Julius_Vogel_Award.sql is a MySQL script intended to create an entry for the Sir Julius Vogel Award.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2013/07/07 04:21:48 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2013   Ahasuerus
       ALL RIGHTS RESERVED

@@ -3,8 +3,8 @@
    alter table "award_cats" to add field award_cat_order
    and add default ordering values
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/06/24 04:21:55 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

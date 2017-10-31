@@ -6,8 +6,8 @@
    title records which were previously affected by a
    bug in the Title Merge code
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/01/24 14:57:47 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

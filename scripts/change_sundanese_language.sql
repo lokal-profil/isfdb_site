@@ -4,8 +4,8 @@
    Sundanese language from "No" to "Yes". It turns out that
    modern Sundanese support the Latin script.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/03/04 16:04:00 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

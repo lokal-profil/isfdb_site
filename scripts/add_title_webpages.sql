@@ -2,8 +2,8 @@
    add_title_webpages.sql is a MySQL script intended to
    alter table "webpages" to include column "title_id".
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2011/04/06 16:31:58 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Bill Longley
       ALL RIGHTS RESERVED

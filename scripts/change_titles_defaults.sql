@@ -4,8 +4,8 @@
    fields 'title_non_genre' and "title_graphic' from NULL
    to No.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/02/16 01:42:56 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

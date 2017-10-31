@@ -2,8 +2,8 @@
    add_disp_all_lang_to_user_prefs.sql is a MySQL script intended to
    alter table "user_preferences" to include column "display_all_languages".
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2009/11/16 03:08:19 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2009   Ahasuerus
       ALL RIGHTS RESERVED

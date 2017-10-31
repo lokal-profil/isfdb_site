@@ -2,8 +2,8 @@
    add_award_indices.sql is a MySQL script intended to
    add indices by award category and award type to table "awards".
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/06/13 20:30:20 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

@@ -2,8 +2,8 @@
    add_title_graphic_flag.sql is a MySQL script intended to
    alter table "titles" to add field title_graphic
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/02/14 03:10:43 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

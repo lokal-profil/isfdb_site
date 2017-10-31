@@ -3,8 +3,8 @@
    delete records from the trans_legal_names table which are
    associated with author records that are no longer in the database
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/09/14 02:39:18 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

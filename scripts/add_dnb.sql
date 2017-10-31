@@ -2,8 +2,8 @@
    add_dnb.sql is a MySQL script intended to add Deutsche Nationalbibliothek 
    as another "Other Sites" option. 
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2011/11/07 18:58:38 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Bill Longley
       ALL RIGHTS RESERVED

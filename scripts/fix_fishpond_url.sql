@@ -1,8 +1,8 @@
 /* 
    fix_fishpond_url.sql is a MySQL script intended to  fix FishPond URLs
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/08/26 01:12:42 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

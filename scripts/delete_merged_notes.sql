@@ -2,8 +2,8 @@
    delete_merged_notes.sql is a MySQL script intended to
    delete notes entries for previosly merged notes.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/08/17 03:31:29 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

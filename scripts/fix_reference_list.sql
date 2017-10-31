@@ -4,8 +4,8 @@
    their position in the list. It is only supposed to be run ONCE 
    so protection against "fixing" them again is built in.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2009/06/06 18:06:27 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2009   Bill Longley on behalf of ISFDB.
       ALL RIGHTS RESERVED

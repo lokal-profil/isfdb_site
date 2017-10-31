@@ -2,8 +2,8 @@
    Delete_Stray_Author_Webpage.sql is a MySQL script intended to 
    remove author webpages left behind when the author was deleted.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2013/03/06 19:26:23 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2013   Bill Longley
       ALL RIGHTS RESERVED

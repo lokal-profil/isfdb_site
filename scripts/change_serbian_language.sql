@@ -4,8 +4,8 @@
    Serbian language from "No" to "Yes". Modern Serbian uses
    both Latin and Cyrillic.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/04/27 17:57:12 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

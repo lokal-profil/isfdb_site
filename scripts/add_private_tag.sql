@@ -2,8 +2,8 @@
    add_private_tag.sql is a MySQL script intended to
    alter table tags" to add column "tag_private"
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/01/21 17:30:40 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

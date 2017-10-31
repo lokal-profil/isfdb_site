@@ -3,8 +3,8 @@
    correct the "non-genre" and "graphic format" flags for REVIEW and
    INTERVIEW titles
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/12/01 20:40:43 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

@@ -1,8 +1,8 @@
 /* 
    add_pub_title_index.sql is a MySQL script intended
    to add a title/pub index to the pub_content table
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/04/24 00:15:32 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

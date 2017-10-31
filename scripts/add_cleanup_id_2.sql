@@ -2,8 +2,8 @@
    add_cleanup_id_2.sql is a MySQL script intended to
    alter table "cleanup" to add field cleanup_id_2
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/02/19 22:47:07 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

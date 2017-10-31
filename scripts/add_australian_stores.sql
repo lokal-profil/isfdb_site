@@ -2,8 +2,8 @@
    add_australian_stores.sql is a MySQL script intended to add 
    fishpond.com.au and Booktopia as "Other Sites" options.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/02/28 05:15:16 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

@@ -2,8 +2,8 @@
    dedup_title_relationships.sql is a MySQL script intended to remove 
    duplicates from the title relationships table.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2013/03/09 08:45:27 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2013   Bill Longley
       ALL RIGHTS RESERVED

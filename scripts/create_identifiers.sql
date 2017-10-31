@@ -7,8 +7,8 @@
    It also populates the first two tables
 	
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/05/24 20:39:53 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

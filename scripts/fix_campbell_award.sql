@@ -3,8 +3,8 @@
    mass change entries in the "awards" table for Campbell
    Memorial ('Ca') records
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/04/17 19:57:04 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

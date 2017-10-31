@@ -7,8 +7,8 @@
    It can be run as necessary until whatever bugs allow such 
    duplicates to be created have been fixed.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2009/06/06 15:59:54 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2009   Bill Longley on behalf of ISFDB.
       ALL RIGHTS RESERVED

@@ -2,8 +2,8 @@
    create_user_status_table.sql is a MySQL script intended to
    create a user status table
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/10/29 00:14:22 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

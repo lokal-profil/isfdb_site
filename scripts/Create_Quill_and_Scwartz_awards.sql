@@ -2,8 +2,8 @@
    Create_Quill_and_Scwartz_awards.sql is a MySQL script intended
    to create entries for the Quill Award and Ruth and Sylvia Schwartz Children's Book Award
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/02/24 22:07:02 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014   Ahasuerus
       ALL RIGHTS RESERVED

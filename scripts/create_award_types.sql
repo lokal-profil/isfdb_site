@@ -3,8 +3,8 @@
    create and populate a table of award types for use 
 	 in the awards table.
 
-   Version: $Revision: 1.3 $
-   Date:    $Date: 2013/01/14 15:38:44 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011-2013 Bill Longley and Ahasuerus
       ALL RIGHTS RESERVED

@@ -2,8 +2,8 @@
    add_keep_spaces_in_searches.sql is a MySQL script intended to
    alter table "user_preferences" to add field add_keep_spaces_in_searches
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/03/01 19:23:49 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

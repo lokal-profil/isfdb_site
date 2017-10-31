@@ -3,8 +3,8 @@
    add indices to the following "transliterated names" tables:
    trans_pub_series, trans_publisher, and trans_legal_names
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/05/04 20:01:13 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

@@ -2,8 +2,8 @@
    fix_notes_with_mismatched_angle_brackets.sql is a MySQL script intended to
    fix Notes records with mismatched angle brackets
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/09/01 23:05:51 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

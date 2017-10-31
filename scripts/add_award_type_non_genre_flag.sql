@@ -2,8 +2,8 @@
    add_award_type_non_genre_flag.sql is a MySQL script intended to
    alter table "award_types" to add field award_type_non_genre
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/08/13 02:21:35 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

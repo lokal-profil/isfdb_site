@@ -3,8 +3,8 @@
    delete records from canonical_author and pub_authors that are
    associated with no longer existing titles and publications
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/10/10 03:05:22 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

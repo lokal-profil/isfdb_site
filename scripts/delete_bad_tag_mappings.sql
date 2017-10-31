@@ -2,8 +2,8 @@
    delete_bad_tag_mappings.sql is a MySQL script intended to
    delete obsolete/bad entries in the table tag_mapping
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/03/05 20:01:06 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

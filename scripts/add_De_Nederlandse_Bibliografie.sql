@@ -3,8 +3,8 @@
    add De Nederlandse Bibliografie as an external idenifier
 	
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/08/20 20:04:41 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

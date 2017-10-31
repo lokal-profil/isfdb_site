@@ -2,8 +2,8 @@
    add_latin_script_flag.sql is a MySQL script intended to
    alter table langiages" to add field latin_script
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/04/19 23:45:55 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

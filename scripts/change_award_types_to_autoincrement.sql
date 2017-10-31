@@ -2,8 +2,8 @@
    change_award_types_to_autoincrement.sql is a MySQL script intended to
    alter table "award_types" to change field award_type_id to be "auto_increment"
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/05/19 22:30:47 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

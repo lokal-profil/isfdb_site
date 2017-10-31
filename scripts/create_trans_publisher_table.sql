@@ -2,8 +2,8 @@
    create_trans_publisher_table.sql is a MySQL script intended to
    create a table of transliterated publisher names
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/02/09 22:15:40 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

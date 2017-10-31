@@ -2,8 +2,8 @@
    create_trans_author_table.sql is a MySQL script intended to
    create a table of transliterated author titles
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/08/21 22:11:53 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

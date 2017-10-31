@@ -4,8 +4,8 @@
    European Library and COPAC to the "Other Sites" section of the Publication
    display page.
 
-   Version: $Revision: 1.2 $
-   Date:    $Date: 2011/12/04 06:57:05 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Bill Longley and Ahasuerus
       ALL RIGHTS RESERVED

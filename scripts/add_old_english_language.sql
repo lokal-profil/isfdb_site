@@ -2,8 +2,8 @@
    add_old_english_language.sql is a MySQL script intended to add
    Old English to ISFDB
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/10/23 23:06:17 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

@@ -11,8 +11,8 @@
    that you will have to keep the reference IDs in step in each insert,
    and do not attempt to create reference_ids that already exist.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2009/06/06 18:06:27 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2009   Bill Longley on behalf of ISFDB.
       ALL RIGHTS RESERVED

@@ -2,8 +2,8 @@
    add_serbo_croatian.sql is a MySQL script intended to add
    Serbo-Croatian-Cyrillic and Serbo-Croatian-Roman to ISFDB
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/03/10 00:18:14 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

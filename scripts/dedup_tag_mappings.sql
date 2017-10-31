@@ -2,8 +2,8 @@
    dedup_tag_mappings.sql is a MySQL script intended to remove 
    semi-duplicates (differ by leading space only) from the tag_mappings table.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2013/03/09 09:56:54 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2013   Bill Longley
       ALL RIGHTS RESERVED

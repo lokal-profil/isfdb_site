@@ -2,8 +2,8 @@
    add_old_french_language.sql is a MySQL script intended to add
    Old French to ISFDB
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/11/28 23:50:15 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

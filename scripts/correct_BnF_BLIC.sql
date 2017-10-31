@@ -2,8 +2,8 @@
    correct_BnF_BLIC.sql is a MySQL script intended to fix the logic
    used to link to BnF by ISBN
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/04/16 16:49:30 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

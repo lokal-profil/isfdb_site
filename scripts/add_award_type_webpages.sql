@@ -4,8 +4,8 @@
    table "award_types" to add columns "award_type_wikipedia"
    and "award_type_note_id"
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2013/02/15 01:01:27 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2013 Ahasuerus
       ALL RIGHTS RESERVED

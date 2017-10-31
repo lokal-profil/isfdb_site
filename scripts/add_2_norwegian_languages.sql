@@ -3,8 +3,8 @@
    2 Norweian languages - Norwegian (Bokmål) and Norwegian (Nynorsk) -
    to ISFDB
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/08/19 21:01:35 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

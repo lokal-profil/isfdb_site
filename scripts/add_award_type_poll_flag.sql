@@ -2,8 +2,8 @@
    add_award_type_poll_flag.sql is a MySQL script intended to
    alter table "award_types" to add field award_type_poll_flag
 
-   Version: $Revision: 1.2 $
-   Date:    $Date: 2014/05/11 02:36:21 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

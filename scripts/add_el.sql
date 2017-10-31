@@ -2,8 +2,8 @@
    add_el.sql is a MySQL script intended to add the European Library
    as another "Other Sites" option. 
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2011/11/08 23:16:01 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Bill Longley
       ALL RIGHTS RESERVED

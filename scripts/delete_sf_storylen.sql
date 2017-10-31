@@ -3,8 +3,8 @@
    delete all occurences of 'sf' in the storylen field
    of the "titles" table
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/11/27 22:06:09 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

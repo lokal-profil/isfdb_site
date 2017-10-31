@@ -2,8 +2,8 @@
    add_middle_high_german_language.sql is a MySQL script intended to add
    Middle English to ISFDB
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2015/03/04 00:56:47 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2015 Ahasuerus
       ALL RIGHTS RESERVED

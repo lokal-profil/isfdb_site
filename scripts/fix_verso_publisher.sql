@@ -1,8 +1,8 @@
 /* 
    fix_verso_publisher.sql is a MySQL script intended to fix "Verso" publisher
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2016/10/26 23:19:37 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2016 Ahasuerus
       ALL RIGHTS RESERVED

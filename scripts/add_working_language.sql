@@ -2,8 +2,8 @@
    add_working_language.sql is a MySQL script intended to add a new column
    to the authors table to indicate the main language the author wrote in
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2011/07/21 18:26:43 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2011 Bill Longley
       ALL RIGHTS RESERVED

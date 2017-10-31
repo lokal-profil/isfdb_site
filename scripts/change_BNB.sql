@@ -2,8 +2,8 @@
    change_BNB.sql is a MySQL script intended to
    change the URLs for BNB identifiers.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/06/01 22:19:43 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

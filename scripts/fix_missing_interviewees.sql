@@ -3,8 +3,8 @@
    REVIEW titles where the reviewed author has been left blank due to 
    Bug 1743292.  
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2009/06/06 16:29:07 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2009   Bill Longley on behalf of ISFDB.
       ALL RIGHTS RESERVED

@@ -2,8 +2,8 @@
    create_bad_image_table.sql is a MySQL script intended to
    create a table of bad images.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/02/02 05:18:06 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

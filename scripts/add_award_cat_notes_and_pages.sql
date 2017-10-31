@@ -3,8 +3,8 @@
    alter table "award_cats" to add field award_cat_id and
    alter table "webpages" to add field award_cat_note_id
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/07/05 12:17:43 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

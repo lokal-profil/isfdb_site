@@ -2,8 +2,8 @@
    add_title_non_genre_flag.sql is a MySQL script intended to
    alter table "titles" to add field title_non_genre
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/12/22 03:42:47 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

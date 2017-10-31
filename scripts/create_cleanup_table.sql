@@ -3,8 +3,8 @@
    create a table of bad records for cleanup purposes. It
    will be re-populated every day by the nightly job.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/06/19 02:53:00 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

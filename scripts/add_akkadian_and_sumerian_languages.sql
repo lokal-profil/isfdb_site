@@ -2,8 +2,8 @@
    add_akkadian_and_sumerian_languages.sql is a MySQL script intended to add
    mayan language to ISFDB
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2017/03/24 15:40:23 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2017 Ahasuerus
       ALL RIGHTS RESERVED

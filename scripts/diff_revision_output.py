@@ -10,8 +10,8 @@
 #     See http://creativecommons.org/publicdomain/zero/1.0/
 #     for details.
 #
-#     Version: $Revision: 1.1 $
-#     Date: $Date: 2010/12/23 11:29:32 $
+#     Version: $Revision$
+#     Date: $Date$
 
 import sys, subprocess, shutil, urllib
 import localdefs

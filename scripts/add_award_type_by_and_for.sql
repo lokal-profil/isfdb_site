@@ -3,8 +3,8 @@
    alter table "award_types" to add fields award_type_by and
    award_type_for
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2014/02/23 20:03:27 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2014 Ahasuerus
       ALL RIGHTS RESERVED

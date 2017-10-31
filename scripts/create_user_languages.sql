@@ -5,8 +5,8 @@
    It is only supposed to be run ONCE so protection against 
    inserting duplicates is built in.
 
-   Version: $Revision: 1.1 $
-   Date:    $Date: 2009/11/14 04:36:00 $
+   Version: $Revision$
+   Date:    $Date$
 
   (C) COPYRIGHT 2009   Ahasuerus
       ALL RIGHTS RESERVED
