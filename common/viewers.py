@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.149 $
-#     Date: $Date: 2017/07/24 23:24:15 $
+#     Version: $Revision$
+#     Date: $Date$
 
 import string
 from xml.dom import minidom

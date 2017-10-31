@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.58 $
-#     Date: $Date: 2017/07/23 00:11:34 $
+#     Version: $Revision$
+#     Date: $Date$
 
 import cgi
 import sys

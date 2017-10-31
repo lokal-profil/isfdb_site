@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.2 $
-#     Date: $Date: 2008/04/24 10:30:43 $
+#     Version: $Revision$
+#     Date: $Date$
 
 
 import sys

@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.41 $
-#     Date: $Date: 2017/04/18 23:57:29 $
+#     Version: $Revision$
+#     Date: $Date$
 
 from isfdb import *
 from SQLparsing import *

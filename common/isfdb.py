@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.102 $
-#     Date: $Date: 2017/08/19 21:02:10 $
+#     Version: $Revision$
+#     Date: $Date$
 
 import cgitb; cgitb.enable()
 from localdefs import *

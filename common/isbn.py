@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.3 $
-#     Date: $Date: 2016/12/28 17:19:33 $
+#     Version: $Revision$
+#     Date: $Date$
 
 import string
 from library import validISBN, toISBN10, toISBN13

@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.7 $
-#     Date: $Date: 2016/08/26 23:35:46 $
+#     Version: $Revision$
+#     Date: $Date$
 
 
 HTMLLOC	   	= "192.168.1.50/isfdb"
