@@ -6,8 +6,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 1.1 $
-#     Date: $Date: 2016/04/17 17:14:52 $
+#     Version: $Revision$
+#     Date: $Date$
 
 from SQLparsing import *
 from library import *
