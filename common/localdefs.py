@@ -9,11 +9,11 @@
 #     Date: $Date$
 
 
-HTMLLOC	   	= "192.168.1.50/isfdb"
-HTFAKE	   	= "/192.168.1.50/cgi-bin"
-DBASEHOST  	= "192.168.1.50"
-HTMLHOST   	= "192.168.1.50"
-COOKIEHOST   	= "192.168.1.50"
+HTMLLOC	   	= "www.isfdb.org"
+HTFAKE	   	= "cgi-bin"
+DBASEHOST  	= "localhost"
+HTMLHOST   	= "www.isfdb.org"
+COOKIEHOST   	= "www.isfdb.org"
 LOCALFILES      = "/var/www/html/"
 WIKILOC         = "www.isfdb.org/wiki"
 USERNAME   	= "root"
