@@ -10,7 +10,7 @@
 
 
 HTMLLOC	   	= "www.isfdb.org"
-HTFAKE	   	= "cgi-bin"
+HTFAKE	   	= "/www.isfdb.org/cgi-bin"
 DBASEHOST  	= "localhost"
 HTMLHOST   	= "www.isfdb.org"
 COOKIEHOST   	= "www.isfdb.org"
