@@ -1097,7 +1097,7 @@ def PrintOnePub(pub, pub_authors, pub_publishers, pub_series, cover_artists, bgc
                 print '<td>&nbsp;</td>'
 
         if pub[PUB_PTYPE]:
-                print '<td>%s</td>' % pub[PUB_PTYPE]
+                print '<td>%s</td>' % ISFDBPubFormat(pub[PUB_PTYPE])
         else:
                 print '<td>&nbsp;</td>'
 
@@ -1153,7 +1153,7 @@ def FormatPubSeries(pub, pub_series):
                         pub_series_name = pub_series[pub[PUB_SERIES]]
                         trans_names = SQLloadTransPubSeriesNames(pub[PUB_SERIES])
                         display_line = '<a href="http:/%s/pubseries.cgi?%s">%s</a>' % (HTFAKE, pub[PUB_SERIES], pub_series_name)
-                        displayed_pub_series += translit_mouseover(trans_names, display_line, 'span')
+                        displayed_pub_series += ISFDBMouseover(trans_names, display_line, 'span')
                 if pub[PUB_SERIES_NUM]:
                         displayed_pub_series += ' #%s' % pub[PUB_SERIES_NUM]
         return displayed_pub_series
@@ -1164,7 +1164,7 @@ def FormatPublisher(pub, pub_publishers):
                 publisher_name = pub_publishers[pub[PUB_PUBLISHER]]
                 trans_names = SQLloadTransPublisherNames(pub[PUB_PUBLISHER])
                 display_line = '<a href="http:/%s/publisher.cgi?%s">%s</a>' % (HTFAKE, pub[PUB_PUBLISHER], publisher_name)
-                displayed_publisher = translit_mouseover(trans_names, display_line, 'span')
+                displayed_publisher = ISFDBMouseover(trans_names, display_line, 'span')
         return displayed_publisher
 
 def PrintTitleTable(titles, merge, limit = 100, user = None):
@@ -1311,7 +1311,7 @@ def PrintAuthorRecord(record, pseudonym, bgcolor, user, trans_names, trans_legal
 	if record[AUTHOR_LEGALNAME]:
                 author_id = record[AUTHOR_ID]
 		if author_id in trans_legal_names:
-                        display_value = translit_mouseover(trans_legal_names[author_id], record[AUTHOR_LEGALNAME], 'td')
+                        display_value = ISFDBMouseover(trans_legal_names[author_id], record[AUTHOR_LEGALNAME], 'td')
                         print display_value
                 else:
                         print "<td>%s</td>" % record[AUTHOR_LEGALNAME]

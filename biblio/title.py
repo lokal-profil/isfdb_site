@@ -201,7 +201,7 @@ if __name__ == '__main__':
                 if reviewed_title:
                         print '<b>Review of:</b> %s' % ISFDBLink('title.cgi', reviewed_title, title[TITLE_TITLE])
                 else:
-                        print "<b>Review of:</b>", translit_mouseover(trans_titles, title[TITLE_TITLE], 'span')
+                        print "<b>Review of:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], 'span')
                 displayCommon(title, user)
 		authors = SQLReviewBriefAuthorRecords(title_id)
 		if len(authors) > 1:
@@ -215,7 +215,7 @@ if __name__ == '__main__':
 			displayAuthorById(author[0], author[1])
 			counter += 1
 	elif title[TITLE_TTYPE] == 'INTERVIEW':
-		print "<b>Interview Title:</b>", translit_mouseover(trans_titles, title[TITLE_TITLE], 'span')
+		print "<b>Interview Title:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], 'span')
                 displayCommon(title, user)
 		authors = SQLInterviewBriefAuthorRecords(title_id)
 		if len(authors) > 1:
@@ -229,7 +229,7 @@ if __name__ == '__main__':
 			displayAuthorById(author[0], author[1])
 			counter += 1
 	else:
-		print "<b>Title:</b>", translit_mouseover(trans_titles, title[TITLE_TITLE], 'span')
+		print "<b>Title:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], 'span')
                 displayCommon(title, user)
 	print "<br>"
 

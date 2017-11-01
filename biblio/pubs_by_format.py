@@ -33,14 +33,14 @@ if __name__ == '__main__':
 	PrintHeader('Percent of Publications by Format by Year')
 	PrintNavbar('pubs_by_format', 0, 0, 'pubs_by_format.cgi', 0)
 
-        print """<h3>Legend:
-                Red - mass market paperback,
-                Blue - trade paperback,
-                Green - hardcover,
-                Yellow - pulp,
-                Orange - digest,
-                Pink - ebook,
-                Black - other formats</h3>"""
+        print '<h3>Legend:'
+        print 'Red - %s, ' % ISFDBPubFormat('pb')
+        print 'Blue - %s, ' % ISFDBPubFormat('tp')
+        print 'Green - %s, ' % ISFDBPubFormat('hc')
+        print 'Yellow - %s, ' % ISFDBPubFormat('pulp')
+        print 'Orange - %s, ' % ISFDBPubFormat('digest')
+        print 'Pink - %s, ' % ISFDBPubFormat('ebook')
+        print 'Black - all other formats'
 	# Set the start year to 1900
 	startyear = 1900
 	# Set the end year to the last year (current year may not have enough data points)

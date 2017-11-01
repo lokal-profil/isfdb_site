@@ -67,7 +67,7 @@ if __name__ == '__main__':
 	print '<ul>'
         # Transliterated name(s)
         trans_names = SQLloadTransPubSeriesNames(pub_series_id)
-        print '<li><b>Publication Series: </b>%s' % translit_mouseover(trans_names, pub_series[PUB_SERIES_NAME], 'span')
+        print '<li><b>Publication Series: </b>%s' % ISFDBMouseover(trans_names, pub_series[PUB_SERIES_NAME], 'span')
         printRecordID('Pub. Series', pub_series_id, user.id)
 
 	# Webpages

@@ -504,11 +504,11 @@ class Bibliography:
 			print '<td valign="top" style="width: 100%">'
 
 		print '<ul>'
-        	print '<li><b>Author:</b> %s' % translit_mouseover(self.au_trans_names, self.au_data[AUTHOR_CANONICAL], 'span')
+        	print '<li><b>Author:</b> %s' % ISFDBMouseover(self.au_trans_names, self.au_data[AUTHOR_CANONICAL], 'span')
         	printRecordID('Author', self.au_id, self.user.id)
 
 		if self.au_data[AUTHOR_LEGALNAME]:
-			print '<li><b>Legal Name:</b> %s' % translit_mouseover(self.au_trans_legal_names, self.au_data[AUTHOR_LEGALNAME], 'span')
+			print '<li><b>Legal Name:</b> %s' % ISFDBMouseover(self.au_trans_legal_names, self.au_data[AUTHOR_LEGALNAME], 'span')
 
                 if self.au_data[AUTHOR_BIRTHPLACE]:
                         print '<li><b>Birthplace:</b>',  (self.au_data[AUTHOR_BIRTHPLACE])

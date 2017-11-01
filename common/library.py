@@ -524,7 +524,7 @@ def ISFDBLink(script, record_id, displayed_value, brackets=False, argument='', t
                 trans_values = trans_function(record_id)
         # If transliterated values have been found, add them to the link
         if trans_values:
-                link = translit_mouseover(trans_values, link, 'span')
+                link = ISFDBMouseover(trans_values, link, 'span')
 
 	if brackets:
 		link = '[%s]' % link
@@ -536,6 +536,59 @@ def ISFDBText(text, escape_quotes = False):
         if UNICODE != "utf-8":
                 text = text.replace("&amp;#","&#")
         return text
+
+def ISFDBPubFormat(format_code):
+        formats = {'pb': """Paperback. Typically 7" by 4.25" (18 cm by 11 cm) or smaller, 
+                            though trimming errors can cause them to sometimes be slightly
+                            (less than 1/4 extra inch) taller or wider/deeper.""",
+                   'tp': """Trade paperback. Any softcover book which is at least 7.25"
+                            (or 19 cm) tall, or at least 4.5" (11.5 cm) wide/deep.""",
+                   'hc': """Hardcover. Used for all hardbacks of any size.""",
+                   'ph': """Pamphlet. Used for short (in page count), unbound, staple-bound,
+                            or otherwise lightly bound publications.""",
+                   'digest': """Books which are similar in size and binding to digest-formatted
+                            magazines, using the standard digest size of approximately 7" by 4.5""",
+                   'dos': """Dos-a-dos or tete-beche formatted paperback books, such as Ace Doubles
+                            and Capra Press back-to-back books.""",
+                   'audio CD': "Compact disc with standard audio tracks",
+                   'audio MP3 CD': "Compact disc with mp3-encoded audio tracks ",
+                   'audio cassette': "Cassette tape",
+                   'audio LP': "Long-playing record (vinyl)",
+                   'digital audio player': "Player with a pre-loaded digital file of the audiobook",
+                   'digital audio download': """Digital recording in any format that is downloaded
+                            directly from the Internet. This category includes podcasts.""",
+                   'digest': """Digest-size magazine, including both standard digest size, at about
+                            7" by 4.5", and also large digest, such as recent issues of Asimov's,
+                            which are about 8.25" by 5.125".""",
+                   'pulp': """Magazine using the common pulp size: 6.5" by 9.5". For ISFDB purposes
+                            this may also be used as a designation for the quality of the paper.
+                            There are some untrimmed pulps that are as large as 8" by 11.75""",
+                   'bedsheet': """8.5" by 11.25" magazines, e.g. early issues of Amazing; or the
+                            1942-43 issues of Astounding.""",
+                   'tabloid': """11" by 16" magazine, usually newsprint, e.g. British Science Fiction Monthly.""",
+                   'A4': """21 cm by 29.7 cm or 8.3" by 11.7" magazine, used by some UK and European magazines""",
+                   'A5': """14.8 cm by 21 cm or 5.8" by 8.3" magazine, used by some UK and European magazines""",
+                   'quarto': """8.5" by 11" magazine, usually saddle-stapled, instead of side-stapled or glued""",
+                   'octavo': """5.5" by 8.5" magazine, usually saddle-stapled, instead of side-stapled or glued""",
+                   'ebook': """Used for all electronic formats, including but not limited to EPUB,
+                            eReader, HTML, iBook, Mobipocket, and PDF.""",
+                   'webzine': """Used for Internet-based periodical publications which are otherwise
+                            not downloadable as an "ebook".""",
+                   'other': """The publication format is non-standard. The details are usually provided
+                            publication notes.""",
+                   'unknown': """The publication record was created from a secondary source and
+                            the publication format is unknown."""
+                   }
+        mouseover_text = formats.get(format_code, '')
+        while "\n" in mouseover_text:
+                mouseover_text = mouseover_text.replace("\n", " ")
+        mouseover_text = normalizeInput(mouseover_text)
+       
+        if mouseover_text:
+                display_value = ISFDBMouseover((mouseover_text,), format_code, 'span')
+        else:
+                display_value = format_code
+        return display_value
 
 class AutoVivification(dict):
         """Emulate Perl's autovivification feature"""
@@ -1372,23 +1425,23 @@ def list_to_in_clause(id_list):
                         in_clause += ",'%s'" % id_string
         return in_clause
 
-def translit_mouseover(translit_values, display_value, tag = 'td'):
-        # Adds a mouseover bubble with transliterated vales to the display value
-        # and returns the composite string.
+def ISFDBMouseover(mouseover_values, display_value, tag = 'td'):
+        # Adds a mouseover bubble with the specified list of values to
+        # the displayed text/link and returns the composite string.
         # Supports different HTML tags, typically <td> and <span>.
 
-        if not translit_values:
+        if not mouseover_values:
                 if tag == 'td':
                         return '<td>%s</td>' % display_value
                 else:
                         return display_value
         display = '<%s class="hint" title="' % tag
         count = 0
-        for translit_value in translit_values:
+        for mouseover_value in mouseover_values:
                 if count:
                         display += '&#13;'
-                # Append the HTML-escaped version of the transliterated value
-                display += ISFDBText(translit_value, 1)
+                # Append the HTML-escaped version of the mouseover value
+                display += ISFDBText(mouseover_value, 1)
                 count += 1
         display += '">%s' % display_value
         display += '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></%s>' % (HTMLLOC, tag)

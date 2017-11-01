@@ -329,7 +329,7 @@ if __name__ == '__main__':
 		print '<td class="pubheader">'
 
 	print '<ul>'
-	print '<li><b>Publication:</b>', translit_mouseover(pub.pub_trans_titles, pub.pub_title, 'span')
+	print '<li><b>Publication:</b>', ISFDBMouseover(pub.pub_trans_titles, pub.pub_title, 'span')
 	printRecordID('Publication', pub.pub_id, userid)
 
 	titles = SQLloadTitlesXBT(pub.pub_id)
@@ -418,7 +418,7 @@ if __name__ == '__main__':
 		print '  <b>Pages:</b>', pub.pub_pages
 	if pub.pub_ptype:
 		print '<li>'
-		print '  <b>Format:</b>', pub.pub_ptype
+		print '  <b>Format:</b>', ISFDBPubFormat(pub.pub_ptype)
 	reference_title = None
 	if pub.pub_ctype:
 		print '<li>'
