@@ -24,6 +24,7 @@ TARGETS	= apple-touch-icon.png \
 	  index.html \
 	  IsfdbBanner.jpg \
 	  question_mark_icon.gif \
+	  adv_search.js \
 	  edit_js.js \
 	  edit_pub.js \
 	  edit_author.js \

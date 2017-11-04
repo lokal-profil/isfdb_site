@@ -472,6 +472,22 @@ def PrintHeader(title):
 	print '<meta http-equiv="content-type" content="text/html; charset=' +UNICODE+ '" >'
 	print '<link rel="shortcut icon" href="http://%s/favicon.ico">' % (HTMLHOST)
 	print '<title>%s</title>' % (title)
+
+        # Advanced Search only:
+        if title == 'ISFDB Advanced Search':
+                # First, create a function which returns an array of publication formats
+                print '<script type="text/javascript">'
+                print 'function PubFormats() {'
+                output = ' var formats = ['
+                for format_code in FORMATS:
+                        output += '"%s", ' % format_code
+                print '%s];' % output[:-2]
+                print ' return formats;'
+                print '}'
+                print '</script>'
+                # Second, import a function to change drop-don values dynamically
+                print '<script type="text/javascript" src="http://%s/adv_search.js"></script>' % HTMLLOC
+
 	print '<style type="text/css" media="screen">'
 	print '  @import url("http://%s/biblio.css");' % (HTMLHOST)
 	print '</style></head>'

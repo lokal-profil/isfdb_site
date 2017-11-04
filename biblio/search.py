@@ -146,7 +146,8 @@ def PrintAuthorSearch():
 	print '</form>'
 
 def PrintPubSelectors(number):
-	print '<select NAME="USE_%d">' % number
+	print '<p id="pub_selectors_%d">' % number
+	print '<select NAME="USE_%d" onchange="PubSelectors(%d, this.value);">' % (number, number)
 	print '<option SELECTED VALUE="pub_title">Title'
         print '<option VALUE="pub_trans_title">Transliterated Title'
 	print '<option VALUE="pub_ctype">Publication Type'
@@ -174,8 +175,8 @@ def PrintPubSelectors(number):
 
         PrintOperators(number)
 
-        print '<input NAME="TERM_%d" SIZE="50">' % number
-	print '<p>'
+        print '<input id="pubterm_%d" NAME="TERM_%d" TYPE="text" SIZE="50">' % (number, number)
+        print '<p>'
 
 def PrintPubSortBy():
 	print '<b>Sort Results By:</b>'
@@ -199,7 +200,6 @@ def PrintPubSearch():
 	print '<li> Valid publication types: ANTHOLOGY, CHAPBOOK, COLLECTION, FANZINE, MAGAZINE, NONFICTION, NOVEL, OMNIBUS'
 	print '<li> ISBN searches ignore dashes and search for both ISBN-10 and ISBN-13'
 	print '</ul>'
-	print '<p>'
 
         for number in (1, 2, 3):
                 PrintPubSelectors(number)
