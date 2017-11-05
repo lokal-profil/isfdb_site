@@ -1680,7 +1680,7 @@ def valid_html_tags():
         paired_tags = ['b', 'i', 'u', 'ol', 'ul', 'em', 'li', 'p', 'table', 'th',
                        'tr', 'td', 'cite', 'sub', 'sup', 'span', 'blockquote', 'pre',
                        'h1', 'h2', 'h3', 'strong', 'abbr', 'center', 'del', 'tbody',
-                       'caption', 'q', 's']
+                       'caption', 'q', 's', 'small']
         self_closing_tags = ['p', 'br', '!--isfdb specific--', 'hr']
         tags_with_attributes = ['a', 'table', 'tr', 'td', 'th']
 
