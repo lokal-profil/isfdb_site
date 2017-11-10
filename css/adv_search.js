@@ -1,26 +1,45 @@
 /*     Version: $Revision: 19 $
       Date: $Date: 2017-10-31 19:26:25 -0400 (Tue, 31 Oct 2017) $ */
 
-function PubSelectors(selector_number, new_value) {
+function CreateDropDown(parent, old_element, element_id, selector_number, values) {
+	parent.removeChild(old_element);
+	var new_element = document.createElement('select');
+	new_element.name = 'TERM_'+selector_number;
+	new_element.id = element_id+'_'+selector_number;
+	for (var i = 0; i < values.length; i++) {
+		var option = document.createElement("option");
+		option.value = values[i];
+		option.text = values[i];
+		new_element.appendChild(option);
+	}
+	parent.appendChild(new_element);
+}
+
+function Selectors(selector_number, new_value, selectors_id, value_id) {
 	// Create a handle for the search value field
-	var element = document.getElementById('pubterm_'+selector_number);
-	// Retrieve the current value of the field
-	// var element_value = element.value;
+	var element = document.getElementById(value_id+'_'+selector_number);
 	// Get the parent element's object
-	var parent = document.getElementById('pub_selectors_'+selector_number);
-	if (new_value == "pub_ptype") {
-		parent.removeChild(element);
-		var element = document.createElement('select');
-		element.name = 'TERM_'+selector_number;
-		element.id = 'pubterm_'+selector_number;
-		var pub_formats = PubFormats();
-		for (var i = 0; i < pub_formats.length; i++) {
-			var option = document.createElement("option");
-			option.value = pub_formats[i];
-			option.text = pub_formats[i];
-			element.appendChild(option);
-		}
-		parent.appendChild(element);
+	var parent = document.getElementById(selectors_id+'_'+selector_number);
+	var values = "";
+	switch(new_value) {
+	case "pub_ptype":
+		values = PubFormats();
+		break;
+	case "pub_ctype":
+		values = PubTypes();
+		break;
+	case "title_ttype":
+		values = TitleTypes();
+		break;
+	case "title_storylen":
+		values = StoryLengths();
+		break;
+	default:
+		values = "";
+		break;
+	}
+	if (values != "") {
+		CreateDropDown(parent, element, value_id, selector_number, values);
 	}
 	else {
 		// If we are switching from a text input field to another text input field,
@@ -33,12 +52,8 @@ function PubSelectors(selector_number, new_value) {
 		element.type = 'text';
 		element.name = 'TERM_'+selector_number;
 		element.size = 50;
-		element.id = 'pubterm_'+selector_number;
+		element.id = value_id+'_'+selector_number;
 		parent.appendChild(element);
 	}
-	return true;
-}
-
-function ChangeToSelect(value_type) {
 	return true;
 }

@@ -464,6 +464,19 @@ def PrintUserInfo(executable, argument):
                 PrintNotLoggedIn(executable,argument)
 	return userid
 
+def PrintJSFunction(function_name, values):
+        print '<script type="text/javascript">'
+        print 'function %s() {' % function_name
+        output = ' var formats = ['
+        for value in values:
+                # Skip empty values, e.g. in STORYLEN_CODES
+                if value:
+                        output += '"%s", ' % value
+        print '%s];' % output[:-2]
+        print ' return formats;'
+        print '}'
+        print '</script>'
+
 def PrintHeader(title):
         print 'Content-type: text/html; charset=%s\n' % (UNICODE)
 	print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
@@ -475,17 +488,15 @@ def PrintHeader(title):
 
         # Advanced Search only:
         if title == 'ISFDB Advanced Search':
-                # First, create a function which returns an array of publication formats
-                print '<script type="text/javascript">'
-                print 'function PubFormats() {'
-                output = ' var formats = ['
-                for format_code in FORMATS:
-                        output += '"%s", ' % format_code
-                print '%s];' % output[:-2]
-                print ' return formats;'
-                print '}'
-                print '</script>'
-                # Second, import a function to change drop-don values dynamically
+                # Create a JS function which returns an array of publication formats
+                PrintJSFunction('PubFormats', FORMATS)
+                # Create a JS function which returns an array of publication types
+                PrintJSFunction('PubTypes', PUB_TYPES)
+                # Create a JS function which returns an array of title types
+                PrintJSFunction('TitleTypes', TITLE_TYPES)
+                # Create a JS function which returns an array of story length codes
+                PrintJSFunction('StoryLengths', STORYLEN_CODES)
+                # Import a function to change drop-down values dynamically
                 print '<script type="text/javascript" src="http://%s/adv_search.js"></script>' % HTMLLOC
 
 	print '<style type="text/css" media="screen">'

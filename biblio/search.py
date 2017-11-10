@@ -33,7 +33,8 @@ def PrintOperators(number):
        	print '</select>'
 
 def PrintTitleSelectors(number):
-	print '<select NAME="USE_%d">' % number
+	print '<p id="title_selectors_%d">' % number
+	print '<select NAME="USE_%d" onchange="Selectors(%d, this.value, \'title_selectors\', \'titleterm\');">' % (number, number)
 	print '<option SELECTED VALUE="title_title">Title'
         print '<option VALUE="title_trans_title">Transliterated Title'
         print '<option VALUE="author_canonical">Author\'s Name'
@@ -62,15 +63,13 @@ def PrintTitleSelectors(number):
 
         PrintOperators(number)
 
-        print '<input NAME="TERM_%d" SIZE="50">' % number
+        print '<input id="titleterm_%d" NAME="TERM_%d" SIZE="50">' % (number, number)
 	print '<p>'
 
 def PrintTitleSearch():
 	print '<h2>Title Search</h2>'
 	print '<p>'
 	print '<ul>'
-	print '<li> Valid title types: ANTHOLOGY, CHAPBOOK, COLLECTION, COVERART, EDITOR (for magazines/fanzines), ESSAY, INTERIORART, INTERVIEW, NONFICTION, NOVEL, OMNIBUS, POEM, REVIEW, SERIAL, SHORTFICTION'
-	print '<li> Valid length types: "novella", "novelette", "short story"'
 	print '<li> When specifying multiple authors and/or multiple tags, OR is supported but AND is not'
 	print '</ul>'
 	print '<p>'
@@ -147,7 +146,7 @@ def PrintAuthorSearch():
 
 def PrintPubSelectors(number):
 	print '<p id="pub_selectors_%d">' % number
-	print '<select NAME="USE_%d" onchange="PubSelectors(%d, this.value);">' % (number, number)
+	print '<select NAME="USE_%d" onchange="Selectors(%d, this.value, \'pub_selectors\', \'pubterm\');">' % (number, number)
 	print '<option SELECTED VALUE="pub_title">Title'
         print '<option VALUE="pub_trans_title">Transliterated Title'
 	print '<option VALUE="pub_ctype">Publication Type'
@@ -197,7 +196,6 @@ def PrintPubSearch():
 	print '<form METHOD="GET" action="http:/%s/adv_search_results.cgi">' % (HTFAKE)
 	print '<p>'
 	print '<ul>'
-	print '<li> Valid publication types: ANTHOLOGY, CHAPBOOK, COLLECTION, FANZINE, MAGAZINE, NONFICTION, NOVEL, OMNIBUS'
 	print '<li> ISBN searches ignore dashes and search for both ISBN-10 and ISBN-13'
 	print '</ul>'
 
