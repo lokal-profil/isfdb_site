@@ -279,11 +279,11 @@ class advanced_search:
                 # group the adjoining terms and the OR together
                 if (self.conjunction_list and (len(self.conjunction_list) == 2) and (self.conjunction_list[0] != self.conjunction_list[1])):
                         if (self.conjunction_list[0] == "OR"):
-                                term_list[0] = "(" + term_list[0]
-                                term_list[1] = term_list[1] + ")"
+                                self.term_list[0] = "(" + self.term_list[0]
+                                self.term_list[1] = self.term_list[1] + ")"
                         else:
-                                term_list[1] = "(" + term_list[1]
-                                term_list[2] = term_list[2] + ")"
+                                self.term_list[1] = "(" + self.term_list[1]
+                                self.term_list[2] = self.term_list[2] + ")"
 
                 # Construct the clause of term(s).  We wrap this in parens to avoid
                 # unintended interaction with the join clauses.

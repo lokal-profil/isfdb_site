@@ -498,6 +498,11 @@ def PrintHeader(title):
                 PrintJSFunction('TitleTypes', ALL_TITLE_TYPES)
                 # Create a JS function which returns an array of story length codes
                 PrintJSFunction('StoryLengths', STORYLEN_CODES)
+                # Create a JS function which returns an array of languages
+                selectable_languages = sorted(list(LANGUAGES))
+                if 'None' in selectable_languages:
+                        selectable_languages.remove('None')
+                PrintJSFunction('AllLanguages', selectable_languages)
                 # Import a function to change drop-down values dynamically
                 print '<script type="text/javascript" src="http://%s/adv_search.js"></script>' % HTMLLOC
 
