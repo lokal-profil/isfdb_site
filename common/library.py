@@ -1443,8 +1443,7 @@ def ISFDBMouseover(mouseover_values, display_value, tag = 'td'):
                 # Append the HTML-escaped version of the mouseover value
                 display += ISFDBText(mouseover_value, 1)
                 count += 1
-        display += '">%s' % display_value
-        display += '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></%s>' % (HTMLLOC, tag)
+        display += '">%s<sup class="mouseover">%s</sup></%s>' % (display_value, QUESTION_MARK, tag)
         return display
 
 def validateURL(url):

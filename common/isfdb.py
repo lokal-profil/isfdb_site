@@ -431,3 +431,6 @@ SUBMISSION_DISPLAY = {
     'Webpages': 'Web Page',
     'Year': 'Date'
     }
+
+#QUESTION_MARK = '&#10068;'
+QUESTION_MARK = '&#10067;'
