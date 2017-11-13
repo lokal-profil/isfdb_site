@@ -96,7 +96,8 @@ def PrintTitleSortBy():
        	print '</select>'
 
 def PrintAuthorSelectors(number):
-	print '<select NAME="USE_%d">' % number
+	print '<p id="author_selectors_%d">' % number
+	print '<select NAME="USE_%d" onchange="Selectors(%d, this.value, \'author_selectors\', \'authorterm\');">' % (number, number)
 	print '<option SELECTED VALUE="author_canonical">Canonical Name'
         print '<option VALUE="author_trans_name">Transliterated Name'
 	print '<option VALUE="author_lastname">Family Name'
@@ -114,7 +115,7 @@ def PrintAuthorSelectors(number):
 
         PrintOperators(number)
 
-        print '<input NAME="TERM_%d" SIZE="50">' % number
+        print '<input id="authorterm_%d" NAME="TERM_%d" SIZE="50">' % (number, number)
 	print '<p>'
 
 def PrintAuthorSortBy():

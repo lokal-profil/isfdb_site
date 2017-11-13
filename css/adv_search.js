@@ -49,6 +49,9 @@ function Selectors(selector_number, new_value, selectors_id, value_id) {
 	case "title_language":
 		values = AllLanguages();
 		break;
+	case "author_language":
+		values = AllLanguages();
+		break;
 	default:
 		values = "";
 		break;
