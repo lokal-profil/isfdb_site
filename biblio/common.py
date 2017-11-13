@@ -488,6 +488,8 @@ def PrintHeader(title):
 
         # Advanced Search only:
         if title == 'ISFDB Advanced Search':
+                # Create a JS function which returns an array of Yes/No values
+                PrintJSFunction('YesNo', ('Yes', 'No'))
                 # Create a JS function which returns an array of publication formats
                 PrintJSFunction('PubFormats', FORMATS)
                 # Create a JS function which returns an array of publication types

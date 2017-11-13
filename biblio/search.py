@@ -55,10 +55,10 @@ def PrintTitleSelectors(number):
         print '<option VALUE="title_language">Title Language'
         print '<option VALUE="title_webpage">Title Webpage'
         print '<option VALUE="tag">Title Tag'
-        print '<option VALUE="title_jvn">Juvenile (Yes or No)'
-        print '<option VALUE="title_nvz">Novelization (Yes or No)'
-        print '<option VALUE="title_non_genre">Non-Genre (Yes or No)'
-        print '<option VALUE="title_graphic">Graphic Format (Yes or No)'
+        print '<option VALUE="title_jvn">Juvenile'
+        print '<option VALUE="title_nvz">Novelization'
+        print '<option VALUE="title_non_genre">Non-Genre'
+        print '<option VALUE="title_graphic">Graphic Format'
 	print '</select>'
 
         PrintOperators(number)

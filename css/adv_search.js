@@ -34,6 +34,18 @@ function Selectors(selector_number, new_value, selectors_id, value_id) {
 	case "title_storylen":
 		values = StoryLengths();
 		break;
+	case "title_jvn":
+		values = YesNo();
+		break;
+	case "title_nvz":
+		values = YesNo();
+		break;
+	case "title_non_genre":
+		values = YesNo();
+		break;
+	case "title_graphic":
+		values = YesNo();
+		break;
 	default:
 		values = "";
 		break;
