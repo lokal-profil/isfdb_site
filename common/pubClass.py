@@ -1134,7 +1134,7 @@ class pubs:
 			key = "title_ttype"+str(counter)
 			if self.form.has_key(key):
 				newTitle.setType(self.form[key].value)
-                                if newTitle.type not in TITLE_TYPES:
+                                if newTitle.type not in REGULAR_TITLE_TYPES:
                                         self.error = 'Invalid title type'
                                         return
                                 title_types[newTitle.type] = title_types.get(newTitle.type, 0) + 1

@@ -493,7 +493,7 @@ def PrintHeader(title):
                 # Create a JS function which returns an array of publication types
                 PrintJSFunction('PubTypes', PUB_TYPES)
                 # Create a JS function which returns an array of title types
-                PrintJSFunction('TitleTypes', TITLE_TYPES)
+                PrintJSFunction('TitleTypes', ALL_TITLE_TYPES)
                 # Create a JS function which returns an array of story length codes
                 PrintJSFunction('StoryLengths', STORYLEN_CODES)
                 # Import a function to change drop-down values dynamically

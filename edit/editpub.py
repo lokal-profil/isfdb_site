@@ -79,7 +79,7 @@ def printtitlerecord(record, index, container, help):
                 print '<td><input name="title_ttype%d" tabindex="%d" value="%s"%s></td>' % (index, taborder, record[TITLE_TTYPE], args % "contenttypeinput")
         else:
                 print '<td><select name="title_ttype%d" tabindex="%d" %s>' % (index, taborder, args % "contenttypeinput")
-                for ttype in ('ANTHOLOGY','CHAPBOOK','COLLECTION', 'EDITOR', 'ESSAY', 'INTERIORART', 'NONFICTION', 'NOVEL','OMNIBUS','POEM','SERIAL','SHORTFICTION'):
+                for ttype in REGULAR_TITLE_TYPES:
                         if (record and record[TITLE_TTYPE] == ttype) or (not record and ttype == 'SHORTFICTION'):
                                 print '<option selected="selected">%s</option>' % ttype
                         else:

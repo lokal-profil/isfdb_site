@@ -379,7 +379,11 @@ FORMATS = ('unknown','hc','tp','pb','ph','digest','dos','ebook','webzine','pulp'
 
 STORYLEN_CODES = ('', 'novella', 'short story', 'novelette')
 
-TITLE_TYPES = ('ANTHOLOGY','CHAPBOOK','COLLECTION', 'EDITOR', 'ESSAY', 'INTERIORART', 'NONFICTION', 'NOVEL', 'OMNIBUS', 'POEM', 'SERIAL', 'SHORTFICTION')
+REGULAR_TITLE_TYPES = ('ANTHOLOGY', 'CHAPBOOK', 'COLLECTION', 'EDITOR', 'ESSAY',
+                       'INTERIORART', 'NONFICTION', 'NOVEL', 'OMNIBUS', 'POEM',
+                       'SERIAL', 'SHORTFICTION')
+
+ALL_TITLE_TYPES = sorted(REGULAR_TITLE_TYPES + ('COVERART', 'REVIEW', 'INTERVIEW'))
 
 PUB_TYPES = ('ANTHOLOGY', 'CHAPBOOK', 'COLLECTION', 'FANZINE', 'MAGAZINE', 'NONFICTION', 'NOVEL', 'OMNIBUS')
 

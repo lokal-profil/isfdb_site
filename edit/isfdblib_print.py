@@ -249,8 +249,7 @@ def printblanktitlerecord(index, help = None, pub_type = 'NOVEL'):
 
         print '<td><select tabindex="1" name="title_ttype%d" class="contenttypeinput">' % (index)
         print '<option selected="selected">%s</option>' % default_title_type
-        for ttype in ('ANTHOLOGY', 'CHAPBOOK', 'COLLECTION', 'EDITOR', 'ESSAY', 'INTERIORART',
-                      'NONFICTION', 'NOVEL', 'OMNIBUS', 'POEM', 'SERIAL', 'SHORTFICTION'):
+        for ttype in REGULAR_TITLE_TYPES:
                 if ttype != default_title_type:
                         print '<option>%s</option>' % ttype
         print '</select></td>'
