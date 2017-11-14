@@ -432,5 +432,5 @@ SUBMISSION_DISPLAY = {
     'Year': 'Date'
     }
 
-#QUESTION_MARK = '&#10068;'
-QUESTION_MARK = '&#10067;'
+# Alternative Unicode question marks: '&#10068;' (white) '&#10067;' (black)
+QUESTION_MARK = '?'
