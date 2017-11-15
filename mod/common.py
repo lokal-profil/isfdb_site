@@ -86,7 +86,10 @@ def ApproveOrReject(app, submission_id):
                 print '<a class="hold" href="http:/'+HTFAKE+'/mod/hold.cgi?%s">HOLD</a>  ' % submission_id
 
         print '<a class="approval" href="http:/'+HTFAKE+'/mod/%s?%s">Approve</a>' % (app, submission_id)
-        print '<span style="float:right"><small><a class="approval" href="http:/'+HTFAKE+'/mod/dumpxml.cgi?%s">View Raw XML</a></small></span>' % submission_id
+        print '<span style="float:right"><small>'
+        print '<a class="approval" href="http:/%s/view_submission.cgi?%s">Public View</a>' % (HTFAKE, submission_id)
+        print '<a class="approval" href="http:/%s/mod/dumpxml.cgi?%s">View Raw XML</a>' % (HTFAKE, submission_id)
+        print '</small></span>'
         print '<hr>'
         print '<form METHOD="POST" ACTION="/cgi-bin/mod/reject.cgi">'
         print '<p class="topspace"><b>Rejection Reason</b><p>'
