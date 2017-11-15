@@ -565,7 +565,9 @@ def InvalidSubmission(submission_id, message = ''):
 	(userid, username, usertoken) = GetUserData()
 	# If the user is a moderator and the submission is "N"ew, allow the user to hard reject it
         if SQLisUserModerator(userid) and SQLloadState(submission_id) == 'N':
-        	print '<h3>Please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject it.</h3>' % (HTFAKE, submission_id)
+        	print '<h3>Please <a href="http:/%s/mod/hardreject.cgi?%d">use Hard Reject</a> to reject it.</h3>' % (HTFAKE, int(submission_id))
+        	print """<br>You can also <a href="http:/%s/mod/dumpxml.cgi?%d">view the
+                        raw XML data</a> contained in the submission.""" % (HTFAKE, int(submission_id))
         print '</div>'
         sys.exit(0)
 
