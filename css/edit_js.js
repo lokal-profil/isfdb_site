@@ -102,9 +102,15 @@ function validateDate(value, display_name, type_of_date) {
 		alert("For authors, dates later than the current year are not allowed.");
 		return false;
 	}
-	if ((type_of_date == "award") && (year == "0000")) {
-		alert("For awards, 0000 years are not allowed.");
-		return false;
+	if (type_of_date == "award") {
+		if (year == "0000") {
+			alert("For awards, 0000 years are not allowed.");
+			return false;
+		}
+		if ((month != "00") || (day != "00")) {
+			alert("Bad YEAR value. Only YYYY and YYYY-00-00 values are valid for awards.");
+			return false;
+		}
 	}
 	var nextYear = currentYear + 1;
 	if ((year > nextYear) && (year != "0000") && (year != "9999") && (year != "8888")) {

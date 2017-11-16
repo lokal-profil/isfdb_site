@@ -177,7 +177,10 @@ class awards:
 			# Take the submitted value and convert it to the standard YYYY-MM-DD format
 			self.award_year = normalizeDate(year)
 			if self.award_year == '0000-00-00':
-				self.error = "Bad YEAR value"
+				self.error = "For awards, 0000 years are not allowed."
+				return
+			if self.award_year[5:] != '00-00':
+				self.error = "Bad YEAR value. Only YYYY and YYYY-00-00 values are valid for awards."
 				return
 			self.used_year = 1
 		else:
