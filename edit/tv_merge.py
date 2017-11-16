@@ -55,7 +55,7 @@ def Compare2(fieldname, values):
                                 checked_entry = recno + 1
                                 break
                         recno += 1
-        # For dates, find the earliest date
+        # For dates, check the box for the earliest date
 	elif fieldname == 'title_year':
                 recno = 0
                 earliest_date = '9999-00-00'
@@ -64,10 +64,10 @@ def Compare2(fieldname, values):
                                 earliest_date = values[recno]
                                 checked_entry = recno + 1
                         recno += 1
+        # For all other types of fields, check the first non-empty box
 	else:
                 recno = 0
                 while recno < MaxRecords:
-                        # Check the first non-empty box
                         if values[recno]:
                                 checked_entry = recno + 1
                                 break

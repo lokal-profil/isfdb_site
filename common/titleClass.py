@@ -80,14 +80,12 @@ class titles:
 
 	def authors(self):
 		counter = 0
-		retval = ''
+		authors = []
 		while counter < self.num_authors:
-			if counter == 0:
-				retval = normAuthor(self.title_authors[counter])
-			else:
-				retval += "+" + normAuthor(self.title_authors[counter])
+                        authors.append(normAuthor(self.title_authors[counter]))
 			counter += 1
-		return retval
+		# Return a '+'-delimited sorted string of author names
+		return '<span class="mergesign">+</span>'.join(sorted(authors))
 
 	def load(self, id):
 		self.loadCommon(id, 0)

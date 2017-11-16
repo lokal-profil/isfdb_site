@@ -2341,23 +2341,8 @@ def PrintMergeField(Label, XmlData, KeepId, Records):
 			if Records[title_id].used_trans_titles:
 				output = '<br>'.join(Records[title_id].title_trans_titles)
 		elif Label == 'Author':
-			counter = 0
-			authors = ''
-			while counter < Records[title_id].num_authors:
-				if counter == 0:
-					authors = Records[title_id].title_authors[counter]
-				else:
-					authors += "+" +Records[title_id].title_authors[counter]
-				counter += 1
-			output = authors
-			counter = 0
-			authors = ''
-			while counter < Records[keep_id].num_authors:
-				if counter == 0:
-					kept = Records[keep_id].title_authors[counter]
-				else:
-					kept += "+" +Records[keep_id].title_authors[counter]
-				counter += 1
+                        output = Records[title_id].authors()
+                        kept = Records[keep_id].authors()
 		elif Label == 'Year':
 			if Records[title_id].used_year:
 				output = Records[title_id].title_year
