@@ -368,3 +368,22 @@ function AddMultipleField(addField, field, field_name, bodyname) {
 	tr.appendChild(td2);
 	tbody.insertBefore(tr, addpoint);
 }
+
+function determineArticle(word) {
+	var article = 'a';
+	switch(word[0]) {
+	case "A":
+		article = 'an';
+		break;
+	case "E":
+		article = 'an';
+		break;
+	case "O":
+		article = 'an';
+		break;
+	default:
+		article = 'a';
+		break;
+	}
+	return article;
+}

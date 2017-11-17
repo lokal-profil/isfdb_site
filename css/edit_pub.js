@@ -348,7 +348,7 @@ function validateTypeMismatch()	{
 	var current_type_name;
 	var current_type_handle;
 	var title_type;
-	var reference_title_found = 0;
+	var reference_title_type = '';
 	var current_count;
 	var anthology_count = 0;
 	var chapbook_count = 0;
@@ -383,11 +383,11 @@ function validateTypeMismatch()	{
 		title_type = current_type_handle.value;
 		if ((pub_type_value == 'FANZINE') || (pub_type_value == 'MAGAZINE')) {
 			if (title_type == 'EDITOR') {
-				reference_title_found = 1;
+				reference_title_type = 'EDITOR';
 			}
 		}
 		else if (title_type == pub_type_value) {
-			reference_title_found = 1;
+			reference_title_type = title_type;
 		}
 		if (title_type == 'ANTHOLOGY') {
 			anthology_count = anthology_count + 1;
@@ -436,17 +436,22 @@ function validateTypeMismatch()	{
 	}
 
 	// Check that the reference title was entered for pub edits and was NOT entered for other types of submissions
-	if (reference_title_found == 1) {
+	if (reference_title_type != '') {
 		if (reference_title == 'implied') {
-			alert("For new/added publications the reference title should not be entered in the Content section. It will be added automatically at submission creation time.");
+			var article = determineArticle(reference_title_type);
+			var message = 'When creating a new '+pub_type_value+' publication, ';
+			message += article+' '+reference_title_type;
+			message += ' title should not be entered in the Regular Titles subsection of the Content section. ';
+			message += 'It will be added automatically at submission creation time.';
+			alert(message);
 			return false;
 		}
 	}
 	else {
 		if (reference_title == 'explicit') {
-			var message = 'When editing publications, the Regular Titles subsection of the Content'
-			message += ' section must contain one title whose type matches the publication type.'
-			message += ' For Magazine and Fanzine publications the matching title type should be EDITOR.'
+			var message = 'When editing publications, the Regular Titles subsection of the Content';
+			message += ' section must contain one title whose type matches the publication type.';
+			message += ' For Magazine and Fanzine publications the matching title type should be EDITOR.';
 			alert(message);
 			return false;
 		}
