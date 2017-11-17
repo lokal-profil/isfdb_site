@@ -245,7 +245,7 @@ def function6():
 	if num > 0:
 		record = result.fetch_row()
 		bgcolor = 1
-		PrintTableColumns(('Author', 'Family Name', ''))
+		PrintTableColumns(('Author', 'Directory Entry', ''))
 		while record:
                         if bgcolor:
                                 print '<tr align=left class="table1">'
@@ -254,7 +254,7 @@ def function6():
 
                         print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, record[0][1], record[0][2])
                         print '<td>%s</td>' % record[0][3]
-                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+6">Ignore this family name</a></td>' % (HTFAKE, record[0][0])
+                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+6">Ignore this directory entry</a></td>' % (HTFAKE, record[0][0])
                         print '</tr>'
 			bgcolor ^= 1
 			record = result.fetch_row()
@@ -5123,7 +5123,7 @@ def function189():
 		record = result.fetch_row()
 		bgcolor = 1
 		count = 1
-		PrintTableColumns(('', 'Family Name', 'Author', 'Working Language'))
+		PrintTableColumns(('', 'Directory Entry', 'Author', 'Working Language'))
 		while record:
                         author_id = record[0][0]
                         author_canonical = record[0][1]

@@ -83,7 +83,7 @@ def nightly_cleanup_reports():
                 from notes having openquote != closequote"
         standardReport(query, 5)
 
-        #   Report 6: Authors with invalid Family Names
+        #   Report 6: Authors with invalid Directory Entries
         query = "select author_id from authors where REPLACE(author_lastname,'&#','') REGEXP '^[[:punct:]]'"
         standardReport(query, 6)
 

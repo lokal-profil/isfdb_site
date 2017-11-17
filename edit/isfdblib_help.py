@@ -238,10 +238,10 @@ def HelpAuthor():
         link = 'http://%s/index.php?title=Template:AuthorFields:TransLegalName' % (WIKILOC)
         help['Trans. Legal Name 1'] = [text, link]
 
-        text = 'The family name under which this person will appear in the Author Directory.'
-        text += ' Follow this link for more details.'
-        link = 'http://%s/index.php?title=Template:AuthorFields:FamilyName' % (WIKILOC)
-        help['Family Name'] = [text, link]
+        text = 'The name (usually the family name) under which this author will appear in the Author Directory.'
+        text += ' Use Latin transliteration for non-Latin characters. Follow this link for more details.'
+        link = 'http://%s/index.php?title=Template:AuthorFields:DirectoryEntry' % (WIKILOC)
+        help['Directory Entry'] = [text, link]
 
         text = 'The place where this person was born in the "city, municipality/state, country, empire" format.'
         text += ' Follow this link for more details.'

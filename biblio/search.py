@@ -100,7 +100,7 @@ def PrintAuthorSelectors(number):
 	print '<select NAME="USE_%d" onchange="Selectors(%d, this.value, \'author_selectors\', \'authorterm\');">' % (number, number)
 	print '<option SELECTED VALUE="author_canonical">Canonical Name'
         print '<option VALUE="author_trans_name">Transliterated Name'
-	print '<option VALUE="author_lastname">Family Name'
+	print '<option VALUE="author_lastname">Directory Entry'
 	print '<option VALUE="author_legalname">Legal Name'
 	print '<option VALUE="author_birthplace">Birth Place'
 	print '<option VALUE="author_birthdate">Birthdate'
@@ -122,7 +122,7 @@ def PrintAuthorSortBy():
 	print '<b>Sort Results By:</b>'
 	print '<select NAME="ORDERBY">'
 	print '<option SELECTED VALUE="author_canonical">Canonical Name'
-	print '<option VALUE="author_lastname">Family Name'
+	print '<option VALUE="author_lastname">Directory Entry'
 	print '<option VALUE="author_legalname">Legal Name'
 	print '<option VALUE="author_birthplace">Birth Place'
 	print '<option VALUE="author_birthdate">Birthdate'

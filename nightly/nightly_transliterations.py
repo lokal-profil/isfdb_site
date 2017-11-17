@@ -333,6 +333,6 @@ def nightly_transliterations():
                 """ % languages_in_clause
         standardReport(query, 188)
 
-        #   Report 189: Authors with Non-Latin Family Names
+        #   Report 189: Authors with Non-Latin Directory Entries
         query = "select author_id from authors where author_lastname regexp '&#'"
         standardReport(query, 189)

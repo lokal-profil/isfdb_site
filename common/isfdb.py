@@ -409,7 +409,7 @@ SUBMISSION_DISPLAY = {
     'Deathdate': 'Death Date',
     'DisplayOrder': 'Display Order',
     'Emails': 'Email Address',
-    'Familyname': 'Family Name',
+    'Familyname': 'Directory Entry',
     'FullName': 'Full Name',
     'Graphic': 'Graphic Format',
     'Isbn': 'ISBN / Catalog #',

@@ -70,7 +70,7 @@ if __name__ == '__main__':
                       "AddTransLegalName", "AddMultipleField", help,
                       "'%s', '%s', '%s'" % ('AddTransLegalName', 'Trans. Legal Name', 'trans_legal_names'))
 
-	printfield("Family Name",    "author_lastname",   help, record[AUTHOR_LASTNAME])
+	printfield("Directory Entry","author_lastname",   help, record[AUTHOR_LASTNAME])
 	printfield("Birth Place",    "author_birthplace", help, record[AUTHOR_BIRTHPLACE])
 	printfield("Birth Date",     "author_birthdate",  help, record[AUTHOR_BIRTHDATE])
 	printfield("Death Date",     "author_deathdate",  help, record[AUTHOR_DEATHDATE])

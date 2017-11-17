@@ -1294,7 +1294,7 @@ def PrintAuthorTable(authors, merge, limit = 100, user = None):
 	print "<th>Author</th>"
 	print "<th>Pseudonym?</th>"
 	print "<th>Working Language</th>"
-	print "<th>Family Name</th>"
+	print "<th>Directory Entry</th>"
 	print "<th>Legal Name</th>"
 	print "<th>Birth Place</th>"
 	print "<th>Birth Date</th>"

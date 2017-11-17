@@ -387,7 +387,8 @@ def oneTypeContributorStatistics(query):
                 print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
 		print '<td>%d</td>' % count
 		print '<td>%s</td>' % moderator
-		print '<td>%s</td>' % SQLLastUserActivity(user_id)
+                last_user_activity = LastUserActivity(user_id)
+		print '<td>%s</td>' % last_user_activity
 		print '</tr>'
 		color = color ^ 1
         	record = result.fetch_row()
@@ -514,11 +515,18 @@ def topModerators(parent_dir):
 		print '<td>%d</td>' % (record[0][1])
 		print '<td>%d</td>' % (record[0][2])
 		print '<td>%d</td>' % (record[0][1] - record[0][2])
-		print '<td>%s</td>' % SQLLastUserActivity(user_id)
+                last_user_activity = LastUserActivity(user_id)
+		print '<td>%s</td>' % last_user_activity
 		print '</tr>'
 		color = color ^ 1
         	record = result.fetch_row()
 	print '</table><p>'
+
+def LastUserActivity(user_id):
+        if WikiExists():
+                return SQLLastUserActivity(user_id)
+        else:
+                return '&nbsp;'
 
 def AuthorsByDebutDate(parent_dir):
         query = "select MIN(date_format(t.title_copyright,'%Y')) debut, a.author_id, a.author_canonical, count(*) NumTitles, a.author_lastname"

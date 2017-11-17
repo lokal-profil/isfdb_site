@@ -6,8 +6,8 @@ function validateAuthorForm() {
 	if (validateRequired("author_canonical","Canonical Name") == false) {
 		return false;
 	}
-	// Validate that a non-empty family name has been entered
-	if (validateRequired("author_lastname","Family Name") == false) {
+	// Validate that a non-empty directory entry has been entered
+	if (validateRequired("author_lastname","Directory Entry") == false) {
 		return false;
 	}
 	// Validate that the author's canonical name doesn't contain double quotes

@@ -308,7 +308,7 @@ class authors:
 			if not self.author_lastname:
                                 raise
         	except:
-                        self.error = 'Family name is required'
+                        self.error = 'Directory Entry is required'
                         return
 
 		if self.form.has_key('author_birthplace'):
