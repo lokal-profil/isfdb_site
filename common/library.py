@@ -1128,6 +1128,14 @@ def FormatImage(value, height = 250):
         # If there is a delimiter, only display the part before the delimiter
         image = value.split("|")[0]
         value = '<img src="%s" height="%s" alt="Coverart"><br>[%s]' % (image, height, value)
+
+        if WIKILOC in image:
+                try:
+                        wikilink = image.split(WIKILOC)[1].split('/')[-1]
+                        wikilink = 'http://%s/index.php/Image:%s' % (WIKILOC, wikilink)
+                        value += '<br><a href="%s" target="_blank">ISFDB Wiki page for this image</a>' % wikilink
+                except:
+                        pass
         return value
 
 def unicode_translation():
