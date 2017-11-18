@@ -635,7 +635,11 @@ div.notes {
 
 /* moderator, submission by current user */
 td.submissionown {
-   background-color: #D0D0FF;
+   background-color: #3333ff;
+}
+
+td.submissionown a {
+   color: #ffffff;
 }
 
 /* moderator, submission by a moderator */

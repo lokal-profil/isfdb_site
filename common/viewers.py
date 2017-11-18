@@ -477,7 +477,16 @@ def PrintWarning(Label, unknown, pseudonym, disambig, title_date = '', pub_date 
         else:
                 print '<td class="blankwarning">&nbsp;</td>'
         return
-        
+
+def PrintMultiLine(lines, newline, ParentLabel, Separator):
+        if lines:
+                lines += Separator
+        if ParentLabel == 'Webpages':
+                lines += '<a href="%s" target="_blank">%s</a>' % (newline, newline)
+        else:
+                lines += newline
+        return lines
+
 def PrintMultField(ParentLabel, ChildLabel, Separator, doc, XmlData, Used, Current):
         (unknown, pseudonym, disambig) = 0, 0, 0
         if ParentLabel in ('Authors', 'BookAuthors', 'AwardAuthors', 'Interviewees', 'Artists'):
@@ -496,16 +505,12 @@ def PrintMultField(ParentLabel, ChildLabel, Separator, doc, XmlData, Used, Curre
                         if display_author:
                                 PrintAuthorNames(Current, Separator)
                         else:
-                                notfirst = 0
                                 multfield = ''
                                 for item in Current:
                                         if item:
-                                                if notfirst:
-                                                        multfield += Separator
-                                                multfield += item
+                                                multfield = PrintMultiLine(multfield, item, ParentLabel, Separator)
                                         else:
                                                 break
-                                        notfirst = 1
                                 print multfield
 		else:
 			print "-"
@@ -518,16 +523,11 @@ def PrintMultField(ParentLabel, ChildLabel, Separator, doc, XmlData, Used, Curre
                                 names.append(child.firstChild.data.encode('iso-8859-1'))
                         (unknown, pseudonym, disambig) = PrintAuthorNames(names, Separator)
                 else:
-                        displayed_names = ''
+                        multfield = ''
                         for child in children:
-                                if displayed_names == '':
-                                        try:
-                                                displayed_names = child.firstChild.data.encode('iso-8859-1')
-                                        except:
-                                                displayed_names = '-'
-                                else:
-                                        displayed_names = displayed_names + Separator + child.firstChild.data.encode('iso-8859-1')
-                        print displayed_names
+                                item = child.firstChild.data.encode('iso-8859-1')
+                                multfield = PrintMultiLine(multfield, item, ParentLabel, Separator)
+                        print multfield
 		print "</td>"
 	else:
 		print '<td class="keep">'
@@ -535,16 +535,12 @@ def PrintMultField(ParentLabel, ChildLabel, Separator, doc, XmlData, Used, Curre
                         if display_author:
                                 PrintAuthorNames(Current, Separator)
                         else:
-                                notfirst = 0
                                 multfield = ''
                                 for item in Current:
                                         if item:
-                                                if notfirst:
-                                                        multfield += Separator
-                                                multfield += item
+                                                multfield = PrintMultiLine(multfield, item, ParentLabel, Separator)
                                         else:
                                                 break
-                                        notfirst = 1
                                 print multfield
 		else:
 			print "-"
