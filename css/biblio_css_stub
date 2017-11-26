@@ -989,4 +989,5 @@ select.search {
 /* Make mouseover question mark appear close to the text */
 sup.mouseover {
   font-size: 60%;
+  padding-left: 1px;
 }
