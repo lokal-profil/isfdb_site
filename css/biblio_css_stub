@@ -986,8 +986,13 @@ select.search {
   width: 130px;
 }
 
-/* Make mouseover question mark appear close to the text */
+/* Mouseover question mark next to the text */
 sup.mouseover {
   font-size: 60%;
-  padding-left: 1px;
+}
+
+/* Mouseover question mark 2 pixels to the right of the text */
+sup.mouseover2pix {
+  font-size: 60%;
+  padding-left: 2px;
 }

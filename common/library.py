@@ -1451,7 +1451,11 @@ def ISFDBMouseover(mouseover_values, display_value, tag = 'td'):
                 # Append the HTML-escaped version of the mouseover value
                 display += ISFDBText(mouseover_value, 1)
                 count += 1
-        display += '">%s<sup class="mouseover">%s</sup></%s>' % (display_value, QUESTION_MARK, tag)
+        if HTFAKE in display_value:
+                mouseover_class = 'mouseover2pix'
+        else:
+                mouseover_class = 'mouseover'
+        display += '">%s<sup class="%s">%s</sup></%s>' % (display_value, mouseover_class, QUESTION_MARK, tag)
         return display
 
 def validateURL(url):
