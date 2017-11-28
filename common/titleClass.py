@@ -250,21 +250,21 @@ class titles:
 			if self.form.has_key('title_author'+str(counter+1)):
                                 value = self.form['title_author'+str(counter+1)].value
                                 value = XMLescape(normAuthor(value))
-                                if value:
+                                if value and (value not in self.title_authors):
         				self.title_authors.append(value)
         				self.num_authors += 1
 			elif self.form.has_key('review_reviewer1.'+str(counter+1)):
                                 value = self.form['review_reviewer1.'+str(counter+1)].value
                                 value = XMLescape(normAuthor(value))
-                                if value:
+                                if value and (value not in self.title_authors):
         				self.title_authors.append(value)
         				self.num_authors += 1
 			elif self.form.has_key('interviewer_author1.'+str(counter+1)):
                                 value = self.form['interviewer_author1.'+str(counter+1)].value
                                 value = XMLescape(normAuthor(value))
-                                if value:
-        				self.title_authors.append(value)
-        				self.num_authors += 1
+                                if value and (value not in self.title_authors):
+                                        self.title_authors.append(value)
+                                        self.num_authors += 1
 			counter += 1
                 if self.num_authors == 0:
                         self.error = "No authors were specified"
@@ -277,13 +277,13 @@ class titles:
 			if self.form.has_key('review_author1.'+str(counter+1)):
                                 value = self.form['review_author1.'+str(counter+1)].value
                                 value = XMLescape(normAuthor(value))
-                                if value:
+                                if value and (value not in self.title_subjauthors):
         				self.title_subjauthors.append(value)
         				self.num_subjauthors += 1
 			elif self.form.has_key('interviewee_author1.'+str(counter+1)):
                                 value = self.form['interviewee_author1.'+str(counter+1)].value
                                 value = XMLescape(normAuthor(value))
-                                if value:
+                                if value and (value not in self.title_subjauthors):
         				self.title_subjauthors.append(value)
         				self.num_subjauthors += 1
 			counter += 1

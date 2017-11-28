@@ -776,7 +776,7 @@ class pubs:
                         if self.form.has_key('pub_author'+str(counter+1)):
                                 value = self.form['pub_author'+str(counter+1)].value
                                 value = XMLescape(normAuthor(value))
-                                if value:
+                                if value and (value not in self.pub_authors):
                                         self.pub_authors.append(value)
                                         self.num_authors += 1
                         counter += 1
@@ -963,7 +963,8 @@ class pubs:
                                 # Add the artist's name to the list of artists for this cover ID
                                 if cover_id not in self.cover_artists:
                                         self.cover_artists[cover_id] = []
-                                self.cover_artists[cover_id].append(artist_name)
+                                if artist_name not in self.cover_artists[cover_id]:
+                                        self.cover_artists[cover_id].append(artist_name)
                                 continue
                         # Retrieve and save cover titles
                         splitstring = key.partition('cover_title')
@@ -1164,22 +1165,20 @@ class pubs:
 			# AUTHORS
 			#############################
 			author = 1
-			authors = ''
+			author_list = []
 			total_skips = 0
 			while True:
 				key = "title_author%s.%s" % (str(counter), str(author))
 				if self.form.has_key(key):
 					value = normAuthor(self.form[key].value)
-					if value:
-						if authors == '':
-							authors = value
-						else:
-							authors += "+" + value
+					if value and (value not in author_list):
+                                                author_list.append(value)
 				else:
 					total_skips += 1
 					if total_skips > 10:
 						break
 				author += 1
+			authors = '+'.join(author_list)
 
 			if authors == '':
 				key = "title_title"+str(counter)
@@ -1333,23 +1332,20 @@ class pubs:
 			# BOOK AUTHORS
 			#############################
 			author = 1
-			authors = ''
+			author_list = []
 			total_skips = 0
 			while True:
 				key = "review_author%s.%s" % (str(counter), str(author))
 				if self.form.has_key(key):
 					value = normAuthor(self.form[key].value)
-					if value:
-						if authors == '':
-							authors = value
-						else:
-							authors += "+" + value
-
+					if value and (value not in author_list):
+                                                author_list.append(value)
 				else:
 					total_skips += 1
 					if total_skips > 10:
 						break
 				author += 1
+			authors = '+'.join(author_list)
 
 			if authors == '':
 				key = "review_title"+str(counter)
@@ -1378,22 +1374,20 @@ class pubs:
 			# REVIEWER
 			#############################
 			author = 1
-			authors = ''
+			author_list = []
 			total_skips = 0
 			while True:
 				key = "review_reviewer%s.%s" % (str(counter), str(author))
 				if self.form.has_key(key):
 					value = normAuthor(self.form[key].value)
-					if value:
-						if authors == '':
-							authors = value
-						else:
-							authors += "+" + value
+					if value and (value not in author_list):
+                                                author_list.append(value)
 				else:
 					total_skips += 1
 					if total_skips > 10:
 						break
 				author += 1
+			authors = '+'.join(author_list)
 
 			if authors == '':
 				key = "review_title"+str(counter)
@@ -1502,22 +1496,20 @@ class pubs:
 			# INTERVIEWEE
 			#############################
 			author = 1
-			authors = ''
+			author_list = []
 			total_skips = 0
 			while True:
 				key = "interviewee_author%s.%s" % (str(counter), str(author))
 				if self.form.has_key(key):
 					value = normAuthor(self.form[key].value)
-					if value:
-						if authors == '':
-							authors = value
-						else:
-							authors += "+" + value
+					if value and (value not in author_list):
+                                                author_list.append(value)
 				else:
 					total_skips += 1
 					if total_skips > 10:
 						break
 				author += 1
+			authors = '+'.join(author_list)
 
 			if authors == '':
 				key = "interview_title"+str(counter)
@@ -1545,22 +1537,20 @@ class pubs:
 			# INTERVIEWER
 			#############################
 			author = 1
-			authors = ''
+			author_list = []
 			total_skips = 0
 			while True:
 				key = "interviewer_author%s.%s" % (str(counter), str(author))
 				if self.form.has_key(key):
 					value = normAuthor(self.form[key].value)
-					if value:
-						if authors == '':
-							authors = value
-						else:
-							authors += "+" + value
+					if value and (value not in author_list):
+                                                author_list.append(value)
 				else:
 					total_skips += 1
 					if total_skips > 10:
 						break
 				author += 1
+			authors = '+'.join(author_list)
 
 			if authors == '':
 				key = "interview_title"+str(counter)
