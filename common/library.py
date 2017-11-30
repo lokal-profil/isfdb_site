@@ -1023,6 +1023,7 @@ def RecognizedDomains():
         domains['goodreads.com'] = ('Goodreads', 'goodreads.com', 0)
         domains['grantvillegazette.com'] = ('1632, Inc.', 'www.1632.org', 1)
         domains['gutenberg.org'] = ('Gutenberg', 'gutenberg.org', 0)
+        domains['howardworks.com'] = ('Howard Works', 'howardworks.com', 1)
         domains['icshi.net'] = ('The Weird Worlds of A. E. van Vogt', 'www.icshi.net/worlds/', 1)
         domains['images-amazon.com'] = ('Amazon.com', 'www.amazon.com', 1)
         domains['imdb.com'] = ('IMDB', 'imdb.com', 0)
