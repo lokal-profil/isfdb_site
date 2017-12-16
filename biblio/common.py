@@ -575,9 +575,8 @@ def PrintNavbar(page_type, arg1, arg2, executable, argument, search_value = '', 
 	# SPECIFIC - navbar items specific to this page
 	#############################################################
 	if page_type == 'publication':
-		# Display links to other sites using an embedded ISBN.  Only done for "isbn" values
-		# that might actually be ISBN-10s or ISBN-13s.
-		if arg1[PUB_ISBN] and (len(arg1[PUB_ISBN]) > 9) and (arg1[PUB_ISBN][0] != '#') and pseudoISBN(arg1[PUB_ISBN]):
+		# Display links to other sites using an embedded ISBN.  Only done for properly formatted isbn values.
+		if arg1[PUB_ISBN] and pseudoISBN(arg1[PUB_ISBN]):
 			#Retrieve the Web sites for this user
 			websites = LoadWebSites(arg1[PUB_ISBN], userid, arg1[PUB_PTYPE])
 			if websites:
@@ -593,15 +592,13 @@ def PrintNavbar(page_type, arg1, arg2, executable, argument, search_value = '', 
                 #For Project Gutenberg pubs, display a link to the PG site
                 elif arg1[PUB_PUBLISHER]:
                         publisher = SQLGetPublisher(arg1[PUB_PUBLISHER])
-                        catalog_id = arg1[PUB_ISBN]
-                        if publisher[PUBLISHER_NAME] == 'Project Gutenberg' and catalog_id:
-                                if (catalog_id[0] == "#") and (len(catalog_id)>1):
-                                        print '<div class="divider">'
-                                        print 'Other Sites:'
-                                        print '</div>'
-                                        print '<ul class="navbar">'
-                                        print '<li><a href="http://www.gutenberg.org/etext/%s" target="_blank">Project Gutenberg</a>' % (arg1[PUB_ISBN][1:])
-                                        print '</ul>'
+                        if publisher[PUBLISHER_NAME] == 'Project Gutenberg' and arg1[PUB_CATALOG]:
+                                print '<div class="divider">'
+                                print 'Other Sites:'
+                                print '</div>'
+                                print '<ul class="navbar">'
+                                print '<li><a href="http://www.gutenberg.org/etext/%s" target="_blank">Project Gutenberg</a>' % arg1[PUB_CATALOG]
+                                print '</ul>'
 
 	PrintEditTools(page_type, userid, arg1, arg2)
 
@@ -1101,10 +1098,7 @@ def PrintOnePub(pub, pub_authors, pub_publishers, pub_series, cover_artists, bgc
                 print '<td>&nbsp;</td>'
 
         # ISBN/Catalog #
-        if pub[PUB_ISBN]:
-                print '<td dir="ltr">%s</td>' % (convertISBN(pub[PUB_ISBN]))
-        else:
-                print '<td>&nbsp;</td>'
+        printISBNCatalog(pub)
 
         # Price
 	if pub[PUB_PRICE]:
@@ -1179,6 +1173,20 @@ def PrintOnePub(pub, pub_authors, pub_publishers, pub_series, cover_artists, bgc
                 else:
                         print '<td>&nbsp;</td>'
         print '</tr>'
+
+def printISBNCatalog(pub):
+        from isbn import convertISBN
+        if pub[PUB_ISBN] or pub[PUB_CATALOG]:
+                value = ''
+                if pub[PUB_ISBN]:
+                        value = convertISBN(pub[PUB_ISBN])
+                if pub[PUB_CATALOG]:
+                        if value:
+                                value += ' / '
+                        value += pub[PUB_CATALOG]
+        else:
+                value = '&nbsp;'
+        print '<td dir="ltr">%s</td>' % value
 
 def FormatPubSeries(pub, pub_series):
         displayed_pub_series = ''

@@ -49,13 +49,10 @@ def CheckPublisher(value):
 
 def CheckISBN(value, XmlData):
         warning = ''
-        pseudo = pseudoISBN(value)
         invalid = validISBN(value) ^ 1
-        if invalid and pseudo:
+        if invalid:
                 warning = 'Bad checksum'
-        if not pseudo and value and value[0] != '#':
-                warning = 'Catalog ID is missing "#"'
-        if not warning and value and pseudo:
+        elif value:
                 isbn_length = ISBNlength(value)
                 pub_date = GetElementValue(XmlData, 'Year')
                 # If there is no publication date in the body of the submission
@@ -1941,6 +1938,7 @@ def DisplayDeletePub(submission_id):
 		PrintField1('Binding',   current.used_ptype,     current.pub_ptype)
 		PrintField1('PubType',   current.used_ctype,     current.pub_ctype)
 		PrintField1('Isbn',      current.used_isbn,      current.pub_isbn)
+		PrintField1('Catalog',   current.used_catalog,   current.pub_catalog)
 		PrintField1('Price',     current.used_price,     current.pub_price)
 		PrintField1('Image',     current.used_image,     current.pub_image)
 		PrintField1('Note',      current.used_note,      current.pub_note)
@@ -2622,6 +2620,7 @@ def DisplayEditPub(submission_id):
 		PrintField2XML('Binding',   merge, current.used_ptype,     current.pub_ptype)
 		PrintField2XML('PubType',   merge, current.used_ctype,     current.pub_ctype)
 		PrintField2XML('Isbn',      merge, current.used_isbn,      current.pub_isbn)
+		PrintField2XML('Catalog',   merge, current.used_catalog,   current.pub_catalog)
 		PrintField2XML('Price',     merge, current.used_price,     current.pub_price)
 		PrintField2XML('Image',     merge, current.used_image,     current.pub_image)
 		PrintField2XML('Note',      merge, current.used_note,      current.pub_note)
@@ -3049,6 +3048,7 @@ def DisplayClonePublication(submission_id):
         PrintField1XML('Binding',   merge, 0)
         PrintField1XML('PubType',   merge, 0)
         PrintField1XML('Isbn',      merge, 0)
+        PrintField1XML('Catalog',   merge, 0)
         PrintField1XML('Price',     merge, 0)
         PrintField1XML('Image',     merge, 0)
         PrintField1XML('Note',      merge, 0)
@@ -3340,6 +3340,7 @@ def DisplayNewPub(submission_id):
         PrintField1XML('Pages',     merge, title_data)
         PrintField1XML('Binding',   merge, title_data)
         PrintField1XML('Isbn',      merge, title_data)
+        PrintField1XML('Catalog',   merge, title_data)
         PrintField1XML('Price',     merge, title_data)
         PrintField1XML('PubSeries', merge, title_data)
         PrintField1XML('PubSeriesNum', merge, title_data)

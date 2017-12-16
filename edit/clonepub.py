@@ -67,6 +67,9 @@ def printpubrecord(pub, image_url, reuse_external_ids):
         print '</tr>'
 	
         printISBN(help, pub.pub_isbn)
+
+	printfield("Catalog ID", "pub_catalog", help, pub.pub_catalog)
+
 	printfield("Price", "pub_price", help, pub.pub_price)
 
         if image_url:

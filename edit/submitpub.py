@@ -116,6 +116,10 @@ if __name__ == '__main__':
 	update_string += val
 	changes += changed
 
+	(val, changed) = EvalField('Catalog', new.used_catalog, old.used_catalog, new.pub_catalog, old.pub_catalog)
+	update_string += val
+	changes += changed
+
 	(val, changed) = EvalField('Price', new.used_price, old.used_price, new.pub_price, old.pub_price)
 	update_string += val
 	changes += changed

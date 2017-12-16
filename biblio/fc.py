@@ -329,7 +329,7 @@ class PublicationMonth:
                 print "<td><b>Genre/Tags</b></td>"
                 print "<td><b>Type</b></td>"
                 print "<td><b>Publisher</b></td>"
-                print "<td><b>ISBN</b></td>"
+                print "<td><b>ISBN/Catalog ID</b></td>"
                 print "<td><b>Price</b></td>"
                 print "<td><b>Pages</b></td>"
                 print "<td><b>Format</b></td>"
@@ -433,10 +433,7 @@ class PublicationMonth:
                         print "&nbsp;"
                 print '</td>'
 
-                print '<td>'
-                if pub[PUB_ISBN]:
-                        print convertISBN(pub[PUB_ISBN])
-                print '</td>'
+                printISBNCatalog(pub)
 
                 print '<td>'
                 if pub[PUB_PRICE]:

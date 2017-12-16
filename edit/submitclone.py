@@ -83,6 +83,8 @@ if __name__ == '__main__':
 		update_string += "    <PubType>%s</PubType>\n" % (db.escape_string(new.pub_ctype))
 	if new.used_isbn:
 		update_string += "    <Isbn>%s</Isbn>\n" % (db.escape_string(new.pub_isbn))
+	if new.used_catalog:
+		update_string += "    <Catalog>%s</Catalog>\n" % (db.escape_string(new.pub_catalog))
 
         if new.identifiers:
 		update_string += new.xmlIdentifiers()

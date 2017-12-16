@@ -79,6 +79,8 @@ def doRecord(publication):
 
 	if publication[PUB_ISBN]:
 		print '      <Isbn>%s</Isbn>' % XMLescape(publication[PUB_ISBN], 1)
+	if publication[PUB_CATALOG]:
+		print '      <Catalog>%s</Catalog>' % XMLescape(publication[PUB_CATALOG], 1)
 	if publication[PUB_PUBLISHER]:
 		publisher = SQLGetPublisher(publication[PUB_PUBLISHER])
 		print '      <Publisher>%s</Publisher>' % XMLescape(publisher[PUBLISHER_NAME], 1)

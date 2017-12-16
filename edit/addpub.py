@@ -84,7 +84,8 @@ if __name__ == '__main__':
 
 	printfield("Pub Type", "pub_ctype", help, pub_type, 1)
 
-	printfield("ISBN / Catalog #", "pub_isbn", help)
+	printfield("ISBN", "pub_isbn", help)
+	printfield("Catalog ID", "pub_catalog", help)
 	printfield("Price", "pub_price", help)
 
 	printfield("Image URL", "pub_image", help)

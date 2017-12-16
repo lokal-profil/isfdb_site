@@ -60,6 +60,7 @@ PUB_PRICE     = 10
 PUB_NOTE      = 11
 PUB_SERIES    = 12
 PUB_SERIES_NUM= 13
+PUB_CATALOG   = 14
 
 #
 # Field offsets for author records
@@ -412,7 +413,8 @@ SUBMISSION_DISPLAY = {
     'Familyname': 'Directory Entry',
     'FullName': 'Full Name',
     'Graphic': 'Graphic Format',
-    'Isbn': 'ISBN / Catalog #',
+    'Isbn': 'ISBN',
+    'Catalog': 'Catalog ID',
     'Legalname': 'Legal Name',
     'NonGenre': 'Non-Genre',
     'Parentposition': 'Series Parent Position',

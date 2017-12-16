@@ -54,7 +54,8 @@ def printpubrecord(record):
 	printfield("Pages", "pub_pages", help, pub.pub_pages, 1)
 	printfield("Pub Format", "pub_ptype", help, pub.pub_ptype, 1)
 	printfield("Pub Type", "pub_ctype", help, pub.pub_ctype, 1)
-	printfield("ISBN / Catalog #", "pub_isbn", help, pub.pub_isbn, 1)
+	printfield("ISBN", "pub_isbn", help, pub.pub_isbn, 1)
+	printfield("Catalog ID", "pub_catalog", help, pub.pub_catalog, 1)
 	printfield("Price", "pub_price", help, pub.pub_price, 1)
 	printfield("Image URL", "pub_image", help, pub.pub_image, 1)
 

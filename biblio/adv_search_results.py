@@ -86,9 +86,9 @@ class advanced_search:
                 self.sort = self.formatEntry(self.order_by)
                 if self.search_type == 'Publication' and self.sort not in ('pub_title', 'pub_ctype',
                                                          'pub_tag', 'pub_year',
-                                                         'pub_isbn', 'pub_price',
-                                                         'pub_pages', 'pub_ptype',
-                                                         'pub_frontimage'):
+                                                         'pub_isbn', 'pub_catalog',
+                                                         'pub_price', 'pub_pages',
+                                                         'pub_ptype', 'pub_frontimage'):
                         DisplayError("Unknown sort field: %s" % sort)
                 elif self.search_type == 'Author' and self.sort not in ('author_canonical',
                                                             'author_lastname',
@@ -543,6 +543,8 @@ class advanced_search:
                 elif field == 'pub_isbn':
                         # ISBNs are a special case. The whole clause was pre-built in ProcessTerm
                         clause = sql_value
+                elif field == 'pub_catalog':
+                        clause = "pubs.pub_catalog %s" % sql_value
                 elif field == 'pub_ptype':
                         clause = "pubs.pub_ptype %s" % sql_value
                 elif field in ('author_canonical', 'author_birthplace', 'author_birthdate', 'author_deathdate'):

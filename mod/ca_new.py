@@ -361,6 +361,7 @@ def DoSubmission(db, submission):
 			UpdatePubColumn(merge, 'Binding', 'pub_ptype',      Record)
 			UpdatePubColumn(merge, 'PubType', 'pub_ctype',      Record)
 			UpdatePubColumn(merge, 'Isbn',    'pub_isbn',       Record)
+			UpdatePubColumn(merge, 'Catalog', 'pub_catalog',    Record)
 			UpdatePubColumn(merge, 'Price',   'pub_price',      Record)
 			UpdatePubColumn(merge, 'Image',   'pub_frontimage', Record)
 

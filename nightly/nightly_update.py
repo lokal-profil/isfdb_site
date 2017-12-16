@@ -280,11 +280,16 @@ def nightly_cleanup_reports():
         standardReport(query, 30)
 
         #   Report 31: Pre-2005 pubs with ISBN-13s and post-2007 pubs with ISBN-10s
-	query = "select pub_id from pubs where (pub_isbn like '97%'\
-                and length(replace(pub_isbn,'-',''))=13 and pub_year \
-                <'2005-00-00' and pub_year !='0000-00-00') or (pub_isbn not like \
-                '#%' and length(replace(pub_isbn,'-',''))=10 and pub_year>'2008-00-00' \
-                and pub_year !='8888-00-00' and pub_year !='9999-00-00')"
+	query = """select pub_id from pubs
+                where (pub_isbn like '97%'
+                and length(replace(pub_isbn,'-',''))=13
+                and pub_year<'2005-00-00'
+                and pub_year !='0000-00-00')
+                or
+                (length(replace(pub_isbn,'-',''))=10
+                and pub_year>'2008-00-00'
+                and pub_year !='8888-00-00'
+                and pub_year !='9999-00-00')"""
         standardReport(query, 31)
 
         #   Report 32: Duplicate Publication Tags
@@ -471,24 +476,21 @@ def nightly_cleanup_reports():
                 )"
         standardReport(query, 48)
 
-        #   Report 49: Publications with Invalid Catalog IDs
+        #   Report 49: Publications with Invalid ISBN Formats
         query = """select p.pub_id from pubs p
-                where substr(pub_isbn,1,1)!='#'
-                and p.pub_isbn is not NULL
+                where p.pub_isbn is not NULL
                 and p.pub_isbn != ''
                 and REPLACE(p.pub_isbn,'-','') not REGEXP '^[[:digit:]]{9}[Xx]{1}$'
                 and REPLACE(p.pub_isbn,'-','') not REGEXP '^[[:digit:]]{10}$'
                 and REPLACE(p.pub_isbn,'-','') not REGEXP '^[[:digit:]]{13}$'
                 """
-##        "select pub_id from pubs where length(replace(pub_isbn,'-','')) \
-##                not in (0,10,13) and substr(pub_isbn,1,1)!='#'"
         standardReport(query, 49)
 
-        #   Report 50: Publications with Invalid ISBNs
+        #   Report 50: Publications with Invalid ISBN Checksums
         query = "(select tmp.pub_id from \
                  (select pub_id, REPLACE(pub_isbn,'-','') AS isbn \
-                 from pubs where SUBSTR(pub_isbn,1,1)!='#' \
-                 and LENGTH(REPLACE(pub_isbn,'-',''))=10) tmp \
+                 from pubs \
+                 where LENGTH(REPLACE(pub_isbn,'-',''))=10) tmp \
                  where CONVERT((11-MOD( \
         	 (substr(isbn,1,1)*10) \
         	+(substr(isbn,2,1)*9) \
@@ -504,8 +506,8 @@ def nightly_cleanup_reports():
                 union \
                 (select tmp.pub_id from \
                  (select pub_id, REPLACE(pub_isbn,'-','') AS isbn \
-                 from pubs where SUBSTR(pub_isbn,1,1)!='#' \
-                 and LENGTH(REPLACE(pub_isbn,'-',''))=13) tmp \
+                 from pubs \
+                 where LENGTH(REPLACE(pub_isbn,'-',''))=13) tmp \
                  where MOD(10-MOD( \
         	 (substr(isbn,1,1)*1) \
         	+(substr(isbn,2,1)*3) \
@@ -541,7 +543,6 @@ def nightly_cleanup_reports():
         query = """select pub_isbn 
                 from pubs 
                 where pub_isbn IS NOT NULL 
-                and SUBSTR(pub_isbn,1,1)!='#' 
                 and pub_isbn != '' 
                 and pub_ctype != 'MAGAZINE' 
 		and pub_id not in ('%s')

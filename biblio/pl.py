@@ -367,36 +367,33 @@ if __name__ == '__main__':
 		print '<li> <b>Date:</b> %s' % (convertDate(pub.pub_year, 1))
 
 	if pub.pub_isbn:
-		if pub.pub_isbn[0] == '#':
-			print '  <li><b>Catalog ID:</b>', pub.pub_isbn
-		else:
-			compact = string.replace(pub.pub_isbn, '-', '')
-			compact = string.replace(compact, ' ', '')
-			compactlen = len(compact)
- 
-			pseudo = pseudoISBN(pub.pub_isbn)
-			invalid = validISBN(pub.pub_isbn) ^ 1
-			if compactlen == 10:
-				if invalid and pseudo:
-					print '  <li id="badISBN">ISBN: %s  (Bad Checksum)' % pub.pub_isbn
-				elif invalid:
-					print '  <li><b>Catalog ID:</b>', pub.pub_isbn
-				else:
-					print '  <li><b>ISBN:</b> %s' % convertISBN(compact)
-				isbn = toISBN13(compact)
-				if isbn != compact:
-					print '[<small>%s</small>]' % convertISBN(isbn)
-			elif compactlen == 13:
-				if invalid and pseudo:
-					print '  <li id="badISBN">ISBN: %s  (Bad Checksum)' % pub.pub_isbn
-				elif invalid:
-					print '  <li><b>Catalog ID:</b>', pub.pub_isbn
-				elif compact[:3] == '978':
-					print '  <li><b>ISBN:</b> %s [<small>%s</small>]' % (convertISBN(compact), convertISBN(toISBN10(compact)))
-				else:
+                compact = string.replace(pub.pub_isbn, '-', '')
+                compact = string.replace(compact, ' ', '')
+                compactlen = len(compact)
+
+                pseudo = pseudoISBN(pub.pub_isbn)
+                invalid = validISBN(pub.pub_isbn) ^ 1
+                # Bad ISBN format
+                if not pseudo:
+                        print '  <li id="badISBN">ISBN: %s  (Bad format)' % pub.pub_isbn
+                else:
+                        # ISBN fails checlsum validation
+                        if invalid:
+                                print '  <li id="badISBN">ISBN: %s  (Bad Checksum)' % pub.pub_isbn
+                        # ISBN-10: display the ISBN-10 as well as the ISBN-13 in "small"
+                        elif compactlen == 10:
+                                print '  <li><b>ISBN:</b> %s [<small>%s</small>]' % (convertISBN(compact), convertISBN(toISBN13(compact)))
+                        # ISBN-13
+                        else:
+                                # ISBN-13s which start with 978 can be converted to ISBN-10, so we display the ISBN-10
+                                if compact[:3] == '978':
+                                        print '  <li><b>ISBN:</b> %s [<small>%s</small>]' % (convertISBN(compact), convertISBN(toISBN10(compact)))
+                                # ISBN-13s that do not start with 978 (currently 979), can't be converted to ISBN-10s
+                                else:
                                         print '  <li><b>ISBN:</b> %s' % convertISBN(compact)
-			else:
-				print '  <li><b>Catalog ID:</b>', pub.pub_isbn
+
+	if pub.pub_catalog:
+                print '  <li><b>Catalog ID:</b>', pub.pub_catalog
 
 	if pub.pub_publisher_id:
 		print '<li>'

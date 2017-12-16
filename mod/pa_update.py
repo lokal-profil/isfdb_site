@@ -330,6 +330,7 @@ if __name__ == '__main__':
 		UpdateColumn(merge, 'Binding', 'pub_ptype',      Record)
 		UpdateColumn(merge, 'PubType', 'pub_ctype',      Record)
 		UpdateColumn(merge, 'Isbn',    'pub_isbn',       Record)
+		UpdateColumn(merge, 'Catalog', 'pub_catalog',    Record)
 		UpdateColumn(merge, 'Price',   'pub_price',      Record)
 		UpdateColumn(merge, 'Image',   'pub_frontimage', Record)
 		UpdateColumn(merge, 'PubSeriesNum',   'pub_series_num',      Record)

@@ -114,6 +114,10 @@ if __name__ == '__main__':
 	update_string += val
 	changes += changed
 
+	(val, changed) = EvalField('Catalog', new.used_catalog, old.used_catalog, new.pub_catalog, old.pub_catalog)
+	update_string += val
+	changes += changed
+
         if new.identifiers:
 		update_string += new.xmlIdentifiers()
 

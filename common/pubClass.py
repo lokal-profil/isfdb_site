@@ -373,6 +373,7 @@ class pubs:
 		self.used_ptype     = 0
 		self.used_ctype     = 0
 		self.used_isbn      = 0
+		self.used_catalog   = 0
 		self.used_image     = 0
 		self.used_price     = 0
 		self.used_note      = 0
@@ -390,6 +391,7 @@ class pubs:
 		self.pub_ptype      = ''
 		self.pub_ctype      = ''
 		self.pub_isbn       = ''
+		self.pub_catalog    = ''
 		self.pub_image      = ''
 		self.pub_price      = ''
 		self.pub_publisher_id = ''
@@ -578,6 +580,9 @@ class pubs:
 			if record[0][PUB_ISBN]:
 				self.pub_isbn = record[0][PUB_ISBN]
 				self.used_isbn = 1
+			if record[0][PUB_CATALOG]:
+				self.pub_catalog = record[0][PUB_CATALOG]
+				self.used_catalog = 1
 			if record[0][PUB_IMAGE]:
 				self.pub_image = record[0][PUB_IMAGE]
 				self.used_image = 1
@@ -593,7 +598,9 @@ class pubs:
                                 self.pub_trans_titles = res2
                                 self.used_trans_titles = 1
 
-                        query = "select authors.author_canonical from authors,pub_authors where pub_authors.author_id = authors.author_id and pub_authors.pub_id='%d'" % (record[0][PUB_PUBID])
+                        query = """select authors.author_canonical from authors, pub_authors
+                                   where pub_authors.author_id=authors.author_id and
+                                   pub_authors.pub_id=%d""" % record[0][PUB_PUBID]
                         self.db.query(query)
                         res2 = self.db.store_result()
                         rec2 = res2.fetch_row()
@@ -687,6 +694,8 @@ class pubs:
 				container += "      <Year>%s</Year>\n" % XMLescape(self.pub_year)
 			if self.used_isbn:
 				container += "      <Isbn>%s</Isbn>\n" % XMLescape(self.pub_isbn)
+			if self.used_catalog:
+				container += "      <Catalog>%s</Catalog>\n" % XMLescape(self.pub_catalog)
 			if self.used_publisher:
 				container += "      <Publisher>%s</Publisher>\n" % XMLescape(self.pub_publisher)
 			if self.used_series:
@@ -866,12 +875,17 @@ class pubs:
 
 		if self.form.has_key('pub_isbn'):
                         value = XMLescape(self.form['pub_isbn'].value)
+                        value = string.replace(value, '-', '')
+                        value = string.replace(value, ' ', '')
                         if value:
                                 self.pub_isbn = value
-                                if validISBN(self.pub_isbn):
-                                        self.pub_isbn = string.replace(self.pub_isbn, '-', '')
-                                        self.pub_isbn = string.replace(self.pub_isbn, ' ', '')
                                 self.used_isbn = 1
+
+		if self.form.has_key('pub_catalog'):
+                        value = XMLescape(self.form['pub_catalog'].value)
+                        if value:
+        			self.pub_catalog = value
+        			self.used_catalog = 1
 
                 # External identifiers
                 identifier_types = SQLLoadIdentifierTypes()

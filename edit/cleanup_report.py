@@ -1737,8 +1737,7 @@ def function48():
 
 def function49():
 	query = """select p.pub_isbn, p.pub_id, p.pub_title from pubs p, cleanup c
-                where substr(pub_isbn,1,1)!='#'
-                and p.pub_isbn is not NULL
+                where p.pub_isbn is not NULL
                 and p.pub_isbn != ''
                 and REPLACE(p.pub_isbn,'-','') not REGEXP '^[[:digit:]]{9}[Xx]{1}$'
                 and REPLACE(p.pub_isbn,'-','') not REGEXP '^[[:digit:]]{10}$'
@@ -1749,9 +1748,9 @@ def function49():
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
-                print '<h2>No Publications with Invalid Catalog IDs</h2>'
+                print '<h2>No Publications with Invalid ISBN Formats</h2>'
                 return
-        PrintTableColumns(('', 'Catalog ID', 'Publication'))
+        PrintTableColumns(('', 'ISBN', 'Publication'))
         bgcolor = 1
         count = 1
         record = result.fetch_row()
@@ -1779,8 +1778,7 @@ def function50():
 	query = """(select tmp.pub_id, tmp.isbn, tmp.pub_title as pub_title, tmp.cleanup_id from
                  (select p.pub_id, REPLACE(p.pub_isbn,'-','') AS isbn, p.pub_title, c.cleanup_id
                  from pubs p, cleanup c
-                 where SUBSTR(p.pub_isbn,1,1)!='#'
-                 and LENGTH(REPLACE(p.pub_isbn,'-',''))=10
+                 where LENGTH(REPLACE(p.pub_isbn,'-',''))=10
                  and p.pub_id=c.record_id and c.report_type=50 and c.resolved IS NULL) tmp
                  where CONVERT((11-MOD( 
         	 (substr(isbn,1,1)*10) 
@@ -1798,8 +1796,7 @@ def function50():
                 (select tmp.pub_id, tmp.isbn, tmp.pub_title as pub_title, tmp.cleanup_id from 
                  (select p.pub_id, REPLACE(p.pub_isbn,'-','') AS isbn, p.pub_title, c.cleanup_id 
                  from pubs p, cleanup c 
-                 where SUBSTR(p.pub_isbn,1,1)!='#' 
-                 and LENGTH(REPLACE(p.pub_isbn,'-',''))=13 
+                 where LENGTH(REPLACE(p.pub_isbn,'-',''))=13 
                  and p.pub_id=c.record_id and c.report_type=50 and c.resolved IS NULL) tmp 
                  where MOD(10-MOD( 
         	 (substr(isbn,1,1)*1) 
@@ -1821,7 +1818,7 @@ def function50():
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
-                print '<h2>No Publications with Invalid ISBNs</h2>'
+                print '<h2>No Publications with Invalid ISBN Checksums</h2>'
                 return
 
         PrintTableColumns(('', 'ISBN', 'Publication', ''))

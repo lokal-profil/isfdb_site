@@ -736,31 +736,12 @@ def printHelpBox(type, helplink):
 def printISBN(help, isbn):
         from isbn import convertISBN
 	if isbn:
-                compact = string.replace(isbn, '-', '')
-                compact = string.replace(compact, ' ', '')
-                compactlen = len(compact)
-
-                pseudo = pseudoISBN(isbn)
-                invalid = validISBN(isbn) ^ 1
-                if compactlen == 10:
-                        if invalid and pseudo:
-                                printfield("ISBN / Catalog #", "pub_isbn", help, isbn)
-                        elif invalid:
-                                printfield("ISBN / Catalog #", "pub_isbn", help, isbn)
-                        else:
-                                printfield("ISBN / Catalog #", "pub_isbn", help, convertISBN(compact))
-                elif compactlen == 13:
-                        if invalid and pseudo:
-                                printfield("ISBN / Catalog #", "pub_isbn", help, isbn)
-                        elif invalid:
-                                printfield("ISBN / Catalog #", "pub_isbn", help, isbn)
-                        else:
-                                printfield("ISBN / Catalog #", "pub_isbn", help, convertISBN(compact))
+                if not validISBN(isbn):
+                        printfield("ISBN", "pub_isbn", help, isbn)
                 else:
-                        printfield("ISBN / Catalog #", "pub_isbn", help, isbn)
+                        printfield("ISBN", "pub_isbn", help, convertISBN(isbn))
 	else:
-		printfield("ISBN / Catalog #", "pub_isbn", help)
-
+		printfield("ISBN", "pub_isbn", help)
         
 def printdropdown(label, fieldname, values, help):
         print '<tr>'

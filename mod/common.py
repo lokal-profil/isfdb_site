@@ -460,9 +460,6 @@ def display_sources(submission_id):
 
         if not isbn:
                 return
-        # Skip Catalog IDs which start with #
-        if isbn[0] == '#':
-                return
         
         pseudo = pseudoISBN(isbn)
         if not pseudo:

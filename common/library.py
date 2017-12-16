@@ -320,6 +320,8 @@ def validISBN(isbn):
 
 
 def pseudoISBN(isbn):
+        # Returns 1 if the passed parameter follows the standard ISBN format, 0 otherwise
+        # Note that only ISBN format is checked; checksum validation is not performed
         isbn = string.replace(isbn, '-', '')
         isbn = string.replace(isbn, ' ', '')
         if (len(isbn) != 10) and (len(isbn) != 13):

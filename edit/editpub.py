@@ -282,6 +282,7 @@ def printpubrecord(pub):
         print '</tr>'
 
         printISBN(help, pub.pub_isbn)
+	printfield("Catalog ID", "pub_catalog", help, pub.pub_catalog)
 	printfield("Price", "pub_price", help, pub.pub_price)
 	printfield("Image URL", "pub_image", help, pub.pub_image)
 	printfield("Pub Series", "pub_series", help, pub.pub_series)

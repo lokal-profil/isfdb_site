@@ -500,11 +500,14 @@ def HelpPub():
         link = 'http://%s/index.php?title=Template:PublicationFields:PubType' % (WIKILOC)
         help['Pub Type:'] = [text, link]
 
-        text = 'ISBN if the publication has one. If there is no ISBN, but a catalog ID is present, enter the ID'
-        text += ' preceded by #. Follow this link for more details.'
+        text = 'ISBN if the publication has one. Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:PublicationFields:ISBN' % (WIKILOC)
-        help['ISBN / Catalog #'] = [text, link]
+        help['ISBN'] = [text, link]
 
+        text = 'Catalog ID if the publication has one. Follow this link for more details.'
+        link = 'http://%s/index.php?title=Template:PublicationFields:CatalogID' % (WIKILOC)
+        help['Catalog ID'] = [text, link]
+        
         text = 'If this publication is listed by a recognized third party Web site'
         text += ' which has assigned a permanent ID to it, select the Web site from the'
         text += ' drop-down list on the left and enter the ID in the field on the right.'
