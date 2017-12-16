@@ -5834,6 +5834,7 @@ def function233():
                    and YEAR(p1.pub_year) = YEAR(p2.pub_year)
                    and MONTH(p1.pub_year) = MONTH(p2.pub_year)
                    and (p1.pub_isbn is null or p2.pub_isbn is null or p1.pub_isbn = p2.pub_isbn)
+                   and not (p1.pub_catalog is not null and p2.pub_catalog is not null and p1.pub_catalog != p2.pub_catalog)
                    and p1.pub_ctype = p2.pub_ctype
                    and p1.pub_title = p2.pub_title
                    and c.report_type = 233
