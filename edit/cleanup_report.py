@@ -5938,6 +5938,41 @@ def function235():
 	else:
 		print "<h2>No publications with invalid BNF identifiers.</h2>"
 
+def function236():
+       
+        query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
+                 from pubs p, publishers pu, cleanup c
+                 where p.publisher_id = pu.publisher_id
+                 and (pu.publisher_name like '%SFBC%'
+                      or pu.publisher_name = 'Science Fiction Book Club')
+                 and p.pub_isbn is not NULL and p.pub_isbn != ""
+                 and p.pub_catalog is NULL
+                 and c.report_type = 236
+                 and p.pub_id = c.record_id
+                 and c.resolved is null
+                 order by p.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('', 'Publication', 'Ignore'))
+		count = 1
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, 236)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No SFBC publications with an ISBN and no Catalog ID.</h2>"
+
 
 def function9999():
         nonModeratorMessage()

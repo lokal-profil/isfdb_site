@@ -1421,6 +1421,15 @@ def nightly_cleanup_reports():
                  and i.identifier_value not regexp '^cb[[:digit:]]{8}[[:alnum:]]{1}$'"""
         standardReport(query, 235)
 
+        #   Report 236: SFBC publications with an ISBN and no catalog ID
+        query = """select distinct p.pub_id from pubs p, publishers pu
+                 where p.publisher_id = pu.publisher_id
+                 and (pu.publisher_name like '%SFBC%'
+                      or pu.publisher_name = 'Science Fiction Book Club')
+                 and p.pub_isbn is not NULL and p.pub_isbn != ""
+                 and p.pub_catalog is NULL"""
+        standardReport(query, 236)
+
 def badUnicodeReport(table, record_title, record_id, report_number):
         unicode_map = unicode_translation()
         # Assumes unicode_map will have at least one entry
