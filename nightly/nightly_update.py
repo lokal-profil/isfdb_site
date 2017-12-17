@@ -1414,6 +1414,13 @@ def nightly_cleanup_reports():
                  and n.note_note like '%http://picarta.pica.nl/%'"""
         standardReport(query, 234)
 
+        #   Report 235: Publications with invalid BNF identifiers
+        query = """select distinct p.pub_id from pubs p, identifiers i
+                 where p.pub_id = i.pub_id
+                 and i.identifier_type_id = 4
+                 and i.identifier_value not regexp '^cb[[:digit:]]{8}[[:alnum:]]{1}$'"""
+        standardReport(query, 235)
+
 def badUnicodeReport(table, record_title, record_id, report_number):
         unicode_map = unicode_translation()
         # Assumes unicode_map will have at least one entry

@@ -5907,6 +5907,37 @@ def function234():
 	else:
 		print "<h2>No publications with direct De Nederlandse Bibliografie links in Notes.</h2>"
 
+def function235():
+       
+        query = """select distinct p.pub_id, p.pub_title
+                 from pubs p, identifiers i, cleanup c
+                 where p.pub_id = i.pub_id
+                 and i.identifier_type_id = 4
+                 and i.identifier_value not regexp '^cb[[:digit:]]{8}[[:alnum:]]{1}$'
+                 and c.report_type = 235
+                 and p.pub_id = c.record_id
+                 order by p.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('', 'Publication'))
+		count = 1
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+			PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No publications with invalid BNF identifiers.</h2>"
+
 
 def function9999():
         nonModeratorMessage()
