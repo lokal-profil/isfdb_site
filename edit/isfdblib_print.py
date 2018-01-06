@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2010-2017   Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2010-2018   Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -504,16 +504,6 @@ def printsource(help):
 	print '<input type="radio" name="Source" value="AuthorWebsite">Author\'s website<br>'
 	print '<input type="radio" tabindex="1" name="Source" value="Other" CHECKED>Other website, later printing/edition or another source (please explain in Publication Note)'
 	print '</td>'
-	print '</tr>'
-
-def printAddArtist(help, next = '2'):
-	print '<tr id="AddArtist" next="%s">' % (str(next))
-       	if help.get("Add Artist"):
-                print '<td class="hint" title="%s"><input type="button" value="Add Artist" tabindex="1" onclick="addPubArtist()">' % (help['Add Artist'][0])
-                print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></td>' % (HTMLLOC)
-        else:
-                print '<td><input type="button" value="Add Artist" tabindex="1" onclick="addPubArtist()"></td>'
-	print '<td>&nbsp;</td>'
 	print '</tr>'
 
 def printAddAuthor(author_or_editor, help, next = '2', table_name = 'pubBody'):
