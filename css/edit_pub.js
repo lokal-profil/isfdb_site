@@ -1,5 +1,5 @@
 /*     Version: $Revision$
-      (C) COPYRIGHT 2015-2017   Ahasuerus
+      (C) COPYRIGHT 2015-2018   Ahasuerus
          ALL RIGHTS RESERVED
       Date: $Date$ */
 
@@ -519,16 +519,13 @@ function addNewExternalID(field_name, table_name) {
 	var table_name = table_name || 'pubBody';
 	var identifier_types = ExternalIdentifiers();
 	var tbody = document.getElementById(table_name);
-	var addpoint = document.getElementById("AddExternalID");
 
-	// Update the 'next' attribute for later additions
-	next = addpoint.getAttribute("next");
-	var int_next = parseInt(next);
-	int_next += 1;
-	var str_next = int_next.toString();
-	addpoint.setAttribute("next", str_next);
+	var last_row = GetLastExtrenalId(field_name);
+	var addpoint = document.getElementById(field_name + '.row.' + last_row);
+	var next = last_row + 1;
 
 	var tr   = document.createElement("tr");
+	tr.setAttribute("id", field_name + '.row.' + next);
 	var td1  = document.createElement("td");
 	var select = document.createElement("select");
 	select.setAttribute("name", field_name+"_type."+next);
@@ -551,8 +548,17 @@ function addNewExternalID(field_name, table_name) {
 	input.setAttribute("tabindex", "1");
 	td2.appendChild(input);
 	tr.appendChild(td2);
-	tbody.insertBefore(tr, addpoint);
-	//alert(identifier_types);
+	tbody.insertBefore(tr, addpoint.nextSibling);
+}
+
+function GetLastExtrenalId(field_name) {
+	for (i = 1 ; i < 1000 ; i++) {
+		row_data = document.getElementById(field_name + '.row.' + i);
+		if (row_data == null) {
+			return i-1;
+		}
+	}
+	return 999;
 }
 
 function addNewBriefCover() {

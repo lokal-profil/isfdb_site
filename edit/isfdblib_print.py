@@ -148,7 +148,7 @@ def printExternalIDs(external_ids = None, label = 'External ID', field = 'extern
         for id_type in sorted(external_ids.keys()):
                 for id_value in external_ids[id_type]:
                         type_id = external_ids[id_type][id_value][0]
-                        print '<tr>'
+                        print '<tr id="external_id.row.%d">' % counter
                         print '<td class="hint" title="%s">' % type_list
                         print '<select tabindex="1" name="%s_type.%d">' % (field, counter)
                         for identifier_type in sorted(identifier_types, key = identifier_types.get):
@@ -166,7 +166,7 @@ def printExternalIDs(external_ids = None, label = 'External ID', field = 'extern
                         print '</tr>'
                         counter += 1
 
-        print '<tr>'
+        print '<tr id="external_id.row.%d">' % counter
         print '<td class="hint" title="%s">' % type_list
         print '<select tabindex="1" name="%s_type.%d">' % (field, counter)
         # Iterate over the list of recognized external IDs and display them in a drop-down list
@@ -610,7 +610,7 @@ def printfield(label, fieldname, help = None, value = '', readonly = 0):
                 args = ' READONLY class="%s titlemultiple"'
         else:
                 args = ' class="%s"'
-	print '<tr>'
+	print '<tr id="%s.row">' % fieldname
 
 	printfieldlabel(label, help)
 
@@ -701,7 +701,7 @@ def printmultiple(values, label, field_name, row_id, onclick_function, help, onc
 def printaddbutton(row_id, counter, label, onclick_function, onclick_parameters, help = None):
         if not help:
                 help = {}
-        print '<tr id="%s" next="%d">' % (row_id, counter+1)
+        print '<tr id="%s">' % row_id
         mouse_over1 = ''
         mouse_over2 = ''
        	if help.get("Add %s" % label):

@@ -1,5 +1,5 @@
 /*     Version: $Revision$
-      (C) COPYRIGHT 2015-2017   Ahasuerus
+      (C) COPYRIGHT 2015-2018   Ahasuerus
          ALL RIGHTS RESERVED
       Date: $Date$ */
 
@@ -250,20 +250,18 @@ function validateAuthors(author_type, field_name, display_name) {
 function addNewWebPage(webpage_type, bodyname) {
 	var bodyname = bodyname || 'tagBody';
 	var tbody = document.getElementById(bodyname);
-	var addpoint = document.getElementById("AddWebPage");
-	next = addpoint.getAttribute("next");
-	var int_next = parseInt(next);
-	int_next += 1;
-	var str_next = int_next.toString();
-	addpoint.setAttribute("next", str_next);
+	var last_row = GetLastRow(webpage_type + '_webpages');
+	var addpoint = document.getElementById(webpage_type + '_webpages' + last_row + '.row');
+	var next = last_row + 1;
 	var tr   = document.createElement("tr");
 	var td1  = document.createElement("td");
 	var td2  = document.createElement("td");
 	var b  = document.createElement("b");
-	label = "Web Page "+next+":";
+	var label = "Web Page " + next + ":";
 	var txt1 = document.createTextNode(label);
 	var input = document.createElement("input");
-	attr = webpage_type+"_webpages"+next;
+	var attr = webpage_type + "_webpages" + next;
+	tr.setAttribute("id", attr + '.row');
 	input.setAttribute("name", attr);
 	input.setAttribute("class", "metainput");
 	input.setAttribute("tabindex", "1");
@@ -272,7 +270,7 @@ function addNewWebPage(webpage_type, bodyname) {
 	td2.appendChild(input);
 	tr.appendChild(td1);
 	tr.appendChild(td2);
-	tbody.insertBefore(tr, addpoint);
+	tbody.insertBefore(tr, addpoint.nextSibling);
 }
 
 function validateSeriesNumber() {
@@ -344,20 +342,18 @@ function validateContentIndicator() {
 function AddMultipleField(addField, field, field_name, bodyname) {
 	var bodyname = bodyname || 'tagBody';
 	var tbody = document.getElementById(bodyname);
-	var addpoint = document.getElementById(addField);
-	next = addpoint.getAttribute("next");
-	var int_next = parseInt(next);
-	int_next += 1;
-	var str_next = int_next.toString();
-	addpoint.setAttribute("next", str_next);
+	var last_row = GetLastRow(field_name);
+	var addpoint = document.getElementById(field_name + last_row + '.row');
+	next = last_row + 1;
 	var tr   = document.createElement("tr");
 	var td1  = document.createElement("td");
 	var td2  = document.createElement("td");
 	var b  = document.createElement("b");
-	label = field+" "+next+":"
+	var label = field + " " + next + ":";
 	var txt1 = document.createTextNode(label);
 	var input = document.createElement("input");
-	attr = field_name+next
+	var attr = field_name + next;
+	tr.setAttribute("id", attr + '.row');
 	input.setAttribute("name", attr);
 	input.setAttribute("class", "metainput");
 	input.setAttribute("tabindex", "1");
@@ -366,7 +362,17 @@ function AddMultipleField(addField, field, field_name, bodyname) {
 	td2.appendChild(input);
 	tr.appendChild(td1);
 	tr.appendChild(td2);
-	tbody.insertBefore(tr, addpoint);
+	tbody.insertBefore(tr, addpoint.nextSibling);
+}
+
+function GetLastRow(field_name) {
+	for (i = 1 ; i < 1000 ; i++) {
+		row_data = document.getElementById(field_name + i + '.row');
+		if (row_data == null) {
+			return i-1;
+		}
+	}
+	return 999;
 }
 
 function determineArticle(word) {
