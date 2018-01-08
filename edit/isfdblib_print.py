@@ -713,9 +713,9 @@ def printaddbutton(row_id, counter, label, onclick_function, onclick_parameters,
         print '</tr>'
 
 def printWebPages(webpages, web_page_type, help, bodyname = 'tagBody'):
-        parameters = "'%s', '%s'" % (web_page_type, bodyname)
+        parameters = "'test', 'Web Page', '%s_webpages', '%s'" % (web_page_type, bodyname)
         printmultiple(webpages, "Web Page", "%s_webpages" % web_page_type,
-                      "AddWebPage", "addNewWebPage", help, parameters)
+                      "AddWebPage", "AddMultipleField", help, parameters)
 
 def printHelpBox(type, helplink):
 	print '<div id="HelpBox">'

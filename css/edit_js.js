@@ -247,32 +247,6 @@ function validateAuthors(author_type, field_name, display_name) {
 	return true;
 }
 
-function addNewWebPage(webpage_type, bodyname) {
-	var bodyname = bodyname || 'tagBody';
-	var tbody = document.getElementById(bodyname);
-	var last_row = GetLastRow(webpage_type + '_webpages');
-	var addpoint = document.getElementById(webpage_type + '_webpages' + last_row + '.row');
-	var next = last_row + 1;
-	var tr   = document.createElement("tr");
-	var td1  = document.createElement("td");
-	var td2  = document.createElement("td");
-	var b  = document.createElement("b");
-	var label = "Web Page " + next + ":";
-	var txt1 = document.createTextNode(label);
-	var input = document.createElement("input");
-	var attr = webpage_type + "_webpages" + next;
-	tr.setAttribute("id", attr + '.row');
-	input.setAttribute("name", attr);
-	input.setAttribute("class", "metainput");
-	input.setAttribute("tabindex", "1");
-	td1.appendChild(b);
-	b.appendChild(txt1);
-	td2.appendChild(input);
-	tr.appendChild(td1);
-	tr.appendChild(td2);
-	tbody.insertBefore(tr, addpoint.nextSibling);
-}
-
 function validateSeriesNumber() {
 	// Retrieve the id of the Series Number field
 	var element_name = document.getElementsByName("title_seriesnum")[0];
@@ -344,7 +318,7 @@ function AddMultipleField(addField, field, field_name, bodyname) {
 	var tbody = document.getElementById(bodyname);
 	var last_row = GetLastRow(field_name);
 	var addpoint = document.getElementById(field_name + last_row + '.row');
-	next = last_row + 1;
+	var next = last_row + 1;
 	var tr   = document.createElement("tr");
 	var td1  = document.createElement("td");
 	var td2  = document.createElement("td");
