@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -62,7 +62,7 @@ def printtitlerecord(record, series_number):
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
         printmultiple(trans_titles, "Transliterated Title", "trans_titles",
                       "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s', '%s', '%s'" % ('AddTransTitle', 'Transliterated Title', 'trans_titles', 'titleBody'))
+                      "'%s', '%s', '%s'" % ('Transliterated Title', 'trans_titles', 'titleBody'))
 
         printTitleAuthors(record, help)
 
@@ -115,7 +115,7 @@ def printreviewrecord(record, series_number):
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
         printmultiple(trans_titles, "Transliterated Title", "trans_titles",
                       "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s', '%s', '%s'" % ('AddTransTitle', 'Transliterated Title', 'trans_titles', 'reviewBody'))
+                      "'%s', '%s', '%s'" % ('Transliterated Title', 'trans_titles', 'reviewBody'))
 
 	########################## Author Section ##########################
 
@@ -181,7 +181,7 @@ def printinterviewrecord(record, series_number):
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
         printmultiple(trans_titles, "Transliterated Title", "trans_titles",
                       "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s', '%s', '%s'" % ('AddTransTitle', 'Transliterated Title', 'trans_titles', 'interviewBody'))
+                      "'%s', '%s', '%s'" % ('Transliterated Title', 'trans_titles', 'interviewBody'))
 
 	########################## Interviewee Section ##########################
 

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2016   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2009-2018   Al von Ruff and Ahasuerus
 #	 ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 	tags = SQLgetUserTags(title_id, user_id)
 	
         printmultiple(tags, "Tag", "tag_name", "AddTag",
-                      "AddMultipleField", help, "'%s', '%s', '%s'" % ('AddTag', 'Tag', 'tag_name'))
+                      "AddMultipleField", help, "'%s', '%s'" % ('Tag', 'tag_name'))
 
 	print "</tbody>"
 	print "</table>"

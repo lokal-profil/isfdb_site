@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2010-2016   Ahasuerus
+#     (C) COPYRIGHT 2010-2018   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -53,7 +53,7 @@ if __name__ == '__main__':
         trans_pub_series_names = SQLloadTransPubSeriesNames(record[PUB_SERIES_ID])
         printmultiple(trans_pub_series_names, "Transliterated Name", "trans_pub_series_names",
                       "AddTransName", "AddMultipleField", help,
-                      "'%s', '%s', '%s'" % ('AddTransName', 'Transliterated Name', 'trans_pub_series_names'))
+                      "'%s', '%s'" % ('Transliterated Name', 'trans_pub_series_names'))
 
 	webpages = SQLloadPubSeriesWebpages(pub_series_id)
         printWebPages(webpages, 'pub_series', help)

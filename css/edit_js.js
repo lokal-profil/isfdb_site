@@ -313,7 +313,7 @@ function validateContentIndicator() {
 	return true;
 }
 
-function AddMultipleField(addField, field, field_name, bodyname) {
+function AddMultipleField(field_label, field_name, bodyname) {
 	var bodyname = bodyname || 'tagBody';
 	var tbody = document.getElementById(bodyname);
 	var last_row = GetLastRow(field_name);
@@ -323,7 +323,7 @@ function AddMultipleField(addField, field, field_name, bodyname) {
 	var td1  = document.createElement("td");
 	var td2  = document.createElement("td");
 	var b  = document.createElement("b");
-	var label = field + " " + next + ":";
+	var label = field_label + " " + next + ":";
 	var txt1 = document.createTextNode(label);
 	var input = document.createElement("input");
 	var attr = field_name + next;

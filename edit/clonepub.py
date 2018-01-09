@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -35,7 +35,7 @@ def printpubrecord(pub, image_url, reuse_external_ids):
         trans_titles = SQLloadTransPubTitles(pub.pub_id)
         printmultiple(trans_titles, "Transliterated Title", "trans_titles",
                       "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s', '%s', '%s'" % ('AddTransTitle', 'Transliterated Title', 'trans_titles', 'pubBody'), 1)
+                      "'%s', '%s', '%s'" % ('Transliterated Title', 'trans_titles', 'pubBody'), 1)
 
 	authors = SQLPubAuthors(pub.pub_id)
 	counter = 1

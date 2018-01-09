@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
         printmultiple([], "Transliterated Title", "trans_titles",
                       "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s', '%s', '%s'" % ('AddTransTitle', 'Transliterated Title', 'trans_titles', 'referenceBody'))
+                      "'%s', '%s', '%s'" % ('Transliterated Title', 'trans_titles', 'referenceBody'))
 
 	if pub_type in ('Chapbook', 'Collection', 'Nonfiction', 'Novel'):
                 author_or_editor = 'Author'

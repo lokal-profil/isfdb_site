@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -62,13 +62,13 @@ if __name__ == '__main__':
         trans_names = SQLloadTransAuthorNames(record[AUTHOR_ID])
         printmultiple(trans_names, "Transliterated Name", "trans_names",
                       "AddTransName", "AddMultipleField", help,
-                      "'%s', '%s', '%s'" % ('AddTransName', 'Transliterated Name', 'trans_names'))
+                      "'%s', '%s'" % ('Transliterated Name', 'trans_names'))
 
 	printfield("Legal Name",     "author_legalname",  help, record[AUTHOR_LEGALNAME])
         trans_legal_names = SQLloadTransLegalNames(record[AUTHOR_ID])
         printmultiple(trans_legal_names, "Trans. Legal Name", "trans_legal_names",
                       "AddTransLegalName", "AddMultipleField", help,
-                      "'%s', '%s', '%s'" % ('AddTransLegalName', 'Trans. Legal Name', 'trans_legal_names'))
+                      "'%s', '%s'" % ('Trans. Legal Name', 'trans_legal_names'))
 
 	printfield("Directory Entry","author_lastname",   help, record[AUTHOR_LASTNAME])
 	printfield("Birth Place",    "author_birthplace", help, record[AUTHOR_BIRTHPLACE])
@@ -79,7 +79,7 @@ if __name__ == '__main__':
 
         emails = SQLloadEmails(record[AUTHOR_ID])
         printmultiple(emails, "Email Address", "author_emails", "AddEmail",
-                      "AddMultipleField", help, "'%s', '%s', '%s'" % ('AddEmail', 'Email Address', 'author_emails'))
+                      "AddMultipleField", help, "'%s', '%s'" % ('Email Address', 'author_emails'))
 
         webpages = SQLloadWebpages(record[AUTHOR_ID])
         printWebPages(webpages, 'author', help)
