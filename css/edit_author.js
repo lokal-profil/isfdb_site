@@ -1,4 +1,6 @@
 /*     Version: $Revision$
+      (C) COPYRIGHT 2015-2018   Ahasuerus
+         ALL RIGHTS RESERVED
       Date: $Date$ */
 
 function validateAuthorForm() {
@@ -27,7 +29,7 @@ function validateAuthorForm() {
 		return false;
 	}
 	// Validate the Web Page URLs
-	if (validateWebPages("AddWebPage", "author_webpages") == false) {
+	if (validateWebPages("author_webpages") == false) {
 		return false;
 	}
 	// If validation passes, return "true", which will let the form submit

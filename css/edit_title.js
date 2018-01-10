@@ -1,5 +1,5 @@
 /*     Version: $Revision$
-      (C) COPYRIGHT 2015-2017   Ahasuerus
+      (C) COPYRIGHT 2015-2018   Ahasuerus
          ALL RIGHTS RESERVED
       Date: $Date$ */
 
@@ -45,7 +45,7 @@ function validateTitleForm(title_type) {
 		}
 	}
 	// Validate the Web Page URLs
-	if (validateWebPages("AddWebPage", "title_webpages") == false) {
+	if (validateWebPages("title_webpages") == false) {
 		return false;
 	}
 	// Validate the date of the title

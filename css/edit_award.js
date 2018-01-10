@@ -1,4 +1,6 @@
 /*     Version: $Revision$
+      (C) COPYRIGHT 2015-2018   Ahasuerus
+         ALL RIGHTS RESERVED
       Date: $Date$ */
 
 function validateAwardForm() {
@@ -38,7 +40,7 @@ function validateAwardTypeForm() {
 		return false;
 	}
 	// Validate the Web Page URLs
-	if (validateWebPages("AddWebPage", "award_type_webpages") == false) {
+	if (validateWebPages("award_type_webpages") == false) {
 		return false;
 	}
 	return true;
@@ -61,7 +63,7 @@ function validateAwardCatForm() {
 		}
 	}
 	// Validate the Web Page URLs
-	if (validateWebPages("AddWebPage", "award_cat_webpages") == false) {
+	if (validateWebPages("award_cat_webpages") == false) {
 		return false;
 	}
 	return true;

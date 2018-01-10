@@ -1,4 +1,6 @@
 /*     Version: $Revision$
+      (C) COPYRIGHT 2015-2018   Ahasuerus
+         ALL RIGHTS RESERVED
       Date: $Date$ */
 
 function validateSeriesForm() {
@@ -18,7 +20,7 @@ function validateSeriesForm() {
 		}
 	}
 	// Validate the Web Page URLs
-	if (validateWebPages("AddWebPage", "series_webpages") == false) {
+	if (validateWebPages("series_webpages") == false) {
 		return false;
 	}
 	return true;
@@ -29,7 +31,7 @@ function validatePubSeriesForm() {
 		return false;
 	}
 	// Validate the Web Page URLs
-	if (validateWebPages("AddWebPage", "pub_series_webpages") == false) {
+	if (validateWebPages("pub_series_webpages") == false) {
 		return false;
 	}
 	return true;
@@ -40,7 +42,7 @@ function validatePublisherForm() {
 		return false;
 	}
 	// Validate the Web Page URLs
-	if (validateWebPages("AddWebPage", "publisher_webpages") == false) {
+	if (validateWebPages( "publisher_webpages") == false) {
 		return false;
 	}
 	return true;

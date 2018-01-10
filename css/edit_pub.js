@@ -284,7 +284,7 @@ function validatePubForm() {
 		return false;
 	}
 	// Validate the Web Page URLs (for NewPubs)
-	if (validateWebPages("AddWebPage", "title_webpages") == false) {
+	if (validateWebPages("title_webpages") == false) {
 		return false;
 	}
 	// Validate covers

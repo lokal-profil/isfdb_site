@@ -25,19 +25,10 @@ function validateURL(field_name) {
 	return true;
 }
 
-function validateWebPages(add_point_name, field_name) {
-	var addpoint = document.getElementById(add_point_name);
-	// If there is no Web Page field, validation is successful
-	if (addpoint == null) {
-		return true;
-	}
-	// Retrieve the next available Web page number
-	var next = addpoint.getAttribute("next");
-	// Convert the next available Web page number to integer so that we can use it in a loop
-	var int_next = parseInt(next);
-	var count = 0;
+function validateWebPages(field_name) {
+	var last_row = GetLastRow(field_name);
 	var web_page_field;
-	for (i = 1 ; i < int_next ; i++) {
+	for (i = 1 ; i < (last_row +1) ; i++) {
 		web_page_field = field_name + i;
 		// Validate each URL
 		if (validateURL(web_page_field) == false) {
