@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -78,7 +78,7 @@ if __name__ == '__main__':
 
         # Only allow adding authors for non-title based awards
         if not award.title_id:
-                print '<tr id="AddAuthor" next="%d">' % (counter)
+                print '<tr id="AddAuthor">'
                 print '<td><input type="button" value="Add Author" onclick="addMetadataTitleAuthor()" tabindex="1"></td>'
                 print '<td> </td>'
                 print '</tr>'

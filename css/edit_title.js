@@ -19,28 +19,28 @@ function validateTitleForm(title_type) {
 	// Validate this title's authors if the title is a review
 	if (title_type == "REVIEW") {
 		// First check the authors of the title being reviewed
-		if (validateAuthors("AddReviewee1", "review_author1.", "reviewee") == false) {
+		if (validateAuthors("review_author1.", "reviewee") == false) {
 			return false;
 		}
 		// If the first check passed, check the authors of the review
-		if (validateAuthors("AddReviewer1", "review_reviewer1.", "reviewer") == false) {
+		if (validateAuthors("review_reviewer1.", "reviewer") == false) {
 			return false;
 		}
 	}
 	// Validate this title's authors if the title is an interview
 	else if (title_type == "INTERVIEW") {
 		// First check the authors being interviewed
-		if (validateAuthors("AddInterviewee1", "interviewee_author1.", "interviewee") == false) {
+		if (validateAuthors("interviewee_author1.", "interviewee") == false) {
 			return false;
 		}
 		// If the first check passed, check the interviewers
-		if (validateAuthors("AddInterviewer1", "interviewer_author1.", "interviewer") == false) {
+		if (validateAuthors("interviewer_author1.", "interviewer") == false) {
 			return false;
 		}
 	}
 	// Validate this title's authors if the title is a regular title
 	else {
-		if (validateAuthors("AddAuthor", "title_author", "author/editor") == false) {
+		if (validateAuthors("title_author", "author/editor") == false) {
 			return false;
 		}
 	}
@@ -153,7 +153,7 @@ function validateVariantTitleForm() {
 		return false;
 	}
 	// Validate this title's authors
-	if (validateAuthors("AddAuthor", "title_author", "author/editor") == false) {
+	if (validateAuthors("title_author", "author/editor") == false) {
 		return false;
 	}
 	// Validate the date of the title
@@ -164,35 +164,7 @@ function validateVariantTitleForm() {
 }
 
 function addMetadataTitleAuthor() {
-	// Adds a new author field to a metadata form
-	var addpoint = document.getElementById("AddAuthor");
-	var tbody = document.getElementById("titleBody");
-	// Update the 'next' attribute for later additions
-	next = addpoint.getAttribute("next");
-	var int_next = parseInt(next);
-	int_next += 1;
-	var str_next = int_next.toString();
-	addpoint.setAttribute("next", str_next);
-	// Create the DOM elements
-	var tr   = document.createElement("tr");
-	var td1  = document.createElement("td");
-	var td2  = document.createElement("td");
-	var b  = document.createElement("b");
-	label = "Author"+next+":";
-	var txt1 = document.createTextNode(label);
-	var input = document.createElement("input");
-	attr = "title_author"+next;
-	input.setAttribute("name", attr);
-	input.setAttribute("class", "metainput");
-	input.setAttribute("tabindex", "1");
-	input.setAttribute("id", attr);
-	// Link the elements into the DOM
-	td1.appendChild(b);
-	b.appendChild(txt1);
-	td2.appendChild(input);
-	tr.appendChild(td1);
-	tr.appendChild(td2);
-	tbody.insertBefore(tr, addpoint);
+	AddMultipleField("Author", "title_author", "titleBody");
 }
 
 function addContentTitleAuthor(entry) {
@@ -266,7 +238,8 @@ function addPerson(entry, tag, body_name, label_name, attr_name, width_class) {
 	label = label_name+next+":";
 	var txt1 = document.createTextNode(label);
 	var input = document.createElement("input");
-	attr = attr_name+entry+"."+next
+	var attr = attr_name+entry+"."+next;
+	tr.setAttribute("id", attr + '.row');
 	input.setAttribute("name", attr);
 	input.setAttribute("class", width_class);
 	input.setAttribute("tabindex", "1");

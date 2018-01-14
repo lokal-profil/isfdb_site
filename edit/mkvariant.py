@@ -123,7 +123,7 @@ if __name__ == '__main__':
                 printfield('Author'+str(counter), 'title_author'+str(counter), help, author)
 		counter += 1
 
-        print '<tr id="AddAuthor" next="%d">' % counter
+        print '<tr id="AddAuthor">'
         print '<td><input type="button" value="Add Author" onclick="addMetadataTitleAuthor()" tabindex="1"></td>'
         print '<td> </td>'
         print '</tr>'

@@ -204,21 +204,13 @@ function validateRequiredDate(field_name, display_name, required, type_of_date) 
 	return true;
 }
 
-function validateAuthors(author_type, field_name, display_name) {
-	var addpoint = document.getElementById(author_type);
-	// Check if the add point exists -- it does not for read-only authors
-	if (addpoint == null) {
-		return true;
-	}
-	// Retrieve the next available author number
-	var next = addpoint.getAttribute("next");
-	// Convert the next available author number to integer so that we can use it in a loop
-	var int_next = parseInt(next);
+function validateAuthors(field_name, display_name) {
+	var last_row = GetLastRow(field_name);
 	var count = 0;
 	var author_field;
 	var author_data;
 	var author_value;
-	for (i = 1 ; i < int_next ; i++) {
+	for (i = 1 ; i < (last_row +1) ; i++) {
 		author_field = field_name + i;
 		author_data = document.getElementsByName(author_field)[0].value;
 		// Strip all spaces to check for authors that consist of nothing but spaces
@@ -319,6 +311,7 @@ function AddMultipleField(field_label, field_name, bodyname) {
 	var input = document.createElement("input");
 	var attr = field_name + next;
 	tr.setAttribute("id", attr + '.row');
+	input.setAttribute("id", attr);
 	input.setAttribute("name", attr);
 	input.setAttribute("class", "metainput");
 	input.setAttribute("tabindex", "1");

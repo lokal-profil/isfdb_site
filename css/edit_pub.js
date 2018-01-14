@@ -135,6 +135,9 @@ function validateContents(title_add_point, title_field, title_date, author_add_p
 			return false;
 		}
 
+		if (title_add_point != "AddTitle") {
+			continue
+		}
 		// Check this title's Length value against the Title Type value
 		// Build the name of the Length field being processed
 		length_field = 'title_storylen' + i;
@@ -264,7 +267,7 @@ function validatePubForm() {
 		return false;
 	}
 	// Validate this pub's authors
-	if (validateAuthors("AddAuthor", "pub_author", "author/editor") == false) {
+	if (validateAuthors("pub_author", "author/editor") == false) {
 		return false;
 	}
 	// Validate the date of the pub
@@ -503,6 +506,8 @@ function addPubAuthor(author_or_editor, table_name) {
 	var txt1 = document.createTextNode(label);
 	var input = document.createElement("input");
 	var attr = "pub_author"+next;
+	tr.setAttribute("id", attr + '.row');
+	input.setAttribute("id", attr);
 	input.setAttribute("name", attr);
 	input.setAttribute("class", "metainput");
 	input.setAttribute("tabindex", "1");

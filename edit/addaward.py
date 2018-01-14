@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2007-2016   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2007-2018   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -116,7 +116,7 @@ if __name__ == '__main__':
         else:
 		printfield("Title", "award_title", help)
 		printfield('Author1', 'title_author1', help)
-		print '<tr id="AddAuthor" next="2">'
+		print '<tr id="AddAuthor">'
 		print '<td><input type="button" value="Add Author" onclick="addMetadataTitleAuthor()" tabindex="1"></td>'
 		print '<td> </td>'
 		print '</tr>'

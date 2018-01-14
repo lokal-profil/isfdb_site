@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -168,8 +168,10 @@ class awards:
 		counter = 0
 		while counter < 100:
 			if self.form.has_key('title_author'+str(counter+1)):
-				self.award_authors.append(XMLescape(self.form['title_author'+str(counter+1)].value))
-				self.num_authors += 1
+                                value = XMLescape(self.form['title_author'+str(counter+1)].value)
+                                if value and (value not in self.award_authors):
+                                        self.award_authors.append(value)
+                                        self.num_authors += 1
 			counter += 1
 
 		if self.form.has_key('award_year'):
