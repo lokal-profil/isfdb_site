@@ -488,37 +488,6 @@ function validateTypeMismatch()	{
 	return true;
 }
 
-function addPubAuthor(author_or_editor, table_name) {
-	var author_or_editor = author_or_editor || 'Author';
-	var table_name = table_name || 'pubBody';
-	var tbody = document.getElementById(table_name);
-	var addpoint = document.getElementById("AddAuthor");
-	next = addpoint.getAttribute("next");
-	var int_next = parseInt(next);
-	int_next += 1;
-	var str_next = int_next.toString();
-	addpoint.setAttribute("next", str_next);
-	var tr   = document.createElement("tr");
-	var td1  = document.createElement("td");
-	var td2  = document.createElement("td");
-	var b  = document.createElement("b");
-	label = author_or_editor+next+":"
-	var txt1 = document.createTextNode(label);
-	var input = document.createElement("input");
-	var attr = "pub_author"+next;
-	tr.setAttribute("id", attr + '.row');
-	input.setAttribute("id", attr);
-	input.setAttribute("name", attr);
-	input.setAttribute("class", "metainput");
-	input.setAttribute("tabindex", "1");
-	td1.appendChild(b);
-	b.appendChild(txt1);
-	td2.appendChild(input);
-	tr.appendChild(td1);
-	tr.appendChild(td2);
-	tbody.insertBefore(tr, addpoint);
-}
-
 function addNewExternalID(field_name, table_name) {
 	var field_name = field_name || 'external_id';
 	var table_name = table_name || 'pubBody';

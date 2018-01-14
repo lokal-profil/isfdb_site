@@ -507,15 +507,15 @@ def printsource(help):
 	print '</tr>'
 
 def printAddAuthor(author_or_editor, help, next = '2', table_name = 'pubBody'):
-	print '<tr id="AddAuthor" next="%s">' % (str(next))
+	print '<tr id="AddAuthor">'
 	label = 'Add ' + author_or_editor
        	if help.get(label):
                 print """<td class="hint" title="%s"><input type="button" value="Add %s" tabindex="1"
-                        onclick="addPubAuthor('%s', '%s')">""" % (help[label][0], author_or_editor, author_or_editor, table_name)
+                        onclick="AddMultipleField('%s', 'pub_author', '%s')">""" % (help[label][0], author_or_editor, author_or_editor, table_name)
                 print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></td>' % (HTMLLOC)
         else:
                 print """<td><input type="button" value="Add %s" tabindex="1"
-                        onclick="addPubAuthor('%s', '%s')"></td>""" % (author_or_editor, author_or_editor, table_name)
+                        onclick="AddMultipleField('%s', 'pub_author', '%s')"></td>""" % (author_or_editor, author_or_editor, table_name)
 	print '<td>&nbsp;</td>'
 	print '</tr>'
 
