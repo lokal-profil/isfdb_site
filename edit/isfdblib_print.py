@@ -772,7 +772,7 @@ def printTitleAuthors(record, help):
                 printfield('Author%s' % (counter), 'title_author%s' % (counter), help, '')
                 counter += 1
 
-        print '<tr id="AddAuthor" next="%d">' % counter
+        print '<tr id="AddAuthor">'
         print '<td><input type="button" value="Add Author" onclick="addMetadataTitleAuthor()"></td>'
         print '<td> </td>'
         print '</tr>'

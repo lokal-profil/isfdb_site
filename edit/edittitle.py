@@ -129,8 +129,9 @@ def printreviewrecord(record, series_number):
                 printfield('Author'+str(counter), 'review_author1.'+str(counter), help, '');
                 counter += 1
 
-        print '<tr id="AddReviewee1" next="%d">' % counter
-        print '<td><input type="button" value="Add Author" onclick="addReviewee(1, \'metainput\')"></td>'
+        print '<tr id="AddReviewee1">'
+        print """<td><input type="button" value="Add Author" tabindex="1"
+                onclick="AddMultipleField('Author', 'review_author1.', 'reviewBody')"></td>"""
         print '<td> </td>'
         print '</tr>'
 
@@ -146,8 +147,9 @@ def printreviewrecord(record, series_number):
                 printfield('Reviewer'+str(counter), 'review_reviewer1.'+str(counter), help, '');
                 counter += 1
 
-        print '<tr id="AddReviewer1" next="%d">' % counter
-        print '<td><input type="button" value="Add Reviewer" onclick="addReviewer(1, \'metainput\')"></td>'
+        print '<tr id="AddReviewer1">'
+        print """<td><input type="button" value="Add Reviewer" tabindex="1"
+                onclick="AddMultipleField('Reviewer', 'review_reviewer1.', 'reviewBody')"></td>"""
         print '<td> </td>'
         print '</tr>'
 
@@ -195,8 +197,9 @@ def printinterviewrecord(record, series_number):
                 printfield('Interviewee'+str(counter), 'interviewee_author1.'+str(counter), help, '');
                 counter += 1
 
-        print '<tr id="AddInterviewee1" next="%d">' % counter
-        print '<td><input type="button" value="Add Interviewee" onclick="addInterviewee(1, \'metainput\')"></td>'
+        print '<tr id="AddInterviewee1">'
+        print """<td><input type="button" value="Add Interviewee" tabindex="1"
+                onclick="AddMultipleField('Interviewee', 'interviewee_author1.', 'interviewBody')"></td>"""
         print '<td> </td>'
         print '</tr>'
 
@@ -212,8 +215,9 @@ def printinterviewrecord(record, series_number):
                 printfield('Interviewer'+str(counter), 'interviewer_author1.'+str(counter), help, '');
                 counter += 1
 
-        print '<tr id="AddInterviewer1" next="%d">' % counter
-        print '<td><input type="button" value="Add Interviewer" onclick="addInterviewer(1, \'metainput\')"></td>'
+        print '<tr id="AddInterviewer1">'
+        print """<td><input type="button" value="Add Interviewer" tabindex="1"
+                onclick="AddMultipleField('Interviewer', 'interviewer_author1.', 'interviewBody')"></td>"""
         print '<td> </td>'
         print '</tr>'
 
