@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014   Ahasuerus 
+#     (C) COPYRIGHT 2014-2018   Ahasuerus 
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -20,18 +20,11 @@ from library import *
 
 	
 if __name__ == '__main__':
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-
 	try:
 		script_type = int(sys.argv[1])
 		missing_id  = int(sys.argv[2])
                 (userid, username, usertoken) = GetUserData()
-                # Let Dirk P. Broer access the Missing Authors scripts
-                if int(userid) == 15233 and 'resolve_missing_author_url.cgi' in sys.argv[0]:
-                        pass
-                elif SQLisUserModerator(userid) == 0:
+                if not SQLisUserModerator(userid):
                         raise
 	except:
                 PrintPreMod('Resolving author URL')

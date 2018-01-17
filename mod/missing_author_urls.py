@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014   Ahasuerus 
+#     (C) COPYRIGHT 2014-2018   Ahasuerus 
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -55,6 +55,13 @@ if __name__ == '__main__':
 	PrintPreMod('ISFDB-%s Author Mismatches' % script_name)
         PrintNavBar()
 
+        print """<h3>This cleanup report lists all known SFE3
+                <a href="http://sf-encyclopedia.com/category/authors/author">authors</a>
+                without a matching ISFDB author name. Note that some SFE3 authors may not
+                be eligible on the ISFDB side, e.g. if their only SF works are comics.
+                Also, the SFE3 spelling or canonical name may not match what's used on
+                the ISFDB side, which is why this report lets moderators ignore SFE3 entries.</h3>"""
+
         query = 'select m.url, m.author_id, a.author_canonical, m.missing_id from missing_author_urls as m, '
         query += 'authors as a where m.author_id=a.author_id and m.resolved=0 UNION '
         query += 'select url,"","",missing_id from missing_author_urls where resolved=0 and author_id IS NULL'
@@ -64,7 +71,7 @@ if __name__ == '__main__':
 	num = result.num_rows()
 
         if num:
-                PrintTableColumns(('#', 'URL', 'Author', 'Click Once Resolved'))
+                PrintTableColumns(('#', 'URL', 'Author', 'Ignore'))
                 record = result.fetch_row()
                 bgcolor = 1
                 count = 1

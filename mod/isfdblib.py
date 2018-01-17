@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2018   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -106,10 +106,7 @@ def PrintNavBar():
                 sys.exit(0)
 
         (userid, username, usertoken) = GetUserData()
-        # Let Dirk P. Broer access the Missing Authors script
-        if int(userid) == 15233 and 'missing_author_urls.cgi' in sys.argv[0]:
-                return
-	if SQLisUserModerator(userid) == 0:
+	if not SQLisUserModerator(userid):
                 print '<h2>Moderator privileges are required for this option</h2>'
                 PrintPostMod()
                 sys.exit(0)
