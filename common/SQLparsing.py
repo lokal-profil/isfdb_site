@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -2952,3 +2952,13 @@ def SQLLoadVotes(title_id, variants, user_id):
                         composite_average_vote = float(results[0][1])
 
         return (vote_count, average_vote, composite_vote_count, composite_average_vote, user_vote)
+
+def SQLQueueSize():
+        query = """select count(s.sub_id)
+        from submissions s
+        where s.sub_state='N'
+        and s.sub_submitter!=13571
+        and s.sub_holdid=0
+        and not exists
+        (select 1 from mw_user_groups g where g.ug_user=s.sub_submitter and g.ug_group='sysop')"""
+        return StandardQuery(query)[0][0]

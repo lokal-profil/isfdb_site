@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -65,9 +65,10 @@ if __name__ == '__main__':
 		PrintTrailer('recent', 0, 0)
 		sys.exit(0)
 	elif type == 'N':
+                queuesize = SQLQueueSize()
 		wikipointer = """If your edits seem to be taking a long time to be approved,
                 please check your <a href="http://%s/index.php/User_talk:%s">Talk page</a>
-                for comments or questions.""" % (WIKILOC, username)
+                for comments or questions.<br>The current number of pending edits by all editors is %d.""" % (WIKILOC, username, queuesize)
 		print wikipointer
 	elif type == 'R':
 		wikipointer = """The moderator may have left additional comments on your 
