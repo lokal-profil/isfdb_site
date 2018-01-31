@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2007-2017   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2007-2018   Al von Ruff, Ahasuerus and Bill Longley
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -68,6 +68,18 @@ def CheckISBN(value, XmlData):
                                 warning = '13-digit ISBN for a pre-2005 publication'
                         if Compare2Dates('2007-00-00', pub_date) == 1 and isbn_length == 10:
                                 warning = '10-digit ISBN for a post-2007 publication'
+        return warning
+
+def DuplicateCatalogId(value):
+        warning = ''
+        results = SQLFindPubsByCatalogId(value)
+        if results:
+                link = AdvSearchLink((('TYPE', 'Publication'),
+                                      ('USE_1', 'pub_catalog'),
+                                      ('OPERATOR_1', 'exact'),
+                                      ('TERM_1', value),
+                                      ('ORDERBY', 'pub_title')))
+                warning = '%sCatalog ID already on file</a>' % link
         return warning
 
 def DuplicateISBN(value):
@@ -171,6 +183,10 @@ def PrintField1XML(Label, XmlData, title):
                         warning = CheckISBN(value, XmlData)
                         if not warning and value and not cloningFlag(XmlData):
                                 warning = DuplicateISBN(value)
+
+                elif Label == 'Catalog':
+                        if value and not cloningFlag(XmlData):
+                                warning = DuplicateCatalogId(value)
 
                 elif Label == 'Binding':
                         if value and (value not in FORMATS):
@@ -294,6 +310,10 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current):
                         warning = CheckISBN(value, XmlData)
                         if not warning:
                                 warning = DuplicateISBN(value)
+
+        elif Label == 'Catalog':
+                if value and not cloningFlag(XmlData):
+                        warning = DuplicateCatalogId(value)
 
         if TagPresent(XmlData, Label):
 		PrintField2(Label, value, 1, ExistsNow, value2, warning, 1)

@@ -1210,6 +1210,10 @@ def SQLFindPubsByIsbn(targets):
 			pub = result.fetch_row()
 	return results
 
+def SQLFindPubsByCatalogId(value):
+        query = "select * from pubs where pub_catalog ='%s'" % db.escape_string(value)
+	return StandardQuery(query)
+
 def SQLFindPubSeriesForPublisher(publisher_id):
         results = []
         query = "select distinct pub_series_id from pubs where publisher_id = '%d' and pub_series_id IS NOT NULL" % int(publisher_id)
