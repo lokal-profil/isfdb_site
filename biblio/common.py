@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2017 	Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2018 	Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Bill Longley and Dirk Stoecker
 #		ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -697,10 +697,10 @@ def PrintEditTools(page_type, userid, arg1, arg2):
 			output.append('<a href="http:/%s/edit/deleteawardtype.cgi?%s">Delete This Award Type</a>' % (HTFAKE, arg1))
 			output.append('<a href="http:/%s/edit/editawardtype.cgi?%s">Edit This Award Type</a>' % (HTFAKE, arg1))
 	elif page_type == 'award_cat':
-		# Award Types can only be deleted/edited by moderators at this time
+		# Award Types can only be deleted by moderators at this time
+                output.append('<a href="http:/%s/edit/editawardcat.cgi?%s">Edit This Award Category</a>' % (HTFAKE, arg1))
 		if moderator:
 			output.append('<a href="http:/%s/edit/deleteawardcat.cgi?%s">Delete This Award Category</a>' % (HTFAKE, arg1))
-			output.append('<a href="http:/%s/edit/editawardcat.cgi?%s">Edit This Award Category</a>' % (HTFAKE, arg1))
 	elif page_type == 'publication':
 		output.append('<a href="http:/%s/edit/find_pub_dups.cgi?%s">Check for Duplicate Titles</a>' % (HTFAKE, arg1[PUB_PUBID]))
 		output.append('<a href="http:/%s/edit/editpub.cgi?%s">Edit This Pub</a>' % (HTFAKE, arg1[PUB_PUBID]))
