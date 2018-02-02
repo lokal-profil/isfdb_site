@@ -859,23 +859,37 @@ def SQLGetPubsNotInSeries(publisher_id):
 ##################################################################
 
 def SQLFindAuthors(target, mode = 'contains'):
+        from string import maketrans
         if mode == 'exact':
                 query = "select distinct * from authors where author_canonical = '%s'""" % db.escape_string(target)
-        else:
+        elif mode == 'contains':
                 target = db.escape_string('%'+target+'%')
                 query = """select distinct a.* from authors a
                              where a.author_canonical like '%s'
                            union select distinct a.* from authors a, trans_authors at
                                 where at.trans_author_name like '%s' and at.author_id = a.author_id
                            order by author_canonical""" % (target, target)
-	db.query(query)
-	result = db.store_result()
-	author = result.fetch_row()
-	results = []
-	while author:
-		results.append(author[0])
-		author = result.fetch_row()
-	return results
+        elif mode == 'approximate':
+                punctuation = """'",.()"""
+                target = target.translate(maketrans("",""), punctuation)
+                prefix = ''
+                for character in punctuation:
+                        prefix += 'REPLACE('
+                suffix = ''
+                for character in punctuation:
+                        if character == "'":
+                                suffix += ""","%s",'')""" % character
+                        else:
+                                suffix += ",'%s','')" % character
+                name1 = '%s%s%s' % (prefix, 'a.author_canonical', suffix)
+                name2 = '%s%s%s' % (prefix, 'at.trans_author_name', suffix)
+                target = db.escape_string('%'+target+'%')
+                query = """select distinct a.* from authors a
+                           where %s like '%s'
+                           union select distinct a.* from authors a, trans_authors at
+                           where %s like '%s' and at.author_id = a.author_id
+                           order by author_canonical""" % (name1, target, name2, target)
+        return StandardQuery(query)
 
 def SQLFindTitles(target):
         target = db.escape_string('%'+target+'%')
