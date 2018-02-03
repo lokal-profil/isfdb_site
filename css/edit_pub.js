@@ -494,7 +494,7 @@ function addNewExternalID(field_name, table_name) {
 	var identifier_types = ExternalIdentifiers();
 	var tbody = document.getElementById(table_name);
 
-	var last_row = GetLastExtrenalId(field_name);
+	var last_row = GetLastExternalId(field_name);
 	var addpoint = document.getElementById(field_name + '.row.' + last_row);
 	var next = last_row + 1;
 
@@ -525,7 +525,7 @@ function addNewExternalID(field_name, table_name) {
 	tbody.insertBefore(tr, addpoint.nextSibling);
 }
 
-function GetLastExtrenalId(field_name) {
+function GetLastExternalId(field_name) {
 	for (i = 1 ; i < 1000 ; i++) {
 		row_data = document.getElementById(field_name + '.row.' + i);
 		if (row_data == null) {

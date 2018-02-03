@@ -172,56 +172,50 @@ function addContentTitleAuthor(entry) {
 	body_name = "titleBody";
 	label_name = "Author";
 	attr_name = "title_author";
-	width_class = "contentinput";
-	addPerson(entry, tag, body_name, label_name, attr_name, width_class);
+	addPerson(entry, tag, body_name, label_name, attr_name);
 }
 
-function addReviewee(entry, width_class) {
-	var width_class = width_class || 'contentinput';
+function addReviewee(entry) {
 	tag = "AddReviewee"+entry;
 	body_name = "reviewBody";
 	label_name = "Author";
 	attr_name = "review_author";
-	addPerson(entry, tag, body_name, label_name, attr_name, width_class);
+	addPerson(entry, tag, body_name, label_name, attr_name);
 }
 
-function addReviewer(entry, width_class) {
-	var width_class = width_class || 'contentinput';
+function addReviewer(entry) {
 	tag = "AddReviewer"+entry;
 	body_name = "reviewBody";
 	label_name = "Reviewer";
 	attr_name = "review_reviewer";
-	addPerson(entry, tag, body_name, label_name, attr_name, width_class);
+	addPerson(entry, tag, body_name, label_name, attr_name);
 }
 
-function addInterviewee(entry, width_class) {
-	var width_class = width_class || 'contentinput';
+function addInterviewee(entry) {
 	tag = "AddInterviewee"+entry;
 	body_name = "interviewBody";
 	label_name = "Interviewee";
 	attr_name = "interviewee_author";
-	addPerson(entry, tag, body_name, label_name, attr_name, width_class);
+	addPerson(entry, tag, body_name, label_name, attr_name);
 }
 
-function addInterviewer(entry, width_class) {
-	var width_class = width_class || 'contentinput';
+function addInterviewer(entry) {
 	tag = "AddInterviewer"+entry;
 	body_name = "interviewBody";
 	label_name = "Interviewer";
 	attr_name = "interviewer_author";
-	addPerson(entry, tag, body_name, label_name, attr_name, width_class);
+	addPerson(entry, tag, body_name, label_name, attr_name);
 }
 
-function addArtist(entry, width_class) {
-	var width_class = width_class || 'contentinput';
+function addArtist(entry) {
 	tag = "AddArtist"+entry;
 	body_name = "coverBody";
 	label_name = "Artist";
 	attr_name = "cover_artist";
-	addPerson(entry, tag, body_name, label_name, attr_name, width_class);
+	addPerson(entry, tag, body_name, label_name, attr_name);
 }
 
-function addPerson(entry, tag, body_name, label_name, attr_name, width_class) {
+function addPerson(entry, tag, body_name, label_name, attr_name) {
 	var addpoint = document.getElementById(tag);
 	var tbody = document.getElementById(body_name);
 	// Update the 'next' attribute for later additions
@@ -241,7 +235,7 @@ function addPerson(entry, tag, body_name, label_name, attr_name, width_class) {
 	var attr = attr_name+entry+"."+next;
 	tr.setAttribute("id", attr + '.row');
 	input.setAttribute("name", attr);
-	input.setAttribute("class", width_class);
+	input.setAttribute("class", 'contentinput');
 	input.setAttribute("tabindex", "1");
 	input.setAttribute("id", attr);
 	// Link the elements into the DOM
