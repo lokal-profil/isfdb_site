@@ -585,7 +585,7 @@ function addNewBriefCover() {
 	var td3 = document.createElement("td");
 	var input4 = document.createElement("input");
 	attr = "cover_artist"+next+".1";
-	input4.setAttribute("id", next);
+	input4.setAttribute("id", attr);
 	input4.setAttribute("name", attr);
 	input4.setAttribute("class", "contentinput");
 	input4.setAttribute("tabindex", "1");
@@ -605,7 +605,6 @@ function addNewBriefCover() {
 	var td5   = document.createElement("td");
 	var input5 = document.createElement("input");
 	input5.setAttribute("type", "button");
-	input5.setAttribute("id", next);
 	input5.setAttribute("tabindex", "1");
 	input5.setAttribute("value", "Add Artist");
 
@@ -634,9 +633,9 @@ function addNewBriefCover() {
 }
 
 function addNewFullCover() {
-	body_name = "coverBody"
-	addpoint_name = "AddCover"
-	record_type = "cover"
+	var body_name = "coverBody";
+	var addpoint_name = "AddCover";
+	var record_type = "cover";
 	var tbody = document.getElementById(body_name);
 	var addpoint = document.getElementById(addpoint_name);
 	// Update the 'next' attribute for later additions
@@ -709,7 +708,6 @@ function addNewFullCover() {
 	var td5   = document.createElement("td");
 	var input5 = document.createElement("input");
 	input5.setAttribute("type", "button");
-	input5.setAttribute("id", next);
 	input5.setAttribute("tabindex", "1");
 	input5.setAttribute("value", "Add Artist");
 
@@ -737,52 +735,16 @@ function addNewFullCover() {
 	tbody.insertBefore(tr4, addpoint);
 }
 
-function addPubArtist() {
-	var tbody = document.getElementById("pubBody");
-	var addpoint = document.getElementById("AddArtist");
-	next = addpoint.getAttribute("next");
-	var int_next = parseInt(next);
-	int_next += 1;
-	var str_next = int_next.toString();
-	addpoint.setAttribute("next", str_next);
-	var tr   = document.createElement("tr");
-	var td1  = document.createElement("td");
-	var td2  = document.createElement("td");
-	var b  = document.createElement("b");
-	label = "Artist"+next+":"
-	var txt1 = document.createTextNode(label);
-	var input = document.createElement("input");
-	var attr = "pub_artist"+next;
-	input.setAttribute("name", attr);
-	input.setAttribute("class", "metainput");
-	input.setAttribute("tabindex", "1");
-	td1.appendChild(b);
-	b.appendChild(txt1);
-	td2.appendChild(input);
-	tr.appendChild(td1);
-	tr.appendChild(td2);
-	tbody.insertBefore(tr, addpoint);
-}
-
 function addNewTitle() {
-	body_name = "titleBody"
-	addpoint_name = "AddTitle"
-	record_type = "title"
-	addRecord(body_name, addpoint_name, record_type)
+	addRecord("titleBody", "AddTitle", "title")
 }
 
 function addNewReview() {
-	body_name = "reviewBody"
-	addpoint_name = "AddReview"
-	record_type = "review"
-	addRecord(body_name, addpoint_name, record_type)
+	addRecord("reviewBody", "AddReview", "review")
 }
 
 function addNewInterview() {
-	body_name = "interviewBody"
-	addpoint_name = "AddInterview"
-	record_type = "interview"
-	addRecord(body_name, addpoint_name, record_type)
+	addRecord("interviewBody", "AddInterview", "interview")
 }
 
 function addRecord(body_name, addpoint_name, record_type) {
@@ -1032,7 +994,6 @@ function addRecord(body_name, addpoint_name, record_type) {
 	var tda4   = document.createElement("td");
 	var input5 = document.createElement("input");
 	input5.setAttribute("type", "button");
-	input5.setAttribute("id", next);
 	input5.setAttribute("tabindex", "1");
 	if (record_type == "title") {
 		input5.setAttribute("value", "Add Author");
@@ -1120,7 +1081,6 @@ function addRecord(body_name, addpoint_name, record_type) {
 		var tda8   = document.createElement("td");
 		var input6 = document.createElement("input");
 		input6.setAttribute("type", "button");
-		input6.setAttribute("id", next);
 		input6.setAttribute("value", "Add Reviewer");
 		input6.setAttribute("tabindex", "1");
 
@@ -1174,7 +1134,6 @@ function addRecord(body_name, addpoint_name, record_type) {
 		var tda8   = document.createElement("td");
 		var input6 = document.createElement("input");
 		input6.setAttribute("type", "button");
-		input6.setAttribute("id", next);
 		input6.setAttribute("tabindex", "1");
 		input6.setAttribute("value", "Add Interviewer");
 

@@ -290,7 +290,8 @@ def printfullcoverart(cover, index, help = None, readonly = 0):
                 for artist in artists:
                         print '<tr>'
                         printContentHeader('Artist%d:'% counter, help)
-                        print '<td><input name="cover_artist%d.%d" value="%s"%s></td>' % (index, counter, escape_string(artist), args % "contentinput")
+                        print """<td><input id="cover_artist%d.%d" name="cover_artist%d.%d"
+                                 value="%s"%s></td>""" % (index, counter, index, counter, escape_string(artist), args % "contentinput")
                         print '</tr>'
                         counter += 1
         if not readonly:
@@ -310,7 +311,7 @@ def printbriefblankcoverart(index, help = None):
         print '</tr>'
         print '<tr>'
         printContentHeader('Artist1:', help)
-        print '<td><input tabindex="1" name="cover_artist%d.%d" class="contentinput"></td>' % (index, counter)
+        print '<td><input tabindex="1" id="cover_artist%d.%d" name="cover_artist%d.%d" class="contentinput"></td>' % (index, counter, index, counter)
         print '</tr>'
         counter +=1
         printAddContentAuthor('Artist', help, index, counter)
@@ -329,7 +330,7 @@ def printfullblankcoverart(index, help = None):
         print '</tr>'
         print '<tr>'
         printContentHeader('Artist1:', help)
-        print '<td><input tabindex="1" name="cover_artist%d.%d" class="contentinput"></td>' % (index, counter)
+        print '<td><input tabindex="1" id="cover_artist%d.%d" name="cover_artist%d.%d" class="contentinput"></td>' % (index, counter, index, counter)
         print '</tr>'
         counter +=1
         printAddContentAuthor('Artist', help, index, counter)

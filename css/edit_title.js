@@ -168,51 +168,27 @@ function addMetadataTitleAuthor() {
 }
 
 function addContentTitleAuthor(entry) {
-	tag = "AddAuthor"+entry;
-	body_name = "titleBody";
-	label_name = "Author";
-	attr_name = "title_author";
-	addPerson(entry, tag, body_name, label_name, attr_name);
+	addPerson(entry, "AddAuthor"+entry, "titleBody", "Author", "title_author");
 }
 
 function addReviewee(entry) {
-	tag = "AddReviewee"+entry;
-	body_name = "reviewBody";
-	label_name = "Author";
-	attr_name = "review_author";
-	addPerson(entry, tag, body_name, label_name, attr_name);
+	addPerson(entry, "AddReviewee"+entry, "reviewBody", "Author", "review_author");
 }
 
 function addReviewer(entry) {
-	tag = "AddReviewer"+entry;
-	body_name = "reviewBody";
-	label_name = "Reviewer";
-	attr_name = "review_reviewer";
-	addPerson(entry, tag, body_name, label_name, attr_name);
+	addPerson(entry, "AddReviewer"+entry, "reviewBody", "Reviewer", "review_reviewer");
 }
 
 function addInterviewee(entry) {
-	tag = "AddInterviewee"+entry;
-	body_name = "interviewBody";
-	label_name = "Interviewee";
-	attr_name = "interviewee_author";
-	addPerson(entry, tag, body_name, label_name, attr_name);
+	addPerson(entry, "AddInterviewee"+entry, "interviewBody", "Interviewee", "interviewee_author");
 }
 
 function addInterviewer(entry) {
-	tag = "AddInterviewer"+entry;
-	body_name = "interviewBody";
-	label_name = "Interviewer";
-	attr_name = "interviewer_author";
-	addPerson(entry, tag, body_name, label_name, attr_name);
+	addPerson(entry, "AddInterviewer"+entry, "interviewBody", "Interviewer", "interviewer_author");
 }
 
 function addArtist(entry) {
-	tag = "AddArtist"+entry;
-	body_name = "coverBody";
-	label_name = "Artist";
-	attr_name = "cover_artist";
-	addPerson(entry, tag, body_name, label_name, attr_name);
+	addPerson(entry, "AddArtist"+entry, "coverBody", "Artist", "cover_artist");
 }
 
 function addPerson(entry, tag, body_name, label_name, attr_name) {
