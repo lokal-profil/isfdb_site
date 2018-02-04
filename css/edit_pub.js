@@ -658,6 +658,7 @@ function addNewFullCover() {
 	var td2   = document.createElement("td");
 	attr = record_type+"_title"+next;
 	var input2 = document.createElement("input");
+	input2.setAttribute("id", attr);
 	input2.setAttribute("name", attr);
 	input2.setAttribute("class", "contentinput");
 	input2.setAttribute("tabindex", "1");
@@ -688,7 +689,7 @@ function addNewFullCover() {
 	var td3 = document.createElement("td");
 	var input4 = document.createElement("input");
 	attr = "cover_artist"+next+".1";
-	input4.setAttribute("id", next);
+	input4.setAttribute("id", attr);
 	input4.setAttribute("name", attr);
 	input4.setAttribute("class", "contentinput");
 	input4.setAttribute("tabindex", "1");

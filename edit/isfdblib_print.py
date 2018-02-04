@@ -281,7 +281,8 @@ def printfullcoverart(cover, index, help = None, readonly = 0):
 
         print '<tr>'
         print '<td><input name="cover_id%d" value="%s" type="HIDDEN"></td>' % (index, cover[TITLE_PUBID])
-        print '<td><input name="cover_title%d" value="%s"%s></td>' % (index, escape_string(cover[TITLE_TITLE]), args % "contentinput")
+        print """<td><input id="cover_title%d" name="cover_title%d"
+                 value="%s"%s></td>""" % (index, index, escape_string(cover[TITLE_TITLE]), args % "contentinput")
         print '<td><input name="cover_date%d" value="%s"%s></td>' % (index, cover[TITLE_YEAR], args % "contentyearinput")
         print '</tr>'
         artists = SQLTitleAuthors(cover[TITLE_PUBID])
