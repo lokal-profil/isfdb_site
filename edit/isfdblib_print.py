@@ -289,7 +289,7 @@ def printfullcoverart(cover, index, help = None, readonly = 0):
         counter = 1
         if len(artists):
                 for artist in artists:
-                        print '<tr>'
+                        print '<tr id="cover_artist%d.%d.row">' % (index, counter)
                         printContentHeader('Artist%d:'% counter, help)
                         print """<td><input id="cover_artist%d.%d" name="cover_artist%d.%d"
                                  value="%s"%s></td>""" % (index, counter, index, counter, escape_string(artist), args % "contentinput")
@@ -310,33 +310,13 @@ def printbriefblankcoverart(index, help = None):
         print '<input name="cover_date%d" type="HIDDEN">' % (index)
         print '</td>'
         print '</tr>'
-        print '<tr>'
+        print '<tr id="cover_artist%d.%d.row">' % (index, counter)
         printContentHeader('Artist1:', help)
         print '<td><input tabindex="1" id="cover_artist%d.%d" name="cover_artist%d.%d" class="contentinput"></td>' % (index, counter, index, counter)
         print '</tr>'
-        counter +=1
+        counter += 1
         printAddContentAuthor('Artist', help, index, counter)
 	printSpacer(2)
-
-def printfullblankcoverart(index, help = None):
-        if not help:
-                help = {}
-        counter = 1
-        print '<tr>'
-        print '<td>'
-        print '<input name="cover_id%d" value="0" type="HIDDEN">' % (index)
-        print '</td>'
-        print '<td><input name="cover_title%d" class="contentinput"></td>' % index
-        print '<td><input name="cover_date%d" class="contentyearinput"></td>' % index
-        print '</tr>'
-        print '<tr>'
-        printContentHeader('Artist1:', help)
-        print '<td><input tabindex="1" id="cover_artist%d.%d" name="cover_artist%d.%d" class="contentinput"></td>' % (index, counter, index, counter)
-        print '</tr>'
-        counter +=1
-        printAddContentAuthor('Artist', help, index, counter)
-	printSpacer(3)
-
 
 def printreviewrecord(record, index, pub_id, help = None, reuse_page_numbers = 1):
         if not help:

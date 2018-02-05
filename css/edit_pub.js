@@ -548,8 +548,8 @@ function addNewBriefCover() {
 	var str_next = int_next.toString();
 	addpoint.setAttribute("next", str_next);
 	// First row - create top-level elements
-	var tr1    = document.createElement("tr");
-	var td1   = document.createElement("td");
+	var tr1 = document.createElement("tr");
+	var td1 = document.createElement("td");
 	// Element: input title_idX
 	var attr = record_type+"_id"+next;
 	var input1 = document.createElement("input");
@@ -573,9 +573,10 @@ function addNewBriefCover() {
 	tbody.insertBefore(tr1, addpoint);
 
 	// Second row for "Artist1" - create top-level elements
-	var tr2    = document.createElement("tr");
-	var td2   = document.createElement("td");
-	var bold   = document.createElement("b");
+	var tr2 = document.createElement("tr");
+	tr2.setAttribute("id", "cover_artist"+next+".1.row");
+	var td2 = document.createElement("td");
+	var bold = document.createElement("b");
 	var text1 = document.createTextNode("Artist1:");
 
 	bold.appendChild(text1);
@@ -678,6 +679,7 @@ function addNewFullCover() {
 
 	// Second row for "Artist1" - create top-level elements
 	var tr2    = document.createElement("tr");
+	tr2.setAttribute("id", "cover_artist"+next+".1.row");
 	var td2   = document.createElement("td");
 	var bold   = document.createElement("b");
 	var text1 = document.createTextNode("Artist1:");
