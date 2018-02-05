@@ -316,7 +316,7 @@ def printbriefblankcoverart(index, help = None):
         print '</tr>'
         counter += 1
         printAddContentAuthor('Artist', help, index, counter)
-	printSpacer(2)
+	printSpacer(2, 'cover_id%d.row' % index)
 
 def printreviewrecord(record, index, pub_id, help = None, reuse_page_numbers = 1):
         if not help:
@@ -667,8 +667,11 @@ def printAwardLevel(label, value, poll, help):
 	print '</select></td>'
 	print '</tr>'
 
-def printSpacer(rows):
-        print '<tr class="titleeditspacer"><td colspan="%d"> </td></tr>' % rows
+def printSpacer(rows, row_id = ''):
+        if row_id:
+                print '<tr id="%s" class="titleeditspacer"><td colspan="%d"> </td></tr>' % (row_id, rows)
+        else:
+                print '<tr class="titleeditspacer"><td colspan="%d"> </td></tr>' % rows
 
 def printmultiple(values, label, field_name, row_id, onclick_function, help, onclick_parameters = '', readonly = 0):
 	counter = 1

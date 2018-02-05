@@ -536,17 +536,12 @@ function GetLastExternalId(field_name) {
 }
 
 function addNewBriefCover() {
-	body_name = "coverBody"
-	addpoint_name = "AddCover"
-	record_type = "cover"
-	var tbody = document.getElementById(body_name);
-	var addpoint = document.getElementById(addpoint_name);
-	// Update the 'next' attribute for later additions
-	next = addpoint.getAttribute("next");
-	var int_next = parseInt(next);
-	int_next += 1;
-	var str_next = int_next.toString();
-	addpoint.setAttribute("next", str_next);
+	var record_type = "cover";
+	var tbody = document.getElementById("coverBody");
+	var last_row = GetLastRow('cover_id');
+	var addpoint = document.getElementById('cover_id' + last_row + '.row');
+	var next = last_row + 1;
+
 	// First row - create top-level elements
 	var tr1 = document.createElement("tr");
 	var td1 = document.createElement("td");
@@ -570,7 +565,7 @@ function addNewBriefCover() {
 	input3.setAttribute("type", "HIDDEN");
 	td1.appendChild(input3);
 	tr1.appendChild(td1);
-	tbody.insertBefore(tr1, addpoint);
+	tbody.insertBefore(tr1, addpoint.nextSibling);
 
 	// Second row for "Artist1" - create top-level elements
 	var tr2 = document.createElement("tr");
@@ -592,7 +587,7 @@ function addNewBriefCover() {
 	input4.setAttribute("tabindex", "1");
 	td3.appendChild(input4);
 	tr2.appendChild(td3);
-	tbody.insertBefore(tr2, addpoint);
+	tbody.insertBefore(tr2, tr1.nextSibling);
 
 	// Third row - "Add Artist" Button
 	var tr3    = document.createElement("tr");
@@ -622,15 +617,16 @@ function addNewBriefCover() {
 	input5.setAttribute("onclick", attr);
 	td5.appendChild(input5);
 	tr3.appendChild(td5);
-	tbody.insertBefore(tr3, addpoint);
+	tbody.insertBefore(tr3, tr2.nextSibling);
 
 	// Spacer
 	var tr4  = document.createElement("tr");
+	tr4.setAttribute("id", "cover_id"+next+".row");
 	tr4.className = "titleeditspacer";
 	var td6 = document.createElement("td");
 	td6.colSpan = 2;
 	tr4.appendChild(td6);
-	tbody.insertBefore(tr4, addpoint);
+	tbody.insertBefore(tr4, tr3.nextSibling);
 }
 
 function addNewFullCover() {
