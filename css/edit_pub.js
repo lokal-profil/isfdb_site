@@ -630,20 +630,17 @@ function addNewBriefCover() {
 }
 
 function addNewFullCover() {
-	var body_name = "coverBody";
 	var addpoint_name = "AddCover";
 	var record_type = "cover";
-	var tbody = document.getElementById(body_name);
-	var addpoint = document.getElementById(addpoint_name);
-	// Update the 'next' attribute for later additions
-	next = addpoint.getAttribute("next");
-	var int_next = parseInt(next);
-	int_next += 1;
-	var str_next = int_next.toString();
-	addpoint.setAttribute("next", str_next);
+	var tbody = document.getElementById("coverBody");
+	var last_row = GetLastRow('cover_id');
+	var addpoint = document.getElementById('cover_id' + last_row + '.row');
+	var next = last_row + 1;
+
 	// First row - create top-level elements
 	var tr1    = document.createElement("tr");
 	var td1   = document.createElement("td");
+
 	// Element: input title_idX
 	var attr = record_type+"_id"+next;
 	var input1 = document.createElement("input");
@@ -651,6 +648,7 @@ function addNewFullCover() {
 	input1.setAttribute("value", "0");
 	input1.setAttribute("type", "HIDDEN");
 	td1.appendChild(input1);
+
 	// Element: input title_titleX
 	var td2   = document.createElement("td");
 	attr = record_type+"_title"+next;
@@ -660,6 +658,7 @@ function addNewFullCover() {
 	input2.setAttribute("class", "contentinput");
 	input2.setAttribute("tabindex", "1");
 	td2.appendChild(input2);
+
 	// Element: input title_dateX
 	var td3 = document.createElement("td");
 	attr = record_type+"_date"+next;
@@ -671,7 +670,7 @@ function addNewFullCover() {
 	tr1.appendChild(td1);
 	tr1.appendChild(td2);
 	tr1.appendChild(td3);
-	tbody.insertBefore(tr1, addpoint);
+	tbody.insertBefore(tr1, addpoint.nextSibling);
 
 	// Second row for "Artist1" - create top-level elements
 	var tr2    = document.createElement("tr");
@@ -693,7 +692,7 @@ function addNewFullCover() {
 	input4.setAttribute("tabindex", "1");
 	td3.appendChild(input4);
 	tr2.appendChild(td3);
-	tbody.insertBefore(tr2, addpoint);
+	tbody.insertBefore(tr2, tr1.nextSibling);
 
 	// Third row - "Add Artist" Button
 	var tr3    = document.createElement("tr");
@@ -723,15 +722,16 @@ function addNewFullCover() {
 	input5.setAttribute("onclick", attr);
 	td5.appendChild(input5);
 	tr3.appendChild(td5);
-	tbody.insertBefore(tr3, addpoint);
+	tbody.insertBefore(tr3, tr2.nextSibling);
 
 	// Spacer
 	var tr4  = document.createElement("tr");
+	tr4.setAttribute("id", "cover_id"+next+".row");
 	tr4.className = "titleeditspacer";
 	var td6 = document.createElement("td");
 	td6.colSpan = 3;
 	tr4.appendChild(td6);
-	tbody.insertBefore(tr4, addpoint);
+	tbody.insertBefore(tr4, tr3.nextSibling);
 }
 
 function addNewTitle() {

@@ -147,7 +147,7 @@ if __name__ == '__main__':
         print '<tbody id="coverBody">'
 
         printbriefblankcoverart(1, help)
-        printNewBriefCoverButton(2)
+        printNewBriefCoverButton()
 
         print '</tbody>'
         print '</table>'

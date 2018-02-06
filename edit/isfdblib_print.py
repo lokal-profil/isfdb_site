@@ -297,7 +297,7 @@ def printfullcoverart(cover, index, help = None, readonly = 0):
                         counter += 1
         if not readonly:
                 printAddContentAuthor('Artist', help, index, counter)
-        printSpacer(3)
+        printSpacer(3, 'cover_id%d.row' % index)
 
 def printbriefblankcoverart(index, help = None):
         if not help:
@@ -546,11 +546,11 @@ def printNewTitleButton(index):
         print '<td><input type="button" value="Add Title" onclick="addNewTitle()" tabindex="1"></td>' 
         print '</tr>'
 
-def printNewBriefCoverButton(index):
-        printNewRecordButton('Cover', index, 'addNewBriefCover')
+def printNewBriefCoverButton():
+        printNewRecordButton('Cover', 'addNewBriefCover')
 
-def printNewFullCoverButton(index):
-        printNewRecordButton('Cover', index, 'addNewFullCover')
+def printNewFullCoverButton():
+        printNewRecordButton('Cover', 'addNewFullCover')
 
 def printNewReviewButton(index):
         print '<tr id="AddReview" next="%d">' % int(index)
@@ -564,10 +564,8 @@ def printNewInterviewButton(index):
         print '<td><input type="button" value="Add Interview" onclick="addNewInterview()" tabindex="1"></td>'
         print '</tr>'
 
-def printNewRecordButton(record_type, index, onclick = None):
-        if not onclick:
-                onclick = 'addNew%s' % record_type
-        print '<tr id="Add%s" next="%d">' % (record_type, int(index))
+def printNewRecordButton(record_type, onclick):
+        print '<tr id="Add%s">' % record_type
         print '<td>&nbsp;</td>'
         print '<td><input type="button" value="Add %s" onclick="%s()" tabindex="1"></td>' % (record_type, onclick)
         print '</tr>'

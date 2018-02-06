@@ -345,7 +345,7 @@ if __name__ == '__main__':
                 index = 1
                 printbriefblankcoverart(index, help)
                 index += 1
-                printNewBriefCoverButton(index)
+                printNewBriefCoverButton()
         else:
                 print '<tr>'
                 print '<td>&nbsp;</td>'
@@ -361,7 +361,7 @@ if __name__ == '__main__':
                         else:
                                 printfullcoverart(cover, index, help, 0)
                         index += 1
-                printNewFullCoverButton(index)
+                printNewFullCoverButton()
         print "</tbody>"
         print "</table>"
 

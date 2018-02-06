@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2008-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -202,7 +202,7 @@ if __name__ == '__main__':
                 for cover in covers:
                         printfullcoverart(cover, index, help, 1)
                         index += 1
-                printNewFullCoverButton(index)
+                printNewFullCoverButton()
                 print '</tbody>'
                 print '</table>'
 
