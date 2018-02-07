@@ -933,12 +933,14 @@ function addRecord(body_name, record_type) {
 		var text18 = document.createTextNode("Interviewee1:");
 		attr = "interviewee_author"+next+".1";
 	}
+	tr2.setAttribute("id", attr + ".row");
 	bold.appendChild(text18);
 	tda1.appendChild(bold);
 	tr2.appendChild(tda1);
 
 	var tda2   = document.createElement("td");
 	var input4 = document.createElement("input");
+	input4.setAttribute("id", attr);
 	input4.setAttribute("name", attr);
 	input4.setAttribute("class", "contentinput");
 	input4.setAttribute("tabindex", "1");
@@ -1032,12 +1034,14 @@ function addRecord(body_name, record_type) {
 		var bold2  = document.createElement("b");
 		var text20 = document.createTextNode("Reviewer1:");
 		attr = "review_reviewer"+next+".1";
+		tr4.setAttribute("id", attr + ".row");
 		bold2.appendChild(text20);
 		tda5.appendChild(bold2);
 		tr4.appendChild(tda5);
 
 		var tda6   = document.createElement("td");
 		var input4 = document.createElement("input");
+		input4.setAttribute("id", attr);
 		input4.setAttribute("name", attr);
 		input4.setAttribute("class", "contentinput");
 		input4.setAttribute("tabindex", "1");
@@ -1085,12 +1089,14 @@ function addRecord(body_name, record_type) {
 		var bold2  = document.createElement("b");
 		var text22 = document.createTextNode("Interviewer1:");
 		attr = "interviewer_author"+next+".1";
+		tr4.setAttribute("id", attr + ".row");
 		bold2.appendChild(text22);
 		tda5.appendChild(bold2);
 		tr4.appendChild(tda5);
 
 		var tda6   = document.createElement("td");
 		var input4 = document.createElement("input");
+		input4.setAttribute("id", attr);
 		input4.setAttribute("name", attr);
 		input4.setAttribute("class", "contentinput");
 		input4.setAttribute("tabindex", "1");

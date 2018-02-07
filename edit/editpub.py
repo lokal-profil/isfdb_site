@@ -112,15 +112,17 @@ def printtitlerecord(record, index, container, help):
         counter = 1
         if len(authors):
                 for author in authors:
-			print '<tr>'
+                        print '<tr id="title_author%d.%d.row">' % (index, counter)
 			printContentHeader('Author%d:'% counter, help)
-			print '<td><input name="title_author%d.%d" tabindex="%d" value="%s"%s></td>' % (index, counter, taborder, escape_string(author), args % "contentinput")
+			print """<td><input id="title_author%d.%d" name="title_author%d.%d" tabindex="%d"
+                        value="%s"%s></td>""" % (index, counter, index, counter, taborder, escape_string(author), args % "contentinput")
 			print '</tr>'
                         counter += 1
 	else:
-		print '<tr>'
+		print '<tr id="title_author%d.%d.row">' % (index, counter)
 		printContentHeader('Author%d:'% counter, help)
-		print '<td><input name="title_author%d.%d" tabindex="%d" %s></td>' % (index, counter, taborder, args % "contentinput")
+		print """<td><input id="title_author%d.%d" name="title_author%d.%d" tabindex="%d"
+                        %s></td>""" % (index, counter, index, counter, taborder, args % "contentinput")
 		print '</tr>'
 		counter += 1
 
@@ -159,9 +161,10 @@ def printreviewrecord(record, index, help):
         authors = SQLReviewAuthors(record[TITLE_PUBID])
         if len(authors):
                 for author in authors:
-                        print '<tr>'
+                        print '<tr id="review_author%d.%d.row">' % (index, counter)
                         printContentHeader('Author%d:'% counter, help)
-                        print '<td><input name="review_author%d.%d" tabindex="%d" value="%s"%s></td>' % (index, counter, taborder, escape_string(author), args % "contentinput")
+                        print """<td><input id="review_author%d.%d" name="review_author%d.%d" tabindex="%d"
+                        value="%s"%s></td>""" % (index, counter, index, counter, taborder, escape_string(author), args % "contentinput")
                         print '</tr>'
                         counter += 1
 
@@ -172,9 +175,10 @@ def printreviewrecord(record, index, help):
         authors = SQLTitleAuthors(record[TITLE_PUBID])
         if len(authors):
                 for author in authors:
-                        print '<tr>'
+                        print '<tr id="review_reviewer%d.%d.row">' % (index, counter)
                         printContentHeader('Reviewer%d:'% counter, help)
-                        print '<td><input name="review_reviewer%d.%d" tabindex="%d" value="%s"%s></td>' % (index, counter, taborder, escape_string(author), args % "contentinput")
+                        print """<td><input id="review_reviewer%d.%d" name="review_reviewer%d.%d" tabindex="%d"
+                        value="%s"%s></td>""" % (index, counter, index, counter, taborder, escape_string(author), args % "contentinput")
                         print '</tr>'
                         counter += 1
 
@@ -214,9 +218,10 @@ def printinterviewrecord(record, index, help):
         authors = SQLInterviewAuthors(record[TITLE_PUBID])
         if len(authors):
                 for author in authors:
-                        print '<tr>'
+                        print '<tr id="interviewee_author%d.%d.row">' % (index, counter)
                         printContentHeader('Interviewee%d:'% counter, help)
-                        print '<td><input name="interviewee_author%d.%d" tabindex="%d" value="%s"%s></td>' % (index, counter, taborder, escape_string(author), args % "contentinput")
+                        print """<td><input id="interviewee_author%d.%d" name="interviewee_author%d.%d" tabindex="%d"
+                        value="%s"%s></td>""" % (index, counter, index, counter, taborder, escape_string(author), args % "contentinput")
                         print '</tr>'
                         counter += 1
 
@@ -228,9 +233,10 @@ def printinterviewrecord(record, index, help):
         authors = SQLTitleAuthors(record[TITLE_PUBID])
         if len(authors):
                 for author in authors:
-                        print '<tr>'
+                        print '<tr id="interviewer_author%d.%d.row">' % (index, counter)
                         printContentHeader('Interviewer%d:'% counter, help)
-                        print '<td><input name="interviewer_author%d.%d" tabindex="%d" value="%s"%s></td>' % (index, counter, taborder, escape_string(author), args % "contentinput")
+                        print """<td><input id="interviewer_author%d.%d" name="interviewer_author%d.%d" tabindex="%d"
+                        value="%s"%s></td>""" % (index, counter, index, counter, taborder, escape_string(author), args % "contentinput")
                         print '</tr>'
                         counter += 1
         print '</tr>'
