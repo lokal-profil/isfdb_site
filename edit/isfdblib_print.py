@@ -225,7 +225,7 @@ def printtitlerecord(record, index, pub_id, help = None, reuse_page_numbers = 1)
                         print '</tr>'
                         counter += 1
 
-	printSpacer(5)
+	printSpacer(5, 'title', index)
 
 def printblanktitlerecord(index, help = None, pub_type = 'NOVEL'):
         if not help:
@@ -268,7 +268,7 @@ def printblanktitlerecord(index, help = None, pub_type = 'NOVEL'):
         counter +=1
 
         printAddContentAuthor('Author', help, index, counter)
-	printSpacer(5)
+	printSpacer(5, 'title', index)
 
 def printfullcoverart(cover, index, help = None, readonly = 0):
         if not help:
@@ -297,7 +297,7 @@ def printfullcoverart(cover, index, help = None, readonly = 0):
                         counter += 1
         if not readonly:
                 printAddContentAuthor('Artist', help, index, counter)
-        printSpacer(3, 'cover_id%d.row' % index)
+        printSpacer(3, 'cover', index)
 
 def printbriefblankcoverart(index, help = None):
         if not help:
@@ -316,7 +316,7 @@ def printbriefblankcoverart(index, help = None):
         print '</tr>'
         counter += 1
         printAddContentAuthor('Artist', help, index, counter)
-	printSpacer(2, 'cover_id%d.row' % index)
+	printSpacer(2, 'cover', index)
 
 def printreviewrecord(record, index, pub_id, help = None, reuse_page_numbers = 1):
         if not help:
@@ -355,7 +355,7 @@ def printreviewrecord(record, index, pub_id, help = None, reuse_page_numbers = 1
                         print '</tr>'
                         counter += 1
 
-	printSpacer(3)
+	printSpacer(3, 'review', index)
 
 def printblankreviewrecord(index, help = None):
         if not help:
@@ -384,7 +384,7 @@ def printblankreviewrecord(index, help = None):
         counter += 1
         printAddSecondaryAuthor('Reviewer', help, index, counter)
 
-	printSpacer(3)
+	printSpacer(3, 'review', index)
 
 def printinterviewrecord(record, index, pub_id, help = None, reuse_page_numbers = 1):
         if not help:
@@ -424,7 +424,7 @@ def printinterviewrecord(record, index, pub_id, help = None, reuse_page_numbers 
                         print '</tr>'
                         counter += 1
 
-	printSpacer(3)
+	printSpacer(3, 'interview', index)
 
 def printblankinterviewrecord(index, help = None):
         if not help:
@@ -453,7 +453,7 @@ def printblankinterviewrecord(index, help = None):
         counter += 1
         printAddSecondaryAuthor('Interviewer', help, index, counter)
 
-	printSpacer(3)
+	printSpacer(3, 'interview', index)
 
 def printtextarea(label, fieldname, help, notes = '', rows = 4, readonly = 0):
         print '<tr>'
@@ -540,29 +540,20 @@ def printContentHeader(label, help, index = 1):
         # The 4th parameter is '' in order to avoid displaying a colon
         printfieldlabel(label, help, index, '')
 
-def printNewTitleButton(index):
-        print '<tr id="AddTitle" next="%d">' % int(index)
-        print '<td>&nbsp;</td>'
-        print '<td><input type="button" value="Add Title" onclick="addNewTitle()" tabindex="1"></td>' 
-        print '</tr>'
-
 def printNewBriefCoverButton():
         printNewRecordButton('Cover', 'addNewBriefCover')
 
 def printNewFullCoverButton():
         printNewRecordButton('Cover', 'addNewFullCover')
 
-def printNewReviewButton(index):
-        print '<tr id="AddReview" next="%d">' % int(index)
-        print '<td>&nbsp;</td>'
-        print '<td><input type="button" value="Add Review" onclick="addNewReview()" tabindex="1"></td>' 
-        print '</tr>'
+def printNewTitleButton():
+        printNewRecordButton('Title', 'addNewTitle')
 
-def printNewInterviewButton(index):
-        print '<tr id="AddInterview" next="%d">' % int(index)
-        print '<td>&nbsp;</td>'
-        print '<td><input type="button" value="Add Interview" onclick="addNewInterview()" tabindex="1"></td>'
-        print '</tr>'
+def printNewReviewButton():
+        printNewRecordButton('Review', 'addNewReview')
+
+def printNewInterviewButton():
+        printNewRecordButton('Interview', 'addNewInterview')
 
 def printNewRecordButton(record_type, onclick):
         print '<tr id="Add%s">' % record_type
@@ -665,11 +656,8 @@ def printAwardLevel(label, value, poll, help):
 	print '</select></td>'
 	print '</tr>'
 
-def printSpacer(rows, row_id = ''):
-        if row_id:
-                print '<tr id="%s" class="titleeditspacer"><td colspan="%d"> </td></tr>' % (row_id, rows)
-        else:
-                print '<tr class="titleeditspacer"><td colspan="%d"> </td></tr>' % rows
+def printSpacer(rows, row_id, index):
+        print '<tr id="%s_id%d.row" class="titleeditspacer"><td colspan="%d"> </td></tr>' % (row_id, index, rows)
 
 def printmultiple(values, label, field_name, row_id, onclick_function, help, onclick_parameters = '', readonly = 0):
 	counter = 1

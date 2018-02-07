@@ -127,7 +127,7 @@ def printtitlerecord(record, index, container, help):
         if not readonly:
                 printAddContentAuthor('Author', help, index, counter)
 
-        printSpacer(5)
+        printSpacer(5, 'title', index)
 
 
 def printreviewrecord(record, index, help):
@@ -181,7 +181,7 @@ def printreviewrecord(record, index, help):
         if not readonly:
                 printAddSecondaryAuthor('Reviewer', help, index, counter)
 
-        printSpacer(3)
+        printSpacer(3, 'review', index)
 
 
 def printinterviewrecord(record, index, help):
@@ -238,7 +238,7 @@ def printinterviewrecord(record, index, help):
         if not readonly:
                 printAddSecondaryAuthor('Interviewer', help, index, counter)
 
-        printSpacer(3)
+	printSpacer(3, 'interview', index)
 
 
 ###################################################################
@@ -419,7 +419,7 @@ if __name__ == '__main__':
         if index == 1:
                 printblanktitlerecord(index, help, pub.pub_ctype)
                 index += 1
-        printNewTitleButton(index)
+        printNewTitleButton()
         print "</tbody>"
         print "</table>"
 
@@ -442,7 +442,7 @@ if __name__ == '__main__':
         else:
                 printblankreviewrecord(index, help)
                 index += 1
-        printNewReviewButton(index)
+        printNewReviewButton()
         print "</tbody>"
         print "</table>"
 
@@ -465,7 +465,7 @@ if __name__ == '__main__':
         else:
                 printblankinterviewrecord(index, help)
                 index += 1
-        printNewInterviewButton(index)
+        printNewInterviewButton()
         print "</tbody>"
         print "</table>"
 

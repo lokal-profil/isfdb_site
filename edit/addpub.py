@@ -154,7 +154,7 @@ if __name__ == '__main__':
         while counter < max:
                 printblanktitlerecord(counter, help, pub_type)
                 counter += 1
-        printNewTitleButton(counter)
+        printNewTitleButton()
         print "</tbody>"
         print "</table>"
 
@@ -184,7 +184,7 @@ if __name__ == '__main__':
                 printblankreviewrecord(counter, help)
                 counter += 1
 
-        printNewReviewButton(counter)
+        printNewReviewButton()
         print "</tbody>"
         print "</table>"
 
@@ -214,7 +214,7 @@ if __name__ == '__main__':
                 printblankinterviewrecord(counter, help)
                 counter += 1
 
-        printNewInterviewButton(counter)
+        printNewInterviewButton()
 
         print "</tbody>"
         print "</table>"

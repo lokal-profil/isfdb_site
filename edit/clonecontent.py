@@ -242,7 +242,7 @@ if __name__ == '__main__':
                 printblanktitlerecord(index, help, publication_to[PUB_CTYPE])
                 index += 1
 
-        printNewTitleButton(index)
+        printNewTitleButton()
         print "</tbody>"
         print "</table>"
 
@@ -266,7 +266,7 @@ if __name__ == '__main__':
         else:
                 printblankreviewrecord(index, help)
                 index += 1
-        printNewReviewButton(index)
+        printNewReviewButton()
         print "</tbody>"
         print "</table>"
 
@@ -290,7 +290,7 @@ if __name__ == '__main__':
         else:
                 printblankinterviewrecord(index, help)
                 index += 1
-        printNewInterviewButton(index)
+        printNewInterviewButton()
         print "</tbody>"
         print "</table>"
 

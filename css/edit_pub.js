@@ -630,7 +630,6 @@ function addNewBriefCover() {
 }
 
 function addNewFullCover() {
-	var addpoint_name = "AddCover";
 	var record_type = "cover";
 	var tbody = document.getElementById("coverBody");
 	var last_row = GetLastRow('cover_id');
@@ -735,27 +734,22 @@ function addNewFullCover() {
 }
 
 function addNewTitle() {
-	addRecord("titleBody", "AddTitle", "title")
+	addRecord("titleBody", "title")
 }
 
 function addNewReview() {
-	addRecord("reviewBody", "AddReview", "review")
+	addRecord("reviewBody", "review")
 }
 
 function addNewInterview() {
-	addRecord("interviewBody", "AddInterview", "interview")
+	addRecord("interviewBody", "interview")
 }
 
-function addRecord(body_name, addpoint_name, record_type) {
+function addRecord(body_name, record_type) {
 	var tbody = document.getElementById(body_name);
-	var addpoint = document.getElementById(addpoint_name);
-
-	// Update the 'next' attribute for later additions
-	var next = addpoint.getAttribute("next");
-	var int_next = parseInt(next);
-	int_next += 1;
-	var str_next = int_next.toString();
-	addpoint.setAttribute("next", str_next);
+	var last_row = GetLastRow(record_type + "_id");
+	var addpoint = document.getElementById(record_type + "_id" + last_row + '.row');
+	var next = last_row + 1;
 
 	// Create top-level elements
 	var tr    = document.createElement("tr");
@@ -1155,15 +1149,16 @@ function addRecord(body_name, addpoint_name, record_type) {
 	tda4.appendChild(input5);
 	tr3.appendChild(tda4);
 
-	tbody.insertBefore(tr, addpoint);
-	tbody.insertBefore(tr2, addpoint);
-	tbody.insertBefore(tr3, addpoint);
+	tbody.insertBefore(tr, addpoint.nextSibling);
+	tbody.insertBefore(tr2, tr.nextSibling);
+	tbody.insertBefore(tr3, tr2.nextSibling);
 	if (record_type != "title") {
-		tbody.insertBefore(tr4, addpoint);
-		tbody.insertBefore(tr5, addpoint);
+		tbody.insertBefore(tr4, tr3.nextSibling);
+		tbody.insertBefore(tr5, tr4.nextSibling);
 	}
 
 	var tr6  = document.createElement("tr");
+	tr6.setAttribute("id", record_type + "_id"+next+".row");
 	tr6.className = "titleeditspacer";
 	var tdx = document.createElement("td");
 	if (record_type == "title") {
@@ -1173,5 +1168,66 @@ function addRecord(body_name, addpoint_name, record_type) {
 		tdx.colSpan = 3;
 	}
 	tr6.appendChild(tdx);
-	tbody.insertBefore(tr6, addpoint);
+	if (record_type != "title") {
+		tbody.insertBefore(tr6, tr5.nextSibling);
+	}
+	else {
+		tbody.insertBefore(tr6, tr3.nextSibling);
+	}
+}
+
+function addContentTitleAuthor(entry) {
+	addPerson(entry, "AddAuthor"+entry, "titleBody", "Author", "title_author");
+}
+
+function addReviewee(entry) {
+	addPerson(entry, "AddReviewee"+entry, "reviewBody", "Author", "review_author");
+}
+
+function addReviewer(entry) {
+	addPerson(entry, "AddReviewer"+entry, "reviewBody", "Reviewer", "review_reviewer");
+}
+
+function addInterviewee(entry) {
+	addPerson(entry, "AddInterviewee"+entry, "interviewBody", "Interviewee", "interviewee_author");
+}
+
+function addInterviewer(entry) {
+	addPerson(entry, "AddInterviewer"+entry, "interviewBody", "Interviewer", "interviewer_author");
+}
+
+function addArtist(entry) {
+	addPerson(entry, "AddArtist"+entry, "coverBody", "Artist", "cover_artist");
+}
+
+function addPerson(entry, tag, body_name, label_name, attr_name) {
+	var addpoint = document.getElementById(tag);
+	var tbody = document.getElementById(body_name);
+	// Update the 'next' attribute for later additions
+	next = addpoint.getAttribute("next");
+	var int_next = parseInt(next);
+	int_next += 1;
+	var str_next = int_next.toString();
+	addpoint.setAttribute("next", str_next);
+	// Create the DOM elements
+	var tr   = document.createElement("tr");
+	var td1  = document.createElement("td");
+	var td2  = document.createElement("td");
+	var b  = document.createElement("b");
+	label = label_name+next+":";
+	var txt1 = document.createTextNode(label);
+	var input = document.createElement("input");
+	var attr = attr_name+entry+"."+next;
+	tr.setAttribute("id", attr + '.row');
+	input.setAttribute("name", attr);
+	input.setAttribute("class", 'contentinput');
+	input.setAttribute("tabindex", "1");
+	input.setAttribute("id", attr);
+	// Link the elements into the DOM
+	td1.appendChild(b);
+	b.appendChild(txt1);
+	td2.appendChild(input);
+	tr.appendChild(td1);
+	tr.appendChild(td2);
+	tbody.insertBefore(tr, addpoint);
 }
