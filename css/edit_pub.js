@@ -342,7 +342,7 @@ function validateTypeMismatch()	{
 	var pub_type_value = pub_type_handle.value;
 	// Retrieve the next available title number
 	var addpoint = document.getElementById("AddTitle");
-	var next1 = addpoint.getAttribute("next");
+	var next1 = GetLastRow('title_id') + 1;
 	// Convert the next available title number to integer so that we can use it in a loop
 	var int_next1 = parseInt(next1);
 	var current_title_name;
