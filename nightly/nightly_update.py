@@ -1,7 +1,7 @@
 #!_PYTHONLOC
 # -*- coding: cp1252 -*-
 #
-#     (C) COPYRIGHT 2009-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -825,6 +825,7 @@ def nightly_cleanup_reports():
                    'pe': ('series', 'series_id'),
                    'seriesgrid': ('series', 'series_id'),
                    'ay': ('award_types', 'award_type_id'),
+                   'awardtype': ('award_types', 'award_type_id'),
                    'award_details': ('awards', 'award_id'),
                    'award_category': ('award_cats', 'award_cat_id'),
                    'publisheryear': ('publishers', 'publisher_id')
