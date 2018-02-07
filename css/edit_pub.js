@@ -25,7 +25,7 @@ function validatePubURL(field_name) {
 	return true;
 }
 
-function validateContents(title_add_point, title_field, title_date, author_add_point, author_field, display_name_author, display_name_title) {
+function validateContents(reford_id, title_field, title_date, author_add_point, author_field, display_name_author, display_name_title) {
 	// Initialize variables
 	var addpoint1;
 	var addpoint2;
@@ -54,13 +54,10 @@ function validateContents(title_add_point, title_field, title_date, author_add_p
 	var ttype_field_handle;
 	var ttype_field_data;
 
-	addpoint1 = document.getElementById(title_add_point);
-	// Retrieve the next available title number
-	next1 = addpoint1.getAttribute("next");
-	// Convert the next available title number to integer so that we can use it in a loop
-	int_next1 = parseInt(next1);
+	// Determine the next available title number
+	next1 = GetLastRow(reford_id) + 1;
 	// Check each title record defined on this page
-	for (i = 1 ; i < int_next1 ; i++) {
+	for (i = 1 ; i < next1 ; i++) {
 		// Build the name of the title field that is being processed
 		current_title_field = title_field + i;
 		// Retrieve the handle of this title record in case we need to focus on it later
@@ -135,7 +132,7 @@ function validateContents(title_add_point, title_field, title_date, author_add_p
 			return false;
 		}
 
-		if (title_add_point != "AddTitle") {
+		if (reford_id != "title_id") {
 			continue
 		}
 		// Check this title's Length value against the Title Type value
@@ -165,7 +162,6 @@ function validateContents(title_add_point, title_field, title_date, author_add_p
 
 function validateCovers() {
 	// Initialize variables
-	var addpoint1;
 	var addpoint2;
 	var artist_data;
 	var artist_field;
@@ -183,19 +179,10 @@ function validateCovers() {
 	var next1;
 	var next2;
 
-	addpoint1 = document.getElementById("AddCover");
-	// If there is no cover art add point, then this is an old style data entry form
-	// which handles cover art in the deprecated "Artist" field, so validation passes
-	if (addpoint1 == null) {
-		return true;
-	}
-
-	// Retrieve the next available cover ID
-	next1 = addpoint1.getAttribute("next");
-	// Convert the next available cover ID to integer so that we can use it in a loop
-	int_next1 = parseInt(next1);
+	// Determine the next available cover ID
+	next1 = GetLastRow('cover_id') + 1;
 	// Check each cover record defined on the page
-	for (i = 1 ; i < int_next1 ; i++) {
+	for (i = 1 ; i < next1 ; i++) {
 		// Retrieve the number of authors for this cover record
 		addpoint2 = document.getElementById("AddArtist" + i);
 		// If there is no artist add point for this cover, then it's read-only and
@@ -295,23 +282,23 @@ function validatePubForm() {
 		return false;
 	}
 	// Validate the Title sub-section of the Contents section
-	if (validateContents("AddTitle", "title_title", "title_date", "AddAuthor", "title_author", "author", "title") == false) {
+	if (validateContents("title_id", "title_title", "title_date", "AddAuthor", "title_author", "author", "title") == false) {
 		return false;
 	}
 	// Validate the revieweEs in the Review sub-section of the Contents section
-	if (validateContents("AddReview", "review_title", "review_date", "AddReviewee", "review_author", "author", "review") == false) {
+	if (validateContents("review_id", "review_title", "review_date", "AddReviewee", "review_author", "author", "review") == false) {
 		return false;
 	}
 	// Validate the revieweRs in the Review sub-section of the Contents section
-	if (validateContents("AddReview", "review_title", "review_date", "AddReviewer", "review_reviewer", "reviewer", "review") == false) {
+	if (validateContents("review_id", "review_title", "review_date", "AddReviewer", "review_reviewer", "reviewer", "review") == false) {
 		return false;
 	}
 	// Validate the intervieweEs in the Interview sub-section of the Contents section
-	if (validateContents("AddInterview", "interview_title", "interview_date", "AddInterviewee", "interviewee_author", "interviewee", "interview") == false) {
+	if (validateContents("interview_id", "interview_title", "interview_date", "AddInterviewee", "interviewee_author", "interviewee", "interview") == false) {
 		return false;
 	}
 	// Validate the intervieweRs in the Interview sub-section of the Contents section
-	if (validateContents("AddInterview", "interview_title", "interview_date", "AddInterviewer", "interviewer_author", "interviewer", "interview") == false) {
+	if (validateContents("interview_id", "interview_title", "interview_date", "AddInterviewer", "interviewer_author", "interviewer", "interview") == false) {
 		return false;
 	}
 	// Check for mismatch between the publication type and titles in the Content section
@@ -340,11 +327,8 @@ function validateTypeMismatch()	{
 	var pub_type_handle = document.getElementsByName("pub_ctype")[0];
 	// Retrieve the value of the publication type field
 	var pub_type_value = pub_type_handle.value;
-	// Retrieve the next available title number
-	var addpoint = document.getElementById("AddTitle");
+	// Determine the next available title number
 	var next1 = GetLastRow('title_id') + 1;
-	// Convert the next available title number to integer so that we can use it in a loop
-	var int_next1 = parseInt(next1);
 	var current_title_name;
 	var current_title_handle;
 	var title_title;
@@ -367,7 +351,7 @@ function validateTypeMismatch()	{
 	var shortfiction_count = 0;
 	var i;
 	// Add the title type of each Content title record to type-specific counters
-	for (i = 1 ; i < int_next1 ; i++) {
+	for (i = 1 ; i < next1 ; i++) {
 		// Build the name of the title field that is being processed
 		current_title_name = "title_title" + i;
 		// Retrieve the handle of the current title field
