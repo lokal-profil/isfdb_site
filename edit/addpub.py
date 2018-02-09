@@ -216,16 +216,17 @@ if __name__ == '__main__':
 
         printNewInterviewButton()
 
-        print "</tbody>"
-        print "</table>"
+        print '</tbody>'
+        print '</table>'
 
-
+	print '<p>'
+	print '<hr>'
+	print '<p>'
         print '<input tabindex="0" NAME="title_id" VALUE="%d" TYPE="HIDDEN">' % (title)
         print '<input tabindex="0" name="editor" value="addpub" type="HIDDEN">'
         print '<input tabindex="0" NAME="pub_id" VALUE="%d" TYPE="HIDDEN">' % (pub)
         print '<input tabindex="1" TYPE="SUBMIT" VALUE="Submit Data">'
         print '</form>'
         print '<p>'
-        print '<hr>'
 
         PrintPostSearch(tableclose=False)

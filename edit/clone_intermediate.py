@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2015-2017   Ahasuerus
+#     (C) COPYRIGHT 2015-2018   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -85,4 +85,4 @@ if __name__ == '__main__':
 	print '<input TYPE="SUBMIT" VALUE="Clone Publication">'
 	print '</form>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(tableclose=False)
