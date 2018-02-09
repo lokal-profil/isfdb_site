@@ -25,29 +25,21 @@ function validatePubURL(field_name) {
 	return true;
 }
 
-function validateContents(reford_id, title_field, title_date, author_add_point, author_field, display_name_author, display_name_title) {
+function validateContents(record_id, title_field, title_date, author_add_point, author_field, display_name_author, display_name_title) {
 	// Initialize variables
-	var addpoint1;
-	var addpoint2;
+	var add_author;
 	var author_data;
 	var defined_authors;
-	var current_title_date;
-	var current_title_field;
-	var current_author_field;
 	var current_title_page;
 	var i;
-	var int_next1;
-	var int_next2;
 	var j;
-	var next1;
-	var next2;
+	var next_author;
 	var title_data;
 	var title_date_data;
 	var title_date_handle;
 	var title_handle;
 	var title_page_handle;
 	var title_page_data;
-	var length_field;
 	var length_field_handle;
 	var length_field_data;
 	var ttype_field;
@@ -55,13 +47,11 @@ function validateContents(reford_id, title_field, title_date, author_add_point, 
 	var ttype_field_data;
 
 	// Determine the next available title number
-	next1 = GetLastRow(reford_id) + 1;
-	// Check each title record defined on this page
-	for (i = 1 ; i < next1 ; i++) {
-		// Build the name of the title field that is being processed
-		current_title_field = title_field + i;
+	var next_record = GetLastRow(record_id) + 1;
+	// Check each Contents title record
+	for (i = 1 ; i < next_record ; i++) {
 		// Retrieve the handle of this title record in case we need to focus on it later
-		title_handle = document.getElementsByName(current_title_field)[0];
+		title_handle = document.getElementsByName(title_field + i)[0];
 		// Retrieve the title of this title record
 		title_data = title_handle.value;
 		// Strip all spaces in case the title consists of nothing but spaces
@@ -85,23 +75,20 @@ function validateContents(reford_id, title_field, title_date, author_add_point, 
 			title_handle.focus();
 			return false;
 		}
-		// Retrieve the number of authors for this record
-		addpoint2 = document.getElementById(author_add_point + i);
-		// If there is no author add point for this title, then it's read-only and we will skip it
-		if (addpoint2 == null) {
+		// Retrieve the Add Author element for this record
+		add_author = document.getElementById(author_add_point + i);
+		// If there is no Add Author element for this title, then it's read-only and we skip it
+		if (add_author == null) {
 			continue;
 		}
 		// Retrieve the next available author number for this title
-		next2 = addpoint2.getAttribute("next");
+		next_author = GetLastRow(author_field + i + '.') + 1;
 		// Initialize the number of defined authors for this title
 		defined_authors = 0;
-		// Convert the next available author number to integer so that we can use it in a loop
-		int_next2 = parseInt(next2);
 		// Check each author name defined for this title
-		for (j = 1 ; j < int_next2 ; j++) {
-			current_author_field = author_field + i + "." + j;
-			// Retrieve the author's name for this author
-			author_data = document.getElementsByName(current_author_field)[0].value;
+		for (j = 1 ; j < next_author ; j++) {
+			// Retrieve the name of this author
+			author_data = document.getElementsByName(author_field + i + "." + j)[0].value;
 			// Strip all spaces to check for authors that consist of nothing but spaces
 			author_value = author_data.split(" ").join("");
 			if (author_value != "") {
@@ -119,10 +106,8 @@ function validateContents(reford_id, title_field, title_date, author_add_point, 
 			return false;
 		}
 		// Check this title's date
-		// Build the name of the currently processed title field
-		current_title_date = title_date + i;
 		// Retrieve the handle of the current title date field
-		title_date_handle = document.getElementsByName(current_title_date)[0];
+		title_date_handle = document.getElementsByName(title_date + i)[0];
 		// Retrieve the value of the current title date field
 		title_date_data = title_date_handle.value;
 		// Strip all spaces in case the date consists of nothing but spaces
@@ -132,14 +117,12 @@ function validateContents(reford_id, title_field, title_date, author_add_point, 
 			return false;
 		}
 
-		if (reford_id != "title_id") {
+		if (record_id != "title_id") {
 			continue
 		}
 		// Check this title's Length value against the Title Type value
-		// Build the name of the Length field being processed
-		length_field = 'title_storylen' + i;
 		// Retrieve the handle of the Length field being processed
-		length_field_handle = document.getElementsByName(length_field)[0];
+		length_field_handle = document.getElementsByName('title_storylen' + i)[0];
 		// Retrieve the value of the Length field being processed
 		length_field_data = length_field_handle.value;
 
@@ -162,44 +145,34 @@ function validateContents(reford_id, title_field, title_date, author_add_point, 
 
 function validateCovers() {
 	// Initialize variables
-	var addpoint2;
+	var artist_addpoint;
 	var artist_data;
-	var artist_field;
 	var cover_date_data;
 	var cover_date_handle;
-	var cover_date_name;
 	var cover_title_data;
 	var cover_title_handle;
-	var cover_title_name;
 	var defined_artists;
 	var i;
-	var int_next1;
-	var int_next2;
 	var j;
-	var next1;
-	var next2;
+	var next_artist;
 
 	// Determine the next available cover ID
-	next1 = GetLastRow('cover_id') + 1;
+	var next_cover = GetLastRow('cover_id') + 1;
 	// Check each cover record defined on the page
-	for (i = 1 ; i < next1 ; i++) {
-		// Retrieve the number of authors for this cover record
-		addpoint2 = document.getElementById("AddArtist" + i);
+	for (i = 1 ; i < next_cover ; i++) {
+		// Retrieve the Add Artist element for this cover record
+		artist_addpoint = document.getElementById("AddArtist" + i);
 		// If there is no artist add point for this cover, then it's read-only and
 		// validation passes
-		if (addpoint2 == null) {
+		if (artist_addpoint == null) {
 			continue;
 		}
 
 		// Check this cover's date
-		// Build the name of the cover field currently being processed
-		cover_date_name = "cover_date" + i;
 		// Retrieve the handle of the current cover date field
-		cover_date_handle = document.getElementsByName(cover_date_name)[0];
-		// Retrieve the value of the current cover date field
-		cover_date_data = cover_date_handle.value;
-		// Strip all spaces in case the date consists of nothing but spaces
-		cover_date_data = cover_date_data.split(" ").join("");
+		cover_date_handle = document.getElementsByName("cover_date" + i)[0];
+		// Retrieve the value of the current cover date field; strip spaces
+		cover_date_data = cover_date_handle.value.split(" ").join("");
 		// Validate date format
 		if ((cover_date_data != "") && (validateDate(cover_date_data,"Date","title")) == false) {
 			cover_date_handle.focus();
@@ -207,33 +180,27 @@ function validateCovers() {
 		}
 
 		// Check this cover's title
-		// Build the name of the cover title field that is being processed
-		cover_title_name = "cover_title" + i;
 		// Retrieve the handle of this title field in case we need to focus on it later
-		cover_title_handle = document.getElementsByName(cover_title_name)[0];
-		// Retrieve the title of this cover record
-		cover_title_data = cover_title_handle.value;
-		// Strip all spaces in case the title consists of nothing but spaces
-		cover_title_data = cover_title_data.split(" ").join("");
-		// If there was no title and no date entered, then validation passes. If one
+		cover_title_handle = document.getElementsByName("cover_title" + i)[0];
+		// Retrieve the title of this cover record; strip spaces
+		cover_title_data = cover_title_handle.value.split(" ").join("");
+		// If there was no title and no date entered, then validation passes. (It also
+		// happens when the brief cover art format is used on the page.) If one
 		// or more artists were entered with no other data, the title and the date will
 		// be defaulted to the title and date of the publication
 		if ((cover_title_data == "") && (cover_date_data == "")) {
-			return true;
+			continue;
 		}
 
 		// Retrieve the next available artist number for this cover
-		next2 = addpoint2.getAttribute("next");
+		next_artist = GetLastRow('cover_artist' + i + '.') + 1;
 		// Initialize the number of defined artists for this cover
 		defined_artists = 0;
-		// Convert the next available artist number to integer so that we can use it in a loop
-		int_next2 = parseInt(next2);
 		// Check each artist name defined for this cover
-		for (j = 1 ; j < int_next2 ; j++) {
-			artist_field = "cover_artist" + i + "." + j;
+		for (j = 1 ; j < next_artist ; j++) {
 			// Retrieve the name of this artist
-			artist_data = document.getElementsByName(artist_field)[0].value;
-			// Strip all spaces to check for authors that consist of nothing but spaces
+			artist_data = document.getElementsByName("cover_artist" + i + "." + j)[0].value;
+			// Strip all spaces to check for artist names which consist of nothing but spaces
 			artist_data = artist_data.split(" ").join("");
 			if (artist_data != "") {
 				defined_artists++;
@@ -961,7 +928,6 @@ function addRecord(body_name, record_type) {
 		attr = "AddInterviewee"+next;
 	}
 	tr3.setAttribute("id", attr);
-	tr3.setAttribute("next", "2");
 
 	// <td> Spacer element
 	var tda3   = document.createElement("td");
@@ -1052,7 +1018,6 @@ function addRecord(body_name, record_type) {
 		var tr5    = document.createElement("tr");
 		attr = "AddReviewer"+next;
 		tr5.setAttribute("id", attr);
-		tr5.setAttribute("next", "2");
 
 		var tda7   = document.createElement("td");
 		var text21 = document.createTextNode(" ");
@@ -1107,7 +1072,6 @@ function addRecord(body_name, record_type) {
 		var tr5    = document.createElement("tr");
 		attr = "AddInterviewer"+next;
 		tr5.setAttribute("id", attr);
-		tr5.setAttribute("next", "2");
 
 		var tda7   = document.createElement("td");
 		var text23 = document.createTextNode(" ");
@@ -1167,44 +1131,39 @@ function addRecord(body_name, record_type) {
 }
 
 function addContentTitleAuthor(entry) {
-	addPerson(entry, "AddAuthor"+entry, "titleBody", "Author", "title_author");
+	addPerson(entry, "AddAuthor", "titleBody", "Author", "title_author");
 }
 
 function addReviewee(entry) {
-	addPerson(entry, "AddReviewee"+entry, "reviewBody", "Author", "review_author");
+	addPerson(entry, "AddReviewee", "reviewBody", "Author", "review_author");
 }
 
 function addReviewer(entry) {
-	addPerson(entry, "AddReviewer"+entry, "reviewBody", "Reviewer", "review_reviewer");
+	addPerson(entry, "AddReviewer", "reviewBody", "Reviewer", "review_reviewer");
 }
 
 function addInterviewee(entry) {
-	addPerson(entry, "AddInterviewee"+entry, "interviewBody", "Interviewee", "interviewee_author");
+	addPerson(entry, "AddInterviewee", "interviewBody", "Interviewee", "interviewee_author");
 }
 
 function addInterviewer(entry) {
-	addPerson(entry, "AddInterviewer"+entry, "interviewBody", "Interviewer", "interviewer_author");
+	addPerson(entry, "AddInterviewer", "interviewBody", "Interviewer", "interviewer_author");
 }
 
 function addArtist(entry) {
-	addPerson(entry, "AddArtist"+entry, "coverBody", "Artist", "cover_artist");
+	addPerson(entry, "AddArtist", "coverBody", "Artist", "cover_artist");
 }
 
 function addPerson(entry, tag, body_name, label_name, attr_name) {
-	var addpoint = document.getElementById(tag);
+	var addpoint = document.getElementById(tag + entry);
 	var tbody = document.getElementById(body_name);
-	// Update the 'next' attribute for later additions
-	next = addpoint.getAttribute("next");
-	var int_next = parseInt(next);
-	int_next += 1;
-	var str_next = int_next.toString();
-	addpoint.setAttribute("next", str_next);
+	var next = GetLastRow(attr_name+entry+'.') + 1;
 	// Create the DOM elements
 	var tr   = document.createElement("tr");
 	var td1  = document.createElement("td");
 	var td2  = document.createElement("td");
 	var b  = document.createElement("b");
-	label = label_name+next+":";
+	var label = label_name+next+":";
 	var txt1 = document.createTextNode(label);
 	var input = document.createElement("input");
 	var attr = attr_name+entry+"."+next;

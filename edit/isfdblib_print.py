@@ -268,7 +268,7 @@ def printblanktitlerecord(index, help = None, pub_type = 'NOVEL'):
         print '</tr>'
         counter +=1
 
-        printAddContentAuthor('Author', help, index, counter)
+        printAddContentAuthor('Author', help, index)
 	printSpacer(5, 'title', index)
 
 def printfullcoverart(cover, index, help = None, readonly = 0):
@@ -297,7 +297,7 @@ def printfullcoverart(cover, index, help = None, readonly = 0):
                         print '</tr>'
                         counter += 1
         if not readonly:
-                printAddContentAuthor('Artist', help, index, counter)
+                printAddContentAuthor('Artist', help, index)
         printSpacer(3, 'cover', index)
 
 def printbriefblankcoverart(index, help = None):
@@ -316,7 +316,7 @@ def printbriefblankcoverart(index, help = None):
         print '<td><input tabindex="1" id="cover_artist%d.%d" name="cover_artist%d.%d" class="contentinput"></td>' % (index, counter, index, counter)
         print '</tr>'
         counter += 1
-        printAddContentAuthor('Artist', help, index, counter)
+        printAddContentAuthor('Artist', help, index)
 	printSpacer(2, 'cover', index)
 
 def printreviewrecord(record, index, pub_id, help = None, reuse_page_numbers = 1):
@@ -378,7 +378,7 @@ def printblankreviewrecord(index, help = None):
                 class="contentinput"></td>""" % (int(index), int(counter), int(index), int(counter))
         print '</tr>'
         counter += 1
-        printAddContentAuthor('Reviewee', help, index, counter)
+        printAddContentAuthor('Reviewee', help, index)
 
         counter = 1
         print '<tr id="review_reviewer%d.%d.row">' % (index, counter)
@@ -387,7 +387,7 @@ def printblankreviewrecord(index, help = None):
                 class="contentinput"></td>""" % (int(index), int(counter), int(index), int(counter))
         print '</tr>'
         counter += 1
-        printAddSecondaryAuthor('Reviewer', help, index, counter)
+        printAddSecondaryAuthor('Reviewer', help, index)
 
 	printSpacer(3, 'review', index)
 
@@ -451,7 +451,7 @@ def printblankinterviewrecord(index, help = None):
         class="contentinput"></td>""" % (int(index), int(counter), int(index), int(counter))
         print '</tr>'
         counter += 1
-        printAddContentAuthor('Interviewee', help, index, counter)
+        printAddContentAuthor('Interviewee', help, index)
 
         counter = 1
         print '<tr id="interviewer_author%d.%d.row">' % (index, counter)
@@ -460,7 +460,7 @@ def printblankinterviewrecord(index, help = None):
         class="contentinput"></td>""" % (int(index), int(counter), int(index), int(counter))
         print '</tr>'
         counter += 1
-        printAddSecondaryAuthor('Interviewer', help, index, counter)
+        printAddSecondaryAuthor('Interviewer', help, index)
 
 	printSpacer(3, 'interview', index)
 
@@ -497,7 +497,7 @@ def printsource(help):
 	print '</td>'
 	print '</tr>'
 
-def printAddAuthor(author_or_editor, help, next = '2', table_name = 'pubBody'):
+def printAddAuthor(author_or_editor, help, table_name = 'pubBody'):
 	print '<tr id="AddAuthor">'
 	label = 'Add ' + author_or_editor
        	if help.get(label):
@@ -510,8 +510,8 @@ def printAddAuthor(author_or_editor, help, next = '2', table_name = 'pubBody'):
 	print '<td>&nbsp;</td>'
 	print '</tr>'
 
-def printAddContentAuthor(type, help, index, next = '2'):
-	print '<tr id="Add%s%d" next="%d">' % (type, int(index), int(next))
+def printAddContentAuthor(type, help, index):
+	print '<tr id="Add%s%d">' % (type, int(index))
 	print '<td>&nbsp;</td>'
 	if type == 'Author':
                 onclick = 'addContentTitleAuthor'
@@ -534,8 +534,8 @@ def printAddContentAuthor(type, help, index, next = '2'):
                 print '<td><input type="button" tabindex="1" value="Add %s" onclick="%s(%d)"></td>' % (label, onclick, int(index))
 	print '</tr>'
 
-def printAddSecondaryAuthor(type, help, index, next = '2'):
-	print '<tr id="Add%s%d" next="%d">' % (type, int(index), int(next))
+def printAddSecondaryAuthor(type, help, index):
+	print '<tr id="Add%s%d">' % (type, int(index))
 	print '<td>&nbsp;</td>'
 	if help.get(('Add '+type)) and int(index) < 2:
         	print '<td class="hint" title="%s"><input type="button" tabindex="1" value="Add %s" onclick="add%s(%d)">' % (help[('Add '+type)][0], type, type, int(index))

@@ -127,7 +127,7 @@ def printtitlerecord(record, index, container, help):
 		counter += 1
 
         if not readonly:
-                printAddContentAuthor('Author', help, index, counter)
+                printAddContentAuthor('Author', help, index)
 
         printSpacer(5, 'title', index)
 
@@ -169,7 +169,7 @@ def printreviewrecord(record, index, help):
                         counter += 1
 
         if not readonly:
-                printAddContentAuthor('Reviewee', help, index, counter)
+                printAddContentAuthor('Reviewee', help, index)
 
         counter = 1
         authors = SQLTitleAuthors(record[TITLE_PUBID])
@@ -183,7 +183,7 @@ def printreviewrecord(record, index, help):
                         counter += 1
 
         if not readonly:
-                printAddSecondaryAuthor('Reviewer', help, index, counter)
+                printAddSecondaryAuthor('Reviewer', help, index)
 
         printSpacer(3, 'review', index)
 
@@ -226,7 +226,7 @@ def printinterviewrecord(record, index, help):
                         counter += 1
 
         if not readonly:
-                printAddContentAuthor('Interviewee', help, index, counter)
+                printAddContentAuthor('Interviewee', help, index)
 
 	print '<tr>'
         counter = 1
@@ -242,7 +242,7 @@ def printinterviewrecord(record, index, help):
         print '</tr>'
 
         if not readonly:
-                printAddSecondaryAuthor('Interviewer', help, index, counter)
+                printAddSecondaryAuthor('Interviewer', help, index)
 
 	printSpacer(3, 'interview', index)
 
@@ -271,7 +271,7 @@ def printpubrecord(pub):
 		printfield('Author%d' % counter, 'pub_author%d' % counter, help)
 		counter += 1
 
-        printAddAuthor('Author', help, counter)
+        printAddAuthor('Author', help)
 	printfield("Date", "pub_year", help, pub.pub_year)
         printfield("Publisher", "pub_publisher", help, pub.pub_publisher)
 	printfield("Pages", "pub_pages", help, pub.pub_pages)
