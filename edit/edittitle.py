@@ -46,7 +46,7 @@ def printCommonSection(record, help):
         printfield("Series Num", "title_seriesnum",  help, series_number, readonly)
 
 	webpages = SQLloadTitleWebpages(record[TITLE_PUBID])
-        printWebPages(webpages, 'title', help, 'titleBody')
+        printWebPages(webpages, 'title', help)
 
         printlanguage(record[TITLE_LANGUAGE], 'language', 'Language', help)
 
@@ -62,7 +62,7 @@ def printtitlerecord(record, series_number):
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
         printmultiple(trans_titles, "Transliterated Title", "trans_titles",
                       "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s', '%s'" % ('Transliterated Title', 'trans_titles', 'titleBody'))
+                      "'%s', '%s'" % ('Transliterated Title', 'trans_titles'))
 
         printTitleAuthors(record, help)
 
@@ -115,7 +115,7 @@ def printreviewrecord(record, series_number):
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
         printmultiple(trans_titles, "Transliterated Title", "trans_titles",
                       "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s', '%s'" % ('Transliterated Title', 'trans_titles', 'reviewBody'))
+                      "'%s', '%s'" % ('Transliterated Title', 'trans_titles'))
 
 	########################## Author Section ##########################
 
@@ -131,7 +131,7 @@ def printreviewrecord(record, series_number):
 
         print '<tr id="AddReviewee1">'
         print """<td><input type="button" value="Add Author" tabindex="1"
-                onclick="AddMultipleField('Author', 'review_author1.', 'reviewBody')"></td>"""
+                onclick="AddMultipleField('Author', 'review_author1.')"></td>"""
         print '<td> </td>'
         print '</tr>'
 
@@ -149,7 +149,7 @@ def printreviewrecord(record, series_number):
 
         print '<tr id="AddReviewer1">'
         print """<td><input type="button" value="Add Reviewer" tabindex="1"
-                onclick="AddMultipleField('Reviewer', 'review_reviewer1.', 'reviewBody')"></td>"""
+                onclick="AddMultipleField('Reviewer', 'review_reviewer1.')"></td>"""
         print '<td> </td>'
         print '</tr>'
 
@@ -183,7 +183,7 @@ def printinterviewrecord(record, series_number):
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
         printmultiple(trans_titles, "Transliterated Title", "trans_titles",
                       "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s', '%s'" % ('Transliterated Title', 'trans_titles', 'interviewBody'))
+                      "'%s', '%s'" % ('Transliterated Title', 'trans_titles'))
 
 	########################## Interviewee Section ##########################
 
@@ -199,7 +199,7 @@ def printinterviewrecord(record, series_number):
 
         print '<tr id="AddInterviewee1">'
         print """<td><input type="button" value="Add Interviewee" tabindex="1"
-                onclick="AddMultipleField('Interviewee', 'interviewee_author1.', 'interviewBody')"></td>"""
+                onclick="AddMultipleField('Interviewee', 'interviewee_author1.')"></td>"""
         print '<td> </td>'
         print '</tr>'
 
@@ -217,7 +217,7 @@ def printinterviewrecord(record, series_number):
 
         print '<tr id="AddInterviewer1">'
         print """<td><input type="button" value="Add Interviewer" tabindex="1"
-                onclick="AddMultipleField('Interviewer', 'interviewer_author1.', 'interviewBody')"></td>"""
+                onclick="AddMultipleField('Interviewer', 'interviewer_author1.')"></td>"""
         print '<td> </td>'
         print '</tr>'
 

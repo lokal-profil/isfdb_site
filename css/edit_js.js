@@ -296,11 +296,10 @@ function validateContentIndicator() {
 	return true;
 }
 
-function AddMultipleField(field_label, field_name, bodyname) {
-	var bodyname = bodyname || 'tagBody';
-	var tbody = document.getElementById(bodyname);
+function AddMultipleField(field_label, field_name) {
 	var last_row = GetLastRow(field_name);
 	var addpoint = document.getElementById(field_name + last_row + '.row');
+	var tbody = addpoint.parentNode;
 	var next = last_row + 1;
 	var tr   = document.createElement("tr");
 	var td1  = document.createElement("td");

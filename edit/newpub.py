@@ -59,7 +59,7 @@ if __name__ == '__main__':
 
         printmultiple([], "Transliterated Title", "trans_titles",
                       "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s', '%s'" % ('Transliterated Title', 'trans_titles', 'referenceBody'))
+                      "'%s', '%s'" % ('Transliterated Title', 'trans_titles'))
 
 	if pub_type in ('Chapbook', 'Collection', 'Nonfiction', 'Novel'):
                 author_or_editor = 'Author'
@@ -97,7 +97,7 @@ if __name__ == '__main__':
 
         printtextarea('Title Note', 'title_note', help, '', 2)
         
-        printWebPages([], 'title', help, 'referenceBody')
+        printWebPages([], 'title', help)
 
 	print '</tbody>'
         print '</table>'

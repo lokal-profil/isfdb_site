@@ -35,7 +35,7 @@ def printpubrecord(pub, image_url, reuse_external_ids):
         trans_titles = SQLloadTransPubTitles(pub.pub_id)
         printmultiple(trans_titles, "Transliterated Title", "trans_titles",
                       "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s', '%s'" % ('Transliterated Title', 'trans_titles', 'pubBody'), 1)
+                      "'%s', '%s'" % ('Transliterated Title', 'trans_titles'), 1)
 
 	authors = SQLPubAuthors(pub.pub_id)
 	counter = 1

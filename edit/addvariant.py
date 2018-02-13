@@ -31,7 +31,7 @@ def printtitlerecord(record):
 
         printmultiple([], "Transliterated Title", "trans_titles",
                       "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s', '%s'" % ('Transliterated Title', 'trans_titles', 'titleBody'))
+                      "'%s', '%s'" % ('Transliterated Title', 'trans_titles'))
 
         printTitleAuthors(record, help)
 

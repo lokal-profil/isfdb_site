@@ -502,11 +502,11 @@ def printAddAuthor(author_or_editor, help, table_name = 'pubBody'):
 	label = 'Add ' + author_or_editor
        	if help.get(label):
                 print """<td class="hint" title="%s"><input type="button" value="Add %s" tabindex="1"
-                        onclick="AddMultipleField('%s', 'pub_author', '%s')">""" % (help[label][0], author_or_editor, author_or_editor, table_name)
+                        onclick="AddMultipleField('%s', 'pub_author')">""" % (help[label][0], author_or_editor, author_or_editor)
                 print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></td>' % (HTMLLOC)
         else:
                 print """<td><input type="button" value="Add %s" tabindex="1"
-                        onclick="AddMultipleField('%s', 'pub_author', '%s')"></td>""" % (author_or_editor, author_or_editor, table_name)
+                        onclick="AddMultipleField('%s', 'pub_author')"></td>""" % (author_or_editor, author_or_editor)
 	print '<td>&nbsp;</td>'
 	print '</tr>'
 
@@ -692,8 +692,8 @@ def printaddbutton(row_id, counter, label, onclick_function, onclick_parameters,
         print '<td> </td>'
         print '</tr>'
 
-def printWebPages(webpages, web_page_type, help, bodyname = 'tagBody'):
-        parameters = "'Web Page', '%s_webpages', '%s'" % (web_page_type, bodyname)
+def printWebPages(webpages, web_page_type, help):
+        parameters = "'Web Page', '%s_webpages'" % web_page_type
         printmultiple(webpages, "Web Page", "%s_webpages" % web_page_type,
                       "AddWebPage", "AddMultipleField", help, parameters)
 

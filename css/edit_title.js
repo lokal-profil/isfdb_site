@@ -164,5 +164,5 @@ function validateVariantTitleForm() {
 }
 
 function addMetadataTitleAuthor() {
-	AddMultipleField("Author", "title_author", "titleBody");
+	AddMultipleField("Author", "title_author");
 }
