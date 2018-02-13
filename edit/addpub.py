@@ -62,9 +62,7 @@ if __name__ == '__main__':
 	printfield("Title", "pub_title", help, record[TITLE_TITLE], 1)
 
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
-        printmultiple(trans_titles, "Transliterated Title", "trans_titles",
-                      "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s'" % ('Transliterated Title', 'trans_titles'), 1)
+        printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help, 1)
 
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
 	counter = 1

@@ -51,9 +51,7 @@ if __name__ == '__main__':
 	printfield("Pub. Series Name",  "pub_series_name",       help, record[PUB_SERIES_NAME])
 	
         trans_pub_series_names = SQLloadTransPubSeriesNames(record[PUB_SERIES_ID])
-        printmultiple(trans_pub_series_names, "Transliterated Name", "trans_pub_series_names",
-                      "AddTransName", "AddMultipleField", help,
-                      "'%s', '%s'" % ('Transliterated Name', 'trans_pub_series_names'))
+        printmultiple(trans_pub_series_names, "Transliterated Name", "trans_pub_series_names", "AddTransName", help)
 
 	webpages = SQLloadPubSeriesWebpages(pub_series_id)
         printWebPages(webpages, 'pub_series', help)

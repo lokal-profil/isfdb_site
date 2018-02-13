@@ -60,9 +60,7 @@ def printtitlerecord(record, series_number):
 
 	printfield("Title", "title_title", help, record[TITLE_TITLE])
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
-        printmultiple(trans_titles, "Transliterated Title", "trans_titles",
-                      "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s'" % ('Transliterated Title', 'trans_titles'))
+        printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
 
         printTitleAuthors(record, help)
 
@@ -113,9 +111,7 @@ def printreviewrecord(record, series_number):
 	print '<input name="review_id1" value="%s" type="HIDDEN">' % (record[TITLE_PUBID])
 
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
-        printmultiple(trans_titles, "Transliterated Title", "trans_titles",
-                      "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s'" % ('Transliterated Title', 'trans_titles'))
+        printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
 
 	########################## Author Section ##########################
 
@@ -181,9 +177,7 @@ def printinterviewrecord(record, series_number):
 	print '<tbody id="interviewBody">'
 	print '<input name="interview_id1" value="%s" type="HIDDEN">' % (record[TITLE_PUBID])
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
-        printmultiple(trans_titles, "Transliterated Title", "trans_titles",
-                      "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s'" % ('Transliterated Title', 'trans_titles'))
+        printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
 
 	########################## Interviewee Section ##########################
 

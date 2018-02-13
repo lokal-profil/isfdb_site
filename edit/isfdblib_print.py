@@ -668,7 +668,7 @@ def printAwardLevel(label, value, poll, help):
 def printSpacer(rows, row_id, index):
         print '<tr id="%s_id%d.row" class="titleeditspacer"><td colspan="%d"> </td></tr>' % (row_id, index, rows)
 
-def printmultiple(values, label, field_name, row_id, onclick_function, help, onclick_parameters = '', readonly = 0):
+def printmultiple(values, label, field_name, row_id, help, readonly = 0):
 	counter = 1
         for value in values:
                 printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, value, readonly)
@@ -676,7 +676,7 @@ def printmultiple(values, label, field_name, row_id, onclick_function, help, onc
 
         if not readonly:
                 printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, '', readonly)
-                printaddbutton(row_id, counter, label, onclick_function, onclick_parameters, help)
+                printaddbutton(row_id, counter, label, "AddMultipleField", "'%s', '%s'" % (label, field_name), help)
 
 def printaddbutton(row_id, counter, label, onclick_function, onclick_parameters, help = None):
         if not help:
@@ -693,9 +693,7 @@ def printaddbutton(row_id, counter, label, onclick_function, onclick_parameters,
         print '</tr>'
 
 def printWebPages(webpages, web_page_type, help):
-        parameters = "'Web Page', '%s_webpages'" % web_page_type
-        printmultiple(webpages, "Web Page", "%s_webpages" % web_page_type,
-                      "AddWebPage", "AddMultipleField", help, parameters)
+        printmultiple(webpages, "Web Page", "%s_webpages" % web_page_type, "AddWebPage", help)
 
 def printHelpBox(type, helplink):
 	print '<div id="HelpBox">'

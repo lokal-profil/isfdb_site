@@ -57,9 +57,7 @@ if __name__ == '__main__':
 
 	printfield("Title", "pub_title", help)
 
-        printmultiple([], "Transliterated Title", "trans_titles",
-                      "AddTransTitle", "AddMultipleField", help,
-                      "'%s', '%s'" % ('Transliterated Title', 'trans_titles'))
+        printmultiple([], "Transliterated Title", "trans_titles", "AddTransTitle", help)
 
 	if pub_type in ('Chapbook', 'Collection', 'Nonfiction', 'Novel'):
                 author_or_editor = 'Author'
