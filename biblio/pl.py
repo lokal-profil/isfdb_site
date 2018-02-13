@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -153,35 +153,50 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
                 else:
                         output = ''
                         printpseudonym = LIBsameParentAuthors(title)
-                        suppressvt = 0
-                        aka = "variant of"
+                        display_parent = 1
                         parent_lang = parent_title[TITLE_LANGUAGE]
                         variant_lang = title[TITLE_LANGUAGE]
-                        # If the two language codes are different and it's not interior art, it's a translation
-                        if parent_lang and variant_lang and parent_lang != variant_lang and title[TITLE_TTYPE] != 'INTERIORART':
+                        title_type = title[TITLE_TTYPE]
+                        parent_type = parent_title[TITLE_TTYPE]
+                        
+                        # If the two language codes are different and the variant is not interior art, it's a translation
+                        if parent_lang and variant_lang and parent_lang != variant_lang and title_type != 'INTERIORART':
+                                translation = 1
+                        else:
+                                translation = 0
+
+                        # Determine the linking element between the variant title and its parent
+                        if translation:
                                 aka = "trans. of"
-                        # Suppress the display of the variant title if:
-                        #  The VT is a Serial and the canonical title is a Novel or Shortfiction, AND the VT is
-                        #  NOT a translation, AND the titles are also identical up to the first left parenthesis
-                        if (title[TITLE_TTYPE] == 'SERIAL') and (aka == "variant of"):
-                                if (parent_title[TITLE_TTYPE] == 'NOVEL') or (parent_title[TITLE_TTYPE] == 'SHORTFICTION'):
-                                        aka = "book publication as"
-                                        position = title[TITLE_TITLE].find(' (')
-                                        if position > 0:
-                                                if parent_title[TITLE_TITLE] == title[TITLE_TITLE][:position]:
-                                                        suppressvt = 1
-                        if suppressvt == 0:
-                                #  Display the parent title only if the titles are different or if they have different language codes
-                                if (parent_title[TITLE_TITLE] != title[TITLE_TITLE]) or (aka == "trans. of"):
-                                        output += ' (%s' % aka
-                                        # If this is an interior art title and its parent is a cover art title,
-                                        # then add "cover art for"
-                                        if (title[TITLE_TTYPE] == 'INTERIORART') and (parent_title[TITLE_TTYPE] == 'COVERART'):
-                                                output += ' cover art for'
-                                        output += ' <i>%s</i>' % ISFDBLink('title.cgi', parent_title[TITLE_PUBID], parent_title[TITLE_TITLE])
-                                        if parent_title[TITLE_YEAR][:4] != title[TITLE_YEAR][:4]:
-                                                output += " %s" % (convertYear(parent_title[TITLE_YEAR][:4]))
-                                        output += ")"
+                        elif title_type == 'SERIAL':
+                                aka = "book publication as"
+                        else:
+                                aka = "variant of"
+
+                        # If this is an interior art title and its parent is a cover art title, add "cover art for"
+                        if (title_type == 'INTERIORART') and (parent_type == 'COVERART'):
+                                aka += ' cover art for'
+                                interior_cover_vt = 1
+                        else:
+                                interior_cover_vt = 0
+                        
+                        # Do not display the variant title for SERIALs if:
+                        #   the VT is NOT a translation
+                        #   and the parent title is a Novel or Shortfiction
+                        #   and the two titles are identical up to the first left parenthesis
+                        if title_type == 'SERIAL' and not translation and parent_type in ('NOVEL', 'SHORTFICTION'):
+                                position = title[TITLE_TITLE].find(' (')
+                                if position > 0 and parent_title[TITLE_TITLE] == title[TITLE_TITLE][:position]:
+                                        display_parent = 0
+                        
+                        #  Display the parent title only if the titles are different
+                        #    or if they have different language codes
+                        #    or it's an INTERIORART/COVERART variant
+                        if display_parent and ((parent_title[TITLE_TITLE] != title[TITLE_TITLE]) or translation or interior_cover_vt):
+                                output += ' (%s <i>%s</i>' % (aka, ISFDBLink('title.cgi', parent_title[TITLE_PUBID], parent_title[TITLE_TITLE]))
+                                if parent_title[TITLE_YEAR][:4] != title[TITLE_YEAR][:4]:
+                                        output += " %s" % (convertYear(parent_title[TITLE_YEAR][:4]))
+                                output += ")"
                         print output
                         if printpseudonym:
                                 PrintAllAuthors(title[TITLE_PUBID], ' [as by ', ']')
