@@ -382,9 +382,15 @@ def HelpTitle():
 
         text = 'The title of this review. The title should appear exactly as published. Note that if you'
         text += ' change the title on this page, the change will affect all publications'
-        text += ' in which this work appears. Follow this link for more details.'
+        text += ' in which this review appears. Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:TitleFields:Title' % (WIKILOC)
         help['Review of'] = [text, link]
+
+        text = 'The title of this interview. The title should appear exactly as published. Note that if you'
+        text += ' change the title on this page, the change will affect all publications'
+        text += ' in which this interview appears. Follow this link for more details.'
+        link = 'http://%s/index.php?title=Template:TitleFields:Title' % (WIKILOC)
+        help['Interview Title'] = [text, link]
 
         text = 'URL of a Web site about this title. This is a repeating field and you can enter as many Web pages as necessary.'
         text += ' Follow thid link for more details.'

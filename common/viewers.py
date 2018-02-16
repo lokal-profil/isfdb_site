@@ -1242,12 +1242,12 @@ def DisplayTitleEdit(submission_id):
                 Record = GetElementValue(merge, 'Record')
                 submitter = GetElementValue(merge, 'Submitter')
         
-                print "<tr>"
+                print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
                 print '<td class="label"><b>Current [Record #<a href="http:/%s/title.cgi?%s">%s</a>]</b></td>' % (HTFAKE, Record, Record)	
                 print '<td class="label"><b>Proposed Changes</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
-                print "</tr>"
+                print '</tr>'
 
                 current = titles(db)
                 current.load(int(Record))
@@ -1257,6 +1257,16 @@ def DisplayTitleEdit(submission_id):
                 PrintField2XML('Title',     merge, current.used_title,     current.title_title)
                 PrintMultField('TranslitTitles',   'TranslitTitle',   '<br>', doc, merge,
                                current.used_trans_titles,   current.title_trans_titles)
+
+                if current.title_ttype == 'REVIEW':
+                        PrintMultField('Authors', 'Author', '+', doc, merge, current.num_authors, current.title_authors)
+                        PrintMultField('BookAuthors', 'BookAuthor', '+', doc, merge, current.num_subjauthors, current.title_subjauthors)
+                elif current.title_ttype == 'INTERVIEW':
+                        PrintMultField('Authors', 'Author', '+', doc, merge, current.num_authors, current.title_authors)
+                        PrintMultField('Interviewees', 'Interviewee', '+', doc, merge, current.num_subjauthors, current.title_subjauthors)
+                else:
+                        PrintMultField('Authors', 'Author', '+', doc, merge, current.num_authors, current.title_authors)
+
                 PrintField2XML('Year',      merge, current.used_year,      current.title_year)
                 PrintField2XML('Synopsis',  merge, current.used_synop,     current.title_synop)
                 PrintField2XML('Series',    merge, current.used_series,    current.title_series)
@@ -1274,16 +1284,7 @@ def DisplayTitleEdit(submission_id):
                 PrintField2XML('Language',  merge, current.used_language,  current.title_language)
                 PrintField2XML('Note',      merge, current.used_note,      current.title_note)
 
-                if current.title_ttype == 'REVIEW':
-                        PrintMultField('Authors', 'Author', '+', doc, merge, current.num_authors, current.title_authors)
-                        PrintMultField('BookAuthors', 'BookAuthor', '+', doc, merge, current.num_subjauthors, current.title_subjauthors)
-                elif current.title_ttype == 'INTERVIEW':
-                        PrintMultField('Authors', 'Author', '+', doc, merge, current.num_authors, current.title_authors)
-                        PrintMultField('Interviewees', 'Interviewee', '+', doc, merge, current.num_subjauthors, current.title_subjauthors)
-                else:
-                        PrintMultField('Authors', 'Author', '+', doc, merge, current.num_authors, current.title_authors)
-
-                print "</tr>"
+                print '</tr>'
                 print '</table>'
                 mod_note = GetElementValue(merge, 'ModNote')
                 if mod_note:

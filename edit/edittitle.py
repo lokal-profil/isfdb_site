@@ -22,6 +22,12 @@ from isfdblib_print import *
 
 help = HelpTitle()
 
+def printReadOnlyTitleType(title_type):
+	print '<tr>'
+	print '<td><b>Title Type</b></td>'
+	print '<td><input name="title_ttype" value="%s" READONLY class="titletype displayonly"></td>' % title_type
+	print '</tr>'
+
 
 def printCommonSection(record, help):
 	printfield("Date", "title_copyright",        help, record[TITLE_YEAR])
@@ -51,17 +57,7 @@ def printCommonSection(record, help):
         printlanguage(record[TITLE_LANGUAGE], 'language', 'Language', help)
 
 
-###################################################################
-# This function outputs a title record in table format
-###################################################################
 def printtitlerecord(record, series_number):
-	print '<table border="0">'
-        print '<tbody id="titleBody">'
-
-	printfield("Title", "title_title", help, record[TITLE_TITLE])
-        trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
-        printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
-
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
         printmultiple(authors, "Author", "title_author", "AddAuthor", help)
 
@@ -94,80 +90,29 @@ def printtitlerecord(record, series_number):
                 readonly = 1
         printtextarea('Synopsis', 'title_synopsis', help, SQLgetNotes(record[TITLE_SYNOP]), 10, readonly)
 
-        printtextarea('Title Note', 'title_note', help, SQLgetNotes(record[TITLE_NOTE]), 10)
-
-        printtextarea('Note to Moderator', 'mod_note', help, '')
-
-	print "</tbody>"
-        print "</table>"
 
 def printreviewrecord(record, series_number):
-	print "<table border=\"0\">"
-
-	printfield("Review of", "title_title", help, record[TITLE_TITLE])
-
-	print '<tbody id="reviewBody">'
-	print '<input name="review_id1" value="%s" type="HIDDEN">' % (record[TITLE_PUBID])
-
-        trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
-        printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
-
 	authors = SQLReviewAuthors(record[TITLE_PUBID])
         printmultiple(authors, "Author", "review_author1.", "AddReviewee1", help)
 
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
         printmultiple(authors, "Reviewer", "review_reviewer1.", "AddReviewer1", help)
 
-	print "</tbody>"
-
-        print '<tbody id="titleBody">'
         printCommonSection(record, help)
 
-	print "<tr>"
-	print "<td><b>Title Type</b></td>"
-	print '<td><input name="title_ttype" value="REVIEW" READONLY class="titletype displayonly"></td>'
-	print '</tr>'
+        printReadOnlyTitleType('REVIEW')
 
-        printtextarea('Note', 'title_note', help, SQLgetNotes(record[TITLE_NOTE]), 10)
-
-        printtextarea('Note to Moderator', 'mod_note', help, '')
-
-        print "</tbody>"
-        print "</table>"
 
 def printinterviewrecord(record, series_number):
-	print "<table border=\"0\">"
-
-	printfield("Interview Title", "title_title", help, record[TITLE_TITLE])
-
-	print '<tbody id="interviewBody">'
-	print '<input name="interview_id1" value="%s" type="HIDDEN">' % (record[TITLE_PUBID])
-        trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
-        printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
-
 	authors = SQLInterviewAuthors(record[TITLE_PUBID])
         printmultiple(authors, "Interviewee", "interviewee_author1.", "AddInterviewee1", help)
 
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
         printmultiple(authors, "Interviewer", "interviewer_author1.", "AddInterviewer1", help)
 
-	print "</tbody>"
-
-        print '<tbody id="titleBody">'
-
         printCommonSection(record, help)
 
-	print "<tr>"
-	print "<td><b>Title Type</b></td>"
-	print '<td><input name="title_ttype" value="INTERVIEW" READONLY class="titletype displayonly"></td>'
-	print '</tr>'
-
-        printtextarea('Note', 'title_note', help, SQLgetNotes(record[TITLE_NOTE]), 10)
-
-        printtextarea('Note to Moderator', 'mod_note', help, '')
-
-        print "</tbody>"
-        print "</table>"
+        printReadOnlyTitleType('INTERVIEW')
 
 
 def displayError():
@@ -196,20 +141,51 @@ if __name__ == '__main__':
 
         printHelpBox('title', 'EditTitle')
 
-        # Pass the title type to the form validation function so that it would know what fields exist in the form
-	print "<form id='data' METHOD=\"POST\" ACTION=\"/cgi-bin/edit/submittitle.cgi\" onsubmit=\"return validateTitleForm('%s')\" >" % (title_data[TITLE_TTYPE])
+        # Pass the title type to the form validation function so that it would know which fields exist in the form
+	print """<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submittitle.cgi"
+                onsubmit="return validateTitleForm('%s')" >""" % (title_data[TITLE_TTYPE])
 
         # Combine the two series number fields into one for display purposes
         series_number = title_data[TITLE_SERIESNUM]
         if title_data[TITLE_SERIESNUM_2] is not None:
                 series_number = '%s.%s' % (title_data[TITLE_SERIESNUM], title_data[TITLE_SERIESNUM_2])
 
+	if title_data[TITLE_TTYPE] == 'REVIEW':
+                review = 1
+        else:
+                review = 0
 	if title_data[TITLE_TTYPE] == 'INTERVIEW':
+                interview = 1
+        else:
+                interview = 0
+
+	print '<table border="0">'
+	print '<tbody>'
+	
+	if review:
+                title_field = 'Review of'
+	elif interview:
+                title_field = 'Interview Title'
+        else:
+                title_field = 'Title'
+	printfield(title_field, 'title_title', help, title_data[TITLE_TITLE])
+
+        trans_titles = SQLloadTransTitles(title_id)
+        printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
+
+	if interview:
 		printinterviewrecord(title_data, series_number)
-	elif title_data[TITLE_TTYPE] == 'REVIEW':
+	elif review:
 		printreviewrecord(title_data, series_number)
 	else:
 		printtitlerecord(title_data, series_number)
+
+        printtextarea('Note', 'title_note', help, SQLgetNotes(title_data[TITLE_NOTE]), 10)
+
+        printtextarea('Note to Moderator', 'mod_note', help, '')
+
+        print '</tbody>'
+        print '</table>'
 
 	print '<p>'
 	print '<hr>'
