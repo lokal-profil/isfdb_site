@@ -36,14 +36,7 @@ def printpubrecord(pub, image_url, reuse_external_ids):
         printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help, 1)
 
 	authors = SQLPubAuthors(pub.pub_id)
-	counter = 1
-	if len(authors):
-		for author in authors:
-			printfield('Author%d' % (counter), 'pub_author%d' % (counter), help, author, 1)
-			counter += 1
-	else:
-		printfield('Author%d' % (counter), 'pub_author%d' % (counter), help)
-		counter += 1
+        printmultiple(authors, "Author", "pub_author", "AddAuthor", help, 1)
 
 	printfield("Date", "pub_year", help, pub.pub_year)
 

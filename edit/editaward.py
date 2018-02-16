@@ -19,7 +19,7 @@ from library import *
 from isfdblib import *
 from isfdblib_help import *
 from SQLparsing import *
-from isfdblib_print import printtextarea, printfield, printAwardCategory, printAwardLevel, printtextarea, printHelpBox
+from isfdblib_print import *
 
 
 if __name__ == '__main__':
@@ -67,21 +67,11 @@ if __name__ == '__main__':
 
 	printfield("Title", "award_title", help, award.award_title, award.title_id)
 
-        counter = 1
-        if award.award_authors:
-        	for author in award.award_authors:
-                        printfield('Author'+str(counter), 'title_author'+str(counter), help, author, award.title_id)
-                        counter += 1
+        if award.title_id:
+                no_edit = 1
         else:
-                printfield('Author1', 'title_author1', help, '', award.title_id)
-                counter += 1
-
-        # Only allow adding authors for non-title based awards
-        if not award.title_id:
-                print '<tr id="AddAuthor">'
-                print '<td><input type="button" value="Add Author" onclick="addMetadataTitleAuthor()" tabindex="1"></td>'
-                print '<td> </td>'
-                print '</tr>'
+                no_edit = 0
+        printmultiple(award.award_authors, "Author", "title_author", "AddAuthor", help, no_edit)
 
 	printfield("Year", "award_year", help, award.award_year)
 

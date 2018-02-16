@@ -260,16 +260,8 @@ def printpubrecord(pub):
         printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
 
 	authors = SQLPubAuthors(pub.pub_id)
-	counter = 1
-	if len(authors):
-		for author in authors:
-                        printfield('Author%d' % counter, 'pub_author%d' % counter, help, author)
-			counter += 1
-	else:
-		printfield('Author%d' % counter, 'pub_author%d' % counter, help)
-		counter += 1
+        printmultiple(authors, "Author", "pub_author", "AddAuthor", help)
 
-        printAddAuthor('Author', help)
 	printfield("Date", "pub_year", help, pub.pub_year)
         printfield("Publisher", "pub_publisher", help, pub.pub_publisher)
 	printfield("Pages", "pub_pages", help, pub.pub_pages)

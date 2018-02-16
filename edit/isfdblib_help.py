@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2014-2017 Ahasuerus
+#     (C) COPYRIGHT 2014-2018 Ahasuerus
 #     ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -394,13 +394,24 @@ def HelpTitle():
         text = 'The name of the author of this title.'
         text += ' Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
-        help['Author1'] = [text, link]
+        help['Author 1'] = [text, link]
 
         text = 'The name of the reviewer exactly as it appears on the title page.'
         text += ' This includes pseudonyms, abbreviated names, etc. If no author is stated, use \'uncredited\'.'
         text += ' Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
-        help['Reviewer1'] = [text, link]
+        help['Reviewer 1'] = [text, link]
+
+        text = 'The name of the person who was interviewed.'
+        text += ' Follow this link for more details.'
+        link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
+        help['Interviewee 1'] = [text, link]
+
+        text = 'The name of the interviewer exactly as it appears on the title page.'
+        text += ' This includes pseudonyms, abbreviated names, etc. If no author is stated, use \'uncredited\'.'
+        text += ' Follow this link for more details.'
+        link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
+        help['Interviewer 1'] = [text, link]
 
         text = 'The date of the first appearance of this title in the form of YYYY-MM-DD. If the month or day is not known, use 00.'
         text += ' If the year is also unknown, use 0000-00-00. Follow this link for more details.'
@@ -462,13 +473,13 @@ def HelpPub():
         text += ' This includes pseudonyms, abbreviated names, etc. If no author is stated, use \'uncredited\'.'
         text += ' Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:PublicationFields:Author' % (WIKILOC)
-        help['Author1'] = [text, link]
+        help['Author 1'] = [text, link]
 
         text = 'The name of the editor of the publication exactly as it appears on the title page.'
         text += ' This includes pseudonyms, abbreviated names, etc. If no editor is stated, use \'uncredited\'.'
         text += ' Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:PublicationFields:Author' % (WIKILOC)
-        help['Editor1'] = [text, link]
+        help['Editor 1'] = [text, link]
 
         text = 'Click this button to add additional authors, if any.'
         help['Add Author'] = [text, '']

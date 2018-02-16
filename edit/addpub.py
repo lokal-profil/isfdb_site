@@ -65,14 +65,7 @@ if __name__ == '__main__':
         printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help, 1)
 
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
-	counter = 1
-	if len(authors):
-		for author in authors:
-			printfield('Author%s' % (counter), 'pub_author%s' % (counter), help, author, 1)
-			counter += 1
-	else:
-		printfield('Author%s' % (counter), 'pub_author%s' % (counter), help, '', 1)
-		counter += 1
+        printmultiple(authors, "Author", "pub_author", "AddAuthor", help, 1)
 
 	printfield("Date", "pub_year", help)
 	printfield("Publisher", "pub_publisher", help)

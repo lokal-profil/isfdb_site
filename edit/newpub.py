@@ -63,9 +63,7 @@ if __name__ == '__main__':
                 author_or_editor = 'Author'
         else:
                 author_or_editor = 'Editor'
-	printfield(author_or_editor+'1', 'pub_author1', help)
-
-        printAddAuthor(author_or_editor, help, 'referenceBody')
+        printmultiple([], author_or_editor, "pub_author", "AddAuthor", help)
 
         printlanguage('','language','Language',help)
 

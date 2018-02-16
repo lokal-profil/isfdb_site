@@ -497,19 +497,6 @@ def printsource(help):
 	print '</td>'
 	print '</tr>'
 
-def printAddAuthor(author_or_editor, help, table_name = 'pubBody'):
-	print '<tr id="AddAuthor">'
-	label = 'Add ' + author_or_editor
-       	if help.get(label):
-                print """<td class="hint" title="%s"><input type="button" value="Add %s" tabindex="1"
-                        onclick="AddMultipleField('%s', 'pub_author')">""" % (help[label][0], author_or_editor, author_or_editor)
-                print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></td>' % (HTMLLOC)
-        else:
-                print """<td><input type="button" value="Add %s" tabindex="1"
-                        onclick="AddMultipleField('%s', 'pub_author')"></td>""" % (author_or_editor, author_or_editor)
-	print '<td>&nbsp;</td>'
-	print '</tr>'
-
 def printAddContentAuthor(type, help, index):
 	print '<tr id="Add%s%d">' % (type, int(index))
 	print '<td>&nbsp;</td>'
@@ -675,7 +662,8 @@ def printmultiple(values, label, field_name, row_id, help, readonly = 0):
                 counter += 1
 
         if not readonly:
-                printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, '', readonly)
+                if not values:
+                        printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, '', readonly)
                 printaddbutton(row_id, counter, label, "AddMultipleField", "'%s', '%s'" % (label, field_name), help)
 
 def printaddbutton(row_id, counter, label, onclick_function, onclick_parameters, help = None):
@@ -737,20 +725,4 @@ def printcheckbox(label, fieldname, current_value, disabled, help):
                 disabled = 'disabled readonly'
         print '<input type="checkbox" name="%s" value="on" %s %s>' % (fieldname, disabled, checked)
         print '</td>'
-        print '</tr>'
-
-def printTitleAuthors(record, help):
-	authors = SQLTitleAuthors(record[TITLE_PUBID])
-        counter = 1
-        if len(authors):
-                for author in authors:
-                        printfield('Author%s' % (counter), 'title_author%s' % (counter), help, author)
-                        counter += 1
-        else:
-                printfield('Author%s' % (counter), 'title_author%s' % (counter), help, '')
-                counter += 1
-
-        print '<tr id="AddAuthor">'
-        print '<td><input type="button" value="Add Author" onclick="addMetadataTitleAuthor()"></td>'
-        print '<td> </td>'
         print '</tr>'

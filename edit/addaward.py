@@ -19,7 +19,7 @@ from isfdblib_help import *
 from SQLparsing import *
 from login import *
 from library import *
-from isfdblib_print import printtextarea, printfield, printAwardCategory, printAwardLevel, printtextarea
+from isfdblib_print import *
 
 
 def DoError(message):
@@ -107,19 +107,12 @@ if __name__ == '__main__':
 
         if title_id:
 		printfield("Title", "award_title", help, title[TITLE_TITLE], 1)
-
 		authors = SQLTitleAuthors(title_id)
-		counter = 1
-		for author in authors:
-			printfield('Author'+str(counter), 'title_author'+str(counter), help, author, 1)
-			counter += 1
+                printmultiple(authors, "Author", "title_author", "AddAuthor", help, 1)
+
         else:
 		printfield("Title", "award_title", help)
-		printfield('Author1', 'title_author1', help)
-		print '<tr id="AddAuthor">'
-		print '<td><input type="button" value="Add Author" onclick="addMetadataTitleAuthor()" tabindex="1"></td>'
-		print '<td> </td>'
-		print '</tr>'
+                printmultiple([], "Author", "title_author", "AddAuthor", help)
 
 	printfield("Year", "award_year", help)
 

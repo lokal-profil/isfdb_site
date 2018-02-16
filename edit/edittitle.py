@@ -62,7 +62,8 @@ def printtitlerecord(record, series_number):
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
         printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
 
-        printTitleAuthors(record, help)
+	authors = SQLTitleAuthors(record[TITLE_PUBID])
+        printmultiple(authors, "Author", "title_author", "AddAuthor", help)
 
         printCommonSection(record, help)
 
@@ -105,51 +106,18 @@ def printreviewrecord(record, series_number):
 
 	printfield("Review of", "title_title", help, record[TITLE_TITLE])
 
-	########################## Review Section Start ##########################
-
 	print '<tbody id="reviewBody">'
 	print '<input name="review_id1" value="%s" type="HIDDEN">' % (record[TITLE_PUBID])
 
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
         printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
 
-	########################## Author Section ##########################
-
 	authors = SQLReviewAuthors(record[TITLE_PUBID])
-        counter = 1
-        if len(authors):
-                for author in authors:
-                        printfield('Author'+str(counter), 'review_author1.'+str(counter), help, author);
-                        counter += 1
-        else:
-                printfield('Author'+str(counter), 'review_author1.'+str(counter), help, '');
-                counter += 1
-
-        print '<tr id="AddReviewee1">'
-        print """<td><input type="button" value="Add Author" tabindex="1"
-                onclick="AddMultipleField('Author', 'review_author1.')"></td>"""
-        print '<td> </td>'
-        print '</tr>'
-
-	########################## Reviewer Section ##########################
+        printmultiple(authors, "Author", "review_author1.", "AddReviewee1", help)
 
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
-        counter = 1
-        if len(authors):
-                for author in authors:
-                        printfield('Reviewer'+str(counter), 'review_reviewer1.'+str(counter), help, author);
-                        counter += 1
-        else:
-                printfield('Reviewer'+str(counter), 'review_reviewer1.'+str(counter), help, '');
-                counter += 1
+        printmultiple(authors, "Reviewer", "review_reviewer1.", "AddReviewer1", help)
 
-        print '<tr id="AddReviewer1">'
-        print """<td><input type="button" value="Add Reviewer" tabindex="1"
-                onclick="AddMultipleField('Reviewer', 'review_reviewer1.')"></td>"""
-        print '<td> </td>'
-        print '</tr>'
-
-	########################## Review Section End ##########################
 	print "</tbody>"
 
         print '<tbody id="titleBody">'
@@ -172,50 +140,17 @@ def printinterviewrecord(record, series_number):
 
 	printfield("Interview Title", "title_title", help, record[TITLE_TITLE])
 
-	########################## Interview Section Start ##########################
-
 	print '<tbody id="interviewBody">'
 	print '<input name="interview_id1" value="%s" type="HIDDEN">' % (record[TITLE_PUBID])
         trans_titles = SQLloadTransTitles(record[TITLE_PUBID])
         printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
 
-	########################## Interviewee Section ##########################
-
 	authors = SQLInterviewAuthors(record[TITLE_PUBID])
-        counter = 1
-        if len(authors):
-                for author in authors:
-                        printfield('Interviewee'+str(counter), 'interviewee_author1.'+str(counter), help, author);
-                        counter += 1
-        else:
-                printfield('Interviewee'+str(counter), 'interviewee_author1.'+str(counter), help, '');
-                counter += 1
-
-        print '<tr id="AddInterviewee1">'
-        print """<td><input type="button" value="Add Interviewee" tabindex="1"
-                onclick="AddMultipleField('Interviewee', 'interviewee_author1.')"></td>"""
-        print '<td> </td>'
-        print '</tr>'
-
-	########################## Interviewer Section ##########################
+        printmultiple(authors, "Interviewee", "interviewee_author1.", "AddInterviewee1", help)
 
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
-        counter = 1
-        if len(authors):
-                for author in authors:
-                        printfield('Interviewer'+str(counter), 'interviewer_author1.'+str(counter), help, author);
-                        counter += 1
-        else:
-                printfield('Interviewer'+str(counter), 'interviewer_author1.'+str(counter), help, '');
-                counter += 1
+        printmultiple(authors, "Interviewer", "interviewer_author1.", "AddInterviewer1", help)
 
-        print '<tr id="AddInterviewer1">'
-        print """<td><input type="button" value="Add Interviewer" tabindex="1"
-                onclick="AddMultipleField('Interviewer', 'interviewer_author1.')"></td>"""
-        print '<td> </td>'
-        print '</tr>'
-
-	########################## Interview Section End ##########################
 	print "</tbody>"
 
         print '<tbody id="titleBody">'

@@ -31,7 +31,8 @@ def printtitlerecord(record):
 
         printmultiple([], "Transliterated Title", "trans_titles", "AddTransTitle", help)
 
-        printTitleAuthors(record, help)
+	authors = SQLTitleAuthors(record[TITLE_PUBID])
+        printmultiple(authors, "Author", "title_author", "AddAuthor", help)
 
 	printfield("Date", "title_copyright", help, record[TITLE_YEAR])
 

@@ -116,15 +116,7 @@ if __name__ == '__main__':
         trans_titles = SQLloadTransTitles(title[TITLE_PUBID])
         printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
 
-	counter = 1
-	for author in authors:
-                printfield('Author'+str(counter), 'title_author'+str(counter), help, author)
-		counter += 1
-
-        print '<tr id="AddAuthor">'
-        print '<td><input type="button" value="Add Author" onclick="addMetadataTitleAuthor()" tabindex="1"></td>'
-        print '<td> </td>'
-        print '</tr>'
+        printmultiple(authors, "Author", "title_author", "AddAuthor", help)
 
         printfield("Date", "title_copyright", help, title[TITLE_YEAR])
 
