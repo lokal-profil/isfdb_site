@@ -439,14 +439,13 @@ function validateTypeMismatch()	{
 	return true;
 }
 
-function addNewExternalID(field_name, table_name) {
+function addNewExternalID(field_name) {
 	var field_name = field_name || 'external_id';
-	var table_name = table_name || 'pubBody';
 	var identifier_types = ExternalIdentifiers();
-	var tbody = document.getElementById(table_name);
 
 	var last_row = GetLastExternalId(field_name);
 	var addpoint = document.getElementById(field_name + '.row.' + last_row);
+	var tbody = addpoint.parentNode;
 	var next = last_row + 1;
 
 	var tr   = document.createElement("tr");
@@ -488,9 +487,9 @@ function GetLastExternalId(field_name) {
 
 function addNewBriefCover() {
 	var record_type = "cover";
-	var tbody = document.getElementById("coverBody");
 	var last_row = GetLastRow('cover_id');
 	var addpoint = document.getElementById('cover_id' + last_row + '.row');
+	var tbody = addpoint.parentNode;
 	var next = last_row + 1;
 
 	// First row - create top-level elements
@@ -582,9 +581,9 @@ function addNewBriefCover() {
 
 function addNewFullCover() {
 	var record_type = "cover";
-	var tbody = document.getElementById("coverBody");
 	var last_row = GetLastRow('cover_id');
 	var addpoint = document.getElementById('cover_id' + last_row + '.row');
+	var tbody = addpoint.parentNode;
 	var next = last_row + 1;
 
 	// First row - create top-level elements
@@ -685,21 +684,21 @@ function addNewFullCover() {
 }
 
 function addNewTitle() {
-	addRecord("titleBody", "title")
+	addRecord("title")
 }
 
 function addNewReview() {
-	addRecord("reviewBody", "review")
+	addRecord("review")
 }
 
 function addNewInterview() {
-	addRecord("interviewBody", "interview")
+	addRecord("interview")
 }
 
-function addRecord(body_name, record_type) {
-	var tbody = document.getElementById(body_name);
+function addRecord(record_type) {
 	var last_row = GetLastRow(record_type + "_id");
 	var addpoint = document.getElementById(record_type + "_id" + last_row + '.row');
+	var tbody = addpoint.parentNode;
 	var next = last_row + 1;
 
 	// Create top-level elements
@@ -1131,32 +1130,32 @@ function addRecord(body_name, record_type) {
 }
 
 function addContentTitleAuthor(entry) {
-	addPerson(entry, "AddAuthor", "titleBody", "Author", "title_author");
+	addPerson(entry, "AddAuthor", "Author", "title_author");
 }
 
 function addReviewee(entry) {
-	addPerson(entry, "AddReviewee", "reviewBody", "Author", "review_author");
+	addPerson(entry, "AddReviewee", "Author", "review_author");
 }
 
 function addReviewer(entry) {
-	addPerson(entry, "AddReviewer", "reviewBody", "Reviewer", "review_reviewer");
+	addPerson(entry, "AddReviewer", "Reviewer", "review_reviewer");
 }
 
 function addInterviewee(entry) {
-	addPerson(entry, "AddInterviewee", "interviewBody", "Interviewee", "interviewee_author");
+	addPerson(entry, "AddInterviewee", "Interviewee", "interviewee_author");
 }
 
 function addInterviewer(entry) {
-	addPerson(entry, "AddInterviewer", "interviewBody", "Interviewer", "interviewer_author");
+	addPerson(entry, "AddInterviewer", "Interviewer", "interviewer_author");
 }
 
 function addArtist(entry) {
-	addPerson(entry, "AddArtist", "coverBody", "Artist", "cover_artist");
+	addPerson(entry, "AddArtist", "Artist", "cover_artist");
 }
 
-function addPerson(entry, tag, body_name, label_name, attr_name) {
+function addPerson(entry, tag, label_name, attr_name) {
 	var addpoint = document.getElementById(tag + entry);
-	var tbody = document.getElementById(body_name);
+	var tbody = addpoint.parentNode;
 	var next = GetLastRow(attr_name+entry+'.') + 1;
 	// Create the DOM elements
 	var tr   = document.createElement("tr");

@@ -179,8 +179,7 @@ def printExternalIDs(external_ids = None, label = 'External ID', field = 'extern
         print '<INPUT tabindex="1" name="%s.%d" id="%s.%d" class="metainput">' % (field, counter, field, counter)
         print '</td>'
         print '</tr>'
-        onclick_parameters = "'%s', '%s'" % ('external_id', 'pubBody')
-        printaddbutton('AddExternalID', counter, label, 'addNewExternalID', onclick_parameters, help)
+        printaddbutton('AddExternalID', counter, label, 'addNewExternalID', "'external_id'", help)
 
 ###################################################################
 # This function outputs an existing title record in table format
