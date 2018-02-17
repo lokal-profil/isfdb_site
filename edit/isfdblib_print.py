@@ -19,16 +19,6 @@ from library import *
 from isfdblib import *
 
 
-def getPageNumber(title_id, pub_id):
-	query = 'select pubc_page from pub_content where title_id=%d and pub_id=%d' % (int(title_id), int(pub_id))
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	try:
-		return record[0][0]
-	except:
-		return 0
-
 def printtitletype(current_value, help):
 	print '<tr>'
 	printContentHeader('Title Type', help)
@@ -193,7 +183,7 @@ def printtitlerecord(record, index, pub_id, help = None, reuse_page_numbers = 1)
 
         print "<tr><td>"
         print '<input name="title_id%d" value="%s" type="HIDDEN">' % (index, record[TITLE_PUBID])
-        page = getPageNumber(record[TITLE_PUBID], pub_id)
+        page = SQLGetPageNumber(record[TITLE_PUBID], pub_id)
 	if page and reuse_page_numbers:
 		print '<input name="title_page%d" tabindex="1" value="%s" class="contentpageinput"></td>' % (index, escape_string(page))
 	else:
@@ -270,6 +260,99 @@ def printblanktitlerecord(index, help = None, pub_type = 'NOVEL'):
         printAddContentAuthor('Author', help, index)
 	printSpacer(5, 'title', index)
 
+def printeditabletitlerecord(record, index, container, help, pub_id):
+        args = ' class="%s"'
+        readonly = False
+        # Find out if the title is in more than 1 publication
+        manypubs = SQLCountPubsForTitle(record[TITLE_PUBID])
+        if manypubs:
+                readonly = True
+                # Titles in multiple pubs are gray
+                args = ' READONLY class="%s titlemultiple"'
+        # Containers in just 1 publication are yellow
+        elif container:
+                args = ' class="%s titlecontainer"'
+
+        if readonly:
+                taborder = 0
+        else:
+                taborder = 1
+
+        print '<tr><td>'
+        print '<input name="title_id%d" value="%s" type="HIDDEN">' % (index, record[TITLE_PUBID])
+        page = SQLGetPageNumber(record[TITLE_PUBID], pub_id)
+	# Container titles shouldn't have page numbers, so the page field is not editable
+        if container:
+                print '<input name="title_page%d" tabindex="0" READONLY class="contentpageinput titlemultiple"></td>' % index
+        # Non-container page numbers are always editable even for read-only titles
+        else:
+                if page:
+                        print '<input name="title_page%d" tabindex="1" value="%s" class="contentpageinput"></td>' % (index, escape_string(page))
+                else:
+                        print '<input name="title_page%d" tabindex="1" class="contentpageinput"></td>' % (index)
+
+        print '<td><input name="title_title%d" tabindex="%d" value="%s"%s></td>' % (index, taborder, escape_string(record[TITLE_TITLE]), args % "contentinput")
+        print '<td><input name="title_date%d" tabindex="%d" value="%s"%s></td>' % (index, taborder, record[TITLE_YEAR], args % "contentyearinput")
+
+	###################################
+	# Title type
+	###################################
+	if readonly:
+                print '<td><input name="title_ttype%d" tabindex="%d" value="%s"%s></td>' % (index, taborder, record[TITLE_TTYPE], args % "contenttypeinput")
+        else:
+                print '<td><select name="title_ttype%d" tabindex="%d" %s>' % (index, taborder, args % "contenttypeinput")
+                for ttype in REGULAR_TITLE_TYPES:
+                        if (record and record[TITLE_TTYPE] == ttype) or (not record and ttype == 'SHORTFICTION'):
+                                print '<option selected="selected">%s</option>' % ttype
+                        else:
+                                print '<option>%s</option>' % ttype
+                print '</select></td>'
+
+	###################################
+	# STORYLEN
+	###################################
+        length = ''
+        if record[TITLE_STORYLEN]:
+                length = record[TITLE_STORYLEN]
+	if readonly:
+                print '<td><input name="title_storylen%d" value="%s" tabindex="%d"%s></td>' % (index, length, taborder, args % "contentleninput")
+        else:
+                print '<td><select name="title_storylen%d" tabindex="%d"%s>' % (index, taborder, args % "contentleninput")
+                for storylen in STORYLEN_CODES:
+                        if record and length == storylen:
+                                print '<option selected="selected">%s</option>' % storylen
+                        else:
+                                print '<option>%s</option>' % storylen
+                print '</select></td>'
+        print '</tr>'
+
+	###################################
+	# AUTHORS
+	###################################
+
+        authors = SQLTitleAuthors(record[TITLE_PUBID])
+        counter = 1
+        if len(authors):
+                for author in authors:
+                        print '<tr id="title_author%d.%d.row">' % (index, counter)
+			printContentHeader('Author%d:'% counter, help)
+			print """<td><input id="title_author%d.%d" name="title_author%d.%d" tabindex="%d"
+                        value="%s"%s></td>""" % (index, counter, index, counter, taborder, escape_string(author), args % "contentinput")
+			print '</tr>'
+                        counter += 1
+	else:
+		print '<tr id="title_author%d.%d.row">' % (index, counter)
+		printContentHeader('Author%d:'% counter, help)
+		print """<td><input id="title_author%d.%d" name="title_author%d.%d" tabindex="%d"
+                        %s></td>""" % (index, counter, index, counter, taborder, args % "contentinput")
+		print '</tr>'
+		counter += 1
+
+        if not readonly:
+                printAddContentAuthor('Author', help, index)
+
+        printSpacer(5, 'title', index)
+
 def printfullcoverart(cover, index, help = None, readonly = 0):
         if not help:
                 help = {}
@@ -325,7 +408,7 @@ def printreviewrecord(record, index, pub_id, help = None, reuse_page_numbers = 1
 
         print '<tr><td>'
         print '<input name="review_id%d" value="%s" type="HIDDEN">' % (index, record[TITLE_PUBID])
-        page = getPageNumber(record[TITLE_PUBID], pub_id)
+        page = SQLGetPageNumber(record[TITLE_PUBID], pub_id)
 	if page and reuse_page_numbers:
 		print '<input name="review_page%d" tabindex="1" value="%s" class="contentpageinput"></td>' % (index, escape_string(page))
 	else:
@@ -390,6 +473,61 @@ def printblankreviewrecord(index, help = None):
 
 	printSpacer(3, 'review', index)
 
+def printeditablereviewrecord(record, index, help, pub_id):
+        # Find out if this title is in more than 1 publication
+        manypubs = SQLCountPubsForTitle(record[TITLE_PUBID])
+        if manypubs:
+                readonly = True
+                args = ' READONLY class="%s titlemultiple"'
+                taborder = 0
+        else:
+                readonly = False
+                args = ' class="%s"'
+                taborder = 1
+
+        print '<tr><td>'
+        print '<input name="review_id%d" value="%s" type="HIDDEN">' % (index, record[TITLE_PUBID])
+        page = SQLGetPageNumber(record[TITLE_PUBID], pub_id)
+	# Page numbers are always editable and included in the tab order
+	if page:
+		print '<input name="review_page%d" value="%s" tabindex="1" class="contentpageinput"></td>' % (index, escape_string(page))
+	else:
+		print '<input name="review_page%d" tabindex="1" class="contentpageinput"></td>' % (index)
+
+        print '<td><input name="review_title%d" tabindex="%d" value="%s"%s></td>' % (index, taborder, escape_string(record[TITLE_TITLE]), args % "contentinput")
+        print '<td><input name="review_date%d" tabindex="%d" value="%s"%s></td>' % (index, taborder, record[TITLE_YEAR], args % "contentyearinput")
+        print '</tr>'
+
+	counter = 1
+        authors = SQLReviewAuthors(record[TITLE_PUBID])
+        if len(authors):
+                for author in authors:
+                        print '<tr id="review_author%d.%d.row">' % (index, counter)
+                        printContentHeader('Author%d:'% counter, help)
+                        print """<td><input id="review_author%d.%d" name="review_author%d.%d" tabindex="%d"
+                        value="%s"%s></td>""" % (index, counter, index, counter, taborder, escape_string(author), args % "contentinput")
+                        print '</tr>'
+                        counter += 1
+
+        if not readonly:
+                printAddContentAuthor('Reviewee', help, index)
+
+        counter = 1
+        authors = SQLTitleAuthors(record[TITLE_PUBID])
+        if len(authors):
+                for author in authors:
+                        print '<tr id="review_reviewer%d.%d.row">' % (index, counter)
+                        printContentHeader('Reviewer%d:'% counter, help)
+                        print """<td><input id="review_reviewer%d.%d" name="review_reviewer%d.%d" tabindex="%d"
+                        value="%s"%s></td>""" % (index, counter, index, counter, taborder, escape_string(author), args % "contentinput")
+                        print '</tr>'
+                        counter += 1
+
+        if not readonly:
+                printAddSecondaryAuthor('Reviewer', help, index)
+
+        printSpacer(3, 'review', index)
+
 def printinterviewrecord(record, index, pub_id, help = None, reuse_page_numbers = 1):
         if not help:
                 help = {}
@@ -398,7 +536,7 @@ def printinterviewrecord(record, index, pub_id, help = None, reuse_page_numbers 
         print '<tr><td>'
         print '<input name="interview_id%d" value="%s" type="HIDDEN">' % (index, record[TITLE_PUBID])
 
-        page = getPageNumber(record[TITLE_PUBID], pub_id)
+        page = SQLGetPageNumber(record[TITLE_PUBID], pub_id)
 	if page and reuse_page_numbers:
 		print '<input name="interview_page%d" tabindex="1" value="%s" class="contentpageinput"></td>' % (index, escape_string(page))
 	else:
@@ -460,6 +598,64 @@ def printblankinterviewrecord(index, help = None):
         print '</tr>'
         counter += 1
         printAddSecondaryAuthor('Interviewer', help, index)
+
+	printSpacer(3, 'interview', index)
+
+def printeditableinterviewrecord(record, index, help, pub_id):
+        # Find out if this title is in more than 1 publication
+        manypubs = SQLCountPubsForTitle(record[TITLE_PUBID])
+        if manypubs:
+                readonly = True
+                args = ' READONLY class="%s titlemultiple"'
+                taborder = 0
+        else:
+                readonly = False
+                args = ' class="%s"'
+                taborder = 1
+
+        print '<tr><td>'
+        print '<input name="interview_id%d" value="%s" type="HIDDEN">' % (index, record[TITLE_PUBID])
+        page = SQLGetPageNumber(record[TITLE_PUBID], pub_id)
+	# Page numbers are always editable and belong to the primary tab group
+	if page:
+		print '<input name="interview_page%d" value="%s" tabindex="1" class="contentpageinput"></td>' % (index, escape_string(page))
+	else:
+		print '<input name="interview_page%d" tabindex="1" class="contentpageinput"></td>' % index
+
+        print '<td><input name="interview_title%d" tabindex="%d" value="%s"%s></td>' % (index, taborder, escape_string(record[TITLE_TITLE]), args % "contentinput")
+
+        print '<td><input name="interview_date%d" tabindex="%d" value="%s"%s></td>' % (index, taborder, record[TITLE_YEAR], args % "contentyearinput")
+        print "</tr>"
+
+        counter = 1
+        authors = SQLInterviewAuthors(record[TITLE_PUBID])
+        if len(authors):
+                for author in authors:
+                        print '<tr id="interviewee_author%d.%d.row">' % (index, counter)
+                        printContentHeader('Interviewee%d:'% counter, help)
+                        print """<td><input id="interviewee_author%d.%d" name="interviewee_author%d.%d" tabindex="%d"
+                        value="%s"%s></td>""" % (index, counter, index, counter, taborder, escape_string(author), args % "contentinput")
+                        print '</tr>'
+                        counter += 1
+
+        if not readonly:
+                printAddContentAuthor('Interviewee', help, index)
+
+	print '<tr>'
+        counter = 1
+        authors = SQLTitleAuthors(record[TITLE_PUBID])
+        if len(authors):
+                for author in authors:
+                        print '<tr id="interviewer_author%d.%d.row">' % (index, counter)
+                        printContentHeader('Interviewer%d:'% counter, help)
+                        print """<td><input id="interviewer_author%d.%d" name="interviewer_author%d.%d" tabindex="%d"
+                        value="%s"%s></td>""" % (index, counter, index, counter, taborder, escape_string(author), args % "contentinput")
+                        print '</tr>'
+                        counter += 1
+        print '</tr>'
+
+        if not readonly:
+                printAddSecondaryAuthor('Interviewer', help, index)
 
 	printSpacer(3, 'interview', index)
 

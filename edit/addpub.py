@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
 	printfield("Pub Type", "pub_ctype", help, pub_type, 1)
 
-	printfield("ISBN", "pub_isbn", help)
+        printISBN(help, None)
 	printfield("Catalog ID", "pub_catalog", help)
 	printfield("Price", "pub_price", help)
 
