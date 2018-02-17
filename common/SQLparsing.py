@@ -677,7 +677,7 @@ def SQLGetPubContentByAuthor(aurec):
 	return results
 
 def SQLloadTitle(titlerec):
-	query = "select * from titles where title_id = %d" % (int(titlerec))
+	query = "select * from titles where title_id = %d" % int(titlerec)
 	db.query(query)
 	result = db.store_result()
 	title = result.fetch_row()
@@ -1908,6 +1908,27 @@ def SQLisUserBureaucrat(userId):
 	else:
 		return 0
 
+def SQLisUserBot(userId):
+        query = "select ug_group from mw_user_groups where ug_user=%d and ug_group='bot'" % int(userId)
+        db.query(query)
+        result = db.store_result()
+	if result.num_rows():
+		return 1
+	else:
+		return 0
+
+def SQLWikiEditCount(submitter):
+        # Retrieve the count of Wiki edits by the current submitter
+       	query = "select user_editcount from mw_user where user_name='%s'" % (db.escape_string(submitter))
+	db.query(query)
+	result = db.store_result()
+	record = result.fetch_row()
+	if record:
+		editcount = record[0][0]
+	else:
+		editcount = 0
+	return editcount
+
 def SQLgetTitleVariants(title_id):
 	query = "select * from titles where title_parent='%d' order by titles.title_copyright, titles.title_title" % (title_id)
 	db.query(query)
@@ -2980,3 +3001,25 @@ def SQLQueueSize():
         and not exists
         (select 1 from mw_user_groups g where g.ug_user=s.sub_submitter and g.ug_group='sysop')"""
         return StandardQuery(query)[0][0]
+
+def SQLCountPubsForTitle(title_id):
+        # Retrieve the number of pubs that this title exists in
+        query = "select count(*) from pub_content where title_id = %d" % int(title_id)
+        db.query(query)
+        result = db.store_result()
+        result_record = result.fetch_row()
+        if result_record and result_record[0][0] > 1:
+                return 1
+        return 0
+
+def SQLGetLangIdByTitle(title_id):
+        query = "select title_language from titles where title_id=%d" % int(title_id)
+        db.query(query)
+        res = db.store_result()
+        lang_id = ''
+        if res.num_rows():
+                record = res.fetch_row()
+                lang_id = record[0][0]
+        if lang_id is None:
+                lang_id = ''
+        return lang_id

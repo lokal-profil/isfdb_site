@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -20,37 +20,6 @@ from library import *
 from xml.dom import minidom
 from xml.dom import Node
 
-
-#########################################################################
-# SQL Helper Functions
-#########################################################################
-def getTitle(title_id):
-	query = 'select * from titles where title_id=%s' % (title_id)
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	return record[0]
-
-def getPageNumber(title_id, pub_id):
-	query = 'select pubc_page from pub_content where title_id=%s and pub_id=%s' % (title_id, pub_id)
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	try:
-		return record[0][0]
-	except:
-		return 0
-
-def SQLTitleAuthors(title_id):
-	query = "select authors.author_canonical from authors,canonical_author where authors.author_id=canonical_author.author_id and canonical_author.title_id='%s' and canonical_author.ca_status=1;" % (title_id)
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
-	results = []
-	while title:
-		results.append(title[0][0])
-		title = result.fetch_row()
-	return results
 
 def normAuthor(value):
         # Convert double quotes to single quotes
@@ -1059,7 +1028,7 @@ class pubs:
                         cover_title_id = self.cover_records[cover_id]
                         if not cover_title_id:
                                 continue
-                        old_title = getTitle(cover_title_id)
+                        old_title = SQLloadTitle(cover_title_id)
                         if old_title[TITLE_YEAR] != self.cover_dates[cover_id]:
                                 self.cover_changed[cover_id] = 1
                                 continue
@@ -1092,7 +1061,7 @@ class pubs:
 					newTitle.setID(self.form[key].value)
 					if int(newTitle.id) > 0:
 						oldTitle = titleEntry()
-						title_data = getTitle(newTitle.id)
+						title_data = SQLloadTitle(newTitle.id)
 						oldTitle.setTitle(title_data[TITLE_TITLE])
 						oldTitle.setID(newTitle.id)
 			else:
@@ -1128,7 +1097,7 @@ class pubs:
                                                 return
 				newTitle.setPage(page_number)
 			if oldTitle:
-				title_page = getPageNumber(oldTitle.id, self.pub_id)
+				title_page = SQLGetPageNumber(oldTitle.id, self.pub_id)
 				if title_page:
 					oldTitle.setPage(title_page)
 
@@ -1291,7 +1260,7 @@ class pubs:
 					newReview.setID(self.form[key].value)
 					if int(newReview.id) > 0:
 						oldReview = reviewEntry()
-						title_data = getTitle(newReview.id)
+						title_data = SQLloadTitle(newReview.id)
 						oldReview.setTitle(title_data[TITLE_TITLE])
 						oldReview.setID(newReview.id)
 			else:
@@ -1327,7 +1296,7 @@ class pubs:
                                                 return
 				newReview.setPage(page_number)
                         if oldReview:
-                                title_page = getPageNumber(oldReview.id, self.pub_id)
+                                title_page = SQLGetPageNumber(oldReview.id, self.pub_id)
                                 if title_page:
                                         oldReview.setPage(title_page)
 
@@ -1450,7 +1419,7 @@ class pubs:
 					newInterview.setID(self.form[key].value)
 					if int(newInterview.id) > 0:
 						oldInterview = interviewEntry()
-						title_data = getTitle(newInterview.id)
+						title_data = SQLloadTitle(newInterview.id)
 						oldInterview.setTitle(title_data[TITLE_TITLE])
 						oldInterview.setID(newInterview.id)
 			else:
@@ -1490,7 +1459,7 @@ class pubs:
                                                 return
 				newInterview.setPage(page_number)
                         if oldInterview:
-                                title_page = getPageNumber(oldInterview.id, self.pub_id)
+                                title_page = SQLGetPageNumber(oldInterview.id, self.pub_id)
                                 if title_page:
                                         oldInterview.setPage(title_page)
 

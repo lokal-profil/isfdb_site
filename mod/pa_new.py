@@ -1,7 +1,7 @@
 #!_PYTHONLOC
 
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2018   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -24,18 +24,6 @@ from common import *
 from library import *
 
 debug = 0
-
-def SQLGetLangIdByTitle(title_id):
-        query = "select title_language from titles where title_id ='%s'" % (str(title_id))
-        db.query(query)
-        res = db.store_result()
-        lang_id = ''
-        if res.num_rows():
-                record = res.fetch_row()
-                lang_id = record[0][0]
-        if lang_id is None:
-                lang_id = ''
-        return lang_id
 
 def Unique(db, tag):
 	query = "select pub_tag from pubs where pub_tag='%s'" % (tag)

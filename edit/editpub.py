@@ -22,19 +22,6 @@ from isfdblib_help import *
 from isfdblib_print import *
 
 
-def SQLCountPubs(record):
-        # Retrieve the number of pubs that this title exists in
-        query = "select count(*) from pub_content where title_id = %d;" % (int(record[TITLE_PUBID]))
-        db.query(query)
-        result = db.store_result()
-        result_record = result.fetch_row()
-        #If this Title exists in more than 1 pub, make it display-only
-        if result_record:
-                if result_record[0][0] > 1:
-                        return 1
-        return 0
-
-
 ###################################################################
 # This function outputs a title record in table format
 ###################################################################
@@ -42,7 +29,7 @@ def printtitlerecord(record, index, container, help):
         args = ' class="%s"'
         readonly = False
         # Find out if the title is in more than 1 publication
-        manypubs = SQLCountPubs(record)
+        manypubs = SQLCountPubsForTitle(record[TITLE_PUBID])
         if manypubs:
                 readonly = True
                 # Titles in multiple pubs are gray
@@ -134,7 +121,7 @@ def printtitlerecord(record, index, container, help):
 
 def printreviewrecord(record, index, help):
         # Find out if this title is in more than 1 publication
-        manypubs = SQLCountPubs(record)
+        manypubs = SQLCountPubsForTitle(record[TITLE_PUBID])
         if manypubs:
                 readonly = True
                 args = ' READONLY class="%s titlemultiple"'
@@ -190,7 +177,7 @@ def printreviewrecord(record, index, help):
 
 def printinterviewrecord(record, index, help):
         # Find out if this title is in more than 1 publication
-        manypubs = SQLCountPubs(record)
+        manypubs = SQLCountPubsForTitle(record[TITLE_PUBID])
         if manypubs:
                 readonly = True
                 args = ' READONLY class="%s titlemultiple"'
@@ -351,7 +338,7 @@ if __name__ == '__main__':
                 index = 1
                 for cover in covers:
                         # Find out if this cover is in more than 1 publication
-                        manypubs = SQLCountPubs(cover)
+                        manypubs = SQLCountPubsForTitle(cover[TITLE_PUBID])
                         if manypubs:
                                 printfullcoverart(cover, index, help, 1)
                         else:

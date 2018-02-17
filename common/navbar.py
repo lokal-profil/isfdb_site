@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2009-2017   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2018   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -23,27 +23,6 @@ def PrintMessagesLink(userid, username):
 		print '<li><div class="newtalk"><a href="http://%s/index.php/User_talk:%s">My Messages</a> (new)</div>' % (WIKILOC, username)
 	else:
 		print '<li><a href="http://%s/index.php/User_talk:%s">My Messages</a>' % (WIKILOC, username)
-
-def SQLisUserBot(userId):
-        query = "select ug_group from mw_user_groups where ug_user='%d' and ug_group='bot'" % (int(userId))
-        db.query(query)
-        result = db.store_result()
-	if result.num_rows():
-		return 1
-	else:
-		return 0
-
-def SQLWikiEditCount(submitter):
-        #Retrieve the count of Wiki edits by the current submitter
-       	query = "select user_editcount from mw_user where user_name ='%s'" % (db.escape_string(submitter))
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	if record:
-		editcount =  record[0][0]
-	else:
-		editcount =  0
-	return editcount
 
 def PrintWikiPointer(submitter):
 	#If the count of Wiki edits is greater than X, then do not display the Wiki pointer
