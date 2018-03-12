@@ -5651,8 +5651,10 @@ def function227():
 def function228():
         nonModeratorMessage()
         query = """select p.pub_id, p.pub_title, c.cleanup_id
-                from pubs p, cleanup c
+                from pubs p, cleanup c, publishers pb
                 where p.pub_isbn is null
+                and p.publisher_id = pb.publisher_id
+                and pb.publisher_name not like '%Project Gutenberg%'
                 and p.pub_ptype = 'ebook'
                 and p.pub_ctype not in ('FANZINE','MAGAZINE')
                 and not exists(

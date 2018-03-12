@@ -1333,8 +1333,11 @@ def nightly_cleanup_reports():
         standardReport(query, 227)
 
         #   Report 228: E-books without ASINs
-        query = """select p.pub_id from pubs p
+        # Ignore Project Gutenberg publications
+        query = """select p.pub_id from pubs p, publishers pb
                 where p.pub_isbn is null
+                and p.publisher_id = pb.publisher_id
+                and pb.publisher_name not like '%Project Gutenberg%'
                 and p.pub_ptype = 'ebook'
                 and p.pub_ctype not in ('FANZINE','MAGAZINE')
                 and not exists(
