@@ -1,4 +1,4 @@
-/* (C) COPYRIGHT 2008-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+/* (C) COPYRIGHT 2008-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
          ALL RIGHTS RESERVED
 
      The copyright notice above does not evidence any actual or
@@ -918,6 +918,12 @@ table.yearblock tr {
 table.yearblock td {
    padding: 2px;
    text-align: center;
+}
+
+/* publication display container title line */
+span.containertitle {
+   font-size: 1.4em;
+   font-weight: bold;
 }
 
 /* publication display listing type switch */

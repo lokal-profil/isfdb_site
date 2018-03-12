@@ -20,6 +20,12 @@ from library import *
 from isbn import convertISBN
 from pubClass import pubs
 
+def DoError(message):
+        PrintHeader('Unknown Publication Record')
+        PrintNavbar(0, 0, 0, 'pl.cgi', 0)
+        print "<h3>%s</h3>" % message
+        PrintTrailer('publication', 0, 0)
+        sys.exit(0)
 
 def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
         if not reference:
@@ -204,74 +210,86 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
                 PrintAllAuthors(title[TITLE_PUBID])
 
 
-def PrintContents(titles, pub, concise, reference_title):
+def PrintContents(titles, pub, concise):
+	print '<div class="ContentBox">'
+
+	# Display the Container title if there is one
+	reference_title = None
         reference_lang = None
-        if reference_title:
-                reference_lang = reference_title[TITLE_LANGUAGE]
+	if pub.pub_ctype:
+                referral_title_id = SQLgetTitleReferral(pub.pub_id, pub.pub_ctype, 1)
+                if referral_title_id:
+                        reference_title = SQLloadTitle(referral_title_id)
+                        reference_lang = reference_title[TITLE_LANGUAGE]
+                        # NOVEL reference titles will be displayed in the Contents section below
+                        if reference_title[TITLE_TTYPE] != 'NOVEL':
+                                print '<span class="containertitle">Container Title:</span>'
+                                PrintTitleLine(reference_title, pub, None, reference_lang, 1)
+
+        # Determine if there are Contents titles to display
 	display_contents = 0
 	for title in titles:
-                # Non-NOVEL reference titles are not to be displayed in the Contents section
+                # Non-NOVEL reference titles are displayed on a separate line above
                 if reference_title and (title[TITLE_PUBID] == reference_title[TITLE_PUBID]) and title[TITLE_TTYPE] != 'NOVEL':
-                        pass
+                        continue
                 # COVERART titles are not to be displayed in the Contents section
                 if title[TITLE_TTYPE] == 'COVERART':
-                        pass
+                        continue
                 # We have found a Contents title, so we break out of the loop
                 display_contents = 1
                 break
 
-	if not display_contents:
-		return
+        # Display Contents items if there are any
+	if display_contents:
+                # Get a list of pub_content records sorted by page number
+                pages = getPubContentList(pub.pub_id)
 
-	# STEP 1 - Get a list of pub_content records sorted by page number
-	pages = getPubContentList(pub.pub_id)
-
-	print '<div class="ContentBox">'
-	if concise:
-                mode_word = 'Full'
-                mode_letter = 'f'
-                label = 'Fiction and Essays'
-	else:
-                mode_word = 'Concise'
-                mode_letter = 'c'
-		label = 'Contents'
-	output = '<h2>%s <a href="http:/%s/pl.cgi?%d+%s">' % (label, HTFAKE, pub.pub_id, mode_letter)
-	output += '<span class="listingtext">(view %s Listing)</span></a></h2>' % mode_word
-	print output
-	print '<ul>'
-	printed = []
-        first_container = 1
-	for item in pages:
-                content_title_id = item[PUB_CONTENTS_TITLE]
-                displayed_page_num = item[PUB_CONTENTS_PAGE]
-                # For display purposes, only use the part of the page number to the left of the first pipe (|) character
-                if displayed_page_num:
-                        displayed_page_num = displayed_page_num.split('|')[0]
-		for title in titles:
-			if title[TITLE_PUBID] == content_title_id:
-                                # If this user has chosen concise display, skip INTERIORART and REVIEW records
-				if concise and (title[TITLE_TTYPE] in ('INTERIORART', 'REVIEW')):
-					continue
-				# If this title has already been printed, do not print 2+ occurences
-				if title[TITLE_PUBID] in printed:
-					continue
-				# Do not display COVERART and magazine editor titles in the Content section
-                                if title[TITLE_TTYPE] in ('COVERART', 'EDITOR', 'MAGAZINE', 'FANZINE'):
-                                        continue
-                                # Skip titles without a title type -- this should never happen
-                                if not title[TITLE_TTYPE]:
-                                        continue
-                                # Suppress the display of the FIRST container title which matches this publication's type;
-                                # subsequent container titles of the same type will be displayed
-                                containers = ('OMNIBUS', 'COLLECTION', 'ANTHOLOGY', 'NONFICTION', 'CHAPBOOK')
-                                if (title[TITLE_TTYPE] in containers) and (pub.pub_ctype == title[TITLE_TTYPE]):
-                                        if first_container:
-                                                first_container = 0
+                if concise:
+                        mode_word = 'Full'
+                        mode_letter = 'f'
+                        label = 'Fiction and Essays'
+                else:
+                        mode_word = 'Concise'
+                        mode_letter = 'c'
+                        label = 'Contents'
+                output = '<h2>%s <a href="http:/%s/pl.cgi?%d+%s">' % (label, HTFAKE, pub.pub_id, mode_letter)
+                output += '<span class="listingtext">(view %s Listing)</span></a></h2>' % mode_word
+                print output
+                print '<ul>'
+                printed = []
+                containers = ('OMNIBUS', 'COLLECTION', 'ANTHOLOGY', 'NONFICTION', 'CHAPBOOK')
+                first_container = 1
+                for item in pages:
+                        content_title_id = item[PUB_CONTENTS_TITLE]
+                        displayed_page_num = item[PUB_CONTENTS_PAGE]
+                        # For display purposes, only use the part of the page number to the left of the first pipe (|) character
+                        if displayed_page_num:
+                                displayed_page_num = displayed_page_num.split('|')[0]
+                        for title in titles:
+                                if title[TITLE_PUBID] == content_title_id:
+                                        # If this user has chosen concise display, skip INTERIORART and REVIEW records
+                                        if concise and (title[TITLE_TTYPE] in ('INTERIORART', 'REVIEW')):
                                                 continue
-                                PrintTitleLine(title, pub, displayed_page_num, reference_lang)
-                                printed.append(title[TITLE_PUBID])
-	print '</ul>'
-	print '</div>'
+                                        # If this title has already been printed, do not print 2+ occurrences
+                                        if title[TITLE_PUBID] in printed:
+                                                continue
+                                        # Do not display COVERART and magazine editor titles in the Content section
+                                        if title[TITLE_TTYPE] in ('COVERART', 'EDITOR', 'MAGAZINE', 'FANZINE'):
+                                                continue
+                                        # Skip titles without a title type -- this should never happen
+                                        if not title[TITLE_TTYPE]:
+                                                continue
+                                        # Suppress the display of the FIRST container title which matches this publication's type;
+                                        # subsequent container titles of the same type will be displayed
+                                        if (title[TITLE_TTYPE] in containers) and (pub.pub_ctype == title[TITLE_TTYPE]):
+                                                if first_container:
+                                                        first_container = 0
+                                                        continue
+                                        PrintTitleLine(title, pub, displayed_page_num, reference_lang)
+                                        printed.append(title[TITLE_PUBID])
+                print '</ul>'
+
+        print '</div>'
 
 
 #==========================================================
@@ -283,10 +301,7 @@ if __name__ == '__main__':
 	try:
 		tag = unescapeLink(sys.argv[1])
 	except:
-		PrintHeader('Unknown Publication Record')
-		PrintNavbar(0, 0, 0, 'pl.cgi', 0)
-		print "<h3>Specified publication does not exist</h3>"
-		sys.exit(0)
+                DoError('Invalid Publication ID specified')
 
         arg2 = ''
 	try:
@@ -315,11 +330,7 @@ if __name__ == '__main__':
 		publication = SQLGetPubByTag(tag)
 
 	if not publication:
-                PrintHeader('Unknown Publication Record')
-		PrintNavbar(0, 0, 0, 'pl.cgi', sys.argv[1])
-		print "<h3>Specified publication does not exist</h3>" 
-		PrintTrailer('publication', 0, 0)
-		sys.exit(0)
+                DoError('Specified publication does not exist')
 
 	pub = pubs(db)
 	pub.load(publication[PUB_PUBID])
@@ -431,20 +442,9 @@ if __name__ == '__main__':
 	if pub.pub_ptype:
 		print '<li>'
 		print '  <b>Format:</b>', ISFDBPubFormat(pub.pub_ptype)
-	reference_title = None
 	if pub.pub_ctype:
 		print '<li>'
 		print '  <b>Type:</b>', pub.pub_ctype
-                referral_title_id = SQLgetTitleReferral(pub.pub_id, pub.pub_ctype, 1)
-                if referral_title_id:
-                        reference_title = SQLloadTitle(referral_title_id)
-                        # NOVEL reference titles are not displayed in the metadata section;
-                        # they are displayed in the Contents section instead
-                        if reference_title[TITLE_TTYPE] != 'NOVEL':
-                                reference_lang = reference_title[TITLE_LANGUAGE]
-                                print '<li>'
-                                print '  <b>Container Title:</b>'
-                                PrintTitleLine(reference_title, pub, None, reference_lang, 1)
 
 	cover_art_titles = []
 	cover_count = 1
@@ -545,14 +545,8 @@ if __name__ == '__main__':
 
        	print '</div>'
 
-	#################################
-	# Contents Section
-	#################################
-	PrintContents(titles, pub, concise, reference_title)
+	PrintContents(titles, pub, concise)
 
-	#################################
-	# Verification Section
-	#################################
         pub.PrintPrimaryVerifications()
         pub.PrintAllSecondaryVerifications()
 
