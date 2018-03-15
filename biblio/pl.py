@@ -221,9 +221,9 @@ def PrintContents(titles, pub, concise):
                 if referral_title_id:
                         reference_title = SQLloadTitle(referral_title_id)
                         reference_lang = reference_title[TITLE_LANGUAGE]
-                        # NOVEL reference titles will be displayed in the Contents section below
+                        # NOVEL reference titles are not displayed here; they will be displayed in the Contents section below
                         if reference_title[TITLE_TTYPE] != 'NOVEL':
-                                print '<span class="containertitle">Container Title:</span>'
+                                print '<span class="containertitle">%s Title:</span>' % reference_title[TITLE_TTYPE].title()
                                 PrintTitleLine(reference_title, pub, None, reference_lang, 1)
 
         # Determine if there are Contents titles to display
