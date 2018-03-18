@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2018   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -371,7 +371,7 @@ LANGUAGES = ('None','Afrikaans','Albanian','Ancient Greek','Arabic','Armenian',
              'Serbo-Croatian Cyrillic','Serbo-Croatian Roman', 'Scots', 'Old English',
              'Old French', 'Middle English', 'Middle High German', 'Yoruba',
              'Mayan languages', 'Akkadian', 'Sumerian', 'Norwegian (Bokmal)',
-             'Norwegian (Nynorsk)')
+             'Norwegian (Nynorsk)', 'Asturian/Bable')
 
 # List of all supported format codes
 FORMATS = ('unknown','hc','tp','pb','ph','digest','dos','ebook','webzine','pulp',
