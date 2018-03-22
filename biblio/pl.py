@@ -126,7 +126,7 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
         elif title[TITLE_TTYPE] == 'OMNIBUS':
                 output += 'omnibus'
         elif title[TITLE_TTYPE] == 'NONFICTION':
-                output += 'non-fiction'
+                output += 'nonfiction'
         elif title[TITLE_TTYPE] == 'CHAPBOOK':
                 output += 'chapbook'
         elif title[TITLE_TTYPE] == 'POEM':
