@@ -323,13 +323,13 @@ function AddMultipleField(field_label, field_name) {
 }
 
 function GetLastRow(field_name) {
-	for (i = 1 ; i < 1000 ; i++) {
+	for (i = 1 ; i < 2000 ; i++) {
 		row_data = document.getElementById(field_name + i + '.row');
 		if (row_data == null) {
 			return i-1;
 		}
 	}
-	return 999;
+	return 1999;
 }
 
 function determineArticle(word) {
