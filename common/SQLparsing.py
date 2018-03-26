@@ -2954,10 +2954,11 @@ def SQLLoadIdentifierSites():
         return StandardQuery(query)
 
 def SQLFindPubByExternalID(id_type, id_value):
+        id_value = id_value.replace('*','%')
         query = """select p.* from pubs p, identifiers id
                    where p.pub_id = id.pub_id
                    and id.identifier_type_id = %d
-                   and id.identifier_value = '%s'""" % (int(id_type), db.escape_string(id_value))
+                   and id.identifier_value like '%s'""" % (int(id_type), db.escape_string(id_value))
         return StandardQuery(query)
 
 def SQLLoadVotes(title_id, variants, user_id):
