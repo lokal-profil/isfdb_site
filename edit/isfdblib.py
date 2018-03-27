@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2004-2017 Al von Ruff, Bill Longley, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Jesse Weinstein <jesse@wefu.org>, Uzume and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2018 Al von Ruff, Bill Longley, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Jesse Weinstein <jesse@wefu.org>, Uzume and Dirk Stoecker
 #     ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1197,7 +1197,7 @@ def reportsDict():
         reports[233] = ("Potential Duplicate E-book Publications")
         reports[234] = ("Publications with direct De Nederlandse Bibliografie links in Notes")
         reports[235] = ("Publications with invalid BNF identifiers")
-        reports[236] = ("SFDB Publications with an ISBN and no Catalog ID")
+        reports[236] = ("SFBC Publications with an ISBN and no Catalog ID")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
