@@ -1205,17 +1205,20 @@ def SQLLoadSeriesListTitles(series_list):
 		title = result.fetch_row()
 	return (results_dict, results_list)
 
-def SQLFindPubsByIsbn(targets):
+def SQLFindPubsByIsbn(targets, excluded_pub_id = 0):
 	results = []
 	if len(targets) > 0:
 		first = 1
-		query = "select * from pubs where pub_isbn like '"
+		query = "select * from pubs where (pub_isbn like '"
 		for target in targets:
 			if not first:
 				query += "' or pub_isbn like '"
 			query += db.escape_string(target)
 			first = 0
-		query += "' order by pub_isbn limit 300"
+		query += "')"
+		if excluded_pub_id:
+                        query += " and pub_id != %d" % int(excluded_pub_id)
+		query += " order by pub_isbn limit 300"
 		db.query(query)
 		result = db.store_result()
 		pub = result.fetch_row()

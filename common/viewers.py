@@ -82,12 +82,12 @@ def DuplicateCatalogId(value):
                 warning = '%sCatalog ID already on file</a>' % link
         return warning
 
-def DuplicateISBN(value):
+def DuplicateISBN(value, current_pub_id = 0):
         from isbn import isbnVariations
         warning = ''
         # Get possible ISBN variations
         targets = isbnVariations(value)
-        results = SQLFindPubsByIsbn(targets)
+        results = SQLFindPubsByIsbn(targets, current_pub_id)
         if results:
                 link = AdvSearchLink((('TYPE', 'Publication'),
                                       ('USE_1', 'pub_isbn'),
@@ -158,7 +158,7 @@ def PrintField2Columns(Label, Used, Value, Warning):
                 print '<td class="blankwarning">&nbsp;</td>'
         print '</tr>'
 
-def PrintField1XML(Label, XmlData, title):
+def PrintField1XML(Label, XmlData, title = 0):
         warning = ''
         value = GetElementValue(XmlData, Label)
         if TagPresent(XmlData, Label):
@@ -275,7 +275,7 @@ def PrintField2(Label, value, Changed, ExistsNow, Current, warning = '', warning
                         print '<td class="blankwarning">&nbsp;</td>'
         print "</tr>"
 
-def PrintField2XML(Label, XmlData, ExistsNow, Current):
+def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
         value = GetElementValue(XmlData, Label)
         value2 = Current
         warning = ''
@@ -309,7 +309,7 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current):
                 if value:
                         warning = CheckISBN(value, XmlData)
                         if not warning:
-                                warning = DuplicateISBN(value)
+                                warning = DuplicateISBN(value, pub_id)
 
         elif Label == 'Catalog':
                 if value and not cloningFlag(XmlData):
@@ -2640,7 +2640,7 @@ def DisplayEditPub(submission_id):
 		PrintField2XML('Pages',     merge, current.used_pages,     current.pub_pages)
 		PrintField2XML('Binding',   merge, current.used_ptype,     current.pub_ptype)
 		PrintField2XML('PubType',   merge, current.used_ctype,     current.pub_ctype)
-		PrintField2XML('Isbn',      merge, current.used_isbn,      current.pub_isbn)
+		PrintField2XML('Isbn',      merge, current.used_isbn,      current.pub_isbn, pub_id)
 		PrintField2XML('Catalog',   merge, current.used_catalog,   current.pub_catalog)
 		PrintField2XML('Price',     merge, current.used_price,     current.pub_price)
 		PrintField2XML('Image',     merge, current.used_image,     current.pub_image)
