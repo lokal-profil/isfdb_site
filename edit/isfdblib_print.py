@@ -169,7 +169,7 @@ def printExternalIDs(external_ids = None, label = 'External ID', field = 'extern
         print '<INPUT tabindex="1" name="%s.%d" id="%s.%d" class="metainput">' % (field, counter, field, counter)
         print '</td>'
         print '</tr>'
-        printaddbutton('AddExternalID', counter, label, 'addNewExternalID', "'external_id'", help)
+        printaddbutton(counter, label, 'addNewExternalID', "'external_id'", help)
 
 ###################################################################
 # This function outputs an existing title record in table format
@@ -850,7 +850,7 @@ def printAwardLevel(label, value, poll, help):
 def printSpacer(rows, row_id, index):
         print '<tr id="%s_id%d.row" class="titleeditspacer"><td colspan="%d"> </td></tr>' % (row_id, index, rows)
 
-def printmultiple(values, label, field_name, row_id, help, readonly = 0):
+def printmultiple(values, label, field_name, help, readonly = 0):
 	counter = 1
         for value in values:
                 printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, value, readonly)
@@ -859,12 +859,12 @@ def printmultiple(values, label, field_name, row_id, help, readonly = 0):
         if not readonly:
                 if not values:
                         printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, '', readonly)
-                printaddbutton(row_id, counter, label, "AddMultipleField", "'%s', '%s'" % (label, field_name), help)
+                printaddbutton(counter, label, "AddMultipleField", "'%s', '%s'" % (label, field_name), help)
 
-def printaddbutton(row_id, counter, label, onclick_function, onclick_parameters, help = None):
+def printaddbutton(counter, label, onclick_function, onclick_parameters, help = None):
         if not help:
                 help = {}
-        print '<tr id="%s">' % row_id
+        print '<tr>'
         mouse_over1 = ''
         mouse_over2 = ''
        	if help.get("Add %s" % label):
@@ -876,7 +876,7 @@ def printaddbutton(row_id, counter, label, onclick_function, onclick_parameters,
         print '</tr>'
 
 def printWebPages(webpages, web_page_type, help):
-        printmultiple(webpages, "Web Page", "%s_webpages" % web_page_type, "AddWebPage", help)
+        printmultiple(webpages, "Web Page", "%s_webpages" % web_page_type, help)
 
 def printHelpBox(type, helplink):
 	print '<div id="HelpBox">'

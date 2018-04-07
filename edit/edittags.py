@@ -57,7 +57,7 @@ if __name__ == '__main__':
         # Retrieve the tags specific to the currently logged in user
 	tags = SQLgetUserTags(title_id, user_id)
 	
-        printmultiple(tags, "Tag", "tag_name", "AddTag", help)
+        printmultiple(tags, "Tag", "tag_name", help)
 
 	print "</tbody>"
 	print "</table>"

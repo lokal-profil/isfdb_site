@@ -108,11 +108,11 @@ if __name__ == '__main__':
         if title_id:
 		printfield("Title", "award_title", help, title[TITLE_TITLE], 1)
 		authors = SQLTitleAuthors(title_id)
-                printmultiple(authors, "Author", "title_author", "AddAuthor", help, 1)
+                printmultiple(authors, "Author", "title_author", help, 1)
 
         else:
 		printfield("Title", "award_title", help)
-                printmultiple([], "Author", "title_author", "AddAuthor", help)
+                printmultiple([], "Author", "title_author", help)
 
 	printfield("Year", "award_year", help)
 

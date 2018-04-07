@@ -60,11 +60,11 @@ if __name__ == '__main__':
 	printfield("Canonical Name", "author_canonical",  help, record[AUTHOR_CANONICAL], display_only)
 
         trans_names = SQLloadTransAuthorNames(record[AUTHOR_ID])
-        printmultiple(trans_names, "Transliterated Name", "trans_names", "AddTransName", help)
+        printmultiple(trans_names, "Transliterated Name", "trans_names", help)
 
 	printfield("Legal Name",     "author_legalname",  help, record[AUTHOR_LEGALNAME])
         trans_legal_names = SQLloadTransLegalNames(record[AUTHOR_ID])
-        printmultiple(trans_legal_names, "Trans. Legal Name", "trans_legal_names", "AddTransLegalName", help)
+        printmultiple(trans_legal_names, "Trans. Legal Name", "trans_legal_names", help)
 
 	printfield("Directory Entry","author_lastname",   help, record[AUTHOR_LASTNAME])
 	printfield("Birth Place",    "author_birthplace", help, record[AUTHOR_BIRTHPLACE])
@@ -74,7 +74,7 @@ if __name__ == '__main__':
 	printlanguage(record[AUTHOR_LANGUAGE], "author_language", "Working Language", help)
 
         emails = SQLloadEmails(record[AUTHOR_ID])
-        printmultiple(emails, "Email Address", "author_emails", "AddEmail", help)
+        printmultiple(emails, "Email Address", "author_emails", help)
 
         webpages = SQLloadWebpages(record[AUTHOR_ID])
         printWebPages(webpages, 'author', help)

@@ -57,13 +57,13 @@ if __name__ == '__main__':
 
 	printfield("Title", "pub_title", help)
 
-        printmultiple([], "Transliterated Title", "trans_titles", "AddTransTitle", help)
+        printmultiple([], "Transliterated Title", "trans_titles", help)
 
 	if pub_type in ('Chapbook', 'Collection', 'Nonfiction', 'Novel'):
                 author_or_editor = 'Author'
         else:
                 author_or_editor = 'Editor'
-        printmultiple([], author_or_editor, "pub_author", "AddAuthor", help)
+        printmultiple([], author_or_editor, "pub_author", help)
 
         printlanguage('','language','Language',help)
 

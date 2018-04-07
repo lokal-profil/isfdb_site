@@ -59,7 +59,7 @@ def printCommonSection(record, help):
 
 def printtitlerecord(record, series_number):
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
-        printmultiple(authors, "Author", "title_author", "AddAuthor", help)
+        printmultiple(authors, "Author", "title_author", help)
 
         printCommonSection(record, help)
 
@@ -93,10 +93,10 @@ def printtitlerecord(record, series_number):
 
 def printreviewrecord(record, series_number):
 	authors = SQLReviewAuthors(record[TITLE_PUBID])
-        printmultiple(authors, "Author", "review_author1.", "AddReviewee1", help)
+        printmultiple(authors, "Author", "review_author1.", help)
 
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
-        printmultiple(authors, "Reviewer", "review_reviewer1.", "AddReviewer1", help)
+        printmultiple(authors, "Reviewer", "review_reviewer1.", help)
 
         printCommonSection(record, help)
 
@@ -105,10 +105,10 @@ def printreviewrecord(record, series_number):
 
 def printinterviewrecord(record, series_number):
 	authors = SQLInterviewAuthors(record[TITLE_PUBID])
-        printmultiple(authors, "Interviewee", "interviewee_author1.", "AddInterviewee1", help)
+        printmultiple(authors, "Interviewee", "interviewee_author1.", help)
 
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
-        printmultiple(authors, "Interviewer", "interviewer_author1.", "AddInterviewer1", help)
+        printmultiple(authors, "Interviewer", "interviewer_author1.", help)
 
         printCommonSection(record, help)
 
@@ -171,7 +171,7 @@ if __name__ == '__main__':
 	printfield(title_field, 'title_title', help, title_data[TITLE_TITLE])
 
         trans_titles = SQLloadTransTitles(title_id)
-        printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
+        printmultiple(trans_titles, "Transliterated Title", "trans_titles", help)
 
 	if interview:
 		printinterviewrecord(title_data, series_number)

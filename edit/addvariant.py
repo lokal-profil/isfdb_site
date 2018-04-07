@@ -29,10 +29,10 @@ def printtitlerecord(record):
 
 	printfield("Title", "title_title", help, record[TITLE_TITLE])
 
-        printmultiple([], "Transliterated Title", "trans_titles", "AddTransTitle", help)
+        printmultiple([], "Transliterated Title", "trans_titles", help)
 
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
-        printmultiple(authors, "Author", "title_author", "AddAuthor", help)
+        printmultiple(authors, "Author", "title_author", help)
 
 	printfield("Date", "title_copyright", help, record[TITLE_YEAR])
 

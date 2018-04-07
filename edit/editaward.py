@@ -71,7 +71,7 @@ if __name__ == '__main__':
                 no_edit = 1
         else:
                 no_edit = 0
-        printmultiple(award.award_authors, "Author", "title_author", "AddAuthor", help, no_edit)
+        printmultiple(award.award_authors, "Author", "title_author", help, no_edit)
 
 	printfield("Year", "award_year", help, award.award_year)
 

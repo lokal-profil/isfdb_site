@@ -29,10 +29,10 @@ def printpubrecord(pub):
 	print '<tbody id="pubBody">'
 	printfield("Title", "pub_title", help, pub.pub_title)
         trans_titles = SQLloadTransPubTitles(pub.pub_id)
-        printmultiple(trans_titles, "Transliterated Title", "trans_titles", "AddTransTitle", help)
+        printmultiple(trans_titles, "Transliterated Title", "trans_titles", help)
 
 	authors = SQLPubAuthors(pub.pub_id)
-        printmultiple(authors, "Author", "pub_author", "AddAuthor", help)
+        printmultiple(authors, "Author", "pub_author", help)
 
 	printfield("Date", "pub_year", help, pub.pub_year)
         printfield("Publisher", "pub_publisher", help, pub.pub_publisher)

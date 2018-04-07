@@ -35,7 +35,7 @@ def printpubrecord(record):
 	printfield("Title", "pub_title", help, pub.pub_title, 1)
 
 	authors = SQLPubAuthors(pub.pub_id)
-        printmultiple(authors, "Author", "pub_author", "AddAuthor", help, 1)
+        printmultiple(authors, "Author", "pub_author", help, 1)
 
 	printfield("Date", "pub_year", help, pub.pub_year, 1)
 
