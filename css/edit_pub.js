@@ -461,6 +461,8 @@ function addNewExternalID(field_name) {
 		select.appendChild(option);
 	}
 	td1.appendChild(select);
+	var add_button = document.getElementById(field_name + '.addbutton');
+	td1.appendChild(add_button);
 	tr.appendChild(td1);
 
 	var td2  = document.createElement("td");

@@ -134,6 +134,7 @@ def printExternalIDs(external_ids = None, label = 'External ID', field = 'extern
                 type_name = identifier_types[identifier_type][0]
                 type_full_name = identifier_types[identifier_type][1]
                 type_list += ' %s: %s&#13;' % (type_name, type_full_name)
+        type_list += 'To add another external identifier, click the + button'
 
         for id_type in sorted(external_ids.keys()):
                 for id_value in external_ids[id_type]:
@@ -148,7 +149,10 @@ def printExternalIDs(external_ids = None, label = 'External ID', field = 'extern
                                         selected = ''
                                 print '<option%s VALUE="%d">%s</option>' % (selected, identifier_type, identifier_types[identifier_type][0])
                         print '</select>'
-                        print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">' % (HTMLLOC)
+                        button = ''
+                        if counter == 1:
+                                button = createaddbutton('addNewExternalID', "'external_id'", 'external_id')
+                        print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">%s' % (HTMLLOC, button)
                         print '</td>'
                         print '<td>'
                         print '<INPUT tabindex="1" name="%s.%d" id="%s.%d" class="metainput" value="%s">' % (field, counter, field, counter, id_value)
@@ -163,13 +167,15 @@ def printExternalIDs(external_ids = None, label = 'External ID', field = 'extern
         for identifier_type in sorted(identifier_types, key = identifier_types.get):
                 print '<option VALUE="%d">%s</option>' % (identifier_type, identifier_types[identifier_type][0])
         print '</select>'
-        print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">' % (HTMLLOC)
+        button = ''
+        if counter == 1:
+                button = createaddbutton('addNewExternalID', "'external_id'", 'external_id')
+        print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">%s' % (HTMLLOC, button)
         print '</td>'
         print '<td>'
         print '<INPUT tabindex="1" name="%s.%d" id="%s.%d" class="metainput">' % (field, counter, field, counter)
         print '</td>'
         print '</tr>'
-        printaddbutton(counter, label, 'addNewExternalID', "'external_id'", help)
 
 ###################################################################
 # This function outputs an existing title record in table format
@@ -641,7 +647,6 @@ def printeditableinterviewrecord(record, index, help, pub_id):
         if not readonly:
                 printAddContentAuthor('Interviewee', help, index)
 
-	print '<tr>'
         counter = 1
         authors = SQLTitleAuthors(record[TITLE_PUBID])
         if len(authors):
@@ -652,7 +657,6 @@ def printeditableinterviewrecord(record, index, help, pub_id):
                         value="%s"%s></td>""" % (index, counter, index, counter, taborder, escape_string(author), args % "contentinput")
                         print '</tr>'
                         counter += 1
-        print '</tr>'
 
         if not readonly:
                 printAddSecondaryAuthor('Interviewer', help, index)
@@ -752,29 +756,31 @@ def printNewRecordButton(record_type, onclick):
         print '<td><input type="button" value="Add %s" onclick="%s()" tabindex="1"></td>' % (record_type, onclick)
         print '</tr>'
 
-def printfieldlabel(label, help, index = 1, colon = ':'):
+def printfieldlabel(label, help, index = 1, colon = ':', addbutton = None):
         # Only display the help pop-up for the first occurrence of repeating fields
        	if help and help.get(label) and (int(index) < 2):
                 text = escape_string(help[label][0])
-               	print '<td class="hint" title="%s"><b>%s%s </b>' % (text, label, colon)
+               	display = '<td class="hint" title="%s"><b>%s%s </b>' % (text, label, colon)
                 image = '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">' % HTMLLOC
                 if help[label][1]:
-                        print '<a tabindex="0" href="%s">%s</a>' % (help[label][1], image)
+                        display += '<a tabindex="0" href="%s">%s</a>' % (help[label][1], image)
                 else:
-                        print image
-
-                print '</td>'
+                        display += image
         else:
-                print '<td><b>%s%s</b></td>' % (label, colon)
+                display = '<td><b>%s%s</b>' % (label, colon)
+        if addbutton:
+                display += addbutton
+        display += '</td>'
+        print display
 
-def printfield(label, fieldname, help = None, value = '', readonly = 0):
+def printfield(label, fieldname, help = None, value = '', readonly = 0, addbutton = None):
         if readonly:
                 args = ' READONLY class="%s titlemultiple"'
         else:
                 args = ' class="%s"'
 	print '<tr id="%s.row">' % fieldname
 
-	printfieldlabel(label, help)
+	printfieldlabel(label, help, 1, ":", addbutton)
 
         if value is not None:
                	print '<td><INPUT tabindex="1" name="%s" id="%s" value="%s"%s></td>' % (fieldname, fieldname, escape_string(value), args % "metainput")
@@ -853,27 +859,21 @@ def printSpacer(rows, row_id, index):
 def printmultiple(values, label, field_name, help, readonly = 0):
 	counter = 1
         for value in values:
-                printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, value, readonly)
+                if not readonly and counter == len(values):
+                        addbutton = createaddbutton("AddMultipleField", "'%s', '%s'" % (label, field_name), field_name)
+                else:
+                        addbutton = None
+                printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, value, readonly, addbutton)
                 counter += 1
 
-        if not readonly:
-                if not values:
-                        printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, '', readonly)
-                printaddbutton(counter, label, "AddMultipleField", "'%s', '%s'" % (label, field_name), help)
+        if not readonly and not values:
+                addbutton = createaddbutton("AddMultipleField", "'%s', '%s'" % (label, field_name), field_name)
+                printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, '', readonly, addbutton)
 
-def printaddbutton(counter, label, onclick_function, onclick_parameters, help = None):
-        if not help:
-                help = {}
-        print '<tr>'
-        mouse_over1 = ''
-        mouse_over2 = ''
-       	if help.get("Add %s" % label):
-                mouse_over1 = ' class="hint" title="%s"' % help['Add %s' % label][0]
-                mouse_over2 = '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">' % HTMLLOC
-        print '<td%s><input type="button" value="Add %s" tabindex="1" onclick="%s(%s)">%s</td>' % (mouse_over1, label,
-                                                                                                   onclick_function, onclick_parameters, mouse_over2)
-        print '<td> </td>'
-        print '</tr>'
+def createaddbutton(onclick_function, onclick_parameters, field_name):
+        button_span = '<span id="%s.addbutton"><input class="addbutton" type="button" value="+" ' % field_name
+        button_span += 'tabindex="1" onclick="%s(%s)"></span>' % (onclick_function, onclick_parameters)
+        return button_span
 
 def printWebPages(webpages, web_page_type, help):
         printmultiple(webpages, "Web Page", "%s_webpages" % web_page_type, help)

@@ -93,8 +93,8 @@ def HelpPublisher():
 
         text = 'If the name of this publisher is spelled using a non-Latin alphabet/script,'
         text += ' enter the Romanized form of the name in this field.'
-        text += ' If there is more than one possible Romanization, click on the Add Transliterated Name'
-        text += ' button below and enter the other spellings of the name.'
+        text += ' If there is more than one possible Romanization, click the +'
+        text += ' button, which will create a new input field, and enter the other spellings of the name.'
         text += ' Follow this link for more details.'
         help['Transliterated Name 1'] = [text, link]
 
@@ -121,8 +121,8 @@ def HelpPubSeries():
 
         text = 'If the name of this publication series is spelled using a non-Latin alphabet/script,'
         text += ' enter the Romanized form of the name in this field.'
-        text += ' If there is more than one possible Romanization, click on the Add Transliterated Name'
-        text += ' button below and enter the other spellings of the name.'
+        text += ' If there is more than one possible Romanization, click the +'
+        text += ' button, which will create a new input field, and enter the other spellings of the name.'
         text += ' Follow this link for more details.'
         link = 'http://%s/index.php/Help:Screen:PublicationSeries' % (WIKILOC)
         help['Transliterated Name 1'] = [text, link]
@@ -217,8 +217,8 @@ def HelpAuthor():
 
         text = 'If the author\'s canonical name is spelled using a non-Latin alphabet/script in the author\'s'
         text += ' working language, enter the Romanized form of the canonical name in this field.'
-        text += ' If there is more than one possible Romanization, click on the Add Transliterated Name'
-        text += ' button below and enter the other Romanized spellings of the canonical name.'
+        text += ' If there is more than one possible Romanization, click the +'
+        text += ' button below, which will create a new input field, and enter the other Romanized spellings of the canonical name.'
         text += ' Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:AuthorFields:TransName' % (WIKILOC)
         help['Transliterated Name 1'] = [text, link]
@@ -231,8 +231,8 @@ def HelpAuthor():
 
         text = 'If the author\'s legal name is spelled using a non-Latin alphabet/script in the author\'s'
         text += ' working language, enter the Romanized form of the legal name in this field.'
-        text += ' If there is more than one possible Romanization, click on the Add Trans.'
-        text += ' Legal Name button below and enter the other spellings of the legal name. If the author has lived in'
+        text += ' If there is more than one possible Romanization, click the + button,'
+        text += ' which will create a new input field, and enter the other spellings of the legal name. If the author has lived in'
         text += ' countries or regions that use additional alphabets/scripts, enter those spellings of the'
         text += ' legal name as well. Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:AuthorFields:TransLegalName' % (WIKILOC)
@@ -306,9 +306,9 @@ def HelpTitlePub():
         text = 'Transliterated Title. Populate only if the title is spelled using'
         text += ' a non-Latin alphabet/script. If you know the Romanized form of the'
         text += ' name, enter it in this field. If there is more than one possible'
-        text += ' Romanization, click on the Add Transliterated Title button below'
+        text += ' Romanization, click the + button, which will create a new input field,'
         text += ' and enter the other Romanized spellings of the title. You can click'
-        text += ' on the Add button as many times as necessary.'
+        text += ' on the + button as many times as necessary.'
         help['Transliterated Title 1'] = [text, '']
 
         text = 'An optional short non-spoiler synopsis. This field is not a place for criticism or reviews'
@@ -392,30 +392,31 @@ def HelpTitle():
         link = 'http://%s/index.php?title=Template:TitleFields:Title' % (WIKILOC)
         help['Interview Title'] = [text, link]
 
-        text = 'URL of a Web site about this title. This is a repeating field and you can enter as many Web pages as necessary.'
-        text += ' Follow thid link for more details.'
+        text = 'URL of a Web site about this title. This is a repeating field and you can enter as many '
+        text += ' Web pages as necessary. To add another Web Page, click the + button.'
+        text += ' Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:TitleFields:WebPage' % (WIKILOC)
         help['Web Page 1'] = [text, link]
 
-        text = 'The name of the author of this title.'
+        text = 'The name of the author of this title. To add another author, click the + button.'
         text += ' Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
         help['Author 1'] = [text, link]
 
         text = 'The name of the reviewer exactly as it appears on the title page.'
         text += ' This includes pseudonyms, abbreviated names, etc. If no author is stated, use \'uncredited\'.'
-        text += ' Follow this link for more details.'
+        text += ' To add another reviewer, click the + button. Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
         help['Reviewer 1'] = [text, link]
 
-        text = 'The name of the person who was interviewed.'
+        text = 'The name of the person who was interviewed. To add another interviewee, click the + button.'
         text += ' Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
         help['Interviewee 1'] = [text, link]
 
         text = 'The name of the interviewer exactly as it appears on the title page.'
         text += ' This includes pseudonyms, abbreviated names, etc. If no author is stated, use \'uncredited\'.'
-        text += ' Follow this link for more details.'
+        text += ' To add another interviewer, click the + button. Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
         help['Interviewer 1'] = [text, link]
 
@@ -477,13 +478,13 @@ def HelpPub():
 
         text = 'The name of the author of the publication exactly as it appears on the title page.'
         text += ' This includes pseudonyms, abbreviated names, etc. If no author is stated, use \'uncredited\'.'
-        text += ' Follow this link for more details.'
+        text += ' To add another author, click the + button. Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:PublicationFields:Author' % (WIKILOC)
         help['Author 1'] = [text, link]
 
         text = 'The name of the editor of the publication exactly as it appears on the title page.'
         text += ' This includes pseudonyms, abbreviated names, etc. If no editor is stated, use \'uncredited\'.'
-        text += ' Follow this link for more details.'
+        text += ' To add another editor, click the + button. Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:PublicationFields:Author' % (WIKILOC)
         help['Editor 1'] = [text, link]
 
@@ -528,12 +529,9 @@ def HelpPub():
         text = 'If this publication is listed by a recognized third party Web site'
         text += ' which has assigned a permanent ID to it, select the Web site from the'
         text += ' drop-down list on the left and enter the ID in the field on the right.'
-        text += ' Follow this link for more details.'
+        text += ' To add more External IDs, click the + button. Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:PublicationFields:ExternalIDs' % (WIKILOC)
         help['External IDs'] = [text, link]
-
-        text = 'Click this button to add additional external IDs, if any.'
-        help['Add External ID'] = [text, '']
 
         text = 'The original cover price of this publication. Follow this link for more details.'
         link = 'http://%s/index.php?title=Template:PublicationFields:Price' % (WIKILOC)
@@ -758,7 +756,7 @@ def HelpAward(poll):
         help['Title'] = [text, link]
 
         text = 'Enter the canonical name of the person associated with this award as it currently exists in ISFDB. '
-        text += 'Follow this link for more details.'
+        text += 'To add another person, click the + button. Follow this link for more details.'
         link = 'http://%s/index.php/Help:Screen:AddAward' % (WIKILOC)
         help['Author1'] = [text, link]
 
@@ -812,7 +810,7 @@ def HelpTag():
                 return help
         
         text = 'Tags are user-defined words and short phrases that help categorize titles in the ISFDB. '
-        text += 'You can define more than one tag per title. Follow this link for more details.'
+        text += 'To add another tag, click the + button. Follow this link for more details.'
         link = 'http://%s/index.php/Help:Screen:TagEditor' % (WIKILOC)
         help['Tag 1'] = [text, link]
 

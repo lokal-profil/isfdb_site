@@ -316,6 +316,8 @@ function AddMultipleField(field_label, field_name) {
 	input.setAttribute("tabindex", "1");
 	td1.appendChild(b);
 	b.appendChild(txt1);
+	var add_button = document.getElementById(field_name + '.addbutton');
+	td1.appendChild(add_button);
 	td2.appendChild(input);
 	tr.appendChild(td1);
 	tr.appendChild(td2);

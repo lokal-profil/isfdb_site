@@ -987,6 +987,14 @@ input.search {
   width: 125px;
 }
 
+/* button to add another input line in an edit form */
+input.addbutton {
+  font-size: 80%;
+  height: 2em;
+  width: 2em;
+  padding: 1px 1px;
+}
+
 /* search block in navigation bar - search type field */
 select.search {
   width: 130px;
