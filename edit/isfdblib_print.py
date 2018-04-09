@@ -871,7 +871,7 @@ def printmultiple(values, label, field_name, help, readonly = 0):
                 printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, '', readonly, addbutton)
 
 def createaddbutton(onclick_function, onclick_parameters, field_name):
-        button_span = '<span id="%s.addbutton"><input class="addbutton" type="button" value="+" ' % field_name
+        button_span = ' <span id="%s.addbutton"><input class="addbutton" type="button" value="+" ' % field_name
         button_span += 'tabindex="1" onclick="%s(%s)"></span>' % (onclick_function, onclick_parameters)
         return button_span
 
