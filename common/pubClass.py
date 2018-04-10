@@ -846,6 +846,7 @@ class pubs:
                         value = XMLescape(self.form['pub_isbn'].value)
                         value = string.replace(value, '-', '')
                         value = string.replace(value, ' ', '')
+                        value = string.replace(value, 'x', 'X')
                         if value:
                                 self.pub_isbn = value
                                 self.used_isbn = 1
