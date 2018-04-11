@@ -3308,7 +3308,8 @@ def function87():
         # Author/title language mismatches
         nonModeratorMessage()
 
-        print '<h3>Note: This report is currently limited to EDITOR, NOVEL and NONFICTION titles.</h3>'
+        print """<h3>Note: This report is currently limited to EDITOR, NOVEL and NONFICTION titles
+                as well as SHORTFICTION titles which start with the letter 'A'.</h3>"""
         query = """select distinct t.title_id, t.title_title, t.title_ttype, c.cleanup_id
                 from titles t, canonical_author ca, authors a, cleanup c
                 where t.title_id=ca.title_id
@@ -3318,7 +3319,9 @@ def function87():
                 and t.title_language IS NOT NULL
                 and a.author_language IS NOT NULL
                 and t.title_language != a.author_language
-                and t.title_ttype in ('NOVEL', 'EDITOR', 'NONFICTION')
+                and (t.title_ttype in ('NOVEL', 'EDITOR', 'NONFICTION')
+                or (t.title_ttype = 'SHORTFICTION' and substring(t.title_title,1,1) = 'A')
+                )
                 and c.report_type=87 and c.resolved IS NULL
                 and c.record_id=t.title_id
                 order by t.title_ttype, a.author_lastname, t.title_title
