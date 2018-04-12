@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2016   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2018   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -159,6 +159,8 @@ class publishers:
                         if key[:18] == 'publisher_webpages':
                                 value = XMLescape(self.form[key].value)
                                 if value:
+                                        if value in self.publisher_webpages:
+                                                continue
                                         if not validateURL(value):
                                                 self.error = 'Invalid Web page URL'
                                                 return

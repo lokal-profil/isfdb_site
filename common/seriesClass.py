@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Bill Longley nad Ahasuerus
+#     (C) COPYRIGHT 2005-2018   Al von Ruff, Bill Longley nad Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -151,6 +151,8 @@ class series:
                         if key[:15] == 'series_webpages':
                                 value = XMLescape(self.form[key].value)
                                 if value:
+                                        if value in self.series_webpages:
+                                                continue
                                         if not validateURL(value):
                                                 self.error = 'Invalid Web page URL'
                                                 return

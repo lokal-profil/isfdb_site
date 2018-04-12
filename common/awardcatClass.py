@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2013-2017   Ahasuerus
+#     (C) COPYRIGHT 2013-2018   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -118,6 +118,8 @@ class award_cat:
                         if key[:18] == 'award_cat_webpages':
                                 value = XMLescape(self.form[key].value)
                                 if value:
+                                        if value in self.award_cat_webpages:
+                                                continue
                                         if not validateURL(value):
                                                 self.error = 'Invalid Web page URL'
                                                 return

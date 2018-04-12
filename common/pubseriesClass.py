@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2010-2016   Ahasuerus
+#     (C) COPYRIGHT 2010-2018   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -146,6 +146,8 @@ class pub_series:
                         if key[:19] == 'pub_series_webpages':
                                 value = XMLescape(self.form[key].value)
                                 if value:
+                                        if value in self.pub_series_webpages:
+                                                continue
                                         if not validateURL(value):
                                                 self.error = 'Invalid Web page URL'
                                                 return
