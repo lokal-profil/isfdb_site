@@ -59,7 +59,8 @@ def PrintPubRecord(count, record, previous_last_viewed, bgcolor):
                 for field in sorted(('Title', 'TransTitles', 'Authors', 'Year', 'Publisher',
                               'PubSeries', 'PubSeriesNum', 'Pages', 'Binding', 'PubType',
                               'Isbn', 'Price', 'Image', 'Note', 'ContentTitle',
-                              'ContentReview', 'ContentInterview', 'Cover', 'External_ID')):
+                              'ContentReview', 'ContentInterview', 'Cover', 'External_ID',
+                              'Catalog')):
                         if doc.getElementsByTagName(field):
                                 if fields:
                                         fields += ', '
