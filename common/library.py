@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2007-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2007-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1466,8 +1466,9 @@ def validateURL(url):
         parsed_url = urlparse(url)
         if parsed_url[0] not in ('http', 'https'):
                 return 0
-        else:
-                return 1
+        if not parsed_url[1]:
+                return 0
+        return 1
 
 def WikiExists():
         query = """select count(*) from information_schema.tables

@@ -16,9 +16,9 @@ function validateURL(field_name) {
 	if (element_value == "") {
 		return true;
 	}
-	// Check that the url starts with "http" (case insensitive)
-	if (element_value.match(/^http/gi) == null) {
-		alert("URLs must start with \"http\".");
+	// Check that the url starts with "http://" or "https://" (case insensitive)
+	if (element_value.match(/^https?:\/\//gi) == null) {
+		alert("URLs must start with \"http://\" or \"https://\".");
 		element_name.focus();
 		return false;
 	}
