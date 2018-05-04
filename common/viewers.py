@@ -3199,8 +3199,8 @@ def displayCoverClone(pub_date, child, submission_id):
         title_date = GetChildValue(child, 'cDate')
         checkTitleExistence(cover_id, submission_id)
 	print '<tr>'
-	if int(title_id):
-                print '<td class="keep">%s</td>' % ISFDBLink('title.cgi', title_id, title)
+	if int(cover_id):
+                print '<td class="keep">%s</td>' % ISFDBLink('title.cgi', cover_id, title)
         else:
                 print '<td class="keep">%s</td>' % title
 
