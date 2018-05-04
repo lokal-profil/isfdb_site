@@ -3199,7 +3199,10 @@ def displayCoverClone(pub_date, child, submission_id):
         title_date = GetChildValue(child, 'cDate')
         checkTitleExistence(cover_id, submission_id)
 	print '<tr>'
-	print '<td class="keep">%s</td>' % title
+	if int(title_id):
+                print '<td class="keep">%s</td>' % ISFDBLink('title.cgi', title_id, title)
+        else:
+                print '<td class="keep">%s</td>' % title
 
 	print '<td class="keep">'
 	artist_list = artists.split('+')
@@ -3227,7 +3230,10 @@ def displayTitleContentClone(pub_date, child, submission_id):
         checkTitleExistence(title_id, submission_id)
 	print "<tr>"
 	print '<td class="keep">%s</td>' % (page)
-	print '<td class="keep">%s</td>' % (title)
+	if int(title_id):
+                print '<td class="keep">%s</td>' % ISFDBLink('title.cgi', title_id, title)
+        else:
+                print '<td class="keep">%s</td>' % title
 
 	print '<td class="keep">'
 	author_list = authors.split('+')
@@ -3268,7 +3274,10 @@ def displayOtherContentClone(pub_date, child, submission_id, record_type):
 	if not title:
 		print '<td class="drop">-</td>'
 	else:
-		print '<td class="keep">%s</td>' % title
+                if int(title_id):
+                        print '<td class="keep">%s</td>' % ISFDBLink('title.cgi', title_id, title)
+                else:
+                        print '<td class="keep">%s</td>' % title
 	if not primary_authors:
 		print '<td class="drop">-</td>'
 	else:
