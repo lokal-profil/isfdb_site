@@ -427,8 +427,8 @@ class titles:
                                 if self.title_ttype != 'OMNIBUS':
                                         self.error = 'Only OMNIBUS titles can have Content data'
                                         return
-                                if len(value) > 31:
-                                        self.error = 'Content value must be 31 characters or less'
+                                if len(value) > 254:
+                                        self.error = 'Content value must be 254 characters or less'
                                         return
                                 if value[0] == '/':
                                         self.error = 'Content value cannot begin with a slash'

@@ -272,8 +272,8 @@ function validateContentIndicator() {
 		return false;
 	}
 
-	if (content_value.length > 31) {
-		alert("Content value must be 31 characters or less.");
+	if (content_value.length > 254) {
+		alert("Content value must be 254 characters or less.");
 		content_name.focus();
 		return false;
 	}
