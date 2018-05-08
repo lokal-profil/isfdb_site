@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Bill Longley, Uzume, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2018   Al von Ruff, Bill Longley, Uzume, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -189,7 +189,7 @@ if __name__ == '__main__':
 	print '<div class="ContentBox">'
 
         # Transliterated title(s)
-        trans_titles = SQLloadTransTitles(title[TITLE_PUBID])
+        trans_titles = SQLloadTransTitles(title_id)
 
 	if title[TITLE_TTYPE] == 'REVIEW':
                 reviewed_title = SQLfindReviewedTitle(title_id)
@@ -199,7 +199,9 @@ if __name__ == '__main__':
                         parent_title = SQLloadTitle(title[TITLE_PARENT])
                         reviewed_title = SQLfindReviewedTitle(parent_title[TITLE_PUBID])
                 if reviewed_title:
-                        print '<b>Review of:</b> %s' % ISFDBLink('title.cgi', reviewed_title, title[TITLE_TITLE])
+                        trans_titles_dict = {reviewed_title: trans_titles}
+                        print '<b>Review of:</b> %s' % ISFDBLink('title.cgi', reviewed_title,
+                                                                 title[TITLE_TITLE], False, '', trans_titles_dict)
                 else:
                         print "<b>Review of:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], 'span')
                 displayCommon(title, user)

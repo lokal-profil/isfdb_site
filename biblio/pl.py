@@ -47,7 +47,9 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
                 parent_id = SQLfindReviewedTitle(title[TITLE_PUBID])
                 output += '<a href="http:/%s/title.cgi?%d" dir="ltr">Review</a>: ' % (HTFAKE, title[TITLE_PUBID])
                 if parent_id:
-                        output += ISFDBLink('title.cgi', parent_id, title[TITLE_TITLE])
+                        trans_titles = SQLloadTransTitles(title[TITLE_PUBID])
+                        trans_titles_dict = {parent_id: trans_titles}
+                        output += ISFDBLink('title.cgi', parent_id, title[TITLE_TITLE], False, '', trans_titles_dict)
                 else:
                         output += '<i>%s</i>' % (title[TITLE_TITLE])
                 authors = SQLReviewBriefAuthorRecords(title[TITLE_PUBID])
