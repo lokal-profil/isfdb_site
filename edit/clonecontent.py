@@ -131,26 +131,30 @@ if __name__ == '__main__':
                         include_interiorart = 0
 
         # Check if we are importing individual titles
-        elif form.has_key('ImportTitles'):
-                FromTitles = form['ImportTitles'].value.split(",")
+        elif form.has_key('ImportTitles1'):
+                # Always include COVERART and INTERIORART titles when importing individual titles
+                include_coverart = 1
+                include_interiorart = 1
                 titles = []
-                for FromTitle in FromTitles:
+      		for key in form:
+                        if 'ImportTitles' not in key:
+                                continue
+                        title_id = XMLescape(form[key].value)
                         # Drop everything to the left of the last question mark in case a title URL was entered
-                        FromTitle = FromTitle.split('?')[-1]
+                        title_id = title_id.split('?')[-1]
+                        # Check that the title ID is an integer
                         try:
-                                clone_title = int(FromTitle)
+                                title_id = int(title_id)
                         except:
+                                errorPage("Title ID must be an integer number")
+                        # Load the title's data
+                        title_data = tuple(SQLloadTitle(title_id))
+                        if not title_data:
                                 errorPage("At least one specified title does not exist")
-
-                        title = tuple(SQLloadTitle(clone_title))
-                        if not title:
-                                errorPage("At least one specified title does not exist")
-                        # Only add the title number to the list if it's not already in the list
-                        if titles.count(title) < 1:
-                                titles.append(title)
-                        # Always include COVERART and INTERIORART titles when importing individual titles
-                        include_coverart = 1
-                        include_interiorart = 1
+                        # Skip duplicate titles
+                        if title_data in titles:
+                                continue
+                        titles.append(title_data)
         else:
                 errorPage("Publication or title to import content from is not specified")
 

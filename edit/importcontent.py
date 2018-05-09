@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2008-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -15,6 +15,7 @@ import sys
 import MySQLdb
 from isfdb import *
 from isfdblib import *
+from isfdblib_print import *
 from library import *
 
 
@@ -42,17 +43,14 @@ if __name__ == '__main__':
 	print '<hr class="divider">'
 	print '<p>'
 	print '<h2>Option 1</h2>'
-	print "<p>"
+	print '<p>'
 
 	print "Enter the publication ID/record number you would like to import from:"
 
 	print '<form class="topspace" id="data" METHOD="POST" ACTION="/cgi-bin/edit/clonecontent.cgi">'
 	print '<table>'
 	
-	print '<tr>'
-	print '<td><b>Import From:</b></td>'
-	print '<td><INPUT NAME="ExportFrom" id="ExportFrom" SIZE="20"></td>'
-	print '</tr>'
+	printfield('Import From', 'ExportFrom')
 
 	print '<tr>'
         print '<td><b>Include COVERART title(s)?</b></td>'
@@ -78,16 +76,13 @@ if __name__ == '__main__':
 	print '<hr class="divider">'
 	print '<p>'
 	print '<h2>Option 2</h2>'
-	print "<p>"
+	print '<p>'
 
-	print "<p>Enter the title ID(s) you would like to import. Use commas as record separators:"
+	print '<p>Enter the title ID(s) you would like to import:'
 
 	print '<form class="topspace" id="singledata" METHOD="POST" ACTION="/cgi-bin/edit/clonecontent.cgi">'
 	print '<table>'
-	print '<tr>'
-	print '<td><b>Individual Titles:</b></td>'
-	print '<td><INPUT NAME="ImportTitles" id="ExportTitles" SIZE="20"></td>'
-	print '</tr>'
+        printmultiple([], "Title", "ImportTitles")
 	print '</table>'
 	print '<p>'
 	print '<input NAME="ExportTo" VALUE="%d" TYPE="HIDDEN">' % pub_id

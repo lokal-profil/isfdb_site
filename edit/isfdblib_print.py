@@ -856,7 +856,9 @@ def printAwardLevel(label, value, poll, help):
 def printSpacer(rows, row_id, index):
         print '<tr id="%s_id%d.row" class="titleeditspacer"><td colspan="%d"> </td></tr>' % (row_id, index, rows)
 
-def printmultiple(values, label, field_name, help, readonly = 0):
+def printmultiple(values, label, field_name, help = None, readonly = 0):
+        if not help:
+                help = {}
 	counter = 1
         for value in values:
                 if not readonly and counter == len(values):

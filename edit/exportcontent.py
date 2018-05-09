@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2017   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2018   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -15,6 +15,7 @@ import sys
 import MySQLdb
 from isfdb import *
 from isfdblib import *
+from isfdblib_print import *
 from library import *
 
 
@@ -39,15 +40,12 @@ if __name__ == '__main__':
         print '<a href="http://%s/index.php/Help:Screen:ExportContent">Help on exporting content</a><p>' % (WIKILOC)
 	print '</div>'
 
-	print "Enter the publication ID/record number you would like to export into:"
-	print "<p>"
+	print 'Enter the publication ID/record number you would like to export into:'
+	print '<p>'
 
 	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/clonecontent.cgi">'
 	print '<table>'
-	print '<tr>'
-	print '<td><b>Export Into:</b></td>'
-	print '<td><INPUT NAME="ExportTo" id="ExportTo" SIZE="20"></td>'
-	print '</tr>'
+	printfield('Export Into', 'ExportTo')
 
 	print '<tr>'
         print '<td><b>Include COVERART title(s)?</b></td>'
