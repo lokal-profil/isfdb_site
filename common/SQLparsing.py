@@ -599,7 +599,7 @@ def SQLGetPubsForChildTitles(titlerec):
 
 def retrievePubsQuery(query):
         # Internal function, NOT TO BE CALLED DIRECTLY
-        # It is currently called by SQLGetPubsByTitle, SQLGetPubsByTitleNoParent
+        # Currently called by SQLGetPubsByTitle, SQLGetPubsByTitleNoParent,
         # SQLGetCoverPubsByTitle and SQLGetPubsForChildTitles
         #
 	############################################################
@@ -619,7 +619,7 @@ def retrievePubsQuery(query):
 	############################################################
 	# STEP 2 - Form a query using those titles
 	############################################################
-       	query = "select pubs.* from pubs,pub_content where pub_content.pub_id=pubs.pub_id "
+       	query = "select distinct pubs.* from pubs,pub_content where pub_content.pub_id=pubs.pub_id "
 	counter = 0
 	for title in titles:
 		if counter:
