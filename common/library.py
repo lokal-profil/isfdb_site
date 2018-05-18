@@ -790,6 +790,8 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
                 'A': ('http:/%s/se.cgi?arg=%%s&amp;type=Name&amp;mode=exact' % HTFAKE, ),
                 'ASIN': ('https://www.amazon.com/dp/%s', 'ASIN',
                          'Amazon Standard Identification Number'),
+                'Audible-ASIN': ('https://www.audible.com/pd/%s', 'Audible-ASIN',
+                         'Audible ASIN'),
                 'BL': ('http://explore.bl.uk/primo_library/libweb/action/dlDisplay.do?vid=BLVU1&docId=BLL01%s',
                        'BL', 'British Library'),
                 'Bleiler1': ('http:/%s/title.cgi?102825' % HTFAKE, 'Bleiler1',
