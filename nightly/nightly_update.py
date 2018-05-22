@@ -1296,7 +1296,9 @@ def nightly_cleanup_reports():
         #   Report 221: Publications with d-nb.info (direct Deutsche Nationalbibliothek links) in Notes
         query = """select p.pub_id from notes n, pubs p
                  where p.note_id = n.note_id
-                 and n.note_note like '%/d-nb.info/%' limit 500"""
+                 and n.note_note like '%/d-nb.info/%'
+                 order by p.pub_title
+                 limit 500"""
         standardReport(query, 221)
 
         #   Report 222: Publications with .fantlab.ru (FantLab) in Notes
@@ -1320,13 +1322,17 @@ def nightly_cleanup_reports():
         #   Report 225: Publications with lccn.loc (direct Library of Congress links) in Notes
         query = """select p.pub_id from notes n, pubs p
                  where p.note_id = n.note_id
-                 and n.note_note like '%lccn.loc%' limit 500"""
+                 and n.note_note like '%lccn.loc%'
+                 order by p.pub_title
+                 limit 500"""
         standardReport(query, 225)
 
         #   Report 226: Publications with worldcat.org (direct OCLC/WorldCat links) in Notes
         query = """select p.pub_id from notes n, pubs p
                  where p.note_id = n.note_id
-                 and n.note_note like '%worldcat.org/%' limit 500"""
+                 and n.note_note like '%worldcat.org/%'
+                 order by p.pub_title
+                 limit 500"""
         standardReport(query, 226)
 
         #   Report 227: Titles with mismatched parentheses
@@ -1436,6 +1442,20 @@ def nightly_cleanup_reports():
                  and p.pub_isbn is not NULL and p.pub_isbn != ""
                  and p.pub_catalog is NULL"""
         standardReport(query, 236)
+
+        #   Report 237: Pubs with LCCN in notes, no LCCN template and no external LCCN ID
+        query = """select p.pub_id
+                from pubs p, notes n
+                where p.note_id = n.note_id
+                and n.note_note like '%LCCN%'
+                and n.note_note not like '%{{LCCN|%'
+                and not exists
+                (select 1 from identifiers i
+                where i.pub_id = p.pub_id
+                and i.identifier_type_id = 10)
+                order by p.pub_title
+                limit 500"""
+        standardReport(query, 237)
 
 def badUnicodeReport(table, record_title, record_id, report_number):
         unicode_map = unicode_translation()

@@ -1118,6 +1118,7 @@ def reportsDict():
         reports[234] = ("Publications with direct De Nederlandse Bibliografie links in Notes")
         reports[235] = ("Publications with invalid BNF identifiers")
         reports[236] = ("SFBC Publications with an ISBN and no Catalog ID")
+        reports[237] = ("Pubs with LCCN in notes, no LCCN template and no external LCCN ID (first 500)")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -1135,7 +1136,7 @@ def reportsDict():
         sections.append(('Awards', (23, 24, 25, 26, 190, 232)), )
         sections.append(('Notes/Synopses', (4, 5, 82, 191, 217, 208, 209, 216, 210, 211,
                                             212, 213, 214, 215, 218, 219, 220, 221, 222,
-                                            223, 224, 225, 226, 229, 230, 234)), )
+                                            223, 224, 225, 226, 229, 230, 234, 237)), )
         sections.append(('Reviews', (40, 41, 42)), )
         sections.append(('Publishers', (43, 44, 65, 73)), )
         sections.append(('Publication Series', (66, 77, 98)), )
@@ -1176,6 +1177,6 @@ def reportsDict():
                          201, 202, 203, 204, 205, 206, 207, 208, 209, 210,
                          211, 212, 213, 214, 215, 216, 217, 218, 219, 220,
                          221, 222, 223, 224, 225, 226, 227, 228, 229, 230,
-                         232, 233, 234, 235, 236, 9999)
+                         232, 233, 234, 235, 236, 237, 9999)
         
         return (reports, sections, non_moderator)

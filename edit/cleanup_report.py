@@ -5978,6 +5978,43 @@ def function236():
 	else:
 		print "<h2>No SFBC publications with an ISBN and no Catalog ID.</h2>"
 
+def function237():
+       
+        query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, notes n, cleanup c
+                where p.note_id = n.note_id
+                and n.note_note like '%LCCN%'
+                and n.note_note not like '%{{LCCN|%'
+                and not exists
+                (select 1 from identifiers i
+                where i.pub_id = p.pub_id
+                and i.identifier_type_id = 10)
+                and c.report_type = 237
+                and p.pub_id = c.record_id
+                and c.resolved is null
+                order by p.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('', 'Publication', 'Ignore'))
+		count = 1
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, 237)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Pubs with LCCN in notes, no LCCN template and no external LCCN ID.</h2>"
+
 
 def function9999():
         nonModeratorMessage()
