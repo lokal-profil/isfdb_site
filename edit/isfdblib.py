@@ -1118,7 +1118,9 @@ def reportsDict():
         reports[234] = ("Publications with direct De Nederlandse Bibliografie links in Notes")
         reports[235] = ("Publications with invalid BNF identifiers")
         reports[236] = ("SFBC Publications with an ISBN and no Catalog ID")
-        reports[237] = ("Pubs with LCCN in notes, no LCCN template and no external LCCN ID (first 500)")
+        reports[237] = ("Publications with LCCN in notes, no LCCN template and no external LCCN ID (first 500)")
+        reports[238] = ("Translations without Notes (first 500)")
+        reports[239] = ("Translations without the Tr Template in Notes (first 500)")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -1131,6 +1133,7 @@ def reportsDict():
         sections.append(('Titles', (19, 1, 3, 18, 47, 54, 55, 62, 63, 69, 74, 80, 87,
                                     91, 96, 194, 195, 196, 197, 227)), )
         sections.append(('Variant Titles', (20, 21, 9, 2, 45)), )
+        sections.append(('Translations', (238, 239)), )
         sections.append(('Chapbooks', (27, 28, 29, 30)), )
         sections.append(('Serials', (22, 83, 84)), )
         sections.append(('Awards', (23, 24, 25, 26, 190, 232)), )
@@ -1140,20 +1143,15 @@ def reportsDict():
         sections.append(('Reviews', (40, 41, 42)), )
         sections.append(('Publishers', (43, 44, 65, 73)), )
         sections.append(('Publication Series', (66, 77, 98)), )
-        sections.append(('Authors: Languages', (192, 11, 58, 59, 60, 61, 168, 183, 184, 185,
+        sections.append(('Author Languages', (192, 11, 58, 59, 60, 61, 168, 183, 184, 185,
                                                 186, 187, 188, 189)), )
-        sections.append(('Author Names: Transliteration', (169, 170, 171, 172, 173, 174,
-                                                           175, 176, 177, 178, 179, 180,
-                                                           181, 182)), )
-        sections.append(('Legal Names: Transliteration', (85, 123)), )
-        sections.append(('Publishers: Transliteration', (99, 122)), )
-        sections.append(('Publication Series: Transliteration', (97, 121)), )
-        sections.append(('Titles: Transliteration', (124, 125, 126, 127, 128,
-                                              129, 130, 131, 132, 133, 134, 135, 136,
-                                              137, 138, 139, 140, 141, 142, 143, 145)), )
-        sections.append(('Publications: Transliteration', (148, 149, 150, 151, 152, 153,
-                                                         154, 155, 156, 157, 158, 159, 160, 161,
-                                                         162, 163, 164, 165, 166, 167, 146, 147)), )
+        sections.append(('Transliterations', (85, 99, 97, 121, 122, 123, 124, 125, 126,
+                                              127, 128, 129, 130, 131, 132, 133, 134, 135,
+                                              136, 137, 138, 139, 140, 141, 142, 143, 145,
+                                              146, 147, 148, 149, 150, 151, 152, 153, 154,
+                                              155, 156, 157, 158, 159, 160, 161, 162, 163,
+                                              164, 165, 166, 167, 169, 170, 171, 172, 173,
+                                              174, 175, 176, 177, 178, 179, 180, 181, 182)), )
         sections.append(('Wiki Cleanup', (101, 102, 103, 104, 105, 106, 107, 108, 109,
                                           110, 111, 112, 113, 114, 115, 116, 117, 118,
                                           119, 120, 200, 201, 202, 203, 204, 205, 206, 207)), )
@@ -1177,6 +1175,6 @@ def reportsDict():
                          201, 202, 203, 204, 205, 206, 207, 208, 209, 210,
                          211, 212, 213, 214, 215, 216, 217, 218, 219, 220,
                          221, 222, 223, 224, 225, 226, 227, 228, 229, 230,
-                         232, 233, 234, 235, 236, 237, 9999)
+                         232, 233, 234, 235, 236, 237, 238, 239, 9999)
         
         return (reports, sections, non_moderator)

@@ -5979,7 +5979,7 @@ def function236():
 		print "<h2>No SFBC publications with an ISBN and no Catalog ID.</h2>"
 
 def function237():
-       
+        nonModeratorMessage()
         query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
                 from pubs p, notes n, cleanup c
                 where p.note_id = n.note_id
@@ -6014,6 +6014,67 @@ def function237():
 		print "</table>"
 	else:
 		print "<h2>No Pubs with LCCN in notes, no LCCN template and no external LCCN ID.</h2>"
+
+def function238():
+        query = """select t1.title_id, t1.title_title
+                from titles t1, titles t2, cleanup c
+                where t1.title_parent = t2.title_id
+                and t1.title_ttype not in ('COVERART','INTERIORART')
+                and t1.title_language != t2.title_language
+                and not exists (select 1 from notes n where t1.note_id = n.note_id)
+                and c.report_type = 238
+                and t1.title_id = c.record_id
+                order by t1.title_title"""
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Title'))
+                bgcolor = 1
+                count = 1
+                while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table><p>'
+        else:
+                print "<h2>No translations without notes found</h2>"
+
+def function239():
+        query = """select t1.title_id, t1.title_title
+                from titles t1, titles t2, notes n, cleanup c
+                where t1.title_parent = t2.title_id
+                and t1.title_ttype not in ('COVERART','INTERIORART')
+                and t1.title_language != t2.title_language
+                and t1.note_id = n.note_id
+                and n.note_note not like '%{{Tr|%'
+                and c.report_type = 239
+                and t1.title_id = c.record_id
+                order by t1.title_title"""
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Title'))
+                bgcolor = 1
+                count = 1
+                while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table><p>'
+        else:
+                print "<h2>No translations without the Tr template in notes found</h2>"
 
 
 def function9999():

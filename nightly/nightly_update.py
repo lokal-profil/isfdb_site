@@ -1457,6 +1457,29 @@ def nightly_cleanup_reports():
                 limit 500"""
         standardReport(query, 237)
 
+        #   Report 238: Translations without Notes
+        query = """select t1.title_id
+                from titles t1, titles t2
+                where t1.title_parent = t2.title_id
+                and t1.title_ttype not in ('COVERART','INTERIORART')
+                and t1.title_language != t2.title_language
+                and not exists (select 1 from notes n where t1.note_id = n.note_id)
+                order by t1.title_title
+                limit 500"""
+        standardReport(query, 238)
+
+        #   Report 239: Translations without the Tr Template in Notes
+        query = """select t1.title_id
+                from titles t1, titles t2, notes n
+                where t1.title_parent = t2.title_id
+                and t1.title_ttype not in ('COVERART','INTERIORART')
+                and t1.title_language != t2.title_language
+                and t1.note_id = n.note_id
+                and n.note_note not like '%{{Tr|%'
+                order by t1.title_title
+                limit 500"""
+        standardReport(query, 239)
+
 def badUnicodeReport(table, record_title, record_id, report_number):
         unicode_map = unicode_translation()
         # Assumes unicode_map will have at least one entry
