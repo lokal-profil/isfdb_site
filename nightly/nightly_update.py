@@ -1323,7 +1323,6 @@ def nightly_cleanup_reports():
         query = """select p.pub_id from notes n, pubs p
                  where p.note_id = n.note_id
                  and n.note_note like '%lccn.loc%'
-                 order by p.pub_title
                  limit 500"""
         standardReport(query, 225)
 

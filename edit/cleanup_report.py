@@ -5577,7 +5577,7 @@ def function224():
         ids_in_notes(224, '%catalogue.bnf.fr%', 'direct BNF links')
 
 def function225():
-        ids_in_notes(225, '%lccn.loc%', 'direct Library of Congress links')
+        ids_in_notes(225, '%lccn.loc%', 'direct Library of Congress links', 1)
 
 def function226():
         ids_in_notes(226, '%worldcat.org/%', 'direct OCLC/WorldCat links')
