@@ -1322,14 +1322,14 @@ def nightly_cleanup_reports():
         #   Report 225: Publications with lccn.loc (direct Library of Congress links) in Notes
         query = """select p.pub_id from notes n, pubs p
                  where p.note_id = n.note_id
-                 and n.note_note like '%lccn.loc%'
-                 limit 500"""
+                 and n.note_note like '%lccn.loc%'"""
         standardReport(query, 225)
 
         #   Report 226: Publications with worldcat.org (direct OCLC/WorldCat links) in Notes
         query = """select p.pub_id from notes n, pubs p
                  where p.note_id = n.note_id
-                 and n.note_note like '%worldcat.org/%'
+                 and (n.note_note like '%worldcat.org/oclc/%'
+                 or n.note_note like '%worldcat.org/title/%')
                  order by p.pub_title
                  limit 500"""
         standardReport(query, 226)
