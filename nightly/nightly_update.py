@@ -1187,7 +1187,9 @@ def nightly_cleanup_reports():
                 where pub_price like '%$ %'
                 or pub_price like '%£ %'
                 or pub_price like '%¥ %'
+                or pub_price like concat('%',CHAR(0x80),' ','%')
                 or pub_price like '%CDN%'
+                or pub_price like '%EUR%'
                 or (pub_price like '%$%,%' and pub_price not like '%$%.%')
                 or (pub_price like '%£%,%' and pub_price not like '%£%.%')
                 or pub_price regexp '^[[:digit:]]{1,20}[.]*[[:digit:]]{1,20}$'

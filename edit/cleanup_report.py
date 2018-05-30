@@ -4001,7 +4001,9 @@ def function100():
                 and (p.pub_price like '%$ %'
                 or p.pub_price like '%£ %'
                 or p.pub_price like '%¥ %'
+                or p.pub_price like concat('%',CHAR(0x80),' ','%')
                 or p.pub_price like '%CDN%'
+                or p.pub_price like '%EUR%'
                 or (p.pub_price like '%$%,%' and pub_price not like '%$%.%')
                 or (p.pub_price like '%£%,%' and pub_price not like '%£%.%')
                 or p.pub_price regexp '^[[:digit:]]{1,20}[.]*[[:digit:]]{1,20}$'
