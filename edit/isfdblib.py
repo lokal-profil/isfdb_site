@@ -1158,7 +1158,7 @@ def reportsDict():
         sections.append(('Forthcoming Books', (71, 72)), )
 
         # A tuple of report IDs which non-moderators are allowed to view
-        non_moderator = (1, 2, 3, 4, 5, 8, 9, 10, 11, 12, 14, 15, 16, 19,
+        non_moderator = (1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 14, 15, 16, 19,
                          20, 22, 29, 33, 34, 38, 41, 46, 48, 49, 54, 58, 59,
                          60, 61, 71, 72, 82, 83, 84, 85, 86, 87, 88,
                          91, 92, 93, 95, 97, 99,

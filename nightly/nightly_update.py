@@ -84,7 +84,9 @@ def nightly_cleanup_reports():
         standardReport(query, 5)
 
         #   Report 6: Authors with invalid Directory Entries
-        query = "select author_id from authors where REPLACE(author_lastname,'&#','') REGEXP '^[[:punct:]]'"
+        query = """select author_id from authors
+                   where author_lastname like '%&#%'
+                   or not hex(author_lastname) regexp '^([0-7][0-9A-F])*$'"""
         standardReport(query, 6)
 
         #   Report 7: Authors with invalid spaces

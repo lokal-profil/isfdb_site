@@ -234,9 +234,12 @@ def OneType(record_id, record_title, table, record_name, cgi_script, note_id, te
 	print '<p>'
 
 def function6():
-	query = """select cleanup.cleanup_id, authors.author_id, authors.author_canonical, authors.author_lastname 
-                from cleanup, authors where REPLACE(authors.author_lastname,'&#','') REGEXP '^[[:punct:]]' 
-                and cleanup.record_id=authors.author_id and cleanup.report_type=6 and cleanup.resolved IS NULL"""
+	query = """select authors.author_id, authors.author_canonical, authors.author_lastname 
+                from cleanup, authors
+                where (author_lastname like '%&#%' or not hex(author_lastname) regexp '^([0-7][0-9A-F])*$')
+                and cleanup.record_id=authors.author_id
+                and cleanup.report_type=6
+                order by author_lastname"""
 
 	db.query(query)
 	result = db.store_result()
@@ -245,22 +248,23 @@ def function6():
 	if num > 0:
 		record = result.fetch_row()
 		bgcolor = 1
-		PrintTableColumns(('Author', 'Directory Entry', ''))
+		PrintTableColumns(('Author', 'Directory Entry'))
 		while record:
                         if bgcolor:
                                 print '<tr align=left class="table1">'
                         else:
                                 print '<tr align=left class="table2">'
-
-                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, record[0][1], record[0][2])
-                        print '<td>%s</td>' % record[0][3]
-                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+6">Ignore this directory entry</a></td>' % (HTFAKE, record[0][0])
+                        author_id = record[0][0]
+                        author_canonical = record[0][1]
+                        author_lastname = record[0][2]
+                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_canonical)
+                        print '<td>%s</td>' % author_lastname
                         print '</tr>'
 			bgcolor ^= 1
 			record = result.fetch_row()
 		print "</table>"
 	else:
-		print "<h2>No records found</h2>"
+		print "<h2>No invalid directory names found</h2>"
 
 def function7():
         print 'This report identifies author names with:'
