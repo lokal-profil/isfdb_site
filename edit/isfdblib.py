@@ -1118,7 +1118,7 @@ def reportsDict():
         reports[234] = ("Publications with direct De Nederlandse Bibliografie links in Notes")
         reports[235] = ("Publications with invalid BNF identifiers")
         reports[236] = ("SFBC Publications with an ISBN and no Catalog ID")
-        reports[237] = ("Publications with LCCN in notes, no LCCN template and no external LCCN ID (first 500)")
+        reports[237] = ("Publications with non-template Library of Congress numbers in notes (first 500)")
         reports[238] = ("Translations without Notes (first 500)")
         reports[239] = ("Translations without the Tr Template in Notes (first 500)")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
@@ -1139,7 +1139,7 @@ def reportsDict():
         sections.append(('Awards', (23, 24, 25, 26, 190, 232)), )
         sections.append(('Notes/Synopses', (4, 5, 82, 191, 217, 208, 209, 216, 210, 211,
                                             212, 213, 214, 215, 218, 219, 220, 221, 222,
-                                            223, 224, 225, 226, 229, 230, 234, 237)), )
+                                            223, 224, 225, 237, 226, 229, 230, 234)), )
         sections.append(('Reviews', (40, 41, 42)), )
         sections.append(('Publishers', (43, 44, 65, 73)), )
         sections.append(('Publication Series', (66, 77, 98)), )

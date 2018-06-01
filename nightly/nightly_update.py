@@ -1446,19 +1446,14 @@ def nightly_cleanup_reports():
                  and p.pub_catalog is NULL"""
         standardReport(query, 236)
 
-        #   Report 237: Pubs with LCCN in notes, no LCCN template and no external LCCN ID
-##        query = """select p.pub_id
-##                from pubs p, notes n
-##                where p.note_id = n.note_id
-##                and n.note_note like '%LCCN%'
-##                and n.note_note not like '%{{LCCN|%'
-##                and not exists
-##                (select 1 from identifiers i
-##                where i.pub_id = p.pub_id
-##                and i.identifier_type_id = 10)
-##                order by p.pub_title
-##                limit 500"""
-##        standardReport(query, 237)
+        #   Report 237: Pubs with non-template LCCNs in notes
+        query = """select p.pub_id
+                from pubs p, notes n
+                where p.note_id = n.note_id
+                and (n.note_note like '%LCCN:%' or n.note_note regexp 'LCCN [[:digit:]]{1}')
+                order by p.pub_title
+                limit 500"""
+        standardReport(query, 237)
 
         #   Report 238: Translations without Notes
         query = """select t1.title_id
