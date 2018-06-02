@@ -206,63 +206,34 @@ if __name__ == '__main__':
                         print "<b>Review of:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], 'span')
                 displayCommon(title, user)
 		authors = SQLReviewBriefAuthorRecords(title_id)
-		if len(authors) > 1:
-			print "<br><b>Authors:</b>"
-		else:
-			print "<br><b>Author:</b>"
-		counter = 0
-		for author in authors:
-			if counter:
-				print " <b>and</b> "
-			displayAuthorById(author[0], author[1])
-			counter += 1
+		displayPersonLabel('Author', authors)
+		displayPersons(authors)
 	elif title[TITLE_TTYPE] == 'INTERVIEW':
 		print "<b>Interview Title:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], 'span')
                 displayCommon(title, user)
 		authors = SQLInterviewBriefAuthorRecords(title_id)
-		if len(authors) > 1:
-			print "<br><b>Interviewees:</b>"
-		else:
-			print "<br><b>Interviewees:</b>"
-		counter = 0
-		for author in authors:
-			if counter:
-				print " <b>and</b> "
-			displayAuthorById(author[0], author[1])
-			counter += 1
+		displayPersonLabel('Interviewee', authors)
+		displayPersons(authors)
 	else:
 		print "<b>Title:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], 'span')
                 displayCommon(title, user)
-	print "<br>"
 
 	########################################
 	# STEP 2 - Get the title's authors
 	########################################
 	authors = SQLTitleBriefAuthorRecords(title_id)
-	if title[TITLE_TTYPE] == 'ANTHOLOGY':
-		if len(authors) > 1:
-			print "<b>Editors:</b>"
-		else:
-			print "<b>Editor:</b>"
+	if title[TITLE_TTYPE] in ('ANTHOLOGY', 'EDITOR'):
+		displayPersonLabel('Editor', authors)
 	elif title[TITLE_TTYPE] == 'REVIEW':
-		if len(authors) > 1:
-			print "<b>Reviewers:</b>"
-		else:
-			print "<b>Reviewer:</b>"
+		displayPersonLabel('Reviewer', authors)
+	elif title[TITLE_TTYPE] == 'INTERVIEW':
+		displayPersonLabel('Interviewer', authors)
 	else:
-		if len(authors) > 1:
-			print "<b>Authors:</b>"
-		else:
-			print "<b>Author:</b>"
-	counter = 0
-	for author in authors:
-		if counter:
-			print " <b>and</b> "
-		displayAuthorById(author[0], author[1])
-		counter += 1
-	print "<br>"
+		displayPersonLabel('Author', authors)
+        displayPersons(authors)
+	print '<br>'
 
-	print "<b>Date:</b> ", convertDate(title[TITLE_YEAR], 1)
+	print '<b>Date:</b> ', convertDate(title[TITLE_YEAR], 1)
 
 	if title[TITLE_PARENT]:
 		parent_title = SQLloadTitle(title[TITLE_PARENT])

@@ -16,6 +16,22 @@ from login import *
 from library import *
 from navbar import *
 
+
+def displayPersonLabel(person_type, persons, line_start = '<br>'):
+        if len(persons) > 1:
+                many = 's'
+        else:
+                many = ''
+        print "%s<b>%s%s:</b>" % (line_start, person_type, many)
+
+def displayPersons(persons):
+        counter = 0
+        for person in persons:
+                if counter:
+                        print " <b>and</b> "
+                displayAuthorById(person[0], person[1])
+                counter += 1
+
 def PrintNewPubs(userid):
 	print '<div class="divider">'
         print 'Add New Data:'

@@ -385,11 +385,12 @@ if __name__ == '__main__':
                                 if len(pubs_for_editor) > 1:
                                         print '<a "href=http:/%s/title.cgi?%s">(View All Issues)</a>' % (HTFAKE, editor[TITLE_PUBID])
 	print '<li>'
+        authors = SQLPubBriefAuthorRecords(pub.pub_id)
 	if pub.pub_ctype in ('ANTHOLOGY', 'MAGAZINE', 'FANZINE'):
-		print '  <b>Editors:</b>'
+                displayPersonLabel('Editor', authors, '')
 	else:
-		print '  <b>Authors:</b>'
-	displayPubAuthors(pub.pub_id)
+                displayPersonLabel('Author', authors, '')
+        displayAuthorList(authors)
 
 	if pub.pub_year:
 		print '<li> <b>Date:</b> %s' % (convertDate(pub.pub_year, 1))
