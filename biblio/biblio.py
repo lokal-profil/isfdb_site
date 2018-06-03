@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -55,6 +55,7 @@ class Bibliography:
                                  'Chronological': 'ch',
                                  'Award': 'eaw'
                                  }
+		self.cgi_script = ''
 
                 ##############################################
                 # SERIES and TITLE TYPE properties
@@ -229,12 +230,9 @@ class Bibliography:
 	####################################################
 	# 	LOAD METHODS
 	####################################################
-	def loadAuthorData(self, author):
-		self.author_name =  author
-		self.au_data = SQLgetAuthorData(author)
-		if self.au_data:
-			self.au_id = self.au_data[0]
-			SQLupdateViews(self.au_id)
+	def loadAuthorData(self):
+                self.au_id = self.au_data[AUTHOR_ID]
+                SQLupdateViews(self.au_id)
 		self.au_trans_names = SQLloadTransAuthorNames(self.au_id)
 		self.au_trans_legal_names = SQLloadTransLegalNames(self.au_id)
 		self.au_emails = SQLloadEmails(self.au_id)
@@ -677,23 +675,25 @@ class Bibliography:
                 return
 
         def printHeaders(self):
-                cgi_script = '%s.cgi' % self.page_types[self.page_type]
+                self.cgi_script = '%s.cgi' % self.page_types[self.page_type]
 
                 try:
                         author = unescapeLink(sys.argv[1])
                 except:
-                        PrintHeader('Invalid Author')
-                        PrintNavbar('author', '', 0, cgi_script, '')
-                        PrintTrailer('author', '', 0)
-                        sys.exit(0)
+                        self.printCommonError('', 'Invalid Author', 1)
 
                 # Check if the passed in value is the row number in the author table.
-                # If so, retrieve the author record from the database and reset
-                # "author" to the canonical name.
+                # If so, use it to retrieve the author record from the database
                 if author.isdigit():
-                        author_data = SQLloadAuthorData(int(author))
-                        if author_data:
-                                author=author_data[AUTHOR_CANONICAL]
+                        self.au_data = SQLloadAuthorData(int(author))
+                # Otherwise use the author name to retrieve the author record
+                else:
+                        self.au_data = SQLgetAuthorData(author)
+
+                # If the requested author doesn't exist, display an error message
+                if not self.au_data:
+                        self.printCommonError(author, "Author not found: %s" % author, 1)
+
                 # Check if the user is trying to change the default settings for translations
                 try:
                         translations = sys.argv[2]
@@ -701,21 +701,20 @@ class Bibliography:
                 except:
                         pass
 
-                title = "%s Bibliography: %s" % (self.page_type, author)
-                PrintHeader(title)
+		self.author_name = self.au_data[AUTHOR_CANONICAL]
+                PrintHeader("%s Bibliography: %s" % (self.page_type, self.author_name))
 
-                if author == 'uncredited' and self.page_type != 'Award':
+                if self.author_name == 'uncredited' and self.page_type != 'Award':
                         self.printCommonError(author, 'Only <a href="http:/%s/eaw.cgi?uncredited">Award Bibliography</a> is available for "uncredited"' % HTFAKE)
 
-                self.loadAuthorData(author)
-                if self.au_id == -1:
-                        self.printCommonError(author, "Author not found: %s" % author)
+                self.loadAuthorData()
 
-                PrintNavbar('author', author, self.au_id, cgi_script, author)
+                PrintNavbar('author', self.author_name, self.au_id, self.cgi_script, self.author_name)
 
-        def printCommonError(self, author, message):
-                cgi_script = '%s.cgi' % self.page_types[self.page_type]
-                PrintNavbar('author', author, 0, cgi_script, author)
+        def printCommonError(self, author, message, noheader = 0):
+                if noheader:
+                        PrintHeader(message)
+                PrintNavbar('author', author, 0, self.cgi_script, author)
                 print '<h2>%s</h2>' % message
                 PrintTrailer('author', author, 0)
                 sys.exit(0)
