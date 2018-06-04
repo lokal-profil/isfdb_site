@@ -5221,11 +5221,12 @@ def function191():
 def function192():
         # Authors without a Working Language
         print """<h2>This report is currently limited to authors whose names
-                     start with the letters X-Z</h2>"""
+                     start with the letters W-Z</h2>"""
         query = """select a.author_id, a.author_canonical
                    from authors a, cleanup c
                    where a.author_language is null
-                   and c.record_id = a.author_id and c.report_type = 192
+                   and c.record_id = a.author_id
+                   and c.report_type = 192
                    order by a.author_lastname, a.author_canonical"""
 
 	db.query(query)

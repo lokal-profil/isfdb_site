@@ -1225,7 +1225,7 @@ def nightly_cleanup_reports():
         #   Report 192: Authors without a Working Language
         query = """select author_id from authors
                    where author_language is null
-                   and substring(author_lastname,1,1) > 'W'
+                   and substring(author_lastname,1,1) > 'V'
                 """
         standardReport(query, 192)
 
