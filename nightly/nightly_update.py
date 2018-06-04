@@ -1451,8 +1451,7 @@ def nightly_cleanup_reports():
                 from pubs p, notes n
                 where p.note_id = n.note_id
                 and (n.note_note like '%LCCN:%' or n.note_note regexp 'LCCN [[:digit:]]{1}')
-                order by p.pub_title
-                limit 500"""
+                order by p.pub_title"""
         standardReport(query, 237)
 
         #   Report 238: Translations without Notes

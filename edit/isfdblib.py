@@ -1118,7 +1118,7 @@ def reportsDict():
         reports[234] = ("Publications with direct De Nederlandse Bibliografie links in Notes")
         reports[235] = ("Publications with invalid BNF identifiers")
         reports[236] = ("SFBC Publications with an ISBN and no Catalog ID")
-        reports[237] = ("Publications with non-template Library of Congress numbers in notes (first 500)")
+        reports[237] = ("Publications with non-template Library of Congress numbers in notes")
         reports[238] = ("Translations without Notes (first 500)")
         reports[239] = ("Translations without the Tr Template in Notes (first 500)")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
