@@ -34,20 +34,10 @@ def isModerator(username):
 # These routines start and end the HTML page
 ##################################################################
 def PrintPreMod(title):
-        print 'Content-type: text/html\n'
-	print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
-	print '<html lang="en-us">'
-        print '<head>'
-        print '<meta http-equiv="content-type" content="text/html; charset=' +UNICODE+ '" >'
-        print '<title>%s</title>' % (title)
-        print '<style type="text/css" media="screen">'
-	print '  @import url("http://%s/biblio.css");' % (HTMLHOST)
-        print '</style></head>'
+        PrintHTMLHeaders(title)
+        PrintHTMLStyle()
         print '<body>'
-        print '<div id="wrap">'
-        print '<a class="topbanner" href="http:/%s/index.cgi"></a>' % (HTFAKE)
-        print '<div id="statusbar">'
-        print '<h2>%s</h2>' % (title)
+        PrintTopBanner(title)
         print '</div>'
 
 ##################################################

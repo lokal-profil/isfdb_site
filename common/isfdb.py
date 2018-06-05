@@ -11,41 +11,46 @@
 import cgitb; cgitb.enable()
 from localdefs import *
 
-SCHEMA_VER = "0.02"
-ENGINE     = "<b>ISFDB Engine</b> - Version 4.00 (04/24/06)"
-COPYRIGHT  = "Copyright (c) 1995-2016 Al von Ruff."
-
-SERIES_TYPE_UNKNOWN     = -1
-SERIES_TYPE_NC          = 1
-SERIES_TYPE_EDIT        = 2
-SERIES_TYPE_ANTH        = 3
-SERIES_TYPE_NONFIC      = 4
-SERIES_TYPE_SF          = 5
-SERIES_TYPE_POEM        = 6
-SERIES_TYPE_ESSAY       = 7
-SERIES_TYPE_OTHER       = 9
-
 def Date_or_None(s):
     return s
 
 def IsfdbConvSetup():
-        import MySQLdb.converters
-        IsfdbConv = MySQLdb.converters.conversions
-        IsfdbConv[10] = Date_or_None
-        return(IsfdbConv)
+    import MySQLdb.converters
+    IsfdbConv = MySQLdb.converters.conversions
+    IsfdbConv[10] = Date_or_None
+    return(IsfdbConv)
 
+def PrintHTMLHeaders(title):
+    print 'Content-type: text/html; charset=%s\n' % UNICODE
+    print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
+    print '<html lang="en-us">'
+    print '<head>'
+    print '<meta http-equiv="content-type" content="text/html; charset=%s" >' % UNICODE
+    print '<link rel="shortcut icon" href="http://%s/favicon.ico">' % HTMLHOST
+    print '<title>%s</title>' % title
 
-#########################################
-# History Actions
-#########################################
+def PrintHTMLStyle():
+    print '<style type="text/css" media="screen">'
+    print '  @import url("http://%s/biblio.css");' % (HTMLHOST)
+    print '</style></head>'
+
+def PrintTopBanner(title):
+    print '<div id="wrap">'
+    print '<a class="topbanner" href="http:/%s/index.cgi"></a>' % (HTFAKE)
+    print '<div id="statusbar">'
+    print '<h2>%s</h2>' % (title)
+
+SCHEMA_VER = "0.02"
+ENGINE     = "<b>ISFDB Engine</b> - Version 4.00 (04/24/06)"
+COPYRIGHT  = "Copyright (c) 1995-2018 Al von Ruff."
+
+# History Actions (obsolete)
 AUTHOR_UPDATE  = 1
 AUTHOR_INSERT  = 2
 AUTHOR_DELETE  = 3
 AUTHOR_MERGE   = 4
 
-#
 # Field offsets for publication records
-#
 PUB_PUBID     = 0
 PUB_TITLE     = 1
 PUB_TAG       = 2
@@ -62,9 +67,7 @@ PUB_SERIES    = 12
 PUB_SERIES_NUM= 13
 PUB_CATALOG   = 14
 
-#
 # Field offsets for author records
-#
 AUTHOR_ID         = 0
 AUTHOR_CANONICAL  = 1
 AUTHOR_LEGALNAME  = 2
@@ -89,9 +92,7 @@ AUTHOR_TRANS_NAME = 19
 AUTHOR_MAX        = 20 # Highest author offset+1; used to display author history
 
 
-#
 # Field offsets for title records
-#
 TITLE_PUBID       = 0
 TITLE_TITLE       = 1
 TITLE_XLATE       = 2
@@ -116,10 +117,7 @@ TITLE_NVZ         = 20
 TITLE_JVN         = 21
 TITLE_CONTENT     = 22
 
-
-#
 # Field offsets for award records
-#
 AWARD_ID             = 0
 AWARD_TITLE          = 1
 AWARD_AUTHOR         = 2
@@ -132,9 +130,7 @@ AWARD_TYPEID         = 8
 AWARD_CATID          = 9
 AWARD_NOTEID         = 10
 
-#
 # Field offsets for award type records
-#
 AWARD_TYPE_ID         = 0
 AWARD_TYPE_CODE       = 1
 AWARD_TYPE_NAME       = 2
@@ -146,24 +142,18 @@ AWARD_TYPE_SHORT_NAME = 7
 AWARD_TYPE_POLL       = 8
 AWARD_TYPE_NONGENRE   = 9
 
-#
 # Field offsets for award category records
-#
 AWARD_CAT_ID          = 0
 AWARD_CAT_NAME        = 1
 AWARD_CAT_TYPE_ID     = 2
 AWARD_CAT_ORDER       = 3
 AWARD_CAT_NOTE        = 4
 
-#
 # Field offsets for note records
-#
 NOTE_PUBID           = 0
 NOTE_NOTE            = 1
 
-#
 # Field offsets for series records
-#
 SERIES_PUBID           = 0
 SERIES_NAME            = 1
 SERIES_PARENT          = 2
@@ -171,33 +161,36 @@ SERIES_TYPE            = 3
 SERIES_PARENT_POSITION = 4
 SERIES_NOTE            = 5
 
-#
+# Order of series types on author and series biblio page
+SERIES_TYPE_UNKNOWN     = -1
+SERIES_TYPE_NC          = 1
+SERIES_TYPE_EDIT        = 2
+SERIES_TYPE_ANTH        = 3
+SERIES_TYPE_NONFIC      = 4
+SERIES_TYPE_SF          = 5
+SERIES_TYPE_POEM        = 6
+SERIES_TYPE_ESSAY       = 7
+SERIES_TYPE_OTHER       = 9
+
 # Field offsets for pub_contents records
-#
 PUB_CONTENTS_ID      = 0
 PUB_CONTENTS_TITLE   = 1
 PUB_CONTENTS_PUB     = 2
 PUB_CONTENTS_PAGE    = 3
 
-#
 # Field offsets for publisher records
-#
 PUBLISHER_ID         = 0
 PUBLISHER_NAME       = 1
 PUBLISHER_WIKI       = 2
 PUBLISHER_NOTE       = 3
 
-#
 # Field offsets for Publication Series records
-#
 PUB_SERIES_ID        = 0
 PUB_SERIES_NAME      = 1
 PUB_SERIES_WIKI      = 2
 PUB_SERIES_NOTE      = 3
 
-#
 # Field offsets for submission records
-#
 SUB_ID               = 0
 SUB_STATE            = 1
 SUB_TYPE             = 2
@@ -210,24 +203,18 @@ SUB_REASON           = 8
 SUB_HOLDID           = 9
 SUB_NEW_RECORD_ID    = 10
 
-#
 # Field offsets for Website records
-#
 WEBSITE_URL          = 0
 WEBSITE_NAME         = 1
 
-#
 # Field offsets for primary verifications
-#
 PRIM_VERIF_ID        = 0
 PRIM_VERIF_PUB_ID    = 1
 PRIM_VERIF_USER_ID   = 2
 PRIM_VERIF_TIME      = 3
 PRIM_VERIF_TRANSIENT = 4
 
-#
 # Field offsets for secondary verifications
-#
 VERIF_ID             = 0
 VERIF_PUB_ID         = 1
 VERIF_REF_ID         = 2
@@ -235,17 +222,13 @@ VERIF_USER_ID        = 3
 VERIF_TIME           = 4
 VERIF_STATUS         = 5
 
-#
 # Field offsets for verification sources; 3 is not used
-#
 REFERENCE_ID         = 0
 REFERENCE_LABEL      = 1
 REFERENCE_NAME       = 2
 REFERENCE_URL        = 4
 
-#
 # Field offsets for tags
-#
 TAG_ID               = 0
 TAG_NAME             = 1
 TAG_STATUS           = 2
@@ -273,6 +256,7 @@ IDSITE_POSITION      = 2
 IDSITE_URL           = 3
 IDSITE_NAME          = 4
 
+# Recognized submission types
 MOD_AUTHOR_MERGE     = 1
 MOD_AUTHOR_UPDATE    = 2
 MOD_AUTHOR_DELETE    = 3

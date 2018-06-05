@@ -93,13 +93,7 @@ def makequery(entry, use):
 # These routines start and end the HTML page
 ##################################################################
 def PrintPreSearch(title):
-        print 'Content-type: text/html; charset=%s\n' % (UNICODE)
-	print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
-	print '<html lang="en-us">'
-        print '<head>'
-        print '<meta http-equiv="content-type" content="text/html; charset=%s" >' % UNICODE
-	print '<link rel="shortcut icon" href="http://%s/favicon.ico">' % (HTMLHOST)
-        print '<title>%s</title>' % (title)
+        PrintHTMLHeaders(title)
 
         # Include the JavaScript file with the general purpose JS functions that support editing
         print '<script type="text/javascript" src="http://%s/edit_js.js"></script>' % HTMLLOC
@@ -125,9 +119,7 @@ def PrintPreSearch(title):
 	elif title in ('Publisher Editor', 'Publication Series Editor', 'Series Editor'):
         	JSscript('edit_other')
 
-        print '<style type="text/css" media="screen">'
-        print '  @import url("http://%s/biblio.css");' % (HTMLHOST)
-        print '</style></head>'
+        PrintHTMLStyle()
 
         body = '<body'
         # Set focus on the first active field in the form
@@ -178,10 +170,7 @@ def PrintPreSearch(title):
         body += '>'
         print body
 
-        print '<div id="wrap">'
-        print '<a class="topbanner" href="http:/%s/index.cgi"></a>' % (HTFAKE)
-        print '<div id="statusbar">'
-        print '<h2>%s</h2>' % (title)
+        PrintTopBanner(title)
         print '</div>'
         if (title != "Title Search") and (title != "Author Search") and (title != "Pub Search"):
                 # The "<noscript>" part will only be executed if Javascript is not enabled on the browser side

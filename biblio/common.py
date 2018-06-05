@@ -494,13 +494,7 @@ def PrintJSFunction(function_name, values):
         print '</script>'
 
 def PrintHeader(title):
-        print 'Content-type: text/html; charset=%s\n' % (UNICODE)
-	print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
-	print '<html lang="en-us">'
-	print '<head>'
-	print '<meta http-equiv="content-type" content="text/html; charset=' +UNICODE+ '" >'
-	print '<link rel="shortcut icon" href="http://%s/favicon.ico">' % (HTMLHOST)
-	print '<title>%s</title>' % (title)
+        PrintHTMLHeaders(title)
 
         # Advanced Search only:
         if title == 'ISFDB Advanced Search':
@@ -522,9 +516,7 @@ def PrintHeader(title):
                 # Import a function to change drop-down values dynamically
                 print '<script type="text/javascript" src="http://%s/adv_search.js"></script>' % HTMLLOC
 
-	print '<style type="text/css" media="screen">'
-	print '  @import url("http://%s/biblio.css");' % (HTMLHOST)
-	print '</style></head>'
+        PrintHTMLStyle()
 	print '<body onload="document.searchform.arg.focus();" >'
 
 	#######################################################################
@@ -538,10 +530,7 @@ def PrintHeader(title):
 		print 'urchinTracker();'
 		print '</script>'
 
-	print '<div id="wrap">'
-        print '<a class="topbanner" href="http:/%s/index.cgi"></a>' % (HTFAKE)
-	print '<div id="statusbar">'
-	print '<h2>%s</h2>' % (title)
+        PrintTopBanner(title)
 	(userid, username, usertoken) = GetUserData()
 	if not userid:
                 print '<h3>You are not logged in. If you'

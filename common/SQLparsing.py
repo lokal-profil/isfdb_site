@@ -48,21 +48,10 @@ try:
 	db.select_db(DBASE)
 	SQLUpdateQueries()
 except:
-        print 'Content-type: text/html; charset=%s\n' % (UNICODE)
-	print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
-	print '<html lang="en-us">'
-        print '<head>'
-	print '<meta http-equiv="content-type" content="text/html; charset=' +UNICODE+ '" >'
-	print '<link rel="shortcut icon" href="http://%s/favicon.ico">' % (HTMLHOST)
-        print '<title>SQL Database Error</title>'
-	print '<style type="text/css" media="screen">'
-	print '  @import url("http://%s/biblio.css");' % (HTMLHOST)
-	print '</style></head>'
+        PrintHTMLHeaders('Database Connection Error')
+        PrintHTMLStyle()
         print '<body>'
-        print '<div id="wrap">'
-        print '<a class="topbanner" href="http:/%s/index.cgi"></a>' % (HTFAKE)
-        print '<div id="statusbar">'
-	print '<h2>ISFDB ERROR</h2>'
+        PrintTopBanner('Database Connection Error')
         print '</div>'
         print '<div id="nav">'
        	print '<a href="http:/%s/index.cgi">' % (HTFAKE)
@@ -71,7 +60,7 @@ except:
         print '</div>'
         print '<div id="main2">'
         print '<div id="ErrorBox">'
-	print "Cannot connect to the MySQL database."
+	print 'Cannot connect to the ISFDB database'
 	print '</div>'
 	print '</div>'
 	print '</div>'
