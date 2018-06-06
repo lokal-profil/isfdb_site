@@ -21,6 +21,8 @@ def IsfdbConvSetup():
     return(IsfdbConv)
 
 def PrintHTMLHeaders(title):
+    print """Content-Security-Policy: form-action 'self';"""
+    #print """Content-Security-Policy: script-src 'self';"""
     print 'Content-type: text/html; charset=%s\n' % UNICODE
     print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
     print '<html lang="en-us">'
