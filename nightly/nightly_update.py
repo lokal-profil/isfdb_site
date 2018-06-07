@@ -973,11 +973,8 @@ def nightly_cleanup_reports():
                 and t.title_language is not null
                 and a.author_language is not null
                 and t.title_language != a.author_language
-                and a.author_canonical != 'uncredited'
-                and (t.title_ttype in ('NOVEL', 'EDITOR', 'NONFICTION')
-                or (t.title_ttype = 'SHORTFICTION' and substring(t.title_title,1,1) = 'A')
-                )
-                
+                and a.author_canonical not in ('uncredited', 'unknown')
+                and t.title_ttype in ('NOVEL', 'EDITOR', 'NONFICTION', 'SHORTFICTION')
                 """
         standardReport(query, 87)
 
