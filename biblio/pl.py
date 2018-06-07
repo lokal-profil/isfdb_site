@@ -491,7 +491,7 @@ if __name__ == '__main__':
                 cover_artists = []
                 #Retrieve the cover artists for the Cover Art Titles
                 for cover_art_title in cover_art_titles:
-                        artists_for_title = SQLTitleAuthors(cover_art_title)
+                        artists_for_title = SQLTitleBriefAuthorRecords(cover_art_title)
                         #Create a list of unique cover artists
                         for cover_artist in artists_for_title:
                                 if cover_artist not in cover_artists:
@@ -522,12 +522,12 @@ if __name__ == '__main__':
                         if len(cover_artists) == 0:
                                 param += '\n|Artist=' + 'Unknown'
                         else:
-                                param += '\n|Artist=' + cover_artists[0]
+                                param += '\n|Artist=%s\n|ArtistId=%d' % (cover_artists[0][1], cover_artists[0][0])
                 elif template == 'CID1-2':
-                        param += '\n|Artist1=' + cover_artists[0] + '\n|Artist2=' + cover_artists[1]
+                        param += '\n|Artist1=%s\n|Artist2=%s' % (cover_artists[0][1], cover_artists[1][1])
                 elif template == 'CID1-3':
-                        param += '\n|Artist1=' + cover_artists[0] + '\n|Artist2=' + cover_artists[1]
-                        param += '\n|Artist3=' + cover_artists[2]
+                        param += '\n|Artist1=%s\n|Artist2=%s' % (cover_artists[0][1], cover_artists[1][1])
+                        param += '\n|Artist3=%s' % cover_artists[2][1]
                 param += '\n|Source=Scanned by [[User:' + username + ']]'
                 param = urllib.quote("{{%s}}" % param)
                 upload = 'wpDestFile=%s.jpg&amp;wpUploadDescription=%s' % (tag, param)
