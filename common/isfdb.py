@@ -21,11 +21,29 @@ def IsfdbConvSetup():
     return(IsfdbConv)
 
 def PrintHTMLHeaders(title):
+    # Disallow the <base> directive
+    print """Content-Security-Policy: base-uri 'none';"""
+    # Disallow <a> ping, Fetch, XMLHttpRequest, WebSocket, and EventSource
+    #   May need to be re-worked if we implement AJAX
+    print """Content-Security-Policy: connect-src 'none';"""
+    # Disallow @font-face
     print """Content-Security-Policy: font-src 'none';"""
+    # Restrict form submission URLs to the ISFDB server
     print """Content-Security-Policy: form-action 'self';"""
+    # Disable nested browsing contexts
+    print """Content-Security-Policy: frame-src 'none';"""
+    # Disable <frame>, <iframe>, <object>, <embed>, and <applet>
     print """Content-Security-Policy: frame-ancestors 'none';"""
-    #print """Content-Security-Policy: style-src 'self';"""
+    # Restrict sources of images and favicons to HTTP and HTTPS
+    print """Content-Security-Policy: img-src http: https:;"""
+    # Disallow <manifest>
+    print """Content-Security-Policy: manifest-src 'none';"""
+    # Disallow <audio>, <track> and <video>
+    print """Content-Security-Policy: media-src 'none';"""
+    # Disable Worker, SharedWorker, or ServiceWorker scripts
+    #   May need to be re-worked if we implement workers
     print """Content-Security-Policy: worker-src 'none';"""
+    # Declare content type and end the HTTP headers section with a \n
     print 'Content-type: text/html; charset=%s\n' % UNICODE
     print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
     print '<html lang="en-us">'
