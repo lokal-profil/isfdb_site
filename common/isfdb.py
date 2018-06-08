@@ -21,8 +21,11 @@ def IsfdbConvSetup():
     return(IsfdbConv)
 
 def PrintHTMLHeaders(title):
+    print """Content-Security-Policy: font-src 'none';"""
     print """Content-Security-Policy: form-action 'self';"""
-    #print """Content-Security-Policy: script-src 'self';"""
+    print """Content-Security-Policy: frame-ancestors 'none';"""
+    #print """Content-Security-Policy: style-src 'self';"""
+    print """Content-Security-Policy: worker-src 'none';"""
     print 'Content-type: text/html; charset=%s\n' % UNICODE
     print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
     print '<html lang="en-us">'
@@ -32,9 +35,8 @@ def PrintHTMLHeaders(title):
     print '<title>%s</title>' % title
 
 def PrintHTMLStyle():
-    print '<style type="text/css" media="screen">'
-    print '  @import url("http://%s/biblio.css");' % (HTMLHOST)
-    print '</style></head>'
+    print '<link href="http://%s/biblio.css" rel="stylesheet" type="text/css" media="screen" />' % HTMLHOST
+    print '</head>'
 
 def PrintTopBanner(title):
     print '<div id="wrap">'
