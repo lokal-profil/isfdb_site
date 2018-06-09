@@ -40,6 +40,8 @@ def PrintHTMLHeaders(title):
     print """Content-Security-Policy: manifest-src 'none';"""
     # Disallow <audio>, <track> and <video>
     print """Content-Security-Policy: media-src 'none';"""
+    # Disallow <object>, <embed>, and <applet>
+    print """Content-Security-Policy: object-src 'none';"""
     # Disable Worker, SharedWorker, or ServiceWorker scripts
     #   May need to be re-worked if we implement workers
     print """Content-Security-Policy: worker-src 'none';"""

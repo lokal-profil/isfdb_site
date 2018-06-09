@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2015   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2018   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -30,7 +30,8 @@ TARGETS	= apple-touch-icon.png \
 	  edit_author.js \
 	  edit_award.js \
 	  edit_other.js \
-	  edit_title.js
+	  edit_title.js \
+	  isfdb_main.js
 
 install:
 	python index_install.py

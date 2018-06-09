@@ -495,6 +495,7 @@ def PrintJSFunction(function_name, values):
 
 def PrintHeader(title):
         PrintHTMLHeaders(title)
+        print '<script type="text/javascript" src="http://%s/isfdb_main.js"></script>' % HTMLLOC
 
         # Advanced Search only:
         if title == 'ISFDB Advanced Search':
@@ -517,11 +518,9 @@ def PrintHeader(title):
                 print '<script type="text/javascript" src="http://%s/adv_search.js"></script>' % HTMLLOC
 
         PrintHTMLStyle()
-	print '<body onload="document.searchform.arg.focus();" >'
+	print '<body>'
 
-	#######################################################################
-	# GOOGLE Analytics
-	#######################################################################
+	# GOOGLE Analytics - will need to be rewritten to work with CSP before it can be activated
 	if DO_ANALYTICS:
 		print '<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">'
 		print '</script>'

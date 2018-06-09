@@ -94,6 +94,7 @@ def makequery(entry, use):
 ##################################################################
 def PrintPreSearch(title):
         PrintHTMLHeaders(title)
+        print '<script type="text/javascript" src="http://%s/isfdb_main.js"></script>' % HTMLLOC
 
         # Include the JavaScript file with the general purpose JS functions that support editing
         print '<script type="text/javascript" src="http://%s/edit_js.js"></script>' % HTMLLOC
@@ -120,56 +121,7 @@ def PrintPreSearch(title):
         	JSscript('edit_other')
 
         PrintHTMLStyle()
-
-        body = '<body'
-        # Set focus on the first active field in the form
-        if 'New Award Category for' in title:
-                body += ' onload="document.getElementById(\'award_cat_name\').focus();" '
-        elif ((title[0:4] == 'New ') and (title != "New Publication Submission")) or (title == 'Clone Publication'):
-                body += ' onload="document.getElementById(\'pub_title\').focus();" '
-        # For Add Pub, focus on the Pub Year field since the first two fields are read-only
-        elif title == 'Add Publication':
-                body += ' onload="document.getElementById(\'pub_year\').focus();" '
-        # 
-        elif title[:14] == 'Import Content':
-                body += ' onload="document.getElementById(\'ExportFrom\').focus();" '
-        elif title[:14] == 'Export Content':
-                body += ' onload="document.getElementById(\'ExportTo\').focus();" '
-	elif title == 'Title Editor':
-                body += ' onload="document.getElementById(\'title_title\').focus();" '
-	elif title == 'Author Editor':
-                body += ' onload="document.getElementById(\'author_canonical\').focus();" '
-	elif title == 'Award Editor':
-                body += ' onload="document.getElementById(\'award_title\').focus();" '
-	elif title == 'Award Editor for a Title':
-                body += ' onload="document.getElementById(\'award_year\').focus();" '
-	elif (title == 'Award Type Editor') or (title == 'Add New Award Type'):
-                body += ' onload="document.getElementById(\'award_type_short_name\').focus();" '
-	elif title == 'Publication Editor':
-                body += ' onload="document.getElementById(\'pub_title\').focus();" '
-	elif title == 'Publisher Editor':
-                body += ' onload="document.getElementById(\'publisher_name\').focus();" '
-	elif title == 'Publication Series Editor':
-                body += ' onload="document.getElementById(\'pub_series_name\').focus();" '
-	elif title == 'Series Editor':
-                body += ' onload="document.getElementById(\'series_name\').focus();" '
-        # Setting focus is commented out for Tag Editor because setting focus to the
-        # first tag is not useful when there are pre-existing tags
-##	elif title == 'Tag Editor':
-##                body += ' onload="document.getElementById(\'tag_name1\').focus();" '
-	elif title == 'Link Review':
-                body += ' onload="document.getElementById(\'Parent\').focus();" '
-	elif title[:23] == 'Make/Remove a Pseudonym':
-                body += ' onload="document.getElementById(\'ParentName\').focus();" '
-	elif title == 'Make Variant Title':
-                body += ' onload="document.getElementById(\'Parent\').focus();" '
-	elif title == 'Add Variant Title':
-                body += ' onload="document.getElementById(\'title_title\').focus();" '
-	elif title == 'Link Award':
-                body += ' onload="document.getElementById(\'title_id\').focus();" '
-        body += '>'
-        print body
-
+        print '<body>'
         PrintTopBanner(title)
         print '</div>'
         if (title != "Title Search") and (title != "Author Search") and (title != "Pub Search"):

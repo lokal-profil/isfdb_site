@@ -49,9 +49,9 @@ def PrintSearchBox(page, search_value = '', search_type = ''):
 		print '<img src="http://%s/isfdb.gif" width="130" height="77" alt="ISFDB logo">' % (HTMLLOC)
         print '</a>'
 	print 'Search the database'
-        print '<form method="get" action="http:/%s/se.cgi" name="searchform" >' % (HTFAKE)
+        print '<form method="get" action="http:/%s/se.cgi" name="searchform" id="searchform">' % (HTFAKE)
 	print '<p>'
-	print '<input name="arg" class="search" value="%s">' % search_value
+	print '<input name="arg" id="searchform_arg" class="search" value="%s">' % search_value
 	print '<select name="type" class="search">'
 	options = ('Name', 'Fiction Titles', 'All Titles', 'Year of Title',
                    'Month of Title', 'Month of Publication', 'Series',
