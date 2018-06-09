@@ -9,7 +9,7 @@ function validateAwardForm() {
 		return false;
 	}
 	// Check if the Award Level radio button is set to "Level"
-	if (document.getElementById("LEVEL_LEVEL").checked) {
+	if ((document.getElementById("LEVEL_LEVEL")) && (document.getElementById("LEVEL_LEVEL").checked)) {
 		// Validate the award level
 		if (validateAwardLevel("award_level","Award Level (when the Poll place button is selected)") == false) {
 			return false;

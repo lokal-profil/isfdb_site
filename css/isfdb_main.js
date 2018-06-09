@@ -4,9 +4,9 @@
       Date: $Date: 2017-10-31 19:26:25 -0400 (Tue, 31 Oct 2017) $ */
 
 document.addEventListener('DOMContentLoaded', function() {
-	// Set focus on the first active field in the form
+	// Set focus on the first active field in edit forms
 	var title = document.title;
-	var focus_field = '';
+	var focus_field = 'searchform_arg';
 	// For Add Pub and Clone Pub, focus on the Pub Year field since the first two fields are read-only
 	if (title == 'Add Publication') {
 		focus_field = 'pub_year';
@@ -14,19 +14,19 @@ document.addEventListener('DOMContentLoaded', function() {
 	else if (title == 'Clone Publication') {
 		focus_field = 'pub_year';
 	}
-	else if (title.startsWith('Import Content') == true) {
+	else if (title.startsWith('Import Content')) {
 		focus_field = 'ExportFrom';
 	}
-	else if (title.startsWith('Export Content') == true) {
+	else if (title.startsWith('Export Content')) {
 		focus_field = 'ExportTo';
 	}
-	else if (title.startsWith('New Award Category for') == true) {
+	else if (title.startsWith('New Award Category for')) {
 		focus_field = 'award_cat_name';
 	}
-	else if ((title.startsWith('New ') == true) && (title != 'New Publication Submission')) {
+	else if (title.startsWith('New ')) {
 		focus_field = 'pub_title';
 	}
-	else if (title.startsWith('Make/Remove a Pseudonym') == true) {
+	else if (title.startsWith('Make/Remove a Pseudonym')) {
 		focus_field = 'ParentName';
 	}
 	else if (title == 'Title Editor') {
@@ -74,9 +74,19 @@ document.addEventListener('DOMContentLoaded', function() {
 	else if (title == 'Link Award') {
 		focus_field = 'title_id';
 	}
-	// If this is a bibliographic (i.e. non-editing) page, set focus to the search box
-	else {
-		focus_field = 'searchform_arg';
+	if (document.getElementById(focus_field)) {
+		document.getElementById(focus_field).focus();
 	}
-	document.getElementById(focus_field).focus();
+	// By default set focus to the search box
+	else {
+		document.getElementById('searchform_arg').focus();
+	}
+
+	if (title.startsWith('Award Editor') == true) {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAwardForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
 });

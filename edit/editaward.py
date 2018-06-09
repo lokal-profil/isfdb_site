@@ -60,7 +60,7 @@ if __name__ == '__main__':
                 print '<h3>You are editing an award not associated with an ISFDB title</h3>'
 	print '<p>'
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitaward.cgi" onsubmit="return validateAwardForm()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitaward.cgi">'
 
 	print '<table border="0">'
         print '<tbody id="titleBody">'

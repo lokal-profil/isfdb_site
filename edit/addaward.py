@@ -101,8 +101,8 @@ if __name__ == '__main__':
 		print 'Add Award link found there.</h3>'
 		print '<p>'
 
-	print '<form method="POST" action="/cgi-bin/edit/submitnewaward.cgi" onsubmit="return validateAwardForm()">'
-        print "<table border=\"0\">"
+	print '<form id="data" method="POST" action="/cgi-bin/edit/submitnewaward.cgi">'
+        print '<table border="0">'
         print '<tbody id="titleBody">'
 
         if title_id:
