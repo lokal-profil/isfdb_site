@@ -79,7 +79,7 @@ if __name__ == '__main__':
 	print "To BREAK an existing Variant link, enter 0."
 	print "<p>"
 
-	print '<form METHOD="POST" ACTION="/cgi-bin/edit/submitmkvar1.cgi" onsubmit="return validateParentTitle()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitmkvar1.cgi">'
 	print "<table border=\"0\">"
         print '<tbody>'
 	if title[TITLE_PARENT] > 0:
@@ -108,7 +108,7 @@ if __name__ == '__main__':
 	print "If the parent title does not exist, enter the title information below to create it."
 	print "<p>"
 
-	print '<form METHOD="POST" ACTION="/cgi-bin/edit/submitmkvar2.cgi" onsubmit="return validateVariantTitleForm()">'
+	print '<form id="data2" METHOD="POST" ACTION="/cgi-bin/edit/submitmkvar2.cgi">'
 	print "<table border=\"0\">"
         print '<tbody id="titleBody">'
 

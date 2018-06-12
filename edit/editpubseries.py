@@ -44,7 +44,7 @@ if __name__ == '__main__':
 
         printHelpBox('publication series', 'PublicationSeries')
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitpubseries.cgi" onsubmit="return validatePubSeriesForm()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitpubseries.cgi">'
 
 	print '<table border="0">'
 	print '<tbody id="tagBody">'

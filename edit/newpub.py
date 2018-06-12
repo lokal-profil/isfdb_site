@@ -45,7 +45,7 @@ if __name__ == '__main__':
 	# Output the leading HTML stuff
 	##################################################################
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitnewpub.cgi" onsubmit="return validatePubForm()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitnewpub.cgi">'
 
         # Retrieve the Help text for publication metadata
         help = HelpPub()

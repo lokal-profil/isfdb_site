@@ -46,7 +46,7 @@ if __name__ == '__main__':
 
         printHelpBox('author', 'AuthorData')
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitauth.cgi" onsubmit="return validateAuthorForm()" >'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitauth.cgi">'
 	
 	print '<table border="0">'
 	print '<tbody id="tagBody">'

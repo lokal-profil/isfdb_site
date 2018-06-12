@@ -11,13 +11,13 @@ function validateParentTitle() {
 	return true;
 }
 
-function validateTitleForm(title_type) {
+function validateTitleForm() {
 	// Validate that a non-empty title has been entered
 	if (validateRequired("title_title","Title") == false) {
 		return false;
 	}
 	// Validate this title's authors if the title is a review
-	if (title_type == "REVIEW") {
+	if (document.getElementById('review_author1.1')) {
 		// First check the authors of the title being reviewed
 		if (validateAuthors("review_author1.", "reviewee") == false) {
 			return false;
@@ -28,7 +28,7 @@ function validateTitleForm(title_type) {
 		}
 	}
 	// Validate this title's authors if the title is an interview
-	else if (title_type == "INTERVIEW") {
+	else if (document.getElementById('interviewee_author1.1')) {
 		// First check the authors being interviewed
 		if (validateAuthors("interviewee_author1.", "interviewee") == false) {
 			return false;

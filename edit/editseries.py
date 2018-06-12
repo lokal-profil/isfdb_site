@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2016   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -60,7 +60,7 @@ if __name__ == '__main__':
 	print "<hr>"
 	print "<p>"
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitseries.cgi" onsubmit="return validateSeriesForm()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitseries.cgi">'
 	print '<table border="0">'
         print '<tbody id="tagBody">'
 

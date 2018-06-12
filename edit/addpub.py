@@ -52,7 +52,7 @@ if __name__ == '__main__':
         print '<a href="http://%s/index.php/Help:Screen:AddPublication">Help:Screen:AddPublication</a><p>' % (WIKILOC)
         print '</div>'
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitaddpub.cgi" onsubmit="return validatePubForm()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitaddpub.cgi">'
 	print '<h2>Publication Metadata</h2>'
 	print '<table class="pub_metadata" id="metadata">'
 	print '<tbody id="pubBody">'

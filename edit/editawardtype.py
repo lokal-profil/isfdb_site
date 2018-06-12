@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2013-2016   Ahasuerus
+#     (C) COPYRIGHT 2013-2018   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -47,7 +47,7 @@ if __name__ == '__main__':
 	award_type.award_type_id = award_type_id
 	award_type.load()
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitawardtype.cgi" onsubmit="return validateAwardTypeForm()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitawardtype.cgi">'
 
 	print '<table border="0">'
 	print '<tbody id="tagBody">'

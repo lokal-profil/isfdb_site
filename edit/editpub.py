@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
         printHelpBox('publication', 'EditPub')
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitpub.cgi" onsubmit="return validatePubForm()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitpub.cgi">'
 
         printpubrecord(pub)
 

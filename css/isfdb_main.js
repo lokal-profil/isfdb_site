@@ -89,4 +89,138 @@ document.addEventListener('DOMContentLoaded', function() {
 			}
 		};
 	}
+
+	else if (title == 'Add New Award Type') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAwardTypeForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title.startsWith('New Award Category') == true) {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAwardCatForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Add Publication') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Add Variant Title') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateVariantTitleForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Import/Export Contents') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Clone Publication') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Author Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAuthorForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Award Category Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAwardCatForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Award Type Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAwardTypeForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Publication Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Publisher Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePublisherForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Publication Series Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubSeriesForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Series Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateSeriesForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Title Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateTitleForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Make Variant Title') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateParentTitle() == false) {
+				event.preventDefault();
+			}
+		};
+		document.getElementById('data2').onsubmit = function(event){
+			if (validateVariantTitleForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title.startsWith('New ') == true) {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
 });

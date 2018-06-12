@@ -142,8 +142,7 @@ if __name__ == '__main__':
         printHelpBox('title', 'EditTitle')
 
         # Pass the title type to the form validation function so that it would know which fields exist in the form
-	print """<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submittitle.cgi"
-                onsubmit="return validateTitleForm('%s')" >""" % (title_data[TITLE_TTYPE])
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submittitle.cgi">'
 
         # Combine the two series number fields into one for display purposes
         series_number = title_data[TITLE_SERIESNUM]

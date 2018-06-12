@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2016   Ahasuerus
+#     (C) COPYRIGHT 2014-2018   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -46,7 +46,7 @@ if __name__ == '__main__':
         printHelpBox('Award Category', 'AwardCat')
 
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitawardcat.cgi" onsubmit="return validateAwardCatForm()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitawardcat.cgi">'
 
 	print '<table border="0">'
 	print '<tbody id="tagBody">'

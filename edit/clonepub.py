@@ -155,7 +155,7 @@ if __name__ == '__main__':
 		PrintPostSearch(0, 0, 0, 0, 0)
 		sys.exit(0)
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitclone.cgi" onsubmit="return validatePubForm()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitclone.cgi">'
 
 	printpubrecord(pub, image_url, reuse_external_ids)
 

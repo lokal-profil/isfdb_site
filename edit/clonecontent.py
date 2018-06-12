@@ -158,7 +158,7 @@ if __name__ == '__main__':
         else:
                 errorPage("Publication or title to import content from is not specified")
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitclone.cgi" onsubmit="return validatePubForm()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitclone.cgi">'
 	printpubrecord(publication_to)
 
 	# Retrieve the titles that are currently in publication_to and remove them from the

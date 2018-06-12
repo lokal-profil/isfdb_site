@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2016   Ahasuerus
+#     (C) COPYRIGHT 2014-2018   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -44,12 +44,12 @@ if __name__ == '__main__':
         PrintNavBar("edit/addawardcat.cgi", sys.argv[1])
 
 	print '<div id="HelpBox">'
-        print "<b>Help on adding an award category: </b>"
+        print '<b>Help on adding an award category: </b>'
         print '<a href="http://%s/index.php/Help:Screen:AddAwardCat">Help:Screen:AddAwardCat</a><p>' % (WIKILOC)
 	print '</div>'
 
-	print '<form method="POST" action="/cgi-bin/edit/submitnewawardcat.cgi" onsubmit="return validateAwardCatForm()">'
-        print "<table border=\"0\">"
+	print '<form id="data" method="POST" action="/cgi-bin/edit/submitnewawardcat.cgi">'
+        print '<table border="0">'
         print '<tbody id="tagBody">'
 
         help = HelpAwardCat()

@@ -70,11 +70,11 @@ if __name__ == '__main__':
                 displayError('This title is currently a variant of another title. Variants of variants are not allowed')
 
 	print '<div id="HelpBox">'
-	print "<b>Help on adding variant titles: </b>"
+	print '<b>Help on adding variant titles: </b>'
 	print '<a href="http://%s/index.php/Help:Screen:AddVariant">Help:Screen:AddVariant</a><p>' % (WIKILOC)
 	print '</div>'
 
-	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitvariant.cgi" onsubmit="return validateVariantTitleForm()">'
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitvariant.cgi">'
 	printtitlerecord(title_data)
 
 	print "<p>"
