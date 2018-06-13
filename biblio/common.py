@@ -586,7 +586,7 @@ def PrintNavbar(page_type, arg1, arg2, executable, argument, search_value = '', 
 			if websites:
                                 print '<div class="divider">'
                                 print 'Other Sites <i class="downarrow"></i>'
-                                print '<div class="divothersites" onclick="void(0)">'
+                                print '<div id="divothersites" class="divothersites">'
                                 print '<ul class="listothersites">'
                                 for website in websites:
                                         print '<li><a href="%s" target="_blank">%s</a>' % (website[1], ISFDBText(website[0]))

@@ -42,6 +42,10 @@ def PrintHTMLHeaders(title):
     print """Content-Security-Policy: media-src 'none';"""
     # Disallow <object>, <embed>, and <applet>
     print """Content-Security-Policy: object-src 'none';"""
+    # Limit JS scripts to .js files served by the ISFDB server and (temporarily) inline
+    print """Content-Security-Policy: script-src 'self' 'unsafe-inline';"""
+    # Limit stylesheets to .css files served by the ISFDB server and (temporarily) inline
+    print """Content-Security-Policy: style-src 'self' 'unsafe-inline';"""
     # Disable Worker, SharedWorker, or ServiceWorker scripts
     #   May need to be re-worked if we implement workers
     print """Content-Security-Policy: worker-src 'none';"""
