@@ -821,6 +821,8 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
                         'Japanese National Bibliography'),
                 'LCCN': ('https://lccn.loc.gov/%s', 'LCCN',
                          'Library of Congress Control Number'),
+                'LTF-pub': ('http://www.tercerafundacion.net/biblioteca/ver/libro/%s', 'La Tercera Fundaci&#243;n publication'),
+                'LTF-title': ('http://www.tercerafundacion.net/biblioteca/ver/ficha/%s', 'La Tercera Fundaci&#243;n title'),
                 'Locus1': ('http://www.locusmag.com/index', 'Locus1',
                            'The Locus Index to Science Fiction'),
                 'Miller/Contento': ('http:/%s/title.cgi?1088499' % HTFAKE, 'Miller/Contento',
