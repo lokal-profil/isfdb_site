@@ -182,10 +182,6 @@ class series:
                         print '<li>'
                         print FormatNote(self.series_note, 'Note', 'short', self.series_id, 'Series')
                 
-                if SQLwikiLinkExists('Series', self.series_name):
-                        print '<li><b>Series Comment:</b>'
-                        print '<a href="http://%s/index.php/Series:%s">View Comment</a>' % (WIKILOC, self.series_name)
-
                 if tags_type == 'brief':
                         self.PrintSeriesTagsBrief(seriesTags)
                 else:
