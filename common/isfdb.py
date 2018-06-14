@@ -57,20 +57,20 @@ def PrintHTMLHeaders(title):
     print '<meta http-equiv="content-type" content="text/html; charset=%s" >' % UNICODE
     print '<link rel="shortcut icon" href="http://%s/favicon.ico">' % HTMLHOST
     print '<title>%s</title>' % title
-
-def PrintHTMLStyle():
     print '<link href="http://%s/biblio.css" rel="stylesheet" type="text/css" media="screen" />' % HTMLHOST
     print '</head>'
-
-def PrintTopBanner(title):
+    print '<body>'
     print '<div id="wrap">'
-    print '<a class="topbanner" href="http:/%s/index.cgi"></a>' % (HTFAKE)
+    print '<a class="topbanner" href="http:/%s/index.cgi"></a>' % HTFAKE
     print '<div id="statusbar">'
     print '<h2>%s</h2>' % (title)
 
 SCHEMA_VER = "0.02"
 ENGINE     = "<b>ISFDB Engine</b> - Version 4.00 (04/24/06)"
 COPYRIGHT  = "Copyright (c) 1995-2018 Al von Ruff."
+# NONCE should be uncommented if and when we need it to create CSP nonces
+# import uuid
+# NONCE = uuid.uuid4().hex
 
 # History Actions (obsolete)
 AUTHOR_UPDATE  = 1

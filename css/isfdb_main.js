@@ -16,6 +16,12 @@ function createOnclick()	{
 			void(0);
 		};
 	}
+
+	if (document.getElementById('external_id.addsign')) {
+		document.getElementById('external_id.addsign').onclick = function(event){
+			addNewExternalID('external_id');
+		};
+	}
 }
 
 function createOnsubmit(title)	{

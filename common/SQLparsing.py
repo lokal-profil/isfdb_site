@@ -49,13 +49,10 @@ try:
 	SQLUpdateQueries()
 except:
         PrintHTMLHeaders('Database Connection Error')
-        PrintHTMLStyle()
-        print '<body>'
-        PrintTopBanner('Database Connection Error')
         print '</div>'
         print '<div id="nav">'
-       	print '<a href="http:/%s/index.cgi">' % (HTFAKE)
-	print '<img src="http://%s/isfdb.gif" width="90%%" alt="ISFDB logo">' % (HTMLLOC)
+       	print '<a href="http:/%s/index.cgi">' % HTFAKE
+	print '<img src="http://%s/isfdb.gif" width="90%%" alt="ISFDB logo">' % HTMLLOC
         print '</a>'
         print '</div>'
         print '<div id="main2">'

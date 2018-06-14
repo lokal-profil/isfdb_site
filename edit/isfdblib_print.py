@@ -111,10 +111,11 @@ def printExternalIDs(external_ids = None, label = 'External ID', field = 'extern
         print '<td>&nbsp;</td>'
         print '</tr>'
 
-        counter = 1
+        counter = 0
         if readonly:
                 for id_type in sorted(external_ids.keys()):
                         for id_value in external_ids[id_type]:
+                                counter += 1
                                 type_id = external_ids[id_type][id_value][0]
                                 print '<tr>'
                                 print '<td>'
@@ -125,7 +126,6 @@ def printExternalIDs(external_ids = None, label = 'External ID', field = 'extern
                                 print '<INPUT name="%s.%d" id="%s.%d" READONLY class="titlemultiple metainput" value="%s">' % (field, counter, field, counter, id_value)
                                 print '</td>'
                                 print '</tr>'
-                                counter += 1
                 return
 
         # Create a list of ID types to display as mouse-over help
@@ -136,46 +136,45 @@ def printExternalIDs(external_ids = None, label = 'External ID', field = 'extern
                 type_list += ' %s: %s&#13;' % (type_name, type_full_name)
         type_list += 'To add another external identifier, click the + button'
 
+        id_count = 0
+        # Find the count of external IDs so that we could display the '+' sign for the last one
         for id_type in sorted(external_ids.keys()):
                 for id_value in external_ids[id_type]:
-                        type_id = external_ids[id_type][id_value][0]
-                        print '<tr id="external_id.row.%d">' % counter
-                        print '<td class="hint" title="%s">' % type_list
-                        print '<select tabindex="1" name="%s_type.%d">' % (field, counter)
-                        for identifier_type in sorted(identifier_types, key = identifier_types.get):
-                                if identifier_type == type_id:
-                                        selected = ' selected="selected"'
-                                else:
-                                        selected = ''
-                                print '<option%s VALUE="%d">%s</option>' % (selected, identifier_type, identifier_types[identifier_type][0])
-                        print '</select>'
-                        button = ''
-                        if counter == 1:
-                                button = createaddbutton('addNewExternalID', "'external_id'", 'external_id')
-                        print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">%s' % (HTMLLOC, button)
-                        print '</td>'
-                        print '<td>'
-                        print '<INPUT tabindex="1" name="%s.%d" id="%s.%d" class="metainput" value="%s">' % (field, counter, field, counter, id_value)
-                        print '</td>'
-                        print '</tr>'
-                        counter += 1
+                        id_count += 1
 
+        for id_type in sorted(external_ids.keys()):
+                for id_value in external_ids[id_type]:
+                        counter += 1
+                        type_id = external_ids[id_type][id_value][0]
+                        printOneExternalID(identifier_types, type_list, type_id, id_value, id_count, field, counter)
+
+        counter += 1
+        printOneExternalID(identifier_types, type_list, None, '', id_count, field, counter)
+
+def printOneExternalID(identifier_types, type_list, type_id, id_value, id_count, field, counter):
         print '<tr id="external_id.row.%d">' % counter
         print '<td class="hint" title="%s">' % type_list
         print '<select tabindex="1" name="%s_type.%d">' % (field, counter)
-        # Iterate over the list of recognized external IDs and display them in a drop-down list
         for identifier_type in sorted(identifier_types, key = identifier_types.get):
-                print '<option VALUE="%d">%s</option>' % (identifier_type, identifier_types[identifier_type][0])
+                if identifier_type == type_id:
+                        selected = ' selected="selected"'
+                else:
+                        selected = ''
+                print '<option%s VALUE="%d">%s</option>' % (selected, identifier_type, identifier_types[identifier_type][0])
         print '</select>'
         button = ''
+        if counter == (id_count + 1):
+                button = createaddbutton('', '', 'external_id')
+        image = ''
         if counter == 1:
-                button = createaddbutton('addNewExternalID', "'external_id'", 'external_id')
-        print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">%s' % (HTMLLOC, button)
+                image = '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">' % HTMLLOC
+        print '%s%s' % (image, button)
         print '</td>'
         print '<td>'
-        print '<INPUT tabindex="1" name="%s.%d" id="%s.%d" class="metainput">' % (field, counter, field, counter)
+        print '<INPUT tabindex="1" name="%s.%d" id="%s.%d" class="metainput" value="%s">' % (field, counter, field, counter, id_value)
         print '</td>'
         print '</tr>'
+
 
 ###################################################################
 # This function outputs an existing title record in table format
@@ -872,9 +871,12 @@ def printmultiple(values, label, field_name, help = None, readonly = 0):
                 addbutton = createaddbutton("AddMultipleField", "'%s', '%s'" % (label, field_name), field_name)
                 printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, '', readonly, addbutton)
 
-def createaddbutton(onclick_function, onclick_parameters, field_name):
-        button_span = ' <span id="%s.addbutton"><input class="addbutton" type="button" value="+" ' % field_name
-        button_span += 'tabindex="1" onclick="%s(%s)"></span>' % (onclick_function, onclick_parameters)
+def createaddbutton(onclick_function = '', onclick_parameters = '', field_name = ''):
+        button_span = ' <span id="%s.addbutton"><input id="%s.addsign"' % (field_name, field_name)
+        button_span += ' class="addbutton" type="button" value="+" tabindex="1"'
+        if onclick_function:
+                button_span += ' onclick="%s(%s)"' % (onclick_function, onclick_parameters)
+        button_span += '></span>'
         return button_span
 
 def printWebPages(webpages, web_page_type, help):

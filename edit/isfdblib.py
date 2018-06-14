@@ -94,8 +94,8 @@ def makequery(entry, use):
 ##################################################################
 def PrintPreSearch(title):
         PrintHTMLHeaders(title)
-        print '<script type="text/javascript" src="http://%s/isfdb_main.js"></script>' % HTMLLOC
 
+        print '<script type="text/javascript" src="http://%s/isfdb_main.js"></script>' % HTMLLOC
         # Include the JavaScript file with the general purpose JS functions that support editing
         print '<script type="text/javascript" src="http://%s/edit_js.js"></script>' % HTMLLOC
 
@@ -120,9 +120,6 @@ def PrintPreSearch(title):
 	elif title in ('Publisher Editor', 'Publication Series Editor', 'Series Editor'):
         	JSscript('edit_other')
 
-        PrintHTMLStyle()
-        print '<body>'
-        PrintTopBanner(title)
         print '</div>'
         if (title != "Title Search") and (title != "Author Search") and (title != "Pub Search"):
                 # The "<noscript>" part will only be executed if Javascript is not enabled on the browser side

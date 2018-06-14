@@ -495,8 +495,8 @@ def PrintJSFunction(function_name, values):
 
 def PrintHeader(title):
         PrintHTMLHeaders(title)
-        print '<script type="text/javascript" src="http://%s/isfdb_main.js"></script>' % HTMLLOC
 
+        print '<script type="text/javascript" src="http://%s/isfdb_main.js"></script>' % HTMLLOC
         # Advanced Search only:
         if title == 'ISFDB Advanced Search':
                 # Create a JS function which returns an array of Yes/No values
@@ -517,9 +517,6 @@ def PrintHeader(title):
                 # Import a function to change drop-down values dynamically
                 print '<script type="text/javascript" src="http://%s/adv_search.js"></script>' % HTMLLOC
 
-        PrintHTMLStyle()
-	print '<body>'
-
 	# GOOGLE Analytics - will need to be rewritten to work with CSP before it can be activated
 	if DO_ANALYTICS:
 		print '<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">'
@@ -529,7 +526,6 @@ def PrintHeader(title):
 		print 'urchinTracker();'
 		print '</script>'
 
-        PrintTopBanner(title)
 	(userid, username, usertoken) = GetUserData()
 	if not userid:
                 print '<h3>You are not logged in. If you'

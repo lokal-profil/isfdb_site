@@ -35,9 +35,6 @@ def isModerator(username):
 ##################################################################
 def PrintPreMod(title):
         PrintHTMLHeaders(title)
-        PrintHTMLStyle()
-        print '<body>'
-        PrintTopBanner(title)
         print '</div>'
 
 ##################################################
