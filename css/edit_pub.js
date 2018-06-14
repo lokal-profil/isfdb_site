@@ -439,6 +439,20 @@ function validateTypeMismatch()	{
 	return true;
 }
 
+function ExternalIdentifiers() {
+	var all_ids = document.getElementById("external_id_type.1");
+	var identifiers = [];
+	var i;
+	var len = all_ids.options.length;
+	for (i = 0; i < len; i++) {
+		identifiers.push({
+			"id": all_ids.options[i].value,
+			"name": all_ids.options[i].text
+		});
+	}
+	return identifiers;
+}
+
 function addNewExternalID(field_name) {
 	var field_name = field_name || 'external_id';
 	var identifier_types = ExternalIdentifiers();

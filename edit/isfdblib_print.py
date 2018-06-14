@@ -154,7 +154,7 @@ def printExternalIDs(external_ids = None, label = 'External ID', field = 'extern
 def printOneExternalID(identifier_types, type_list, type_id, id_value, id_count, field, counter):
         print '<tr id="external_id.row.%d">' % counter
         print '<td class="hint" title="%s">' % type_list
-        print '<select tabindex="1" name="%s_type.%d">' % (field, counter)
+        print '<select tabindex="1" name="%s_type.%d" id="%s_type.%d">' % (field, counter, field, counter)
         for identifier_type in sorted(identifier_types, key = identifier_types.get):
                 if identifier_type == type_id:
                         selected = ' selected="selected"'

@@ -121,27 +121,12 @@ def PrintPreSearch(title):
         	JSscript('edit_other')
 
         print '</div>'
-        if (title != "Title Search") and (title != "Author Search") and (title != "Pub Search"):
-                # The "<noscript>" part will only be executed if Javascript is not enabled on the browser side
-                print '<noscript><h1>Your browser does not support JavaScript. Javascript is required to edit ISFDB.'
-                print '<a href="http:/%s/index.cgi">Click here</a> to return to browsing ISFDB.</h1></noscript>' % (HTFAKE)
+        # The "<noscript>" part will only be executed if Javascript is not enabled on the browser side
+        print '<noscript><h1>Your browser does not support JavaScript. Javascript is required to edit ISFDB.'
+        print '<a href="http:/%s/index.cgi">Click here</a> to return to browsing ISFDB.</h1></noscript>' % (HTFAKE)
 
 def JSscript(script_name):
         print '<script type="text/javascript" src="http://%s/%s.js"></script>' % (HTMLLOC, script_name)
-        # For pages with publication data, include a function which returns an array of external
-        # identifier types likes ASINs and LCCNs
-        if script_name == 'edit_pub':
-                identifier_types = SQLLoadIdentifierTypes()
-                print '<script type="text/javascript">'
-                print 'function ExternalIdentifiers() {'
-                output = ' var identifiers = ['
-                for identifier_type in sorted(identifier_types, key = identifier_types.get):
-                        output += '{"id":%d, "name":"%s"}, ' % (identifier_type, identifier_types[identifier_type][0])
-                print '%s];' % output[:-2]
-                print ' return identifiers;'
-                print '}'
-                print '</script>'
-
 
 def getSubmitter():
         (userid, username, usertoken) = GetUserData()
