@@ -59,11 +59,7 @@ if __name__ == '__main__':
 
         printmultiple([], "Transliterated Title", "trans_titles", help)
 
-	if pub_type in ('Chapbook', 'Collection', 'Nonfiction', 'Novel'):
-                author_or_editor = 'Author'
-        else:
-                author_or_editor = 'Editor'
-        printmultiple([], author_or_editor, "pub_author", help)
+        printmultiple([], 'Author', "pub_author", help)
 
         printlanguage('','language','Language',help)
 

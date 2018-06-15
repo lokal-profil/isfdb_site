@@ -164,7 +164,7 @@ def printOneExternalID(identifier_types, type_list, type_id, id_value, id_count,
         print '</select>'
         button = ''
         if counter == (id_count + 1):
-                button = createaddbutton('', '', 'external_id')
+                button = createaddbutton('external_id')
         image = ''
         if counter == 1:
                 image = '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">' % HTMLLOC
@@ -861,22 +861,19 @@ def printmultiple(values, label, field_name, help = None, readonly = 0):
 	counter = 1
         for value in values:
                 if not readonly and counter == len(values):
-                        addbutton = createaddbutton("AddMultipleField", "'%s', '%s'" % (label, field_name), field_name)
+                        addbutton = createaddbutton(field_name)
                 else:
                         addbutton = None
                 printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, value, readonly, addbutton)
                 counter += 1
 
         if not readonly and not values:
-                addbutton = createaddbutton("AddMultipleField", "'%s', '%s'" % (label, field_name), field_name)
+                addbutton = createaddbutton(field_name)
                 printfield(("%s %d" % (label, counter)), ("%s%d" % (field_name, counter)), help, '', readonly, addbutton)
 
-def createaddbutton(onclick_function = '', onclick_parameters = '', field_name = ''):
+def createaddbutton(field_name):
         button_span = ' <span id="%s.addbutton"><input id="%s.addsign"' % (field_name, field_name)
-        button_span += ' class="addbutton" type="button" value="+" tabindex="1"'
-        if onclick_function:
-                button_span += ' onclick="%s(%s)"' % (onclick_function, onclick_parameters)
-        button_span += '></span>'
+        button_span += ' class="addbutton" type="button" value="+" tabindex="1"></span>'
         return button_span
 
 def printWebPages(webpages, web_page_type, help):

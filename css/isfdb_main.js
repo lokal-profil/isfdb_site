@@ -7,11 +7,11 @@ document.addEventListener('DOMContentLoaded', function() {
 	var title = document.title;
 	setPageFocus(title);
 	createOnsubmit(title);
-	createOnclick();
+	createOnclick(title);
 	createOnchange();
 });
 
-function createOnclick()	{
+function createOnclick(title)	{
 	if (document.getElementById('divothersites')) {
 		document.getElementById('divothersites').onclick = function(event){
 			void(0);
@@ -23,6 +23,152 @@ function createOnclick()	{
 			addNewExternalID('external_id');
 		};
 	}
+
+	/*
+	var multiples = [{'id': 'trans_names', 'label': 'Transliterated Name'}, {'id': 'trans_legal_names', 'label': 'Trans. Legal Name'}];
+	var i;
+	var field_id;
+	var addsign;
+	var label;
+	for (i = 0; i < multiples.length; i++) {
+		field_id = multiples[i].id;
+		addsign = field_id + '.addsign';
+		label = multiples[i].label;
+		alert(field_id+label);
+		if (document.getElementById(addsign)) {
+			document.getElementById(addsign).onclick = function(event){
+				AddMultipleField(label, field_id);
+			};
+		}
+	}
+	*/
+
+	if (document.getElementById('trans_names.addsign')) {
+		document.getElementById('trans_names.addsign').onclick = function(event){
+			AddMultipleField('Transliterated Name', 'trans_names');
+		};
+	}
+
+	if (document.getElementById('trans_legal_names.addsign')) {
+		document.getElementById('trans_legal_names.addsign').onclick = function(event){
+			AddMultipleField('Trans. Legal Name', 'trans_legal_names');
+		};
+	}
+
+	if (document.getElementById('author_webpages.addsign')) {
+		document.getElementById('author_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'author_webpages');
+		};
+	}
+
+	if (document.getElementById('publisher_webpages.addsign')) {
+		document.getElementById('publisher_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'publisher_webpages');
+		};
+	}
+
+	if (document.getElementById('pub_series_webpages.addsign')) {
+		document.getElementById('pub_series_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'pub_series_webpages');
+		};
+	}
+
+	if (document.getElementById('title_webpages.addsign')) {
+		document.getElementById('title_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'title_webpages');
+		};
+	}
+
+	if (document.getElementById('award_type_webpages.addsign')) {
+		document.getElementById('award_type_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'award_type_webpages');
+		};
+	}
+
+	if (document.getElementById('award_cat_webpages.addsign')) {
+		document.getElementById('award_cat_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'award_cat_webpages');
+		};
+	}
+
+	if (document.getElementById('series_webpages.addsign')) {
+		document.getElementById('series_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'series_webpages');
+		};
+	}
+
+	if (document.getElementById('author_emails.addsign')) {
+		document.getElementById('author_emails.addsign').onclick = function(event){
+			AddMultipleField('Email Address', 'author_emails');
+		};
+	}
+
+	if (document.getElementById('title_author.addsign')) {
+		document.getElementById('title_author.addsign').onclick = function(event){
+			AddMultipleField('Author', 'title_author');
+		};
+	}
+
+	if (document.getElementById('trans_titles.addsign')) {
+		document.getElementById('trans_titles.addsign').onclick = function(event){
+			AddMultipleField('Transliterated Title', 'trans_titles');
+		};
+	}
+
+	if (document.getElementById('pub_author.addsign')) {
+		document.getElementById('pub_author.addsign').onclick = function(event){
+			AddMultipleField('Author', 'pub_author');
+		};
+	}
+
+	if (document.getElementById('trans_publisher_names.addsign')) {
+		document.getElementById('trans_publisher_names.addsign').onclick = function(event){
+			AddMultipleField('Transliterated Name', 'trans_publisher_names');
+		};
+	}
+
+	if (document.getElementById('trans_pub_series_names.addsign')) {
+		document.getElementById('trans_pub_series_names.addsign').onclick = function(event){
+			AddMultipleField('Transliterated Name', 'trans_pub_series_names');
+		};
+	}
+
+	if (document.getElementById('interviewee_author1..addsign')) {
+		document.getElementById('interviewee_author1..addsign').onclick = function(event){
+			AddMultipleField('Interviewee', 'interviewee_author1.');
+		};
+	}
+
+	if (document.getElementById('interviewer_author1..addsign')) {
+		document.getElementById('interviewer_author1..addsign').onclick = function(event){
+			AddMultipleField('Interviewer', 'interviewer_author1.');
+		};
+	}
+
+	if (document.getElementById('review_author1..addsign')) {
+		document.getElementById('review_author1..addsign').onclick = function(event){
+			AddMultipleField('Author', 'review_author1.');
+		};
+	}
+
+	if (document.getElementById('review_reviewer1..addsign')) {
+		document.getElementById('review_reviewer1..addsign').onclick = function(event){
+			AddMultipleField('Reviewer', 'review_reviewer1.');
+		};
+	}
+
+	if (document.getElementById('tag_name.addsign')) {
+		document.getElementById('tag_name.addsign').onclick = function(event){
+			AddMultipleField('Tag', 'tag_name');
+		};
+	}
+
+	if (document.getElementById('ImportTitles.addsign')) {
+		document.getElementById('ImportTitles.addsign').onclick = function(event){
+			AddMultipleField('Title', 'ImportTitles');
+		};
+	}
+
 }
 
 function createOnchange()	{
