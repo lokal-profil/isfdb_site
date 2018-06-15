@@ -1010,3 +1010,8 @@ sup.mouseover2pix {
   font-size: 60%;
   padding-left: 2px;
 }
+
+/* Do not display hidden selects */
+select.nodisplay {
+  display:none;
+}

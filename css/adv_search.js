@@ -1,6 +1,42 @@
 /*     Version: $Revision: 19 $
       Date: $Date: 2017-10-31 19:26:25 -0400 (Tue, 31 Oct 2017) $ */
 
+function YesNo() {
+	var formats = ["Yes", "No"];
+	return formats;
+}
+
+function PubFormats()	{
+	return GetValidValues('Formats');
+}
+
+function PubTypes()	{
+	return GetValidValues('PubTypes');
+}
+
+function TitleTypes()	{
+	return GetValidValues('TitleTypes');
+}
+
+function StoryLengths()	{
+	return GetValidValues('StoryLengths');
+}
+
+function AllLanguages()	{
+	return GetValidValues('AllLanguages');
+}
+
+function GetValidValues(select_name)	{
+	var field = document.getElementById(select_name);
+	var field_values = [];
+	var i;
+	var len = field.options.length;
+	for (i = 0; i < len; i++) {
+		field_values.push(field.options[i].value);
+	}
+	return field_values;
+}
+
 function CreateDropDown(parent, old_element, element_id, selector_number, values) {
 	parent.removeChild(old_element);
 	var new_element = document.createElement('select');

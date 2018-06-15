@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	setPageFocus(title);
 	createOnsubmit(title);
 	createOnclick();
+	createOnchange();
 });
 
 function createOnclick()	{
@@ -20,6 +21,38 @@ function createOnclick()	{
 	if (document.getElementById('external_id.addsign')) {
 		document.getElementById('external_id.addsign').onclick = function(event){
 			addNewExternalID('external_id');
+		};
+	}
+}
+
+function createOnchange()	{
+	if (document.getElementById('author_1')) {
+		document.getElementById('author_1').onchange = function(event){
+			Selectors(1, this.value, 'author_selectors', 'authorterm');
+		};
+		document.getElementById('author_2').onchange = function(event){
+			Selectors(2, this.value, 'author_selectors', 'authorterm');
+		};
+		document.getElementById('author_3').onchange = function(event){
+			Selectors(3, this.value, 'author_selectors', 'authorterm');
+		};
+		document.getElementById('title_1').onchange = function(event){
+			Selectors(1, this.value, 'title_selectors', 'titleterm');
+		};
+		document.getElementById('title_2').onchange = function(event){
+			Selectors(2, this.value, 'title_selectors', 'titleterm');
+		};
+		document.getElementById('title_3').onchange = function(event){
+			Selectors(3, this.value, 'title_selectors', 'titleterm');
+		};
+		document.getElementById('pub_1').onchange = function(event){
+			Selectors(1, this.value, 'pub_selectors', 'pubterm');
+		};
+		document.getElementById('pub_2').onchange = function(event){
+			Selectors(2, this.value, 'pub_selectors', 'pubterm');
+		};
+		document.getElementById('pub_3').onchange = function(event){
+			Selectors(3, this.value, 'pub_selectors', 'pubterm');
 		};
 	}
 }

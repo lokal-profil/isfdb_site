@@ -480,41 +480,13 @@ def PrintUserInfo(executable, argument):
                 PrintNotLoggedIn(executable,argument)
 	return userid
 
-def PrintJSFunction(function_name, values):
-        print '<script type="text/javascript">'
-        print 'function %s() {' % function_name
-        output = ' var formats = ['
-        for value in values:
-                # Skip empty values, e.g. in STORYLEN_CODES
-                if value:
-                        output += '"%s", ' % value
-        print '%s];' % output[:-2]
-        print ' return formats;'
-        print '}'
-        print '</script>'
-
 def PrintHeader(title):
         PrintHTMLHeaders(title)
 
         print '<script type="text/javascript" src="http://%s/isfdb_main.js"></script>' % HTMLLOC
         # Advanced Search only:
         if title == 'ISFDB Advanced Search':
-                # Create a JS function which returns an array of Yes/No values
-                PrintJSFunction('YesNo', ('Yes', 'No'))
-                # Create a JS function which returns an array of publication formats
-                PrintJSFunction('PubFormats', FORMATS)
-                # Create a JS function which returns an array of publication types
-                PrintJSFunction('PubTypes', PUB_TYPES)
-                # Create a JS function which returns an array of title types
-                PrintJSFunction('TitleTypes', ALL_TITLE_TYPES)
-                # Create a JS function which returns an array of story length codes
-                PrintJSFunction('StoryLengths', STORYLEN_CODES)
-                # Create a JS function which returns an array of languages
-                selectable_languages = sorted(list(LANGUAGES))
-                if 'None' in selectable_languages:
-                        selectable_languages.remove('None')
-                PrintJSFunction('AllLanguages', selectable_languages)
-                # Import a function to change drop-down values dynamically
+                # Import functions to change drop-down values dynamically
                 print '<script type="text/javascript" src="http://%s/adv_search.js"></script>' % HTMLLOC
 
 	# GOOGLE Analytics - will need to be rewritten to work with CSP before it can be activated

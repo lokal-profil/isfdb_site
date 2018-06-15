@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Ahasuerus and Bill Longley
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -16,6 +16,25 @@ import string
 from isfdb import *
 from SQLparsing import *
 from common import *
+
+
+def PrintDropDownValues():
+        PrintOneDropDown('Formats', FORMATS)
+        PrintOneDropDown('PubTypes', PUB_TYPES)
+        PrintOneDropDown('TitleTypes', ALL_TITLE_TYPES)
+        PrintOneDropDown('StoryLengths', STORYLEN_CODES)
+        selectable_languages = sorted(list(LANGUAGES))
+        if 'None' in selectable_languages:
+                selectable_languages.remove('None')
+        PrintOneDropDown('AllLanguages', selectable_languages)
+
+def PrintOneDropDown(name, values):
+	print '<select NAME="%s" id="%s" class="nodisplay">' % (name, name)
+	for value in values:
+                # Skip empty values, e.g. in STORYLEN_CODES
+                if value:
+                        print '<option VALUE="%s">%s' % (value, value)
+       	print '</select>'
 
 def PrintRadioSelectors(number):
 	print '<input TYPE="RADIO" NAME="CONJUNCTION_%d" VALUE="AND" CHECKED>AND' % number
@@ -34,7 +53,7 @@ def PrintOperators(number):
 
 def PrintTitleSelectors(number):
 	print '<p id="title_selectors_%d">' % number
-	print '<select NAME="USE_%d" onchange="Selectors(%d, this.value, \'title_selectors\', \'titleterm\');">' % (number, number)
+	print '<select NAME="USE_%d" id="title_%d">' % (number, number)
 	print '<option SELECTED VALUE="title_title">Title'
         print '<option VALUE="title_trans_title">Transliterated Title'
         print '<option VALUE="author_canonical">Author\'s Name'
@@ -97,7 +116,7 @@ def PrintTitleSortBy():
 
 def PrintAuthorSelectors(number):
 	print '<p id="author_selectors_%d">' % number
-	print '<select NAME="USE_%d" onchange="Selectors(%d, this.value, \'author_selectors\', \'authorterm\');">' % (number, number)
+	print '<select NAME="USE_%d" id="author_%d">' % (number, number)
 	print '<option SELECTED VALUE="author_canonical">Canonical Name'
         print '<option VALUE="author_trans_name">Transliterated Name'
 	print '<option VALUE="author_lastname">Directory Entry'
@@ -147,7 +166,7 @@ def PrintAuthorSearch():
 
 def PrintPubSelectors(number):
 	print '<p id="pub_selectors_%d">' % number
-	print '<select NAME="USE_%d" onchange="Selectors(%d, this.value, \'pub_selectors\', \'pubterm\');">' % (number, number)
+	print '<select NAME="USE_%d" id="pub_%d">' % (number, number)
 	print '<option SELECTED VALUE="pub_title">Title'
         print '<option VALUE="pub_trans_title">Transliterated Title'
 	print '<option VALUE="pub_ctype">Publication Type'
@@ -246,6 +265,7 @@ if __name__ == '__main__':
         PrintHeader("ISFDB Advanced Search")
 	PrintNavbar('search', 0, 0, 0, 0)
 
+        PrintDropDownValues()
         print '<ul>'
         print '<li>Supported wildcards: * and % match any number of characters, _ matches one character'
         print '</ul>'
