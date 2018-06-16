@@ -42,10 +42,10 @@ def printpubrecord(pub):
 	print '<tr>'
 	printContentHeader('Pub Type:', help)
         print '<td><select tabindex="1" name="pub_ctype" class="metainputselect">'
-        print '<option selected="selected">%s</option>' % pub.pub_ctype
-        for ctype in ['ANTHOLOGY','CHAPBOOK','COLLECTION','FANZINE','MAGAZINE','NONFICTION','NOVEL','OMNIBUS']:
+        print '<option value="%s" selected="selected">%s</option>' % (pub.pub_ctype, pub.pub_ctype)
+        for ctype in PUB_TYPES:
 		if ctype != pub.pub_ctype:
-        		print '<option>%s</option>' % (ctype)
+        		print '<option value="%s">%s</option>' % (ctype, ctype)
         print '</select>'
         print '</tr>'
 

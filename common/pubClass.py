@@ -816,13 +816,13 @@ class pubs:
 
 		if self.form.has_key('pub_ptype'):
                         value = XMLescape(self.form['pub_ptype'].value)
-                        if value:
-                                if value not in FORMATS:
-                                        self.error = 'Invalid Publication Format'
-                                        return
-        			self.pub_ptype = value
-        			self.used_ptype = 1
+                        if value not in FORMATS:
+                                self.error = 'Invalid Publication Format - %s' % value
+                                return
+                        self.pub_ptype = value
+                        self.used_ptype = 1
 
+                ctype = ''
 		try:
 			ctype = self.form['pub_ctype'].value
 			if ctype not in PUB_TYPES:
@@ -830,7 +830,7 @@ class pubs:
                         self.pub_ctype = ctype
                         self.used_ctype = 1
 		except:
-                        self.error = 'Invalid Publication Type'
+                        self.error = 'Invalid Publication Type - %s' % ctype
                         return
 
 		if self.form.has_key('pub_image'):

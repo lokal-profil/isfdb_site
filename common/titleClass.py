@@ -360,6 +360,9 @@ class titles:
 		if self.form.has_key('language'):
                         value = XMLescape(self.form['language'].value)
                         if value:
+                                if value not in LANGUAGES:
+                                        self.error = 'Invalid Language - %s' % value
+                                        return
         			self.title_language = value
         			self.used_language = 1
         			
@@ -367,7 +370,7 @@ class titles:
                         value = XMLescape(self.form['title_storylen'].value)
                         if value:
                                 if value not in STORYLEN_CODES:
-                                        self.error = 'Invalid length'
+                                        self.error = 'Invalid length - %s' % value
                                         return
                                 self.title_storylen = value
                                 if self.title_ttype != 'SHORTFICTION' and self.title_storylen:

@@ -23,13 +23,13 @@ def printtitletype(current_value, help):
 	print '<tr>'
 	printContentHeader('Title Type', help)
         print '<td><select tabindex="1" name="title_ttype">'
-	for ttype in ['ANTHOLOGY','CHAPBOOK','COLLECTION','COVERART',
+	for ttype in ['ANTHOLOGY', 'CHAPBOOK', 'COLLECTION', 'COVERART',
                       'EDITOR', 'ESSAY', 'INTERIORART', 'NONFICTION',
-                      'NOVEL','OMNIBUS','POEM','SERIAL','SHORTFICTION']:
+                      'NOVEL', 'OMNIBUS', 'POEM', 'SERIAL', 'SHORTFICTION']:
 		if current_value == ttype:
-        		print '<option selected="selected">%s</option>' % ttype
+        		print '<option value="%s" selected="selected">%s</option>' % (ttype, ttype)
 		else:
-        		print '<option>%s</option>' % ttype
+        		print '<option value="%s">%s</option>' % (ttype, ttype)
 		
         print '</select></td></tr>'
 
@@ -68,13 +68,13 @@ def printlanguage(current_language_code='', field='language', label='Language', 
         for language_name in sorted(LANGUAGES[1:]):
                 # If the current record's language is defined and we are processing it, then select it
 		if current_language_name and language_name == current_language_name:
-        		print '<option selected="selected">%s</option>' % (language_name)
+        		print '<option value="%s" selected="selected">%s</option>' % (language_name, language_name)
         	# If the current title has no language code and this language is the user's default language, then select it
 		elif not current_language_name and language_name == default_language_name:
-        		print '<option selected="selected">%s</option>' % (language_name)
+        		print '<option value="%s" selected="selected">%s</option>' % (language_name, language_name)
                 # Otherwise this language is displayed, but is not "selected"
 		else:
-        		print '<option>%s</option>' % (language_name)
+        		print '<option value="%s">%s</option>' % (language_name, language_name)
 
         print '</select>'
         print '</td>'
@@ -91,9 +91,9 @@ def printformat(field='pub_ptype', label='Format', help = None, value='unknown')
         # Iterate over the list of recognized formats and display them in a drop-down list
         for format in FORMATS:
 		if format.lower() == value.lower():
-        		print '<option selected="selected">%s</option>' % format
+        		print '<option value="%s" selected="selected">%s</option>' % (format, format)
 		else:
-        		print '<option>%s</option>' % format
+        		print '<option value="%s">%s</option>' % (format, format)
 
         print '</select>'
         print '</td>'
