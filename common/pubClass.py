@@ -817,6 +817,9 @@ class pubs:
 		if self.form.has_key('pub_ptype'):
                         value = XMLescape(self.form['pub_ptype'].value)
                         if value:
+                                if value not in FORMATS:
+                                        self.error = 'Invalid Publication Format'
+                                        return
         			self.pub_ptype = value
         			self.used_ptype = 1
 

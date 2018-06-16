@@ -204,7 +204,7 @@ function createOnchange()	{
 }
 
 function createOnsubmit(title)	{
-	if (title.startsWith('Award Editor') == true) {
+	if (title.indexOf('Award Editor') == 0) {
 		document.getElementById('data').onsubmit = function(event){
 			if (validateAwardForm() == false) {
 				event.preventDefault();
@@ -220,7 +220,7 @@ function createOnsubmit(title)	{
 		};
 	}
 
-	else if (title.startsWith('New Award Category') == true) {
+	else if (title.indexOf('New Award Category') == 0) {
 		document.getElementById('data').onsubmit = function(event){
 			if (validateAwardCatForm() == false) {
 				event.preventDefault();
@@ -337,7 +337,7 @@ function createOnsubmit(title)	{
 		};
 	}
 
-	else if (title.startsWith('New ') == true) {
+	else if (title.indexOf('New ') == 0) {
 		document.getElementById('data').onsubmit = function(event){
 			if (validatePubForm() == false) {
 				event.preventDefault();
@@ -356,19 +356,19 @@ function setPageFocus(title)	{
 	else if (title == 'Clone Publication') {
 		focus_field = 'pub_year';
 	}
-	else if (title.startsWith('Import Content')) {
+	else if (title.indexOf('Import Content') == 0) {
 		focus_field = 'ExportFrom';
 	}
-	else if (title.startsWith('Export Content')) {
+	else if (title.indexOf('Export Content') == 0) {
 		focus_field = 'ExportTo';
 	}
-	else if (title.startsWith('New Award Category for')) {
+	else if (title.indexOf('New Award Category for') == 0) {
 		focus_field = 'award_cat_name';
 	}
-	else if (title.startsWith('New ')) {
+	else if (title.indexOf('New ') == 0) {
 		focus_field = 'pub_title';
 	}
-	else if (title.startsWith('Make/Remove a Pseudonym')) {
+	else if (title.indexOf('Make/Remove a Pseudonym') == 0) {
 		focus_field = 'ParentName';
 	}
 	else if (title == 'Title Editor') {
