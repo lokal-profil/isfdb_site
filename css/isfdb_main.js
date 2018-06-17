@@ -169,6 +169,36 @@ function createOnclick(title)	{
 		};
 	}
 
+	if (document.getElementById('addNewBriefCover')) {
+		document.getElementById('addNewBriefCover').onclick = function(event){
+			addNewBriefCover();
+		};
+	}
+
+	if (document.getElementById('addNewFullCover')) {
+		document.getElementById('addNewFullCover').onclick = function(event){
+			addNewFullCover();
+		};
+	}
+
+	if (document.getElementById('addNewTitle')) {
+		document.getElementById('addNewTitle').onclick = function(event){
+			addNewTitle();
+		};
+	}
+
+	if (document.getElementById('addNewReview')) {
+		document.getElementById('addNewReview').onclick = function(event){
+			addNewReview();
+		};
+	}
+
+	if (document.getElementById('addNewInterview')) {
+		document.getElementById('addNewInterview').onclick = function(event){
+			addNewInterview();
+		};
+	}
+
 }
 
 function createOnchange()	{

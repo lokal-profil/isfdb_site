@@ -749,10 +749,10 @@ def printNewReviewButton():
 def printNewInterviewButton():
         printNewRecordButton('Interview', 'addNewInterview')
 
-def printNewRecordButton(record_type, onclick):
+def printNewRecordButton(record_type, listener):
         print '<tr id="Add%s">' % record_type
         print '<td>&nbsp;</td>'
-        print '<td><input type="button" value="Add %s" onclick="%s()" tabindex="1"></td>' % (record_type, onclick)
+        print '<td><input type="button" id="%s" value="Add %s" tabindex="1"></td>' % (listener, record_type)
         print '</tr>'
 
 def printfieldlabel(label, help, index = 1, colon = ':', addbutton = None):
