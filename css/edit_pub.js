@@ -566,21 +566,13 @@ function addNewBriefCover() {
 	// <td> button element
 	var td5   = document.createElement("td");
 	var input5 = document.createElement("input");
+	input5.setAttribute("id", "addArtist.button." + next);
 	input5.setAttribute("type", "button");
 	input5.setAttribute("tabindex", "1");
 	input5.setAttribute("value", "Add Artist");
-
-	isIE = navigator.userAgent.indexOf("MSIE") > -1;
-	if (isIE) {
-		var fnTitleHelper = function(oEvent) {
-			var oElement = oEvent.srcElement;
-			var buttonNumber = oElement.getAttribute("id");
-			addArtist(buttonNumber);
-		}
-		input5.attachEvent("onclick", fnTitleHelper);
-	}
-	attr = "addArtist("+next+")";
-	input5.setAttribute("onclick", attr);
+	input5.onclick  = function(event){
+		addArtist(event);
+	};
 	td5.appendChild(input5);
 	tr3.appendChild(td5);
 	tbody.insertBefore(tr3, tr2.nextSibling);
@@ -670,21 +662,13 @@ function addNewFullCover() {
 	// <td> button element
 	var td5   = document.createElement("td");
 	var input5 = document.createElement("input");
+	input5.setAttribute("id", "addArtist.button." + next);
 	input5.setAttribute("type", "button");
 	input5.setAttribute("tabindex", "1");
 	input5.setAttribute("value", "Add Artist");
-
-	isIE = navigator.userAgent.indexOf("MSIE") > -1;
-	if (isIE) {
-		var fnTitleHelper = function(oEvent) {
-			var oElement = oEvent.srcElement;
-			var buttonNumber = oElement.getAttribute("id");
-			addArtist(buttonNumber);
-		}
-		input5.attachEvent("onclick", fnTitleHelper);
-	}
-	attr = "addArtist("+next+")";
-	input5.setAttribute("onclick", attr);
+	input5.onclick  = function(event){
+		addArtist(event);
+	};
 	td5.appendChild(input5);
 	tr3.appendChild(td5);
 	tbody.insertBefore(tr3, tr2.nextSibling);
@@ -957,56 +941,32 @@ function addRecord(record_type) {
 	input5.setAttribute("tabindex", "1");
 	if (record_type == "title") {
 		input5.setAttribute("value", "Add Author");
+		input5.setAttribute("id", "addContentTitleAuthor.button." + next);
 	}
 	else if (record_type == "review") {
 		input5.setAttribute("value", "Add Author");
+		input5.setAttribute("id", "addReviewee.button." + next);
 	}
 	else if (record_type == "interview") {
 		input5.setAttribute("value", "Add Interviewee");
+		input5.setAttribute("id", "addInterviewee.button." + next);
 	}
 
 	isIE = navigator.userAgent.indexOf("MSIE") > -1;
 	if (record_type == "title") {
-		if (isIE) {
-			var fnTitleHelper = function(oEvent) {
-				var oElement = oEvent.srcElement;
-				var buttonNumber = oElement.getAttribute("id");
-				addContentTitleAuthor(buttonNumber);
-			}
-			input5.attachEvent("onclick", fnTitleHelper);
-		}
-		else {
-			attr = "addContentTitleAuthor("+next+")";
-		}
-		input5.setAttribute("onclick", attr);
+		input5.onclick  = function(event){
+			addContentTitleAuthor(event);
+		};
 	}
 	else if (record_type == "review") {
-		if (isIE) {
-			var fnReviewHelper = function(oEvent) {
-				var oElement = oEvent.srcElement;
-				var buttonNumber = oElement.getAttribute("id");
-				addReviewee(buttonNumber);
-			}
-			input5.attachEvent("onclick", fnReviewHelper);
-		}
-		else {
-			attr = "addReviewee("+next+")";
-		}
-		input5.setAttribute("onclick", attr);
+		input5.onclick  = function(event){
+			addReviewee(event);
+		};
 	}
 	else if (record_type == "interview") {
-		if (isIE) {
-			var fnInterviewHelper = function(oEvent) {
-				var oElement = oEvent.srcElement;
-				var buttonNumber = oElement.getAttribute("id");
-				addInterviewee(buttonNumber);
-			}
-			input5.attachEvent("onclick", fnInterviewHelper);
-		}
-		else {
-			attr = "addInterviewee("+next+")";
-		}
-		input5.setAttribute("onclick", attr);
+		input5.onclick  = function(event){
+			addInterviewee(event);
+		};
 	}
 	if (record_type == "review") {
 		// Reviewer section
@@ -1041,22 +1001,13 @@ function addRecord(record_type) {
 
 		var tda8   = document.createElement("td");
 		var input6 = document.createElement("input");
+		input6.setAttribute("id", "addReviewer.button." + next);
 		input6.setAttribute("type", "button");
 		input6.setAttribute("value", "Add Reviewer");
 		input6.setAttribute("tabindex", "1");
-
-		if (isIE) {
-			var fnReviewerHelper = function(oEvent) {
-				var oElement = oEvent.srcElement;
-				var buttonNumber = oElement.getAttribute("id");
-				addReviewer(buttonNumber);
-			}
-			input6.attachEvent("onclick", fnReviewerHelper);
-		}
-		else {
-			attr = "addReviewer("+next+")";
-			input6.setAttribute("onclick", attr);
-		}
+		input6.onclick  = function(event){
+			addReviewer(event);
+		};
 
 		tda8.appendChild(input6);
 		tr5.appendChild(tda8);
@@ -1095,22 +1046,13 @@ function addRecord(record_type) {
 
 		var tda8   = document.createElement("td");
 		var input6 = document.createElement("input");
+		input6.setAttribute("id", "addInterviewer.button." + next);
 		input6.setAttribute("type", "button");
 		input6.setAttribute("tabindex", "1");
 		input6.setAttribute("value", "Add Interviewer");
-
-		if (isIE) {
-			var fnInterviewerHelper = function(oEvent) {
-				var oElement = oEvent.srcElement;
-				var buttonNumber = oElement.getAttribute("id");
-				addInterviewer(buttonNumber);
-			}
-			input6.attachEvent("onclick", fnInterviewerHelper);
-		}
-		else {
-			attr = "addInterviewer("+next+")";
-			input6.setAttribute("onclick", attr);
-		}
+		input6.onclick  = function(event){
+			addInterviewer(event);
+		};
 
 		tda8.appendChild(input6);
 		tr5.appendChild(tda8);
@@ -1145,31 +1087,32 @@ function addRecord(record_type) {
 	}
 }
 
-function addContentTitleAuthor(entry) {
-	addPerson(entry, "AddAuthor", "Author", "title_author");
+function addContentTitleAuthor(event) {
+	addPerson(event, "AddAuthor", "Author", "title_author");
 }
 
-function addReviewee(entry) {
-	addPerson(entry, "AddReviewee", "Author", "review_author");
+function addReviewee(event) {
+	addPerson(event, "AddReviewee", "Author", "review_author");
 }
 
-function addReviewer(entry) {
-	addPerson(entry, "AddReviewer", "Reviewer", "review_reviewer");
+function addReviewer(event) {
+	addPerson(event, "AddReviewer", "Reviewer", "review_reviewer");
 }
 
-function addInterviewee(entry) {
-	addPerson(entry, "AddInterviewee", "Interviewee", "interviewee_author");
+function addInterviewee(event) {
+	addPerson(event, "AddInterviewee", "Interviewee", "interviewee_author");
 }
 
-function addInterviewer(entry) {
-	addPerson(entry, "AddInterviewer", "Interviewer", "interviewer_author");
+function addInterviewer(event) {
+	addPerson(event, "AddInterviewer", "Interviewer", "interviewer_author");
 }
 
-function addArtist(entry) {
-	addPerson(entry, "AddArtist", "Artist", "cover_artist");
+function addArtist(event) {
+	addPerson(event, "AddArtist", "Artist", "cover_artist");
 }
 
-function addPerson(entry, tag, label_name, attr_name) {
+function addPerson(event, tag, label_name, attr_name) {
+	var entry = event.target.id.split('.')[2];
 	var addpoint = document.getElementById(tag + entry);
 	var tbody = addpoint.parentNode;
 	var next = GetLastRow(attr_name+entry+'.') + 1;

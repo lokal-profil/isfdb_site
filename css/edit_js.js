@@ -3,6 +3,276 @@
          ALL RIGHTS RESERVED
       Date: $Date$ */
 
+document.addEventListener('DOMContentLoaded', function() {
+	var title = document.title;
+	createOnclick(title);
+});
+
+function createOnclick(title)	{
+	if (document.getElementById('divothersites')) {
+		document.getElementById('divothersites').onclick = function(event){
+			void(0);
+		};
+	}
+
+	if (document.getElementById('external_id.addsign')) {
+		document.getElementById('external_id.addsign').onclick = function(event){
+			addNewExternalID('external_id');
+		};
+	}
+
+	/*
+	var multiples = [{'id': 'trans_names', 'label': 'Transliterated Name'}, {'id': 'trans_legal_names', 'label': 'Trans. Legal Name'}];
+	var i;
+	var field_id;
+	var addsign;
+	var label;
+	for (i = 0; i < multiples.length; i++) {
+		field_id = multiples[i].id;
+		addsign = field_id + '.addsign';
+		label = multiples[i].label;
+		alert(field_id+label);
+		if (document.getElementById(addsign)) {
+			document.getElementById(addsign).onclick = function(event){
+				AddMultipleField(label, field_id);
+			};
+		}
+	}
+	*/
+
+	if (document.getElementById('trans_names.addsign')) {
+		document.getElementById('trans_names.addsign').onclick = function(event){
+			AddMultipleField('Transliterated Name', 'trans_names');
+		};
+	}
+
+	if (document.getElementById('trans_legal_names.addsign')) {
+		document.getElementById('trans_legal_names.addsign').onclick = function(event){
+			AddMultipleField('Trans. Legal Name', 'trans_legal_names');
+		};
+	}
+
+	if (document.getElementById('author_webpages.addsign')) {
+		document.getElementById('author_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'author_webpages');
+		};
+	}
+
+	if (document.getElementById('publisher_webpages.addsign')) {
+		document.getElementById('publisher_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'publisher_webpages');
+		};
+	}
+
+	if (document.getElementById('pub_series_webpages.addsign')) {
+		document.getElementById('pub_series_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'pub_series_webpages');
+		};
+	}
+
+	if (document.getElementById('title_webpages.addsign')) {
+		document.getElementById('title_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'title_webpages');
+		};
+	}
+
+	if (document.getElementById('award_type_webpages.addsign')) {
+		document.getElementById('award_type_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'award_type_webpages');
+		};
+	}
+
+	if (document.getElementById('award_cat_webpages.addsign')) {
+		document.getElementById('award_cat_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'award_cat_webpages');
+		};
+	}
+
+	if (document.getElementById('series_webpages.addsign')) {
+		document.getElementById('series_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'series_webpages');
+		};
+	}
+
+	if (document.getElementById('author_emails.addsign')) {
+		document.getElementById('author_emails.addsign').onclick = function(event){
+			AddMultipleField('Email Address', 'author_emails');
+		};
+	}
+
+	if (document.getElementById('title_author.addsign')) {
+		document.getElementById('title_author.addsign').onclick = function(event){
+			AddMultipleField('Author', 'title_author');
+		};
+	}
+
+	if (document.getElementById('trans_titles.addsign')) {
+		document.getElementById('trans_titles.addsign').onclick = function(event){
+			AddMultipleField('Transliterated Title', 'trans_titles');
+		};
+	}
+
+	if (document.getElementById('pub_author.addsign')) {
+		document.getElementById('pub_author.addsign').onclick = function(event){
+			AddMultipleField('Author', 'pub_author');
+		};
+	}
+
+	if (document.getElementById('trans_publisher_names.addsign')) {
+		document.getElementById('trans_publisher_names.addsign').onclick = function(event){
+			AddMultipleField('Transliterated Name', 'trans_publisher_names');
+		};
+	}
+
+	if (document.getElementById('trans_pub_series_names.addsign')) {
+		document.getElementById('trans_pub_series_names.addsign').onclick = function(event){
+			AddMultipleField('Transliterated Name', 'trans_pub_series_names');
+		};
+	}
+
+	if (document.getElementById('interviewee_author1..addsign')) {
+		document.getElementById('interviewee_author1..addsign').onclick = function(event){
+			AddMultipleField('Interviewee', 'interviewee_author1.');
+		};
+	}
+
+	if (document.getElementById('interviewer_author1..addsign')) {
+		document.getElementById('interviewer_author1..addsign').onclick = function(event){
+			AddMultipleField('Interviewer', 'interviewer_author1.');
+		};
+	}
+
+	if (document.getElementById('review_author1..addsign')) {
+		document.getElementById('review_author1..addsign').onclick = function(event){
+			AddMultipleField('Author', 'review_author1.');
+		};
+	}
+
+	if (document.getElementById('review_reviewer1..addsign')) {
+		document.getElementById('review_reviewer1..addsign').onclick = function(event){
+			AddMultipleField('Reviewer', 'review_reviewer1.');
+		};
+	}
+
+	if (document.getElementById('tag_name.addsign')) {
+		document.getElementById('tag_name.addsign').onclick = function(event){
+			AddMultipleField('Tag', 'tag_name');
+		};
+	}
+
+	if (document.getElementById('ImportTitles.addsign')) {
+		document.getElementById('ImportTitles.addsign').onclick = function(event){
+			AddMultipleField('Title', 'ImportTitles');
+		};
+	}
+
+	if (document.getElementById('addNewBriefCover')) {
+		document.getElementById('addNewBriefCover').onclick = function(event){
+			addNewBriefCover();
+		};
+	}
+
+	if (document.getElementById('addNewFullCover')) {
+		document.getElementById('addNewFullCover').onclick = function(event){
+			addNewFullCover();
+		};
+	}
+
+	if (document.getElementById('addNewTitle')) {
+		document.getElementById('addNewTitle').onclick = function(event){
+			addNewTitle();
+		};
+	}
+
+	if (document.getElementById('addNewReview')) {
+		document.getElementById('addNewReview').onclick = function(event){
+			addNewReview();
+		};
+	}
+
+	if (document.getElementById('addNewInterview')) {
+		document.getElementById('addNewInterview').onclick = function(event){
+			addNewInterview();
+		};
+	}
+
+	var row_id = '';
+	var add_button1 = '';
+	var add_button2 = '';
+	for (var i = 1 ; i < 2000 ; i++) {
+		row_id = 'cover_id' + i + '.row';
+		add_button1 = 'addArtist.button.' + i;
+		if (document.getElementById(row_id)) {
+			if (document.getElementById(add_button1)) {
+				document.getElementById(add_button1).onclick = function(event){
+					addArtist(event);
+				};
+			}
+		}
+		else {
+			break;
+		}
+	}
+
+	for (var i = 1 ; i < 2000 ; i++) {
+		row_id = 'title_id' + i + '.row';
+		add_button1 = 'addContentTitleAuthor.button.' + i;
+		if (document.getElementById(row_id)) {
+			if (document.getElementById(add_button1)) {
+				document.getElementById(add_button1).onclick = function(event){
+					addContentTitleAuthor(event);
+				};
+			}
+		}
+		else {
+			break;
+		}
+	}
+
+	for (var i = 1 ; i < 2000 ; i++) {
+		row_id = 'review_id' + i + '.row';
+		add_button1 = 'addReviewee.button.' + i;
+		add_button2 = 'addReviewer.button.' + i;
+		if (document.getElementById(row_id)) {
+			if (document.getElementById(add_button1)) {
+				document.getElementById(add_button1).onclick = function(event){
+					addReviewee(event);
+				};
+			}
+			if (document.getElementById(add_button2)) {
+				document.getElementById(add_button2).onclick = function(event){
+					addReviewer(event);
+				};
+			}
+		}
+		else {
+			break;
+		}
+	}
+
+	for (var i = 1 ; i < 2000 ; i++) {
+		row_id = 'interview_id' + i + '.row';
+		add_button1 = 'addInterviewee.button.' + i;
+		add_button2 = 'addInterviewer.button.' + i;
+		if (document.getElementById(row_id)) {
+			if (document.getElementById(add_button1)) {
+				document.getElementById(add_button1).onclick = function(event){
+					addInterviewee(event);
+				};
+			}
+			if (document.getElementById(add_button2)) {
+				document.getElementById(add_button2).onclick = function(event){
+					addInterviewer(event);
+				};
+			}
+		}
+		else {
+			break;
+		}
+	}
+
+}
+
 function validateURL(field_name) {
 	// Retrieve the URL field - use [0] because JS returns an array in case there are many fields with this name
 	var element_name = document.getElementsByName(field_name)[0];
@@ -351,4 +621,152 @@ function determineArticle(word) {
 		break;
 	}
 	return article;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+	var title = document.title;
+	createOnsubmit(title);
+});
+
+function createOnsubmit(title)	{
+	if (title.indexOf('Award Editor') == 0) {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAwardForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Add New Award Type') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAwardTypeForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title.indexOf('New Award Category') == 0) {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAwardCatForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Add Publication') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Add Variant Title') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateVariantTitleForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Import/Export Contents') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Clone Publication') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Author Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAuthorForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Award Category Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAwardCatForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Award Type Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateAwardTypeForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Publication Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Publisher Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePublisherForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Publication Series Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubSeriesForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Series Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateSeriesForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Title Editor') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateTitleForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title == 'Make Variant Title') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateParentTitle() == false) {
+				event.preventDefault();
+			}
+		};
+		document.getElementById('data2').onsubmit = function(event){
+			if (validateVariantTitleForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
+	else if (title.indexOf('New ') == 0) {
+		document.getElementById('data').onsubmit = function(event){
+			if (validatePubForm() == false) {
+				event.preventDefault();
+			}
+		};
+	}
 }

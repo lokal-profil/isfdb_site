@@ -699,34 +699,36 @@ def printAddContentAuthor(type, help, index):
 	print '<tr id="Add%s%d">' % (type, int(index))
 	print '<td>&nbsp;</td>'
 	if type == 'Author':
-                onclick = 'addContentTitleAuthor'
+                button_id = 'addContentTitleAuthor'
                 label = 'Author'
         elif type == 'Reviewee':
-                onclick = 'addReviewee'
+                button_id = 'addReviewee'
                 label = 'Author'
         elif type == 'Interviewee':
-                onclick = 'addInterviewee'
+                button_id = 'addInterviewee'
                 label = 'Interviewee'
         elif type == 'Artist':
-                onclick = 'addArtist'
+                button_id = 'addArtist'
                 label = 'Artist'
 
         # Only display the help pop-up for the first occurence of this button
         if help.get(('Add '+label)) and int(index) < 2:
-        	print '<td class="hint" title="%s"><input type="button" tabindex="1" value="Add %s" onclick="%s(%d)">' % (help[('Add '+label)][0], label, onclick, int(index))
-        	print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></td>' % (HTMLLOC)
+        	print '<td class="hint" title="%s">' % help[('Add '+label)][0]
+        	print '<input id="%s.button.%d" type="button" tabindex="1" value="Add %s">' % (button_id, int(index), label)
+        	print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></td>' % HTMLLOC
         else:
-                print '<td><input type="button" tabindex="1" value="Add %s" onclick="%s(%d)"></td>' % (label, onclick, int(index))
+                print '<td><input id="%s.button.%d" type="button" tabindex="1" value="Add %s"></td>' % (button_id, int(index), label)
 	print '</tr>'
 
 def printAddSecondaryAuthor(type, help, index):
 	print '<tr id="Add%s%d">' % (type, int(index))
 	print '<td>&nbsp;</td>'
 	if help.get(('Add '+type)) and int(index) < 2:
-        	print '<td class="hint" title="%s"><input type="button" tabindex="1" value="Add %s" onclick="add%s(%d)">' % (help[('Add '+type)][0], type, type, int(index))
-        	print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></td>' % (HTMLLOC)
+        	print '<td class="hint" title="%s">' % help[('Add '+type)][0]
+        	print '<input id="add%s.button.%d" type="button" tabindex="1" value="Add %s">' % (type, int(index), type)
+        	print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></td>' % HTMLLOC
         else:
-                print '<td><input type="button" tabindex="1" value="Add %s" onclick="add%s(%d)"></td>' % (type, type, int(index))
+                print '<td><input id="add%s.button.%d" type="button" tabindex="1" value="Add %s"></td>' % (type, int(index), type)
 	print '</tr>'
 
 
