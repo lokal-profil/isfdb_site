@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 20011-2014   Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2011-2018   Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
         # If no decade was specified, then list all decades that the data is available for
         if not decade:
-                # Set the end decade to the decade of the current year
+                # Set the last decade to the decade of the current year
                 endyear = localtime()[0]
                 enddecade = endyear/10
                 print '<h3>Select a time period:</h3>'
@@ -45,7 +45,7 @@ if __name__ == '__main__':
                 f = open(filename,"r")
                 data = f.read()
                 f.close()
-                print '<h3>Includes novels, short fiction, serials, poems and collections:</h3>'
+                print '<h3>Includes authors with at least 6 novels, short fiction, serials, poems or collections:</h3>'
                 print data
         except:
                 print '<h3>No data for the specified decade</h3>'

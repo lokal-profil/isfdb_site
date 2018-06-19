@@ -529,12 +529,19 @@ def LastUserActivity(user_id):
                 return '&nbsp;'
 
 def AuthorsByDebutDate(parent_dir):
-        query = "select MIN(date_format(t.title_copyright,'%Y')) debut, a.author_id, a.author_canonical, count(*) NumTitles, a.author_lastname"
-        query += " from titles t, canonical_author ca, authors a where t.title_copyright!='0000-00-00'"
-        query += " and t.title_ttype IN ('NOVEL','COLLECTION','SHORTFICTION','SERIAL','POEM') and ca.ca_status=1"
-        query += " and ca.title_id = t.title_id and ca.author_id = a.author_id and t.title_parent = 0"
-        query += " and a.author_canonical not in ('Anonymous','unknown','uncredited')"
-        query += " GROUP BY ca.author_id HAVING NumTitles > 5 ORDER BY 1,5,2"
+        query = """select MIN(date_format(t.title_copyright,'%Y')) debut, a.author_id,
+                a.author_canonical, count(t.title_id) NumTitles, a.author_lastname
+                from titles t, canonical_author ca, authors a
+                where t.title_copyright!='0000-00-00'
+                and t.title_ttype IN ('NOVEL','COLLECTION','SHORTFICTION','SERIAL','POEM')
+                and ca.ca_status=1
+                and ca.title_id = t.title_id
+                and ca.author_id = a.author_id
+                and t.title_parent = 0
+                and a.author_canonical not in ('Anonymous','unknown','uncredited')
+                GROUP BY ca.author_id
+                HAVING NumTitles > 5
+                ORDER BY 1,5,2"""
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()
@@ -568,9 +575,9 @@ def AuthorsForOneDecade(parent_dir, decade, data):
 			print '<tr align=left class="table1">'
 		else:
 			print '<tr align=left class="table2">'
-		print '<td>%s</td>' % (record[0])
-		print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, record[1], record[2])
-		print '<td>%d</td>' % (record[3])
+		print '<td>%s</td>' % record[0]
+		print '<td>%s</td>' % ISFDBLink('ea.cgi', record[1], record[2])
+		print '<td>%d</td>' % record[3]
 		print '</tr>'
 		color = color ^ 1
 	print '</table><p>'
