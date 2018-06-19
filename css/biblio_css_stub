@@ -1015,3 +1015,65 @@ sup.mouseover2pix {
 select.nodisplay {
   display:none;
 }
+
+/* Do not display hidden inputs */
+input.nodisplay {
+  display:none;
+}
+
+span.recordID {
+  float:right;
+}
+
+span.approval {
+  float:right;
+}
+
+.svg1 {
+  stroke:gray;
+  stroke-width:1;
+}
+
+.svgred {
+  stroke:red;
+  stroke-width:2;
+}
+
+.svgblue {
+  stroke:blue;
+  stroke-width:2;
+}
+
+.svgblue {
+  stroke:green;
+  stroke-width:2;
+}
+
+.svgorange {
+  stroke:orange;
+  stroke-width:2;
+}
+
+.svgyellow {
+  stroke:yellow;
+  stroke-width:2;
+}
+
+.svgpink {
+  stroke:pink;
+  stroke-width:2;
+}
+
+.svgblack {
+  stroke:black;
+  stroke-width:2;
+}
+
+td.authorimage {
+  width: 100%;
+  vertical-align: top;
+}
+
+div.nongenre {
+  text-align: center;
+}

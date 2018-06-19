@@ -735,7 +735,7 @@ def outputGraph(height, startyear, xscale, yscale, years, maximum, results):
 	increment = maximum/4
 	value = increment * 4
 	while y <= height:
-		print '<line x1="%d" y1="%d" x2="%d" y2="%d" style="stroke:gray;stroke-width:1"/>' % (xoffset, y+yoffset, xoffset+5+(years*xscale), y+yoffset)
+		print '<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg1"/>' % (xoffset, y+yoffset, xoffset+5+(years*xscale), y+yoffset)
 		print '<text x="%d" y="%d" font-size="10">%d</text>' % (xoffset+10+(years*xscale), y+5+yoffset, value)
 		value -= increment
 		y = y + 50
@@ -745,7 +745,7 @@ def outputGraph(height, startyear, xscale, yscale, years, maximum, results):
 	###################################################
 	x = 0
 	while x < years:
-		print '<line x1="%d" y1="%d" x2="%d" y2="%d" style="stroke:gray;stroke-width:1"/>' % (xoffset+(xscale*x), yoffset, xoffset+(xscale*x), height+10+yoffset)
+		print '<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg1"/>' % (xoffset+(xscale*x), yoffset, xoffset+(xscale*x), height+10+yoffset)
 		print '<text x="%d" y="%d" font-size="10">%d</text>' % ((xscale*x)-12+xoffset, height+20+yoffset, x+startyear)
 		x += 10
 
@@ -763,7 +763,7 @@ def printOneSVGLine(xscale, yscale, years, maximum, results, xoffset, yoffset, c
         last = (0, 0)
         while index < years:
                 if index:
-                        print '<line x1="%d" y1="%d" x2="%d" y2="%d" style="stroke:%s;stroke-width:2"/>' % (xoffset+(xscale * last[0]), yoffset+(int(yscale * float(last[1]))), xoffset+(xscale * results[index][0]), yoffset+(int(yscale * float(maximum-results[index][1]))), color)
+                        print '<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg%s"/>' % (xoffset+(xscale * last[0]), yoffset+(int(yscale * float(last[1]))), xoffset+(xscale * results[index][0]), yoffset+(int(yscale * float(maximum-results[index][1]))), color)
                 last = (results[index][0], maximum-results[index][1])
                 index += 1
 
@@ -1671,7 +1671,7 @@ def EscapeParams(params):
         return param_string
 
 def printRecordID(record_type, record_id, user_id, user = None):
-	output = '<span style="float:right"><b>%s Record # </b>%d' % (record_type, int(record_id))
+	output = '<span class="recordID"><b>%s Record # </b>%d' % (record_type, int(record_id))
 	if user_id:
                 cgi_scripts = {'Publication': 'editpub',
                                'Title': 'edittitle',

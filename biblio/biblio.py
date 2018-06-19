@@ -392,7 +392,7 @@ class Bibliography:
                 for title in self.canonical_titles:
                         if title[TITLE_NON_GENRE] == 'Yes':
                                 print '<hr>'
-                                print '<div style="text-align:center"><b>Non-Genre Titles</b></div><br>'
+                                print '<div class="nongenre"><b>Non-Genre Titles</b></div><br>'
                                 return 1
                 return 0
 
@@ -499,7 +499,7 @@ class Bibliography:
 			print '<td>'
 			print '<img src="%s" width="150" alt="Author Picture">' % (self.au_data[AUTHOR_IMAGE])
 			print '</td>'
-			print '<td valign="top" style="width: 100%">'
+			print '<td class="authorimage">'
 
 		print '<ul>'
         	print '<li><b>Author:</b> %s' % ISFDBMouseover(self.au_trans_names, self.au_data[AUTHOR_CANONICAL], 'span')

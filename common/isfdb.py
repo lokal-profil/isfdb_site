@@ -44,8 +44,8 @@ def PrintHTMLHeaders(title):
     print """Content-Security-Policy: object-src 'none';"""
     # Limit JS scripts to .js files served by the ISFDB server
     print """Content-Security-Policy: script-src 'self' http://%s;""" % HTMLHOST
-    # Limit stylesheets to .css files served by the ISFDB server and (temporarily) inline
-    print """Content-Security-Policy: style-src 'self' 'unsafe-inline' http://%s;""" % HTMLHOST
+    # Limit stylesheets to .css files served by the ISFDB server
+    print """Content-Security-Policy: style-src 'self' http://%s;""" % HTMLHOST
     # Disable Worker, SharedWorker, or ServiceWorker scripts
     #   May need to be re-worked if we implement workers
     print """Content-Security-Policy: worker-src 'none';"""

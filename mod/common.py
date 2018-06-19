@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2006-2017   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2018   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -86,7 +86,7 @@ def ApproveOrReject(app, submission_id):
                 print '<a class="hold" href="http:/'+HTFAKE+'/mod/hold.cgi?%s">HOLD</a>  ' % submission_id
 
         print '<a class="approval" href="http:/'+HTFAKE+'/mod/%s?%s">Approve</a>' % (app, submission_id)
-        print '<span style="float:right"><small>'
+        print '<span class="approval"><small>'
         print '<a class="approval" href="http:/%s/view_submission.cgi?%s">Public View</a>' % (HTFAKE, submission_id)
         print '<a class="approval" href="http:/%s/mod/dumpxml.cgi?%s">View Raw XML</a>' % (HTFAKE, submission_id)
         print '</small></span>'

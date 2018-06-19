@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2017   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2018   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -114,19 +114,19 @@ if __name__ == '__main__':
                         if verifier_name == username:
         			print '<td><input type="radio" value="NOTVER" name="xx%d"></td>' % ref_id
         		else:
-                                print '<td><input type="radio" value="NOTVER" name="xx%d" style="display:none;"></td>'  % ref_id
-			print '<td><input type="radio" value="VER" name="xx%d" style="display:none;"><a href="http://%s/index.php/User:%s">%s</a></td>' % (ref_id, WIKILOC, verifier_name, verifier_name)
+                                print '<td><input type="radio" value="NOTVER" name="xx%d" class="nodisplay"></td>'  % ref_id
+			print '<td><input type="radio" value="VER" name="xx%d" class="nodisplay"><a href="http://%s/index.php/User:%s">%s</a></td>' % (ref_id, WIKILOC, verifier_name, verifier_name)
                         # Only allow checking "N/A" if the current user is the verifier for this source
                         if verifier_name == username:
         			print '<td><input type="radio" value="NA" name="xx%d"></td>' % ref_id
         		else:
-                                print '<td><input type="radio" value="NA" name="xx%d" style="display:none;"></td>'  % ref_id
+                                print '<td><input type="radio" value="NA" name="xx%d" class="nodisplay"></td>'  % ref_id
 		elif ver_status == 2:
                         # Retrieve the name of the user who marked this pub/source combination "N/A"
                         verifier_name = SQLgetUserName(verification[VERIF_USER_ID])
 			print '<td><input type="radio" value="NOTVER" name="xx%d"></td>' % ref_id
 			print '<td><input type="radio" value="VER" name="xx%d"></td>' % ref_id
-			print '<td><input type="radio" value="NA" name="xx%d" style="display:none;"><a href="http://%s/index.php/User:%s">%s</a></td>' % (ref_id, WIKILOC, verifier_name, verifier_name)
+			print '<td><input type="radio" value="NA" name="xx%d" class="nodisplay"><a href="http://%s/index.php/User:%s">%s</a></td>' % (ref_id, WIKILOC, verifier_name, verifier_name)
 		print '</tr>'
 	print '</table>'
 	print '<p>'
