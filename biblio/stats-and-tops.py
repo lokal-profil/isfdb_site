@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2013-2017   Ahasuerus
+#     (C) COPYRIGHT 2013-2018   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -30,7 +30,7 @@ if __name__ == '__main__':
         print '</ul>'
 	print '<h4>Author Statistics</h4>'
 	print '<ul>'
-        print '<li><a href="http:/%s/authors_by_debut_year.cgi">Authors By Debut Year</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/authors_by_debut_year_table.cgi">Authors By Debut Year</a>' % (HTFAKE)
         print '<li><a href="http:/%s/most_viewed.cgi?authors">Most-Viewed Authors</a>' % (HTFAKE)
         print '<li><a href="http://%s/degrees.html">Author Communities</a> [as of 2005]' % (HTMLHOST)
         print '<li>Authors by Age:'

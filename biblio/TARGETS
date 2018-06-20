@@ -2,6 +2,7 @@
 TARGETS = DIR/adv_search_results.cgi \
 	  DIR/ae.cgi \
 	  DIR/authors_by_debut_year.cgi \
+	  DIR/authors_by_debut_year_table.cgi \
 	  DIR/authors_by_language.cgi \
 	  DIR/authortags.cgi \
 	  DIR/award_category.cgi \

@@ -1344,3 +1344,24 @@ def PrintAuthorRecord(record, pseudonym, bgcolor, user, trans_names, trans_legal
 	else:
 		print "<td>-</td>"
         print "</tr>"
+
+def PrintAnnualGrid(starting_decade, link, year_parameter, display_decade, decade_parameter):
+        # Get the current year based on system time
+        current_year = localtime()[0]
+        # Determine the current decade - Python division returns integers by default
+        current_decade = current_year/10*10
+        bgcolor = 0
+        # Display all decades since the starting decade in reverse chronological order
+        for decade in range(current_decade, starting_decade-10, -10):
+                print '<tr class="table%d">' % (bgcolor+1)
+                if display_decade:
+                        print '<td><a href="http:/%s/%s.cgi?%s%d">%ds</a></td>' % (HTFAKE, link, decade_parameter, decade, decade)
+                for year in range(decade, decade+10):
+                        # Skip future years
+                        if year > current_year:
+                                print '<td>&nbsp;</td>'
+                                continue
+                        print '<td><a href="http:/%s/%s.cgi?%s%d">%d</a></td>' % (HTFAKE, link, year_parameter, year, year)
+                print '</tr>'
+                bgcolor ^= 1
+        print '</table>'

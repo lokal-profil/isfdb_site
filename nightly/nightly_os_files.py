@@ -57,7 +57,7 @@ def os_files():
         elapsed.print_elapsed("Moderator stats", 0)
 
         # Task 7: Update the list of authors by debut date
-        AuthorsByDebutDate(parent_dir)
+        AuthorsByDebutDate()
         elapsed.print_elapsed("Authors by debut date", 0)
 
         # Restore the original stdout
@@ -528,59 +528,23 @@ def LastUserActivity(user_id):
         else:
                 return '&nbsp;'
 
-def AuthorsByDebutDate(parent_dir):
-        query = """select MIN(date_format(t.title_copyright,'%Y')) debut, a.author_id,
-                a.author_canonical, count(t.title_id) NumTitles, a.author_lastname
+def AuthorsByDebutDate():
+        delete = "delete from authors_by_debut_date"
+	db.query(delete)
+        query = """insert into authors_by_debut_date (debut_year, author_id, title_count)
+                select MIN(date_format(t.title_copyright,'%Y')) debut,
+                a.author_id, count(t.title_id) NumTitles
                 from titles t, canonical_author ca, authors a
-                where t.title_copyright!='0000-00-00'
-                and t.title_ttype IN ('NOVEL','COLLECTION','SHORTFICTION','SERIAL','POEM')
+                where t.title_copyright not in ('0000-00-00', '8888-00-00')
+                and t.title_ttype IN ('NOVEL', 'COLLECTION', 'SHORTFICTION', 'POEM')
                 and ca.ca_status=1
                 and ca.title_id = t.title_id
                 and ca.author_id = a.author_id
                 and t.title_parent = 0
-                and a.author_canonical not in ('Anonymous','unknown','uncredited')
+                and a.author_canonical not in ('Anonymous', 'unknown', 'uncredited')
                 GROUP BY ca.author_id
-                HAVING NumTitles > 5
-                ORDER BY 1,5,2"""
+                HAVING NumTitles > 5"""
 	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	decades = {}
-	while record:
-                decade = int(record[0][0])/10
-                # For years prior to 1900, put all authors into a single bucket, 100
-                if decade < 190:
-                        decade = 100
-                if decade not in decades:
-                        decades[decade] = [record[0]]
-                else:
-                        decades[decade].append(record[0])
-        	record = result.fetch_row()
-	for decade in decades:
-                AuthorsForOneDecade(parent_dir, decade, decades[decade])
-
-def AuthorsForOneDecade(parent_dir, decade, data):
-        # Redirect output to a decade-specific file
-        file_name =  '%s%sauthors_by_debut_year_%d.html' % (parent_dir, os.sep, decade)
-        sys.stdout = open(file_name, 'w')
-	print '<table cellpadding="3" bgcolor="#FFFFFF">'
-	print '<tr align=left class="table1">'
-	print '<td><b>Debut Year</b></td>'
-	print '<td><b>Author</b></td>'
-	print '<td><b>Number of Titles</b></td>'
-	print '</tr>'
-	color = 0
-	for record in data:
-		if color:
-			print '<tr align=left class="table1">'
-		else:
-			print '<tr align=left class="table2">'
-		print '<td>%s</td>' % record[0]
-		print '<td>%s</td>' % ISFDBLink('ea.cgi', record[1], record[2])
-		print '<td>%d</td>' % record[3]
-		print '</tr>'
-		color = color ^ 1
-	print '</table><p>'
 
 def buildQueryTitle(type, startyear, endyear):
         query = "select YEAR(title_copyright),COUNT(*) from titles where title_ttype='%s' and title_parent=0 and " % (type)

@@ -14,39 +14,55 @@ from common import *
 
 if __name__ == '__main__':
 
+        header = 'Authors By Debut Year'
         try:
-                decade = int(sys.argv[1])
-                header = 'Authors By Debut Year'
-                if decade > 100:
-                        header += ' - %d0s' % decade
+                year = int(sys.argv[1])
+                if year > 1899:
+                        header += ' - %d' % year
                 else:
                         header += ' - Prior to 1900'
+                        year = 0
         except:
-                decade = 0
-                header = 'Authors By Debut Year'
+                year = 0
 	PrintHeader(header)
 	PrintNavbar('authors_by_debut_year', 0, 0, 'authors_by_debut_year.cgi', 0)
 
-        # If no decade was specified, then list all decades that the data is available for
-        if not decade:
-                # Set the last decade to the decade of the current year
-                endyear = localtime()[0]
-                enddecade = endyear/10
-                print '<h3>Select a time period:</h3>'
-                print '<ul>'
-                print '<li><a href="http:/%s/authors_by_debut_year.cgi?100">Prior to 1900</a>' % HTFAKE
-                for decade in range(190, enddecade+1):
-                        print '<li><a href="http:/%s/authors_by_debut_year.cgi?%d">%d0s</a>' % (HTFAKE, decade, decade)
-                PrintTrailer('frontpage', 0, 0)
-                sys.exit(0)
+        print '<h3>Includes authors with at least 6 novels, short fiction, poems or collections:</h3>'
+	print '<table class="generic_table">'
+	print '<tr align=left class="table1">'
+	print '<th>Debut Year</th>'
+	print '<th>Author</th>'
+	print '<th>Number of Titles</th>'
+	print '</tr>'
 
-        try:
-                filename = LOCALFILES + "authors_by_debut_year_%d.html" % decade
-                f = open(filename,"r")
-                data = f.read()
-                f.close()
-                print '<h3>Includes authors with at least 6 novels, short fiction, serials, poems or collections:</h3>'
-                print data
-        except:
-                print '<h3>No data for the specified decade</h3>'
+        if year:
+                year_selector = '= %d' % year
+        else:
+                year_selector = '< 1900'
+        query = """select ad.debut_year, ad.author_id, a.author_canonical, ad.title_count
+                from authors_by_debut_date ad, authors a
+                where ad.debut_year %s
+                and ad.author_id = a.author_id
+                order by debut_year, a.author_lastname, a.author_canonical""" % db.escape_string(year_selector)
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	color = 0
+	while record:
+                debut_year = record[0][0]
+                author_id = record[0][1]
+                author_name = record[0][2]
+                title_count = record[0][3]
+		if color:
+			print '<tr align=left class="table1">'
+		else:
+			print '<tr align=left class="table2">'
+		print '<td>%s</td>' % debut_year
+		print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id, author_name)
+		print '<td>%d</td>' % title_count
+		print '</tr>'
+		color = color ^ 1
+                record = result.fetch_row()
+	print '</table><p>'
+
 	PrintTrailer('frontpage', 0, 0)
