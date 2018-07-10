@@ -1408,6 +1408,8 @@ def DisplayNewAward(submission_id):
                 if TagPresent(merge, 'Record'):
                         Record = GetElementValue(merge, 'Record')
                         title = SQLloadTitle(int(Record))
+                        if not title:
+                                InvalidSubmission(submission_id, 'Title no longer exists')
                         print "<tr>"
                         print '<td class="label"><b>Add Award to <a href="http:/%s/title.cgi?%s">[Title #%s]</a></b></td>' % (HTFAKE, Record, Record)
                         print '<td class="label">%s</td>' % (title[TITLE_TITLE])
