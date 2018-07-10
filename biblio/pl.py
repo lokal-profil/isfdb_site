@@ -103,7 +103,10 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
                                                                 output += ".%s" % parent_title[TITLE_SERIESNUM_2]
                                                 output += ']'
 
-        output += " &#8226; "
+        if title[TITLE_TTYPE] != 'COVERART':
+                output += " &#8226; "
+        else:
+                output += ' '
 
         if title[TITLE_YEAR] != pub.pub_year:
                 output += '(%s)' % (convertYear(title[TITLE_YEAR][:4]))
@@ -147,6 +150,8 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
                 output += 'interview'
         elif title[TITLE_TTYPE] == 'EDITOR':
                 output += 'edited'
+        elif title[TITLE_TTYPE] == 'COVERART':
+                pass
         else:
                 output += title[TITLE_TTYPE]
         output += ' by '
@@ -167,8 +172,10 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
                         title_type = title[TITLE_TTYPE]
                         parent_type = parent_title[TITLE_TTYPE]
                         
-                        # If the two language codes are different and the variant is not interior art, it's a translation
-                        if parent_lang and variant_lang and parent_lang != variant_lang and title_type != 'INTERIORART':
+                        # If the two language codes are different and the variant is not interior art
+                        # and not cover art, it's a translation
+                        if (parent_lang and variant_lang and parent_lang != variant_lang
+                            and title_type not in ('INTERIORART', 'COVERART')):
                                 translation = 1
                         else:
                                 translation = 0
@@ -458,7 +465,8 @@ if __name__ == '__main__':
                                 cover_indicator = str(cover_count)
                         print '<li><b><a href="http:/%s/title.cgi?%d">Cover%s</a>:</b>' % (HTFAKE, title[TITLE_PUBID], cover_indicator)
 			cover_art_titles.append(title[TITLE_PUBID])
-			PrintAllAuthors(title[TITLE_PUBID])
+			#PrintAllAuthors(title[TITLE_PUBID])
+                        PrintTitleLine(title, pub, None, None, 1)
 			cover_count += 1
 
 	if pub.pub_note:
