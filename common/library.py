@@ -1151,6 +1151,7 @@ def unicode_translation():
 ##        '&#700;' : "'",      # Modified letter apostrophe
         replace = {
                    '&#165;':  chr(165), # Unicode yen changed to Latin-1 yen
+                   '&#847;': '',        # Combining Grapheme Joiner, which we replace with "no character"
                    '&#8192;': ' ',      # En quad space
                    '&#8193;': ' ',      # Em quad space
                    '&#8194;': ' ',      # En space
@@ -1163,7 +1164,10 @@ def unicode_translation():
                    '&#8201;': ' ',      # Thin space
                    '&#8202;': ' ',      # Hair space
                    '&#8203;': '',       # Zero width space, which we replace with "no character"
+                   '&#8204;': '',       # Zero width non-joiner, which we replace with "no character"
+                   '&#8205;': '',       # Zero width joiner, which we replace with "no character"
                    '&#8206;': '',       # Left-To-Right character
+                   '&#8207;': '',       # Right-To-Left character
                    '&#8216;': "'",      # Left single quotation mark
                    '&#8217;': "'",      # Right single quotation mark
                    '&#8218;': "'",      # Single low-reverse-9 quotation mark
