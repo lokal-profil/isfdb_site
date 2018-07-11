@@ -28,6 +28,10 @@ function validateAuthorForm() {
 	if (validateURL("author_image") == false) {
 		return false;
 	}
+	// Validate emails
+	if (validateEmails("author_emails") == false) {
+		return false;
+	}
 	// Validate the Web Page URLs
 	if (validateWebPages("author_webpages") == false) {
 		return false;
@@ -44,6 +48,41 @@ function validateDoubleQuotes(field_name, display_name) {
 	// Check if the resulting string contains double quotes and generate an alert error
 	if (element_value.indexOf("\"") !== -1) {
 		alert("Double quotes are not allowed in " + display_name + ". Use single quotes instead.");
+		element_name.focus();
+		return false;
+	}
+	return true;
+}
+
+function validateEmails(field_name) {
+	var last_row = GetLastRow(field_name);
+	var email_field;
+	for (i = 1 ; i < (last_row +1) ; i++) {
+		email_field = field_name + i;
+		// Validate each email
+		if (validateEmail(email_field) == false) {
+			return false;
+		}
+	}
+	return true;
+}
+
+function validateEmail(field_name) {
+	// Retrieve the URL field - use [0] because JS returns an array in case there are many fields with this name
+	var element_name = document.getElementsByName(field_name)[0];
+	// If there is no email field, validation fails
+	if (element_name == null) {
+		return false;
+	}
+	// Retrieve the value of the field
+	var element_value = element_name.value;
+	// If the value is empty, then validation passes
+	if (element_value == "") {
+		return true;
+	}
+	// Check that the email follows the "name@domain.top-level-domain" format
+	if (element_value.match(/\S+@\S+\.\S+/gi) == null) {
+		alert("Email addresses must use a valid format.");
 		element_name.focus();
 		return false;
 	}

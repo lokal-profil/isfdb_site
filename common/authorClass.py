@@ -243,6 +243,7 @@ class authors:
 			self.author_webpages = elem
 
 	def cgi2obj(self):
+                import re
 		self.form = cgi.FieldStorage()
 		try:
 			self.author_id = str(int(self.form['author_id'].value))
@@ -355,6 +356,11 @@ class authors:
                         if key[:13] == 'author_emails':
                                 value = XMLescape(self.form[key].value)
                                 if value:
+                                        if value in self.author_emails:
+                                                continue
+                                        if not re.match(r"[^@]+@[^@]+\.[^@]+",value):
+                                                self.error = 'Invalid email address'
+                                                return
                                         self.author_emails.append(value)
                                         self.used_emails = 1
 
