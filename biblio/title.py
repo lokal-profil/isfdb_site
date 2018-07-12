@@ -44,7 +44,7 @@ def PrintOneVariant(variant, parent, parent_authors, bgcolor, translation):
                 bubble_values = []
                 notes = SQLgetNotes(variant[TITLE_NOTE])
                 bubble_values.append(FormatNote(notes, '', 'full', 0, '', 0))
-                print ISFDBMouseover(bubble_values, convertTitleYear(variant), 'span', INFO_SIGN)
+                print ISFDBMouseover(bubble_values, convertTitleYear(variant), '', INFO_SIGN)
         else:
                 print convertTitleYear(variant)
         print '</td>'
@@ -209,19 +209,19 @@ if __name__ == '__main__':
                         print '<b>Review of:</b> %s' % ISFDBLink('title.cgi', reviewed_title,
                                                                  title[TITLE_TITLE], False, '', trans_titles_dict)
                 else:
-                        print "<b>Review of:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], 'span')
+                        print "<b>Review of:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], '')
                 displayCommon(title, user)
 		authors = SQLReviewBriefAuthorRecords(title_id)
 		displayPersonLabel('Author', authors)
 		displayPersons(authors)
 	elif title[TITLE_TTYPE] == 'INTERVIEW':
-		print "<b>Interview Title:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], 'span')
+		print "<b>Interview Title:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], '')
                 displayCommon(title, user)
 		authors = SQLInterviewBriefAuthorRecords(title_id)
 		displayPersonLabel('Interviewee', authors)
 		displayPersons(authors)
 	else:
-		print "<b>Title:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], 'span')
+		print "<b>Title:</b>", ISFDBMouseover(trans_titles, title[TITLE_TITLE], '')
                 displayCommon(title, user)
 
 	########################################

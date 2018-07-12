@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2018   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -48,7 +48,7 @@ if __name__ == '__main__':
 	print '<ul>'
         # Transliterated name(s)
         trans_names = SQLloadTransPublisherNames(publisher_id)
-        print '<li><b>Publisher: </b>%s' % ISFDBMouseover(trans_names, publisher[PUBLISHER_NAME], 'span')
+        print '<li><b>Publisher: </b>%s' % ISFDBMouseover(trans_names, publisher[PUBLISHER_NAME], '')
         printRecordID('Publisher', publisher_id, user.id)
 
 	# Webpages
@@ -99,7 +99,7 @@ if __name__ == '__main__':
                         trans_names = SQLloadTransPubSeriesNames(pub_series[PUB_SERIES_ID])
                         display_line = '<a href="http:/%s/pubseries.cgi?%s" dir="ltr">%s</a>' % (HTFAKE,
                                         pub_series[PUB_SERIES_ID], pub_series[PUB_SERIES_NAME])
-                        print '<li>%s</li>' % ISFDBMouseover(trans_names, display_line, 'span')
+                        print '<li>%s</li>' % ISFDBMouseover(trans_names, display_line, '')
         print '</ul>'
         print '</div>'
 

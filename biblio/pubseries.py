@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2010-2017   Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2010-2018   Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 	print '<ul>'
         # Transliterated name(s)
         trans_names = SQLloadTransPubSeriesNames(pub_series_id)
-        print '<li><b>Publication Series: </b>%s' % ISFDBMouseover(trans_names, pub_series[PUB_SERIES_NAME], 'span')
+        print '<li><b>Publication Series: </b>%s' % ISFDBMouseover(trans_names, pub_series[PUB_SERIES_NAME], '')
         printRecordID('Pub. Series', pub_series_id, user.id)
 
 	# Webpages

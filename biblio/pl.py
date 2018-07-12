@@ -364,7 +364,7 @@ if __name__ == '__main__':
 		print '<td class="pubheader">'
 
 	print '<ul>'
-	print '<li><b>Publication:</b>', ISFDBMouseover(pub.pub_trans_titles, pub.pub_title, 'span')
+	print '<li><b>Publication:</b>', ISFDBMouseover(pub.pub_trans_titles, pub.pub_title, '')
 	printRecordID('Publication', pub.pub_id, userid)
 
 	titles = SQLloadTitlesXBT(pub.pub_id)

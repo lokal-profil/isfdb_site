@@ -123,7 +123,7 @@ def displayMainTitle(title, author_id, authors, series_type, original_language, 
                 displayAuthors(authors[title[TITLE_PUBID]], author_id, translit_authors)
 
 def buildCoreTitleLine(title, original_language, translit_titles):
-	output = ' <i>%s</i> ' % ISFDBLink('title.cgi', int(title[TITLE_PUBID]), title[TITLE_TITLE], False, '', translit_titles)
+	output = ' %s ' % ISFDBLink('title.cgi', int(title[TITLE_PUBID]), '<i>%s</i>' % title[TITLE_TITLE], False, '', translit_titles)
 
 	# Only display the current language if it is defined, the original (i.e. author's or, for
 	# serializations, parent title's) language is defined and not the same as the current language
@@ -242,8 +242,8 @@ def displayVariantTitle(title, origTitle, variant_type, parent_authors,
         if label:
                 label = ' <b>%s:</b>' % label
 
-	output = '%s <i>%s</i> ' % (label, ISFDBLink('title.cgi', int(title[TITLE_PUBID]),
-                                                     title[TITLE_TITLE], False, '', translit_titles))
+	output = '%s %s ' % (label, ISFDBLink('title.cgi', int(title[TITLE_PUBID]),
+                                                     '<i>%s</i>' % title[TITLE_TITLE], False, '', translit_titles))
 
 	if translation:
                 output += '[%s] ' % LANGUAGES[title[TITLE_LANGUAGE]]
@@ -1167,7 +1167,7 @@ def FormatPubSeries(pub, pub_series):
                         pub_series_name = pub_series[pub[PUB_SERIES]]
                         trans_names = SQLloadTransPubSeriesNames(pub[PUB_SERIES])
                         display_line = '<a href="http:/%s/pubseries.cgi?%s">%s</a>' % (HTFAKE, pub[PUB_SERIES], pub_series_name)
-                        displayed_pub_series += ISFDBMouseover(trans_names, display_line, 'span')
+                        displayed_pub_series += ISFDBMouseover(trans_names, display_line, '')
                 if pub[PUB_SERIES_NUM]:
                         displayed_pub_series += ' #%s' % pub[PUB_SERIES_NUM]
         return displayed_pub_series
@@ -1178,7 +1178,7 @@ def FormatPublisher(pub, pub_publishers):
                 publisher_name = pub_publishers[pub[PUB_PUBLISHER]]
                 trans_names = SQLloadTransPublisherNames(pub[PUB_PUBLISHER])
                 display_line = '<a href="http:/%s/publisher.cgi?%s">%s</a>' % (HTFAKE, pub[PUB_PUBLISHER], publisher_name)
-                displayed_publisher = ISFDBMouseover(trans_names, display_line, 'span')
+                displayed_publisher = ISFDBMouseover(trans_names, display_line, '')
         return displayed_publisher
 
 def PrintTitleTable(titles, merge, limit = 100, user = None):

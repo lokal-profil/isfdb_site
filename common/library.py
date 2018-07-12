@@ -526,7 +526,7 @@ def ISFDBLink(script, record_id, displayed_value, brackets=False, argument='', t
                 trans_values = trans_function(record_id)
         # If transliterated values have been found, add them to the link
         if trans_values:
-                link = ISFDBMouseover(trans_values, link, 'span')
+                link = ISFDBMouseover(trans_values, link, '')
 
 	if brackets:
 		link = '[%s]' % link
@@ -587,7 +587,7 @@ def ISFDBPubFormat(format_code):
         mouseover_text = normalizeInput(mouseover_text)
        
         if mouseover_text:
-                display_value = ISFDBMouseover((mouseover_text,), format_code, 'span')
+                display_value = ISFDBMouseover((mouseover_text,), format_code, '')
         else:
                 display_value = format_code
         return display_value
@@ -1448,26 +1448,32 @@ def list_to_in_clause(id_list):
 def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUESTION_MARK):
         # Adds a mouseover bubble with the specified list of values to
         # the displayed text/link and returns the composite string.
-        # Supports different HTML tags, typically <td> and <span>.
+        # Supports different opening and closing HTML tags, typically <td>.
 
         if not mouseover_values:
                 if tag == 'td':
                         return '<td>%s</td>' % display_value
                 else:
                         return display_value
-        display = '<%s class="hint" title="' % tag
-        count = 0
-        for mouseover_value in mouseover_values:
-                if count:
-                        display += '&#13;'
-                # Append the HTML-escaped version of the mouseover value
-                display += ISFDBText(mouseover_value, 1)
-                count += 1
         if HTFAKE in display_value:
                 mouseover_class = 'mouseover2pix'
         else:
                 mouseover_class = 'mouseover'
-        display += '">%s<sup class="%s">%s</sup></%s>' % (display_value, mouseover_class, indicator, tag)
+        if tag:
+                display = '<%s>' % tag
+        else:
+                display = ''
+        display += '<div class="tooltip">%s<sup class="%s">%s</sup><span class="tooltiptext">' % (display_value, mouseover_class, indicator)
+        count = 0
+        for mouseover_value in mouseover_values:
+                if count:
+                        display += '<br>'
+                # Append the HTML-escaped version of the mouseover value
+                display += mouseover_value
+                count += 1
+        display += '</span> </div>'
+        if tag:
+                display += '</%s>'% tag
         return display
 
 def validateURL(url):
