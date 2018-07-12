@@ -767,7 +767,7 @@ def printOneSVGLine(xscale, yscale, years, maximum, results, xoffset, yoffset, c
                 last = (results[index][0], maximum-results[index][1])
                 index += 1
 
-def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, record_type = ''):
+def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, record_type = '', div = 1):
         import urllib
         import re
         if display_mode == 'short' and '{{BREAK}}' in note:
@@ -953,10 +953,11 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
 	# Remove leading and trailing spaces (but not newlines)
 	retval = string.strip(retval, ' ')
 
-        if note_type:
-                retval = '<div class="notes"><b>%s:</b> %s</div>' % (note_type, retval)
-        else:
-                retval = '<div class="notes">%s</div>' % (retval)
+        if div:
+                if note_type:
+                        retval = '<div class="notes"><b>%s:</b> %s</div>' % (note_type, retval)
+                else:
+                        retval = '<div class="notes">%s</div>' % (retval)
 	return retval
 
 def ServerSideRedirect(location):
