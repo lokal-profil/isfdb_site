@@ -449,3 +449,5 @@ SUBMISSION_DISPLAY = {
 
 # Alternative Unicode question marks: '&#10068;' (white) '&#10067;' (black)
 QUESTION_MARK = '?'
+# "More info" sign for mouseover bubbles
+INFO_SIGN = '&#x24d8;'

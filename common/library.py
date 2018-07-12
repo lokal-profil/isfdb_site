@@ -1445,7 +1445,7 @@ def list_to_in_clause(id_list):
                         in_clause += ",'%s'" % id_string
         return in_clause
 
-def ISFDBMouseover(mouseover_values, display_value, tag = 'td'):
+def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUESTION_MARK):
         # Adds a mouseover bubble with the specified list of values to
         # the displayed text/link and returns the composite string.
         # Supports different HTML tags, typically <td> and <span>.
@@ -1467,7 +1467,7 @@ def ISFDBMouseover(mouseover_values, display_value, tag = 'td'):
                 mouseover_class = 'mouseover2pix'
         else:
                 mouseover_class = 'mouseover'
-        display += '">%s<sup class="%s">%s</sup></%s>' % (display_value, mouseover_class, QUESTION_MARK, tag)
+        display += '">%s<sup class="%s">%s</sup></%s>' % (display_value, mouseover_class, indicator, tag)
         return display
 
 def validateURL(url):

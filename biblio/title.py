@@ -38,14 +38,15 @@ def PrintOneVariantType(variants, title, authors, translation):
 
 def PrintOneVariant(variant, parent, parent_authors, bgcolor, translation):
         print '<tr class="table%d">' % (bgcolor+1)
-        # Display variant year
+        # Display variant year and VT notes in a mouseover bubble
         print '<td>'
-        print convertTitleYear(variant)
         if variant[TITLE_NOTE]:
                 bubble_values = []
                 notes = SQLgetNotes(variant[TITLE_NOTE])
                 bubble_values.append(FormatNote(notes, '', 'full', 0, '', 0))
-                print ISFDBMouseover(bubble_values, '', 'span')
+                print ISFDBMouseover(bubble_values, convertTitleYear(variant), 'span', INFO_SIGN)
+        else:
+                print convertTitleYear(variant)
         print '</td>'
         # Display translation language
         if translation:
