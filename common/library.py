@@ -1459,7 +1459,11 @@ def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUES
                 display = '<%s>' % tag
         else:
                 display = ''
-        display += '<div class="tooltip">%s<sup class="mouseover">%s</sup><span class="tooltiptext">' % (display_value, indicator)
+        if indicator == QUESTION_MARK:
+                tooltipwidth = 'tooltipnarrow'
+        else:
+                tooltipwidth = 'tooltipwide'
+        display += '<div class="tooltip">%s<sup class="mouseover">%s</sup><span class="tooltiptext %s">' % (display_value, indicator, tooltipwidth)
         count = 0
         for mouseover_value in mouseover_values:
                 if count:
