@@ -1455,15 +1455,11 @@ def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUES
                         return '<td>%s</td>' % display_value
                 else:
                         return display_value
-        if HTFAKE in display_value:
-                mouseover_class = 'mouseover2pix'
-        else:
-                mouseover_class = 'mouseover'
         if tag:
                 display = '<%s>' % tag
         else:
                 display = ''
-        display += '<div class="tooltip">%s<sup class="%s">%s</sup><span class="tooltiptext">' % (display_value, mouseover_class, indicator)
+        display += '<div class="tooltip">%s<sup class="mouseover">%s</sup><span class="tooltiptext">' % (display_value, indicator)
         count = 0
         for mouseover_value in mouseover_values:
                 if count:
@@ -1471,7 +1467,7 @@ def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUES
                 # Append the HTML-escaped version of the mouseover value
                 display += mouseover_value
                 count += 1
-        display += '</span> </div>'
+        display += '</span></div>'
         if tag:
                 display += '</%s>'% tag
         return display

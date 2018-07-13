@@ -1082,19 +1082,19 @@ div.nongenre {
 .tooltip {
     position: relative;
     display: inline-block;
-    /* border-bottom: 1px dotted black; If you want dots under the hoverable text */
 }
 
 /* Tooltip text */
 .tooltip .tooltiptext {
     visibility: hidden;
     width: 150px;
-    background-color: grey;
-    color: #fff;
+    background-color: black;
+    color: white;
     text-align: left;
     padding: 5px 0;
     padding-left: 3px;
     border-radius: 6px;
+    border: 1px solid black;
  
     /* Position the tooltip text */
     position: absolute;
