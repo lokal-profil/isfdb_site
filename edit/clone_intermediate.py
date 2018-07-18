@@ -35,9 +35,6 @@ if __name__ == '__main__':
 	except:
                 DisplayError("Missing or invalid publication ID")
 
-        if pub_data[PUB_CTYPE] in ('MAGAZINE', 'FANZINE'):
-                DisplayError("Magazines and Fanzines can't be cloned at this time")
-
 	PrintPreSearch("Clone Publication - %s" % pub_data[PUB_TITLE])
 	PrintNavBar("edit/clonecover.cgi", pub_id)
 

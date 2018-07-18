@@ -142,7 +142,7 @@ if __name__ == '__main__':
         print '<a href="http://%s/index.php/Help:Screen:ClonePub">Help:Screen:ClonePub</a><p>' % (WIKILOC)
         print '</div>'
 
-	title_id = SQLgetTitleReferral(pub_id, pub.pub_ctype)
+	title_id = SQLgetTitleReferral(pub_id, pub.pub_ctype, 1)
 	if title_id == 0:
         	print "<h3>Error: This publication is not in a cloneable state.</h3>"
 		print "<p>Unable to determine the parent title of this publication."
