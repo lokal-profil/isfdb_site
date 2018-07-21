@@ -1081,7 +1081,6 @@ div.nongenre {
 /* Tooltip container */
 .tooltip {
     position: relative;
-    display: inline-block;
 }
 
 /* Tooltip text */
@@ -1094,8 +1093,7 @@ div.nongenre {
     padding-left: 3px;
     border-radius: 6px;
     border: 1px solid black;
- 
-    /* Position the tooltip text */
+     /* Position the tooltip text */
     position: absolute;
     z-index: 1;
 }
