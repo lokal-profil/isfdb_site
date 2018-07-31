@@ -140,9 +140,10 @@ def convertYear(date):
 	return yearstr
 
 def unpublishedDate():
-        value = '<span class="hint" title="Announced but never published">unpublished'
-        value += '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></span>' % (HTMLLOC)
-        return value
+        return 'unpublished'
+##        value = '<span class="hint" title="Announced but never published">unpublished'
+##        value += '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></span>' % (HTMLLOC)
+##        return value
 
 def convertDate(theDate, precise = 0):
 	try:
