@@ -1078,14 +1078,18 @@ div.nongenre {
   text-align: center;
 }
 
-/* Tooltip container */
-.tooltip {
+/* Tooltip container div */
+div.tooltip {
     position: relative;
     display: inline;
 }
 
 /* Tooltip text */
-.tooltip .tooltiptext {
+div.tooltip span.tooltiptext {
+    /* Position the tooltip text */
+    position: absolute;
+    pointer-events: none;
+    background: transparent;
     visibility: hidden;
     background-color: white;
     color: black;
@@ -1094,20 +1098,18 @@ div.nongenre {
     padding-left: 3px;
     border-radius: 6px;
     border: 1px solid black;
-    /* Position the tooltip text */
-    position: absolute;
     z-index: 1;
 }
 
-.tooltipnarrow {
+span.tooltipnarrow {
     width: 150px;
 }
 
-.tooltipwide {
+span.tooltipwide {
     width: 300px;
 }
 
 /* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
+div.tooltip:hover span.tooltiptext {
     visibility: visible;
 }
