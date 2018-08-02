@@ -975,7 +975,7 @@ def PrintPubsTable(pubs, display_type, user = None, limit = 100000):
         else:
                 print '<th class="publication_publisher">Publisher/Pub. Series</th>'
 
-        print '<th class="publication_isbn_catalog">ISBN/Catalog#</th>'
+        print '<th class="publication_isbn_catalog">ISBN/Catalog ID</th>'
         print '<th class="publication_price">Price</th>'
         print '<th class="publication_pages">Pages</th>'
         print '<th class="publication_format">Format</th>'
@@ -1069,7 +1069,7 @@ def PrintOnePub(pub, pub_authors, pub_publishers, pub_series, cover_artists, bgc
         else:
                 print '<td>&nbsp;</td>'
 
-        # ISBN/Catalog #
+        # ISBN/Catalog ID
         printISBNCatalog(pub)
 
         # Price
