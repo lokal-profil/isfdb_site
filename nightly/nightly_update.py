@@ -442,12 +442,14 @@ def nightly_cleanup_reports():
                         db.query(update)
                 record = result.fetch_row()
 
-        #   Report 45: Similar publishers
-        query = "select v.title_id from titles v, titles p where v.title_parent > 0 \
-                and v.title_parent=p.title_id and v.title_ttype!=p.title_ttype \
-                and not (v.title_ttype='SERIAL' and p.title_ttype in ('NOVEL', 'SHORTFICTION', 'COLLECTION')) \
-                and not (v.title_ttype='INTERIORART' and p.title_ttype='COVERART') \
-                and not (v.title_ttype='COVERART' and p.title_ttype='INTERIORART')"
+        #   Report 45: Variant Title Type Mismatches
+        query = """select v.title_id from titles v, titles p
+                where v.title_parent > 0
+                and v.title_parent=p.title_id
+                and v.title_ttype!=p.title_ttype
+                and not (v.title_ttype='SERIAL' and p.title_ttype in ('NOVEL', 'SHORTFICTION', 'COLLECTION'))
+                and not (v.title_ttype='INTERIORART' and p.title_ttype='COVERART')
+                and not (v.title_ttype='COVERART' and p.title_ttype='INTERIORART')"""
         standardReport(query, 45)
 
         #   Report 46: EDITOR records not in MAGAZINE/FANZINE publications

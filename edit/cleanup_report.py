@@ -1547,13 +1547,17 @@ def function44():
         print "</table>"
 
 def function45():
-        query = """select v.title_id, v.title_title, v.title_ttype, p.title_ttype, c.cleanup_id 
-                from titles v, titles p, cleanup c where v.title_parent>0 
-                and v.title_parent=p.title_id and v.title_ttype!=p.title_ttype 
-                and not (v.title_ttype='SERIAL' and p.title_ttype='NOVEL') 
-                and not (v.title_ttype='SERIAL' and p.title_ttype='SHORTFICTION') 
-                and not (v.title_ttype='INTERIORART' and p.title_ttype='COVERART') 
-                and v.title_id=c.record_id and c.report_type=45 and c.resolved IS NULL"""
+        query = """select v.title_id, v.title_title, v.title_ttype, p.title_ttype
+                from titles v, titles p, cleanup c
+                where v.title_parent > 0 
+                and v.title_parent=p.title_id
+                and v.title_ttype!=p.title_ttype 
+                and not (v.title_ttype='SERIAL' and p.title_ttype in ('NOVEL', 'SHORTFICTION', 'COLLECTION')) 
+                and not (v.title_ttype='INTERIORART' and p.title_ttype='COVERART')
+                and not (v.title_ttype='COVERART' and p.title_ttype='INTERIORART')
+                and v.title_id=c.record_id
+                and c.report_type=45
+                order by v.title_title"""
 	db.query(query)
 	result = db.store_result()
 	num = result.num_rows()
@@ -1575,7 +1579,7 @@ def function45():
                 if not titles[variant_type]:
                         print "<h3>No %s title type mismatches</h3>" % variant_type
                         continue
-                PrintTableColumns(('', '%s titles' % variant_type, 'Parent type', ''))
+                PrintTableColumns(('', '%s titles' % variant_type, 'Parent type'))
                 color = 0
                 count = 1
                 for title in titles[variant_type]:
@@ -1586,11 +1590,9 @@ def function45():
                         variant_id = title[0]
                         variant_title = title[1]
                         parent_type = title[3]
-                        cleanup_id = title[4]
                         print '<td>%d</td>' % count
                         print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, variant_id, variant_title)
                         print '<td>%s</td>' % parent_type
-                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+45">Ignore this title</a></td>' % (HTFAKE, cleanup_id)
                         print '</tr>'
                         color = color ^ 1
                         count += 1
