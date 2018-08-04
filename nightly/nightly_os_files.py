@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -33,63 +33,32 @@ def os_files():
         # since cron may have started this script in a different dir
         os.chdir(current_dir)
 
-        # Task 1: Update the ISFDB banner by rotating the available images
-        updateBanner(parent_dir)
-        
-        # Task 2: Update all SVG files
+        # Task 1: Update all SVG files
         rebuildSVG(parent_dir)
         elapsed.print_elapsed("SVG files", 0)
 
-        # Task 3: Update summary database statistics page
+        # Task 2: Update summary database statistics page
         summaryStatistics(parent_dir)
         elapsed.print_elapsed("Summary stats", 0)
 
-        # Task 4: Update contributor statistics
+        # Task 3: Update contributor statistics
         contributorStatistics(parent_dir)
         elapsed.print_elapsed("Contributor stats", 0)
 
-        # Task 5: Update the list of top verifiers
+        # Task 4: Update the list of top verifiers
         topVerifiers(parent_dir)
         elapsed.print_elapsed("Verifier stats", 0)
         
-        # Task 6: Update the list of top moderators
+        # Task 5: Update the list of top moderators
         topModerators(parent_dir)
         elapsed.print_elapsed("Moderator stats", 0)
 
-        # Task 7: Update the list of authors by debut date
+        # Task 6: Update the list of authors by debut date
         AuthorsByDebutDate()
         elapsed.print_elapsed("Authors by debut date", 0)
 
         # Restore the original stdout
         sys.stdout = elapsed.stdout
-
-def updateBanner(parent_dir):
-
-	# Load the current banner number
-	fd = open('CurrentBanner')
-	current = fd.readline()
-	fd.close()
-
-        # Create a list of recognized banner/jpg files
-        list = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-	# Calculate the next banner number
-	next = int(current)+1;
-	# If the next number is greater than the last existing file, use the first one
-	if next <= list[-1]:
-		pass
-	else:
-		next = int(list[0])
-
-	# Copy the banner
-	nextFile = 'IsfdbBanner'+str(next)+'.jpg'
-        # Copy the current banner file to the parent directory
-        shutil.copy(nextFile, parent_dir + os.sep + 'IsfdbBanner.jpg')
-	
-	# Update the CurrentBanner file
-	fd = open('CurrentBanner', 'w+')
-	fd.write(str(next))
-	fd.close()
-	return
 
 def rebuildSVG(parent_dir):
         charts = ('year_novels','year_shortfiction','year_reviews','year_pubs','year_magazines','year_verif')

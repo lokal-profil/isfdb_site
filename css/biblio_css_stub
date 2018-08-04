@@ -87,7 +87,6 @@ a.topbanner {
    height: 90px;
    color: #fff; 
    background: #005;
-   background-image: url("http://HTMLHOST/IsfdbBanner.jpg");
    background-repeat: no-repeat;
    background-position: center left;
    border: 1px solid black;

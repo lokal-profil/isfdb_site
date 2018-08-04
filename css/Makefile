@@ -23,6 +23,16 @@ TARGETS	= apple-touch-icon.png \
 	  isfdb_logo.jpg \
 	  index.html \
 	  IsfdbBanner.jpg \
+	  IsfdbBanner2.jpg \
+	  IsfdbBanner3.jpg \
+	  IsfdbBanner4.jpg \
+	  IsfdbBanner5.jpg \
+	  IsfdbBanner6.jpg \
+	  IsfdbBanner7.jpg \
+	  IsfdbBanner8.jpg \
+	  IsfdbBanner9.jpg \
+	  IsfdbBanner10.jpg \
+	  IsfdbBanner11.jpg \
 	  question_mark_icon.gif \
 	  adv_search.js \
 	  edit_js.js \

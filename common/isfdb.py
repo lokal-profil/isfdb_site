@@ -21,6 +21,7 @@ def IsfdbConvSetup():
     return(IsfdbConv)
 
 def PrintHTMLHeaders(title):
+    from datetime import date
     # Disallow the <base> directive
     print """Content-Security-Policy: base-uri 'none';"""
     # Disallow <a> ping, Fetch, XMLHttpRequest, WebSocket, and EventSource
@@ -61,7 +62,17 @@ def PrintHTMLHeaders(title):
     print '</head>'
     print '<body>'
     print '<div id="wrap">'
-    print '<a class="topbanner" href="http:/%s/index.cgi"></a>' % HTFAKE
+    print '<a class="topbanner" href="http:/%s/index.cgi">' % HTFAKE
+    print '<span>'
+    # Get the number of days since January 1, 2000
+    millenium = date(2000, 1, 1)
+    today = date.today()
+    elapsed = today - millenium
+    # Calculate the banner number for today; the range is 2-11
+    banner_number = (elapsed.days % 10) + 2
+    print '<img src="http://%s/IsfdbBanner%d.jpg" alt="ISFDB banner">' % (HTMLHOST, banner_number)
+    print '</span>'
+    print '</a>'
     print '<div id="statusbar">'
     print '<h2>%s</h2>' % (title)
 
