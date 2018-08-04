@@ -1,13 +1,11 @@
+#
+#     (C) COPYRIGHT 2018   Ahasuerus
+#       ALL RIGHTS RESERVED
+#
+#     The copyright notice above does not evidence any actual or
+#     intended publication of such source code.
+#
+#     Version: $Revision$
+#     Date: $Date$
 
-TARGETS = DIR/CurrentBanner \
-	  DIR/IsfdbBanner2.jpg \
-	  DIR/IsfdbBanner3.jpg \
-	  DIR/IsfdbBanner4.jpg \
-	  DIR/IsfdbBanner5.jpg \
-	  DIR/IsfdbBanner6.jpg \
-	  DIR/IsfdbBanner7.jpg \
-	  DIR/IsfdbBanner8.jpg \
-	  DIR/IsfdbBanner9.jpg \
-	  DIR/IsfdbBanner10.jpg \
-	  DIR/IsfdbBanner11.jpg \
-	  DIR/nightly_update.py
+TARGETS = DIR/nightly_update.py

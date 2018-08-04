@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2013-2017   Ahasuerus
+#     (C) COPYRIGHT 2013-2018   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -45,8 +45,7 @@ all:	$(TARGETS)
 
 local/%.py:	%.py
 		python install_nightly.py $* local /usr/bin/python
-local/CurrentBanner:	CurrentBanner
-		cp $< local
+
 local/%.jpg:	%.jpg
 		cp $*.jpg local
 
