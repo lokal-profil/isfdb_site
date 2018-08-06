@@ -19,6 +19,298 @@ from SQLparsing import *
 from library import *
 from nightly_lib import elapsedTime
 
+class Output():
+        def __init__(self):
+                self.data = ''
+
+        def start(self, new_line):
+                self.data = '%s\n' % new_line
+
+        def append(self, new_line):
+                self.data += '%s\n' % new_line
+
+        def file(self, report_id, report_param):
+                delete = 'delete from reports where report_id = %d and report_param = %d' % (report_id, report_param)
+                db.query(delete)
+                insert = """insert into reports (report_id, report_param, report_data)
+                        VALUES(%d, %d, "%s")""" % (report_id, report_param, db.escape_string(self.data))
+                db.query(insert)
+
+        def topModerators(self):
+                self.start('<h2>Top ISFDB Moderators</h2>')
+                self.append('<p>')
+                self.append('<table class="generic_table">')
+                self.append('<tr align=left class="table1">')
+                self.append('<th>Moderator</th>')
+                self.append('<th>Total</th>')
+                self.append('<th>Others</th>')
+                self.append('<th>Self</th>')
+                self.append('<th>Last User Activity</th>')
+
+                query = """select sub_reviewer, count(*) as total,
+                        sum(case when sub_reviewer <> sub_submitter then 1 else 0 end)
+                        from submissions
+                        where sub_state='I'
+                        and sub_reviewer != 0
+                        group by sub_reviewer
+                        order by total desc"""
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+
+                color = 0
+                while record:
+                        user_id = record[0][0]
+                        user_name = SQLgetUserName(user_id)
+                        if color:
+                                self.append('<tr align=left class="table1">')
+                        else:
+                                self.append('<tr align=left class="table2">')
+                        self.append('<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name))
+                        self.append('<td>%d</td>' % (record[0][1]))
+                        self.append('<td>%d</td>' % (record[0][2]))
+                        self.append('<td>%d</td>' % (record[0][1] - record[0][2]))
+                        last_user_activity = LastUserActivity(user_id)
+                        self.append('<td>%s</td>' % last_user_activity)
+                        self.append('</tr>')
+                        color = color ^ 1
+                        record = result.fetch_row()
+                self.append('</table><p>')
+                self.file(1, 0)
+
+        def topVerifiers(self):
+                details = {}
+                primary = {}
+                secondary = {}
+                total = {}
+                headers = {}
+
+                # Primary verifications
+                query = """select distinct count(pv.user_id), u.user_name
+                        from primary_verifications pv, mw_user u
+                        where exists(select 1 from pubs where pubs.pub_id = pv.pub_id)
+                        and pv.user_id = u.user_id
+                        group by pv.user_id"""
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                while record:
+                        count = record[0][0]
+                        user = record[0][1]
+                        total[user] = total.get(user, 0) + count
+                        primary[user] = primary.get(user, 0) + count
+                        record = result.fetch_row() 
+
+                # Secondary verifications
+                query = """select distinct r.reference_label, count(v.user_id), u.user_name
+                        from verification v, mw_user u, reference r
+                        where v.ver_status='1'
+                        and exists(select 1 from pubs where pubs.pub_id=v.pub_id)
+                        and v.user_id=u.user_id
+                        and v.reference_id=r.reference_id
+                        group by v.user_id, v.reference_id"""
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                while record:
+                        source = record[0][0]
+                        count = record[0][1]
+                        user = record[0][2]
+                        if user not in details:
+                                details[user] = {}
+                        if source not in details[user]:
+                                details[user][source] = 0
+                        details[user][source] += count
+                        if source not in headers:
+                                headers[source] = 0
+                        total[user] = total.get(user, 0) + count
+                        secondary[user] = secondary.get(user, 0) + count
+                        record = result.fetch_row() 
+
+                self.start('<table cellpadding="1" class="publications">')
+                self.append('<tr class="generic_table_header">')
+                self.append('<th class="verifiers_user">User</th>')
+                self.append('<th>Total</th>')
+                self.append('<th>Primary</th>')
+                self.append('<th>Secondary</th>')
+                for header in sorted(headers):
+                        self.append('<th>%s</th>' % header)
+                self.append('</tr>')
+                color = 0
+                for user in sorted(total, key=total.get, reverse=True):
+                        if total[user] < 10:
+                                break
+                        if color:
+                                self.append('<tr align=left class="table1">')
+                        else:
+                                self.append('<tr align=left class="table2">')
+                        self.append('<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user, user))
+
+                        self.append('<td>%s</td>' % total.get(user, '&nbsp;'))
+
+                        self.append('<td>%s</td>' % primary.get(user, '&nbsp;'))
+
+                        self.append('<td>%s</td>' % secondary.get(user, '&nbsp;'))
+
+                        for header in sorted(headers):
+                                if user in details and header in details[user]:
+                                        self.append('<td>%d</td>' % details[user][header])
+                                else:
+                                        self.append('<td>&nbsp;</td>')
+                        self.append('</tr>')
+                        color = color ^ 1
+
+                        record = result.fetch_row()
+                self.append('</table>')
+                self.file(2, 0)
+
+        def contributorStatistics(self):
+                query = """select distinct sub_submitter,count(sub_submitter) as xx
+                        from submissions
+                        where sub_state='I'
+                        group by sub_submitter
+                        order by xx desc"""
+                self.oneTypeContributorStatistics(query, 0)
+
+                for sub_type in sorted(SUBMAP.keys()):
+                        if SUBMAP[sub_type][3]:
+                                query = """select distinct sub_submitter, count(sub_submitter) as xx
+                                        from submissions
+                                        where sub_state='I'
+                                        and sub_type='%s'
+                                        group by sub_submitter
+                                        order by xx desc""" % (sub_type)
+                                self.oneTypeContributorStatistics(query, sub_type)
+
+        def oneTypeContributorStatistics(self, query, sub_type):
+                self.start('<table class="generic_table">')
+                self.append('<tr class="table1">')
+                self.append('<th>User</th>')
+                self.append('<th>Count</th>')
+                self.append('<th>Moderator</th>')
+                self.append('<th>Last User Activity</th>')
+                self.append('</tr>')
+
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+
+                color = 0
+                while record:
+                        user_id = record[0][0]
+                        count = record[0][1]
+                        # Stop once we have reached the first user with fewer than 10 contributions
+                        if count <10:
+                                break
+                        user_name = SQLgetUserName(user_id)
+                        moderator = 'No'
+                        if SQLisUserModerator(user_id):
+                                moderator = 'Yes'
+                        if color:
+                                self.append('<tr align=left class="table1">')
+                        else:
+                                self.append('<tr align=left class="table2">')
+                        self.append('<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name))
+                        self.append('<td>%d</td>' % count)
+                        self.append('<td>%s</td>' % moderator)
+                        last_user_activity = LastUserActivity(user_id)
+                        self.append('<td>%s</td>' % last_user_activity)
+                        self.append('</tr>')
+                        color = color ^ 1
+                        record = result.fetch_row()
+                self.append('</table><p>')
+                self.file(3, sub_type)
+
+        def summaryStatistics(self):
+                self.start("<ul>")
+
+                query = "select count(author_id) from authors"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                self.append("<li><b>Authors:</b> %d" % record[0][0])
+
+                query = "select count(pub_id) from pubs"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                self.append("<li><b>Publications:</b> %d" % record[0][0])
+                total_pubs = float(record[0][0])
+
+                self.append("<ul>")
+                query = "select distinct pub_ctype, count(pub_ctype) from pubs group by pub_ctype"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                while record:
+                        self.append("<li>%s: %d" % (record[0][0], record[0][1]))
+                        record = result.fetch_row()
+                self.append("</ul>")
+
+                query = "select count(distinct pub_id) from primary_verifications"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                self.append("<li><b>Verified Publications:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/total_pubs))
+
+                query = "select count(publisher_id) from publishers"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                self.append("<li><b>Publishers:</b> %d" % record[0][0])
+                total_pubs = float(record[0][0])
+
+                query = "select count(title_id) from titles"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                self.append("<li><b>Titles:</b> %d" % record[0][0])
+                total_titles = float(record[0][0])
+
+                self.append("<ul>")
+                query = "select distinct title_ttype, count(title_ttype) from titles group by title_ttype"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                while record:
+                        self.append("<li>%s: %d" % (record[0][0], record[0][1]))
+                        record = result.fetch_row()
+                self.append("</ul>")
+                query = "select count(distinct title_id) from votes"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                self.append("<li><b>Titles with Votes:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/total_titles))
+                
+                query = "select count(distinct title_id) from tag_mapping"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                self.append("<li><b>Titles with Tags:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/total_titles))
+
+
+                query = "select count(award_id) from awards"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                self.append("<li><b>Awards:</b> %d" % record[0][0])
+
+                self.append("<ul>")
+                query = """select at.award_type_name, count(at.award_type_id)
+                        from awards AS aw, award_types AS at
+                        where aw.award_type_id = at.award_type_id
+                        group by at.award_type_name"""
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                while record:
+                        self.append("<li>%s: %d" % (record[0][0], record[0][1]))
+                        record = result.fetch_row()
+                self.append("</ul>")
+
+                self.append("</ul>")
+                self.file(4, 0)
+
 def os_files():
         elapsed = elapsedTime()
         # First switch to the directory where the current Python module is located
@@ -38,23 +330,24 @@ def os_files():
         elapsed.print_elapsed("SVG files", 0)
 
         # Task 2: Update summary database statistics page
-        summaryStatistics(parent_dir)
+        output = Output()
+        output.summaryStatistics()
         elapsed.print_elapsed("Summary stats", 0)
 
         # Task 3: Update contributor statistics
-        contributorStatistics(parent_dir)
+        output.contributorStatistics()
         elapsed.print_elapsed("Contributor stats", 0)
 
         # Task 4: Update the list of top verifiers
-        topVerifiers(parent_dir)
+        output.topVerifiers()
         elapsed.print_elapsed("Verifier stats", 0)
         
         # Task 5: Update the list of top moderators
-        topModerators(parent_dir)
+        output.topModerators()
         elapsed.print_elapsed("Moderator stats", 0)
 
         # Task 6: Update the list of authors by debut date
-        AuthorsByDebutDate()
+        #AuthorsByDebutDate()
         elapsed.print_elapsed("Authors by debut date", 0)
 
         # Restore the original stdout
@@ -219,277 +512,6 @@ def byAge(chart):
 	results_dict = {}
 	results_dict['black'] = results
 	outputGraph(height, startage, xscale, yscale, ages, maximum, results_dict)
-
-def summaryStatistics(parent_dir):
-        # Redirect output to the Summary Statistics file
-        file_name = parent_dir + os.sep + "summary_statistics.html"
-        sys.stdout = open(file_name, 'w')
-        
-	print "<ul>"
-
-	query = "select count(author_id) from authors"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	print "<li><b>Authors:</b>", record[0][0]
-
-	query = "select count(pub_id) from pubs"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	print "<li><b>Publications:</b>", record[0][0]
-	total_pubs = float(record[0][0])
-
-	print "<ul>"
-	query = "select distinct pub_ctype, count(pub_ctype) from pubs group by pub_ctype"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	while record:
-		print "<li>%s: %d" % (record[0][0], record[0][1])
-		record = result.fetch_row()
-	print "</ul>"
-
-	query = "select count(distinct pub_id) from primary_verifications"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	print "<li><b>Verified Publications:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/total_pubs)
-
-	query = "select count(publisher_id) from publishers"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	print "<li><b>Publishers:</b>", record[0][0]
-	total_pubs = float(record[0][0])
-
-	query = "select count(title_id) from titles"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	print "<li><b>Titles:</b>", record[0][0]
-	total_titles = float(record[0][0])
-
-	print "<ul>"
-	query = "select distinct title_ttype, count(title_ttype) from titles group by title_ttype"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	while record:
-		print "<li>%s: %d" % (record[0][0], record[0][1])
-		record = result.fetch_row()
-	print "</ul>"
-	query = "select count(distinct title_id) from votes"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	print "<li><b>Titles with Votes:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/total_titles)
-	
-	query = "select count(distinct title_id) from tag_mapping"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	print "<li><b>Titles with Tags:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/total_titles)
-
-
-	query = "select count(award_id) from awards"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	print "<li><b>Awards:</b>", record[0][0]
-
-	print "<ul>"
-	query = "select at.award_type_name, count(at.award_type_id) from awards AS aw, award_types AS at where aw.award_type_id = at.award_type_id group by at.award_type_name"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	while record:
-		print "<li>%s: %d" % (record[0][0], record[0][1])
-		record = result.fetch_row()
-	print "</ul>"
-
-	print "</ul>"
-
-def contributorStatistics(parent_dir):
-        file_name = parent_dir + os.sep + "top_contributors_all.html"
-        sys.stdout = open(file_name, 'w')
-        query = "select distinct sub_submitter,count(sub_submitter) as xx from submissions where sub_state='I' group by sub_submitter order by xx desc"
-        oneTypeContributorStatistics(query)
-
-	for type in sorted(SUBMAP.keys()):
-                if SUBMAP[type][3]:
-                        file_name = '%s%stop_contributors%d.html' % (parent_dir, os.sep, type)
-                        sys.stdout = open(file_name, 'w')
-                        query = "select distinct sub_submitter, count(sub_submitter) as xx from "
-                        query += "submissions where sub_state='I' and sub_type='%s' group by sub_submitter order by xx desc" % (type)
-                        oneTypeContributorStatistics(query)
-
-
-def oneTypeContributorStatistics(query):
-	print '<table class="generic_table">'
-	print '<tr class="table1">'
-	print '<th>User</th>'
-	print '<th>Count</th>'
-	print '<th>Moderator</th>'
-	print '<th>Last User Activity</th>'
-	print '</tr>'
-
-	db.query(query)
-	result = db.store_result()
-        record = result.fetch_row()
-
-	color = 0
-	while record:
-                user_id = record[0][0]
-                count = record[0][1]
-                # Stop once we have reached the first user with fewer than 10 contributions
-                if count <10:
-                        break
-                user_name = SQLgetUserName(user_id)
-                moderator = 'No'
-                if SQLisUserModerator(user_id):
-                        moderator = 'Yes'
-		if color:
-			print '<tr align=left class="table1">'
-		else:
-			print '<tr align=left class="table2">'
-                print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
-		print '<td>%d</td>' % count
-		print '<td>%s</td>' % moderator
-                last_user_activity = LastUserActivity(user_id)
-		print '<td>%s</td>' % last_user_activity
-		print '</tr>'
-		color = color ^ 1
-        	record = result.fetch_row()
-	print '</table><p>'
-
-def topVerifiers(parent_dir):
-        file_name = parent_dir + os.sep + "top_verifiers.html"
-        sys.stdout = open(file_name, 'w')
-
-	print '<table cellpadding="1" class="publications">'
-
-        details = {}
-        primary = {}
-        secondary = {}
-        total = {}
-        headers = {}
-
-        # Primary verifications
-	query = """select distinct count(pv.user_id), u.user_name
-                from primary_verifications pv, mw_user u
-                where exists(select 1 from pubs where pubs.pub_id = pv.pub_id)
-                and pv.user_id = u.user_id
-                group by pv.user_id"""
-	db.query(query)
-	result = db.store_result()
-        record = result.fetch_row()
-        while record:
-                count = record[0][0]
-                user = record[0][1]
-                total[user] = total.get(user, 0) + count
-                primary[user] = primary.get(user, 0) + count
-        	record = result.fetch_row() 
-
-        # Secondary verifications
-	query = """select distinct r.reference_label, count(v.user_id), u.user_name
-                from verification v, mw_user u, reference r
-                where v.ver_status='1'
-                and exists(select 1 from pubs where pubs.pub_id=v.pub_id)
-                and v.user_id=u.user_id
-                and v.reference_id=r.reference_id
-                group by v.user_id, v.reference_id"""
-	db.query(query)
-	result = db.store_result()
-        record = result.fetch_row()
-        while record:
-                source = record[0][0]
-                count = record[0][1]
-                user = record[0][2]
-                if user not in details:
-                        details[user] = {}
-                if source not in details[user]:
-                        details[user][source] = 0
-                details[user][source] += count
-                if source not in headers:
-                        headers[source] = 0
-                total[user] = total.get(user, 0) + count
-                secondary[user] = secondary.get(user, 0) + count
-        	record = result.fetch_row() 
-
-	print '<tr class="generic_table_header">'
-	print '<th class="verifiers_user">User</th>'
-	print '<th>Total</th>'
-	print '<th>Primary</th>'
-	print '<th>Secondary</th>'
-	for header in sorted(headers):
-                print '<th>%s</th>' % header
- 	print '</tr>'
-	color = 0
-	for user in sorted(total, key=total.get, reverse=True):
-                if total[user] < 10:
-                        break
-		if color:
-			print '<tr align=left class="table1">'
-		else:
-			print '<tr align=left class="table2">'
-                print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user, user)
-
-                print '<td>%s</td>' % total.get(user, '&nbsp;')
-
-                print '<td>%s</td>' % primary.get(user, '&nbsp;')
-
-                print '<td>%s</td>' % secondary.get(user, '&nbsp;')
-
-                for header in sorted(headers):
-                        if user in details and header in details[user]:
-                                print '<td>%d</td>' % details[user][header]
-                        else:
-                                print '<td>&nbsp;</td>'
-		print '</tr>'
-		color = color ^ 1
-
-        	record = result.fetch_row()
-	print '</table>'
-
-
-def topModerators(parent_dir):
-        file_name = parent_dir + os.sep + "top_moderators.html"
-        sys.stdout = open(file_name, 'w')
-	print '<h2>Top ISFDB Moderators</h2>'
-	print '<p>'
-	print '<table class="generic_table">'
-	print '<tr align=left class="table1">'
-	print '<th>Moderator</th>'
-	print '<th>Total</th>'
-	print '<th>Others</th>'
-	print '<th>Self</th>'
-	print '<th>Last User Activity</th>'
-
-        query = "select sub_reviewer, count(*) as total, sum(case when sub_reviewer <> sub_submitter then 1 else 0 end) from submissions where sub_state='I' and sub_reviewer != 0 group by sub_reviewer order by total desc"
-	#query = "select distinct sub_reviewer,count(sub_reviewer) as xx from submissions where sub_state='I' group by sub_reviewer order by xx desc"
-	db.query(query)
-	result = db.store_result()
-        record = result.fetch_row()
-
-	color = 0
-	while record:
-                user_id = record[0][0]
-                user_name = SQLgetUserName(user_id)
-		if color:
-			print '<tr align=left class="table1">'
-		else:
-			print '<tr align=left class="table2">'
-                print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
-		print '<td>%d</td>' % (record[0][1])
-		print '<td>%d</td>' % (record[0][2])
-		print '<td>%d</td>' % (record[0][1] - record[0][2])
-                last_user_activity = LastUserActivity(user_id)
-		print '<td>%s</td>' % last_user_activity
-		print '</tr>'
-		color = color ^ 1
-        	record = result.fetch_row()
-	print '</table><p>'
 
 def LastUserActivity(user_id):
         if WikiExists():

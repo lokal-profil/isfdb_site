@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2007-2013   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2007-2018   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -22,10 +22,13 @@ if __name__ == '__main__':
 
 	PrintHeader("Top Verifiers")
 	PrintNavbar('top', 0, 0, 'topmods.cgi', 0)
-        filename = LOCALFILES + "top_verifiers.html"
-        f = open(filename,"r")
-        data = f.read()
-        f.close()
-        print data
+	query = 'select report_data from reports where report_id = 2'
+	db.query(query)
+        result = db.store_result()
+        if result.num_rows():
+                record = result.fetch_row()
+                print record[0][0]
+        else:
+                print '<h3>This report is currently unavailable. It will be regenerated overnight.</h3>'
 	PrintTrailer('top', 0, 0)
 
