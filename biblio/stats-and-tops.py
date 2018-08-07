@@ -63,7 +63,7 @@ if __name__ == '__main__':
         print '<li><a href="http:/%s/stats.cgi?5">Titles by Year of First Publication</a>' % (HTFAKE)
         print '<li><a href="http:/%s/stats.cgi?7">Titles by Author Age</a>' % (HTFAKE)
         print '<li><a href="http://%s/agestuff.html">Award-Winning Titles by Author Age</a> [as of 2005, to be updated]' % (HTMLHOST)
-        print '<li><a href="http:/%s/novels_in_series.cgi">Percent of Titles in Series by Year</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?8">Percent of Titles in Series by Year</a>' % (HTFAKE)
         print '<li><a href="http:/%s/most_reviewed_table.cgi">Most-Reviewed Titles (in genre publications)</a>' % (HTFAKE)
         print '<li>Titles Ranked by Awards and Nominations:'
         print '<ul>'
@@ -86,8 +86,8 @@ if __name__ == '__main__':
 	print '<h4>Publication Statistics</h4>'
         print '<ul>'
         print '<li><a href="http:/%s/stats.cgi?6">Publications by Year</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/books_by_type.cgi">Percent of Books by Type by Year</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/pubs_by_format.cgi">Percent of Publications by Format by Year</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?9">Percent of Books by Type by Year</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?10">Percent of Publications by Format by Year</a>' % (HTFAKE)
         print '</ul>'
 	print '<h3>Top ISFDB Editors</h3>'
         print '<ul>'

@@ -60,32 +60,39 @@ if __name__ == '__main__':
         bytype = AutoVivification()
         while record:
             year = record[0][0]
-            type = record[0][1]
+            pub_type = record[0][1]
             count = record[0][2]
             if not total[year]:
                     total[year] = 0
             total[year] += count
-            if type not in recognized:
-                    type = 'other'
-            if not bytype[type][year]:
-                    bytype[type][year] = 0
-            bytype[type][year] += count
+            if pub_type not in recognized:
+                    pub_type = 'other'
+            if not bytype[pub_type][year]:
+                    bytype[pub_type][year] = 0
+            bytype[pub_type][year] += count
             record = result.fetch_row()
 
         # Add any missing years
-        for type in bytype.keys():
+        for pub_type in bytype.keys():
                 for year in range(startyear,endyear+1):
-                        if year not in bytype[type]:
-                                bytype[type][year] = 0
+                        if year not in bytype[pub_type]:
+                                bytype[pub_type][year] = 0
 
+        colors = {'red' : 'pb',
+                  'blue': 'tp',
+                  'green': 'hc',
+                  'yellow':  'pulp',
+                  'orange': 'digest',
+                  'black': 'other',
+                  'pink': 'ebook'}
         results_dict = {}
-        results_dict['red'] = oneType('pb', startyear, bytype)
-        results_dict['blue'] = oneType('tp', startyear, bytype)
-        results_dict['green'] = oneType('hc', startyear, bytype)
-        results_dict['yellow'] = oneType('pulp', startyear, bytype)
-        results_dict['orange'] = oneType('digest', startyear, bytype)
-        results_dict['black'] = oneType('other', startyear, bytype)
-        results_dict['pink'] = oneType('ebook', startyear, bytype)
+        for color in colors:
+                pub_type = colors[color]
+                results_dict[color] = []
+                for year in bytype[pub_type]:
+                        percent = bytype[pub_type][year] * 100 / total[year]
+                        year_tuple = (int(year) - startyear, percent)
+                        results_dict[color].append(year_tuple)
 
         minimum = 0
         maximum = 100

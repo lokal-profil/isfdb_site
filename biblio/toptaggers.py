@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2007-2017   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2007-2018   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -24,7 +24,7 @@ from xml.dom import Node
 if __name__ == '__main__':
 
 	PrintHeader("Top Taggers")
-	PrintNavbar('top', 0, 0, 'topmods.cgi', 0)
+	PrintNavbar('top', 0, 0, 'toptaggers.cgi', 0)
 
 	print '<h2>Top ISFDB Taggers</h2>'
 	print '<p>'

@@ -721,53 +721,6 @@ def getSortedTitlesInPub(pub_id):
                         new_titles.append(title)
         return new_titles
 
-def outputGraph(height, startyear, xscale, yscale, years, maximum, results):
-
-	xoffset = 15
-	yoffset = 10
-
-	print '<svgcode width="%d" height="%d" version="1.1">' % (xoffset+40+(years*xscale), height+30+yoffset)
-	print '<svg width="100%%" height="%dpx" version="1.1" xmlns="http://www.w3.org/2000/svg">' % (height+30+yoffset)
-
-	###################################################
-	# Output the grid and labels - Horizontal Lines
-	###################################################
-	y = 0
-	increment = maximum/4
-	value = increment * 4
-	while y <= height:
-		print '<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg1"/>' % (xoffset, y+yoffset, xoffset+5+(years*xscale), y+yoffset)
-		print '<text x="%d" y="%d" font-size="10">%d</text>' % (xoffset+10+(years*xscale), y+5+yoffset, value)
-		value -= increment
-		y = y + 50
-
-	###################################################
-	# Output the grid and labels - Vertical Lines
-	###################################################
-	x = 0
-	while x < years:
-		print '<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg1"/>' % (xoffset+(xscale*x), yoffset, xoffset+(xscale*x), height+10+yoffset)
-		print '<text x="%d" y="%d" font-size="10">%d</text>' % ((xscale*x)-12+xoffset, height+20+yoffset, x+startyear)
-		x += 10
-
-	###################################################
-	# Output the data
-	###################################################
-        for line_color in results:
-                printOneSVGLine(xscale, yscale, years, maximum, results[line_color], xoffset, yoffset, line_color)
-
-	print '</svg>'
-	print '</svgcode>'
-
-def printOneSVGLine(xscale, yscale, years, maximum, results, xoffset, yoffset, color):
-        index = 0
-        last = (0, 0)
-        while index < years:
-                if index:
-                        print '<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg%s"/>' % (xoffset+(xscale * last[0]), yoffset+(int(yscale * float(last[1]))), xoffset+(xscale * results[index][0]), yoffset+(int(yscale * float(maximum-results[index][1]))), color)
-                last = (results[index][0], maximum-results[index][1])
-                index += 1
-
 def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, record_type = '', div = 1):
         import urllib
         import re

@@ -10,7 +10,6 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/award_directory.cgi \
 	  DIR/awardtype.cgi \
 	  DIR/ay.cgi \
-	  DIR/books_by_type.cgi \
 	  DIR/cancelsubmission.cgi \
 	  DIR/ch.cgi \
 	  DIR/changed_verified_pubs.cgi \
@@ -35,7 +34,6 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/myrecent.cgi \
 	  DIR/myvotes.cgi \
 	  DIR/note.cgi \
-	  DIR/novels_in_series.cgi \
 	  DIR/oldest.cgi \
 	  DIR/oldest_nl.cgi \
 	  DIR/pe.cgi \
@@ -44,7 +42,6 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/popular_authors_table.cgi \
 	  DIR/publisher.cgi \
 	  DIR/publisheryear.cgi \
-	  DIR/pubs_by_format.cgi \
 	  DIR/pubseries.cgi \
 	  DIR/pubs_not_in_series.cgi \
 	  DIR/recent.cgi \
@@ -55,7 +52,6 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/seriesgrid.cgi \
 	  DIR/seriestags.cgi \
 	  DIR/stats.cgi \
-	  DIR/stats_charts.cgi \
 	  DIR/stats-and-tops.cgi \
 	  DIR/submitdiff.cgi \
 	  DIR/submitlogin.cgi \
@@ -68,9 +64,7 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/titlecovers.cgi \
 	  DIR/titles_by_language.cgi \
 	  DIR/topcontrib.cgi \
-	  DIR/topmods.cgi \
 	  DIR/toptaggers.cgi \
-	  DIR/topvers.cgi \
 	  DIR/topvoters.cgi \
 	  DIR/top50year.cgi \
 	  DIR/top100.cgi \

@@ -6,8 +6,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision$
-#     Date: $Date$
+#     Version: $Revision: 181 $
+#     Date: $Date: 2018-08-06 22:48:08 -0400 (Mon, 06 Aug 2018) $
 
 import os
 import sys
@@ -726,7 +726,7 @@ class Output():
                         HAVING NumTitles > 5"""
                 db.query(query)
 
-def os_files():
+def nightly_stats():
         output = Output()
         output.report("titlesByYear")
         output.report("publicationsByYear")

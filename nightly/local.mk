@@ -17,7 +17,7 @@ INSTALL = $(INSTALL_HTML)/nightly
 MYLIBS	= nightly_dup_authors.py \
 	  nightly_html.py \
 	  nightly_lib.py \
-	  nightly_os_files.py \
+	  nightly_stats.py \
 	  nightly_transliterations.py \
 	  nightly_wiki.py
 

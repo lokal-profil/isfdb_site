@@ -24,7 +24,10 @@ class Stats:
                                 4: 'ISFDB Statistics',
                                 5: 'Titles by Year of First Publication',
                                 6: 'Publications by Year',
-                                7: 'Titles by Author Age'}
+                                7: 'Titles by Author Age',
+                                8: 'Percent of Titles in Series by Year',
+                                9: 'Percent of Book Titles by Type by Year',
+                                10: 'Percent of Publications by Format by Year'}
 
         def params(self):
                 try:

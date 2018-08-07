@@ -21,7 +21,7 @@ from SQLparsing import *
 if __name__ == '__main__':
 
 	PrintHeader("Top Verifiers")
-	PrintNavbar('top', 0, 0, 'topmods.cgi', 0)
+	PrintNavbar('top', 0, 0, 'topvers.cgi', 0)
 	query = 'select report_data from reports where report_id = 2'
 	db.query(query)
         result = db.store_result()

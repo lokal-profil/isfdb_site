@@ -18,7 +18,7 @@ from library import *
 from nightly_dup_authors import *
 from nightly_html import *
 from nightly_lib import *
-from nightly_os_files import *
+from nightly_stats import *
 from nightly_transliterations import *
 from nightly_wiki import *
 
@@ -1509,9 +1509,8 @@ if __name__ == '__main__':
                 # Delete unresolved records from the cleanup table EXCEPT for the duplicate authors report
                 query = 'delete from cleanup where resolved IS NULL and report_type != 9999'
                 db.query(query)
-                os_files()
+                nightly_stats()
                 nightly_cleanup_reports()
                 nightly_wiki()
                 nightly_transliterations()
                 nightly_html()
-                
