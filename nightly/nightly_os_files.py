@@ -29,6 +29,9 @@ class Output():
         def append(self, new_line):
                 self.data += '%s\n' % new_line
 
+        def subheader(self, subheader):
+                self.data += '<h3>%s</h3>\n' % subheader
+
         def file(self, report_id, report_param):
                 delete = 'delete from reports where report_id = %d and report_param = %d' % (report_id, report_param)
                 db.query(delete)
@@ -311,207 +314,243 @@ class Output():
                 self.append("</ul>")
                 self.file(4, 0)
 
+        def rebuildSVG(self):
+                self.data = ''
+                self.byYear('NOVEL', 'Novels')
+                self.byYear('SHORTFICTION', 'Short Fiction')
+                self.byYear('REVIEW', 'Reviews')
+                self.file(5, 0)
+                
+                self.data = ''
+                self.byYear('PUBS', 'Publications (without magazines)')
+                self.byYear('MAGAZINES', 'Magazines')
+                self.byYear('VERIFIED', 'Verified Publications in Percent')
+                self.file(6, 0)
+
+                self.data = ''
+                self.byAge('NOVEL', 'all', 'All Novels')
+                self.byAge('NOVEL', 'first', 'First Novels')
+                self.byAge('SHORTFICTION', 'all', 'All Short Fiction')
+                self.byAge('SHORTFICTION', 'first', 'First Short Fiction')
+                self.file(7, 0)
+
+        def byYear(self, chart, subheader):
+                self.subheader(subheader)
+                # Set the start year to 1900
+                startyear = 1900
+                # Set the end year to the last year
+                endyear = localtime()[0]-1
+                results = []
+                lastyear = startyear
+                if chart in ('NOVEL', 'SHORTFICTION', 'REVIEW'):
+                        query = """select YEAR(title_copyright),COUNT(*)
+                                from titles where title_ttype='%s'
+                                and title_parent=0
+                                and YEAR(title_copyright)>%d
+                                and YEAR(title_copyright)<%d
+                                group by YEAR(title_copyright)""" % (chart, startyear-1, endyear+1)
+                elif chart == 'VERIFIED':
+                        query = """select YEAR(p.pub_year), count(distinct p.pub_id)
+                                from pubs as p, primary_verifications as pv
+                                where p.pub_id = pv.pub_id
+                                and YEAR(p.pub_year)>%d
+                                and YEAR(p.pub_year)<%d
+                                group by YEAR(p.pub_year)""" % (startyear-1, endyear+1)
+                else:
+                        query = "select YEAR(pub_year),COUNT(*) from pubs where "
+                        if chart == 'PUBS':
+                            query += "pub_ctype!='MAGAZINE'"
+                        else:
+                            query += "pub_ctype='MAGAZINE'"
+                        query += " and YEAR(pub_year)>%d and YEAR(pub_year)<%s group by YEAR(pub_year)" % (startyear-1, endyear+1)
+                
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                while record:
+                    year = record[0][0]
+                    count = record[0][1]
+                    # If there is a gap in years with no data, pad it with 0s
+                    if year > (lastyear+1):
+                        for missingyear in range(lastyear+1,year):
+                            tuple = (missingyear-startyear, 0)
+                            results.append(tuple)
+                    tuple = (year-startyear, count)
+                    results.append(tuple)
+                    record = result.fetch_row()
+                    # Save the last year that we had data for
+                    lastyear = year
+
+                # Get the minimum and maximum values
+                minimum = min(results,key=itemgetter(1))[1]
+                maximum = max(results,key=itemgetter(1))[1]
+
+                # If displaying verified pubs, do another query to get their totals for each year
+                if chart == 'VERIFIED':
+                    totals = []
+                    lastyear = startyear
+                    # Set the minimum and maximum value to 0 and 100 since we will be displaying percentages
+                    maximum = 100
+                    minimum = 0
+                    query = """select YEAR(pub_year), COUNT(pub_id) from pubs
+                                where YEAR(pub_year)>%d and YEAR(pub_year)<%d
+                                group by YEAR(pub_year)""" % (startyear-1, endyear+1)
+                    db.query(query)
+                    result = db.store_result()
+                    record = result.fetch_row()
+                    while record:
+                        total_count = record[0][1]
+                        year = record[0][0]
+                        # Calculate the relative position/index of this year in the results list
+                        index = year-startyear
+                        # Retrieve the tuple for this year
+                        tuple = results[index]
+                        # Calculate the percent of verified pubs for this year
+                        percent = tuple[1]*100/total_count
+                        # Build the new tuple, replacing the absolute value of verified pubs with the percent value for the year
+                        newtuple = (tuple[0], percent)
+                        # Replace this year's tuple in the list with the percent-based data
+                        results[index] = newtuple
+                        # Get the next year's data
+                        record = result.fetch_row()
+                        # Save the last year that we had data for
+                        lastyear = year
+                
+                years = endyear-startyear+1
+                height = 200
+                xscale = 6
+                yscale = float(height)/float(maximum-minimum)
+                results_dict = {}
+                results_dict['black'] = results
+                self.outputGraph(height, startyear, xscale, yscale, years, maximum, results_dict)
+
+        def byAge(self, title_type, chart, subheader):
+                self.subheader(subheader)
+                # Set the start age to 0
+                startage = 0
+                # Set the end age to 100
+                endage = 101
+                results = []
+                lastage=startage-1
+
+                if chart == 'all':
+                    query = "select YEAR(t.title_copyright)-YEAR(a.author_birthdate),count(t.title_id) from titles t, "
+                    query += "canonical_author c, authors a where t.title_id=c.title_id and c.author_id=a.author_id and "
+                    query += "YEAR(t.title_copyright)<8888 and YEAR(t.title_copyright)>0 and title_ttype='%s' " % title_type
+                    query += "and a.author_birthdate IS NOT NULL group by YEAR(t.title_copyright)-YEAR(a.author_birthdate) limit 120"
+                else:
+                    query = "select v.FIRST-v.DOB,count(v.FIRST-v.DOB) from (select YEAR(a.author_birthdate) as DOB, "
+                    query += "(select min(YEAR(t.title_copyright)) from titles t, canonical_author c where "
+                    query += "t.title_copyright!='0000-00-00' and t.title_id=c.title_id and t.title_ttype='%s' and " % title_type
+                    query += "c.author_id=a.author_id and c.ca_status=1) as FIRST from authors a where a.author_birthdate "
+                    query += "IS NOT NULL) as v where v.FIRST IS NOT NULL group by v.FIRST-v.DOB"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                while record:
+                    age = record[0][0]
+                    count = record[0][1]
+                    record = result.fetch_row()
+                    if age is None:
+                            continue
+                    if age < startage or age > endage:
+                            continue
+                    # If there is a gap in ages with no data, pad it with 0s
+                    if age > (lastage+1):
+                        for missingage in range(lastage+1,age):
+                            tuple = (missingage, 0)
+                            results.append(tuple)
+                    tuple = (age, count)
+                    results.append(tuple)
+                    # Save the last age that we had data for
+                    lastage = age
+
+                # Get the minimum and maximum values
+                minimum = min(results,key=itemgetter(1))[1]
+                maximum = max(results,key=itemgetter(1))[1]
+
+                ages = endage-startage
+                height = 200
+                xscale = 6
+                yscale = float(height)/float(maximum-minimum)
+                results_dict = {}
+                results_dict['black'] = results
+                self.outputGraph(height, startage, xscale, yscale, ages, maximum, results_dict)
+
+        def outputGraph(self, height, startyear, xscale, yscale, years, maximum, results):
+
+                xoffset = 15
+                yoffset = 10
+
+                self.append('<svgcode width="%d" height="%d" version="1.1">' % (xoffset+40+(years*xscale), height+30+yoffset))
+                self.append('<svg width="100%%" height="%dpx" version="1.1" xmlns="http://www.w3.org/2000/svg">' % (height+30+yoffset))
+
+                ###################################################
+                # Output the grid and labels - Horizontal Lines
+                ###################################################
+                y = 0
+                increment = maximum/4
+                value = increment * 4
+                while y <= height:
+                        self.append('<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg1"/>' % (xoffset, y+yoffset, xoffset+5+(years*xscale), y+yoffset))
+                        self.append('<text x="%d" y="%d" font-size="10">%d</text>' % (xoffset+10+(years*xscale), y+5+yoffset, value))
+                        value -= increment
+                        y = y + 50
+
+                ###################################################
+                # Output the grid and labels - Vertical Lines
+                ###################################################
+                x = 0
+                while x < years:
+                        self.append('<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg1"/>' % (xoffset+(xscale*x), yoffset, xoffset+(xscale*x), height+10+yoffset))
+                        self.append('<text x="%d" y="%d" font-size="10">%d</text>' % ((xscale*x)-12+xoffset, height+20+yoffset, x+startyear))
+                        x += 10
+
+                ###################################################
+                # Output the data
+                ###################################################
+                for line_color in results:
+                        self.printOneSVGLine(xscale, yscale, years, maximum, results[line_color], xoffset, yoffset, line_color)
+
+                self.append('</svg>')
+                self.append('</svgcode>')
+
+        def printOneSVGLine(self, xscale, yscale, years, maximum, results, xoffset, yoffset, color):
+                index = 0
+                last = (0, 0)
+                while index < years:
+                        if index:
+                                self.append('<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg%s"/>' % (xoffset+(xscale * last[0]), yoffset+(int(yscale * float(last[1]))), xoffset+(xscale * results[index][0]), yoffset+(int(yscale * float(maximum-results[index][1]))), color))
+                        last = (results[index][0], maximum-results[index][1])
+                        index += 1
+
 def os_files():
         elapsed = elapsedTime()
-        # First switch to the directory where the current Python module is located
-        #
-        # Retrieve the location of this Python module
-        current_filename = os.path.abspath( __file__ )
-        # Determine the directory of the current Python module
-        current_dir = os.path.dirname(current_filename)
-        # Determine the parent directory
-        parent_dir = os.path.pardir
-        # Change the current directory to the "nightly" directory
-        # since cron may have started this script in a different dir
-        os.chdir(current_dir)
+        output = Output()
 
-        # Task 1: Update all SVG files
-        rebuildSVG(parent_dir)
+        # Rebuild SVG files
+        output.rebuildSVG()
         elapsed.print_elapsed("SVG files", 0)
 
-        # Task 2: Update summary database statistics page
-        output = Output()
+        # Rebuild the summary database statistics page
         output.summaryStatistics()
         elapsed.print_elapsed("Summary stats", 0)
 
-        # Task 3: Update contributor statistics
+        # Rebuild contributor statistics
         output.contributorStatistics()
         elapsed.print_elapsed("Contributor stats", 0)
 
-        # Task 4: Update the list of top verifiers
+        # Rebuild the table of top verifiers
         output.topVerifiers()
         elapsed.print_elapsed("Verifier stats", 0)
         
-        # Task 5: Update the list of top moderators
+        # Rebuild the table of top moderators
         output.topModerators()
         elapsed.print_elapsed("Moderator stats", 0)
 
-        # Task 6: Update the list of authors by debut date
-        #AuthorsByDebutDate()
+        # Rebuild the table of authors by debut date
+        AuthorsByDebutDate()
         elapsed.print_elapsed("Authors by debut date", 0)
-
-        # Restore the original stdout
-        sys.stdout = elapsed.stdout
-
-def rebuildSVG(parent_dir):
-        charts = ('year_novels','year_shortfiction','year_reviews','year_pubs','year_magazines','year_verif')
-        for chart in charts:
-                file_name = parent_dir + os.sep + chart + ".svg"
-                sys.stdout = open(file_name, 'w')
-                byYear(chart)
-        
-        charts = ('age_all_novels','age_all_short','age_first_novel','age_first_short')
-        for chart in charts:
-                file_name = parent_dir + os.sep + chart + ".svg"
-                sys.stdout = open(file_name, 'w')
-                byAge(chart)
-        return
-
-def byYear(chart):
-	# Set the start year to 1900
-	startyear = 1900
-	# Set the end year to the last year
-	endyear = localtime()[0]-1
-	results = []
-	lastyear = startyear
-        if chart == "year_novels":
-                query = buildQueryTitle('NOVEL', startyear, endyear)
-        elif chart == "year_shortfiction":
-                query = buildQueryTitle('SHORTFICTION', startyear, endyear)
-        elif chart == "year_reviews":
-                query = buildQueryTitle('REVIEW', startyear, endyear)
-        elif chart == "year_pubs":
-                query = buildQueryPub('PUBS', startyear, endyear)
-        elif chart == "year_magazines":
-                query = buildQueryPub('MAGAZINES', startyear, endyear)
-        elif chart == "year_verif":
-            query = """select YEAR(p.pub_year), count(distinct p.pub_id)
-                        from pubs as p, primary_verifications as pv
-                        where p.pub_id = pv.pub_id
-                        and YEAR(p.pub_year)>%d
-                        and YEAR(p.pub_year)<%d
-                        group by YEAR(p.pub_year)""" % (startyear-1, endyear+1)
-        
-        db.query(query)
-        result = db.store_result()
-        record = result.fetch_row()
-        while record:
-            year = record[0][0]
-            count = record[0][1]
-            # If there is a gap in years with no data, pad it with 0s
-            if year > (lastyear+1):
-                for missingyear in range(lastyear+1,year):
-                    tuple = (missingyear-startyear, 0)
-                    results.append(tuple)
-            tuple = (year-startyear, count)
-            results.append(tuple)
-            record = result.fetch_row()
-            # Save the last year that we had data for
-            lastyear = year
-
-        # Get the minimum and maximum values
-        minimum = min(results,key=itemgetter(1))[1]
-        maximum = max(results,key=itemgetter(1))[1]
-
-        # If displaying verified pubs, do another query to get their totals for each year
-        if chart == "year_verif":
-            totals = []
-            lastyear = startyear
-            # Set the minimum and maximum value to 0 and 100 since we will be displaying percentages
-            maximum = 100
-            minimum = 0
-            query = """select YEAR(pub_year), COUNT(pub_id) from pubs
-                        where YEAR(pub_year)>%d and YEAR(pub_year)<%d
-                        group by YEAR(pub_year)""" % (startyear-1, endyear+1)
-            db.query(query)
-            result = db.store_result()
-            record = result.fetch_row()
-            while record:
-                total_count = record[0][1]
-                year = record[0][0]
-                # Calculate the relative position/index of this year in the results list
-                index = year-startyear
-                # Retrieve the tuple for this year
-                tuple = results[index]
-                # Calculate the percent of verified pubs for this year
-                percent = tuple[1]*100/total_count
-                # Build the new tuple, replacing the absolute value of verified pubs with the percent value for the year
-                newtuple = (tuple[0], percent)
-                # Replace this year's tuple in the list with the percent-based data
-                results[index] = newtuple
-                # Get the next year's data
-                record = result.fetch_row()
-                # Save the last year that we had data for
-                lastyear = year
-        
-	years = endyear-startyear+1
-	height = 200
-	xscale = 6
-	yscale = float(height)/float(maximum-minimum)
-	results_dict = {}
-	results_dict['black'] = results
-	outputGraph(height, startyear, xscale, yscale, years, maximum, results_dict)
-
-def byAge(chart):
-	# Set the start age to 0
-	startage = 0
-	# Set the end age to 100
-	endage = 101
-	results = []
-	lastage=startage-1
-
-        if chart[:7] == "age_all":
-            if chart == "age_all_novels":
-                    title_type = 'NOVEL'
-            else:
-                    title_type = 'SHORTFICTION'
-            query = "select YEAR(t.title_copyright)-YEAR(a.author_birthdate),count(t.title_id) from titles t, "
-            query += "canonical_author c, authors a where t.title_id=c.title_id and c.author_id=a.author_id and "
-            query += "YEAR(t.title_copyright)<8888 and YEAR(t.title_copyright)>0 and title_ttype='%s' " % title_type
-            query += "and a.author_birthdate IS NOT NULL group by YEAR(t.title_copyright)-YEAR(a.author_birthdate) limit 120"
-        elif chart[:9] == "age_first":
-            if chart == "age_first_novel":
-                    title_type = 'NOVEL'
-            else:
-                    title_type = 'SHORTFICTION'
-            query = "select v.FIRST-v.DOB,count(v.FIRST-v.DOB) from (select YEAR(a.author_birthdate) as DOB, "
-            query += "(select min(YEAR(t.title_copyright)) from titles t, canonical_author c where "
-            query += "t.title_copyright!='0000-00-00' and t.title_id=c.title_id and t.title_ttype='%s' and " % title_type
-            query += "c.author_id=a.author_id and c.ca_status=1) as FIRST from authors a where a.author_birthdate "
-            query += "IS NOT NULL) as v where v.FIRST IS NOT NULL group by v.FIRST-v.DOB"
-        db.query(query)
-        result = db.store_result()
-        record = result.fetch_row()
-        while record:
-            age = record[0][0]
-            count = record[0][1]
-            record = result.fetch_row()
-            if age is None:
-                    continue
-            if age < startage or age > endage:
-                    continue
-            #print age
-            # If there is a gap in ages with no data, pad it with 0s
-            if age > (lastage+1):
-                for missingage in range(lastage+1,age):
-                    tuple = (missingage, 0)
-                    results.append(tuple)
-            tuple = (age, count)
-            results.append(tuple)
-            # Save the last age that we had data for
-            lastage = age
-
-        # Get the minimum and maximum values
-        minimum = min(results,key=itemgetter(1))[1]
-        maximum = max(results,key=itemgetter(1))[1]
-
-	ages = endage-startage
-	height = 200
-	xscale = 6
-	yscale = float(height)/float(maximum-minimum)
-	results_dict = {}
-	results_dict['black'] = results
-	outputGraph(height, startage, xscale, yscale, ages, maximum, results_dict)
 
 def LastUserActivity(user_id):
         if WikiExists():
@@ -537,16 +576,3 @@ def AuthorsByDebutDate():
                 HAVING NumTitles > 5"""
 	db.query(query)
 
-def buildQueryTitle(type, startyear, endyear):
-        query = "select YEAR(title_copyright),COUNT(*) from titles where title_ttype='%s' and title_parent=0 and " % (type)
-        query += "YEAR(title_copyright)>%d and YEAR(title_copyright)<%s group by YEAR(title_copyright)" % (startyear-1, endyear+1)
-        return query
-
-def buildQueryPub(type, startyear, endyear):
-        query = "select YEAR(pub_year),COUNT(*) from pubs where "
-        if type == 'PUBS':
-            query += "pub_ctype!='MAGAZINE'"
-        else:
-            query += "pub_ctype='MAGAZINE'"
-        query += " and YEAR(pub_year)>%d and YEAR(pub_year)<%s group by YEAR(pub_year)" % (startyear-1, endyear+1)
-        return query

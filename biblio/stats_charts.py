@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2014   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2018   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,15 +17,15 @@ from SQLparsing import *
 from biblio import *
 
 
-def displayCharts(types):
-        for type in types:
-                print '<h3>%s</h3>' % (type[1])
-		filename = LOCALFILES + "%s.svg" % type[0]
-                f = open(filename,"r")
-                data = f.read()
-                f.close()
-                print data
-        return
+def displayCharts(report_id):
+	query = 'select report_data from reports where report_id = %d' % report_id
+	db.query(query)
+        result = db.store_result()
+        if result.num_rows():
+                record = result.fetch_row()
+                print record[0][0]
+        else:
+                print '<h3>This report is currently unavailable. It will be regenerated overnight.</h3>'
 
 if __name__ == '__main__':
 
@@ -45,22 +45,12 @@ if __name__ == '__main__':
                 sys.exit(0)
 
         if sys.argv[1] == "Titles":
-                types = [('year_novels','Novels')]
-                types.append(('year_shortfiction','Short Fiction'),)
-                types.append(('year_reviews','Reviews'),)
-                displayCharts(types)
+                displayCharts(5)
 
         elif sys.argv[1] == "Publications":
-                types = [('year_pubs','Publications (without magazines)')]
-                types.append(('year_magazines','Magazines'),)
-                types.append(('year_verif','Verified Publications in Percent'),)
-                displayCharts(types)
+                displayCharts(6)
 
         elif sys.argv[1] == "Age":
-                types = [('age_all_novels','All Novels')]
-                types.append(('age_first_novel','First Novels'),)
-                types.append(('age_all_short','All Short Fiction'),)
-                types.append(('age_first_short','First Short Fiction'),)
-                displayCharts(types)
+                displayCharts(7)
 
 	PrintTrailer('frontpage', 0, 0)

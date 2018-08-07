@@ -25,7 +25,7 @@ if __name__ == '__main__':
 	print '<h3>Database Statistics</h3>'
 	print '<ul>'
 
-        print '<li><a href="http:/%s/stats.cgi">Summary Database Statistics</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?4">Summary Database Statistics</a>' % (HTFAKE)
         print '<li><a href="http://%s/index.php/Annual_Page_Views_and_Database_Growth">Database Growth and Annual Page Views</a>' % (WIKILOC)
         print '</ul>'
 	print '<h4>Author Statistics</h4>'
@@ -60,8 +60,8 @@ if __name__ == '__main__':
         
 	print '<h4>Title Statistics</h4>'
         print '<ul>'
-        print '<li><a href="http:/%s/stats_charts.cgi?Titles">Titles by Year of First Publication</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/stats_charts.cgi?Age">Titles by Author Age</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?5">Titles by Year of First Publication</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?7">Titles by Author Age</a>' % (HTFAKE)
         print '<li><a href="http://%s/agestuff.html">Award-Winning Titles by Author Age</a> [as of 2005, to be updated]' % (HTMLHOST)
         print '<li><a href="http:/%s/novels_in_series.cgi">Percent of Titles in Series by Year</a>' % (HTFAKE)
         print '<li><a href="http:/%s/most_reviewed_table.cgi">Most-Reviewed Titles (in genre publications)</a>' % (HTFAKE)
@@ -85,14 +85,14 @@ if __name__ == '__main__':
         
 	print '<h4>Publication Statistics</h4>'
         print '<ul>'
-        print '<li><a href="http:/%s/stats_charts.cgi?Publications">Publications by Year</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?6">Publications by Year</a>' % (HTFAKE)
         print '<li><a href="http:/%s/books_by_type.cgi">Percent of Books by Type by Year</a>' % (HTFAKE)
         print '<li><a href="http:/%s/pubs_by_format.cgi">Percent of Publications by Format by Year</a>' % (HTFAKE)
         print '</ul>'
 	print '<h3>Top ISFDB Editors</h3>'
         print '<ul>'
-	print '<li><a href="http:/%s/topvers.cgi">Top Verifiers</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/topmods.cgi">Top Moderators</a>' % (HTFAKE)
+	print '<li><a href="http:/%s/stats.cgi?2">Top Verifiers</a>' % (HTFAKE)
+	print '<li><a href="http:/%s/stats.cgi?1">Top Moderators</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/toptaggers.cgi">Top Taggers</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/topvoters.cgi">Top Voters</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/topcontrib.cgi">Top Contributors (All Submission Types)</a>' % (HTFAKE)
