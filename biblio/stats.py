@@ -27,7 +27,8 @@ class Stats:
                                 7: 'Titles by Author Age',
                                 8: 'Percent of Titles in Series by Year',
                                 9: 'Percent of Book Titles by Type by Year',
-                                10: 'Percent of Publications by Format by Year'}
+                                10: 'Percent of Publications by Format by Year',
+                                11: 'Submissions per Year'}
 
         def params(self):
                 try:
@@ -45,6 +46,7 @@ class Stats:
                 db.query(query)
                 result = db.store_result()
                 if result.num_rows():
+                        print '<h3>This report is generated once a day</h3>'
                         record = result.fetch_row()
                         print record[0][0]
                 else:

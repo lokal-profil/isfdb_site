@@ -45,6 +45,59 @@ class Output():
                 method()
                 self.elapsed.print_elapsed(method_name)
 
+        def LastUserActivity(self, user_id):
+                if WikiExists():
+                        return SQLLastUserActivity(user_id)
+                else:
+                        return '&nbsp;'
+
+        def outputGraph(self, height, startyear, xscale, yscale, years, maximum, results):
+                xoffset = 15
+                yoffset = 10
+
+                self.append('<svgcode width="%d" height="%d" version="1.1">' % (xoffset+40+(years*xscale), height+30+yoffset))
+                self.append('<svg width="100%%" height="%dpx" version="1.1" xmlns="http://www.w3.org/2000/svg">' % (height+30+yoffset))
+
+                ###################################################
+                # Output the grid and labels - Horizontal Lines
+                ###################################################
+                y = 0
+                increment = maximum/4
+                value = increment * 4
+                while y <= height:
+                        self.append('<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg1"/>' % (xoffset, y+yoffset, xoffset+5+(years*xscale), y+yoffset))
+                        self.append('<text x="%d" y="%d" font-size="10">%d</text>' % (xoffset+10+(years*xscale), y+5+yoffset, value))
+                        value -= increment
+                        y = y + 50
+
+                ###################################################
+                # Output the grid and labels - Vertical Lines
+                ###################################################
+                x = 0
+                while x < years:
+                        self.append('<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg1"/>' % (xoffset+(xscale*x), yoffset, xoffset+(xscale*x), height+10+yoffset))
+                        self.append('<text x="%d" y="%d" font-size="10">%d</text>' % ((xscale*x)-12+xoffset, height+20+yoffset, x+startyear))
+                        x += 10
+
+                ###################################################
+                # Output the data
+                ###################################################
+                for line_color in results:
+                        index = 0
+                        last = (0, 0)
+                        while index < years:
+                                if index:
+                                        self.append('<line x1="%d"' % (xoffset+(xscale * last[0])))
+                                        self.append(' y1="%d"' % (yoffset+(int(yscale * float(last[1])))))
+                                        self.append(' x2="%d"' % (xoffset+(xscale * results[line_color][index][0])))
+                                        self.append(' y2="%d"' % (yoffset+(int(yscale * float(maximum-results[line_color][index][1])))))
+                                        self.append('class="svg%s"/>' % line_color)
+                                last = (results[line_color][index][0], maximum-results[line_color][index][1])
+                                index += 1
+
+                self.append('</svg>')
+                self.append('</svgcode>')
+
         def topModerators(self):
                 self.start('<h2>Top ISFDB Moderators</h2>')
                 self.append('<p>')
@@ -79,7 +132,7 @@ class Output():
                         self.append('<td>%d</td>' % (record[0][1]))
                         self.append('<td>%d</td>' % (record[0][2]))
                         self.append('<td>%d</td>' % (record[0][1] - record[0][2]))
-                        last_user_activity = LastUserActivity(user_id)
+                        last_user_activity = self.LastUserActivity(user_id)
                         self.append('<td>%s</td>' % last_user_activity)
                         self.append('</tr>')
                         color = color ^ 1
@@ -222,7 +275,7 @@ class Output():
                         self.append('<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name))
                         self.append('<td>%d</td>' % count)
                         self.append('<td>%s</td>' % moderator)
-                        last_user_activity = LastUserActivity(user_id)
+                        last_user_activity = self.LastUserActivity(user_id)
                         self.append('<td>%s</td>' % last_user_activity)
                         self.append('</tr>')
                         color = color ^ 1
@@ -376,18 +429,18 @@ class Output():
                 result = db.store_result()
                 record = result.fetch_row()
                 while record:
-                    year = record[0][0]
-                    count = record[0][1]
-                    # If there is a gap in years with no data, pad it with 0s
-                    if year > (lastyear+1):
-                        for missingyear in range(lastyear+1,year):
-                            tuple = (missingyear-startyear, 0)
-                            results.append(tuple)
-                    tuple = (year-startyear, count)
-                    results.append(tuple)
-                    record = result.fetch_row()
-                    # Save the last year that we had data for
-                    lastyear = year
+                        year = record[0][0]
+                        count = record[0][1]
+                        # If there is a gap in years with no data, pad it with 0s
+                        if year > (lastyear+1):
+                                for missingyear in range(lastyear+1,year):
+                                        tuple = (missingyear-startyear, 0)
+                                        results.append(tuple)
+                        tuple = (year-startyear, count)
+                        results.append(tuple)
+                        record = result.fetch_row()
+                        # Save the last year that we had data for
+                        lastyear = year
 
                 # Get the minimum and maximum values
                 minimum = min(results,key=itemgetter(1))[1]
@@ -485,53 +538,6 @@ class Output():
                 results_dict['black'] = results
                 self.outputGraph(height, startage, xscale, yscale, ages, maximum, results_dict)
 
-        def outputGraph(self, height, startyear, xscale, yscale, years, maximum, results):
-
-                xoffset = 15
-                yoffset = 10
-
-                self.append('<svgcode width="%d" height="%d" version="1.1">' % (xoffset+40+(years*xscale), height+30+yoffset))
-                self.append('<svg width="100%%" height="%dpx" version="1.1" xmlns="http://www.w3.org/2000/svg">' % (height+30+yoffset))
-
-                ###################################################
-                # Output the grid and labels - Horizontal Lines
-                ###################################################
-                y = 0
-                increment = maximum/4
-                value = increment * 4
-                while y <= height:
-                        self.append('<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg1"/>' % (xoffset, y+yoffset, xoffset+5+(years*xscale), y+yoffset))
-                        self.append('<text x="%d" y="%d" font-size="10">%d</text>' % (xoffset+10+(years*xscale), y+5+yoffset, value))
-                        value -= increment
-                        y = y + 50
-
-                ###################################################
-                # Output the grid and labels - Vertical Lines
-                ###################################################
-                x = 0
-                while x < years:
-                        self.append('<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg1"/>' % (xoffset+(xscale*x), yoffset, xoffset+(xscale*x), height+10+yoffset))
-                        self.append('<text x="%d" y="%d" font-size="10">%d</text>' % ((xscale*x)-12+xoffset, height+20+yoffset, x+startyear))
-                        x += 10
-
-                ###################################################
-                # Output the data
-                ###################################################
-                for line_color in results:
-                        self.printOneSVGLine(xscale, yscale, years, maximum, results[line_color], xoffset, yoffset, line_color)
-
-                self.append('</svg>')
-                self.append('</svgcode>')
-
-        def printOneSVGLine(self, xscale, yscale, years, maximum, results, xoffset, yoffset, color):
-                index = 0
-                last = (0, 0)
-                while index < years:
-                        if index:
-                                self.append('<line x1="%d" y1="%d" x2="%d" y2="%d" class="svg%s"/>' % (xoffset+(xscale * last[0]), yoffset+(int(yscale * float(last[1]))), xoffset+(xscale * results[index][0]), yoffset+(int(yscale * float(maximum-results[index][1]))), color))
-                        last = (results[index][0], maximum-results[index][1])
-                        index += 1
-
         def novelsInSeries(self):
                 self.start('<h3>Legend: Red - novels, Blue - short fiction</h3>')
                 # Set the start year to 1900
@@ -568,11 +574,11 @@ class Output():
                 record = result.fetch_row()
                 results = []
                 while record:
-                    year = record[0][0]
-                    percent = record[0][3]
-                    tuple = (int(year)-startyear, int(round(float(percent))))
-                    results.append(tuple)
-                    record = result.fetch_row()
+                        year = record[0][0]
+                        percent = record[0][3]
+                        data_tuple = (int(year)-startyear, int(round(float(percent))))
+                        results.append(data_tuple)
+                        record = result.fetch_row()
                 return results
 
         def titlesByTypeByYear(self):
@@ -726,8 +732,46 @@ class Output():
                         HAVING NumTitles > 5"""
                 db.query(query)
 
+        def submissionsByYear(self):
+                # Set the start year to 2007
+                startyear = 2007
+                # Set the end year to the last year
+                currentyear = localtime()[0]
+                lastyear = currentyear - 1
+                years = lastyear - startyear + 1
+
+                # Retrieve the data from the database
+                query = """select YEAR(sub_time), count(*)
+                        from submissions
+                        where YEAR(sub_time) > 2006
+                        group by YEAR(sub_time)
+                        order by YEAR(sub_time)"""
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                results_dict = {}
+                results_dict['black'] = []
+                minimum = 0
+                maximum = 0
+                while record:
+                        year = record[0][0]
+                        count = record[0][1]
+                        data_tuple = (int(year) - startyear, int(count))
+                        results_dict['black'].append(data_tuple)
+                        if count > maximum:
+                                maximum = count
+                        record = result.fetch_row()
+
+                height = 200
+                xscale = 50
+                yscale = float(height)/float(maximum - minimum)
+                self.start('')
+                self.outputGraph(height, startyear, xscale, yscale, years, maximum, results_dict)
+                self.file(11, 0)
+
 def nightly_stats():
         output = Output()
+        output.report("submissionsByYear")
         output.report("titlesByYear")
         output.report("publicationsByYear")
         output.report("titlesByAuthorAge")
@@ -739,11 +783,3 @@ def nightly_stats():
         output.report("titlesByTypeByYear")
         output.report("pubsByFormat")
         output.report("authorsByDebutDate")
-
-def LastUserActivity(user_id):
-        if WikiExists():
-                return SQLLastUserActivity(user_id)
-        else:
-                return '&nbsp;'
-
-

@@ -26,6 +26,7 @@ if __name__ == '__main__':
 	print '<ul>'
 
         print '<li><a href="http:/%s/stats.cgi?4">Summary Database Statistics</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?11">Submissions per Year</a>' % (HTFAKE)
         print '<li><a href="http://%s/index.php/Annual_Page_Views_and_Database_Growth">Database Growth and Annual Page Views</a>' % (WIKILOC)
         print '</ul>'
 	print '<h4>Author Statistics</h4>'
