@@ -639,12 +639,16 @@ def nightly_cleanup_reports():
 
         #   Report 55: Title records with HTML in titles
         query = """select title_id from titles where
-                   title_title like '%<i>%' or title_title like '%<u>%'"""
+                   title_title like '%<i>%'
+                   or title_title like '%<u>%'
+                   or title_title like '%<b>%'"""
         standardReport(query, 55)
 
         #   Report 56: Publications with HTML in titles
         query = """select pub_id from pubs where
-                   pub_title like '%<i>%' or pub_title like '%<u>%'"""
+                   pub_title like '%<i>%'
+                   or pub_title like '%<u>%'
+                   or pub_title like '%<b>%'"""
         standardReport(query, 56)
 
         #   Report 57: Invalid SFE3 image links
