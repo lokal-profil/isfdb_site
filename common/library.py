@@ -1660,37 +1660,43 @@ def printRecordID(record_type, record_id, user_id, user = None):
         output += '</span>'
         print output
 
-def valid_html_tags():
-        paired_tags = ['b', 'i', 'u', 'ol', 'ul', 'em', 'li', 'p', 'table', 'th',
-                       'tr', 'td', 'cite', 'sub', 'sup', 'blockquote',
-                       'strong', 'center', 'del', 's', 'small']
-        self_closing_tags = ['p', 'br', '!--isfdb specific--']
-        tags_with_attributes = ['a', 'table', 'tr', 'td', 'th']
+class isfdbUI:
+        def __init__(self):
+                self.paired_tags = ['b', 'i', 'u', 'ol', 'ul', 'em', 'li', 'p', 'table', 'th',
+                               'tr', 'td', 'cite', 'sub', 'sup', 'blockquote',
+                               'strong', 'center', 'del', 's', 'small']
+                self.self_closing_tags = ['p', 'br', '!--isfdb specific--']
+                self.tags_with_attributes = ['a', 'table', 'td']
 
-        valid_tags = []
-        for tag in paired_tags:
-                valid_tags.append('<%s>' % tag)
-                valid_tags.append('</%s>' % tag)
-        for tag in self_closing_tags:
-                valid_tags.append('<%s>' % tag)
-                valid_tags.append('<%s/>' % tag)
-                valid_tags.append('<%s />' % tag)
-        for tag in tags_with_attributes:
-                valid_tags.append('<%s ' % tag)
-                valid_tags.append('</%s>' % tag)
-        return valid_tags
+                self.valid_tags = []
+                for tag in self.paired_tags:
+                        self.valid_tags.append('<%s>' % tag)
+                        self.valid_tags.append('</%s>' % tag)
+                for tag in self.self_closing_tags:
+                        self.valid_tags.append('<%s>' % tag)
+                        self.valid_tags.append('<%s/>' % tag)
+                        self.valid_tags.append('<%s />' % tag)
+                for tag in self.tags_with_attributes:
+                        self.valid_tags.append('<%s ' % tag)
+                        self.valid_tags.append('</%s>' % tag)
 
-def BadHtmlClause(field_name):
-        valid_tags = valid_html_tags()
-        query = '(('
-        for tag in valid_tags:
-                query += "replace("
-        query += "lower(%s)," % field_name
-        for tag in valid_tags:
-                query += "'%s','')," % tag
-        query = query[:-1] + " like '%<%') "
-        query += "or (%s like '%%<a href%%' and %s not like '%%<a href=%%'))" % (field_name, field_name)
-        return query
+        def goodHtmlClause(self, table_name, field_name):
+                clause = '('
+                for tag in self.valid_tags:
+                        clause += "%s.%s like '%%%s%%' or " % (table_name, field_name, tag)
+                clause = clause[:-4] + ")"
+                return clause
+
+        def badHtmlClause(self, table_name, field_name):
+                clause = '(('
+                for tag in self.valid_tags:
+                        clause += "replace("
+                clause += "lower(%s)," % field_name
+                for tag in self.valid_tags:
+                        clause += "'%s','')," % tag
+                clause = clause[:-1] + " like '%<%') "
+                clause += "or (%s.%s like '%%<a href%%' and %s.%s not like '%%<a href=%%'))" % (table_name, field_name, table_name, field_name)
+                return clause
 
 def FormatExternalIDType(type_name, types):
         formatted_type = ''

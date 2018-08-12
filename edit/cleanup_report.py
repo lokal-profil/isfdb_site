@@ -2096,9 +2096,10 @@ def function54():
         print '</table><p>'
 
 def function55():
+        ui = isfdbUI()
         query = """select title_id, title_title from titles t, cleanup c
                 where t.title_id=c.record_id and c.report_type=55
-                and (t.title_title like '%<i>%' or t.title_title like '%<u>%')"""
+                and %s""" % ui.goodHtmlClause('t', 'title_title')
 
 	db.query(query)
 	result = db.store_result()
@@ -2122,9 +2123,10 @@ def function55():
 		print "<h2>No Title records with HTML in Titles.</h2>"
 
 def function56():
+        ui = isfdbUI()
         query = """select pub_id, pub_title from pubs p, cleanup c
         where p.pub_id=c.record_id and c.report_type=56
-        and (p.pub_title like '%<i>%' or p.pub_title like '%<u>%')"""
+        and %s""" % ui.goodHtmlClause('p', 'pub_title')
 
 	db.query(query)
 	result = db.store_result()
@@ -6124,7 +6126,7 @@ def function9999():
 
 def Nightly_html(report_id, table, note_field, record_id_field, record_title_field, cgi_script):
         import cgi
-        valid_tags = valid_html_tags()
+        ui = isfdbUI()
 
         if report_id == 217:
                 query = """select t.%s, t.%s, t.%s
@@ -6132,16 +6134,15 @@ def Nightly_html(report_id, table, note_field, record_id_field, record_title_fie
                            and t.%s = c.record_id
                            and c.report_type = %s
                            """ % (record_id_field, record_title_field, note_field, table,
-                                  BadHtmlClause('t.%s' % note_field), record_id_field, report_id)
+                                  ui.badHtmlClause('t', '%s' % note_field), record_id_field, report_id)
         else:
                 query = """select t.%s, t.%s, n.note_note
                            from %s t, notes n, cleanup c where %s
                            and t.%s = n.note_id
                            and t.%s = c.record_id
                            and c.report_type = %s
-                        """ % (record_id_field, record_title_field, table, BadHtmlClause('n.note_note'),
+                        """ % (record_id_field, record_title_field, table, ui.badHtmlClause('n', 'note_note'),
                                note_field, record_id_field, report_id)
-        #print cgi.escape(query)
 	db.query(query)
 	result = db.store_result()
 
@@ -6157,7 +6158,7 @@ def Nightly_html(report_id, table, note_field, record_id_field, record_title_fie
                 record_id = record[0][0]
                 record_name = record[0][1]
                 note = record[0][2]
-                for tag in valid_tags:
+                for tag in ui.valid_tags:
                         note = string.replace(note, tag.lower(), '')
                         note = string.replace(note, tag.upper(), '')
                 problem_part = note
@@ -6174,7 +6175,7 @@ def Nightly_html(report_id, table, note_field, record_id_field, record_title_fie
                 bgcolor ^= 1
                 count += 1
                 record = result.fetch_row()
-        print "</table>"
+        print '</table>'
 
 
 def PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):

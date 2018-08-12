@@ -1,7 +1,6 @@
 #!_PYTHONLOC
-# -*- coding: cp1252 -*-
 #
-#     (C) COPYRIGHT 2017   Ahasuerus
+#     (C) COPYRIGHT 2017-2018   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -15,13 +14,21 @@ from SQLparsing import *
 from library import *
 from nightly_lib import *
 
-def OneRecordType(report_id, in_clause, table, note_field, record_id_field):
-        query = "select %s from %s where %s in (%s)" % (record_id_field, table, note_field, in_clause)
-        standardReport(query, report_id)
-
 def nightly_html():
+        ui = isfdbUI()
+        #   Report 55: Title records with HTML in titles
+        query = "select title_id from titles where "
+        query += ui.goodHtmlClause('titles', 'title_title')
+        standardReport(query, 55)
+
+        #   Report 56: Publications with HTML in titles
+        query = "select pub_id from pubs where "
+        query += ui.goodHtmlClause('pubs', 'pub_title')
+        standardReport(query, 56)
+
+        #   Report 217: Publications with HTML in titles
         query = "select note_id from notes where "
-        query += BadHtmlClause('note_note')
+        query += ui.badHtmlClause('notes', 'note_note')
         db.query(query)
         result = db.store_result()
         record = result.fetch_row()
@@ -46,9 +53,10 @@ def nightly_html():
                 note_field = record_data[1]
                 record_id_field = record_data[2]
                 report_id = record_data[3]
-                OneRecordType(report_id, in_clause, table, note_field, record_id_field)
+                query = "select %s from %s where %s in (%s)" % (record_id_field, table, note_field, in_clause)
+                standardReport(query, report_id)
 
         # Author notes are processed separately since they are stored in the main author table
         query = "select author_id from authors where "
-        query += BadHtmlClause('author_note')
+        query += ui.badHtmlClause('authors', 'author_note')
         standardReport(query, 217)

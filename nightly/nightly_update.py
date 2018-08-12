@@ -637,20 +637,6 @@ def nightly_cleanup_reports():
                 	and t2.title_ttype in ('SHORTFICTION','POEM','SERIAL')))"""
         standardReport(query, 54)
 
-        #   Report 55: Title records with HTML in titles
-        query = """select title_id from titles where
-                   title_title like '%<i>%'
-                   or title_title like '%<u>%'
-                   or title_title like '%<b>%'"""
-        standardReport(query, 55)
-
-        #   Report 56: Publications with HTML in titles
-        query = """select pub_id from pubs where
-                   pub_title like '%<i>%'
-                   or pub_title like '%<u>%'
-                   or pub_title like '%<b>%'"""
-        standardReport(query, 56)
-
         #   Report 57: Invalid SFE3 image links
         query = """select pub_id from pubs where
                    pub_frontimage like '%sf-encyclopedia.uk%'
