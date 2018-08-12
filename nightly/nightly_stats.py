@@ -753,15 +753,24 @@ class Output():
                 results_dict['black'] = []
                 minimum = 0
                 maximum = 0
+                years_dict = {}
                 while record:
                         year = record[0][0]
                         count = record[0][1]
-                        data_tuple = (int(year) - startyear, int(count))
-                        results_dict['black'].append(data_tuple)
+                        years_dict[year] = int(count)
                         if count > maximum:
                                 maximum = count
                         record = result.fetch_row()
-
+                # If there is no data, don't create the report
+                if not maximum:
+                        return
+                # Populate years with no submissions with 0s
+                for year in range(startyear, currentyear):
+                        if year in years_dict:
+                                data_tuple = (year - startyear, years_dict[year])
+                        else:
+                                data_tuple = (year - startyear, 1)
+                        results_dict['black'].append(data_tuple)
                 height = 200
                 xscale = 50
                 yscale = float(height)/float(maximum - minimum)

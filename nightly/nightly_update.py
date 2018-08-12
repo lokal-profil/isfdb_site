@@ -1360,11 +1360,10 @@ def nightly_cleanup_reports():
                          where identifier_type_id = 1 and pub_id = p.pub_id)"""
         standardReport(query, 228)
 
-        #   Report 229: Mismatched HTML tags in publication Notes
+        #   Report 229: Mismatched tags in publication Notes
         paired_tags = ['b', 'i', 'u', 'ol', 'ul', 'em', 'table', 'th',
-                       'tr', 'td', 'cite', 'sub', 'sup', 'span', 'blockquote', 'pre',
-                       'h1', 'h2', 'h3', 'strong', 'abbr', 'center', 'del', 'tbody',
-                       'caption', 'q']
+                       'tr', 'td', 'cite', 'sub', 'sup', 'blockquote',
+                       'strong', 'center', 'del', 's', 'small']
 
         query = "select p.pub_id from pubs p, notes n where p.note_id = n.note_id and ("
         count = 0

@@ -1,7 +1,7 @@
 #!_PYTHONLOC
 # -*- coding: cp1252 -*-
 #
-#     (C) COPYRIGHT 2011-2017   Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2011-2018   Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -5550,7 +5550,7 @@ def function213():
         Nightly_html(213, 'awards', 'award_note_id', 'award_id', 'award_title', 'award_details')
 
 def function214():
-        Nightly_html(214, 'award_types', 'award_type_note_id', 'award_type_id', 'award_type_name', 'award_type')
+        Nightly_html(214, 'award_types', 'award_type_note_id', 'award_type_id', 'award_type_name', 'awardtype')
 
 def function215():
         Nightly_html(215, 'award_cats', 'award_cat_note_id', 'award_cat_id', 'award_cat_name', 'award_category')
