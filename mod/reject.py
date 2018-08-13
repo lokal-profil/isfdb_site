@@ -41,7 +41,9 @@ if __name__ == '__main__':
                 sys.exit(0)
 
 	if form.has_key("reason"):
-		reason = form["reason"].value
+                # Run the rejection reason through XML escaping and
+                # unescaping in order to normalize input
+		reason = XMLunescape(XMLescape(form["reason"].value))
 	else:
 		reason = ''
 
