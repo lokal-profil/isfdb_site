@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2013   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -31,9 +31,9 @@ if __name__ == '__main__':
 	sys.stderr = sys.stdout
 	form = cgi.FieldStorage()
 
-	if form.has_key("sub_id"):
+	try:
 		sub_id = int(form["sub_id"].value)
-	else:
+	except:
 		print "ERROR: Can't get submission ID."
 		sys.exit(1)
 
@@ -41,21 +41,23 @@ if __name__ == '__main__':
                 sys.exit(0)
 
 	if form.has_key("reason"):
-		reason = XMLescape(form["reason"].value)
+		reason = form["reason"].value
 	else:
 		reason = ''
 
         print "<ul>"
 
 	(reviewerid, username, usertoken) = GetUserData()
-	update = "update submissions set sub_state='R', sub_reason='%s', sub_reviewer='%d', sub_reviewed=NOW() where sub_id='%d';" % (db.escape_string(reason), int(reviewerid), sub_id)
+	update = """update submissions set sub_state='R', sub_reason='%s',
+                    sub_reviewer='%d', sub_reviewed=NOW()
+                    where sub_id=%d""" % (db.escape_string(reason), int(reviewerid), sub_id)
         print "<li> ", update
 	db.query(update)
 
         print "</ul><p /><hr />"
 
 	
-	print "Record %s has been moved to the Rejected state.<br />" % str(sub_id)
+	print "Record %d has been moved to the Rejected state.<br />" % sub_id
 	print "<b>Reason:</b> ", reason
 
 	print "<p />"
