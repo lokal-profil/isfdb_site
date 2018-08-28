@@ -23,6 +23,7 @@ class Output():
         def __init__(self):
                 self.data = ''
                 self.elapsed = elapsedTime()
+                self.last_count = float(0)
 
         def start(self, new_line):
                 self.data = '%s\n' % new_line
@@ -283,24 +284,22 @@ class Output():
                 self.append('</table><p>')
                 self.file(3, sub_type)
 
+        def summaryLine(self, field, table, display):
+                query = "select count(%s) from %s" % (db.escape_string(field), db.escape_string(table))
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                self.append("<li><b>%s:</b> %d" % (display, record[0][0]))
+                self.last_count = float(record[0][0])
+
         def summaryStatistics(self):
                 self.start("<ul>")
 
-                query = "select count(author_id) from authors"
-                db.query(query)
-                result = db.store_result()
-                record = result.fetch_row()
-                self.append("<li><b>Authors:</b> %d" % record[0][0])
-
-                query = "select count(pub_id) from pubs"
-                db.query(query)
-                result = db.store_result()
-                record = result.fetch_row()
-                self.append("<li><b>Publications:</b> %d" % record[0][0])
-                total_pubs = float(record[0][0])
+                self.summaryLine('author_id', 'authors', '<a href="http:/%s/directory.cgi?author">Authors</a>' % HTFAKE)
+                self.summaryLine('pub_id', 'pubs', 'Publications')
 
                 self.append("<ul>")
-                query = "select distinct pub_ctype, count(pub_ctype) from pubs group by pub_ctype"
+                query = "select distinct pub_ctype, count(pub_ctype) from pubs group by pub_ctype order by CAST(pub_ctype as CHAR)"
                 db.query(query)
                 result = db.store_result()
                 record = result.fetch_row()
@@ -313,24 +312,14 @@ class Output():
                 db.query(query)
                 result = db.store_result()
                 record = result.fetch_row()
-                self.append("<li><b>Verified Publications:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/total_pubs))
+                self.append("<li><b>Verified Publications:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/self.last_count))
 
-                query = "select count(publisher_id) from publishers"
-                db.query(query)
-                result = db.store_result()
-                record = result.fetch_row()
-                self.append("<li><b>Publishers:</b> %d" % record[0][0])
-                total_pubs = float(record[0][0])
-
-                query = "select count(title_id) from titles"
-                db.query(query)
-                result = db.store_result()
-                record = result.fetch_row()
-                self.append("<li><b>Titles:</b> %d" % record[0][0])
-                total_titles = float(record[0][0])
+                self.summaryLine('publisher_id', 'publishers', '<a href="http:/%s/directory.cgi?publisher">Publishers</a>' % HTFAKE)
+                self.summaryLine('pub_series_id', 'pub_series', 'Publication Series')
+                self.summaryLine('title_id', 'titles', 'Titles')
 
                 self.append("<ul>")
-                query = "select distinct title_ttype, count(title_ttype) from titles group by title_ttype"
+                query = "select distinct title_ttype, count(title_ttype) from titles group by title_ttype order by CAST(title_ttype as CHAR)"
                 db.query(query)
                 result = db.store_result()
                 record = result.fetch_row()
@@ -342,20 +331,18 @@ class Output():
                 db.query(query)
                 result = db.store_result()
                 record = result.fetch_row()
-                self.append("<li><b>Titles with Votes:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/total_titles))
+                self.append("<li><b>Titles with Votes:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/self.last_count))
                 
                 query = "select count(distinct title_id) from tag_mapping"
                 db.query(query)
                 result = db.store_result()
                 record = result.fetch_row()
-                self.append("<li><b>Titles with Tags:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/total_titles))
+                self.append("<li><b>Titles with Tags:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/self.last_count))
 
-
-                query = "select count(award_id) from awards"
-                db.query(query)
-                result = db.store_result()
-                record = result.fetch_row()
-                self.append("<li><b>Awards:</b> %d" % record[0][0])
+                self.summaryLine('series_id', 'series', 'Series')
+                self.summaryLine('award_type_id', 'award_types', '<a href="http:/%s/award_directory.cgi">Award Types</a>' % HTFAKE)
+                self.summaryLine('award_cat_id', 'award_cats', 'Award Categories')
+                self.summaryLine('award_id', 'awards', 'Awards')
 
                 self.append("<ul>")
                 query = """select at.award_type_name, count(at.award_type_id)
