@@ -395,7 +395,7 @@ LANGUAGES = ('None','Afrikaans','Albanian','Ancient Greek','Arabic','Armenian',
              'Old French', 'Middle English', 'Middle High German', 'Yoruba',
              'Mayan languages', 'Akkadian', 'Sumerian', 'Norwegian (Bokmal)',
              'Norwegian (Nynorsk)', 'Asturian/Bable', 'Middle French', 'Low German',
-             'Nepali', 'Pashto/Pushto')
+             'Nepali', 'Pashto/Pushto', 'Shona')
 
 # List of all supported format codes
 FORMATS = ('unknown','hc','tp','pb','ph','digest','dos','ebook','webzine','pulp',
