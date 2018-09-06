@@ -21,25 +21,6 @@ function createOnclick(title)	{
 		};
 	}
 
-	/*
-	var multiples = [{'id': 'trans_names', 'label': 'Transliterated Name'}, {'id': 'trans_legal_names', 'label': 'Trans. Legal Name'}];
-	var i;
-	var field_id;
-	var addsign;
-	var label;
-	for (i = 0; i < multiples.length; i++) {
-		field_id = multiples[i].id;
-		addsign = field_id + '.addsign';
-		label = multiples[i].label;
-		alert(field_id+label);
-		if (document.getElementById(addsign)) {
-			document.getElementById(addsign).onclick = function(event){
-				AddMultipleField(label, field_id);
-			};
-		}
-	}
-	*/
-
 	if (document.getElementById('trans_names.addsign')) {
 		document.getElementById('trans_names.addsign').onclick = function(event){
 			AddMultipleField('Transliterated Name', 'trans_names');
@@ -286,9 +267,15 @@ function validateURL(field_name) {
 	if (element_value == "") {
 		return true;
 	}
-	// Check that the url starts with "http://" or "https://" (case insensitive)
+	// Check that the URL starts with "http://" or "https://" (case insensitive)
 	if (element_value.match(/^https?:\/\//gi) == null) {
 		alert("URLs must start with \"http://\" or \"https://\".");
+		element_name.focus();
+		return false;
+	}
+	// Check that the URL doesn't contain angle brackets
+	if ((/\</.test(element_value) == true) || (/\>/.test(element_value) == true)) {
+		alert("URLs must not contain angle brackets");
 		element_name.focus();
 		return false;
 	}

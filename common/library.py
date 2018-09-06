@@ -1432,6 +1432,8 @@ def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUES
 
 def validateURL(url):
         from urlparse import urlparse
+        if ('&lt;' in url) or ('&gt;' in url):
+                return 0
         parsed_url = urlparse(url)
         if parsed_url[0] not in ('http', 'https'):
                 return 0
