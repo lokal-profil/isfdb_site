@@ -1,3 +1,12 @@
+#
+#     (C) COPYRIGHT 2008-2018   Al von Ruff and Ahasuerus
+#       ALL RIGHTS RESERVED
+#
+#     The copyright notice above does not evidence any actual or
+#     intended publication of such source code.
+#
+#     Version: $Revision$
+#     Date: $Date$
 
 TARGETS = DIR/adv_search_results.cgi \
 	  DIR/ae.cgi \
@@ -27,15 +36,12 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/most_popular_table.cgi \
 	  DIR/most_reviewed.cgi \
 	  DIR/most_reviewed_table.cgi \
-	  DIR/most_viewed.cgi \
 	  DIR/mylanguages.cgi \
 	  DIR/mypreferences.cgi \
 	  DIR/mywebsites.cgi \
 	  DIR/myrecent.cgi \
 	  DIR/myvotes.cgi \
 	  DIR/note.cgi \
-	  DIR/oldest.cgi \
-	  DIR/oldest_nl.cgi \
 	  DIR/pe.cgi \
 	  DIR/pl.cgi \
 	  DIR/popular_authors.cgi \
@@ -67,13 +73,9 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/toptaggers.cgi \
 	  DIR/topvoters.cgi \
 	  DIR/top50year.cgi \
-	  DIR/top100.cgi \
 	  DIR/user_search_results.cgi\
 	  DIR/usertag.cgi \
 	  DIR/usertitles.cgi \
 	  DIR/userver.cgi \
 	  DIR/view_submission.cgi \
-	  DIR/vstats.cgi \
-	  DIR/youngest.cgi \
-	  DIR/youngest_nl.cgi
-
+	  DIR/vstats.cgi

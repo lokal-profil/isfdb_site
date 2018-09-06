@@ -1738,3 +1738,30 @@ def LIBsameParentAuthors(title):
                 if set(parentauthors) != set(pseudonymauthors):
                         pseudonym = 1
         return pseudonym
+
+def LIBbuildRecordList(record_type, records):
+        output = ''
+        first = 1
+        for record in records:
+                if record_type == 'author':
+                        record_id = record[AUTHOR_ID]
+                        record_name = record[AUTHOR_CANONICAL]
+                        cgi_script = 'ea.cgi'
+                elif record_type == 'series':
+                        record_id = record[SERIES_PUBID]
+                        record_name = record[SERIES_NAME]
+                        cgi_script = 'pe.cgi'
+                elif record_type == 'pub_series':
+                        record_id = record[PUB_SERIES_ID]
+                        record_name = record[PUB_SERIES_NAME]
+                        cgi_script = 'pubseries.cgi'
+                elif record_type == 'publisher':
+                        record_id = record[PUBLISHER_ID]
+                        record_name = record[PUBLISHER_NAME]
+                        cgi_script = 'publisher.cgi'
+                if not first:
+                        output += ', '
+                else:
+                        first = 0
+                output += ISFDBLink(cgi_script, record_id, record_name, False, '')
+        return output

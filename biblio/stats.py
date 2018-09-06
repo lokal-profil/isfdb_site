@@ -28,7 +28,15 @@ class Stats:
                                 8: 'Percent of Titles in Series by Year',
                                 9: 'Percent of Book Titles by Type by Year',
                                 10: 'Percent of Publications by Format by Year',
-                                11: 'Submissions per Year'}
+                                11: 'Submissions per Year',
+                                12: 'Top 100 Novels as Voted by ISFDB Users',
+                                13: 'Most-Viewed Authors',
+                                14: 'Most-Viewed Novels',
+                                15: 'Most-Viewed Short Fiction',
+                                16: 'Oldest Living Authors',
+                                17: 'Oldest Non-Living Authors',
+                                18: 'Youngest Living Authors',
+                                19: 'Youngest Non-Living Authors'}
 
         def params(self):
                 try:

@@ -735,31 +735,7 @@ def displayAuthorList(authors):
         displayRecordList('author', authors)
 
 def displayRecordList(record_type, records):
-        output = ''
-        first = 1
-        for record in records:
-                if record_type == 'author':
-                        record_id = record[AUTHOR_ID]
-                        record_name = record[AUTHOR_CANONICAL]
-                        cgi_script = 'ea.cgi'
-                elif record_type == 'series':
-                        record_id = record[SERIES_PUBID]
-                        record_name = record[SERIES_NAME]
-                        cgi_script = 'pe.cgi'
-                elif record_type == 'pub_series':
-                        record_id = record[PUB_SERIES_ID]
-                        record_name = record[PUB_SERIES_NAME]
-                        cgi_script = 'pubseries.cgi'
-                elif record_type == 'publisher':
-                        record_id = record[PUBLISHER_ID]
-                        record_name = record[PUBLISHER_NAME]
-                        cgi_script = 'publisher.cgi'
-                if not first:
-                        output += ', '
-                else:
-                        first = 0
-                output += ISFDBLink(cgi_script, record_id, record_name, False, '')
-        print output
+        print LIBbuildRecordList(record_type, records)
 
 def displayAuthorById(id, name, trans_authors = None):
         if not trans_authors:
@@ -781,41 +757,6 @@ def PrintAllAuthors(title_id, prefix = '', suffix = ''):
 		counter += 1
 	output += suffix
 	print output
-
-def PrintListPage(title, page_type, arg1, arg2, executable, argument, query, displayFunction, headers, note = None):
-
-	db.query(query)
-	result = db.store_result()
-
-        PrintHeader(title)
-	PrintNavbar(page_type, arg1, arg2, executable, argument)
-
-	if note:
-                print '<h3>Note: %s</h3>' % note
-
-	print '<table class="seriesgrid">'
-        print '<tr>'
-        for header in headers:
-                print '<th>%s</th>' % header
-        print '</tr>'
-        bgcolor = 0
-       	while 1:
-                record = result.fetch_row()
-                if not record:
-                        break
-                displayFunction(record, bgcolor)
-                bgcolor ^= 1
-	print '</table>'
-	PrintTrailer(page_type, arg1, arg2)
-
-def AuthorsDisplayFunc(record, bgcolor):
-        print '<tr class="table%d">' % (bgcolor+1)
-        print '<td>%s</td>' % (record[0][0])
-        print '<td>%s</td>' % (record[0][2])
-        print '<td>'
-        displayAuthorById(record[0][3], record[0][1])
-        print '</td>'
-        print '</tr>'
 
 def PrintWebPages(webpages, format = '<li>'):
         if not webpages:

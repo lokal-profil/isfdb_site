@@ -765,6 +765,187 @@ class Output():
                 self.outputGraph(height, startyear, xscale, yscale, years, maximum, results_dict)
                 self.file(11, 0)
 
+        def topNovels(self):
+                self.top100('novel', 12)
+        
+        def topShorts(self):
+                self.top100('short', 999999)
+        
+        def top100(self, report_type, report_id):
+                if report_type == 'novel':
+                        ttype = 'NOVEL'
+                        ltype = "Novels"
+                elif report_type == 'short':
+                        ttype = 'SHORTFICTION'
+                        ltype = 'Shortfiction'
+
+                self.start('<h3>Top 100 %s as voted by ISFDB users:</h3>' % ltype)
+                query = """select t.title_id, t.title_title, t.title_copyright, AVG(v.rating)
+                        from titles t, votes v
+                        where t.title_id = v.title_id
+                        and t.title_ttype = '%s'
+                        group by t.title_id
+                        having COUNT(v.rating)>5
+                        order by AVG(v.rating) desc limit 100""" % ttype
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+
+                self.append('<table class="generic_table">')
+                self.append('<tr class="generic_table_header">')
+                self.append('<th>Rank</th>')
+                self.append('<th>Rating</th>')
+                self.append('<th>Title</th>')
+                self.append('<th>Year</th>')
+                self.append('<th>Author(s)</th>')
+                self.append('</tr>')
+                counter = 1
+                color = 1
+                while record:
+                        if color:
+                                self.append('<tr align=left class="table1">')
+                        else:
+                                self.append('<tr align=left class="table2">')
+                        self.append('<td>%d</td>' % counter)
+                        self.append('<td>%2.2f</td>' % record[0][3])
+                        self.append('<td>%s</td>' % ISFDBLink('title.cgi', record[0][0], record[0][1]))
+                        self.append('<td>%s</td>' % record[0][2][:4])
+                        authors = SQLTitleBriefAuthorRecords(int(record[0][0]))
+                        self.append('<td>')
+                        self.append(LIBbuildRecordList('author', authors))
+                        self.append('</td>')
+                        self.append('</tr>')
+                        record = result.fetch_row()
+                        counter += 1
+                        color = color ^ 1
+                self.append('</table>')
+                self.file(report_id, 0)
+
+        def mostViewedAuthors(self):
+                query = """select @rownum:=@rownum+1, author_canonical, author_views, author_id
+                from authors, (SELECT @rownum:=0) as r
+                order by author_views desc
+                limit 500"""
+                headers = ('Rank', 'Views', 'Author')
+                self.authorDisplay(query, headers, 13)
+
+        def authorDisplay(self, query, headers, report_id, note = None):
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+
+                self.start('')
+                if note:
+                        self.append('<h3>Note: %s</h3>' % note)
+
+                self.append('<table class="seriesgrid">')
+                self.append('<tr>')
+                for header in headers:
+                        self.append('<th>%s</th>' % header)
+                self.append('</tr>')
+                bgcolor = 0
+                while record:
+                        self.append('<tr class="table%d">' % (bgcolor+1))
+                        self.append('<td>%s</td>' % (record[0][0]))
+                        self.append('<td>%s</td>' % (record[0][2]))
+                        self.append('<td>')
+                        self.append(ISFDBLink('ea.cgi', record[0][3], record[0][1]))
+                        self.append('</td>')
+                        self.append('</tr>')
+                        record = result.fetch_row()
+                        bgcolor ^= 1
+                self.append('</table>')
+                self.file(report_id, 0)
+
+        def mostViewedNovels(self):
+                self.mostViewed('NOVEL', 14)
+
+        def mostViewedShorts(self):
+                self.mostViewed('SHORTFICTION', 15)
+
+        def mostViewed(self, title_type, report_id):
+                self.start('<table class="seriesgrid">')
+                self.append('<tr>')
+                self.append('<th>Rank</th>')
+                self.append('<th>Views</th>')
+                self.append('<th>Title</th>')
+                self.append('<th>Year</th>')
+                self.append('<th>Authors</th>')
+                self.append('</tr>')
+                query = """select @rownum:=@rownum+1, title_views, title_id, title_title, title_copyright
+                        from titles, (SELECT @rownum:=0) as r
+                        where title_ttype='%s'
+                        order by title_views
+                        desc limit 500""" % (db.escape_string(title_type))
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                bgcolor = 0
+                while record:
+                        rank = record[0][0]
+                        views = record[0][1]
+                        title_id = record[0][2]
+                        title_title = record[0][3]
+                        title_year = convertYear(record[0][4])
+                        self.append('<tr align=left class="table%d">' % (bgcolor+1))
+                        self.append('<td>%d</d>' % rank)
+                        self.append('<td>%d</td>' % views)
+                        self.append('<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_title))
+                        self.append('<td>%s</td>' % title_year)
+                        self.append('<td>')
+                        authors = SQLTitleBriefAuthorRecords(title_id)
+                        self.append(LIBbuildRecordList('author', authors))
+                        self.append('</td>')
+                        self.append('</tr>')
+                        bgcolor = bgcolor ^ 1
+                        record = result.fetch_row()
+                self.append('</table>')
+                self.file(report_id, 0)
+
+        def oldestLivingAuthors(self):
+                query = """select YEAR(NOW())-YEAR(author_birthdate) as age,
+                           author_canonical, author_birthdate, author_id from authors
+                           where author_birthdate is not null
+                           and author_birthdate !='0000-00-00'
+                           and author_deathdate is null
+                           and YEAR(NOW())-YEAR(author_birthdate) > 79
+                           and YEAR(NOW())-YEAR(author_birthdate) < 117
+                           order by author_birthdate"""
+                headers = ('Age', 'Date of Birth', 'Author')
+                note = """The following list includes authors whose year of birth
+                          is between 80 and 116 years in the past and who do not
+                          have a year of death on file"""
+                self.authorDisplay(query, headers, 16, note)
+
+        def oldestNonLivingAuthors(self):
+                query = "select YEAR(author_deathdate)-YEAR(author_birthdate) as age, author_canonical, author_birthdate, "
+                query += "author_id from authors where author_birthdate is not null and author_deathdate is not null "
+                query += "and author_birthdate != '0000-00-00' and author_deathdate !='0000-00-00' "
+                query += "and YEAR(author_deathdate)-YEAR(author_birthdate) > 79 "
+                query += "order by YEAR(author_deathdate)-YEAR(author_birthdate) desc"
+                headers = ('Age', 'Date of Birth', 'Author')
+                self.authorDisplay(query, headers, 17)
+
+        def youngestLivingAuthors(self):
+                query = "select YEAR(NOW())-YEAR(author_birthdate) as age, author_canonical, author_birthdate, "
+                query += "author_id from authors where author_birthdate is not null and author_deathdate is null "
+                query += "and YEAR(NOW())-YEAR(author_birthdate) < 40 order by author_birthdate desc"
+                headers = ('Age', 'Date of Birth', 'Author')
+                self.authorDisplay(query, headers, 18)
+
+        def youngestNonLivingAuthors(self):
+                query = """select YEAR(author_deathdate)-YEAR(author_birthdate) as age,
+                           author_canonical, author_birthdate, author_id from authors
+                           where author_birthdate is not null
+                           and YEAR(author_birthdate) != '0000'
+                           and author_deathdate is not null
+                           and YEAR(author_deathdate) != '0000'
+                           and YEAR(author_deathdate)-YEAR(author_birthdate) < 40
+                           and YEAR(author_deathdate)-YEAR(author_birthdate) > 0
+                           order by YEAR(author_deathdate)-YEAR(author_birthdate)"""
+                headers = ('Age', 'Date of Birth', 'Author')
+                self.authorDisplay(query, headers, 19)
+
 def nightly_stats():
         output = Output()
         output.report("submissionsByYear")
@@ -779,3 +960,11 @@ def nightly_stats():
         output.report("titlesByTypeByYear")
         output.report("pubsByFormat")
         output.report("authorsByDebutDate")
+        output.report("topNovels")
+        output.report("mostViewedAuthors")
+        output.report("mostViewedNovels")
+        output.report("mostViewedShorts")
+        output.report("oldestLivingAuthors")
+        output.report("oldestNonLivingAuthors")
+        output.report("youngestLivingAuthors")
+        output.report("youngestNonLivingAuthors")

@@ -32,14 +32,14 @@ if __name__ == '__main__':
 	print '<h4>Author Statistics</h4>'
 	print '<ul>'
         print '<li><a href="http:/%s/authors_by_debut_year_table.cgi">Authors By Debut Year</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/most_viewed.cgi?authors">Most-Viewed Authors</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?13">Most-Viewed Authors</a>' % (HTFAKE)
         print '<li><a href="http://%s/degrees.html">Author Communities</a> [as of 2005]' % (HTMLHOST)
         print '<li>Authors by Age:'
         print '<ul>'
-        print '<li><a href="http:/%s/oldest.cgi">Oldest Living Authors</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/oldest_nl.cgi">Oldest Non-Living Authors</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/youngest.cgi">Youngest Living Authors</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/youngest_nl.cgi">Youngest Non-Living Authors</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?16">Oldest Living Authors</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?17">Oldest Non-Living Authors</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?18">Youngest Living Authors</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?19">Youngest Non-Living Authors</a>' % (HTFAKE)
         print '</ul>'
         print '<li>Authors/Editors Ranked by Awards and Nominations:'
         print '<ul>'
@@ -76,11 +76,11 @@ if __name__ == '__main__':
         print '<li><a href="http:/%s/most_popular_table.cgi?5">Non-Fiction</a>' % (HTFAKE)
         print '<li><a href="http:/%s/most_popular_table.cgi?6">Other Types</a>' % (HTFAKE)
         print '</ul>'
-        print '<li><a href="http:/%s/top100.cgi?novel">Top 100 Novels as Voted by ISFDB Users</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?12">Top 100 Novels as Voted by ISFDB Users</a>' % (HTFAKE)
         print '<li>Most-Viewed Titles:'
         print '<ul>'
-        print '<li><a href="http:/%s/most_viewed.cgi?novels">Most-Viewed Novels</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/most_viewed.cgi?short">Most-Viewed Short Fiction</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?14">Most-Viewed Novels</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?15">Most-Viewed Short Fiction</a>' % (HTFAKE)
         print '</ul>'
         print '</ul>'
         
