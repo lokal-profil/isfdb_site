@@ -1102,6 +1102,57 @@ class Output():
                 self.append('</table>')
                 self.file(23, 0)
 
+        def topForthcoming(self):
+                self.start("<h3>The following forthcoming novels are those with the most interest as generated")
+                self.append("by the users of the ISFDB.</h3>")
+                self.append('<p>')
+
+                query = """select title_views, title_title, title_id, title_copyright
+                        from titles where title_ttype='NOVEL' and title_views > 0
+                        and title_copyright>NOW() and YEAR(title_copyright)<(YEAR(CURDATE())+5)
+                        order by title_views desc limit 50"""
+
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+
+                self.append('<table>')
+                self.append('<tr>')
+                self.append('<th>Rank</th>')
+                self.append('<th>Title</th>')
+                self.append('<th>Author(s)</th>')
+                self.append('<th>Date</th>')
+                self.append('</tr>')
+                bgcolor = 1
+                title_count = 1
+                while record:
+                        if bgcolor:
+                                line = '<tr align=left class="table1">'
+                        else:
+                                line = '<tr align=left class="table2">'
+                        line += '<td>%d</td>' % title_count
+                        line += '<td>%s</td>' % ISFDBLink('title.cgi', record[0][2], record[0][1])
+
+                        authors = SQLTitleBriefAuthorRecords(int(record[0][2]))
+                        author_count = 0
+                        line += '<td>'
+                        for author in authors:
+                                if author_count > 0:
+                                        line += ', '
+                                line += ISFDBLink('ea.cgi', author[0], author[1])
+                                author_count += 1
+                        line += '</td>'
+
+                        line += '<td>%s</td>' % record[0][3]
+                        line += '</tr>'
+                        self.append(line)
+                        record = result.fetch_row()
+                        bgcolor ^= 1
+                        title_count += 1
+
+                self.append('</table>')
+                self.file(24, 0)
+
 def nightly_stats():
         output = Output()
         output.report("submissionsByYear")
@@ -1128,3 +1179,4 @@ def nightly_stats():
         output.report("titlesByLanguage")
         output.report("topTaggers")
         output.report("topVoters")
+        output.report("topForthcoming")

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2016   Al von Ruff, Ahasuerus, Uzume and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2018   Al von Ruff, Ahasuerus, Uzume and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -50,7 +50,7 @@ def lifeSpan(author):
 def displayLinks():
         print '<p class="bottomlinks">\n%s\n%s' % (
                 ISFDBLink("fc.cgi", "", "View All Forthcoming Books", argument='class="inverted"'),
-                ISFDBLink("top50year.cgi", "", "View Top Forthcoming", argument='class="inverted"')
+                ISFDBLink("stats.cgi?24", "", "View Top Forthcoming", argument='class="inverted"')
                 )
 	return
 

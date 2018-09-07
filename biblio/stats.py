@@ -40,7 +40,8 @@ class Stats:
                                 20: 'Authors by Working Language',
                                 21: 'Titles by Language',
                                 22: 'Top Taggers',
-                                23: 'Top Voters'}
+                                23: 'Top Voters',
+                                24: 'Top Forthcoming'}
 
         def params(self):
                 try:
