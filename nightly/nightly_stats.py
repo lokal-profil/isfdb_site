@@ -1153,6 +1153,73 @@ class Output():
                 self.append('</table>')
                 self.file(24, 0)
 
+        def mostReviewed(self):
+                # Initialize the dictionary which will hold review counts for title IDs
+                counts = {}
+                # Initialize the dictionary which will hold years for title IDs
+                years = {}
+                # Initialize the list of parent title IDs
+                parents = []
+                # Retrieve all reviewed title IDs, their dates and IDs of their parent titles
+                query = """select t.title_id,t.title_parent,YEAR(t.title_copyright)
+                           from title_relationships as r, titles as t
+                           where r.title_id=t.title_id"""
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                while record:
+                        title_id = record[0][0]
+                        parent_id = record[0][1]
+                        year = record[0][2]
+                        # If this title is a VT, add its parent to the list of parents to be retrieved later
+                        if parent_id != 0:
+                                title_id = parent_id
+                                if str(parent_id) not in parents:
+                                        parents.append(str(parent_id))
+                        # Increment the count of reviews for this title ID
+                        counts[title_id] = counts.get(title_id, 0) +1
+                        years[title_id] = year
+                        record = result.fetch_row()
+                # Convert the list of parent IDs to a string in the SQL IN clause format
+                parents_string = ','.join(parents)
+
+                # Retrieve dates of parent titles
+                query = "select title_id, YEAR(title_copyright) from titles where title_id in (%s)" % (db.escape_string(parents_string))
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+
+                while record:
+                        title_id = record[0][0]
+                        year = record[0][1]
+                        # If the parent's year is less than the variant's, use the parent's year
+                        if (years[title_id] == 0) or (year < years[title_id]):
+                                years[title_id] = year
+                        record = result.fetch_row()
+
+                db.query("truncate most_reviewed")
+                values = []
+                for title_id in counts:
+                        reviews = counts[title_id]
+                        year = years[title_id]
+                        if year < 1900:
+                                decade = 'pre1900'
+                        else:
+                                decade = str(year)[:3] + '0'
+                        values.append((int(title_id), int(year), decade, int(reviews)))
+                        if len(values) > 300:
+                                self.most_reviewed_file(values)
+                                values = []
+                if values:
+                        self.most_reviewed_file(values)
+
+        def most_reviewed_file(self, values):
+                mycursor = db.cursor()
+                insert = """insert into most_reviewed(title_id, year, decade, reviews)
+                             VALUES(%s, %s, %s, %s)"""
+                mycursor.executemany(insert, values)
+                db.commit()
+
 def nightly_stats():
         output = Output()
         output.report("submissionsByYear")
@@ -1180,3 +1247,5 @@ def nightly_stats():
         output.report("topTaggers")
         output.report("topVoters")
         output.report("topForthcoming")
+        output.report("mostReviewed")
+        
