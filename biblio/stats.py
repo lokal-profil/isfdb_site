@@ -36,7 +36,11 @@ class Stats:
                                 16: 'Oldest Living Authors',
                                 17: 'Oldest Non-Living Authors',
                                 18: 'Youngest Living Authors',
-                                19: 'Youngest Non-Living Authors'}
+                                19: 'Youngest Non-Living Authors',
+                                20: 'Authors by Working Language',
+                                21: 'Titles by Language',
+                                22: 'Top Taggers',
+                                23: 'Top Voters'}
 
         def params(self):
                 try:

@@ -12,7 +12,6 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/ae.cgi \
 	  DIR/authors_by_debut_year.cgi \
 	  DIR/authors_by_debut_year_table.cgi \
-	  DIR/authors_by_language.cgi \
 	  DIR/authortags.cgi \
 	  DIR/award_category.cgi \
 	  DIR/award_details.cgi \
@@ -68,10 +67,7 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/tag_author.cgi \
 	  DIR/title.cgi \
 	  DIR/titlecovers.cgi \
-	  DIR/titles_by_language.cgi \
 	  DIR/topcontrib.cgi \
-	  DIR/toptaggers.cgi \
-	  DIR/topvoters.cgi \
 	  DIR/top50year.cgi \
 	  DIR/user_search_results.cgi\
 	  DIR/usertag.cgi \

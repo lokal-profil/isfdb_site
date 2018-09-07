@@ -27,13 +27,11 @@ if __name__ == '__main__':
 
         print '<li><a href="http:/%s/stats.cgi?4">Summary Database Statistics</a>' % (HTFAKE)
         print '<li><a href="http:/%s/stats.cgi?11">Submissions per Year</a>' % (HTFAKE)
-        print '<li><a href="http://%s/index.php/Annual_Page_Views_and_Database_Growth">Database Growth and Annual Page Views</a>' % (WIKILOC)
         print '</ul>'
 	print '<h4>Author Statistics</h4>'
 	print '<ul>'
         print '<li><a href="http:/%s/authors_by_debut_year_table.cgi">Authors By Debut Year</a>' % (HTFAKE)
         print '<li><a href="http:/%s/stats.cgi?13">Most-Viewed Authors</a>' % (HTFAKE)
-        print '<li><a href="http://%s/degrees.html">Author Communities</a> [as of 2005]' % (HTMLHOST)
         print '<li>Authors by Age:'
         print '<ul>'
         print '<li><a href="http:/%s/stats.cgi?16">Oldest Living Authors</a>' % (HTFAKE)
@@ -55,15 +53,14 @@ if __name__ == '__main__':
 
 	print '<h4>Language Statistics</h4>'
         print '<ul>'
-        print '<li><a href="http:/%s/authors_by_language.cgi">Authors by Language</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/titles_by_language.cgi">Titles by Language</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?20">Authors by Working Language</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?21">Titles by Language</a>' % (HTFAKE)
         print '</ul>'
         
 	print '<h4>Title Statistics</h4>'
         print '<ul>'
         print '<li><a href="http:/%s/stats.cgi?5">Titles by Year of First Publication</a>' % (HTFAKE)
         print '<li><a href="http:/%s/stats.cgi?7">Titles by Author Age</a>' % (HTFAKE)
-        print '<li><a href="http://%s/agestuff.html">Award-Winning Titles by Author Age</a> [as of 2005, to be updated]' % (HTMLHOST)
         print '<li><a href="http:/%s/stats.cgi?8">Percent of Titles in Series by Year</a>' % (HTFAKE)
         print '<li><a href="http:/%s/most_reviewed_table.cgi">Most-Reviewed Titles (in genre publications)</a>' % (HTFAKE)
         print '<li>Titles Ranked by Awards and Nominations:'
@@ -94,14 +91,19 @@ if __name__ == '__main__':
         print '<ul>'
 	print '<li><a href="http:/%s/stats.cgi?2">Top Verifiers</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/stats.cgi?1">Top Moderators</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/toptaggers.cgi">Top Taggers</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/topvoters.cgi">Top Voters</a>' % (HTFAKE)
+	print '<li><a href="http:/%s/stats.cgi?22">Top Taggers</a>' % (HTFAKE)
+	print '<li><a href="http:/%s/stats.cgi?23">Top Voters</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/topcontrib.cgi">Top Contributors (All Submission Types)</a>' % (HTFAKE)
 	print '<ul>'
 	for type in sorted(SUBMAP.keys()):
                 if SUBMAP[type][3]:
                         print '<li><a href="http:/%s/topcontrib.cgi?%d">Top Contributors (%s)</a>' % (HTFAKE, type, SUBMAP[type][3])
 	print '</ul>'
-        
+	print '</ul>'
+	print '<h4>Historical snapshots (not up to date)</h4>'
+	print '<ul>'
+        print '<li><a href="http://%s/degrees.html">Author Communities</a> [as of 2005]' % (HTMLHOST)
+        print '<li><a href="http://%s/agestuff.html">Award-Winning Titles by Author Age</a> [as of 2005]' % (HTMLHOST)
+        print '<li><a href="http://%s/index.php/Annual_Page_Views_and_Database_Growth">Database Growth and Annual Page Views</a>' % (WIKILOC)
 	print '</ul>'
 	PrintTrailer('frontpage', 0, 0)

@@ -946,6 +946,162 @@ class Output():
                 headers = ('Age', 'Date of Birth', 'Author')
                 self.authorDisplay(query, headers, 19)
 
+        def authorsByLanguage(self):
+                query = "select author_language, count(*) cnt from authors group by author_language"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                rows = []
+                total = 0
+                while record:
+                        lang_id = record[0][0]
+                        if lang_id == 0:
+                                language = 'Undefined'
+                        elif not lang_id:
+                                language = 'To Be Assigned'
+                        else:
+                                language = LANGUAGES[lang_id]
+                        lang_count = -record[0][1]
+                        total += record[0][1]
+                        row = (lang_count, language)
+                        rows.append(row)
+                        record = result.fetch_row()
+
+                self.start('<h4>Total authors: %d</h4>' % total)
+                self.append('<p>')
+                self.append('<table class="seriesgrid">')
+                self.append('<tr>')
+                self.append('<th>Working Language</th>')
+                self.append('<th>Count</th>')
+                self.append('<th>Percent</th>')
+                self.append('</tr>')
+                bgcolor = 1
+                for row in sorted(rows):
+                        self.append('<tr class="table%d">' % bgcolor)
+                        count = -row[0]
+                        language = row[1]
+                        self.append('<td>%s</td>' % language)
+                        self.append('<td>%d</td>' % count)
+                        self.append('<td>% 3.2f</td>' % (count*100/float(total)))
+                        self.append('</tr>')
+                        bgcolor ^= 1
+                self.append('</table>')
+                self.file(20, 0)
+
+        def titlesByLanguage(self):
+                query = "select title_language, count(*) cnt from titles group by title_language"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                rows = []
+                total = 0
+                while record:
+                        lang_id = record[0][0]
+                        if lang_id == 0:
+                                language = 'Undefined'
+                        elif not lang_id:
+                                language = 'To Be Assigned'
+                        else:
+                                language = LANGUAGES[lang_id]
+                        lang_count = -record[0][1]
+                        total += record[0][1]
+                        row = (lang_count, language)
+                        rows.append(row)
+                        record = result.fetch_row()
+
+                self.start('<h4>Total titles: %d</h4>' % total)
+                self.append('<p>')
+                self.append('<table class="seriesgrid">')
+                self.append('<tr>')
+                self.append('<th>Language</th>')
+                self.append('<th>Count</th>')
+                self.append('<th>Percent</th>')
+                self.append('</tr>')
+                bgcolor = 1
+                for row in sorted(rows):
+                        self.append('<tr class="table%d">' % bgcolor)
+                        count = -row[0]
+                        language = row[1]
+                        self.append('<td>%s</td>' % language)
+                        self.append('<td>%d</td>' % count)
+                        self.append('<td>% 3.2f</td>' % (count*100/float(total)))
+                        self.append('</tr>')
+                        bgcolor ^= 1
+                self.append('</table>')
+                self.file(21, 0)
+
+        def topTaggers(self):
+                self.start('<h2>Top ISFDB Taggers</h2>')
+                self.append('<p>')
+                self.append('<table class="generic_table">')
+                self.append('<tr class="table1">')
+                self.append('<th>User</th>')
+                self.append('<th>Tags</th>')
+                self.append('<th>Last User Activity</th>')
+                self.append('</tr>')
+
+                query = "select distinct user_id,count(user_id) as xx from tag_mapping group by user_id order by xx desc"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+
+                color = 0
+                while record:
+                        user_id = record[0][0]
+                        count = record[0][1]
+                        # Only display users with 10+ tags
+                        if count < 10:
+                                break
+                        user_name = SQLgetUserName(user_id)
+                        if color:
+                                self.append('<tr align=left class="table1">')
+                        else:
+                                self.append('<tr align=left class="table2">')
+                        self.append('<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name))
+                        self.append('<td>%d</td>' % count)
+                        self.append('<td>%s</td>' % SQLLastUserActivity(user_id))
+                        self.append('</tr>')
+                        color = color ^ 1
+                        record = result.fetch_row()
+                self.append('</table>')
+                self.file(22, 0)
+
+        def topVoters(self):
+                self.start('<h2>Top ISFDB Voters</h2>')
+                self.append('<p>')
+                self.append('<table class="generic_table">')
+                self.append('<tr class="table1">')
+                self.append('<th>User</th>')
+                self.append('<th>Votes</th>')
+                self.append('<th>Last User Activity</th>')
+                self.append('</tr>')
+
+                query = "select distinct user_id,count(user_id) as xx from votes group by user_id order by xx desc"
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+
+                color = 0
+                while record:
+                        user_id = record[0][0]
+                        count = record[0][1]
+                        # Only display users with 10+ votes
+                        if count < 10:
+                                break
+                        user_name = SQLgetUserName(user_id)
+                        if color:
+                                self.append('<tr align=left class="table1">')
+                        else:
+                                self.append('<tr align=left class="table2">')
+                        self.append('<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name))
+                        self.append('<td>%d</td>' % count)
+                        self.append('<td>%s</td>' % SQLLastUserActivity(user_id))
+                        self.append('</tr>')
+                        color = color ^ 1
+                        record = result.fetch_row()
+                self.append('</table>')
+                self.file(23, 0)
+
 def nightly_stats():
         output = Output()
         output.report("submissionsByYear")
@@ -968,3 +1124,7 @@ def nightly_stats():
         output.report("oldestNonLivingAuthors")
         output.report("youngestLivingAuthors")
         output.report("youngestNonLivingAuthors")
+        output.report("authorsByLanguage")
+        output.report("titlesByLanguage")
+        output.report("topTaggers")
+        output.report("topVoters")
