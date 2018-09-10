@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2016   Ahasuerus
+#     (C) COPYRIGHT 2014-2018   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -25,75 +25,37 @@ def doError():
 	PrintTrailer('top', 0, 0)
         sys.exit(0)
 
-
-def printTableBody(final, span):
-	bgcolor = 0
-        eligible = 0
-        for record in sorted(final, reverse=True):
-                score = record[0]
-                year = record[1]
-                title_id = record[2]
-                print '<tr align=left class="table%d">' % (bgcolor+1)
-                print '<td>%d</td>' % (eligible+1)
-                print '<td>%d</td>' % score
-                # Display the year of the title unless we are displaying the data for just one year
-                if span != 'year':
-                        display_year = unicode(year)
-                        if display_year == '0':
-                                display_year = '0000'
-                        print '<td>%s</td>' % convertYear(display_year)
-                # Retrieve this record's title and type
-                title_data = SQLloadTitle(title_id)
-                print '<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_data[TITLE_TITLE])
-                print '<td>%s</td>' % title_data[TITLE_TTYPE]
-                print '<td>'
-                PrintAllAuthors(title_id)
-                print '</td>'
-                print '</tr>'
-                bgcolor = bgcolor ^ 1
-                eligible += 1
-                # Once we have displayed 500 rows, quit
-                if eligible > 499:
-                        return
-
-
 if __name__ == '__main__':
 
         display_year = 0
         decade = 0
+        title_types = (('Titles', ''),
+                       ('Novels', 'NOVEL'),
+                       ('Short Fiction', 'SHORTFICTION'),
+                       ('Collections', 'COLLECTION'),
+                       ('Anthologies', 'ANTHOLOGY'),
+                       ('Non-Fiction', 'NONFICTION'),
+                       ('Other Title Types', ''))
         try:
-                type = int(sys.argv[1])
-                if type == 0:
-                        title_type = 'Titles'
-                elif type == 1:
-                        title_type = 'Novels'
-                elif type == 2:
-                        title_type = 'Short Fiction'
-                elif type == 3:
-                        title_type = 'Collections'
-                elif type == 4:
-                        title_type = 'Anthologies'
-                elif type == 5:
-                        title_type = 'Non-Fiction'
-                elif type == 6:
-                        title_type = 'Other Title Types'
-                else:
-                        raise
+                type_id = int(sys.argv[1])
+                type_tuple = title_types[type_id]
+                displayed_type = type_tuple[0]
+                title_type = type_tuple[1]
         except:
                 doError()
 
         try:
                 span = sys.argv[2]
                 if span == 'all':
-                        header = 'Highest Ranked %s of All Time' % title_type
+                        header = 'Highest Ranked %s of All Time' % displayed_type
                 elif span == 'decade':
                         decade = int(sys.argv[3])
-                        header = 'Highest Ranked %s of the %ds' % (title_type, decade)
+                        header = 'Highest Ranked %s of the %ds' % (displayed_type, decade)
                 elif span == 'year':
                         display_year = int(sys.argv[3])
-                        header = 'Highest Ranked %s published in %s' % (title_type, display_year)
+                        header = 'Highest Ranked %s published in %s' % (displayed_type, display_year)
                 elif span == 'pre1950':
-                        header = 'Highest Ranked %s Prior to 1950' % title_type
+                        header = 'Highest Ranked %s Prior to 1950' % displayed_type
                 else:
                         raise
         except:
@@ -102,26 +64,70 @@ if __name__ == '__main__':
 	PrintHeader(header)
 	PrintNavbar('top', 0, 0, 'most_popular.cgi', 0)
 
-        titles = TitlesSortedByAwards(type, span, decade, display_year)
+        print '<h3>This report is generated once a day</h3>'
 
-        if not titles:
+        query = """select title_id, score, year, title_type from award_titles_report where 1 """
+        if span == 'year':
+                query += ' and year=%d' % display_year
+        elif span == 'decade':
+                query += ' and decade=%d' % decade
+        elif span == 'pre1950':
+                query += ' and decade="pre1950"'
+        if title_type:
+                query += ' and title_type = "%s"' % title_type
+        elif displayed_type == 'Other Title Types':
+                query += ' and title_type not in ("NOVEL", "SHORTFICTION", "COLLECTION", "ANTHOLOGY", "NONFICTION")'
+        query += ' order by score desc, year desc limit 500'
+
+        db.query(query)
+        result = db.store_result()
+        if not result.num_rows():
                 print '<h3>No awards or nominations for the specified period</h3>'
-        else:
-                print '<b>Note</b>: Some recent awards are yet to be integrated into the database.<br>'
-                print '<b>Scoring</b>: Wins are worth 50 points, nominations and second places are worth 35 points. For polls, third and lower places are worth (33-poll position) points.'
-                # Print the table headers        
-                print '<table class="seriesgrid">'
-                print '<tr>'
-                print '<th>Place</th>'
-                print '<th>Score</th>'
+                PrintTrailer('top', 0, 0)
+                sys.exit(0)
+
+        print """<b>Note</b>: Some recent awards are yet to be integrated into the database.<br>
+                <b>Scoring</b>: Wins are worth 50 points, nominations and second places are worth
+                35 points. For polls, third and lower places are worth (33-poll position) points."""
+        # Print the table headers        
+        print '<table class="seriesgrid">'
+        print '<tr>'
+        print '<th>Place</th>'
+        print '<th>Score</th>'
+        if span != 'year':
+                print '<th>Year</th>'
+        print '<th>Title</th>'
+        print '<th>Type</th>'
+        print '<th>Authors</th>'
+        print '</tr>'
+        record = result.fetch_row()
+        bgcolor = 0
+        place = 0
+        while record:
+                title_id = record[0][0]
+                score = record[0][1]
+                year = record[0][2]
+                title_type = record[0][3]
+                title_title = SQLgetTitle(title_id)
+                print '<tr align=left class="table%d">' % (bgcolor + 1)
+                print '<td>%d</td>' % (place + 1)
+                print '<td>%d</td>' % score
+                # Display the year of the title unless we are displaying the data for just one year
                 if span != 'year':
-                        print '<th>Year</th>'
-                print '<th>Title</th>'
-                print '<th>Type</th>'
-                print '<th>Authors</th>'
+                        display_year = unicode(year)
+                        if display_year == '0':
+                                display_year = '0000'
+                        print '<td>%s</td>' % convertYear(display_year)
+                print '<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_title)
+                print '<td>%s</td>' % title_type
+                print '<td>'
+                PrintAllAuthors(title_id)
+                print '</td>'
                 print '</tr>'
-                printTableBody(titles, span)
-                print '</table>'
+                record = result.fetch_row()
+                place += 1
+                bgcolor = bgcolor ^ 1
+        print '</table>'
 	
 	PrintTrailer('top', 0, 0)
 

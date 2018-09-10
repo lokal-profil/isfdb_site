@@ -1220,8 +1220,14 @@ class Output():
                 mycursor.executemany(insert, values)
                 db.commit()
 
+        def awardTitles(self):
+                import nightly_awards
+                award_titles = nightly_awards.awardTitles()
+                award_titles.buildAwardTitles()
+
 def nightly_stats():
         output = Output()
+        output.report("awardTitles")
         output.report("submissionsByYear")
         output.report("titlesByYear")
         output.report("publicationsByYear")
@@ -1248,4 +1254,3 @@ def nightly_stats():
         output.report("topVoters")
         output.report("topForthcoming")
         output.report("mostReviewed")
-        

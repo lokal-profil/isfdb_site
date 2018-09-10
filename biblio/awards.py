@@ -141,7 +141,8 @@ def TitlesSortedByAwards(requested_type, span, decade, display_year):
                         # Check all variants and find the earliest year for this title
                         if variant_year < parent_year:
                                 parent_year = variant_year
-                        # Add the variant's score to the parent's if the parent and variant are of the requedted type
+                        # Add the variant's score to the parent's if the parent
+                        # and the variant are of the requested type
                         if parent_id in scores and variant_id in scores:
                                 scores[parent_id] += scores[variant_id]
                         # Delete the variant's score
