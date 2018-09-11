@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2016   Ahasuerus
+#     (C) COPYRIGHT 2014-2018   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -27,11 +27,11 @@ def doError():
 
 def printTableBody(author_dict):
 	bgcolor = 0
-        eligible = 0
+        count = 0
         for author_id in sorted(author_dict, key=author_dict.get, reverse=True):
                 score = author_dict[author_id]
                 print '<tr align=left class="table%d">' % (bgcolor+1)
-                print '<td>%d</td>' % (eligible+1)
+                print '<td>%d</td>' % (count+1)
                 print '<td>%d</td>' % score
                 print '<td>'
                 author_data = SQLloadAuthorData(author_id)
@@ -39,46 +39,38 @@ def printTableBody(author_dict):
                 print '</td>'
                 print '</tr>'
                 bgcolor = bgcolor ^ 1
-                eligible += 1
-                # Once we have displayed 500 rows, quit
-                if eligible > 499:
-                        return
+                count += 1
+                if count > 499:
+                        break
 
 
 if __name__ == '__main__':
 
-        display_year = 0
         decade = 0
+        title_types = (('Authors and Editors', ''),
+                       ('Novel Authors', 'NOVEL'),
+                       ('Short Fiction Authors', 'SHORTFICTION'),
+                       ('Collection Authors', 'COLLECTION'),
+                       ('Anthology Editors', 'ANTHOLOGY'),
+                       ('Non-Fiction Authors', 'NONFICTION'),
+                       ('Other Title Types Authors', ''))
         try:
-		type = int(sys.argv[1])
-		if type == 0:
-                        author_type = 'Authors and Editors'
-		elif type == 1:
-                        author_type = 'Novel Authors'
-                elif type == 2:
-                        author_type = 'Short Fiction Authors'
-                elif type == 3:
-                        author_type = 'Collection Authors'
-                elif type == 4:
-                        author_type = 'Anthology Editors'
-                elif type == 5:
-                        author_type = 'Non-Fiction Authors'
-                elif type == 6:
-                        author_type = 'Other Title Types Authors'
-                else:
-                        raise
+		type_id = int(sys.argv[1])
+                type_tuple = title_types[type_id]
+                displayed_type = type_tuple[0]
+                title_type = type_tuple[1]
         except:
                 doError()
 
         try:
                 span = sys.argv[2]
                 if span == 'all':
-                        header = 'Highest Ranked %s of All Time' % author_type
+                        header = 'Highest Ranked %s of All Time' % displayed_type
                 elif span == 'decade':
                         decade = int(sys.argv[3])
-                        header = 'Highest Ranked %s of the %ds' % (author_type, decade)
+                        header = 'Highest Ranked %s of the %ds' % (displayed_type, decade)
                 elif span == 'pre1950':
-                        header = 'Highest Ranked %s Prior to 1950' % author_type
+                        header = 'Highest Ranked %s Prior to 1950' % displayed_type
                 else:
                         raise
         except:
@@ -87,26 +79,33 @@ if __name__ == '__main__':
 	PrintHeader(header)
 	PrintNavbar('top', 0, 0, 'popular_authors.cgi', 0)
 
-        titles = TitlesSortedByAwards(type, span, decade, display_year)
-        if not titles:
-                print '<h3>No %s with awards or nominations for the specified period</h3>' % author_type
+        query = """select title_id, score from award_titles_report where 1 """
+        if span == 'decade':
+                query += ' and decade=%d' % decade
+        elif span == 'pre1950':
+                query += ' and decade="pre1950"'
+        if title_type:
+                query += ' and title_type = "%s"' % title_type
+        elif displayed_type == 'Other Title Types Authors':
+                query += ' and title_type not in ("NOVEL", "SHORTFICTION", "COLLECTION", "ANTHOLOGY", "NONFICTION")'
+
+        db.query(query)
+        result = db.store_result()
+        if not result.num_rows():
+                print '<h3>No %s with awards or nominations for the specified period</h3>' % displayed_type
                 PrintTrailer('top', 0, 0)
                 sys.exit(0)
 
         # Initialize the dictionary which will list scores by title_id
         title_dict = {}
-        # Build the SQL IN clause which will be used to find authors for the identified titles
-        first = 1
-        for title_data in titles:
-                title_id = str(title_data[2])
-                title_dict[title_id] = title_data[0]
-                if first:
-                        in_clause = title_id
-                        first = 0
-                else:
-                        in_clause += ',' + str(title_id)
+        record = result.fetch_row()
+        while record:
+                title_id = str(record[0][0])
+                title_dict[title_id] = record[0][1]
+                record = result.fetch_row()
 
-        query = "select title_id, author_id from canonical_author where ca_status=1 and title_id in (%s)" % in_clause
+        # Retrieve the author IDs for the identified titles
+        query = "select title_id, author_id from canonical_author where ca_status=1 and title_id in (%s)" % dict_to_in_clause(title_dict)
 	db.query(query)
 	result = db.store_result()
         record = result.fetch_row()
