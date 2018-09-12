@@ -163,8 +163,8 @@ class award_type:
                                 if value:
                                         if value in self.award_type_webpages:
                                                 continue
-                                        if not validateURL(value):
-                                                self.error = 'Invalid Web page URL'
+                                        self.error = invalidURL(value)
+                                        if self.error:
                                                 return
                                         self.award_type_webpages.append(value)
                                         self.used_webpages = 1

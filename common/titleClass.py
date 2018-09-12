@@ -351,8 +351,8 @@ class titles:
                                 if value:
                                         if value in self.title_webpages:
                                                 continue
-                                        if not validateURL(value):
-                                                self.error = 'Invalid Web page URL'
+                                        self.error = invalidURL(value)
+                                        if self.error:
                                                 return
                                         self.title_webpages.append(value)
                                         self.used_webpages = 1

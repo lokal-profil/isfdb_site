@@ -161,8 +161,8 @@ class publishers:
                                 if value:
                                         if value in self.publisher_webpages:
                                                 continue
-                                        if not validateURL(value):
-                                                self.error = 'Invalid Web page URL'
+                                        self.error = invalidURL(value)
+                                        if self.error:
                                                 return
                                         self.publisher_webpages.append(value)
                                         self.used_webpages = 1

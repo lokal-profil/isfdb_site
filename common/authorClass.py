@@ -335,8 +335,9 @@ class authors:
 		if self.form.has_key('author_image'):
 			value = XMLescape(self.form['author_image'].value)
 			if value:
-                                if not validateURL(value):
-                                        self.error = 'Invalid Author image URL'
+                                self.error = invalidURL(value)
+                                if self.error:
+                                        self.error = 'Author image error: %s' % self.error
                                         return
                                 self.author_image = value
         			self.used_image = 1
@@ -370,8 +371,9 @@ class authors:
                                 if value:
                                         if value in self.author_webpages:
                                                 continue
-                                        if not validateURL(value):
-                                                self.error = 'Invalid Web page URL'
+                                        self.error = invalidURL(value)
+                                        if self.error:
+                                                self.error = 'Author Web page error: %s' % self.error
                                                 return
                                         self.author_webpages.append(value)
                                         self.used_webpages = 1

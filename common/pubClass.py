@@ -836,8 +836,8 @@ class pubs:
 		if self.form.has_key('pub_image'):
                         value = XMLescape(self.form['pub_image'].value)
                         if value:
-                                if not validateURL(value):
-                                        self.error = 'Invalid Web page URL'
+                                self.error = invalidURL(value)
+                                if self.error:
                                         return
                                 if value[0:41] == 'http://www.isfdb.org/wiki/index.php/Image':
                                         self.error = "URL for covers should be for the image, not the Wiki page the image is on"

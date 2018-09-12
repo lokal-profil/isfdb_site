@@ -273,9 +273,9 @@ function validateURL(field_name) {
 		element_name.focus();
 		return false;
 	}
-	// Check that the URL doesn't contain angle brackets
-	if ((/\</.test(element_value) == true) || (/\>/.test(element_value) == true)) {
-		alert("URLs must not contain angle brackets");
+	// Check that the URL doesn't contain angle brackets, double quotes or spaces
+	if ((/\</.test(element_value) == true) || (/\>/.test(element_value) == true) || (/\"/.test(element_value) == true) || (/\ /.test(element_value) == true)) {
+		alert("URLs must not contain angle brackets, double quotes or spaces");
 		element_name.focus();
 		return false;
 	}

@@ -1430,16 +1430,22 @@ def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUES
                 display += '</%s>'% tag
         return display
 
-def validateURL(url):
+def invalidURL(url):
         from urlparse import urlparse
-        if ('&lt;' in url) or ('&gt;' in url):
-                return 0
+        error = 'Invalid URL. '
+        for invalid_char in ('&lt;', '&gt;', ' ', '&quot;'):
+                if invalid_char in url:
+                        if invalid_char == ' ':
+                                display_char = 'Spaces'
+                        else:
+                                display_char = invalid_char
+                        return '%s %s not allowed in URLs' % (error, display_char)
         parsed_url = urlparse(url)
         if parsed_url[0] not in ('http', 'https'):
-                return 0
+                return '%s URLs must start with http or https' % error
         if not parsed_url[1]:
-                return 0
-        return 1
+                return '%s Domain name not specified' % error
+        return ''
 
 def WikiExists():
         query = """select count(*) from information_schema.tables
