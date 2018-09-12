@@ -117,6 +117,7 @@ if __name__ == '__main__':
                 author_dict[author_id] = author_dict.get(author_id, 0) + score
         	record = result.fetch_row()
 
+        print '<h3>This report is generated once a day</h3>'
         print '<b>Note</b>: Some recent awards are yet to be integrated into the database. Only title-based awards are used for ranking purposes.<br>'
         print '<b>Scoring</b>: Wins are worth 50 points, nominations and second places are worth 35 points. For polls, third and lower places are worth (33-poll position) points.'
         # Print the table headers        
