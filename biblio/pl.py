@@ -463,7 +463,7 @@ if __name__ == '__main__':
                         cover_indicator = ''
                         if cover_count > 1:
                                 cover_indicator = str(cover_count)
-                        print '<li><b><a href="http:/%s/title.cgi?%d">Cover%s</a>:</b>' % (HTFAKE, title[TITLE_PUBID], cover_indicator)
+                        print '<li><b>Cover%s:</b>' % cover_indicator
 			cover_art_titles.append(title[TITLE_PUBID])
 			#PrintAllAuthors(title[TITLE_PUBID])
                         PrintTitleLine(title, pub, None, None, 1)
