@@ -244,6 +244,10 @@ function validatePubForm() {
 	if (validateWebPages("title_webpages") == false) {
 		return false;
 	}
+	// Validate the External IDs
+	if (validateExternalIDs() == false) {
+		return false;
+	}
 	// Validate covers
 	if (validateCovers() == false) {
 		return false;
@@ -273,6 +277,41 @@ function validatePubForm() {
 		return false;
 	}
 
+	return true;
+}
+
+function validateExternalIDs() {
+	var last_row = GetLastExternalId("external_id");
+	var external_id_field;
+	for (i = 1 ; i < (last_row +1) ; i++) {
+		external_id_field = "external_id." + i;
+		// Validate each External ID
+		if (validateExternalID(external_id_field) == false) {
+			return false;
+		}
+	}
+	return true;
+}
+
+function validateExternalID(field_name) {
+	// Retrieve the External ID field - use [0] because JS returns an array in case there are many fields with this name
+	var element_name = document.getElementsByName(field_name)[0];
+	// If there is no External ID field, validation is successful
+	if (element_name == null) {
+		return true;
+	}
+	// Retrieve the value of the field
+	var element_value = element_name.value;
+	// If the value is empty, then validation passes
+	if (element_value == "") {
+		return true;
+	}
+	// Check that the External ID field doesn't contain angle brackets, double quotes or spaces
+	if ((/\</.test(element_value) == true) || (/\>/.test(element_value) == true) || (/\"/.test(element_value) == true) || (/\ /.test(element_value) == true)) {
+		alert("External IDs must not contain angle brackets, double quotes or spaces");
+		element_name.focus();
+		return false;
+	}
 	return true;
 }
 

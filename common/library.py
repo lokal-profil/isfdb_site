@@ -1432,19 +1432,35 @@ def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUES
 
 def invalidURL(url):
         from urlparse import urlparse
-        error = 'Invalid URL. '
-        for invalid_char in ('&lt;', '&gt;', ' ', '&quot;'):
-                if invalid_char in url:
-                        if invalid_char == ' ':
-                                display_char = 'Spaces'
-                        else:
-                                display_char = invalid_char
-                        return '%s %s not allowed in URLs' % (error, display_char)
+        error = invalidURLcharacters(url, 'URL', 'escaped')
+        if error:
+                return error
         parsed_url = urlparse(url)
         if parsed_url[0] not in ('http', 'https'):
                 return '%s URLs must start with http or https' % error
         if not parsed_url[1]:
                 return '%s Domain name not specified' % error
+        return ''
+
+def invalidURLcharacters(url, field_name, escaped_flag):
+        invalid_characters = ['<', '>', '"']
+        if escaped_flag == 'escaped':
+                final_invalid_chars = []
+                for invalid_character in invalid_characters:
+                        final_invalid_chars.append(XMLescape(invalid_character))
+        elif escaped_flag == 'unescaped':
+                final_invalid_chars = invalid_characters
+        else:
+                return 'Software issue - contact the site administrator'
+        # Append space which has to be added after XMLescape; otherwise it would be stripped as a trailing space
+        final_invalid_chars.append(' ')
+        for invalid_char in final_invalid_chars:
+                if invalid_char in url:
+                        if invalid_char == ' ':
+                                display_char = 'Spaces'
+                        else:
+                                display_char = invalid_char
+                        return 'Invalid %s. %s not allowed in %ss' % (field_name, display_char, field_name)
         return ''
 
 def WikiExists():

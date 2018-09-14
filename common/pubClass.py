@@ -882,6 +882,9 @@ class pubs:
                                         id_value = self.form['external_id.%d' % id_type_sequence_number].value
                                 except:
                                         continue
+                                self.error = invalidURLcharacters(id_value, 'External ID', 'unescaped')
+                                if self.error:
+                                        return
                                 if type_name not in self.identifiers:
                                         self.identifiers[type_name] = {}
                                 # If this ID has already been entered for this ID type, skip it
