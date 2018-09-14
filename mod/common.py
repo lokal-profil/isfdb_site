@@ -75,7 +75,7 @@ def ApproveOrReject(app, submission_id):
                 #If the submission is currently on hold by another moderator, don't allow moderation
                 if int(hold_id) != int(reviewer_id):
                         holding_user = SQLgetUserName(hold_id)
-                        print "<h3>Submission is currently on hold by %s" % WikiLink(holding_user)
+                        print "<h3>Submission is currently on hold by %s</h3>" % WikiLink(holding_user)
                         return
                 #If the submission is currently on hold by the reviewing moderator, allow to remove from hold
                 print "<h3>Submission is currently on hold by you.</h3><p>"
@@ -467,7 +467,8 @@ def display_sources(submission_id):
 
         # Retrieve all Web sites that ISFDB knows about
         websites = LoadWebSites(isbn, None, format)
-        print '<ul>Additional sources: '
+        print '<b>Additional sources:</b> '
+        print '<ul>'
         for website in websites:
                 print '<li><a href="%s" target="_blank">%s</a>' % (website[1], website[0])
         print '</ul>'

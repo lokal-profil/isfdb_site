@@ -58,7 +58,7 @@ def PrintHTMLHeaders(title):
     print '<meta http-equiv="content-type" content="text/html; charset=%s" >' % UNICODE
     print '<link rel="shortcut icon" href="http://%s/favicon.ico">' % HTMLHOST
     print '<title>%s</title>' % title
-    print '<link href="http://%s/biblio.css" rel="stylesheet" type="text/css" media="screen" />' % HTMLHOST
+    print '<link href="http://%s/biblio.css" rel="stylesheet" type="text/css" media="screen">' % HTMLHOST
     print '</head>'
     print '<body>'
     print '<div id="wrap">'
