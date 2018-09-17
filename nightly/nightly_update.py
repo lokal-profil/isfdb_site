@@ -1465,6 +1465,27 @@ def nightly_cleanup_reports():
                 limit 500"""
         standardReport(query, 239)
 
+        #   Report 240: Anthologies and Collections without Fiction Titles
+        query = """insert into cleanup (record_id, report_type, record_id_2)
+                select xx.pub_id, 240, IF(xx.pub_year='0000-00-00', 0, REPLACE(SUBSTR(xx.pub_year, 1,7),'-',''))
+                from (
+                select p.pub_id, p.pub_year
+                from pubs p
+                where p.pub_ctype in ('ANTHOLOGY', 'COLLECTION')
+                and p.pub_year != '8888-00-00'
+                and NOT EXISTS
+                        (select 1 from cleanup c
+                        where c.record_id = p.pub_id
+                        and c.report_type = 240)
+                and NOT EXISTS
+                        (select 1 from pub_content pc, titles t
+                        where p.pub_id=pc.pub_id 
+                        and pc.title_id=t.title_id
+                        and (t.title_ttype in ('NOVEL', 'SHORTFICTION', 'POEM', 'SERIAL'))
+                )) as xx
+                """
+        db.query(query)
+
 def badUnicodeReport(table, record_title, record_id, report_number):
         unicode_map = unicode_translation()
         # Assumes unicode_map will have at least one entry

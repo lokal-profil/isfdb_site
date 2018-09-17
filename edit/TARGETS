@@ -1,3 +1,12 @@
+#
+#     (C) COPYRIGHT 2008-2018   Al von Ruff and Ahasuerus
+#       ALL RIGHTS RESERVED
+#
+#     The copyright notice above does not evidence any actual or
+#     intended publication of such source code.
+#
+#     Version: $Revision$
+#     Date: $Date$
 
 TARGETS = DIR/addaward.cgi \
 	  DIR/addawardcat.cgi \
@@ -27,6 +36,7 @@ TARGETS = DIR/addaward.cgi \
 	  DIR/editseries.cgi \
 	  DIR/edittags.cgi \
 	  DIR/edittitle.cgi \
+	  DIR/empty_containers.cgi \
 	  DIR/exportcontent.cgi \
 	  DIR/find_dups.cgi \
 	  DIR/find_pub_dups.cgi \

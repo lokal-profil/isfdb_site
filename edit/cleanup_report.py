@@ -6079,6 +6079,87 @@ def function239():
         else:
                 print "<h2>No translations without the Tr template in notes found</h2>"
 
+def function240():
+        years = {}
+        decades = {}
+        months = {}
+        unknown = 0
+        query = """select count(*), record_id_2 from cleanup
+                   where report_type = 240 and resolved IS NULL
+                   group by record_id_2"""
+        db.query(query)
+        result = db.store_result()
+        record = result.fetch_row()
+        while record:
+                count = record[0][0]
+                month = record[0][1]
+                if not month:
+                        unknown += count
+                else:
+                        year = month/100
+                        decade = year/10
+                        years[year] = years.get(year, 0) + count
+                        decades[decade] = decades.get(decade, 0) + count
+                        months[month] = months.get(month, 0) + count
+                record = result.fetch_row()
+
+        print '<h3 class="centered">Since 2000: By Year and Month</h3>'
+        print '<table class="seriesgrid">'
+        print '<tr class="table1">'
+        print '<th>Year</th>'
+        print '<th colspan="13">Month</th>'
+        print '</tr>'
+        # Get the current year based on system time
+        current_year = localtime()[0]
+        bgcolor = 1
+        for year in range(current_year, 1999, -1):
+                if year not in years:
+                        continue
+                print '<tr class="table%d">' % (bgcolor+1)
+                print '<td><a href="http:/%s/edit/empty_containers.cgi?year+%d">%d (%d)</a></td>' % (HTFAKE, year, year, years[year])
+                for number in range(0,13):
+                        month = year*100+number
+                        if number in monthmap:
+                                month_name = monthmap[number]
+                        else:
+                                month_name = 'None'
+                        print '<td>'
+                        # No links for months with no empty containers
+                        if month not in months:
+                                print month_name
+                        else:
+                                print '<a href="http:/%s/edit/empty_containers.cgi?month+%d">%s (%d)</a>' % (HTFAKE, month, month_name, months[month])
+                        print '</td>'
+                print '</tr>'
+                bgcolor ^= 1
+        print '</table>'
+        print '<p>'
+        print '<b>Unknown Year:</b> <a href="http:/%s/edit/empty_containers.cgi?unknown+0">%d</a>' % (HTFAKE, unknown)
+        
+        print '<h3 class="centered">Pre-2000: By Year and Decade</h3>'
+        print '<table class="seriesgrid">'
+        print '<tr class="table1">'
+        print '<th>Decade</th>'
+        print '<th colspan="10">Years</th>'
+        print '</tr>'
+        bgcolor = 1
+        # Display all pre-21st century decades in reverse chronological order
+        for decade in sorted(decades, reverse=1):
+                if decade > 199:
+                        continue
+                print '<tr class="table%d">' % (bgcolor+1)
+                print '<td><a href="http:/%s/edit/empty_containers.cgi?decade+%d">%d0s (%d)</a></td>' % (HTFAKE, decade, decade, decades[decade])
+                for year in range(decade*10, decade*10+10):
+                        print '<td>'
+                        # No links for years without empty containers
+                        if year not in years:
+                                print year
+                        else:
+                                print '<a href="http:/%s/edit/empty_containers.cgi?year+%d">%d (%d)</a>' % (HTFAKE, year, year, years[year])
+                        print '</td>'
+                print '</tr>'
+                bgcolor ^= 1
+        print '</table>'
 
 def function9999():
         nonModeratorMessage()

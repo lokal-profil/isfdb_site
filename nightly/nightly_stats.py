@@ -16,7 +16,6 @@ import string
 from operator import itemgetter
 from library import *
 from SQLparsing import *
-from library import *
 from nightly_lib import elapsedTime
 
 class Output():
