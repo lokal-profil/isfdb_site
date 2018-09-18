@@ -1,7 +1,7 @@
 #!_PYTHONLOC
 # -*- coding: cp1252 -*-
 #
-#     (C) COPYRIGHT 2006-2017   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2018   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -442,7 +442,7 @@ class advanced_search:
                         clause = "webpages.url %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('webpages')]
                         joins = ['webpages.title_id=titles.title_id']
-                elif field == 'title_language':
+                elif field in ('title_language', 'title_language_free'):
                         clause = "languages.lang_name %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('languages')]
                         joins = ['languages.lang_id=titles.title_language']
@@ -485,7 +485,7 @@ class advanced_search:
                         clause = "authors.author_birthdate %s" % sql_value
                 elif field == 'author_deathdate':
                         clause = "authors.author_deathdate %s" % sql_value
-                elif field == 'author_language':
+                elif field in ('author_language', 'author_language_free'):
                         clause = "languages.lang_name %s" % sql_value
                         dbases = [tableInfo('authors'), tableInfo('languages')]
                         joins = ['languages.lang_id=authors.author_language']
