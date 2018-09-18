@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2012-2017 Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2012-2018 Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -49,11 +49,11 @@ if __name__ == '__main__':
 
         if all_reports:
                 print 'Displaying all reports. You can also limit the list to \
-                <a href="http:/%s/edit/cleanup.cgi?0">reports with potential problems</a>.</h3>' % HTFAKE
+                <a href="http:/%s/edit/cleanup.cgi?0">reports with potential problems</a>.' % HTFAKE
         else:
                 if user.moderator:
                         print 'Only reports with identified potential problems are displayed. You can \
-                        also view a <a href="http:/%s/edit/cleanup.cgi?1">full list of reports</a>.</h3>' % HTFAKE
+                        also view a <a href="http:/%s/edit/cleanup.cgi?1">full list of reports</a>.' % HTFAKE
 
         (reports, sections, non_moderator) = reportsDict()
 
@@ -84,7 +84,7 @@ if __name__ == '__main__':
                         problems += counts[report_id]
                 if not problems and not all_reports:
                         continue
-                print '<center><b>%s</b></center>' % section[0]
+                print '<h3 class="centered">%s</h3>' % section[0]
                 for report_id in report_numbers:
                         # Skip reports with no identified problem records unless explicitly
                         # requested to display them
@@ -102,7 +102,7 @@ if __name__ == '__main__':
 
         # Determine the number of outstanding SFE3 URLs
         if user.moderator:
-                print '<center><b>Reports That Are Not Regenerated Nightly</b></center>'
+                print '<h3 class="centered">Reports That Are Not Regenerated Nightly</h3>'
 
                 query = "select count(*) from missing_author_urls where resolved=0 and author_id IS NULL"
                 db.query(query)
@@ -123,4 +123,4 @@ if __name__ == '__main__':
                         print '<a href="http:/%s/mod/bad_images.cgi"><button type="button">Publications with Suspect Images (%d)</button></a>' % (HTFAKE, int(record[0][0]))
                         print '<p>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)

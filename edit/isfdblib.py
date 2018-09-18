@@ -195,15 +195,15 @@ def PrintNavBar(executable, arg):
 
 def PrintPostSearch(executable=0, records=0, subsequent=0, printed=0, mergeform=0, tableclose=True):
         if tableclose:
-                print "</table>\n"
+                print '</table>'
 	if mergeform:
-		print "<hr />\n"
-		print "<p>"
-		print "<input TYPE=\"SUBMIT\" VALUE=\"Merge Selected Records\">"
-		print "</form>"
+		print '<hr>'
+		print '<p>'
+		print '<input TYPE="SUBMIT" VALUE="Merge Selected Records">'
+		print '</form>'
 	if printed == 100:
-		print "<hr />\n"
-		print "<a href=\"http://"+DBASEHOST+"/cgi-bin/edit/"+executable+".cgi?"+subsequent+"\">[Records: %s]</a>" % (records)
+		print '<hr>'
+		print '<a href="http:/%s/edit/%s.cgi?%s">[Records: %s]</a>' % (HTFAKE, executable, subsequent, records)
 
         print '</div>'
         print '<div id="bottom">'

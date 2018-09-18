@@ -21,8 +21,8 @@ from login import User
 
 
 def PrintTableColumns(columns):
-	print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-	print "<tr align=left bgcolor=\"#d6d6d6\">"
+	print '<table class="generic_table">'
+	print '<tr class="table2">'
 	for column in columns:
                 if not column:
                         data = '&nbsp;'
@@ -31,8 +31,8 @@ def PrintTableColumns(columns):
                 # Skip 'Ignore' and 'Resolve' columns if the user is not a moderator
                 if ('Ignore' in column or 'Resolve' in column) and not user.moderator:
                         continue
-                print "<td><b>%s</b></td>" % data
- 	print "</tr>"
+                print '<td><b>%s</b></td>' % data
+ 	print '</tr>'
 
 def nonModeratorMessage():
         if not user.moderator:
@@ -6456,5 +6456,5 @@ if __name__ == '__main__':
 
         function()
 
-        PrintPostSearch(0, 0, 0, 0, 0)
+        PrintPostSearch(0, 0, 0, 0, 0, 0)
         
