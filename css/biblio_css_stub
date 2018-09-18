@@ -555,7 +555,7 @@ h3.contentheader {
    margin-bottom: 0px;
 }
 
-h1, h2, h3.centered {
+h1.centered, h2.centered, h3.centered {
    text-align: center;
 }
 
