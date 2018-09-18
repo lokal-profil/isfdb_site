@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -192,12 +192,12 @@ class PublicationMonth:
 
         def PrintPage(self):
                 print '<hr>'
-                print '<h2><center>Upcoming Months</center></h2>'
+                print '<h2 class="centered">Upcoming Months</h2>'
                 self.PrintMonthLine()
                 print '<hr>'
 
                 if not self.pubs:
-                        print '<h1><center>No books available for %s %s</center></h1>' % (monthmap[self.target_month], self.target_year)
+                        print '<h1 class="centered">No books available for %s %s</h1>' % (monthmap[self.target_month], self.target_year)
                 else:
                         if self.sorting == 'date':
                                 self.SortByDateAndGenre()
@@ -210,8 +210,8 @@ class PublicationMonth:
 
         def PrintMonthLine(self):
                 count = 0
-                print "<table align=center cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-                print "<tr align=center bgcolor=\"#d6d6d6\">"
+                print '<table class="generic_centered_table">'
+                print '<tr class="generic_centered_header">'
                 TmpMonth = self.current_month
                 TmpYear = int(self.current_year)
                 while count < 12:
@@ -249,10 +249,10 @@ class PublicationMonth:
                                 pub_dict[last_name][canonical_name][pub_id] = author_id
 
                 if self.target_day == 0:
-                        print '<h1><center> All Books for %s %s by Author</center></h1>' % (monthmap[self.target_month], self.target_year)
+                        print '<h1 class="centered"> All Books for %s %s by Author</h1>' % (monthmap[self.target_month], self.target_year)
                         print '<a href="http:/%s/fc.cgi?date+%d+%s">Sort by Genre and Date</a><br>' % (HTFAKE, self.target_month, self.target_year)
                 else:
-                        print '<h1><center> Future Books for %s %s by Author</center></h1>' % (monthmap[self.target_month], self.target_year)
+                        print '<h1 class="centered"> Future Books for %s %s by Author</h1>' % (monthmap[self.target_month], self.target_year)
                         print '<a href="http:/%s/fc.cgi?date">Sort by Genre and Date</a><br>' % (HTFAKE)
                 self.PrintTableHeader()
 
@@ -282,10 +282,10 @@ class PublicationMonth:
 
                 # Print out the target month
                 if self.target_day == 0:
-                        print '<h1><center> All Books for %s %s by Genre and Date</center></h1>' % (monthmap[self.target_month], self.target_year)
+                        print '<h1 class="centered"> All Books for %s %s by Genre and Date</h1>' % (monthmap[self.target_month], self.target_year)
                         print '<a href="http:/%s/fc.cgi?author+%d+%s">Sort by Author</a><br>' % (HTFAKE, self.target_month, self.target_year)
                 else:
-                        print '<h1><center> Future Books for %s %s by Genre and Date</center></h1>' % (monthmap[self.target_month], self.target_year)
+                        print '<h1 class="centered"> Future Books for %s %s by Genre and Date</h1>' % (monthmap[self.target_month], self.target_year)
                         print '<a href="http:/%s/fc.cgi?author">Sort by Author</a><br>' % (HTFAKE)
                 print 'Or jump to:'
                 print '<ul>'
@@ -305,7 +305,7 @@ class PublicationMonth:
                         self.PrintGenre("romance", "Romance", self.romance)
 
         def PrintGenre(self, html_id, displayed_genre, pub_ids):
-                print '<h2 id = "%s"><center>%s</center></h2>' % (html_id, displayed_genre)
+                print '<h2 id = "%s" class="centered">%s</h2>' % (html_id, displayed_genre)
                 self.PrintTableHeader()
                 
                 for pub_id in pub_ids:
@@ -314,8 +314,8 @@ class PublicationMonth:
                 print '</table>'
 
         def PrintTableHeader(self):
-                print '<table cellpadding=0 BGCOLOR="#FFFFFF">'
-                print '<tr align=center bgcolor="#d6d6d6">'
+                print '<table class="generic_table">'
+                print '<tr class="generic_centered_header">'
                 if self.do_marque:
                         print "<td></td>"
                 if self.sorting == 'author':

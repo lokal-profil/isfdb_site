@@ -555,7 +555,7 @@ h3.contentheader {
    margin-bottom: 0px;
 }
 
-h3.centered {
+h1, h2, h3.centered {
    text-align: center;
 }
 
@@ -746,6 +746,13 @@ table.bibliolinks {
 table.generic_centered_table {
    background-color: #FFFFFF;
    padding: 0px;
+   margin-right: auto;
+   margin-left: auto;
+}
+
+/* table row design of generic centered table */
+tr.generic_centered_header {
+   background-color: #d6d6d6;
    margin-right: auto;
    margin-left: auto;
 }
