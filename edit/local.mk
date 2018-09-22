@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2016   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -14,7 +14,8 @@ include ../INSTALLDIRS
 
 INSTALL = $(INSTALL_CGI)/edit
 
-MYLIBS	= isfdblib.py \
+MYLIBS	= cleanup_lib.py \
+	  isfdblib.py \
 	  isfdblib_help.py \
 	  isfdblib_print.py
 

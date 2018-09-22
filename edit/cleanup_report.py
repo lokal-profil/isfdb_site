@@ -13,6 +13,7 @@
 import string
 import sys
 import MySQLdb
+from cleanup_lib import reportsDict
 from isfdb import *
 from isfdblib import *
 from SQLparsing import *
