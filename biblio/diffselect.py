@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
 	SQLupdateTitleViews(title_id)
 
-        browser_title = "Differences Between Publications: %s" % title[TITLE_TITLE]
+        browser_title = "Compare Publications for %s" % title[TITLE_TITLE]
         PrintHeader(browser_title)
 	PrintNavbar('title', 0, title_id, 'title.cgi', sys.argv[1])
 	if title[TITLE_TTYPE] == 'REVIEW':
@@ -92,7 +92,7 @@ if __name__ == '__main__':
 		print "<b>Type:</b>", title[TITLE_TTYPE]
 
 
-        print '<p><b>Select publications to diff:</b>'
+        print '<p><b>Select publications to compare:</b>'
         print '<p>'
 
 	print '<form METHOD="POST" ACTION="/cgi-bin/submitdiff.cgi">'
@@ -106,7 +106,7 @@ if __name__ == '__main__':
 	print '<p>'
         print '<input type="SUBMIT" value="Submit Query">'
 	print '<input name="title_id" value="%d" type="HIDDEN">' % (title_id)
-	print "</form>"
+	print '</form>'
 
 	print '<p><hr><p>'
 	PrintTrailer('title', title_id, title_id)

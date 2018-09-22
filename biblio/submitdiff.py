@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2016   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2018   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -24,7 +24,7 @@ def DoError(message):
 	
 if __name__ == '__main__':
 
-	PrintHeader("Publication Diff")
+	PrintHeader("Publication Comparison")
 	PrintNavbar('pubdiff', 0, 0, 0, 0)
 
 	form = cgi.FieldStorage()
@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
 	# If the user selected fewer than 2 pubs, display an error message and abort
 	if len(pub_ids) < 2:
-                DoError('You must select at least 2 publications to check for differences')
+                DoError('You must select at least 2 publications to compare')
 
         pubs = []
         for pub_id in pub_ids:

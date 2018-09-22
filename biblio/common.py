@@ -640,7 +640,7 @@ def PrintEditTools(page_type, userid, arg1, arg2):
 		output.append('<a href="http:/%s/edit/find_dups.cgi?%s">Check for Duplicate Titles</a>' % (HTFAKE, arg2))
 	elif page_type == 'title':
 		output.append('<a href="http:/%s/edit/edittitle.cgi?%s">Edit Title Data</a>' % (HTFAKE, arg2))
-		output.append('<a href="http:/%s/diffselect.cgi?%s">Diff Publications</a>' % (HTFAKE, arg2))
+		output.append('<a href="http:/%s/diffselect.cgi?%s">Compare Publications</a>' % (HTFAKE, arg2))
 		output.append('<a href="http:/%s/edit/deletetitle.cgi?%s">Delete This Title</a>' % (HTFAKE, arg2))
 		output.append('<a href="http:/%s/edit/mkvariant.cgi?%s">Make This Title a Variant Title or Pseudonymous Work</a>' % (HTFAKE, arg2))
 		if arg1 in ('NOVEL', 'COLLECTION', 'OMNIBUS', 'ANTHOLOGY', 'CHAPBOOK', 'NONFICTION'):
