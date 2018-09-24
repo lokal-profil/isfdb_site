@@ -241,6 +241,11 @@ td.blankwarning {
    background: #C7DBFF;
 }
 
+/* blank info cell */
+td.info	{
+   background: #C7DBFF;
+}
+
 th.verifiers_user {
    width: 15%;
 }

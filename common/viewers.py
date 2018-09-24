@@ -220,7 +220,7 @@ def PrintField1XML(Label, XmlData, title = 0):
 # side-by-side
 ###########################################################
 
-def PrintField2(Label, value, Changed, ExistsNow, Current, warning = '', warning_column = 0):
+def PrintField2(Label, value, Changed, ExistsNow, Current, warning = '', warning_column = 0, warning_class = 'warn'):
         (unknown, pseudonym, disambig) = 0, 0, 0
         if Label in ('Artists', 'Authors', 'Book Authors', 'Reviewers', 'Interviewees', 'Interviewers'):
                 display_author = 1
@@ -267,7 +267,7 @@ def PrintField2(Label, value, Changed, ExistsNow, Current, warning = '', warning
 
         if warning_column:
                 if warning:
-                        print '<td class="warn">%s</td>' % warning
+                        print '<td class="%s">%s</td>' % (warning_class, warning)
                 elif display_author:
                         # Drop the last 's' in the field name
                         PrintWarning(Label[:-1], unknown, pseudonym, disambig)
@@ -279,12 +279,24 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
         value = GetElementValue(XmlData, Label)
         value2 = Current
         warning = ''
+        warning_class = 'warn'
         if Label == 'Image':
                 if value:
                         warning = CheckImage(value)
                 value = FormatImage(value)
                 value2 = FormatImage(Current)
         elif Label in ('TitleNote', 'Note', 'Synopsis'):
+                # If an existing note is being modified, display differences in the Warnings column
+                # without using the yellow background reserved for warnings
+                if value and value2:
+                        from difflib import unified_diff
+                        diff_generator = unified_diff(value2.splitlines(), value.splitlines(),
+                                                      fromfile='before', tofile='after', n=0, lineterm='<br>')
+                        for line in diff_generator:
+                                if line.startswith('--- before') or line.startswith('+++ after') or line.startswith('@@ '):
+                                        continue
+                                warning += '<br>%s' % XMLescape(line)
+                                warning_class = 'info'
                 value = FormatNote(value, '', 'edit')
                 value2 = FormatNote(Current, '', 'edit')
         elif Label == 'Series':
@@ -316,9 +328,9 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
                         warning = DuplicateCatalogId(value)
 
         if TagPresent(XmlData, Label):
-		PrintField2(Label, value, 1, ExistsNow, value2, warning, 1)
+		PrintField2(Label, value, 1, ExistsNow, value2, warning, 1, warning_class)
         else:
-		PrintField2(Label, 0, 0, ExistsNow, value2, warning, 1)
+		PrintField2(Label, 0, 0, ExistsNow, value2, warning, 1, warning_class)
 
 
 def PrintComparison2(Label, Proposed, Original, warning = ''):
