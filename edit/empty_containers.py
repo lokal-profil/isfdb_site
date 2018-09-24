@@ -60,8 +60,7 @@ if __name__ == '__main__':
         except:
                 doError()
 
-        query = """select c.cleanup_id, p.pub_id, p.pub_title,
-                p.pub_year, p.pub_ctype, p.note_id
+        query = """select c.cleanup_id, p.*
                 from pubs p, cleanup c
                 where c.resolved IS NULL
                 and c.report_type = 240
@@ -78,19 +77,23 @@ if __name__ == '__main__':
         user.load()
         user.load_moderator_flag()
 
-        PrintTableColumns(('', 'Title', 'Authors', 'Date', 'Pub. Type', 'Note', 'Ignore'), user)
+        PrintTableColumns(('', 'Title', 'Authors', 'Pub. Date', 'Type', '1st Edition', 'Publisher', 'Note', 'Ignore'), user)
         record = result.fetch_row()
         count = 1
         bgcolor = 1
         while record:
                 cleanup_id = record[0][0]
-                pub_id = record[0][1]
-                pub_title = record[0][2]
-                pub_date = record[0][3]
-                pub_type = record[0][4]
-                note_id = record[0][5]
+                pub_data = record[0][1:]
+                pub_id = pub_data[PUB_PUBID]
+                pub_title = pub_data[PUB_TITLE]
+                pub_date = pub_data[PUB_YEAR]
+                pub_type = pub_data[PUB_CTYPE]
+                publisher_id = pub_data[PUB_PUBLISHER]
+                note_id = pub_data[PUB_NOTE]
                 note_note = SQLgetNotes(note_id)
                 authors = SQLPubBriefAuthorRecords(pub_id)
+                publisher = SQLGetPublisher(publisher_id)
+                referral_id = SQLgetTitleReferral(pub_id, pub_data[PUB_CTYPE])
                 if bgcolor:
                         print '<tr align=left class="table1">'
                 else:
@@ -99,8 +102,22 @@ if __name__ == '__main__':
                 print '<td>%s</td>' % ISFDBLink("pl.cgi", pub_id, pub_title)
                 print '<td>%s</td>' % LIBbuildRecordList('author', authors)
                 print '<td>%s</td>' % pub_date
-                print '<td>%s</td>' % pub_type
-                print '<td>%s</td>' % note_note
+                print '<td>%s</td>' % pub_type[:4]
+
+                referral_column = 0
+                if referral_id:
+                        referral_title = SQLloadTitle(referral_id)
+                        if referral_title[TITLE_YEAR] != pub_date:
+                                print '<td>%s</td>' % referral_title[TITLE_YEAR]
+                                referral_column = 1
+                if not referral_column:
+                        print '<td>&nbsp;</td>'
+
+                if publisher:
+                        print '<td>%s</td>' % ISFDBLink('publisher.cgi', publisher_id, publisher[PUBLISHER_NAME])
+                else:
+                        print '<td>&nbsp;</td>'
+                print '<td>%s</td>' % FormatNote(note_note)
                 if user.moderator:
                         print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+240">Ignore</a></td>' % (HTFAKE, cleanup_id)
                 print '</tr>'
