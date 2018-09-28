@@ -393,7 +393,7 @@ LANGUAGES = ('None','Afrikaans','Albanian','Ancient Greek','Arabic','Armenian',
              'Sundanese','Swahili','Tagalog','Tatar','Telugu','Uighur','Sanskrit',
              'Serbo-Croatian Cyrillic','Serbo-Croatian Roman', 'Scots', 'Old English',
              'Old French', 'Middle English', 'Middle High German', 'Yoruba',
-             'Mayan languages', 'Akkadian', 'Sumerian', 'Norwegian (Bokmal)',
+             'Mayan language', 'Akkadian', 'Sumerian', 'Norwegian (Bokmal)',
              'Norwegian (Nynorsk)', 'Asturian/Bable', 'Middle French', 'Low German',
              'Nepali', 'Pashto/Pushto', 'Shona', 'Old Norse')
 
