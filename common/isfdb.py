@@ -395,7 +395,12 @@ LANGUAGES = ('None','Afrikaans','Albanian','Ancient Greek','Arabic','Armenian',
              'Old French', 'Middle English', 'Middle High German', 'Yoruba',
              'Mayan language', 'Akkadian', 'Sumerian', 'Norwegian (Bokmal)',
              'Norwegian (Nynorsk)', 'Asturian/Bable', 'Middle French', 'Low German',
-             'Nepali', 'Pashto/Pushto', 'Shona', 'Old Norse')
+             'Nepali', 'Pashto/Pushto', 'Shona', 'Old Norse', 'Nilo-Saharan language',
+             'Bambara', 'Bantu language', 'Niger-Kordofanian language', 'Ewe', 'Igbo',
+             'Kamba', 'Kannada', 'Kikuyu/Gikuyu', 'Kurdish', 'Lingala',
+             'Creole or pidgin, French-based', 'Central American Indian language',
+             'Nandi', 'Creole or pidgin, English-based', 'Tigre', 'Tigrinya', 'Tsonga',
+             'Tswana', 'Zulu')
 
 # List of all supported format codes
 FORMATS = ('unknown','hc','tp','pb','ph','digest','dos','ebook','webzine','pulp',
