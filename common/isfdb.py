@@ -400,7 +400,9 @@ LANGUAGES = ('None','Afrikaans','Albanian','Ancient Greek','Arabic','Armenian',
              'Kamba', 'Kannada', 'Kikuyu/Gikuyu', 'Kurdish', 'Lingala',
              'Creole or pidgin, French-based', 'Central American Indian language',
              'Nandi', 'Creole or pidgin, English-based', 'Tigre', 'Tigrinya', 'Tsonga',
-             'Tswana', 'Zulu')
+             'Tswana', 'Zulu', 'Acoli', 'Fulah', 'Ganda', 'Kinyarwanda', 'Luo', 'Mandingo',
+             'Oriya', 'Pedi/Sepedi/Northern Sotho', 'South Ndebele', 'Southern Sotho',
+             'Standard Moroccan Tamazight', 'Wolof', 'North Ndebele')
 
 # List of all supported format codes
 FORMATS = ('unknown','hc','tp','pb','ph','digest','dos','ebook','webzine','pulp',
