@@ -21,8 +21,8 @@ if __name__ == '__main__':
 	PrintHeader('ISFDB Statistics and Top Lists')
 	PrintNavbar('stats', 0, 0, 'stats-and-tops.cgi', 0)
 
-	print 'Note that some of these lists are created on demand and some are regenerated nightly'
-	print '<h3>Database Statistics</h3>'
+	print 'These lists are regenerated nightly'
+	print '<h4>Database Statistics</h4>'
 	print '<ul>'
 
         print '<li><a href="http:/%s/stats.cgi?4">Summary Database Statistics</a>' % (HTFAKE)
@@ -87,7 +87,7 @@ if __name__ == '__main__':
         print '<li><a href="http:/%s/stats.cgi?9">Percent of Books by Type by Year</a>' % (HTFAKE)
         print '<li><a href="http:/%s/stats.cgi?10">Percent of Publications by Format by Year</a>' % (HTFAKE)
         print '</ul>'
-	print '<h3>Top ISFDB Editors</h3>'
+	print '<h4>Top ISFDB Editors</h4>'
         print '<ul>'
 	print '<li><a href="http:/%s/stats.cgi?2">Top Verifiers</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/stats.cgi?1">Top Moderators</a>' % (HTFAKE)
