@@ -260,11 +260,12 @@ def reportsDict():
         reports[238] = ("Translations without Notes (first 500)")
         reports[239] = ("Translations without the Tr Template in Notes (first 500)")
         reports[240] = ("Anthologies and Collections without Fiction Titles")
+        reports[241] = ("Magazines without Fiction Titles")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
         sections.append(('Magazines', (12, 13, 14, 15, 46)), )
-        sections.append(('Containers', (29, 37, 92, 240)), )
+        sections.append(('Containers', (29, 37, 92, 240, 241)), )
         sections.append(('Publications', (32, 33, 31, 34, 35, 36, 38, 39, 49, 50,
                                           51, 52, 56, 57, 70, 75, 79, 86, 88, 93,
                                           100, 193, 228, 231, 233, 235, 236)), )
@@ -314,6 +315,7 @@ def reportsDict():
                          201, 202, 203, 204, 205, 206, 207, 208, 209, 210,
                          211, 212, 213, 214, 215, 216, 217, 218, 219, 220,
                          221, 222, 223, 224, 225, 226, 227, 228, 229, 230,
-                         232, 233, 234, 235, 236, 237, 238, 239, 240, 9999)
+                         232, 233, 234, 235, 236, 237, 238, 239, 240, 241,
+                         9999)
         
         return (reports, sections, non_moderator)

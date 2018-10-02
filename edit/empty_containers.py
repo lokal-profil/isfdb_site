@@ -18,7 +18,10 @@ from library import *
 from SQLparsing import *
 
 def doError():
+	PrintPreSearch("Containers with no Fiction Titles")
+	PrintNavBar('edit/empty_container_table.cgi', 0)
         print '<h3>Bad argument</h3>'
+        PrintPostSearch(0, 0, 0, 0, 0)
         sys.exit(0)
 
 def PrintTableColumns(columns, user):
@@ -37,9 +40,6 @@ def PrintTableColumns(columns, user):
 
 if __name__ == '__main__':
 
-	PrintPreSearch("Anthologies and Collections with no Fiction Titles")
-	PrintNavBar('edit/empty_container_table.cgi', 0)
-
         # If the script was called with no arguments, then it's an error
         if len(sys.argv) == 1:
                 doError()
@@ -56,28 +56,41 @@ if __name__ == '__main__':
                         display_range = '0000-00'
                 else:
                         raise
-                print '<h3>Date range: %s</h3>' % display_range
+                report_id = int(sys.argv[3])
+                if report_id not in (240, 241):
+                        raise
         except:
                 doError()
 
+        if report_id == 240:
+                container_names = 'Anthologies and Collections'
+        else:
+                container_names = 'Magazines'
+	PrintPreSearch("%s with no Fiction Titles" % container_names)
+	PrintNavBar('edit/empty_container_table.cgi', 0)
+
+        print '<h3>Date range: %s</h3>' % display_range
         query = """select c.cleanup_id, p.*
                 from pubs p, cleanup c
                 where c.resolved IS NULL
-                and c.report_type = 240
+                and c.report_type = %d
                 and c.record_id_2 like '%d%%'
                 and c.record_id = p.pub_id
-                order by pub_title""" % date_range
+                order by pub_title""" % (report_id, date_range)
         db.query(query)
         result = db.store_result()
         if not result.num_rows():
-                print 'No eligible Anthology or Collection publications for the specified date range'
+                print 'No eligible publications for the specified date range'
                 sys.exit(0)
 
         user = User()
         user.load()
         user.load_moderator_flag()
 
-        PrintTableColumns(('', 'Title', 'Authors', 'Pub. Date', 'Type', '1st Edition', 'Publisher', 'Note', 'Ignore'), user)
+        if report_id == 240:
+                PrintTableColumns(('', 'Title', 'Authors', 'Pub. Date', 'Type', '1st Edition', 'Publisher', 'Note', 'Ignore'), user)
+        else:
+                PrintTableColumns(('', 'Title', 'Editors', 'Pub. Date', 'Publisher', 'Note', 'Ignore'), user)
         record = result.fetch_row()
         count = 1
         bgcolor = 1
@@ -102,16 +115,17 @@ if __name__ == '__main__':
                 print '<td>%s</td>' % ISFDBLink("pl.cgi", pub_id, pub_title)
                 print '<td>%s</td>' % LIBbuildRecordList('author', authors)
                 print '<td>%s</td>' % pub_date
-                print '<td>%s</td>' % pub_type[:4]
+                if report_id == 240:
+                        print '<td>%s</td>' % pub_type[:4]
 
-                referral_column = 0
-                if referral_id:
-                        referral_title = SQLloadTitle(referral_id)
-                        if referral_title[TITLE_YEAR] != pub_date:
-                                print '<td>%s</td>' % referral_title[TITLE_YEAR]
-                                referral_column = 1
-                if not referral_column:
-                        print '<td>&nbsp;</td>'
+                        referral_column = 0
+                        if referral_id:
+                                referral_title = SQLloadTitle(referral_id)
+                                if referral_title[TITLE_YEAR] != pub_date:
+                                        print '<td>%s</td>' % referral_title[TITLE_YEAR]
+                                        referral_column = 1
+                        if not referral_column:
+                                print '<td>&nbsp;</td>'
 
                 if publisher:
                         print '<td>%s</td>' % ISFDBLink('publisher.cgi', publisher_id, publisher[PUBLISHER_NAME])
@@ -119,7 +133,7 @@ if __name__ == '__main__':
                         print '<td>&nbsp;</td>'
                 print '<td>%s</td>' % FormatNote(note_note)
                 if user.moderator:
-                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+240">Ignore</a></td>' % (HTFAKE, cleanup_id)
+                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+%d">Ignore</a></td>' % (HTFAKE, cleanup_id, report_id)
                 print '</tr>'
                 count += 1
                 bgcolor ^= 1

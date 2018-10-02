@@ -6081,13 +6081,20 @@ def function239():
                 print "<h2>No translations without the Tr template in notes found</h2>"
 
 def function240():
+        empty_containers_grid(240)
+
+def function241():
+        empty_containers_grid(241)
+
+def empty_containers_grid(report_id):
+        anchor = '<a href="http:/%s/edit/empty_containers.cgi' % HTFAKE
         years = {}
         decades = {}
         months = {}
         unknown = 0
         query = """select count(*), record_id_2 from cleanup
-                   where report_type = 240 and resolved IS NULL
-                   group by record_id_2"""
+                   where report_type = %d and resolved IS NULL
+                   group by record_id_2""" % report_id
         db.query(query)
         result = db.store_result()
         record = result.fetch_row()
@@ -6117,7 +6124,7 @@ def function240():
                 if year not in years:
                         continue
                 print '<tr class="table%d">' % (bgcolor+1)
-                print '<td><a href="http:/%s/edit/empty_containers.cgi?year+%d">%d (%d)</a></td>' % (HTFAKE, year, year, years[year])
+                print '<td>%s?year+%d+%d">%d (%d)</a></td>' % (anchor, year, report_id, year, years[year])
                 for number in range(0,13):
                         month = year*100+number
                         if number in monthmap:
@@ -6129,13 +6136,13 @@ def function240():
                         if month not in months:
                                 print month_name
                         else:
-                                print '<a href="http:/%s/edit/empty_containers.cgi?month+%d">%s (%d)</a>' % (HTFAKE, month, month_name, months[month])
+                                print '%s?month+%d+%d">%s (%d)</a>' % (anchor, month, report_id, month_name, months[month])
                         print '</td>'
                 print '</tr>'
                 bgcolor ^= 1
         print '</table>'
         print '<p>'
-        print '<b>Unknown Year:</b> <a href="http:/%s/edit/empty_containers.cgi?unknown+0">%d</a>' % (HTFAKE, unknown)
+        print '<b>Unknown Year:</b> %s?unknown+0+%d">%d</a>' % (anchor, report_id, unknown)
         
         print '<h3 class="centered">Pre-2000: By Year and Decade</h3>'
         print '<table class="seriesgrid">'
@@ -6149,14 +6156,14 @@ def function240():
                 if decade > 199:
                         continue
                 print '<tr class="table%d">' % (bgcolor+1)
-                print '<td><a href="http:/%s/edit/empty_containers.cgi?decade+%d">%d0s (%d)</a></td>' % (HTFAKE, decade, decade, decades[decade])
+                print '<td>%s?decade+%d+%d">%d0s (%d)</a></td>' % (anchor, decade, report_id, decade, decades[decade])
                 for year in range(decade*10, decade*10+10):
                         print '<td>'
                         # No links for years without empty containers
                         if year not in years:
                                 print year
                         else:
-                                print '<a href="http:/%s/edit/empty_containers.cgi?year+%d">%d (%d)</a>' % (HTFAKE, year, year, years[year])
+                                print '%s?year+%d+%d">%d (%d)</a>' % (anchor, year, report_id, year, years[year])
                         print '</td>'
                 print '</tr>'
                 bgcolor ^= 1
