@@ -76,6 +76,13 @@ if __name__ == '__main__':
                 and c.report_type = %d
                 and c.record_id_2 like '%d%%'
                 and c.record_id = p.pub_id
+                and p.pub_year != '8888-00-00'
+                and NOT EXISTS
+                        (select 1 from pub_content pc, titles t
+                        where p.pub_id=pc.pub_id 
+                        and pc.title_id=t.title_id
+                        and t.title_ttype in ('NOVEL', 'SHORTFICTION', 'POEM', 'SERIAL')
+                        )
                 order by pub_title""" % (report_id, date_range)
         db.query(query)
         result = db.store_result()
