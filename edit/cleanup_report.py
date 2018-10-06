@@ -1248,6 +1248,7 @@ def function36():
         print "</table>"
 
 def function37():
+        nonModeratorMessage()
         query = """select p.pub_id, p.pub_title, c.cleanup_id
                 from pubs p, cleanup c
                 where p.pub_ctype='OMNIBUS' and 
