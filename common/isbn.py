@@ -2403,25 +2403,26 @@ def isbnVariations(original):
         #   - The unhyphenated forms of the ISBN-10 and the ISBN-13
         ######################################################################
 	variations = []
-	# Always original
-	variations.append(original)
-	if validISBN(original):
-		collapsedOrig = string.replace(original, '-', '')
-		collapsedOrig = string.replace(collapsedOrig, ' ', '')
-		origLen = len(original)
-		collapsedLen = len(collapsedOrig);
-		if collapsedLen == origLen:
-			# original not punctuated, add punctuated
-			variations.append(convertISBN(original))
-		else:
-			# original punctuated, add unpunctuated
-			variations.append(collapsedOrig)
-		if collapsedLen == 10:
-			# ISBN-10; need ISBN-13
-			otherISBN = toISBN13(collapsedOrig)
-		else:
-			# ISBN-13; need ISBN-10
-			otherISBN = toISBN10(collapsedOrig)
-		variations.append(otherISBN)
-		variations.append(convertISBN(otherISBN))
+	if original:
+                # Always original
+                variations.append(original)
+                if validISBN(original):
+                        collapsedOrig = string.replace(original, '-', '')
+                        collapsedOrig = string.replace(collapsedOrig, ' ', '')
+                        origLen = len(original)
+                        collapsedLen = len(collapsedOrig);
+                        if collapsedLen == origLen:
+                                # original not punctuated, add punctuated
+                                variations.append(convertISBN(original))
+                        else:
+                                # original punctuated, add unpunctuated
+                                variations.append(collapsedOrig)
+                        if collapsedLen == 10:
+                                # ISBN-10; need ISBN-13
+                                otherISBN = toISBN13(collapsedOrig)
+                        else:
+                                # ISBN-13; need ISBN-10
+                                otherISBN = toISBN10(collapsedOrig)
+                        variations.append(otherISBN)
+                        variations.append(convertISBN(otherISBN))
 	return variations
