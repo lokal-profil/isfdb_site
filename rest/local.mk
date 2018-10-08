@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -13,6 +13,8 @@ include ../INSTALLDIRS
 
 INSTALL = $(INSTALL_CGI)/rest
 
+MYLIBS	= pub_output.py
+
 LIBS = login.py \
 	SQLparsing.py \
 	isbn.py \
@@ -24,6 +26,7 @@ LIBS = login.py \
 	isfdblib.py
 
 all:	$(TARGETS)
+	cp $(MYLIBS) local
 	cp $(LIBS) local
 
 local/%.cgi:	%.py

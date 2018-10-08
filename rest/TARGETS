@@ -9,5 +9,6 @@
 #     Date: $Date$
 
 TARGETS = DIR/submission.cgi \
-	  DIR/getpub.cgi
-	 
+	  DIR/getpub.cgi \
+	  DIR/getpub_by_ID.cgi
+	  
