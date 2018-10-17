@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2014   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2018   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -21,7 +21,7 @@ from viewers import DisplayMakePseudonym
 
 if __name__ == '__main__':
 
-        PrintPreMod('Proposed Make Pseudonym Submission')
+        PrintPreMod('Proposed Make Alternate Name Submission')
         PrintNavBar()
 
 	try:

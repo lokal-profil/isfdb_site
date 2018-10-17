@@ -1087,6 +1087,8 @@ def DetermineRecordType(recordType, subtype, doc2):
                                 recordType = 'AddPub'
                         elif subtype == MOD_PUB_CLONE:
                                 recordType = 'ClonePub'
+        if recordType in SUBMISSION_TYPE_DISPLAY:
+                recordType = SUBMISSION_TYPE_DISPLAY[recordType]
         return recordType
 
 def FormatImage(value, height = 250):

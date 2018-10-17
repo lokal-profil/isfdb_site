@@ -130,7 +130,7 @@ def PrintAuthorSelectors(number):
         print '<option VALUE="author_trans_legalname">Transliterated Legal Name'
         print '<option VALUE="author_webpage">Webpage'
         print '<option VALUE="author_email">E-mail'
-        print '<option VALUE="author_pseudos">Pseudonym'
+        print '<option VALUE="author_pseudos">Alternate Name'
         print '<option VALUE="author_note">Note'
        	print '</select>'
 

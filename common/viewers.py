@@ -491,7 +491,7 @@ def PrintWarning(Label, unknown, pseudonym, disambig, title_date = '', pub_date 
         if pseudonym:
                 if output:
                         output += ', '
-                output += 'Pseudonym'
+                output += 'Alternate name'
                 if pseudonym > 1:
                         output += 's'
                 output += ' submitted'
@@ -1843,7 +1843,7 @@ def DisplayMakePseudonym(submission_id):
 
                 print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
                 print "<tr>"
-                print '<td class="label"><b>Pseudonym [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE,Record,Record)	
+                print '<td class="label"><b>Alternate Name [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE,Record,Record)	
 
                 if TagPresent(merge, 'Parent'):
                         parent = GetElementValue(merge, 'Parent')
@@ -1855,7 +1855,7 @@ def DisplayMakePseudonym(submission_id):
                                 author = SQLloadAuthorData(int(Record))
                                 print '<td class="drop">%s</td>' % (author[AUTHOR_CANONICAL])
                         except:
-                                InvalidSubmission(submission_id, "Pseudonym author not found: %d" % int(Record))
+                                InvalidSubmission(submission_id, "Alternate name not found: %d" % int(Record))
                         try:
                                 author = SQLloadAuthorData(int(parent))
                                 print '<td class="keep">%s</td>' % (author[AUTHOR_CANONICAL])
@@ -1869,7 +1869,7 @@ def DisplayMakePseudonym(submission_id):
 
 	authors = SQLgetActualFromPseudo(int(Record))
 	if authors:
-		print 'This name is currently labeled as a pseudonym for the following authors:'
+		print 'This name is currently labeled as an alternate name for the following authors:'
 		print '<ul>'
                 for author in authors:
                         author_data = SQLgetAuthorData(author[0])
@@ -1890,7 +1890,7 @@ def DisplayRemovePseudonym(submission_id):
         		submitter = GetElementValue(merge, 'Submitter')
 	
 			print "<tr>"
-			print '<td class="label"><b>Pseudonym [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE, Record, Record)
+			print '<td class="label"><b>Alternate Name [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE, Record, Record)
 	
        			if TagPresent(merge, 'Parent'):
         			parent = GetElementValue(merge, 'Parent')
@@ -1902,7 +1902,7 @@ def DisplayRemovePseudonym(submission_id):
 					author = SQLloadAuthorData(int(Record))
 					print '<td class="drop">%s</td>' % (author[AUTHOR_CANONICAL])
 				except:
-                                        InvalidSubmission(submission_id, 'Pseudonym record no longer exists')
+                                        InvalidSubmission(submission_id, 'Alternate name record no longer exists')
 				try:
 					author = SQLloadAuthorData(int(parent))
 					print '<td class="keep">%s</td>' % (author[AUTHOR_CANONICAL])
@@ -1922,11 +1922,11 @@ def DisplayRemovePseudonym(submission_id):
 
         pseud_id = SQLGetPseudIdByAuthorAndPseud(parent,Record)
         if not pseud_id:
-                InvalidSubmission(submission_id, 'This pseudonym no longer exists')
+                InvalidSubmission(submission_id, 'This alternate name no longer exists')
 
 	authors = SQLgetActualFromPseudo(int(Record))
 	if authors:
-		print 'This name is currently labeled as a pseudonym for the following authors:'
+		print 'This name is currently labeled as an alternate name for the following authors:'
 		print '<ul>'
                 for author in authors:
                         author_data = SQLgetAuthorData(author[0])

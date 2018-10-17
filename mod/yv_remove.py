@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2010   Ahasuerus
+#     (C) COPYRIGHT 2006-2018   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -22,7 +22,7 @@ from viewers import DisplayRemovePseudonym
 
 if __name__ == '__main__':
 
-        PrintPreMod('Proposed Remove Pseudonym Submission')
+        PrintPreMod('Proposed Remove Alternate Name Submission')
         PrintNavBar()
 
 	try:

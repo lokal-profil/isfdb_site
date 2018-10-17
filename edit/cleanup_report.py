@@ -114,7 +114,7 @@ def function2():
                         record = result.fetch_row()
                 print '</table><p>'
         else:
-                print "<h2>No VT-pseudonym mismatches found</h2>"
+                print "<h2>No VT-alternate name mismatches found</h2>"
 
 def function3():
         nonModeratorMessage()
@@ -413,11 +413,11 @@ def function10():
         db.query(query)
         result = db.store_result()
         if not result.num_rows():
-                print '<h2>No pseudonyms with canonical titles found</h2>'
+                print '<h2>No alternate names with canonical titles found</h2>'
                 return
 
         # Print table headers
-        PrintTableColumns(('Pseudonym', 'Count'))
+        PrintTableColumns(('Alternate Name', 'Count'))
         record = result.fetch_row()
         bgcolor = 1
         while record:
@@ -427,7 +427,7 @@ def function10():
                         print '<tr align=left class="table2">'
 
                 print "<td>%s</td>" % ISFDBLink("ea.cgi", record[0][0], record[0][1])
-                # Retrieve the number of canonical titles for this pseudonym
+                # Retrieve the number of canonical titles for this alternate name
                 query2 = """select count(t.title_id) from canonical_author c, titles t
                         where c.author_id=%d and c.ca_status=1 and c.title_id=t.title_id
                         and t.title_parent=0""" % int(record[0][0])
@@ -1990,11 +1990,11 @@ def function53():
         db.query(query)
         result = db.store_result()
         if not result.num_rows():
-                print '<h2>No Authors with Duplicate Pseudonyms Found</h2>'
+                print '<h2>No Authors with Duplicate Alternate Names Found</h2>'
                 return
 
         # Print table headers
-        PrintTableColumns(('','Pseudonym', 'Author', 'Count'))
+        PrintTableColumns(('','Altrenate Name', 'Author', 'Count'))
         record = result.fetch_row()
         bgcolor = 1
         count = 1
@@ -5437,7 +5437,7 @@ def function197():
         print '</table>'
 
 def function198():
-        # Author/Pseudonym language mismatches
+        # Author/alternate name language mismatches
         query = """select distinct a2.author_id, a2.author_canonical, c.cleanup_id
                 from authors a1, authors a2, pseudonyms p, cleanup c
                 where a1.author_id = p.author_id
@@ -5468,7 +5468,7 @@ def function198():
 			record = result.fetch_row()
 		print "</table>"
 	else:
-		print "<h2>No author/pseudonym language mismatches found.</h2>"
+		print "<h2>No author/alternate name language mismatches found.</h2>"
 	return
 
 def function199():
@@ -5508,7 +5508,7 @@ def function199():
 			record = result.fetch_row()
 		print "</table>"
 	else:
-		print "<h2>No author/pseudonym language mismatches found.</h2>"
+		print "<h2>No author/alternate name language mismatches found.</h2>"
 	return
 
 def function200():

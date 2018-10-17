@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2014   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2018   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -22,7 +22,7 @@ debug = 0
 
 if __name__ == '__main__':
 
-        PrintPreMod('Make Pseudonym - SQL Statements')
+        PrintPreMod('Make Alternate Name - SQL Statements')
         PrintNavBar()
 
 	try:

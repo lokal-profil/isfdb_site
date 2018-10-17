@@ -30,7 +30,7 @@ function setPageFocus(title)	{
 	else if (title.indexOf('New ') == 0) {
 		focus_field = 'pub_title';
 	}
-	else if (title.indexOf('Make/Remove a Pseudonym') == 0) {
+	else if (title.indexOf('Make/Remove Alternate Name') == 0) {
 		focus_field = 'ParentName';
 	}
 	else if (title == 'Title Editor') {

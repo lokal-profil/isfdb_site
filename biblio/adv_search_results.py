@@ -450,7 +450,7 @@ class advanced_search:
                         clause = "tags.tag_name %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('tags'), tableInfo('tag_mapping')]
                         joins = ['tag_mapping.title_id=titles.title_id','tags.tag_id=tag_mapping.tag_id']
-                # "exact" is used by "Show All Titles"  and "view all titles by this pseudonym"
+                # "exact" is used by "Show All Titles" and by "view all titles by this alternate name"
                 elif field == 'exact':
                         clause = "canonical_author.author_id=%d and canonical_author.ca_status=1" % int(value)
                         dbases = [tableInfo('titles'), tableInfo('canonical_author')]

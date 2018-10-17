@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2014   Ahasuerus
+#     (C) COPYRIGHT 2006-2018   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -24,7 +24,7 @@ from viewers import DisplayRemovePseudonym
 if __name__ == '__main__':
 
         submission = Submission()
-        submission.header = 'Remove Pseudonym Submission'
+        submission.header = 'Remove Alternate Name Submission'
         submission.cgi_script = 'mkpseudo'
         submission.type = MOD_REMOVE_PSEUDO
         submission.viewer = DisplayRemovePseudonym

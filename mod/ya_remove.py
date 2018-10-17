@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2010-2014   Ahasuerus
+#     (C) COPYRIGHT 2010-2018   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -23,7 +23,7 @@ debug = 0
 
 if __name__ == '__main__':
 
-        PrintPreMod('Remove Pseudonym - SQL Statements')
+        PrintPreMod('Remove Alternate Name - SQL Statements')
         PrintNavBar()
 
 	try:
@@ -56,7 +56,7 @@ if __name__ == '__main__':
                                 pseud_id = SQLGetPseudIdByAuthorAndPseud(parent,Record)
                                 if not pseud_id:
                         		print '<div id="ErrorBox">'
-                        		print "<h3>Error: This pseudonym no longer exists.</h3>"
+                        		print "<h3>Error: This alternate name no longer exists.</h3>"
                                 	print '<h3>Please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject this submission.</h3>' % (HTFAKE, submission)
                         		print '</div>'
                         		PrintPostMod()

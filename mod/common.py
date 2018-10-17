@@ -264,13 +264,13 @@ def deleteFromAuthorTable(author_id):
 	if debug == 0:
         	db.query(query)
 
-	#Delete this author from the Pseudonym table where the author is the pointed-to author
+	#Delete this author from the Pseudonym table where the author is the parent
 	query = "delete from pseudonyms where author_id='%d'" % (int(author_id))
 	print "<li> ", query
 	if debug == 0:
         	db.query(query)
 
-	#Delete this author from the Pseudonym table where the author is the pseudonym
+	#Delete this author from the Pseudonym table where the author is the alternate name
 	query = "delete from pseudonyms where pseudonym='%d'" % (int(author_id))
 	print "<li> ", query
 	if debug == 0:

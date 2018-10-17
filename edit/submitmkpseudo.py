@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2014   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2018   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -24,7 +24,7 @@ from viewers import DisplayMakePseudonym
 if __name__ == '__main__':
 
         submission = Submission()
-        submission.header = 'Make Pseudonym Submission'
+        submission.header = 'Make Alternate Name Submission'
         submission.cgi_script = 'mkpseudo'
         submission.type = MOD_AUTHOR_PSEUDO
         submission.viewer = DisplayMakePseudonym
@@ -69,7 +69,7 @@ if __name__ == '__main__':
                         submission.error('Parent record must be an integer number')
 
         if int(author_id) == int(parent_id):
-                submission.error('Author record can not be a pseudonym of itself')
+                submission.error('Author record can not be an alternate name of itself')
 
 	update_string =  '<?xml version="1.0" encoding="' +UNICODE+ '" ?>\n'
 	update_string += "<IsfdbSubmission>\n"

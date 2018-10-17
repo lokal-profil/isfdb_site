@@ -634,7 +634,7 @@ def PrintEditTools(page_type, userid, arg1, arg2):
                 output.append('<a href="http:/%s/mod/list.cgi?N">Moderator</a>' % HTFAKE)
 	if (page_type == 'author') and (int(arg2) > 0):
 		output.append('<a href="http:/%s/edit/editauth.cgi?%s">Edit Author Data</a>' % (HTFAKE, arg2))
-		output.append('<a href="http:/%s/edit/mkpseudo.cgi?%s">Make/Remove a Pseudonym</a>' % (HTFAKE, arg2))
+		output.append('<a href="http:/%s/edit/mkpseudo.cgi?%s">Make/Remove Alternate Name</a>' % (HTFAKE, arg2))
 		link = AdvSearchLink((('TYPE', 'Title'), ('exact', str(arg2)), ('ORDERBY', 'title_title')))
                 output.append('%s%s</a>' % (link, 'Show All Titles'))
 		output.append('<a href="http:/%s/edit/find_dups.cgi?%s">Check for Duplicate Titles</a>' % (HTFAKE, arg2))
@@ -642,11 +642,11 @@ def PrintEditTools(page_type, userid, arg1, arg2):
 		output.append('<a href="http:/%s/edit/edittitle.cgi?%s">Edit Title Data</a>' % (HTFAKE, arg2))
 		output.append('<a href="http:/%s/diffselect.cgi?%s">Compare Publications</a>' % (HTFAKE, arg2))
 		output.append('<a href="http:/%s/edit/deletetitle.cgi?%s">Delete This Title</a>' % (HTFAKE, arg2))
-		output.append('<a href="http:/%s/edit/mkvariant.cgi?%s">Make This Title a Variant Title or Pseudonymous Work</a>' % (HTFAKE, arg2))
+		output.append('<a href="http:/%s/edit/mkvariant.cgi?%s">Make This Title a Variant</a>' % (HTFAKE, arg2))
 		if arg1 in ('NOVEL', 'COLLECTION', 'OMNIBUS', 'ANTHOLOGY', 'CHAPBOOK', 'NONFICTION'):
                         output.append('<a href="http:/%s/edit/addpub.cgi?%s">Add Publication to This Title</a>' % (HTFAKE, arg2))
 		if (arg1 != 'REVIEW') and (arg1 != 'INTERVIEW'):
-                        output.append('<a href="http:/%s/edit/addvariant.cgi?%s">Add a Variant Title or Pseudonymous Work to This Title</a>' % (HTFAKE, arg2))
+                        output.append('<a href="http:/%s/edit/addvariant.cgi?%s">Add a Variant to This Title</a>' % (HTFAKE, arg2))
 		if arg1 == 'REVIEW':
 			output.append('<a href="http:/%s/edit/linkreview.cgi?%s">Link Review to Title</a>' % (HTFAKE, arg2))
                 output.append('<a href="http:/%s/edit/select_award_type.cgi?%s">Add an Award to This Title</a>' % (HTFAKE, arg2))
@@ -1213,7 +1213,7 @@ def PrintAuthorTable(authors, merge, limit = 100, user = None):
 	if merge and user.moderator:
         	print "<th>Merge</th>"
 	print "<th>Author</th>"
-	print "<th>Pseudonym?</th>"
+	print "<th>Alternate Name?</th>"
 	print "<th>Working Language</th>"
 	print "<th>Directory Entry</th>"
 	print "<th>Legal Name</th>"
@@ -1251,7 +1251,7 @@ def PrintAuthorRecord(record, pseudonym, bgcolor, user, trans_names, trans_legal
 		if count:
                         print "<td>Has pseud. titles"
                 else:
-                        print "<td>Pseudonym"
+                        print "<td>Alternate Name"
                 print "</td>"
         else:
 		print "<td>-</td>"

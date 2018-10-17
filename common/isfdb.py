@@ -357,7 +357,7 @@ SUBMAP = {
   MOD_TITLE_MKVARIANT:	 ('kv_new',    'MakeVariant', 'title.cgi', 'Make Variant Title', 'Record', 'DisplayMakeVariant'),
   MOD_RMTITLE:		 ('tv_remove', 'TitleRemove', 'pl.cgi', 'Remove Title', 'Record', 'DisplayRemoveTitle'),
   MOD_PUB_CLONE :	 ('cv_new',    'NewPub', 'pl.cgi', 'Clone Publication', 'Record', 'DisplayClonePublication'),
-  MOD_AUTHOR_PSEUDO :	 ('yv_new',    'MakePseudonym', 'ea.cgi', 'Create Pseudonym', 'Record', 'DisplayMakePseudonym'),
+  MOD_AUTHOR_PSEUDO :	 ('yv_new',    'MakePseudonym', 'ea.cgi', 'Create Alternate Name', 'Record', 'DisplayMakePseudonym'),
   MOD_AWARD_NEW :	 ('wv_new',    'NewAward', 'award_details.cgi', 'New Award', 'Record', 'DisplayNewAward'),
   MOD_AWARD_UPDATE :	 ('wv_update', 'AwardUpdate', 'award_details.cgi', 'Award Update', 'Record', 'DisplayAwardEdit'),
   MOD_AWARD_DELETE :	 ('wv_delete', 'AwardDelete', None, 'Award Delete', 'Record', 'DisplayAwardDelete'),
@@ -365,7 +365,7 @@ SUBMAP = {
   MOD_PUBLISHER_MERGE :	 ('uv_merge',  'PublisherMerge', 'publisher.cgi', 'Publisher Merge', 'Record', 'DisplayPublisherMerge'),
   MOD_REVIEW_LINK :	 ('rv_link',   'LinkReview', 'title.cgi', 'Link Review', 'Record', 'DisplayLinkReview'),
   MOD_DELETE_SERIES :	 ('sv_delete', 'SeriesDelete', None, 'Delete Series', 'Record', 'DisplaySeriesDelete'),
-  MOD_REMOVE_PSEUDO :    ('yv_remove', 'RemovePseud', 'ea.cgi', 'Remove Pseudonym', 'Record', 'DisplayRemovePseudonym'),
+  MOD_REMOVE_PSEUDO :    ('yv_remove', 'RemovePseud', 'ea.cgi', 'Remove Alternate Name', 'Record', 'DisplayRemovePseudonym'),
   MOD_PUB_SERIES_UPDATE: ('zv_update', 'PubSeriesUpdate', 'pubseries.cgi', 'Publication Series Update', 'Record', 'DisplayPubSeriesChanges'),
   MOD_AWARD_TYPE_UPDATE: ('award_type_update_display', 'AwardTypeUpdate', 'awardtype.cgi', 'Award Type Update', 'Record', 'DisplayAwardTypeChanges'),
   MOD_AWARD_LINK:        ('award_link_display', 'LinkAward', 'award_details.cgi', 'Link Award', 'Award', 'DisplayAwardLink'),
@@ -464,6 +464,11 @@ SUBMISSION_DISPLAY = {
     'TransTitles': 'Transliterated Title',
     'Webpages': 'Web Page',
     'Year': 'Date'
+    }
+
+SUBMISSION_TYPE_DISPLAY = {
+    'MakePseudonym': 'Make Alternate Name',
+    'RemovePseud': 'Remove Alternate Name'    
     }
 
 # Alternative Unicode question marks: '&#10068;' (white) '&#10067;' (black)

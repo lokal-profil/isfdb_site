@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2013   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2009-2018   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -24,7 +24,7 @@ if __name__ == '__main__':
                 if not author:
                         raise
 	except:
-		PrintPreSearch("Make/Remove a Pseudonym")
+		PrintPreSearch("Make/Remove Alternate Name")
 		PrintNavBar("edit/mkpseudo.cgi", 0)
 		print '<h3>Missing or invalid author ID</h3>'
 		PrintPostSearch(0, 0, 0, 0, 0)
@@ -33,21 +33,21 @@ if __name__ == '__main__':
 	##################################################################
 	# Output the leading HTML stuff
 	##################################################################
-	PrintPreSearch("Make/Remove a Pseudonym - %s" % author[AUTHOR_CANONICAL])
+	PrintPreSearch("Make/Remove Alternate Name - %s" % author[AUTHOR_CANONICAL])
 	PrintNavBar("edit/mkpseudo.cgi", author_id)
 
 	print '<div id="HelpBox">'
-        print "<b>Help on creating pseudonyms: </b>"
-        print '<a href="http://%s/index.php/Help:Screen:MakePseudonym">Help:Screen:MakePseudonym</a><p>' % (WIKILOC)
+        print "<b>Help on creating alternate names: </b>"
+        print '<a href="http://%s/index.php/Help:Screen:MakeAlternateName">Help:Screen:MakeAlternateName</a><p>' % (WIKILOC)
 	print '</div>'
 
-	print "Making/removing pseudonyms for <b>%s</b>" % author[AUTHOR_CANONICAL]
+	print "Making/removing alternate name for <b>%s</b>" % author[AUTHOR_CANONICAL]
 	print "<br>"
 
-        #Retrieve a list of current canonical authors for this pseudonym
+        #Retrieve a list of current canonical authors for this alternate name
 	parents = SQLgetActualFromPseudo(author_id)
 	if parents:
-		print 'This name is currently labeled as a pseudonym for the following author(s):'
+		print 'This name is currently labeled as an alternate name for the following author(s):'
 		print '<table border="1">'
                 for parent in parents:
         		print '<tr>'

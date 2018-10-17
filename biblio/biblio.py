@@ -33,9 +33,9 @@ class Bibliography:
 		self.au_id = -1
                 # Full author record
 		self.au_data = []
-		# 0/1 flag indicating whether this author is a pseudonym
+		# 0/1 flag indicating whether this author is an alternate name
 		self.au_is_pseudonym = 0
-		# 0/1 flag indicating whether this author has pseudonyms
+		# 0/1 flag indicating whether this author has alternate names
 		self.au_has_pseudonyms = 0
 		# List of this author's tags
 		self.au_tags = []
@@ -203,7 +203,7 @@ class Bibliography:
                                 self.nongenre = 1
                                 self.displaySummary()
                                 self.printTime('Printing biblio')
-                # If this is a pseudonym, display the name of the parent author
+                # If this is am alternae name, display the name of the parent author
                 elif self.au_is_pseudonym and not self.selfPseudo():
                         self.printAuthorPseudo()
                 # If this is not an Award page and there are stray titles, display them
@@ -579,10 +579,10 @@ class Bibliography:
         def printAuthorPseudo(self):
                 authors = SQLgetBriefActualFromPseudo(self.au_id)
                 if len(authors) > 0:
-                        print '<b>Pseudonym. See: '
+                        print '<b>Alternate Name. See: '
                         displayAuthorList(authors)
                         print AdvSearchLink((('TYPE', 'Title'), ('exact', str(self.au_id)), ('ORDERBY', 'title_title')))
-                        print '(or view all titles by this pseudonym)</a></b>'
+                        print '(or view all titles published using this alternate name)</a></b>'
 
         def printInterviews(self):
 		if not self.interviews:
