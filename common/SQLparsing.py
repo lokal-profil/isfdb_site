@@ -2422,16 +2422,15 @@ def SQLfindReviewedTitle(review_id):
 	else:
 		return(0)
 
-def SQLGetPseudIdByAuthorAndPseud(parent,author):
-        query = "select pseudo_id from pseudonyms where author_id = %d and pseudonym = %d order by pseudo_id desc limit 1" % (int(parent), int(author))
+def SQLGetPseudIdByAuthorAndPseud(parent,pseudonym):
+        query = "select pseudo_id from pseudonyms where author_id = %d and pseudonym = %d order by pseudo_id desc limit 1" % (int(parent), int(pseudonym))
 	db.query(query)
 	result = db.store_result()
 	pub = result.fetch_row()
-	results = []
-	while pub:
-		results.append(pub[0])
-		pub = result.fetch_row()
-	return results
+	if pub:
+		return pub[0][0]
+	else:
+                return []
 
 def LoadWebSites(isbn, user_id = None, format = None):
         from urlparse import urlparse

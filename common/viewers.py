@@ -1922,7 +1922,7 @@ def DisplayRemovePseudonym(submission_id):
 
         pseud_id = SQLGetPseudIdByAuthorAndPseud(parent,Record)
         if not pseud_id:
-                InvalidSubmission(submission_id, 'This alternate name no longer exists')
+                InvalidSubmission(submission_id, 'This alternate name association no longer exists')
 
 	authors = SQLgetActualFromPseudo(int(Record))
 	if authors:

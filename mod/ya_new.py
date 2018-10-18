@@ -63,8 +63,8 @@ if __name__ == '__main__':
         print "</ul>"
         print "<hr>"
         print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
-	print '[<a href="http:/' +HTFAKE+ '/ea.cgi?%d">View Author</a>]' % int(parent)
-	print '[<a href="http:/' +HTFAKE+ '/ea.cgi?%d">View Pseudonym</a>]' % int(Record)
+	print '[<a href="http:/' +HTFAKE+ '/ea.cgi?%d">View Canonical Name</a>]' % int(parent)
+	print '[<a href="http:/' +HTFAKE+ '/ea.cgi?%d">View Alternate Name</a>]' % int(Record)
         print "<p>"
 
 
