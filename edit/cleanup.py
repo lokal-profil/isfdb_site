@@ -38,23 +38,28 @@ if __name__ == '__main__':
 	except:
                 all_reports = 0
 
-        print """<h3>The numbers in parentheses are the numbers of problem records found when each report
-                was regenerated overnight; the current numbers may be lower.</h3>"""
+        print '<b>Legend:</b>'
+        print '<ul>'
+        print """<li>The numbers in parentheses show how many problem records were found when each report
+                was last regenerated; the current numbers may be lower."""
 
         if user.moderator:
-                print """Reports that can be viewed by non-moderators have asterisks next to their names.
-                        Note that non-moderator can't mark records as "ignored"."""
+                print """<li>Reports that can be viewed by non-moderators have asterisks next to their names.
+                        <li>Note that non-moderators can't mark records as "ignored".
+                        <li>For an explanation of the "ignore" functionality see
+                        <a href="http://%s/index.php/Help:Screen:IgnoreCleanupRecords">this Help page.</a>""" % WIKILOC
         else:
-                print """Some cleanup reports allow moderators to mark records as "ignored".
+                print """<li>Some cleanup reports allow moderators to mark records as "ignored".
                          Note that moderators have access to additional reports. """
 
         if all_reports:
-                print 'Displaying all reports. You can also limit the list to \
-                <a href="http:/%s/edit/cleanup.cgi?0">reports with potential problems</a>.' % HTFAKE
+                print """<li>Displaying all reports. You can also limit the list to 
+                <a href="http:/%s/edit/cleanup.cgi?0">reports with identified potential problems</a>.""" % HTFAKE
         else:
                 if user.moderator:
-                        print 'Only reports with identified potential problems are displayed. You can \
-                        also view a <a href="http:/%s/edit/cleanup.cgi?1">full list of reports</a>.' % HTFAKE
+                        print """<li>Only reports with identified potential problems are displayed. You can 
+                        also view a <a href="http:/%s/edit/cleanup.cgi?1">full list of reports</a>.""" % HTFAKE
+        print '</ul>'
 
         (reports, sections, non_moderator) = reportsDict()
 
