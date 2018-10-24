@@ -262,6 +262,21 @@ def PrintUserSearch():
 	print '<input TYPE="SUBMIT" VALUE="Submit Query">'
 	print '</form>'
 
+def PrintNotesSearch():
+	print '<h2>Notes Search</h2>'
+	print '<form METHOD="GET" action="http:/%s/note_search_results.cgi">' % (HTFAKE)
+	print '<p>'
+	print '<select NAME="OPERATOR">'
+	print '<option SELECTED VALUE="exact">is exactly'
+	print '<option VALUE="contains">contains'
+	print '<option VALUE="starts_with">starts with'
+	print '<option VALUE="ends_with">ends with'
+       	print '</select>'
+        print '<input NAME="NOTE_VALUE" SIZE="50">'
+	print '<p>'
+	print '<input TYPE="SUBMIT" VALUE="Submit Query">'
+	print '</form>'
+
 if __name__ == '__main__':
 
         PrintHeader("ISFDB Advanced Search")
@@ -281,6 +296,8 @@ if __name__ == '__main__':
 	PrintIdentifierSearch()
 	print '<p><hr><p>'
 	PrintUserSearch()
+	print '<p><hr><p>'
+	PrintNotesSearch()
 
 	PrintTrailer('search', 0, 0)
 

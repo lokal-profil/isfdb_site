@@ -41,6 +41,7 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/myrecent.cgi \
 	  DIR/myvotes.cgi \
 	  DIR/note.cgi \
+	  DIR/note_search_results.cgi \
 	  DIR/pe.cgi \
 	  DIR/pl.cgi \
 	  DIR/popular_authors.cgi \
