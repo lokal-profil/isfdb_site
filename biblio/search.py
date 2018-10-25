@@ -266,9 +266,10 @@ def PrintNotesSearch():
 	print '<h2>Notes Search</h2>'
 	print '<form METHOD="GET" action="http:/%s/note_search_results.cgi">' % (HTFAKE)
 	print '<p>'
+	print 'Note/Synopsis '
 	print '<select NAME="OPERATOR">'
-	print '<option SELECTED VALUE="exact">is exactly'
-	print '<option VALUE="contains">contains'
+	print '<option SELECTED VALUE="contains">contains'
+	print '<option VALUE="exact">is exactly'
 	print '<option VALUE="starts_with">starts with'
 	print '<option VALUE="ends_with">ends with'
        	print '</select>'
