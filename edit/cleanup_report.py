@@ -6087,6 +6087,38 @@ def function240():
 def function241():
         empty_containers_grid(241)
 
+def function242():
+        query = """select distinct t1.title_id, t1.title_title
+                from titles t1, titles t2, pub_content pc1, pub_content pc2, cleanup c
+                where t1.title_id = pc1.title_id
+                and pc1.pub_id = pc2.pub_id
+                and pc2.title_id = t2.title_id
+                and t1.title_ttype = 'CHAPBOOK'
+                and t2.title_ttype = 'SHORTFICTION'
+                and t1.title_jvn != t2.title_jvn
+                and t1.title_id = c.record_id
+                and c.report_type = 242
+                order by t1.title_title"""
+	db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	num = result.num_rows()
+
+        if num:
+                PrintTableColumns(('', 'Title',))
+                bgcolor = 1
+                count = 1
+                while record:
+                        title_id = record[0][0]
+                        title_title = record[0][1]
+                        PrintTitleRecord(title_id, title_title, bgcolor, count)
+                        bgcolor ^= 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table><p>'
+        else:
+                print "<h2>No CHAPBOOK/SHORTFICTION juvenile flag mismatches found</h2>"
+
 def empty_containers_grid(report_id):
         anchor = '<a href="http:/%s/edit/empty_containers.cgi' % HTFAKE
         years = {}

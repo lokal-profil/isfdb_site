@@ -1471,6 +1471,17 @@ def nightly_cleanup_reports():
         #   Report 241: Magazines without Fiction Titles
         query = emptyContainers(241, "'MAGAZINE'")
 
+        #   Report 242: CHAPBOOK/SHORTFICTION Juvenile Flag Mismatches
+        query = """select distinct t1.title_id
+                from titles t1, titles t2, pub_content pc1, pub_content pc2
+                where t1.title_id = pc1.title_id
+                and pc1.pub_id = pc2.pub_id
+                and pc2.title_id = t2.title_id
+                and t1.title_ttype = 'CHAPBOOK'
+                and t2.title_ttype = 'SHORTFICTION'
+                and t1.title_jvn != t2.title_jvn"""
+        standardReport(query, 242)
+
 def emptyContainers(report_id, container_types):
         query = """insert into cleanup (record_id, report_type, record_id_2)
                 select xx.pub_id, %d, IF(xx.pub_year='0000-00-00', 0, REPLACE(SUBSTR(xx.pub_year, 1,7),'-',''))
