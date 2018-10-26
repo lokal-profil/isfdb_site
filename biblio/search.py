@@ -278,6 +278,22 @@ def PrintNotesSearch():
 	print '<input TYPE="SUBMIT" VALUE="Submit Query">'
 	print '</form>'
 
+def PrintWebPagesSearch():
+	print '<h2>Web Pages Search</h2>'
+	print '<form METHOD="GET" action="http:/%s/webpages_search_results.cgi">' % (HTFAKE)
+	print '<p>'
+	print 'Web Page '
+	print '<select NAME="OPERATOR">'
+	print '<option SELECTED VALUE="contains">contains'
+	print '<option VALUE="exact">is exactly'
+	print '<option VALUE="starts_with">starts with'
+	print '<option VALUE="ends_with">ends with'
+       	print '</select>'
+        print '<input NAME="WEBPAGE_VALUE" SIZE="100">'
+	print '<p>'
+	print '<input TYPE="SUBMIT" VALUE="Submit Query">'
+	print '</form>'
+
 if __name__ == '__main__':
 
         PrintHeader("ISFDB Advanced Search")
@@ -299,6 +315,8 @@ if __name__ == '__main__':
 	PrintUserSearch()
 	print '<p><hr><p>'
 	PrintNotesSearch()
+	print '<p><hr><p>'
+	PrintWebPagesSearch()
 
 	PrintTrailer('search', 0, 0)
 

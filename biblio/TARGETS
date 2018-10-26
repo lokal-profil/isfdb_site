@@ -74,4 +74,5 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/usertitles.cgi \
 	  DIR/userver.cgi \
 	  DIR/view_submission.cgi \
-	  DIR/vstats.cgi
+	  DIR/vstats.cgi \
+	  DIR/webpages_search_results.cgi

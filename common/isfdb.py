@@ -246,6 +246,17 @@ SUB_NEW_RECORD_ID    = 10
 WEBSITE_URL          = 0
 WEBSITE_NAME         = 1
 
+# Field offsets for Web Pages records
+WEBPAGE_ID           = 0
+WEBPAGE_AUTHOR       = 1
+WEBPAGE_PUBLISHER    = 2
+WEBPAGE_URL          = 3
+WEBPAGE_PUB_SERIES   = 4
+WEBPAGE_TITLE        = 5
+WEBPAGE_AWARD_TYPE   = 6
+WEBPAGE_SERIES       = 7
+WEBPAGE_AWARD_CAT    = 8
+
 # Field offsets for primary verifications
 PRIM_VERIF_ID        = 0
 PRIM_VERIF_PUB_ID    = 1
