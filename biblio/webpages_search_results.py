@@ -27,13 +27,13 @@ class WebPagesSearch:
                 self.records = AutoVivification()
                 self.webpages = AutoVivification()
                 self.record_types = {
-                        'Authors': ('author_id', 'author_canonical', 'ea', 'authors'),
-                        'Titles': ('title_id', 'title_title', 'title', 'titles'),
-                        'Series': ('series_id', 'series_title', 'pe', 'series'),
-                        'Publishers': ('publisher_id', 'publisher_name', 'publisher', 'publishers'),
-                        'Publication Series': ('pub_series_id', 'pub_series_name', 'pubseries', 'pub_series'),
-                        'Award Categories': ('award_cat_id', 'award_cat_name', 'award_category', 'award_cats'),
-                        'Award Types': ('award_type_id', 'award_type_name', 'awardtype', 'award_types')
+                        'Authors': ('author_id', 'author_canonical', 'ea', 'authors', 'author_lastname'),
+                        'Titles': ('title_id', 'title_title', 'title', 'titles', 'title_title'),
+                        'Series': ('series_id', 'series_title', 'pe', 'series', 'series_title'),
+                        'Publishers': ('publisher_id', 'publisher_name', 'publisher', 'publishers', 'publisher_name'),
+                        'Publication Series': ('pub_series_id', 'pub_series_name', 'pubseries', 'pub_series', 'pub_series_name'),
+                        'Award Categories': ('award_cat_id', 'award_cat_name', 'award_category', 'award_cats', 'award_cat_name'),
+                        'Award Types': ('award_type_id', 'award_type_name', 'awardtype', 'award_types', 'award_type_name')
                         }
 
         def get_search_parameters(self):
@@ -96,8 +96,6 @@ class WebPagesSearch:
                         elif fields[WEBPAGE_AWARD_CAT]:
                                 record_type = 'Award Categories'
                                 record_id = fields[WEBPAGE_AWARD_CAT]
-                        else:
-                                raise
                         self.webpages[record_type][record_id] = fields[WEBPAGE_URL]
                         record = result.fetch_row()
 
@@ -110,7 +108,8 @@ class WebPagesSearch:
                         id_field = self.record_types[record_type][0]
                         name_field = self.record_types[record_type][1]
                         table = self.record_types[record_type][3]
-                        query = "select %s, %s from %s where %s in (%s)" % (id_field, name_field, table, id_field, in_clause)
+                        ordering_field = self.record_types[record_type][4]
+                        query = "select %s, %s, %s from %s where %s in (%s)" % (id_field, name_field, ordering_field, table, id_field, in_clause)
                         db.query(query)
                         result = db.store_result()
                         self.num = result.num_rows()
@@ -118,7 +117,8 @@ class WebPagesSearch:
                         while record:
                                 record_id = record[0][0]
                                 record_name = record[0][1]
-                                self.records[record_type][record_name][record_id] = self.webpages[record_type][record_id]
+                                ordering_field = record[0][2]
+                                self.records[record_type][ordering_field][record_name][record_id] = self.webpages[record_type][record_id]
                                 record = result.fetch_row()
 
         def print_results(self):
@@ -129,11 +129,13 @@ class WebPagesSearch:
                 print '<p><b>Jump to record type:</b>'
                 print '<ul>'
                 for record_type in sorted(self.record_types):
-                        if record_type in self.records:
-                                count = 0
-                                for record_name in self.records[record_type]:
-                                        count += len(self.records[record_type][record_name])
-                                print '<li><a href="#%s">%s</a> (%d)' % (record_type.replace(' ',''), record_type, count)
+                        if record_type not in self.records:
+                                continue
+                        count = 0
+                        for ordering_field in self.records[record_type]:
+                                for record_name in self.records[record_type][ordering_field]:
+                                        count += len(self.records[record_type][ordering_field][record_name])
+                        print '<li><a href="#%s">%s</a> (%d)' % (record_type.replace(' ',''), record_type, count)
                 print '</ul>'
                 for record_type in sorted(self.record_types):
                         if record_type not in self.records:
@@ -148,15 +150,17 @@ class WebPagesSearch:
                         cgi_script = self.record_types[record_type][2]
                         bgcolor = 1
                         count = 1
-                        for record_name in sorted(self.records[record_type]):
-                                for record_id in self.records[record_type][record_name]:
-                                        print '<tr class="table%d">' % (bgcolor+1)
-                                        print '<td>%d</td>' % count
-                                        print '<td>%s</td>' % ISFDBLink('%s.cgi' % cgi_script, record_id, record_name)
-                                        print '<td>%s</td>' % self.records[record_type][record_name][record_id]
-                                        print '</tr>'
-                                        bgcolor ^= 1
-                                        count += 1
+                        for ordering_field in sorted(self.records[record_type]):
+                                for record_name in sorted(self.records[record_type][ordering_field]):
+                                        for record_id in self.records[record_type][ordering_field][record_name]:
+                                                print '<tr class="table%d">' % (bgcolor+1)
+                                                print '<td>%d</td>' % count
+                                                print '<td>%s</td>' % ISFDBLink('%s.cgi' % cgi_script, record_id, record_name)
+                                                url = self.records[record_type][ordering_field][record_name][record_id]
+                                                print '<td><a href="%s" target="_blank">%s</a></td>' % (url, url)
+                                                print '</tr>'
+                                                bgcolor ^= 1
+                                                count += 1
                         print '</table>'
 
 if __name__ == '__main__':

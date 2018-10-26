@@ -278,8 +278,8 @@ def PrintNotesSearch():
 	print '<input TYPE="SUBMIT" VALUE="Submit Query">'
 	print '</form>'
 
-def PrintWebPagesSearch():
-	print '<h2>Web Pages Search</h2>'
+def PrintWebPageSearch():
+	print '<h2>Web Page Search</h2>'
 	print '<form METHOD="GET" action="http:/%s/webpages_search_results.cgi">' % (HTFAKE)
 	print '<p>'
 	print 'Web Page '
@@ -316,7 +316,7 @@ if __name__ == '__main__':
 	print '<p><hr><p>'
 	PrintNotesSearch()
 	print '<p><hr><p>'
-	PrintWebPagesSearch()
+	PrintWebPageSearch()
 
 	PrintTrailer('search', 0, 0)
 
