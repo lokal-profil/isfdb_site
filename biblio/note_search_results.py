@@ -27,16 +27,16 @@ class NoteSearch:
                 self.clause = ''
                 self.records = AutoVivification()
                 self.record_types = {
-                        'Authors': ('author_id', 'author_canonical', 'author_note', 'ea', 'authors'),
-                        'Titles': ('title_id', 'title_title', 'note_id', 'title', 'titles'),
-                        'Synopses': ('title_id', 'title_title', 'title_synopsis', 'title', 'titles'),
-                        'Series': ('series_id', 'series_title', 'series_note_id', 'pe', 'series'),
-                        'Publications': ('pub_id', 'pub_title', 'note_id', 'pl', 'pubs'),
-                        'Publishers': ('publisher_id', 'publisher_name', 'note_id', 'publisher', 'publishers'),
-                        'Publication Series': ('pub_series_id', 'pub_series_name', 'pub_series_note_id', 'pubseries', 'pub_series'),
-                        'Awards': ('award_id', 'award_title', 'award_note_id', 'award_details', 'awards'),
-                        'Award Categories': ('award_cat_id', 'award_cat_name', 'award_cat_note_id', 'award_category', 'award_cats'),
-                        'Award Types': ('award_type_id', 'award_type_name', 'award_type_note_id', 'awardtype', 'award_types')
+                        'Authors': ('author_id', 'author_canonical', 'author_note', 'ea', 'authors', 'author_lastname'),
+                        'Titles': ('title_id', 'title_title', 'note_id', 'title', 'titles', 'title_title'),
+                        'Synopses': ('title_id', 'title_title', 'title_synopsis', 'title', 'titles', 'title_title'),
+                        'Series': ('series_id', 'series_title', 'series_note_id', 'pe', 'series', 'series_title'),
+                        'Publications': ('pub_id', 'pub_title', 'note_id', 'pl', 'pubs', 'pub_title'),
+                        'Publishers': ('publisher_id', 'publisher_name', 'note_id', 'publisher', 'publishers', 'publisher_name'),
+                        'Publication Series': ('pub_series_id', 'pub_series_name', 'pub_series_note_id', 'pubseries', 'pub_series', 'pub_series_name'),
+                        'Awards': ('award_id', 'award_title', 'award_note_id', 'award_details', 'awards', 'award_title'),
+                        'Award Categories': ('award_cat_id', 'award_cat_name', 'award_cat_note_id', 'award_category', 'award_cats', 'award_cat_name'),
+                        'Award Types': ('award_type_id', 'award_type_name', 'award_type_note_id', 'awardtype', 'award_types', 'award_type_name')
                         }
 
         def get_search_parameters(self):
@@ -71,7 +71,7 @@ class NoteSearch:
                 sys.exit(0)
 
         def get_author_notes(self):
-                query = """select author_id, author_canonical, author_note
+                query = """select author_id, author_canonical, author_note, author_lastname
                                 from authors where author_note %s limit 1000""" % self.clause
                 db.query(query)
                 result = db.store_result()
@@ -81,7 +81,8 @@ class NoteSearch:
                         author_id = record[0][0]
                         author_name = record[0][1]
                         note_text = record[0][2]
-                        self.records['Authors'][author_name][author_id] = note_text
+                        author_lastname = record[0][3]
+                        self.records['Authors'][author_lastname][author_name][author_id] = note_text
                         record = result.fetch_row()
 
         def get_other_notes(self):
@@ -107,7 +108,8 @@ class NoteSearch:
                         id_field = self.record_types[record_type][0]
                         name_field = self.record_types[record_type][1]
                         note_field = self.record_types[record_type][2]
-                        query = """select %s, %s, %s from %s where %s in (%s)""" % (id_field, name_field, note_field, table, note_field, in_clause)
+                        ordering_field = self.record_types[record_type][5]
+                        query = """select %s, %s, %s, %s from %s where %s in (%s)""" % (id_field, name_field, note_field, ordering_field, table, note_field, in_clause)
                         db.query(query)
                         result = db.store_result()
                         self.num = result.num_rows()
@@ -117,7 +119,8 @@ class NoteSearch:
                                 record_name = record[0][1]
                                 note_id = record[0][2]
                                 note_text = notes[note_id]
-                                self.records[record_type][record_name][record_id] = note_text
+                                ordering_name = record[0][3]
+                                self.records[record_type][ordering_name][record_name][record_id] = note_text
                                 record = result.fetch_row()
 
         def print_notes(self):
@@ -128,11 +131,13 @@ class NoteSearch:
                 print '<p><b>Jump to record type:</b>'
                 print '<ul>'
                 for record_type in sorted(self.record_types):
-                        if record_type in self.records:
-                                count = 0
-                                for record_name in self.records[record_type]:
-                                        count += len(self.records[record_type][record_name])
-                                print '<li><a href="#%s">%s</a> (%d)' % (record_type.replace(' ',''), record_type, count)
+                        if record_type not in self.records:
+                                continue
+                        count = 0
+                        for ordering_field in self.records[record_type]:
+                                for record_name in self.records[record_type][ordering_field]:
+                                        count += len(self.records[record_type][ordering_field][record_name])
+                        print '<li><a href="#%s">%s</a> (%d)' % (record_type.replace(' ',''), record_type, count)
                 print '</ul>'
                 for record_type in sorted(self.record_types):
                         if record_type not in self.records:
@@ -147,15 +152,17 @@ class NoteSearch:
                         cgi_script = self.record_types[record_type][3]
                         bgcolor = 1
                         count = 1
-                        for record_name in sorted(self.records[record_type]):
-                                for record_id in self.records[record_type][record_name]:
-                                        print '<tr class="table%d">' % (bgcolor+1)
-                                        print '<td>%d</td>' % count
-                                        print '<td>%s</td>' % ISFDBLink('%s.cgi' % cgi_script, record_id, record_name)
-                                        print '<td>%s</td>' % FormatNote(self.records[record_type][record_name][record_id])
-                                        print '</tr>'
-                                        bgcolor ^= 1
-                                        count += 1
+                        for ordering_field in sorted(self.records[record_type]):
+                                for record_name in sorted(self.records[record_type][ordering_field]):
+                                        for record_id in self.records[record_type][ordering_field][record_name]:
+                                                print '<tr class="table%d">' % (bgcolor+1)
+                                                print '<td>%d</td>' % count
+                                                print '<td>%s</td>' % ISFDBLink('%s.cgi' % cgi_script, record_id, record_name)
+                                                note = self.records[record_type][ordering_field][record_name][record_id]
+                                                print '<td>%s</td>' % FormatNote(note,'','full')
+                                                print '</tr>'
+                                                bgcolor ^= 1
+                                                count += 1
                         print '</table>'
 
 if __name__ == '__main__':
