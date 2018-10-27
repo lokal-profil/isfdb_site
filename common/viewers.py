@@ -1380,9 +1380,9 @@ def DisplayTitleDelete(submission_id):
 		PrintField1('TitleType',  current.used_ttype,     current.title_ttype)
 		PrintField1('Storylen',   current.used_storylen,  current.title_storylen)
 		PrintField1('ContentIndicator', current.used_content, current.title_content)
+		PrintField1('NonGenre',   current.used_non_genre, current.title_non_genre)
 		PrintField1('Juvenile',   current.used_jvn,       current.title_jvn)
 		PrintField1('Novelization', current.used_nvz,     current.title_nvz)
-		PrintField1('NonGenre',   current.used_non_genre, current.title_non_genre)
 		PrintField1('Graphic',    current.used_graphic,   current.title_graphic)
 
 		PrintMultField1('Webpages', 'Web page', '<br>', current.used_webpages, current.title_webpages)
@@ -2327,9 +2327,9 @@ def DisplayMergeTitles(submission_id):
 		PrintMergeField('Seriesnum', Document, KeepId, Records)
 		PrintMergeField('Storylen',  Document, KeepId, Records)
 		PrintMergeField('ContentIndicator',  Document, KeepId, Records)
+		PrintMergeField('NonGenre',  Document, KeepId, Records)
 		PrintMergeField('Juvenile',  Document, KeepId, Records)
 		PrintMergeField('Novelization',  Document, KeepId, Records)
-		PrintMergeField('NonGenre',  Document, KeepId, Records)
 		PrintMergeField('Graphic',   Document, KeepId, Records)
 		PrintMergeField('Language',  Document, KeepId, Records)
 		PrintMergeField('Webpages',  Document, KeepId, Records)
@@ -2540,9 +2540,9 @@ def DisplayMakeVariant(submission_id):
                         PrintField2('Non-Genre', existingParent.title_non_genre, 1, 1, theVariant.title_non_genre, warning, 1)
 
                         warning = ''
-                        if existingParent.title_graphic != theVariant.title_graphic and int(parent):
-                                warning = 'Graphic flag mismatch'
-                        PrintField2('Graphic', existingParent.title_graphic, 1, 1, theVariant.title_graphic, warning, 1)
+                        if existingParent.title_jvn != theVariant.title_jvn and int(parent):
+                                warning = 'Juvenile flag mismatch'
+                        PrintField2('Juvenile', existingParent.title_jvn, 1, 1, theVariant.title_jvn, warning, 1)
 
                         warning = ''
                         if existingParent.title_nvz != theVariant.title_nvz and int(parent):
@@ -2550,9 +2550,9 @@ def DisplayMakeVariant(submission_id):
                         PrintField2('Novelization', existingParent.title_nvz, 1, 1, theVariant.title_nvz, warning, 1)
 
                         warning = ''
-                        if existingParent.title_jvn != theVariant.title_jvn and int(parent):
-                                warning = 'Juvenile flag mismatch'
-                        PrintField2('Juvenile', existingParent.title_jvn, 1, 1, theVariant.title_jvn, warning, 1)
+                        if existingParent.title_graphic != theVariant.title_graphic and int(parent):
+                                warning = 'Graphic flag mismatch'
+                        PrintField2('Graphic', existingParent.title_graphic, 1, 1, theVariant.title_graphic, warning, 1)
 
                         PrintField2('Language', existingParent.title_language, 1, 1, theVariant.title_language, '', 1)
 
@@ -2584,9 +2584,9 @@ def DisplayMakeVariant(submission_id):
                         PrintField2('TitleType', parent_title_type, 1, 1, theVariant.title_ttype, warning, 1)
                         PrintField2('Length', theVariant.title_storylen, 1, 1, theVariant.title_storylen, '', 1)
                         PrintField2('Non-Genre', theVariant.title_non_genre, 1, 1, theVariant.title_non_genre, warning, 1)
-                        PrintField2('Graphic', theVariant.title_graphic, 1, 1, theVariant.title_graphic, warning, 1)
-                        PrintField2('Novelization', theVariant.title_nvz, 1, 1, theVariant.title_nvz, warning, 1)
                         PrintField2('Juvenile', theVariant.title_jvn, 1, 1, theVariant.title_jvn, warning, 1)
+                        PrintField2('Novelization', theVariant.title_nvz, 1, 1, theVariant.title_nvz, warning, 1)
+                        PrintField2('Graphic', theVariant.title_graphic, 1, 1, theVariant.title_graphic, warning, 1)
                         PrintField2XML('Language',  merge, theVariant.used_language,  theVariant.title_language)
                         PrintMultField('Authors', 'Author', '+', doc, merge, theVariant.num_authors, theVariant.title_authors)
 
@@ -3360,9 +3360,9 @@ def DisplayNewPub(submission_id):
         PrintField1XML('Series', merge, title_data)
         PrintField1XML('SeriesNum', merge, title_data)
         PrintField1XML('ContentIndicator', merge, title_data)
+        PrintField1XML('NonGenre',  merge, title_data)
         PrintField1XML('Juvenile',  merge, title_data)
         PrintField1XML('Novelization',  merge, title_data)
-        PrintField1XML('NonGenre',  merge, title_data)
         PrintField1XML('Graphic',   merge, title_data)
         PrintMultFieldRaw(merge, doc, 'Webpages', 'Webpage')
         print '</table>'
