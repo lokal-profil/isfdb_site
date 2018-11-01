@@ -48,6 +48,7 @@ class advanced_search:
         	self.query = ''
         	self.records = []
         	self.num = 0
+        	self.wildcards = '%*_'
 
         def parse_parameters(self):
                 sys.stderr = sys.stdout
@@ -212,8 +213,17 @@ class advanced_search:
                         sys.exit(0)
                 return padded_entry
 
+        def validateEmptyTerm(self, value):
+                stripped = value
+                for wildcard in self.wildcards:
+                        stripped = stripped.replace(wildcard,'')
+                        if not stripped:
+                                DisplayError('Search values must contain at least one non-wildcard character')
+
         def validateTerm(self, field, value):
-                if field == 'month':
+                self.validateEmptyTerm(value)
+                
+                if field in ('month', 'pub_month'):
                         (year, month, error) = validateMonth(value)
                         if error:
                                 DisplayError(error)
@@ -227,7 +237,7 @@ class advanced_search:
                                 DisplayError(message[:-2])
                 elif field in ('title_graphic', 'title_non_genre', 'title_jvn', 'title_nvz'):
                         if value.lower() not in ('yes', 'no'):
-                                DisplayError('Valid Yes/No value required')
+                                DisplayError('Yes/No value required')
                 elif field == 'pub_ctype':
                         ttypes = ('ANTHOLOGY', 'CHAPBOOK', 'COLLECTION', 'FANZINE', 'MAGAZINE', 'NONFICTION', 'NOVEL', 'OMNIBUS')
                         if value.upper() not in ttypes:
@@ -236,10 +246,6 @@ class advanced_search:
                                         message += ttype
                                         message += ", "
                                 DisplayError(message[:-2])
-                elif field == 'pub_month':
-                        (year, month, error) = validateMonth(value)
-                        if error:
-                                DisplayError(error)
 
         def mergeTableInfoLists(self, dest, src):
                 for sti in src:
