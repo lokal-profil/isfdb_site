@@ -786,6 +786,15 @@ class Submission:
                         changes = 1
                 return (changes, update_string)
 
+        def different_authors(self, new_authors, old_authors):
+                old_list = []
+                for old_author in old_authors:
+                        old_list.append(XMLescape(old_author))
+                if set(new_authors) != set(old_list):
+                        return 1
+                else:
+                        return 0
+
 
 def compare_lists(newField, oldField):
         # Compare two lists of values. Return 1 if there are different elements, 0 otherwise.

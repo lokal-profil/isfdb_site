@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -164,65 +164,23 @@ if __name__ == '__main__':
 	if new.form.has_key('mod_note'):
 		update_string += "    <ModNote>%s</ModNote>\n" % (db.escape_string(XMLescape(new.form['mod_note'].value)))
 
-	#############################################################
-	#	AUTHORS
-	#############################################################
-	update = 0
-	if new.num_authors != old.num_authors:
-		update = 1
-	else:
-		counter = 0
-		while counter < new.num_authors:
-			if new.title_authors[counter] != XMLescape(old.title_authors[counter]):
-					update = 1
-					break
-			counter += 1
-	if update:
+	if submission.different_authors(new.title_authors, old.title_authors):
 		update_string += "    <Authors>\n"
-		counter = 0
-		while counter < new.num_authors:
-			update_string += "      <Author>%s</Author>\n" % (db.escape_string(new.title_authors[counter]))
-			counter += 1
+		for new_author in new.title_authors:
+			update_string += "      <Author>%s</Author>\n" % db.escape_string(new_author)
 		update_string += "    </Authors>\n"
 
-	#############################################################
-	#	SUBJECT AUTHORS
-	#############################################################
 	if old.title_ttype == 'REVIEW':
-		update = 0
-		if new.num_subjauthors != old.num_subjauthors:
-			update = 1
-		else:
-			counter = 0
-			while counter < new.num_subjauthors:
-				if new.title_subjauthors[counter] != XMLescape(old.title_subjauthors[counter]):
-						update = 1
-						break
-				counter += 1
-		if update:
-			update_string += "    <BookAuthors>\n"
-			counter = 0
-			while counter < new.num_subjauthors:
-				update_string += "      <BookAuthor>%s</BookAuthor>\n" % (db.escape_string(new.title_subjauthors[counter]))
-				counter += 1
-			update_string += "    </BookAuthors>\n"
+                if submission.different_authors(new.title_subjauthors, old.title_subjauthors):
+                        update_string += "    <BookAuthors>\n"
+                        for new_author in new.title_subjauthors:
+                                update_string += "      <BookAuthor>%s</BookAuthor>\n" % db.escape_string(new_author)
+                        update_string += "    </BookAuthors>\n"
 	elif old.title_ttype == 'INTERVIEW':
-		update = 0
-		if new.num_subjauthors != old.num_subjauthors:
-			update = 1
-		else:
-			counter = 0
-			while counter < new.num_subjauthors:
-				if new.title_subjauthors[counter] != XMLescape(old.title_subjauthors[counter]):
-						update = 1
-						break
-				counter += 1
-		if update:
+                if submission.different_authors(new.title_subjauthors, old.title_subjauthors):
 			update_string += "    <Interviewees>\n"
-			counter = 0
-			while counter < new.num_subjauthors:
-				update_string += "      <Interviewee>%s</Interviewee>\n" % (db.escape_string(new.title_subjauthors[counter]))
-				counter += 1
+			for new_author in new.title_subjauthors:
+				update_string += "      <Interviewee>%s</Interviewee>\n" % db.escape_string(new_author)
 			update_string += "    </Interviewees>\n"
 
 

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -138,33 +138,15 @@ if __name__ == '__main__':
 	if new.form.has_key('Source'):
 		update_string += "    <Source>%s</Source>\n" % (db.escape_string(XMLescape(new.form['Source'].value)))
 
-	#############################################################
-	# External IDs
-	#############################################################
         # Only add the submitted identifiers to the submission if they are
         # different from the identifiers that are currently on file
         if old.identifiers != new.identifiers:
                 update_string += new.xmlIdentifiers()
 	
-	#############################################################
-	# Authors
-	#############################################################
-	update = 0
-	if new.num_authors != old.num_authors:
-		update = 1
-	else:
-		counter = 0
-		while counter < new.num_authors:
-			if new.pub_authors[counter] != XMLescape(old.pub_authors[counter]):
-					update = 1
-					break
-			counter += 1
-	if update:
+	if submission.different_authors(new.pub_authors, old.pub_authors):
 		update_string += "    <Authors>\n"
-		counter = 0
-		while counter < new.num_authors:
-			update_string += "      <Author>%s</Author>\n" % (db.escape_string(new.pub_authors[counter]))
-			counter += 1
+		for new_author in new.pub_authors:
+			update_string += "      <Author>%s</Author>\n" % db.escape_string(new_author)
 		update_string += "    </Authors>\n"
 
         # Transliterated titles
