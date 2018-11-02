@@ -171,43 +171,7 @@ def nightly_transliterations():
                    """
         standardReport(query, 147)
 
-        #   Reports 148-160: Pub titles with non-Latin characters without
-        #   an associated transliterated title for popular non-Latin languages
-        reports = transliteratedReports('pubs')
-        for report in reports:
-                report_id = report[1]
-                language_name = report[0]
-                query = """select distinct p.pub_id
-                        from pubs p, pub_content pc, titles t USE INDEX (language), languages l
-                        where p.pub_title regexp '&#'
-                        and p.pub_id = pc.pub_id
-                        and pc.title_id = t.title_id
-                        and t.title_language = l.lang_id
-                        and l.lang_name = '%s'
-                        and p.pub_id not in
-                                (select tp.pub_id from trans_pubs tp)
-                        """ % language_name
-                standardReport(query, report_id)
-
-        #   Report 161: Pub titles with non-Latin characters without
-        #   an associated transliterated publication title for less common languages
-        reports = transliteratedReports('pubs')
-        languages = []
-        for report in reports:
-                language_name = report[0]
-                languages.append(language_name)
-        languages_in_clause = list_to_in_clause(languages)
-        query = """select distinct p.pub_id
-                        from pubs p, pub_content pc, titles t, languages l
-                        where p.pub_title regexp '&#'
-                        and p.pub_id = pc.pub_id
-                        and pc.title_id = t.title_id
-                        and t.title_language = l.lang_id
-                        and l.lang_name not in (%s)
-                        and not exists
-                          (select 1 from trans_pubs tp where tp.pub_id = p.pub_id)
-                """ % languages_in_clause
-        standardReport(query, 161)
+        pubsWithNonLatin()
 
         #   Reports 162-166: Pubs with non-Latin titles with Latin characters
         # in pub titles for common non-Latin languages
@@ -336,3 +300,55 @@ def nightly_transliterations():
         #   Report 189: Authors with Non-Latin Directory Entries
         query = "select author_id from authors where author_lastname regexp '&#'"
         standardReport(query, 189)
+
+def pubsWithNonLatin():
+        #   Reports 148-161: Pub titles with non-Latin characters without
+        #   an associated transliterated title
+        reports = transliteratedReports('pubs')
+        reports_dict = {}
+        for report in reports:
+                reports_dict[report[0]] = report[1]
+        
+        query = """select distinct p.pub_id
+               from pubs p
+               where p.pub_title regexp '&#'
+               and not exists
+               (select 1 from trans_pubs tp where p.pub_id = tp.pub_id)"""
+        db.query(query)
+        result = db.store_result()
+        pub_ids = []
+        record = result.fetch_row()
+        while record:
+                pub_ids.append(record[0][0])
+                record = result.fetch_row()
+        if not pub_ids:
+                return
+        pub_ids_clause = list_to_in_clause(pub_ids)
+
+        query = """select distinct p.pub_id, l.lang_name
+               from pubs p, titles t, pub_content pc, languages l
+               where p.pub_id in (%s)
+               and p.pub_id = pc.pub_id
+               and pc.title_id = t.title_id
+               and t.title_language = l.lang_id""" % pub_ids_clause
+        db.query(query)
+        result = db.store_result()
+        record = result.fetch_row()
+        cleanup_ids = {}
+        while record:
+                pub_id = record[0][0]
+                lang_name = record[0][1]
+                if lang_name in reports_dict:
+                        report_id = reports_dict[lang_name]
+                else:
+                        report_id = 161
+                if report_id not in cleanup_ids:
+                        cleanup_ids[report_id] = []
+                cleanup_ids[report_id].append(pub_id)
+                record = result.fetch_row()
+        
+        for report_id in cleanup_ids:
+                pub_ids_clause = list_to_in_clause(cleanup_ids[report_id])
+                query = """select pub_id from pubs where pub_id in (%s)""" % pub_ids_clause
+                standardReport(query, report_id)
+        
