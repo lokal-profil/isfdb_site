@@ -286,7 +286,7 @@ def nightly_transliterations():
                 languages.append(language_name)
         languages_in_clause = list_to_in_clause(languages)
         query = """select distinct t.title_id
-                   from titles t, languages l, authors a, canonical_author ca
+                   from titles t USE INDEX (language), languages l, authors a, canonical_author ca
                    where t.title_language = l.lang_id
                    and l.lang_name not in (%s)
                    and l.latin_script = 'No'
