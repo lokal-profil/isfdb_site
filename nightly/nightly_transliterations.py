@@ -110,34 +110,7 @@ def nightly_transliterations():
                 """ % languages_in_clause
         standardReport(query, 137)
 
-        #   Reports 138-142: Non-Latin titles with Latin characters
-        #                    for popular non-Latin languages
-        reports = popularNonLatinLanguages('titles')
-        for report in reports:
-                report_id = report[1]
-                language_name = report[0]
-                query = """select t.title_id from titles t, languages l
-                        where t.title_language = l.lang_id
-                        and l.lang_name = '%s'
-                        and t.title_title regexp'[[:alpha:]]'
-                        """ % language_name
-                standardReport(query, report_id)
-
-        #   Report 143: Non-Latin titles with Latin characters
-        #                    for less common non-Latin languages
-        reports = popularNonLatinLanguages('titles')
-        languages = []
-        for report in reports:
-                language_name = report[0]
-                languages.append(language_name)
-        languages_in_clause = list_to_in_clause(languages)
-        query = """select t.title_id from titles t, languages l
-                where t.title_language = l.lang_id
-                and l.lang_name not in (%s)
-                and l.latin_script = 'No'
-                and t.title_title regexp'[[:alpha:]]'
-                """ % languages_in_clause
-        standardReport(query, 143)
+        nonLatiTitlesWithLatinChars()
 
         #   Report 145: Romanian titles with s-cedilla or t-cedilla in the title
         query = """select title_id from titles
@@ -301,6 +274,37 @@ def nightly_transliterations():
         query = "select author_id from authors where author_lastname regexp '&#'"
         standardReport(query, 189)
 
+def nonLatiTitlesWithLatinChars():
+        #   Reports 138-143: Non-Latin titles with Latin characters
+        reports = popularNonLatinLanguages('titles')
+        reports_dict = {}
+        for report in reports:
+                reports_dict[report[0]] = report[1]
+
+        query = """select t.title_id, l.lang_name
+                from titles t, languages l
+                where t.title_language = l.lang_id
+                and l.latin_script = 'No'
+                and t.title_title regexp'[[:alpha:]]'"""
+        db.query(query)
+        result = db.store_result()
+        cleanup_ids = {}
+        record = result.fetch_row()
+        while record:
+                title_id = record[0][0]
+                lang_name = record[0][1]
+                if lang_name in reports_dict:
+                        report_id = reports_dict[lang_name]
+                else:
+                        report_id = 143
+                if report_id not in cleanup_ids:
+                        cleanup_ids[report_id] = []
+                cleanup_ids[report_id].append(title_id)
+                record = result.fetch_row()
+
+        for report_id in sorted(cleanup_ids):
+                standardReportFromList(cleanup_ids[report_id], report_id)
+  
 def pubsWithNonLatin():
         #   Reports 148-161: Pub titles with non-Latin characters without
         #   an associated transliterated title
@@ -347,8 +351,5 @@ def pubsWithNonLatin():
                 cleanup_ids[report_id].append(pub_id)
                 record = result.fetch_row()
         
-        for report_id in cleanup_ids:
-                pub_ids_clause = list_to_in_clause(cleanup_ids[report_id])
-                query = """select pub_id from pubs where pub_id in (%s)""" % pub_ids_clause
-                standardReport(query, report_id)
-        
+        for report_id in sorted(cleanup_ids):
+                standardReportFromList(cleanup_ids[report_id], report_id)
