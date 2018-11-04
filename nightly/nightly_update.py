@@ -1435,21 +1435,25 @@ def nightly_cleanup_reports():
         standardReport(query, 236)
 
         #   Report 237: Pubs with non-template LCCNs in notes
-        query = """select p.pub_id
-                from pubs p, notes n
-                where p.note_id = n.note_id
-                and (n.note_note like '%LCCN:%' or n.note_note regexp 'LCCN [[:digit:]]{1}')
-                order by p.pub_title"""
+        query = """select p.pub_id from
+                (select note_id from notes
+                where note_note like '%LCCN:%'
+                or note_note regexp 'LCCN [[:digit:]]{1}')
+                as n, pubs p
+                where p.note_id = n.note_id"""
         standardReport(query, 237)
 
         #   Report 238: Translations without Notes
-        query = """select t1.title_id
+        query = """select t3.title_id from
+                (select t1.title_id
                 from titles t1, titles t2
                 where t1.title_parent = t2.title_id
                 and t1.title_ttype not in ('COVERART','INTERIORART')
                 and t1.title_language != t2.title_language
-                and not exists (select 1 from notes n where t1.note_id = n.note_id)
-                order by t1.title_title
+                and not exists (select 1 from notes n where t1.note_id = n.note_id))
+                as t3, titles t4
+                where t3.title_id = t4.title_id
+                order by t4.title_title
                 limit 500"""
         standardReport(query, 238)
 
