@@ -6119,6 +6119,34 @@ def function242():
         else:
                 print "<h2>No CHAPBOOK/SHORTFICTION juvenile flag mismatches found</h2>"
 
+def function243():
+        query = """select p.pub_id, p.pub_title
+                from pubs p, cleanup c
+                where c.report_type = 243
+                and p.pub_id = c.record_id
+                and pub_frontimage like '%L.\_%'
+                and pub_frontimage like '%amazon%'
+                order by p.pub_title"""
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		PrintTableColumns(('', 'Publication'))
+		count = 1
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print "</table>"
+	else:
+		print "<h2>No Pubs with Publication Images with Extra Formatting in Amazon ULRs.</h2>"
+
 def empty_containers_grid(report_id):
         anchor = '<a href="http:/%s/edit/empty_containers.cgi' % HTFAKE
         years = {}

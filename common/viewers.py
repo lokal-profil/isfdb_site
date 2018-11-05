@@ -114,6 +114,8 @@ def CheckImage(value):
                 if "|" not in value:
                         warning += """ For SFE3-hosted images, the associated Gallery Web page
                                         must be entered after a '|'."""
+        if not warning and 'amazon.' in value and 'L._' in value:
+                warning = 'Extra formatting in an Amazon URL'
         return warning
 
 #################################################################

@@ -1486,6 +1486,13 @@ def nightly_cleanup_reports():
                 and t1.title_jvn != t2.title_jvn"""
         standardReport(query, 242)
 
+        #   Report 243: Publication Images with Extra Formatting in Amazon URLs
+        query = """select pub_id
+                from pubs
+                where pub_frontimage like '%L.\_%'
+                and pub_frontimage like '%amazon%'"""
+        standardReport(query, 243)
+
 def emptyContainers(report_id, container_types):
         query = """insert into cleanup (record_id, report_type, record_id_2)
                 select xx.pub_id, %d, IF(xx.pub_year='0000-00-00', 0, REPLACE(SUBSTR(xx.pub_year, 1,7),'-',''))
