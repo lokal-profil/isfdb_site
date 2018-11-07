@@ -1494,25 +1494,45 @@ def nightly_cleanup_reports():
         standardReport(query, 243)
 
 def emptyContainers(report_id, container_types):
-        query = """insert into cleanup (record_id, report_type, record_id_2)
-                select xx.pub_id, %d, IF(xx.pub_year='0000-00-00', 0, REPLACE(SUBSTR(xx.pub_year, 1,7),'-',''))
+        elapsed = elapsedTime()
+        query = """select xx.pub_id, IF(xx.pub_year='0000-00-00', 0, REPLACE(SUBSTR(xx.pub_year, 1,7),'-',''))
                 from (
                 select p.pub_id, p.pub_year
                 from pubs p
                 where p.pub_ctype in (%s)
                 and p.pub_year != '8888-00-00'
                 and NOT EXISTS
-                        (select 1 from cleanup c
-                        where c.record_id = p.pub_id
-                        and c.report_type = %d)
-                and NOT EXISTS
                         (select 1 from pub_content pc, titles t
                         where p.pub_id=pc.pub_id 
                         and pc.title_id=t.title_id
                         and (t.title_ttype in ('NOVEL', 'SHORTFICTION', 'POEM', 'SERIAL'))
-                )) as xx
-                """ % (report_id, container_types, report_id)
+                )) as xx""" % container_types
         db.query(query)
+        result = db.store_result()
+        containers = {}
+        record = result.fetch_row()
+        while record:
+                pub_id = record[0][0]
+                pub_month = record[0][1]
+                containers[pub_id] = pub_month
+                record = result.fetch_row()
+
+        # Remove previously resolved/ignored records from the dictionary of IDs
+        query = "select record_id from cleanup where report_type=%d and resolved=1" % int(report_id)
+        db.query(query)
+	result = db.store_result()
+        record = result.fetch_row()
+	while record:
+		resolved_id = record[0][0]
+		if resolved_id in containers:
+                        del containers[resolved_id]
+        	record = result.fetch_row()
+
+        # Insert the new pub IDs and their months into the cleanup table
+        for record_id in containers:
+                update = "insert into cleanup (record_id, report_type, record_id_2) values(%d, %d, %d)" % (int(record_id), int(report_id), int(containers[record_id]))
+                db.query(update)
+        elapsed.print_elapsed(report_id)
 
 def badUnicodeReport(table, record_title, record_id, report_number):
         unicode_map = unicode_translation()
