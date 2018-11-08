@@ -245,12 +245,19 @@ def PrintIdentifierSearch():
                 print '<option VALUE="%d">%s</option>' % (type_number, type_name)
 	print '</select>'
 
+	print '<select NAME="OPERATOR">'
+	print '<option SELECTED VALUE="exact">is exactly'
+	print '<option VALUE="contains">contains'
+	print '<option VALUE="notcontains">does not contain'
+	print '<option VALUE="starts_with">starts with'
+	print '<option VALUE="not_starts_with">does not start with'
+	print '<option VALUE="ends_with">ends with'
+	print '<option VALUE="not_ends_with">does not end with'
+
         print '<input NAME="ID_VALUE" SIZE="50">'
 	print '<p>'
 
 	print '<input TYPE="SUBMIT" VALUE="Submit Query">'
-	print '<input NAME="START" VALUE="0" TYPE="HIDDEN">'
-	print '<input NAME="TYPE" VALUE="Publication" TYPE="HIDDEN">'
 	print '</form>'
 
 def PrintUserSearch():
