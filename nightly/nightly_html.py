@@ -26,7 +26,7 @@ def nightly_html():
         query += ui.goodHtmlClause('pubs', 'pub_title')
         standardReport(query, 56)
 
-        #   Report 217: Publications with HTML in titles
+        #   Report 217: Records with unsupported HTML in Notes
         query = "select note_id from notes where "
         query += ui.badHtmlClause('notes', 'note_note')
         db.query(query)

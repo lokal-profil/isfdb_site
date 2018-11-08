@@ -1725,8 +1725,12 @@ class isfdbUI:
                 clause += "lower(%s)," % field_name
                 for tag in self.valid_tags:
                         clause += "'%s','')," % tag
-                clause = clause[:-1] + " like '%<%') "
-                clause += "or (%s.%s like '%%<a href%%' and %s.%s not like '%%<a href=%%'))" % (table_name, field_name, table_name, field_name)
+                clause = clause[:-1] + " like '%<%')"
+                clause += " or (%s.%s like '%%<a href%%' and %s.%s not like '%%<a href=%%')" % (table_name, field_name, table_name, field_name)
+                clause += """ or (%s.%s like '%%<li>%%'
+                                and %s.%s not like '%%<ul>%%'
+                                and %s.%s not like '%%<ol>%%'))
+                                """ % (table_name, field_name, table_name, field_name, table_name, field_name)
                 return clause
 
 def FormatExternalIDType(type_name, types):
