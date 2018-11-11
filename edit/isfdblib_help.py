@@ -577,7 +577,7 @@ def HelpPub():
 
         text = 'Check this check-box if the main title in this publication'
         text += ' is a graphic format work. Follow this link for more details.'
-        link = 'http://%s/index.php?title=Template:PublicationFields:Graphic' % (WIKILOC)
+        link = 'http://%s/index.php?title=Template:PublicationFields:GraphicFormat' % (WIKILOC)
         help['Graphic Format'] = [text, link]
 
         text = 'Select the choice that matches the source of your data and enter any'
