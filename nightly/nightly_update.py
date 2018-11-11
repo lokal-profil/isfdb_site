@@ -1346,22 +1346,6 @@ def nightly_cleanup_reports():
                          where identifier_type_id = 1 and pub_id = p.pub_id)"""
         standardReport(query, 228)
 
-        #   Report 229: Mismatched tags in publication Notes
-        paired_tags = ['b', 'i', 'u', 'ol', 'ul', 'em', 'table', 'th',
-                       'tr', 'td', 'cite', 'sub', 'sup', 'blockquote',
-                       'strong', 'center', 'del', 's', 'small']
-
-        query = "select p.pub_id from pubs p, notes n where p.note_id = n.note_id and ("
-        count = 0
-        for tag in paired_tags:
-                if count:
-                        query += " or "
-                query += """round((length(lower(n.note_note)) - length(replace(lower(n.note_note),'<%s>','')))/%d) !=
-                round((length(lower(n.note_note)) - length(replace(lower(n.note_note),'</%s>','')))/%d)""" % (tag, len(tag)+2, tag, len(tag)+3)
-                count += 1
-        query += ")"
-        standardReport(query, 229)
-
         #   Report 230: Mismatched OCLC URLs in Publication Notes
         query = """select p.pub_id, n.note_note from notes n, pubs p
                 where p.note_id = n.note_id and n.note_note regexp

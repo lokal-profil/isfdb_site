@@ -1693,9 +1693,10 @@ def printRecordID(record_type, record_id, user_id, user = None):
 
 class isfdbUI:
         def __init__(self):
-                self.paired_tags = ['b', 'i', 'u', 'ol', 'ul', 'em', 'li', 'p', 'table', 'th',
-                               'tr', 'td', 'cite', 'sub', 'sup', 'blockquote',
-                               'strong', 'center', 'del', 's', 'small']
+                self.required_paired_tags = ['b', 'blockquote', 'center', 'cite', 'del', 'em', 'i', 'ol', 'pre',
+                                    's', 'strong', 'sub', 'sup', 'table', 'td', 'th', 'tr', 'u', 'ul']
+                self.optional_paired_tags = ['li', 'p']
+                self.paired_tags = self.required_paired_tags + self.optional_paired_tags
                 self.self_closing_tags = ['p', 'br', '!--isfdb specific--']
                 self.tags_with_attributes = ['a', 'table', 'td']
 

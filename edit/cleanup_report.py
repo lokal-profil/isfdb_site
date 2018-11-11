@@ -5699,15 +5699,12 @@ def function228():
                 print "<h2>No ISBN-less e-publications without an ASIN found</h2>"
 
 def function229():
-        paired_tags = ['b', 'i', 'u', 'ol', 'ul', 'em', 'table', 'th',
-                       'tr', 'td', 'cite', 'sub', 'sup', 'span', 'blockquote', 'pre',
-                       'h1', 'h2', 'h3', 'strong', 'abbr', 'center', 'del', 'tbody',
-                       'caption', 'q']
+        ui = isfdbUI()
         query = """select p.pub_id, p.pub_title
                 from pubs p, notes n, cleanup c
                 where p.note_id = n.note_id and ("""
         count = 0
-        for tag in paired_tags:
+        for tag in ui.required_paired_tags:
                 if count:
                         query += " or "
                 query += """round((length(lower(n.note_note)) - length(replace(lower(n.note_note),'<%s>','')))/%d) !=

@@ -60,3 +60,15 @@ def nightly_html():
         query = "select author_id from authors where "
         query += ui.badHtmlClause('authors', 'author_note')
         standardReport(query, 217)
+
+        #   Report 229: Mismatched HTML tags in publication Notes
+        query = "select p.pub_id from pubs p, notes n where p.note_id = n.note_id and ("
+        count = 0
+        for tag in ui.required_paired_tags:
+                if count:
+                        query += " or "
+                query += """round((length(lower(n.note_note)) - length(replace(lower(n.note_note),'<%s>','')))/%d) !=
+                round((length(lower(n.note_note)) - length(replace(lower(n.note_note),'</%s>','')))/%d)""" % (tag, len(tag)+2, tag, len(tag)+3)
+                count += 1
+        query += ")"
+        standardReport(query, 229)
