@@ -1719,6 +1719,12 @@ class isfdbUI:
                 clause = clause[:-4] + ")"
                 return clause
 
+        def goodHtmlTagsPresent(self, value):
+                for tag in self.valid_tags:
+                        if tag in value.lower():
+                                return 1
+                return 0
+
         def badHtmlClause(self, table_name, field_name):
                 clause = '(('
                 for tag in self.valid_tags:
@@ -1733,6 +1739,36 @@ class isfdbUI:
                                 and %s.%s not like '%%<ol>%%'))
                                 """ % (table_name, field_name, table_name, field_name, table_name, field_name)
                 return clause
+
+        def badHtmlTagsPresent(self, value):
+                value = value.lower()
+                for tag in self.valid_tags:
+                        value = value.replace(tag,'')
+                if '<' in value or '>' in value:
+                        return 1
+
+        def invalidHtmlListPresent(self, value):
+                value = value.lower()
+                if '<li>' in value and '<ul>' not in value and '<ol>' not in value:
+                        return 1
+
+        def mismatchedHtmlTagsPresent(self, value):
+                value = value.lower()
+                for tag in self.required_paired_tags:
+                        open_tag = '<%s>' % tag
+                        close_tag = '</%s>' % tag
+                        if value.count(open_tag) != value.count(close_tag):
+                                return 1
+                return 0
+
+        def invalidHtmlInNotes(self, value):
+                if self.badHtmlTagsPresent(value):
+                        return 'Unrecognized HTML tag(s) present'
+                elif self.invalidHtmlListPresent(value):
+                        return 'HTML tags: li without ul or ol'
+                elif self.mismatchedHtmlTagsPresent(value):
+                        return 'Mismatched HTML tags'
+                return ''
 
 def FormatExternalIDType(type_name, types):
         formatted_type = ''

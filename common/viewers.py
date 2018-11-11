@@ -164,6 +164,7 @@ def PrintField1XML(Label, XmlData, title = 0):
         warning = ''
         value = GetElementValue(XmlData, Label)
         if TagPresent(XmlData, Label):
+                ui = isfdbUI()
                 if Label == 'Image':
                         warning = CheckImage(value)
                         value = FormatImage(value)
@@ -199,17 +200,20 @@ def PrintField1XML(Label, XmlData, title = 0):
                                         warning = 'Pre-2000 e-book submitted'
 
                 elif Label in ('TitleNote', 'Note', 'Synopsis'):
+                        warning = ui.invalidHtmlInNotes(value)
                         value = FormatNote(value, '', 'edit')
 
                 elif Label == 'Series':
                         (value, warning) = CheckSeries(value)
                 
-                elif (Label == 'Title') and title:
-                        if value != title[TITLE_TITLE]:
+                elif Label == 'Title':
+                        if title and value != title[TITLE_TITLE]:
                                 # This should only happen with Web API submissions
                                 # because regular AddPub submissions default the pub
                                 # title to the title title and do not allow title editing
                                 warning = 'Pub title doesn\'t match the Title title'
+                        if ui.goodHtmlTagsPresent(value):
+                                warning = 'HTML tag(s) in title'
                                
 		PrintField2Columns(Label, 1, value, warning)
 
@@ -278,6 +282,7 @@ def PrintField2(Label, value, Changed, ExistsNow, Current, warning = '', warning
         print "</tr>"
 
 def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
+        ui = isfdbUI()
         value = GetElementValue(XmlData, Label)
         value2 = Current
         warning = ''
@@ -288,9 +293,10 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
                 value = FormatImage(value)
                 value2 = FormatImage(Current)
         elif Label in ('TitleNote', 'Note', 'Synopsis'):
+                warning = ui.invalidHtmlInNotes(value)
                 # If an existing note is being modified, display differences in the Warnings column
                 # without using the yellow background reserved for warnings
-                if value and value2:
+                if not warning and value and value2:
                         from difflib import unified_diff
                         diff_generator = unified_diff(value2.splitlines(), value.splitlines(),
                                                       fromfile='before', tofile='after', n=0, lineterm='<br>')
@@ -328,6 +334,10 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
         elif Label == 'Catalog':
                 if value and not cloningFlag(XmlData):
                         warning = DuplicateCatalogId(value)
+
+        elif Label == 'Title':
+                if ui.goodHtmlTagsPresent(value):
+                        warning = 'HTML tag(s) in title'
 
         if TagPresent(XmlData, Label):
 		PrintField2(Label, value, 1, ExistsNow, value2, warning, 1, warning_class)
