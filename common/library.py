@@ -1744,7 +1744,7 @@ class isfdbUI:
                 value = value.lower()
                 for tag in self.valid_tags:
                         value = value.replace(tag,'')
-                if '<' in value or '>' in value:
+                if '<' in value:
                         return 1
 
         def invalidHtmlListPresent(self, value):
