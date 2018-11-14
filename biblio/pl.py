@@ -446,7 +446,7 @@ if __name__ == '__main__':
 	if pub.pub_price:
 		print '<li>'
 		print '  <b>Price:</b>', pub.pub_price
-	if pub.pub_pages and (pub.pub_pages != '0'):
+	if pub.pub_pages:
 		print '<li>'
 		print '  <b>Pages:</b>', pub.pub_pages
 	if pub.pub_ptype:

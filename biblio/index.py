@@ -157,9 +157,8 @@ if __name__ == '__main__':
 				if result[PUB_PRICE]:
 					outstr += ", "+result[PUB_PRICE]
 
-				if result[PUB_PAGES] and (result[PUB_PAGES] != '0'):
-					if result[PUB_PAGES] != 'unpaginated':
-						outstr += ", %spp" % result[PUB_PAGES]
+				if result[PUB_PAGES]:
+                                        outstr += ", %spp" % result[PUB_PAGES]
 
 				if result[PUB_PTYPE]:
 					if result[PUB_PTYPE] == 'hc':

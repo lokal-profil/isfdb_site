@@ -1021,7 +1021,7 @@ def PrintOnePub(pub, pub_authors, pub_publishers, pub_series, cover_artists, bgc
                 print '<td>&nbsp;</td>'
 
         # Pages
-        if pub[PUB_PAGES] and (pub[PUB_PAGES] != '0'):
+        if pub[PUB_PAGES]:
                 page_list = string.split(pub[PUB_PAGES],'+')
                 print '<td>'
                 first = 1

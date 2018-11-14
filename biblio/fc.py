@@ -441,8 +441,8 @@ class PublicationMonth:
                 print '</td>'
 
                 print '<td>'
-                if pub[PUB_PAGES] and (pub[PUB_PAGES] != 'unpaginated') and (pub[PUB_PAGES] != '0'):
-                        print pub[PUB_PAGES]+"pp"
+                if pub[PUB_PAGES]:
+                        print pub[PUB_PAGES]
                 print '</td>'
 
                 print '<td>'
