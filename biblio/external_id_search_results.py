@@ -18,6 +18,7 @@ from isfdb import *
 from SQLparsing import *
 from common import *
 from biblio import *
+from library import ServerSideRedirect
 
 class ExtIDSearch:
         def __init__(self):
@@ -52,6 +53,7 @@ class ExtIDSearch:
                         self.display_error('Invalid operator specified')
 
         def display_error(self, message):
+                self.print_headers()
                 print '<h2>%s</h2>' % message
                 PrintTrailer('search', '', 0)
                 sys.exit(0)
@@ -92,23 +94,24 @@ class ExtIDSearch:
                         self.pubs.append(pub_data)
                         record = result.fetch_row()
 
+        def print_headers(self):
+                PrintHeader("ISFDB Publication Search by External ID")
+                PrintNavbar('search', 0, 0, 0, 0)
+                
         def print_pubs(self):
-                if not self.pubs:
-                        print '<b>No matching records found.</b>'
-                        return
                 matches = len(self.pubs)
                 if matches == 1:
-                        plural = ''
-                else:
-                        plural = 'es'
-                print "<p><b>%d match%s found." % (matches, plural)
-                print 'External ID Search is currently limited to the first 300 publication matches.</b>'
+                        ServerSideRedirect('http:/%s/pl.cgi?%d' % (HTFAKE, self.pubs[0][PUB_PUBID]))
+                self.print_headers()
+                if not matches:
+                        print '<h2>No matching records found.</h2>'
+                        return
+                print '<p><h3>%d matches found.' % matches
+                print 'Publication Search by External ID is currently limited to the first 300 publication matches.</h3>'
                 PrintPubsTable(self.pubs, 'adv_search')
 
 if __name__ == '__main__':
 
-        PrintHeader("ISFDB Publication Search by External ID")
-        PrintNavbar('search', 0, 0, 0, 0)
 
         search = ExtIDSearch()
         search.get_search_parameters()
