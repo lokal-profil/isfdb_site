@@ -148,7 +148,7 @@ def SQLgetBriefActualFromPseudo(au_id):
                    from authors a, pseudonyms p
                    where p.pseudonym = %d
                    and p.author_id = a.author_id
-                   order by a.author_lastname""" % int(au_id)
+                   order by a.author_lastname, a.author_canonical""" % int(au_id)
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()
@@ -1270,19 +1270,13 @@ def SQLIntervieweeAuthors(title_id, author_id = 0):
 	return results
 
 def SQLTitleBriefAuthorRecords(title_id):
-	query = """select authors.author_id, authors.author_canonical
-                 from authors, canonical_author
-                 where authors.author_id = canonical_author.author_id
-                 and canonical_author.ca_status = 1
-                 and canonical_author.title_id=%d""" % int(title_id)
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
-	results = []
-	while title:
-		results.append(title[0])
-		title = result.fetch_row()
-	return results
+	query = """select a.author_id, a.author_canonical
+                 from authors a, canonical_author ca
+                 where a.author_id = ca.author_id
+                 and ca.ca_status = 1
+                 and ca.title_id=%d
+                 order by a.author_lastname, a.author_canonical""" % int(title_id)
+	return StandardQuery(query)
 
 def SQLTitleListBriefAuthorRecords(title_list, author_id = 0):
         if not title_list:
@@ -1308,10 +1302,12 @@ def SQLTitleListBriefAuthorRecords(title_list, author_id = 0):
 	return results
 
 def SQLTitleAuthors(title_id):
-	query = """select authors.author_canonical from authors,canonical_author
-                   where authors.author_id=canonical_author.author_id
-                   and canonical_author.ca_status=1
-                   and canonical_author.title_id=%d""" % int(title_id)
+	query = """select a.author_canonical
+                from authors a, canonical_author ca
+                where a.author_id = ca.author_id
+                and ca.ca_status=1
+                and ca.title_id=%d
+                order by a.author_lastname, a.author_canonical""" % int(title_id)
 	db.query(query)
 	result = db.store_result()
 	title = result.fetch_row()
@@ -1322,18 +1318,21 @@ def SQLTitleAuthors(title_id):
 	return results
 
 def SQLInterviewBriefAuthorRecords(title_id):
-	query = "select authors.author_id,authors.author_canonical from authors,canonical_author where authors.author_id=canonical_author.author_id and canonical_author.ca_status=2 and canonical_author.title_id='%d';" % int(title_id)
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
-	results = []
-	while title:
-		results.append(title[0])
-		title = result.fetch_row()
-	return results
+	query = """select a.author_id, a.author_canonical
+                from authors a, canonical_author ca
+                where a.author_id=ca.author_id
+                and ca.ca_status=2
+                and ca.title_id=%d
+                order by a.author_lastname, a.author_canonical""" % int(title_id)
+	return StandardQuery(query)
 
 def SQLInterviewAuthors(title_id):
-	query = "select authors.author_canonical from authors,canonical_author where authors.author_id=canonical_author.author_id and canonical_author.ca_status=2 and canonical_author.title_id='%d';" % int(title_id)
+	query = """select a.author_canonical
+                from authors a, canonical_author ca
+                where a.author_id = ca.author_id
+                and ca.ca_status=2
+                and ca.title_id=%d
+                order by a.author_lastname, a.author_canonical""" % int(title_id)
 	db.query(query)
 	result = db.store_result()
 	title = result.fetch_row()
@@ -1344,18 +1343,21 @@ def SQLInterviewAuthors(title_id):
 	return results
 
 def SQLReviewBriefAuthorRecords(title_id):
-	query = "select authors.author_id,authors.author_canonical from authors,canonical_author where authors.author_id=canonical_author.author_id and canonical_author.ca_status=3 and canonical_author.title_id='%d';" % int(title_id)
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
-	results = []
-	while title:
-		results.append(title[0])
-		title = result.fetch_row()
-	return results
+	query = """select a.author_id, a.author_canonical
+                from authors a, canonical_author ca
+                where a.author_id=ca.author_id
+                and ca.ca_status=3
+                and ca.title_id=%d
+                order by a.author_lastname, a.author_canonical""" % int(title_id)
+	return StandardQuery(query)
 
 def SQLReviewAuthors(title_id):
-	query = "select authors.author_canonical from authors,canonical_author where authors.author_id=canonical_author.author_id and canonical_author.ca_status=3 and canonical_author.title_id='%d';" % int(title_id)
+	query = """select a.author_canonical
+                from authors a, canonical_author ca
+                where a.author_id=ca.author_id
+                and ca.ca_status=3
+                and ca.title_id=%d
+                order by a.author_lastname, a.author_canonical""" % int(title_id)
 	db.query(query)
 	result = db.store_result()
 	title = result.fetch_row()
@@ -1366,15 +1368,12 @@ def SQLReviewAuthors(title_id):
 	return results
 
 def SQLPubBriefAuthorRecords(pub_id):
-	query = "select authors.author_id,authors.author_canonical from authors,pub_authors where authors.author_id=pub_authors.author_id and pub_authors.pub_id='%d';" % int(pub_id)
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
-	results = []
-	while title:
-		results.append(title[0])
-		title = result.fetch_row()
-	return results
+	query = """select a.author_id, a.author_canonical
+                from authors a, pub_authors pa
+                where a.author_id = pa.author_id
+                and pa.pub_id = %d
+                order by a.author_lastname, a.author_canonical""" % int(pub_id)
+	return StandardQuery(query)
 
 def SQLPubListBriefAuthorRecords(pub_list):
         from library import list_to_in_clause
@@ -1382,7 +1381,8 @@ def SQLPubListBriefAuthorRecords(pub_list):
 	query = """select pa.pub_id, a.author_id, a.author_canonical, a.author_lastname
                 from authors a, pub_authors pa
                 where a.author_id = pa.author_id
-                and pa.pub_id in (%s)""" % pub_string
+                and pa.pub_id in (%s)
+                order by a.author_lastname, a.author_canonical""" % pub_string
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()
@@ -1399,8 +1399,11 @@ def SQLPubListBriefAuthorRecords(pub_list):
 	return results
 
 def SQLPubAuthors(pub_id):
-	query = """select authors.author_canonical from authors, pub_authors
-                where authors.author_id=pub_authors.author_id and pub_authors.pub_id=%d""" % int(pub_id)
+	query = """select a.author_canonical
+                from authors a, pub_authors pa
+                where a.author_id=pa.author_id
+                and pa.pub_id=%d
+                order by a.author_lastname, a.author_canonical""" % int(pub_id)
 	db.query(query)
 	result = db.store_result()
 	title = result.fetch_row()

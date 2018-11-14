@@ -626,7 +626,6 @@ if __name__ == '__main__':
                 print '<h3 class="contentheader">Bibliographic Warnings</h3>'
                 print '<ul class="noindent">'
 		nonefound = 1
-		TitleAuthors = SQLTitleAuthors(title_id)
 		for pub in pubs:
 
 			# Check to make sure that if the title is a collection, then the 
