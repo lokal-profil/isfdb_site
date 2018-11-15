@@ -911,11 +911,53 @@ def printdropdown(label, fieldname, values, help):
         print '</td>'
         print '</tr>'
 
-def printcheckbox(label, fieldname, current_value, disabled, help):
-        # Displays a checkbox. If "current_value" is "Yes", then it will be checked
+def printTitleFlags(record, help):
+        if record:
+                non_genre = record[TITLE_NON_GENRE]
+        else:
+                non_genre = ''
+        if record:
+                juvenile = record[TITLE_JVN]
+        else:
+                juvenile = ''
+        if record:
+                novelization = record[TITLE_NVZ]
+        else:
+                novelization = ''
+        disabled = ''
+        if record:
+                graphic = record[TITLE_GRAPHIC]
+                if record[TITLE_TTYPE] in ('COVERART', 'INTERIORART'):
+                        disabled = 'disabled'
+        else:
+                graphic = ''
+
         print '<tr>'
-        printfieldlabel(label, help)
+        printfieldlabel('Title Flags', help)
         print '<td>'
+        print '<table>'
+        print '<tbody>'
+        printcheckboxheaders(('Non-Genre', 'Juvenile', 'Novelization', 'Graphic Format'), help)
+        print '<tr>'
+        printcheckbox('title_non_genre', non_genre, '', help)
+        printcheckbox('title_jvn', juvenile, '', help)
+        printcheckbox('title_nvz', novelization, '', help)
+        printcheckbox('title_graphic', graphic, disabled, help)
+        print '</tr>'
+        print '</tbody>'
+        print '</table>'
+        print '</td>'
+        print '</tr>'
+
+def printcheckboxheaders(headers, help):
+        print '<tr>'
+        for header in headers:
+                printfieldlabel(header, help, 1, '')
+        print '</tr>'
+
+def printcheckbox(fieldname, current_value, disabled, help):
+        print '<td class="titleflags">'
+        # Displays a checkbox. If "current_value" is "Yes", then it will be checked
         checked = ''
         if current_value == 'Yes':
                 checked = 'checked'
@@ -923,4 +965,3 @@ def printcheckbox(label, fieldname, current_value, disabled, help):
                 disabled = 'disabled readonly'
         print '<input type="checkbox" name="%s" value="on" %s %s>' % (fieldname, disabled, checked)
         print '</td>'
-        print '</tr>'

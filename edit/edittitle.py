@@ -69,19 +69,9 @@ def printtitlerecord(record, series_number):
 
         printfield('Content', 'title_content', help, record[TITLE_CONTENT])
 
-        printcheckbox('Non-Genre', 'title_non_genre', record[TITLE_NON_GENRE], '', help)
+        printTitleFlags(record, help)
 
-        printcheckbox('Juvenile', 'title_jvn', record[TITLE_JVN], '', help)
-
-        printcheckbox('Novelization', 'title_nvz', record[TITLE_NVZ], '', help)
-
-        # COVERART and INTERIORART titles can't be "graphic", so we disable the checkbox
-        disabled = ''
-        if record[TITLE_TTYPE] in ('COVERART', 'INTERIORART'):
-                disabled = 'disabled'
-        printcheckbox('Graphic Format', 'title_graphic', record[TITLE_GRAPHIC], disabled, help)
-
-        # CHAPBOOKS can't synopses. Consequently the Synopsis field is displayed
+        # CHAPBOOKS can't have synopses. Consequently the Synopsis field is displayed
         # as read-only ***if*** there is no pre-existing value. If there is a value
         # on file, then the field is editable to make it easy for editors to remove
         # the value.

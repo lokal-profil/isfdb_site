@@ -12,4 +12,4 @@
   intended publication of such source code.
 */
 
-update pubs set pub_pages = NULL where pub_pages = '0' and pub_ptype like '%audio%';
+update pubs set pub_pages = NULL where pub_pages = '0' and pub_ptype like '%ebook%';

@@ -77,13 +77,7 @@ if __name__ == '__main__':
         else:
                 printfield("Content", "title_content", help, '', 1)
 
-        printcheckbox('Non-Genre', 'title_non_genre', '', '', help)
-	
-        printcheckbox('Juvenile', 'title_jvn', '', '', help)
-
-        printcheckbox('Novelization', 'title_nvz', '', '', help)
-
-        printcheckbox('Graphic Format', 'title_graphic', '', '', help)
+        printTitleFlags('', help)
 
         printtextarea('Synopsis', 'title_synopsis', help, '', 4, readonly)
 

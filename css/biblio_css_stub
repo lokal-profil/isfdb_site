@@ -956,6 +956,11 @@ td.checkmark {
    text-align: center;
 }
 
+/* checkbox display for title flags */
+td.titleflags {
+   text-align: center;
+}
+
 /* a cover image exists */
 .coverexists {
    font-size: 90%; 
