@@ -964,6 +964,9 @@ def printcheckbox(fieldname, current_value, disabled, help):
                 checked = 'checked'
         if disabled == 'disabled':
                 disabled = 'disabled readonly'
-        print '<input type="checkbox" name="%s" value="on" %s %s>' % (fieldname, disabled, checked)
+                tabindex = '0'
+        else:
+                tabindex = '1'
+        print '<input type="checkbox" tabindex="%s" name="%s" value="on" %s %s>' % (tabindex, fieldname, disabled, checked)
         print '</td>'
         print '<td class="checkboxseparator"></td>'
