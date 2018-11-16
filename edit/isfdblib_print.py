@@ -935,7 +935,7 @@ def printTitleFlags(record, help):
         print '<tr>'
         printfieldlabel('Title Flags', help)
         print '<td>'
-        print '<table>'
+        print '<table class="checkboxheaders">'
         print '<tbody>'
         printcheckboxheaders(('Non-Genre', 'Juvenile', 'Novelization', 'Graphic Format'), help)
         print '<tr>'
@@ -953,6 +953,7 @@ def printcheckboxheaders(headers, help):
         print '<tr>'
         for header in headers:
                 printfieldlabel(header, help, 1, '')
+                print '<td class="checkboxseparator"></td>'
         print '</tr>'
 
 def printcheckbox(fieldname, current_value, disabled, help):
@@ -965,3 +966,4 @@ def printcheckbox(fieldname, current_value, disabled, help):
                 disabled = 'disabled readonly'
         print '<input type="checkbox" name="%s" value="on" %s %s>' % (fieldname, disabled, checked)
         print '</td>'
+        print '<td class="checkboxseparator"></td>'

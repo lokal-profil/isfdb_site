@@ -605,6 +605,15 @@ table.pub_metadata {
    border: none
 }
 
+table.checkboxheaders {
+   border-spacing: 1px;
+   border-collapse: separate;
+}
+
+td.checkboxseparator {
+   padding: 5px;
+}
+
 td.hint {
    cursor:help;
 }
