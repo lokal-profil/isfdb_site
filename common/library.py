@@ -781,6 +781,7 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
                            'The Locus Index to Science Fiction'),
                 'Miller/Contento': ('http:/%s/title.cgi?1088499' % HTFAKE, 'Miller/Contento',
                                    'Science Fiction, Fantasy, & Weird Fiction Magazine Index (1890-2007) by Stephen T. Miller and William G. Contento'),
+                'Narrator': ('%s', 'Narrated by'),
                 'NDL': ('https://id.ndl.go.jp/bib/%s/eng', 'NDL',
                         'National Diet Library'),
                 'OCLC': ('http://www.worldcat.org/oclc/%s', 'OCLC',
