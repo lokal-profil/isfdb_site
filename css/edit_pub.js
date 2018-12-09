@@ -282,34 +282,41 @@ function validatePubForm() {
 
 function validateExternalIDs() {
 	var last_row = GetLastExternalId("external_id");
-	var external_id_field;
 	for (i = 1 ; i < (last_row +1) ; i++) {
-		external_id_field = "external_id." + i;
 		// Validate each External ID
-		if (validateExternalID(external_id_field) == false) {
+		if (validateExternalID(i) == false) {
 			return false;
 		}
 	}
 	return true;
 }
 
-function validateExternalID(field_name) {
+function validateExternalID(i) {
+	var id_field = "external_id." + i;
 	// Retrieve the External ID field - use [0] because JS returns an array in case there are many fields with this name
-	var element_name = document.getElementsByName(field_name)[0];
+	var id_name = document.getElementsByName(id_field)[0];
 	// If there is no External ID field, validation is successful
-	if (element_name == null) {
+	if (id_name == null) {
 		return true;
 	}
 	// Retrieve the value of the field
-	var element_value = element_name.value;
+	var id_value = id_name.value;
 	// If the value is empty, then validation passes
-	if (element_value == "") {
+	if (id_value == "") {
 		return true;
 	}
 	// Check that the External ID field doesn't contain angle brackets, double quotes or spaces
-	if ((/\</.test(element_value) == true) || (/\>/.test(element_value) == true) || (/\"/.test(element_value) == true) || (/\ /.test(element_value) == true)) {
+	if ((/\</.test(id_value) == true) || (/\>/.test(id_value) == true) || (/\"/.test(id_value) == true) || (/\ /.test(id_value) == true)) {
 		alert("External IDs must not contain angle brackets, double quotes or spaces");
-		element_name.focus();
+		id_name.focus();
+		return false;
+	}
+	// Check that the External ID Type is not the default 0 value
+	var type_field = "external_id_type." + i;
+	var type_name = document.getElementsByName(type_field)[0];
+	if (type_name.value == "0") {
+		alert("An External ID type must be selected from the drop-down list");
+		id_name.focus();
 		return false;
 	}
 	return true;

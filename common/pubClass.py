@@ -862,35 +862,44 @@ class pubs:
 
                 # External identifiers
                 identifier_types = SQLLoadIdentifierTypes()
-      		for key in self.form:
-                        if 'external_id_type' in key:
-                                # Retrieve the sequence number of the external ID type
+                for key in self.form:
+                        if 'external_id.' in key:
+                                # Get the External ID number and value
                                 try:
-                                        id_type_sequence_number = int(key.split('.')[1])
-                                        type_id = int(self.form[key].value)
-                                        type_tuple = identifier_types.get(type_id, None)
-                                        if not type_tuple:
-                                                self.error = 'Unsupported identifier type %s' % type_id
-                                                return
-                                        type_name = type_tuple[0]
-                                        type_full_name = type_tuple[1]
+                                        ext_id_number = int(key.split('.')[1])
+                                        if not ext_id_number:
+                                                raise
                                 except:
-                                        continue
-                                # Retrieve the user-entered value associated with this identifier type
-                                # If there is none, then the field was empty and we skip it
-                                try:
-                                        id_value = self.form['external_id.%d' % id_type_sequence_number].value
-                                except:
-                                        continue
-                                self.error = invalidURLcharacters(id_value, 'External ID', 'unescaped')
+                                        self.error = 'Invalid identifier type'
+                                        return
+                                ext_id_value = self.form[key].value
+
+                                # Check if there are invalid characters in the user-entered value
+                                self.error = invalidURLcharacters(ext_id_value, 'External ID', 'unescaped')
                                 if self.error:
                                         return
+
+                                # Retrieve the external identifier type associated with this user-entered value
+                                # If there is none, it's non-numeric or 0, then this ID is invalid
+                                try:
+                                        id_type_number = int(self.form['external_id_type.%d' % ext_id_number].value)
+                                        if not id_type_number:
+                                                raise
+                                except:
+                                        self.error = 'Invalid identifier type'
+                                        return
+                                type_tuple = identifier_types.get(id_type_number, None)
+                                if not type_tuple:
+                                        self.error = 'Unsupported identifier type %d' % id_type_number
+                                        return
+                                type_name = type_tuple[0]
+                                type_full_name = type_tuple[1]
                                 if type_name not in self.identifiers:
                                         self.identifiers[type_name] = {}
                                 # If this ID has already been entered for this ID type, skip it
-                                if id_value in self.identifiers[type_name]:
+                                if ext_id_value in self.identifiers[type_name]:
                                         continue
-                                self.identifiers[type_name][id_value] = (type_id, type_full_name)
+                                self.identifiers[type_name][ext_id_value] = (id_type_number, type_full_name)
 
 		if self.form.has_key('pub_price'):
                         value = XMLescape(self.form['pub_price'].value)
