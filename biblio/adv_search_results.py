@@ -86,10 +86,8 @@ class advanced_search:
         def ProcessSort(self):
                 self.sort = self.formatEntry(self.order_by)
                 if self.search_type == 'Publication' and self.sort not in ('pub_title', 'pub_ctype',
-                                                         'pub_tag', 'pub_year',
-                                                         'pub_isbn', 'pub_catalog',
-                                                         'pub_price', 'pub_pages',
-                                                         'pub_ptype', 'pub_frontimage'):
+                                                         'pub_year', 'pub_isbn', 'pub_catalog',
+                                                         'pub_price', 'pub_pages', 'pub_ptype', 'pub_frontimage'):
                         DisplayError("Unknown sort field: %s" % sort)
                 elif self.search_type == 'Author' and self.sort not in ('author_canonical',
                                                             'author_lastname',
@@ -524,8 +522,6 @@ class advanced_search:
                         clause = "trans_pubs.trans_pub_title %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('trans_pubs')]
                         joins = ['trans_pubs.pub_id=pubs.pub_id']
-                elif field == 'pub_tag':
-                        clause = "pubs.pub_tag %s" % sql_value
                 elif field == 'pub_year':
                         clause = "SUBSTRING(pubs.pub_year,1,4) %s" % sql_value
                 elif field == 'pub_month':

@@ -74,7 +74,7 @@ def PrintTitleSelectors(number):
         print '<option VALUE="title_language">Title Language (list)'
         print '<option VALUE="title_language_free">Title Language (free form)'
         print '<option VALUE="title_webpage">Title Webpage'
-        print '<option VALUE="tag">Title Tag'
+        print '<option VALUE="tag">Tag'
         print '<option VALUE="title_jvn">Juvenile'
         print '<option VALUE="title_nvz">Novelization'
         print '<option VALUE="title_non_genre">Non-Genre'
@@ -192,7 +192,6 @@ def PrintPubSelectors(number):
 	print '<option VALUE="pub_verifier">Primary Verifier'
         print '<option VALUE="pub_note">Notes'
 	print '<option VALUE="pub_frontimage">Image URL'
-	print '<option VALUE="pub_tag">Tag'
 	print '</select>'
 
         PrintOperators(number)
@@ -205,7 +204,6 @@ def PrintPubSortBy():
 	print '<select NAME="ORDERBY">'
 	print '<option SELECTED VALUE="pub_title">Title'
 	print '<option VALUE="pub_ctype">Publication Type'
-	print '<option VALUE="pub_tag">Tag'
 	print '<option VALUE="pub_year">Date'
 	print '<option VALUE="pub_isbn">ISBN'
 	print '<option VALUE="pub_catalog">Catalog ID'
