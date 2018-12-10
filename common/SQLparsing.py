@@ -1288,7 +1288,8 @@ def SQLTitleListBriefAuthorRecords(title_list, author_id = 0):
                 where a.author_id = ca.author_id
                 and a.author_id <> %d
                 and ca.ca_status = 1
-                and ca.title_id in (%s)""" % (int(author_id), db.escape_string(title_list))
+                and ca.title_id in (%s)
+                order by a.author_lastname, a.author_canonical""" % (int(author_id), db.escape_string(title_list))
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()
