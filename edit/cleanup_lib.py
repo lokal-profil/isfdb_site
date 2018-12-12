@@ -9,15 +9,6 @@
 #     Date: $Date: 2018-09-18 10:44:12 -0400 (Tue, 18 Sep 2018) $
 
 
-##import cgi
-##import string
-##import sys
-##import MySQLdb
-##from isfdb import *
-##from login import *
-##from library import *
-##from SQLparsing import *
-
 def reportsDict():
         reports = {}
         reports[1] = ("Titles without Authors")
@@ -263,6 +254,13 @@ def reportsDict():
         reports[241] = ("Magazines without Fiction Titles")
         reports[242] = ("CHAPBOOK/SHORTFICTION Juvenile Flag Mismatches")
         reports[243] = ("Publication Images with Extra Formatting in Amazon URLs")
+        reports[244] = ("Publications with Invalid External ID Format")
+        reports[245] = ("Publications with non-standard ASINs")
+        reports[246] = ("Publications with non-standard Barnes & Noble IDs")
+        reports[247] = ("Publications with non-standard LCCNs")
+        reports[248] = ("Publications with Invalid Open Library IDs")
+        reports[249] = ("Publications with Invalid BNB IDs")
+        reports[250] = ("Publications with OCLC IDs matching ISBNs")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -270,7 +268,8 @@ def reportsDict():
         sections.append(('Containers', (29, 37, 54, 92, 240, 241)), )
         sections.append(('Publications', (32, 33, 31, 34, 35, 36, 38, 39, 49, 50,
                                           51, 52, 56, 57, 70, 75, 79, 86, 88, 93,
-                                          100, 193, 228, 231, 233, 235, 236, 243)), )
+                                          100, 193, 228, 231, 233, 235, 236, 243,
+                                          244, 245, 246, 247, 248, 249, 250)), )
         sections.append(('Series', (16, 17, 48, 64, 67, 76, 81, 90, 144)), )
         sections.append(('Titles', (19, 1, 3, 18, 47, 55, 62, 63, 69, 74, 80, 87,
                                     91, 96, 194, 195, 196, 197, 227)), )
@@ -318,6 +317,6 @@ def reportsDict():
                          211, 212, 213, 214, 215, 216, 217, 218, 219, 220,
                          221, 222, 223, 224, 225, 226, 227, 228, 229, 230,
                          232, 233, 234, 235, 236, 237, 238, 239, 240, 241,
-                         242, 243, 9999)
+                         242, 243, 244, 245, 246, 247, 248, 249, 250, 9999)
         
         return (reports, sections, non_moderator)

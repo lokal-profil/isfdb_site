@@ -1477,6 +1477,76 @@ def nightly_cleanup_reports():
                 and pub_frontimage like '%amazon%'"""
         standardReport(query, 243)
 
+        #   Report 244: Publications with Invalid External ID Format
+        query = """select distinct p.pub_id
+                from pubs p, identifiers i, identifier_types it
+                where p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and (
+                (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'LTF', 'NDL', 'OCLC/WorldCat')
+                and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
+                or
+                (it.identifier_type_name in ('DNB', 'PPN')
+                and i.identifier_value not regexp '^[[:digit:]]{1,20}[Xx]{0,1}$')
+                )
+                """
+        standardReport(query, 244)
+
+        #   Report 245: Publications with non-standard ASINs
+        query = """select distinct p.pub_id
+                from pubs p, identifiers i, identifier_types it
+                where p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name in ('ASIN', 'Audible-ASIN')
+                and i.identifier_value not like 'B%'"""
+        standardReport(query, 245)
+
+        #   Report 246: Publications with non-standard Barnes & Noble IDs
+        query = """select distinct p.pub_id
+                from pubs p, identifiers i, identifier_types it
+                where p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'BN'
+                and i.identifier_value not like '294%'"""
+        standardReport(query, 246)
+
+        #   Report 247: Publications with Non-Standard LCCNs
+        query = """select distinct p.pub_id
+                from pubs p, identifiers i, identifier_types it
+                where p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'LCCN'
+                and replace(i.identifier_value,'-','') not regexp '^[[:digit:]]{1,30}$'"""
+        standardReport(query, 247)
+
+        #   Report 248: Publications with Invalid Open Library IDs
+        query = """select distinct p.pub_id
+                from pubs p, identifiers i, identifier_types it
+                where p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'Open Library'
+                and i.identifier_value not like 'O%'"""
+        standardReport(query, 248)
+
+        #   Report 249: Publications with Invalid BNB IDs
+        query = """select distinct p.pub_id
+                from pubs p, identifiers i, identifier_types it
+                where p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'BNB'
+                and i.identifier_value like 'BLL%'"""
+        standardReport(query, 249)
+
+        #   Report 250: Publications with OCLC IDs matching ISBNs
+        # Note that the query currently uses idenitifier type IDs instead of
+        # idenitifier type names in order to avoid a costly join
+        query = """select distinct p.pub_id
+                from pubs p, identifiers i
+                where p.pub_id = i.pub_id
+                and i.identifier_type_id = 12
+                and replace(i.identifier_value,'-','') = replace(p.pub_isbn,'-','')"""
+        standardReport(query, 250)
+
 def emptyContainers(report_id, container_types):
         elapsed = elapsedTime()
         query = """select xx.pub_id, IF(xx.pub_year='0000-00-00', 0, REPLACE(SUBSTR(xx.pub_year, 1,7),'-',''))

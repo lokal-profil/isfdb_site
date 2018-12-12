@@ -13,12 +13,50 @@
 import string
 import sys
 import MySQLdb
-from cleanup_lib import reportsDict
+from cleanup_lib import *
 from isfdb import *
 from isfdblib import *
 from SQLparsing import *
 from library import *
 from login import User
+
+class Cleanup():
+        def __init__(self):
+                self.query = ''
+                self.none = ''
+                self.ignore = 0
+                self.report_id = 0
+                self.note = ''
+
+        def print_pub_table(self):
+                db.query(self.query)
+                result = db.store_result()
+                num = result.num_rows()
+
+                if num > 0:
+                        if self.note:
+                                print '<h2>%s.</h2>' % self.note
+                        record = result.fetch_row()
+                        bgcolor = 1
+                        if self.ignore:
+                                PrintTableColumns(('', 'Publication', 'Ignore'))
+                        else:
+                                PrintTableColumns(('', 'Publication'))
+                        count = 1
+                        while record:
+                                pub_id = record[0][0]
+                                pub_title = record[0][1]
+                                if self.ignore:
+                                        cleanup_id = record[0][2]
+                                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, self.report_id)
+                                else:
+                                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
+                                bgcolor ^= 1
+                                count += 1
+                                record = result.fetch_row()
+                        print '</table>'
+                else:
+                        print '<h2>%s.</h2>' % self.none
 
 
 def PrintTableColumns(columns):
@@ -6117,32 +6155,134 @@ def function242():
                 print "<h2>No CHAPBOOK/SHORTFICTION juvenile flag mismatches found</h2>"
 
 def function243():
-        query = """select p.pub_id, p.pub_title
+        cleanup.query = """select p.pub_id, p.pub_title
                 from pubs p, cleanup c
                 where c.report_type = 243
                 and p.pub_id = c.record_id
                 and pub_frontimage like '%L.\_%'
                 and pub_frontimage like '%amazon%'
                 order by p.pub_title"""
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
+        cleanup.none = 'No Publications with Images with Extra Formatting in Amazon URLs'
+        cleanup.print_pub_table()
 
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		PrintTableColumns(('', 'Publication'))
-		count = 1
-		while record:
-                        pub_id = record[0][0]
-                        pub_title = record[0][1]
-                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No Pubs with Publication Images with Extra Formatting in Amazon ULRs.</h2>"
+def function244():
+        cleanup.note = """This cleanup report finds publications with non-numeric External IDs
+                        for the following External ID types: BL, COPAC, FantLab, Goodreads,
+                        JNB/JPNO, LTF, NDL, OCLC/WorldCat. It also finds publications with
+                        DNB and PPN External IDs that are not limited to digits followed
+                        by an 'x' or an 'X'"""
+        cleanup.query = """select p.pub_id, p.pub_title
+                from pubs p, identifiers i, identifier_types it, cleanup c
+                where c.report_type = 244
+                and p.pub_id = c.record_id
+                and p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and (
+                (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'LTF', 'NDL', 'OCLC/WorldCat')
+                and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
+                or
+                (it.identifier_type_name in ('DNB', 'PPN')
+                and i.identifier_value not regexp '^[[:digit:]]{1,20}[Xx]{0,1}$')
+                )
+                order by p.pub_title"""
+        cleanup.none = 'No Publications with Invalid External ID Format'
+        cleanup.print_pub_table()
+
+def function245():
+        cleanup.note = """This cleanup report finds publications with ASIN IDs and
+                        Audible-ASIN IDs that do not start with the letter B. Moderators
+                        have the ability to ignore false positives"""
+        cleanup.query = """select p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, identifiers i, identifier_types it, cleanup c
+                where c.report_type = 245
+                and c.resolved is NULL
+                and p.pub_id = c.record_id
+                and p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name in ('ASIN', 'Audible-ASIN')
+                and i.identifier_value not like 'B%'
+                order by p.pub_title"""
+        cleanup.none = 'No Publications with Non-Standard ASINs'
+        cleanup.ignore = 1
+        cleanup.print_pub_table()
+
+def function246():
+        cleanup.note = """This cleanup report finds publications with Barnes & Noble IDs
+                        that do not start with '294'. Moderators
+                        have the ability to ignore false positives"""
+        cleanup.query = """select p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, identifiers i, identifier_types it, cleanup c
+                where c.report_type = 246
+                and c.resolved is NULL
+                and p.pub_id = c.record_id
+                and p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'BN'
+                and i.identifier_value not like '294%'
+                order by p.pub_title"""
+        cleanup.none = 'No Publications with Non-Standard Barnes & Noble IDs'
+        cleanup.ignore = 1
+        cleanup.print_pub_table()
+
+def function247():
+        cleanup.note = """This cleanup report finds publications with LCCNs that
+                        include anything aside from digits and hyphens.
+                        Moderators have the ability to ignore false positives"""
+        cleanup.query = """select p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, identifiers i, identifier_types it, cleanup c
+                where c.report_type = 247
+                and c.resolved is NULL
+                and p.pub_id = c.record_id
+                and p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'LCCN'
+                and replace(i.identifier_value,'-','') not regexp '^[[:digit:]]{1,30}$'
+                order by p.pub_title"""
+        cleanup.none = 'No Publications with Invalid LCCNs'
+        cleanup.ignore = 1
+        cleanup.print_pub_table()
+
+def function248():
+        cleanup.note = """This cleanup report finds publications with Open Library IDs
+                        that do not start with the letter 'O'"""
+        cleanup.query = """select p.pub_id, p.pub_title
+                from pubs p, identifiers i, identifier_types it, cleanup c
+                where c.report_type = 248
+                and p.pub_id = c.record_id
+                and p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'Open Library'
+                and i.identifier_value not like 'O%'
+                order by p.pub_title"""
+        cleanup.none = 'No Publications with Invalid Open Library IDs'
+        cleanup.print_pub_table()
+
+def function249():
+        cleanup.note = """This cleanup report finds publications with BNB IDs
+                        that start with the letters 'BLL'"""
+        cleanup.query = """select p.pub_id, p.pub_title
+                from pubs p, identifiers i, identifier_types it, cleanup c
+                where c.report_type = 249
+                and p.pub_id = c.record_id
+                and p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'BNB'
+                and i.identifier_value like 'BLL%'
+                order by p.pub_title"""
+        cleanup.none = 'No Publications with Invalid BNB IDs'
+        cleanup.print_pub_table()
+
+def function250():
+        cleanup.query = """select p.pub_id, p.pub_title
+                from pubs p, identifiers i, cleanup c
+                where c.report_type = 250
+                and p.pub_id = c.record_id
+                and p.pub_id = i.pub_id
+                and i.identifier_type_id = 12
+                and replace(i.identifier_value,'-','') = replace(p.pub_isbn,'-','')
+                order by p.pub_title"""
+        cleanup.none = 'No Publications with OCLC IDs matching ISBNs'
+        cleanup.print_pub_table()
 
 def empty_containers_grid(report_id):
         anchor = '<a href="http:/%s/edit/empty_containers.cgi' % HTFAKE
@@ -6520,6 +6660,8 @@ if __name__ == '__main__':
 	PrintPreSearch(reports[type_id])
         PrintNavBar('edit/cleanup_report.cgi', type_id)
 
+        cleanup = Cleanup()
+        cleanup.report_id = type_id
         function()
 
         PrintPostSearch(0, 0, 0, 0, 0, 0)
