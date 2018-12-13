@@ -356,6 +356,26 @@ class Output():
                         record = result.fetch_row()
                 self.append("</ul>")
 
+                query = """select count(*) from identifiers"""
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                self.append('<li><b><a href="http://%s/index.php/Template:PublicationFields:ExternalIDs">External Identifiers</a>:</b> %d' % (WIKILOC, int(record[0][0])))
+
+                self.append("<ul>")
+                query = """select it.identifier_type_name, count(i.identifier_id)
+                        from identifiers i, identifier_types it
+                        where i.identifier_type_id = it.identifier_type_id
+                        group by it.identifier_type_id
+                        order by it.identifier_type_name"""
+                db.query(query)
+                result = db.store_result()
+                record = result.fetch_row()
+                while record:
+                        self.append("<li>%s: %d" % (record[0][0], int(record[0][1])))
+                        record = result.fetch_row()
+                self.append("</ul>")
+                            
                 self.append("</ul>")
                 self.file(4, 0)
 
