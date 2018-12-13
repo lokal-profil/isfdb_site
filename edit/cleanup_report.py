@@ -35,7 +35,7 @@ class Cleanup():
 
                 if num > 0:
                         if self.note:
-                                print '<h2>%s.</h2>' % self.note
+                                print '<h3>%s</h3>' % self.note
                         record = result.fetch_row()
                         bgcolor = 1
                         if self.ignore:
@@ -6166,11 +6166,13 @@ def function243():
         cleanup.print_pub_table()
 
 def function244():
-        cleanup.note = """This cleanup report finds publications with non-numeric External IDs
-                        for the following External ID types: BL, COPAC, FantLab, Goodreads,
-                        JNB/JPNO, LTF, NDL, OCLC/WorldCat. It also finds publications with
-                        DNB and PPN External IDs that are not limited to digits followed
-                        by an 'x' or an 'X'"""
+        cleanup.note = """This cleanup report finds publications with non-numeric
+                        External IDs for the following External ID Types:
+                        <ul>
+                        <li>BL, COPAC, FantLab, Goodreads, JNB/JPNO, LTF, NDL, OCLC/WorldCat
+                        <li>DNB and PPN (optional trailing 'x'/'X' allowed)
+                        <li>NDL (optional leading 'b' allowed)
+                        </ul>"""
         cleanup.query = """select p.pub_id, p.pub_title
                 from pubs p, identifiers i, identifier_types it, cleanup c
                 where c.report_type = 244
@@ -6178,11 +6180,14 @@ def function244():
                 and p.pub_id = i.pub_id
                 and i.identifier_type_id = it.identifier_type_id
                 and (
-                (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'LTF', 'NDL', 'OCLC/WorldCat')
+                (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'LTF', 'OCLC/WorldCat')
                 and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
                 or
                 (it.identifier_type_name in ('DNB', 'PPN')
-                and i.identifier_value not regexp '^[[:digit:]]{1,20}[Xx]{0,1}$')
+                and i.identifier_value not regexp '^[[:digit:]]{1,30}[Xx]{0,1}$')
+                or
+                (it.identifier_type_name = 'NDL'
+                and i.identifier_value not regexp '^[b]*[[:digit:]]{1,30}$')
                 )
                 order by p.pub_title"""
         cleanup.none = 'No Publications with Invalid External ID Format'
@@ -6191,7 +6196,7 @@ def function244():
 def function245():
         cleanup.note = """This cleanup report finds publications with ASIN IDs and
                         Audible-ASIN IDs that do not start with the letter B. Moderators
-                        have the ability to ignore false positives"""
+                        have the ability to ignore false positives."""
         cleanup.query = """select p.pub_id, p.pub_title, c.cleanup_id
                 from pubs p, identifiers i, identifier_types it, cleanup c
                 where c.report_type = 245
@@ -6209,7 +6214,7 @@ def function245():
 def function246():
         cleanup.note = """This cleanup report finds publications with Barnes & Noble IDs
                         that do not start with '294'. Moderators
-                        have the ability to ignore false positives"""
+                        have the ability to ignore false positives."""
         cleanup.query = """select p.pub_id, p.pub_title, c.cleanup_id
                 from pubs p, identifiers i, identifier_types it, cleanup c
                 where c.report_type = 246
@@ -6227,7 +6232,7 @@ def function246():
 def function247():
         cleanup.note = """This cleanup report finds publications with LCCNs that
                         include anything aside from digits and hyphens.
-                        Moderators have the ability to ignore false positives"""
+                        Moderators have the ability to ignore false positives."""
         cleanup.query = """select p.pub_id, p.pub_title, c.cleanup_id
                 from pubs p, identifiers i, identifier_types it, cleanup c
                 where c.report_type = 247
@@ -6244,7 +6249,7 @@ def function247():
 
 def function248():
         cleanup.note = """This cleanup report finds publications with Open Library IDs
-                        that do not start with the letter 'O'"""
+                        that do not start with the letter 'O'."""
         cleanup.query = """select p.pub_id, p.pub_title
                 from pubs p, identifiers i, identifier_types it, cleanup c
                 where c.report_type = 248
@@ -6259,7 +6264,7 @@ def function248():
 
 def function249():
         cleanup.note = """This cleanup report finds publications with BNB IDs
-                        that start with the letters 'BLL'"""
+                        that start with the letters 'BLL'."""
         cleanup.query = """select p.pub_id, p.pub_title
                 from pubs p, identifiers i, identifier_types it, cleanup c
                 where c.report_type = 249

@@ -1477,17 +1477,20 @@ def nightly_cleanup_reports():
                 and pub_frontimage like '%amazon%'"""
         standardReport(query, 243)
 
-        #   Report 244: Publications with Invalid External ID Format
+        #   Report 244: Publications with Invalid Non-numeric External IDs
         query = """select distinct p.pub_id
                 from pubs p, identifiers i, identifier_types it
                 where p.pub_id = i.pub_id
                 and i.identifier_type_id = it.identifier_type_id
                 and (
-                (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'LTF', 'NDL', 'OCLC/WorldCat')
+                (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'LTF', 'OCLC/WorldCat')
                 and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
                 or
                 (it.identifier_type_name in ('DNB', 'PPN')
-                and i.identifier_value not regexp '^[[:digit:]]{1,20}[Xx]{0,1}$')
+                and i.identifier_value not regexp '^[[:digit:]]{1,30}[Xx]{0,1}$')
+                or
+                (it.identifier_type_name = 'NDL'
+                and i.identifier_value not regexp '^[b]*[[:digit:]]{1,30}$')
                 )
                 """
         standardReport(query, 244)
