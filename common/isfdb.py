@@ -30,7 +30,7 @@ def PrintHTMLHeaders(title):
     # Disallow @font-face
     print """Content-Security-Policy: font-src 'none';"""
     # Restrict form submission URLs to the ISFDB server
-    print """Content-Security-Policy: form-action 'self' http://%s;""" % HTMLHOST
+    print """Content-Security-Policy: form-action 'self' http://%s https://www.google.com;""" % HTMLHOST
     # Disable nested browsing contexts
     print """Content-Security-Policy: frame-src 'none';"""
     # Disable <frame>, <iframe>, <object>, <embed>, and <applet>
