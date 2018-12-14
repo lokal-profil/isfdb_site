@@ -299,6 +299,31 @@ def PrintWebPageSearch():
 	print '<input TYPE="SUBMIT" VALUE="Submit Query">'
 	print '</form>'
 
+def PrintGoogleSearch():
+	print '<h2>Search ISFDB Using Google</h2>'
+	print '<form METHOD="GET" action="http:/%s/google_search_redirect.cgi" accept-charset="utf-8">' % (HTFAKE)
+	print '<p>'
+	print '<select NAME="PAGE_TYPE">'
+        print '<option VALUE="name">Name'
+	print '<option VALUE="title">Title'
+	print '<option VALUE="series">Series'
+	print '<option VALUE="publication">Publication'
+	print '<option VALUE="pubseries">Publication Series'
+	print '<option VALUE="publisher">Publisher'
+	print '<option VALUE="award_category">Award Category'
+	print '</select>'
+
+	print '<select NAME="OPERATOR">'
+        print '<option VALUE="exact">contains exact word'
+        print '<option SELECTED VALUE="approximate">contains approximate word'
+	print '</select>'
+
+        print '<input NAME="SEARCH_VALUE" SIZE="50">'
+	print '<p>'
+
+	print '<input TYPE="SUBMIT" VALUE="Submit Query">'
+	print '</form>'
+
 if __name__ == '__main__':
 
         PrintHeader("ISFDB Advanced Search")
@@ -322,6 +347,8 @@ if __name__ == '__main__':
 	PrintNotesSearch()
 	print '<p><hr><p>'
 	PrintWebPageSearch()
+	print '<p><hr><p>'
+	PrintGoogleSearch()
 
 	PrintTrailer('search', 0, 0)
 

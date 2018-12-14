@@ -29,6 +29,7 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/eaw.cgi \
 	  DIR/external_id_search_results.cgi \
 	  DIR/fc.cgi \
+	  DIR/google_search_redirect.cgi \
 	  DIR/history.cgi \
 	  DIR/index.cgi \
 	  DIR/most_popular.cgi \
