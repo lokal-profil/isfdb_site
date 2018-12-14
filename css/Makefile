@@ -19,6 +19,7 @@ TARGETS	= apple-touch-icon.png \
 	  apple-touch-icon-precomposed.png \
 	  biblio.css \
 	  checkmark.png \
+	  favicon.ico \
 	  isfdb.gif \
 	  isfdb_logo.jpg \
 	  index.html \
