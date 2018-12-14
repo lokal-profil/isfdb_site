@@ -251,6 +251,7 @@ def PrintIdentifierSearch():
 	print '<option VALUE="not_starts_with">does not start with'
 	print '<option VALUE="ends_with">ends with'
 	print '<option VALUE="not_ends_with">does not end with'
+	print '</select>'
 
         print '<input NAME="ID_VALUE" SIZE="50">'
 	print '<p>'
