@@ -58,6 +58,36 @@ class Cleanup():
                 else:
                         print '<h2>%s.</h2>' % self.none
 
+        def print_title_table(self):
+                db.query(self.query)
+                result = db.store_result()
+                num = result.num_rows()
+
+                if num > 0:
+                        if self.note:
+                                print '<h3>%s</h3>' % self.note
+                        record = result.fetch_row()
+                        bgcolor = 1
+                        if self.ignore:
+                                PrintTableColumns(('', 'Title', 'Ignore'))
+                        else:
+                                PrintTableColumns(('', 'Title'))
+                        count = 1
+                        while record:
+                                title_id = record[0][0]
+                                title_title = record[0][1]
+                                if self.ignore:
+                                        cleanup_id = record[0][2]
+                                        PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id, self.report_id)
+                                else:
+                                        PrintTitleRecord(title_id, title_title, bgcolor, count)
+                                bgcolor ^= 1
+                                count += 1
+                                record = result.fetch_row()
+                        print '</table>'
+                else:
+                        print '<h2>%s.</h2>' % self.none
+
 
 def PrintTableColumns(columns):
 	print '<table class="generic_table">'
@@ -5928,38 +5958,18 @@ def function233():
 		print "<h2>No potential duplicate e-book publications found.</h2>"
 
 def function234():
-       
-        query = """select p.pub_id, p.pub_title
+        cleanup.query = """select p.pub_id, p.pub_title
                    from notes n, pubs p, cleanup c
                    where p.note_id = n.note_id
                    and n.note_note like '%http://picarta.pica.nl/%'
                    and c.report_type = 234
                    and p.pub_id = c.record_id
                    order by pub_title"""
-
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		PrintTableColumns(('', 'Publication'))
-		count = 1
-		while record:
-                        pub_id = record[0][0]
-                        pub_title = record[0][1]
-			PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No publications with direct De Nederlandse Bibliografie links in Notes.</h2>"
+        cleanup.none = 'No publications with direct De Nederlandse Bibliografie links in Notes'
+        cleanup.print_pub_table()
 
 def function235():
-       
-        query = """select distinct p.pub_id, p.pub_title
+        cleanup.query = """select distinct p.pub_id, p.pub_title
                  from pubs p, identifiers i, cleanup c
                  where p.pub_id = i.pub_id
                  and i.identifier_type_id = 4
@@ -5967,30 +5977,11 @@ def function235():
                  and c.report_type = 235
                  and p.pub_id = c.record_id
                  order by p.pub_title"""
-
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		PrintTableColumns(('', 'Publication'))
-		count = 1
-		while record:
-                        pub_id = record[0][0]
-                        pub_title = record[0][1]
-			PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No publications with invalid BNF identifiers.</h2>"
+        cleanup.none = 'No publications with invalid BNF identifiers'
+        cleanup.print_pub_table()
 
 def function236():
-       
-        query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
+        cleanup.query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
                  from pubs p, publishers pu, cleanup c
                  where p.publisher_id = pu.publisher_id
                  and (pu.publisher_name like '%SFBC%'
@@ -6001,31 +5992,13 @@ def function236():
                  and p.pub_id = c.record_id
                  and c.resolved is null
                  order by p.pub_title"""
-
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		PrintTableColumns(('', 'Publication', 'Ignore'))
-		count = 1
-		while record:
-                        pub_id = record[0][0]
-                        pub_title = record[0][1]
-                        cleanup_id = record[0][2]
-                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, 236)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No SFBC publications with an ISBN and no Catalog ID.</h2>"
+        cleanup.none = 'No SFBC publications with an ISBN and no Catalog ID'
+        cleanup.ignore = 1
+        cleanup.print_pub_table()
 
 def function237():
         nonModeratorMessage()
-        query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
+        cleanup.query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
                 from pubs p, notes n, cleanup c
                 where p.note_id = n.note_id
                 and (n.note_note like '%LCCN:%' or n.note_note regexp 'LCCN [[:digit:]]{1}')
@@ -6033,30 +6006,12 @@ def function237():
                 and p.pub_id = c.record_id
                 and c.resolved is null
                 order by p.pub_title"""
-
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		PrintTableColumns(('', 'Publication', 'Ignore'))
-		count = 1
-		while record:
-                        pub_id = record[0][0]
-                        pub_title = record[0][1]
-                        cleanup_id = record[0][2]
-                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, 237)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No Pubs with non-template Library of Congress numbers in notes .</h2>"
+        cleanup.none = 'No Pubs with non-template Library of Congress numbers in notes'
+        cleanup.ignore = 1
+        cleanup.print_pub_table()
 
 def function238():
-        query = """select t1.title_id, t1.title_title
+        cleanup.query = """select t1.title_id, t1.title_title
                 from titles t1, titles t2, cleanup c
                 where t1.title_parent = t2.title_id
                 and t1.title_ttype not in ('COVERART','INTERIORART')
@@ -6065,28 +6020,11 @@ def function238():
                 and c.report_type = 238
                 and t1.title_id = c.record_id
                 order by t1.title_title"""
-	db.query(query)
-	result = db.store_result()
-        record = result.fetch_row()
-	num = result.num_rows()
-
-        if num:
-                PrintTableColumns(('', 'Title'))
-                bgcolor = 1
-                count = 1
-                while record:
-                        title_id = record[0][0]
-                        title_title = record[0][1]
-                        PrintTitleRecord(title_id, title_title, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-                        record = result.fetch_row()
-                print '</table><p>'
-        else:
-                print "<h2>No translations without notes found</h2>"
+        cleanup.none = 'No translations without notes found'
+        cleanup.print_title_table()
 
 def function239():
-        query = """select t1.title_id, t1.title_title
+        cleanup.query = """select t1.title_id, t1.title_title
                 from titles t1, titles t2, notes n, cleanup c
                 where t1.title_parent = t2.title_id
                 and t1.title_ttype not in ('COVERART','INTERIORART')
@@ -6096,25 +6034,8 @@ def function239():
                 and c.report_type = 239
                 and t1.title_id = c.record_id
                 order by t1.title_title"""
-	db.query(query)
-	result = db.store_result()
-        record = result.fetch_row()
-	num = result.num_rows()
-
-        if num:
-                PrintTableColumns(('', 'Title'))
-                bgcolor = 1
-                count = 1
-                while record:
-                        title_id = record[0][0]
-                        title_title = record[0][1]
-                        PrintTitleRecord(title_id, title_title, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-                        record = result.fetch_row()
-                print '</table><p>'
-        else:
-                print "<h2>No translations without the Tr template in notes found</h2>"
+        cleanup.none = 'No translations without the Tr template in notes found'
+        cleanup.print_title_table()
 
 def function240():
         empty_containers_grid(240)
@@ -6123,7 +6044,7 @@ def function241():
         empty_containers_grid(241)
 
 def function242():
-        query = """select distinct t1.title_id, t1.title_title
+        cleanup.query = """select distinct t1.title_id, t1.title_title
                 from titles t1, titles t2, pub_content pc1, pub_content pc2, cleanup c
                 where t1.title_id = pc1.title_id
                 and pc1.pub_id = pc2.pub_id
@@ -6134,25 +6055,8 @@ def function242():
                 and t1.title_id = c.record_id
                 and c.report_type = 242
                 order by t1.title_title"""
-	db.query(query)
-	result = db.store_result()
-        record = result.fetch_row()
-	num = result.num_rows()
-
-        if num:
-                PrintTableColumns(('', 'Title',))
-                bgcolor = 1
-                count = 1
-                while record:
-                        title_id = record[0][0]
-                        title_title = record[0][1]
-                        PrintTitleRecord(title_id, title_title, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-                        record = result.fetch_row()
-                print '</table><p>'
-        else:
-                print "<h2>No CHAPBOOK/SHORTFICTION juvenile flag mismatches found</h2>"
+        cleanup.none = 'No CHAPBOOK/SHORTFICTION juvenile flag mismatches found'
+        cleanup.print_title_table()
 
 def function243():
         cleanup.query = """select p.pub_id, p.pub_title
