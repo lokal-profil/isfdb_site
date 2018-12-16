@@ -383,6 +383,7 @@ class Output():
                 self.data = ''
                 self.byYear('NOVEL', 'Novels')
                 self.byYear('SHORTFICTION', 'Short Fiction')
+                self.byYear('POEM', 'Poems')
                 self.byYear('REVIEW', 'Reviews')
                 self.file(5, 0)
 
@@ -409,7 +410,7 @@ class Output():
                 endyear = localtime()[0]-1
                 results = []
                 lastyear = startyear
-                if chart in ('NOVEL', 'SHORTFICTION', 'REVIEW'):
+                if chart in ('NOVEL', 'SHORTFICTION', 'POEM', 'REVIEW'):
                         query = """select YEAR(title_copyright),COUNT(*)
                                 from titles where title_ttype='%s'
                                 and title_parent=0
