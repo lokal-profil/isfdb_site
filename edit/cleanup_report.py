@@ -27,66 +27,53 @@ class Cleanup():
                 self.ignore = 0
                 self.report_id = 0
                 self.note = ''
+                self.print_record_function = None
+                self.record_name = ''
+
+        def print_generic_table(self):
+                db.query(self.query)
+                result = db.store_result()
+                num = result.num_rows()
+
+                if num > 0:
+                        if self.note:
+                                print '<h3>%s</h3>' % self.note
+                        record = result.fetch_row()
+                        bgcolor = 1
+                        if self.ignore:
+                                PrintTableColumns(('#', self.record_name, 'Ignore'))
+                        else:
+                                PrintTableColumns(('#', self.record_name))
+                        count = 1
+                        while record:
+                                record_id = record[0][0]
+                                record_title = record[0][1]
+                                if self.ignore:
+                                        cleanup_id = record[0][2]
+                                        self.print_record_function(record_id, record_title, bgcolor, count, cleanup_id, self.report_id)
+                                else:
+                                        self.print_record_function(record_id, record_title, bgcolor, count)
+                                bgcolor ^= 1
+                                count += 1
+                                record = result.fetch_row()
+                        print '</table>'
+                else:
+                        print '<h2>%s.</h2>' % self.none
 
         def print_pub_table(self):
-                db.query(self.query)
-                result = db.store_result()
-                num = result.num_rows()
-
-                if num > 0:
-                        if self.note:
-                                print '<h3>%s</h3>' % self.note
-                        record = result.fetch_row()
-                        bgcolor = 1
-                        if self.ignore:
-                                PrintTableColumns(('', 'Publication', 'Ignore'))
-                        else:
-                                PrintTableColumns(('', 'Publication'))
-                        count = 1
-                        while record:
-                                pub_id = record[0][0]
-                                pub_title = record[0][1]
-                                if self.ignore:
-                                        cleanup_id = record[0][2]
-                                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id, self.report_id)
-                                else:
-                                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
-                                bgcolor ^= 1
-                                count += 1
-                                record = result.fetch_row()
-                        print '</table>'
-                else:
-                        print '<h2>%s.</h2>' % self.none
+                self.print_record_function = PrintPublicationRecord
+                self.record_name = 'Publication'
+                self.print_generic_table()
 
         def print_title_table(self):
-                db.query(self.query)
-                result = db.store_result()
-                num = result.num_rows()
+                self.print_record_function = PrintTitleRecord
+                self.record_name = 'Title'
+                self.print_generic_table()
 
-                if num > 0:
-                        if self.note:
-                                print '<h3>%s</h3>' % self.note
-                        record = result.fetch_row()
-                        bgcolor = 1
-                        if self.ignore:
-                                PrintTableColumns(('', 'Title', 'Ignore'))
-                        else:
-                                PrintTableColumns(('', 'Title'))
-                        count = 1
-                        while record:
-                                title_id = record[0][0]
-                                title_title = record[0][1]
-                                if self.ignore:
-                                        cleanup_id = record[0][2]
-                                        PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id, self.report_id)
-                                else:
-                                        PrintTitleRecord(title_id, title_title, bgcolor, count)
-                                bgcolor ^= 1
-                                count += 1
-                                record = result.fetch_row()
-                        print '</table>'
-                else:
-                        print '<h2>%s.</h2>' % self.none
+        def print_award_table(self):
+                self.print_record_function = PrintAwardRecord
+                self.record_name = 'Award'
+                self.print_generic_table()
 
 
 def PrintTableColumns(columns):
@@ -5845,59 +5832,24 @@ def function230():
                 print "<h2>No publications with mismatched OCLC URLs in Notes.</h2>"
 
 def function231():
-        print """<h3>For Smashwords-hosted images, the publication-specific Web page 
-                must be entered in the Image field after a '|'.</h3>"""
-        
-        query = """select pub_id, pub_title from pubs, cleanup c
+        cleanup.note="""For Smashwords-hosted images, the publication-specific Web page 
+                must be entered in the Image field after a '|'."""
+        cleanup.query = """select pub_id, pub_title from pubs, cleanup c
                    where c.report_type=231
                    and pubs.pub_id=c.record_id
                    and pub_frontimage like '%dwtr67e3ikfml.cloudfront.net%'
                    and pub_frontimage not like '%|%'
                    order by pub_title"""
-
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		PrintTableColumns(('', 'Publication'))
-		count = 1
-		while record:
-                        pub_id = record[0][0]
-                        pub_title = record[0][1]
-			PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No invalid Smashwords image links found.</h2>"
+        cleanup.none = 'No invalid Smashwords image links found'
+        cleanup.print_pub_table()
 
 def function232():
-        query = """select award_id, award_title from awards
-                   where award_year not like '%-00-00' order by award_title"""
-
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		PrintTableColumns(('', 'Award'))
-		count = 1
-		while record:
-                        award_id = record[0][0]
-                        award_title = record[0][1]
-			PrintAwardRecord(award_id, award_title, bgcolor, count)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print '</table>'
-	else:
-		print '<h2>No invalid award years found.</h2>'
+        cleanup.query = """select award_id, award_title
+                from awards
+                where award_year not like '%-00-00'
+                order by award_title"""
+        cleanup.none = 'No invalid award years found'
+        cleanup.print_award_table()
 
 def function233():
         query = """select distinct p1.pub_id, p1.pub_title,
