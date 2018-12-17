@@ -210,7 +210,8 @@ SERIES_TYPE_SF          = 5
 SERIES_TYPE_POEM        = 6
 SERIES_TYPE_ESSAY       = 7
 SERIES_TYPE_REVIEW      = 8
-SERIES_TYPE_OTHER       = 9
+SERIES_TYPE_INTERVIEW   = 9
+SERIES_TYPE_OTHER       = 10
 
 # Field offsets for pub_contents records
 PUB_CONTENTS_ID      = 0

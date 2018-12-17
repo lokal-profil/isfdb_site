@@ -100,6 +100,9 @@ def displayMainTitle(title, author_id, authors, series_type, original_language, 
 		elif title[TITLE_TTYPE] == 'REVIEW':
 			if series_type != SERIES_TYPE_REVIEW:
 				output += ' <b>[REVIEW]</b> '
+		elif title[TITLE_TTYPE] == 'INTERVIEW':
+			if series_type != SERIES_TYPE_INTERVIEW:
+				output += ' <b>[INTERVIEW]</b> '
 		else:
 			# These have no tag and no series and should probably never appear
 			# in a series' contents.  But we use their type as a tag so we can
