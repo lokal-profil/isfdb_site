@@ -209,6 +209,7 @@ SERIES_TYPE_NONFIC      = 4
 SERIES_TYPE_SF          = 5
 SERIES_TYPE_POEM        = 6
 SERIES_TYPE_ESSAY       = 7
+SERIES_TYPE_REVIEW      = 8
 SERIES_TYPE_OTHER       = 9
 
 # Field offsets for pub_contents records

@@ -28,7 +28,7 @@ class Bibliography:
                 # AUTHOR properties
                 ##############################################
                 # Author name
-		self.author_name_name = ''
+		self.author_name = ''
 		# Author ID
 		self.au_id = -1
                 # Full author record
@@ -49,7 +49,7 @@ class Bibliography:
                 ##############################################
 		# Author page type; can be reset by CGI scripts
 		self.page_type = 'Summary'
-		# Dictionary of CGI script names indexed by Web page name
+		# Dictionary of CGI script names indexed by displayed Web page name
                 self.page_types = {'Summary': 'ea',
                                  'Alphabetical': 'ae',
                                  'Chronological': 'ch',
@@ -86,7 +86,8 @@ class Bibliography:
                                'CHAPBOOK', SERIES_TYPE_NONFIC, 'NONFICTION',
                                'COVERART', 'INTERIORART', SERIES_TYPE_SF,
                                'SHORTFICTION', SERIES_TYPE_POEM, 'POEM',
-                               SERIES_TYPE_ESSAY, 'ESSAY', 'REVIEW', 'INTERVIEW')
+                               SERIES_TYPE_ESSAY, 'ESSAY', SERIES_TYPE_REVIEW,
+                               'REVIEW', 'INTERVIEW')
 
                 ##############################################
                 # TITLE and CO-AUTHOR properties
@@ -148,7 +149,8 @@ class Bibliography:
                         'NONFICTION': SERIES_TYPE_NONFIC,
                         'SHORTFICTION': SERIES_TYPE_SF,
                         'POEM': SERIES_TYPE_POEM,
-                        'ESSAY': SERIES_TYPE_ESSAY
+                        'ESSAY': SERIES_TYPE_ESSAY,
+                        'REVIEW': SERIES_TYPE_REVIEW
                         }
                 # Mapping between series display order and displayed section headers
                 self.type_reverse = {
@@ -158,7 +160,8 @@ class Bibliography:
                         SERIES_TYPE_NONFIC: 'Nonfiction',
                         SERIES_TYPE_SF: 'Short Fiction',
                         SERIES_TYPE_POEM: 'Poem',
-                        SERIES_TYPE_ESSAY: 'Essay'
+                        SERIES_TYPE_ESSAY: 'Essay',
+                        SERIES_TYPE_REVIEW: 'Review'
                         }
                 # Dictionary of TOP series showing each top series' genre status
                 self.series_genre = {}
@@ -203,7 +206,7 @@ class Bibliography:
                                 self.nongenre = 1
                                 self.displaySummary()
                                 self.printTime('Printing biblio')
-                # If this is am alternae name, display the name of the parent author
+                # If this is an alternate name, display the name of the parent author
                 elif self.au_is_pseudonym and not self.selfPseudo():
                         self.printAuthorPseudo()
                 # If this is not an Award page and there are stray titles, display them
@@ -337,6 +340,8 @@ class Bibliography:
                                 self.series_priority[top_parent] = SERIES_TYPE_POEM
                         elif 'ESSAY' in self.series_type[top_parent]:
                                 self.series_priority[top_parent] = SERIES_TYPE_ESSAY
+                        elif 'REVIEW' in self.series_type[top_parent]:
+                                self.series_priority[top_parent] = SERIES_TYPE_REVIEW
                         else:
                                 self.series_priority[top_parent] = SERIES_TYPE_OTHER
 
