@@ -80,14 +80,23 @@ class Bibliography:
                                }
                 # List of series types and title types in the
                 # order in which the page will display them
-                self.ordered_title_types = (SERIES_TYPE_NC, 'NOVEL', 'COLLECTION',
-                               'OMNIBUS', 'SERIAL', SERIES_TYPE_EDIT,
-                               'EDITOR', SERIES_TYPE_ANTH, 'ANTHOLOGY',
-                               'CHAPBOOK', SERIES_TYPE_NONFIC, 'NONFICTION',
-                               'COVERART', 'INTERIORART', SERIES_TYPE_SF,
-                               'SHORTFICTION', SERIES_TYPE_POEM, 'POEM',
-                               SERIES_TYPE_ESSAY, 'ESSAY', SERIES_TYPE_REVIEW,
-                               'REVIEW', SERIES_TYPE_INTERVIEW, 'INTERVIEW')
+                self.ordered_title_types = (SERIES_TYPE_NC,
+                                            'NOVEL',
+                                            'COLLECTION',
+                                            'OMNIBUS',
+                                            'SERIAL',
+                                            SERIES_TYPE_EDIT, 'EDITOR',
+                                            SERIES_TYPE_ANTH, 'ANTHOLOGY',
+                                            'CHAPBOOK',
+                                            SERIES_TYPE_NONFIC, 'NONFICTION',
+                                            SERIES_TYPE_SF, 'SHORTFICTION',
+                                            SERIES_TYPE_POEM, 'POEM',
+                                            SERIES_TYPE_ESSAY, 'ESSAY',
+                                            SERIES_TYPE_COVERART, 'COVERART',
+                                            SERIES_TYPE_INTERIORART, 'INTERIORART',
+                                            SERIES_TYPE_REVIEW, 'REVIEW',
+                                            SERIES_TYPE_INTERVIEW, 'INTERVIEW'
+                                            )
 
                 ##############################################
                 # TITLE and CO-AUTHOR properties
@@ -150,6 +159,8 @@ class Bibliography:
                         'SHORTFICTION': SERIES_TYPE_SF,
                         'POEM': SERIES_TYPE_POEM,
                         'ESSAY': SERIES_TYPE_ESSAY,
+                        'COVERART': SERIES_TYPE_COVERART,
+                        'INTERIORART': SERIES_TYPE_INTERIORART,
                         'REVIEW': SERIES_TYPE_REVIEW,
                         'INTERVIEW': SERIES_TYPE_INTERVIEW
                         }
@@ -162,6 +173,8 @@ class Bibliography:
                         SERIES_TYPE_SF: 'Short Fiction',
                         SERIES_TYPE_POEM: 'Poem',
                         SERIES_TYPE_ESSAY: 'Essay',
+                        SERIES_TYPE_COVERART: 'Cover Art',
+                        SERIES_TYPE_INTERIORART: 'Interior Art',
                         SERIES_TYPE_REVIEW: 'Review',
                         SERIES_TYPE_INTERVIEW: 'Interview'
                         }
@@ -342,6 +355,10 @@ class Bibliography:
                                 self.series_priority[top_parent] = SERIES_TYPE_POEM
                         elif 'ESSAY' in self.series_type[top_parent]:
                                 self.series_priority[top_parent] = SERIES_TYPE_ESSAY
+                        elif 'COVERART' in self.series_type[top_parent]:
+                                self.series_priority[top_parent] = SERIES_TYPE_COVERART
+                        elif 'INTERIORART' in self.series_type[top_parent]:
+                                self.series_priority[top_parent] = SERIES_TYPE_INTERIORART
                         elif 'REVIEW' in self.series_type[top_parent]:
                                 self.series_priority[top_parent] = SERIES_TYPE_REVIEW
                         elif 'INTERVIEW' in self.series_type[top_parent]:

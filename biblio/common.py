@@ -97,6 +97,12 @@ def displayMainTitle(title, author_id, authors, series_type, original_language, 
 		elif title[TITLE_TTYPE] == 'POEM':
 			if series_type != SERIES_TYPE_POEM:
 				output += ' <b>[POEM]</b> '
+		elif title[TITLE_TTYPE] == 'COVERART':
+			if series_type != SERIES_TYPE_COVERART:
+				output += ' <b>[COVERART]</b> '
+		elif title[TITLE_TTYPE] == 'INTERIORART':
+			if series_type != SERIES_TYPE_INTERIORART:
+				output += ' <b>[INTERIORART]</b> '
 		elif title[TITLE_TTYPE] == 'REVIEW':
 			if series_type != SERIES_TYPE_REVIEW:
 				output += ' <b>[REVIEW]</b> '
