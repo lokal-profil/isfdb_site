@@ -1290,8 +1290,7 @@ def nightly_cleanup_reports():
         query = """select p.pub_id from notes n, pubs p
                  where p.note_id = n.note_id
                  and n.note_note like '%/d-nb.info/%'
-                 order by p.pub_title
-                 limit 500"""
+                 order by p.pub_title"""
         standardReport(query, 221)
 
         #   Report 222: Publications with .fantlab.ru (FantLab) in Notes
@@ -1321,10 +1320,8 @@ def nightly_cleanup_reports():
         #   Report 226: Publications with worldcat.org (direct OCLC/WorldCat links) in Notes
         query = """select p.pub_id from notes n, pubs p
                  where p.note_id = n.note_id
-                 and (n.note_note like '%worldcat.org/oclc/%'
-                 or n.note_note like '%worldcat.org/title/%')
-                 order by p.pub_title
-                 limit 500"""
+                 and n.note_note like '%worldcat.org/%'
+                 order by p.pub_title"""
         standardReport(query, 226)
 
         #   Report 227: Titles with mismatched parentheses

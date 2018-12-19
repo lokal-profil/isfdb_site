@@ -5645,7 +5645,7 @@ def function225():
         ids_in_notes(225, '%lccn.loc%', 'direct Library of Congress links', 1)
 
 def function226():
-        ids_in_notes(226, '%worldcat.org/%', 'direct OCLC/WorldCat links')
+        ids_in_notes(226, '%worldcat.org/%', 'direct OCLC/WorldCat links', 1)
 
 def ids_in_notes(report_number, pattern_match, display_name, allow_ignore = 0, like_modifier = ''):
         if allow_ignore:
