@@ -1547,6 +1547,39 @@ def nightly_cleanup_reports():
                 and replace(i.identifier_value,'-','') = replace(p.pub_isbn,'-','')"""
         standardReport(query, 250)
 
+        #   Report 251: Publications with an OCLC Verification, no ISBN and no OCLC External ID
+        query = """select distinct p.pub_id
+            from pubs p, verification v, reference r
+            where p.pub_id = v.pub_id
+            and (p.pub_isbn is null or p.pub_isbn='')
+            and v.reference_id = r.reference_id
+            and r.reference_label = 'OCLC/Worldcat'
+            and v.ver_status = 1
+            and not exists
+            (select 1 from identifiers i, identifier_types it
+            where p.pub_id = i.pub_id
+            and i.identifier_type_id = it.identifier_type_id
+            and it.identifier_type_name = 'OCLC/WorldCat')"""
+        standardReport(query, 251)
+
+        #   Report 252: Publications with an OCLC Verification, no ISBN and no OCLC External ID
+        query = """select distinct p.pub_id
+            from pubs p, verification v, reference r
+            where p.pub_id = v.pub_id
+            and p.pub_isbn is not null
+            and p.pub_isbn!=''
+            and v.reference_id = r.reference_id
+            and r.reference_label = 'OCLC/Worldcat'
+            and v.ver_status = 1
+            and not exists
+            (select 1 from identifiers i, identifier_types it
+            where p.pub_id = i.pub_id
+            and i.identifier_type_id = it.identifier_type_id
+            and it.identifier_type_name = 'OCLC/WorldCat')
+            order by p.pub_title
+            limit 1000"""
+        standardReport(query, 252)
+
 def emptyContainers(report_id, container_types):
         elapsed = elapsedTime()
         query = """select xx.pub_id, IF(xx.pub_year='0000-00-00', 0, REPLACE(SUBSTR(xx.pub_year, 1,7),'-',''))

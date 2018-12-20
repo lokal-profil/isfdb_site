@@ -6145,6 +6145,69 @@ def function250():
         cleanup.none = 'No Publications with OCLC IDs matching ISBNs'
         cleanup.print_pub_table()
 
+def function251():
+        cleanup.query = """select distinct p.pub_id, p.pub_title
+            from pubs p, verification v, reference r, cleanup c
+            where c.report_type = 251
+            and p.pub_id = c.record_id
+            and p.pub_id = v.pub_id
+            and (p.pub_isbn is null or p.pub_isbn = '')
+            and v.reference_id = r.reference_id
+            and r.reference_label = 'OCLC/Worldcat'
+            and v.ver_status = 1
+            and not exists
+            (select 1 from identifiers i, identifier_types it
+            where p.pub_id = i.pub_id
+            and i.identifier_type_id = it.identifier_type_id
+            and it.identifier_type_name = 'OCLC/WorldCat')
+            order by p.pub_title"""
+        cleanup.none = 'No Publications with an OCLC Verification, no ISBN and no OCLC External ID'
+        cleanup.print_pub_table()
+
+def function252():
+        query = """select distinct p.pub_id, p.pub_title, p.pub_isbn
+            from pubs p, verification v, reference r, cleanup c
+            where c.report_type = 252
+            and p.pub_id = c.record_id
+            and p.pub_id = v.pub_id
+            and p.pub_isbn is not null
+            and p.pub_isbn != ''
+            and v.reference_id = r.reference_id
+            and r.reference_label = 'OCLC/Worldcat'
+            and v.ver_status = 1
+            and not exists
+            (select 1 from identifiers i, identifier_types it
+            where p.pub_id = i.pub_id
+            and i.identifier_type_id = it.identifier_type_id
+            and it.identifier_type_name = 'OCLC/WorldCat')
+            order by p.pub_title"""
+        db.query(query)
+        result = db.store_result()
+        num = result.num_rows()
+        if num > 0:
+                record = result.fetch_row()
+                bgcolor = 1
+                PrintTableColumns(('#', 'Publication', 'ISBN link to OCLC'))
+                count = 1
+                while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        pub_isbn = record[0][2]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % int(count)
+                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        print '<td><a href="http://www.worldcat.org/isbn/%s">%s</a></td>' % (pub_isbn, pub_isbn)
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table>'
+        else:
+                print '<h2>No Publications with an OCLC Verification, an ISBN and no OCLC External ID.</h2>'
+
 def empty_containers_grid(report_id):
         anchor = '<a href="http:/%s/edit/empty_containers.cgi' % HTFAKE
         years = {}
