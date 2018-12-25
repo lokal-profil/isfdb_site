@@ -45,7 +45,7 @@ def printCommonSection(record, help):
         else:
                 readonly = 0
         printfield("Series", "title_series", help, series_name, readonly)
-        if (record[TITLE_PARENT] or record[TITLE_TTYPE] == 'CHAPBOOK') and not series_number:
+        if (record[TITLE_PARENT] or record[TITLE_TTYPE] == 'CHAPBOOK') and (series_number is None):
                 readonly = 1
         else:
                 readonly = 0
