@@ -773,6 +773,8 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
                 'ISBN': ('%s', 'Additional ISBN'),
                 'JNB': ('https://iss.ndl.go.jp/api/openurl?ndl_jpno=%s&locale=en', 'JNB',
                         'Japanese National Bibliography'),
+                'KBR': ('https://opac.kbr.be/Library/doc/SYRACUSE/%s/', 'KBR',
+                         'De Belgische Bibliografie/La Bibliographie de Belgique'),
                 'LCCN': ('https://lccn.loc.gov/%s', 'LCCN',
                          'Library of Congress Control Number'),
                 'LTF-pub': ('http://www.tercerafundacion.net/biblioteca/ver/libro/%s', 'La Tercera Fundaci&#243;n publication'),
