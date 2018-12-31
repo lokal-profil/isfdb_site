@@ -1788,7 +1788,9 @@ def FormatExternalIDSite(sites, type_id, id_value):
                 if site[IDSITE_TYPE_ID] == type_id:
                         site_count += 1
                         url = site[IDSITE_URL]
-        if site_count == 1:
+        if site_count == 0:
+                formatted_id = id_value
+        elif site_count == 1:
                 formatted_id = ' %s' % FormatExternalIDLink(url, id_value, id_value)
         else:
                 formatted_id = ' %s (' % id_value
