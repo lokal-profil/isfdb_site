@@ -332,6 +332,7 @@ if __name__ == '__main__':
 
         PrintDropDownValues()
         print '<ul>'
+        print '<li>A downloadable version of the ISFDB database is available <a href="http://%s/index.php/ISFDB_Downloads">here</a>' % WIKILOC
         print '<li>Supported wildcards: * and % match any number of characters, _ matches one character'
         print '</ul>'
         print '<hr>'
