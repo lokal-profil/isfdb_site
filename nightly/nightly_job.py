@@ -7,15 +7,14 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision$
-#     Date: $Date$
+#     Version: $Revision: 284 $
+#     Date: $Date: 2018-12-27 20:11:30 -0500 (Thu, 27 Dec 2018) $
 
 import os
 import sys
 import string
 from SQLparsing import *
 from library import *
-from dup_authors import *
 from nightly_html import *
 from nightly_lib import *
 from nightly_stats import *
@@ -1637,27 +1636,11 @@ def badUnicodeReport(table, record_title, record_id, report_number):
 
 
 if __name__ == '__main__':
-        # First determine whether we were asked to run the nightly task or the monthly task
-	try:
-		run_type = sys.argv[1]
-		if run_type not in ('nightly', 'monthly'):
-                        raise
-	except:
-		print """This module takes one parameter. The value of the parameter
-                        must be either 'nightly' or 'monthly'."""
-		sys.exit(0)
-
-        if run_type == 'monthly':
-                # Delete unresolved records for the duplicate authors report from the cleanup table
-                query = 'delete from cleanup where resolved IS NULL and report_type = 9999'
-                db.query(query)
-                dup_authors()
-        else:
-                # Delete unresolved records from the cleanup table EXCEPT for the duplicate authors report
-                query = 'delete from cleanup where resolved IS NULL and report_type != 9999'
-                db.query(query)
-                nightly_stats()
-                nightly_cleanup_reports()
-                nightly_wiki()
-                nightly_transliterations()
-                nightly_html()
+        # Delete unresolved records from the cleanup table EXCEPT for the monthly duplicate authors report
+        query = 'delete from cleanup where resolved IS NULL and report_type != 9999'
+        db.query(query)
+        nightly_stats()
+        nightly_cleanup_reports()
+        nightly_wiki()
+        nightly_transliterations()
+        nightly_html()

@@ -8,4 +8,5 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-TARGETS = DIR/nightly_update.py
+TARGETS = DIR/monthly_job.py \
+          DIR/nightly_job.py
