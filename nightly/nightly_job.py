@@ -1582,25 +1582,14 @@ def nightly_cleanup_reports():
         standardReport(query, 252)
 
         #   Report 253: Pubs non-linking External IDs in Notes
-        # Note that the database query has been split into 2 parts for performance reasons
-        query = """select distinct note_id from notes
+        query = """select p.pub_id from pubs p, notes n
+                where p.note_id = n.note_id
+                and n.note_id in (select distinct note_id from notes
                 where note_note like '%{{BREAK}}%Reginald1%'
                 or note_note like '%{{BREAK}}%Reginald3%'
                 or note_note like '%{{BREAK}}%Bleiler%Early Years%'
                 or note_note like '%{{BREAK}}%Bleiler%Gernsback%'
-                or note_note like '%{{BREAK}}%Bleiler%Guide to Supernatural%'"""
-        db.query(query)
-        result = db.store_result()
-        record = result.fetch_row()
-        note_ids = []
-        while record:
-                note_id = int(record[0][0])
-                note_ids.append(note_id)
-                record = result.fetch_row()
-        note_in_clause = list_to_in_clause(note_ids)
-        query = """select p.pub_id from pubs p, notes n
-                where p.note_id = n.note_id
-                and n.note_id in (%s)""" % note_in_clause
+                or note_note like '%{{BREAK}}%Bleiler%Guide to Supernatural%')"""
         standardReport(query, 253)
 
 def emptyContainers(report_id, container_types):
