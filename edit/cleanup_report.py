@@ -1,7 +1,7 @@
 #!_PYTHONLOC
 # -*- coding: cp1252 -*-
 #
-#     (C) COPYRIGHT 2011-2018   Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2011-2019   Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -6209,6 +6209,23 @@ def function252():
                 print '</table>'
         else:
                 print '<h2>No Publications with an OCLC Verification, an ISBN and no OCLC External ID.</h2>'
+
+def function253():
+        cleanup.query = """select distinct p.pub_id, p.pub_title
+            from pubs p, notes n, cleanup c
+            where c.report_type = 253
+            and p.pub_id = c.record_id
+            and p.note_id = n.note_id
+            and (
+                n.note_note like '%{{BREAK}}%Reginald1%'
+                or n.note_note like '%{{BREAK}}%Reginald3%'
+                or n.note_note like '%{{BREAK}}%Bleiler%Early Years%'
+                or n.note_note like '%{{BREAK}}%Bleiler%Gernsback%'
+                or n.note_note like '%{{BREAK}}%Bleiler%Guide to Supernatural%'
+            )
+            order by p.pub_title"""
+        cleanup.none = 'No Publications with non-linking External IDs in Notes'
+        cleanup.print_pub_table()
 
 def empty_containers_grid(report_id):
         anchor = '<a href="http:/%s/edit/empty_containers.cgi' % HTFAKE

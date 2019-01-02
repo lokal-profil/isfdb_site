@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2012-2018 Ahasuerus
+#     (C) COPYRIGHT 2012-2019 Ahasuerus
 #     ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -263,6 +263,7 @@ def reportsDict():
         reports[250] = ("Publications with OCLC IDs matching ISBNs")
         reports[251] = ("Publications with an OCLC Verification, no ISBN and no OCLC External ID")
         reports[252] = ("Publications with an OCLC Verification, an ISBN and no OCLC External ID (first 1000)")
+        reports[253] = ("Publications with non-linking External IDs in Notes")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -271,7 +272,8 @@ def reportsDict():
         sections.append(('Publications', (32, 33, 31, 34, 35, 36, 38, 39, 49, 50,
                                           51, 52, 56, 57, 70, 75, 79, 86, 88, 93,
                                           100, 193, 228, 231, 233, 235, 236, 243,
-                                          244, 245, 246, 247, 248, 249, 250, 251, 252)), )
+                                          244, 245, 246, 247, 248, 249, 250, 251,
+                                          252, 253)), )
         sections.append(('Series', (16, 17, 48, 64, 67, 76, 81, 90, 144)), )
         sections.append(('Titles', (19, 1, 3, 18, 47, 55, 62, 63, 69, 74, 80, 87,
                                     91, 96, 194, 195, 196, 197, 227)), )
@@ -320,6 +322,6 @@ def reportsDict():
                          221, 222, 223, 224, 225, 226, 227, 228, 229, 230,
                          232, 233, 234, 235, 236, 237, 238, 239, 240, 241,
                          242, 243, 244, 245, 246, 247, 248, 249, 250, 251,
-                         252, 9999)
+                         252, 253, 9999)
         
         return (reports, sections, non_moderator)
