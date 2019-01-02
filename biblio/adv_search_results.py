@@ -1,7 +1,7 @@
 #!_PYTHONLOC
 # -*- coding: cp1252 -*-
 #
-#     (C) COPYRIGHT 2006-2018   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -372,18 +372,34 @@ class advanced_search:
                 print '</div>'
                 print '<form METHOD="POST" ACTION="/cgi-bin/edit/%s.cgi">' % script
 
-        def PrintNextPage(self):
-                if search.num < 101:
-                        return
+        def PrintPageButtons(self):
+                print '<div class="button-container">'
+                if self.start > 99:
+                        self.PrintPageButton('Previous')
+                if search.num > 100:
+                        self.PrintPageButton('Next')
+                print '</div>'
+
+        def PrintPageButton(self, direction):
                 print '<form METHOD="GET" action="http:/%s/adv_search_results.cgi">' % HTFAKE
-                print '<p>'
+                print '<div>'
                 for key in self.form.keys():
                         if key == 'START':
-                                key_value = self.start + 100
+                                if direction == 'Previous':
+                                        key_value = self.start - 100
+                                else:
+                                        key_value = self.start + 100
                         else:
                                 key_value = cgi.escape(self.form[key], True)
                         print '<input NAME="%s" value="%s" type="HIDDEN">' % (key, key_value)
-                print '<input TYPE="SUBMIT" VALUE="Next page (%d - %d)">' % (self.start+101, self.start+200)
+                if direction == 'Previous':
+                        start = self.start-99
+                        end = self.start
+                else:
+                        start = self.start+101
+                        end = self.start+200
+                print '<input TYPE="SUBMIT" VALUE="%s page (%d - %d)">' % (direction, start, end)
+                print '</div>'
                 print '</form>'
 
         def PrintMergeButton(self):
@@ -631,6 +647,6 @@ if __name__ == '__main__':
 
         search.executeQuery()
 
-        search.PrintNextPage()
+        search.PrintPageButtons()
 
 	PrintTrailer('adv_search_results', 0, 0)

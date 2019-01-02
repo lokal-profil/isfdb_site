@@ -1,4 +1,4 @@
-/* (C) COPYRIGHT 2008-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
+/* (C) COPYRIGHT 2008-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
          ALL RIGHTS RESERVED
 
      The copyright notice above does not evidence any actual or
@@ -1141,4 +1141,14 @@ span.tooltipwide {
 /* Show the tooltip text when you mouse over the tooltip container */
 div.tooltip:hover span.tooltiptext {
     visibility: visible;
+}
+
+.button-container form,
+.button-container form div {
+    display: inline;
+}
+
+.button-container input {
+    display: inline;
+    vertical-align: middle;
 }
