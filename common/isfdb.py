@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -418,7 +418,7 @@ LANGUAGES = ('None','Afrikaans','Albanian','Ancient Greek','Arabic','Armenian',
              'Tswana', 'Zulu', 'Acoli', 'Fulah', 'Ganda', 'Kinyarwanda', 'Luo', 'Mandingo',
              'Oriya', 'Pedi/Sepedi/Northern Sotho', 'South Ndebele', 'Southern Sotho',
              'Standard Moroccan Tamazight', 'Wolof', 'North Ndebele', 'Montenegrin',
-             'Mirandese')
+             'Mirandese', 'Lao')
 
 # List of all supported format codes
 FORMATS = ('unknown','hc','tp','pb','ph','digest','dos','ebook','webzine','pulp',
