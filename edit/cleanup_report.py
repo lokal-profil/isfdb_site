@@ -6029,6 +6029,7 @@ def function244():
                         <ul>
                         <li>BL, COPAC, FantLab, Goodreads, JNB/JPNO, KBR, LTF, NDL, OCLC/WorldCat
                         <li>DNB and PPN (optional trailing 'x'/'X' allowed)
+                        <li>Reginald-1 and Reginald-3 (optional trailing letter allowed)
                         <li>NDL (optional leading 'b' allowed)
                         </ul>"""
         cleanup.query = """select p.pub_id, p.pub_title
