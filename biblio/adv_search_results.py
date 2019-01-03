@@ -65,6 +65,8 @@ class advanced_search:
                                         self.form[key] = value
 
                         self.start = int(self.form['START'])
+                        if self.start > 30000:
+                                DisplayError('Advanced Search Is Currently Limited to 300 pages or 30,000 records', 1)
                         self.search_type = self.form['TYPE']
                         if self.search_type not in ('Author', 'Title', 'Publication'):
                                 raise
