@@ -1481,7 +1481,7 @@ def nightly_cleanup_reports():
                 where p.pub_id = i.pub_id
                 and i.identifier_type_id = it.identifier_type_id
                 and (
-                (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'LTF', 'OCLC/WorldCat')
+                (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'KBR', 'LTF', 'OCLC/WorldCat')
                 and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
                 or
                 (it.identifier_type_name in ('DNB', 'PPN')

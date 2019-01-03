@@ -6027,7 +6027,7 @@ def function244():
         cleanup.note = """This cleanup report finds publications with non-numeric
                         External IDs for the following External ID Types:
                         <ul>
-                        <li>BL, COPAC, FantLab, Goodreads, JNB/JPNO, LTF, NDL, OCLC/WorldCat
+                        <li>BL, COPAC, FantLab, Goodreads, JNB/JPNO, KBR, LTF, NDL, OCLC/WorldCat
                         <li>DNB and PPN (optional trailing 'x'/'X' allowed)
                         <li>NDL (optional leading 'b' allowed)
                         </ul>"""
@@ -6038,7 +6038,7 @@ def function244():
                 and p.pub_id = i.pub_id
                 and i.identifier_type_id = it.identifier_type_id
                 and (
-                (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'LTF', 'OCLC/WorldCat')
+                (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'KBR', 'LTF', 'OCLC/WorldCat')
                 and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
                 or
                 (it.identifier_type_name in ('DNB', 'PPN')
