@@ -6046,6 +6046,9 @@ def function244():
                 or
                 (it.identifier_type_name = 'NDL'
                 and i.identifier_value not regexp '^[b]*[[:digit:]]{1,30}$')
+                or
+                (it.identifier_type_name in ('Reginald-1', 'Reginald-3')
+                and i.identifier_value not regexp '^[[:digit:]]{1,6}[[:alpha:]]{0,1}$')
                 )
                 order by p.pub_title"""
         cleanup.none = 'No Publications with Invalid External ID Format'

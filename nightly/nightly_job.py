@@ -1480,7 +1480,8 @@ def nightly_cleanup_reports():
                 from pubs p, identifiers i, identifier_types it
                 where p.pub_id = i.pub_id
                 and i.identifier_type_id = it.identifier_type_id
-                and (
+                and
+                (
                 (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'KBR', 'LTF', 'OCLC/WorldCat')
                 and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
                 or
@@ -1489,6 +1490,9 @@ def nightly_cleanup_reports():
                 or
                 (it.identifier_type_name = 'NDL'
                 and i.identifier_value not regexp '^[b]*[[:digit:]]{1,30}$')
+                or
+                (it.identifier_type_name in ('Reginald-1', 'Reginald-3')
+                and i.identifier_value not regexp '^[[:digit:]]{1,6}[[:alpha:]]{0,1}$')
                 )
                 """
         standardReport(query, 244)
