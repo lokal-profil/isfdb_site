@@ -6027,19 +6027,20 @@ def function244():
         cleanup.note = """This cleanup report finds publications with non-numeric
                         External IDs for the following External ID Types:
                         <ul>
-                        <li>BL, COPAC, FantLab, Goodreads, JNB/JPNO, KBR, LTF, NDL, OCLC/WorldCat
+                        <li>BL, all Bleilers, COPAC, FantLab, Goodreads, JNB/JPNO, KBR, LTF, NDL, OCLC/WorldCat
                         <li>DNB and PPN (optional trailing 'x'/'X' allowed)
-                        <li>Reginald-1 and Reginald-3 (optional trailing letter allowed)
+                        <li>Reginald-1 and Reginald-3 (one optional trailing letter allowed)
                         <li>NDL (optional leading 'b' allowed)
                         </ul>"""
-        cleanup.query = """select p.pub_id, p.pub_title
+        cleanup.query = """select distinct p.pub_id, p.pub_title
                 from pubs p, identifiers i, identifier_types it, cleanup c
                 where c.report_type = 244
                 and p.pub_id = c.record_id
                 and p.pub_id = i.pub_id
                 and i.identifier_type_id = it.identifier_type_id
                 and (
-                (it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'KBR', 'LTF', 'OCLC/WorldCat')
+                ((it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'KBR', 'LTF', 'OCLC/WorldCat')
+                or it.identifier_type_name like '%Bleiler%')
                 and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
                 or
                 (it.identifier_type_name in ('DNB', 'PPN')
