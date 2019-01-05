@@ -1185,6 +1185,7 @@ def nightly_cleanup_reports():
                 or (pub_price like '%$%,%' and pub_price not like '%$%.%')
                 or (pub_price like '%£%,%' and pub_price not like '%£%.%')
                 or pub_price regexp '^[[:digit:]]{1,20}[.]*[[:digit:]]{1,20}$'
+                or pub_price like 'http%'
                 """
         standardReport(query, 100)
 

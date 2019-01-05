@@ -4071,7 +4071,8 @@ def function100():
                 or (p.pub_price like '%$%,%' and pub_price not like '%$%.%')
                 or (p.pub_price like '%£%,%' and pub_price not like '%£%.%')
                 or p.pub_price regexp '^[[:digit:]]{1,20}[.]*[[:digit:]]{1,20}$'
-                )
+                or p.pub_price like 'http%'
+            )
                 order by p.pub_title
                 """
 
