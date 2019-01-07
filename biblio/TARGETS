@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -25,6 +25,7 @@ TARGETS = DIR/adv_search_results.cgi \
 	  DIR/directory.cgi \
 	  DIR/dologin.cgi \
 	  DIR/dologout.cgi \
+	  DIR/dumpxml.cgi \
 	  DIR/ea.cgi \
 	  DIR/eaw.cgi \
 	  DIR/external_id_search_results.cgi \

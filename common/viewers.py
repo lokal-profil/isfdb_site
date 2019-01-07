@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2007-2018   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2007-2019   Al von Ruff, Ahasuerus and Bill Longley
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -599,12 +599,14 @@ def InvalidSubmission(submission_id, message = ''):
         error_text = 'This submission is no longer valid. %s.' % message
         print '<div id="ErrorBox">'
         print '<h3>Error: %s</h3>' % error_text
+        print '<h3>You can <a href="http:/%s/dumpxml.cgi?%d">view the submission as raw XML</a>.' % (HTFAKE, int(submission_id))
 	(userid, username, usertoken) = GetUserData()
 	# If the user is a moderator and the submission is "N"ew, allow the user to hard reject it
         if SQLisUserModerator(userid) and SQLloadState(submission_id) == 'N':
-        	print '<h3>Please <a href="http:/%s/mod/hardreject.cgi?%d">use Hard Reject</a> to reject it.</h3>' % (HTFAKE, int(submission_id))
-        	print """<br>You can also <a href="http:/%s/mod/dumpxml.cgi?%d">view the
-                        raw XML data</a> contained in the submission.""" % (HTFAKE, int(submission_id))
+        	print '<br>Use <a href="http:/%s/mod/hardreject.cgi?%d">Hard Reject</a> to reject it.</h3>' % (HTFAKE, int(submission_id))
+        print '</h3>'
+        print '</div>'
+        print '</div>'
         print '</div>'
         sys.exit(0)
 

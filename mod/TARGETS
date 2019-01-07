@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -31,7 +31,6 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/change_tag_status.cgi \
 	  DIR/cv_new.cgi \
 	  DIR/cpanel.cgi \
-	  DIR/dumpxml.cgi \
 	  DIR/editrefs.cgi \
 	  DIR/hardreject.cgi \
 	  DIR/hold.cgi \

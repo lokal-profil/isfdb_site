@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2017   Ahasuerus
+#     (C) COPYRIGHT 2014-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -101,6 +101,8 @@ if __name__ == '__main__':
                 (subjectLink, new_record) = getSubjectLink(submission, doc2, sub_type)
                 if new_record:
                         print '<p><b>New record:</b> %s' % subjectLink
+
+        print '<p>View <a href="http:/%s/dumpxml.cgi?%d">the submission as raw XML</a>.' % (HTFAKE, int(submission_id))
         
         print '<p><b>Submitted by</b> %s on %s' % (WikiLink(submitter), sub_time)
 
