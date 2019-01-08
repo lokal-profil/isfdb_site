@@ -20,14 +20,6 @@ from library import *
 from isbn import *
 
 
-def DisplayError(message, display_header = 0):
-        if display_header:
-                PrintHeader('Advanced Search')
-                PrintNavbar('adv_search_results', 0, 0, 0, 0)
-        print '<h2>Error: %s</h2>' % message
-	PrintTrailer('adv_search_results', 0, 0)
-        sys.exit(0)
-
 class advanced_search:
         def __init__(self):
         	self.conjunction_list = []
@@ -52,6 +44,17 @@ class advanced_search:
                 user.load_moderator_flag()
                 self.user = user
 
+        def DisplayError(self, message, display_header = 0):
+                if display_header:
+                        PrintHeader('Advanced Search')
+                        PrintNavbar('adv_search_results', 0, 0, 0, 0)
+                self.DisplayMessage('Error: %s' % message)
+
+        def DisplayMessage(self, message):
+                print '<h2>%s</h2>' % message
+                PrintTrailer('adv_search_results', 0, 0)
+                sys.exit(0)
+
         def parse_parameters(self):
                 sys.stderr = sys.stdout
                 raw_form = cgi.FieldStorage()
@@ -68,7 +71,7 @@ class advanced_search:
 
                         self.start = int(self.form['START'])
                         if self.start > 30000:
-                                DisplayError('Advanced Search Is Currently Limited to 300 pages or 30,000 records', 1)
+                                self.DisplayError('Advanced Search Is Currently Limited to 300 pages or 30,000 records', 1)
                         self.search_type = self.form['TYPE']
                         if self.search_type not in ('Author', 'Title', 'Publication'):
                                 raise
@@ -77,7 +80,7 @@ class advanced_search:
                         if self.action not in ('query', 'count'):
                                 raise
                 except:
-                        DisplayError('Invalid Search parameters', 1)
+                        self.DisplayError('Invalid Advanced Search Parameters', 1)
 
         def set_search_type(self):
                 if self.search_type == 'Author':
@@ -101,18 +104,18 @@ class advanced_search:
                 if self.search_type == 'Publication' and self.sort not in ('pub_title', 'pub_ctype',
                                                          'pub_year', 'pub_isbn', 'pub_catalog',
                                                          'pub_price', 'pub_pages', 'pub_ptype', 'pub_frontimage'):
-                        DisplayError("Unknown sort field: %s" % sort)
+                        self.DisplayError("Unknown sort field: %s" % self.sort)
                 elif self.search_type == 'Author' and self.sort not in ('author_canonical',
                                                             'author_lastname',
                                                             'author_legalname',
                                                             'author_birthplace',
                                                             'author_birthdate',
                                                             'author_deathdate'):
-                        DisplayError("Unknown sort field: %s" % sort)
+                        self.DisplayError("Unknown sort field: %s" % self.sort)
                 elif self.search_type == 'Title' and self.sort not in ('title_title',
                                                             'title_copyright',
                                                             'title_ttype'):
-                        DisplayError("Unknown sort field: %s" % sort)
+                        self.DisplayError("Unknown sort field: %s" % self.sort)
                 if self.sort == 'pub_pages':
                         self.sort = 'CAST(pub_pages as SIGNED)'
                 elif self.sort == 'pub_price':
@@ -139,7 +142,7 @@ class advanced_search:
                 if self.form.has_key('TERM_1'):
                         self.ProcessTerm(self.form.get('TERM_1'), self.form.get('USE_1'), self.form.get('OPERATOR_1'))
                 if not self.term_list:
-                        DisplayError("No search data entered")
+                        self.DisplayError("No search data entered")
 
                 # If we have term 2, only include the conjunction if there was also
                 # a term 1 (otherwise, term 2 is the first term, and the conjunction
@@ -201,9 +204,7 @@ class advanced_search:
                         for operator in operators:
                                 message += operator
                                 message += ', '
-                        print '<h2>%s</h2>' % (message[:-2])
-                        PrintTrailer('adv_search_results', 0, 0)
-                        sys.exit(0)
+                        self.DisplayError(message[:-2])
 
         def padEntry(self, operator, entry):
                 if operator == 'exact':
@@ -219,9 +220,7 @@ class advanced_search:
                 elif operator == 'ends_with':
                         padded_entry = "like '%%%s'" % entry
                 else:
-                        print '<h2>An unexpected error has occurred. Please post the URL of this Web page on the Moderator noticeboard.</h2>'
-                        PrintTrailer('adv_search_results', 0, 0)
-                        sys.exit(0)
+                        self.DisplayError('An unexpected error has occurred. Please post the URL of this Web page on the Moderator noticeboard.')
                 return padded_entry
 
         def validateEmptyTerm(self, value):
@@ -229,7 +228,7 @@ class advanced_search:
                 for wildcard in self.wildcards:
                         stripped = stripped.replace(wildcard,'')
                         if not stripped:
-                                DisplayError('Search values must contain at least one non-wildcard character')
+                                self.DisplayError('Search values must contain at least one non-wildcard character')
 
         def validateTerm(self, field, value):
                 self.validateEmptyTerm(value)
@@ -237,26 +236,16 @@ class advanced_search:
                 if field in ('month', 'pub_month'):
                         (year, month, error) = validateMonth(value)
                         if error:
-                                DisplayError(error)
+                                self.DisplayError(error)
                 elif field == 'title_ttype':
-                        ttypes = ('ANTHOLOGY', 'CHAPBOOK', 'COLLECTION', 'COVERART', 'EDITOR', 'ESSAY', 'INTERIORART', 'INTERVIEW', 'NONFICTION', 'NOVEL', 'OMNIBUS', 'POEM', 'REVIEW', 'SERIAL', 'SHORTFICTION')
-                        if value.upper() not in ttypes:
-                                message = 'Valid title types are: '
-                                for ttype in ttypes:
-                                        message += ttype
-                                        message += ", "
-                                DisplayError(message[:-2])
+                        if value.upper() not in ALL_TITLE_TYPES:
+                                self.DisplayError('Valid title types are: %s' % ', '.join(ALL_TITLE_TYPES))
                 elif field in ('title_graphic', 'title_non_genre', 'title_jvn', 'title_nvz'):
                         if value.lower() not in ('yes', 'no'):
-                                DisplayError('Yes/No value required')
+                                self.DisplayError('Yes/No value required')
                 elif field == 'pub_ctype':
-                        ttypes = ('ANTHOLOGY', 'CHAPBOOK', 'COLLECTION', 'FANZINE', 'MAGAZINE', 'NONFICTION', 'NOVEL', 'OMNIBUS')
-                        if value.upper() not in ttypes:
-                                message = 'Valid title types are: '
-                                for ttype in ttypes:
-                                        message += ttype
-                                        message += ", "
-                                DisplayError(message[:-2])
+                        if value.upper() not in PUB_TYPES:
+                                self.DisplayError('Valid title types are: %s' % ', '.join(PUB_TYPES))
 
         def mergeTableInfoLists(self, dest, src):
                 for sti in src:
@@ -277,13 +266,7 @@ class advanced_search:
         def checkValidConjunction(self, value):
                 conjunctions = ('AND', 'OR')
                 if value not in conjunctions:
-                        message = 'Valid conjunctions are: '
-                        for op in conjunctions:
-                                message += op
-                                message += ', '
-                        print '<h2>%s</h2>' % (message[:-2])
-                        PrintTrailer('adv_search_results', 0, 0)
-                        sys.exit(0)
+                        self.DisplayError('Valid conjunctions are: %s' % ', '.join(conjunctions))
 
         def formatEntry(self, value):
                 value = db.escape_string(value)
@@ -325,9 +308,7 @@ class advanced_search:
                 self.makeTableQuery()
                 self.search()
                 if self.action == 'count':
-                        print 'Count of matching records: %d' % self.records[0]
-                        PrintTrailer('adv_search_results', 0, 0)
-                        sys.exit(0)
+                        self.DisplayMessage('Count of matching records: %d' % self.records[0])
 
         def PrintPubResults(self):
                 PrintPubsTable(self.records, 'adv_search', self.user, 100)
@@ -347,9 +328,7 @@ class advanced_search:
                 self.num = result.num_rows()
 
                 if not self.num:
-                        print "<h2>No records found</h2>"
-                        PrintTrailer('adv_search_results', 0, 0)
-                        sys.exit(0)
+                        self.DisplayMessage('No records found')
 
                 record = result.fetch_row()
                 while record:
@@ -492,7 +471,7 @@ class advanced_search:
                         dbases = [tableInfo('titles'), tableInfo('canonical_author')]
                         joins = ['titles.title_id=canonical_author.title_id']
                 else:
-                        DisplayError("Unknown field: %s" % field)
+                        self.DisplayError("Unknown field: %s" % field)
                 return ("(%s)" % clause, dbases, joins)
 
         def MakeAuthorSQLterm(self, field, value, sql_value):
@@ -539,7 +518,7 @@ class advanced_search:
                 elif field == 'author_note':
                         clause = "authors.author_note %s" % sql_value
                 else:
-                        DisplayError("Unknown field: %s" % field)
+                        self.DisplayError("Unknown field: %s" % field)
                 return ("(%s)" % clause, dbases, joins)
 
         def MakePubSQLterm(self, field, value, sql_value):
@@ -613,7 +592,7 @@ class advanced_search:
                 elif field == 'pub_ctype':
                         clause = "pubs.pub_ctype %s" % sql_value
                 else:
-                        DisplayError("Unknown field: %s" % field)
+                        self.DisplayError("Unknown field: %s" % field)
                 return ("(%s)" % clause, dbases, joins)
 
 class tableInfo:
