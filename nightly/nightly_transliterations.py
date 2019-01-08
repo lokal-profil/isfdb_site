@@ -1,5 +1,4 @@
 #!_PYTHONLOC
-# -*- coding: cp1252 -*-
 #
 #     (C) COPYRIGHT 2009-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED

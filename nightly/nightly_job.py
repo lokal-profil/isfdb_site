@@ -1,5 +1,4 @@
 #!_PYTHONLOC
-# -*- coding: cp1252 -*-
 #
 #     (C) COPYRIGHT 2009-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
@@ -1175,15 +1174,15 @@ def nightly_cleanup_reports():
         #   Report 100: Finds invalid prices
         query = """select pub_id from pubs
                 where pub_price like '%$ %'
-                or pub_price like '%£ %'
-                or pub_price like '%¥ %'
+                or pub_price like concat('%',CHAR(0xA3),' ','%')
+                or pub_price like concat('%',CHAR(0xA5),' ','%')
                 or pub_price like concat('%',CHAR(0x80),'%',' ','%')
                 or pub_price like concat('%','_',CHAR(0x80),'%')
                 or pub_price like concat('%',CHAR(0x80),'%',',','%')
                 or pub_price like '%CDN%'
                 or pub_price like '%EUR%'
                 or (pub_price like '%$%,%' and pub_price not like '%$%.%')
-                or (pub_price like '%£%,%' and pub_price not like '%£%.%')
+                or (pub_price like concat('%',CHAR(0xA3),'%',',','%') and pub_price not like concat('%',CHAR(0xA3),'%',".",'%'))
                 or pub_price regexp '^[[:digit:]]{1,20}[.]*[[:digit:]]{1,20}$'
                 or pub_price like 'http%'
                 """

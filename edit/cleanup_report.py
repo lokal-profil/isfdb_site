@@ -1,5 +1,4 @@
 #!_PYTHONLOC
-# -*- coding: cp1252 -*-
 #
 #     (C) COPYRIGHT 2011-2019   Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
@@ -4061,15 +4060,15 @@ def function100():
                 where p.pub_id = c.record_id
                 and c.report_type = 100
                 and (p.pub_price like '%$ %'
-                or p.pub_price like '%£ %'
-                or p.pub_price like '%¥ %'
+                or p.pub_price like concat('%',CHAR(0xA3),' ','%')
+                or p.pub_price like concat('%',CHAR(0xA5),' ','%')
                 or p.pub_price like concat('%',CHAR(0x80),'%',' ','%')
                 or p.pub_price like concat('%','_',CHAR(0x80),'%')
                 or p.pub_price like concat('%',CHAR(0x80),'%',',','%')
                 or p.pub_price like '%CDN%'
                 or p.pub_price like '%EUR%'
-                or (p.pub_price like '%$%,%' and pub_price not like '%$%.%')
-                or (p.pub_price like '%£%,%' and pub_price not like '%£%.%')
+                or (p.pub_price like '%$%,%' and p.pub_price not like '%$%.%')
+                or (p.pub_price like concat('%',CHAR(0xA3),'%',',','%') and p.pub_price not like concat('%',CHAR(0xA3),'%',".",'%'))
                 or p.pub_price regexp '^[[:digit:]]{1,20}[.]*[[:digit:]]{1,20}$'
                 or p.pub_price like 'http%'
             )
