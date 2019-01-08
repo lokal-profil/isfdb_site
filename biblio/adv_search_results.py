@@ -1,5 +1,4 @@
 #!_PYTHONLOC
-# -*- coding: cp1252 -*-
 #
 #     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
@@ -117,7 +116,7 @@ class advanced_search:
                 if self.sort == 'pub_pages':
                         self.sort = 'CAST(pub_pages as SIGNED)'
                 elif self.sort == 'pub_price':
-                        self.sort = "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(pub_price,' ',''),'$',''),'C',''),'A',''),'M',''),'D',''),'£',''),'F',''),'€',''),'z&#322;',''),'NZ',''),'t',''),'ƒ','')*100"
+                        self.sort = "REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(pub_price,' ',''),'$',''),'C',''),'A',''),'M',''),'D',''),CHAR(0xA3),''),'F',''),CHAR(0x80),''),'z&#322;',''),'NZ',''),'t',''),CHAR(0x83),'')*100"
                 if self.search_type == 'Author':
                         if self.sort != 'author_canonical':
                                 self.sort += ', author_canonical'
