@@ -1,7 +1,6 @@
 #!_PYTHONLOC
-# -*- coding: cp1252 -*-
 #
-#     (C) COPYRIGHT 2007-2014   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2007-2019   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -121,9 +120,20 @@ if __name__ == '__main__':
                                 "into", "of", "off", "out", "over", "than", "then", "to", "up", "with")
                 
                 # Create a dictionary of words that will need to be replaced for "Similar Mode"
-                replace_words = {'&': 'and', '0': 'zero', '10': 'ten', '11': 'eleven', '12': 'twelve', \
-                                 '13': 'thirteen', '14': 'fourteen', '15': 'fifteen', '16': 'sixteen', \
-                                 '17': 'seventeen', '18': 'eighteen', '19': 'nineteen', '–': '-', '—': '-'}
+                replace_words = {'&': 'and',
+                                 '0': 'zero',
+                                 '10': 'ten',
+                                 '11': 'eleven',
+                                 '12': 'twelve',
+                                 '13': 'thirteen',
+                                 '14': 'fourteen',
+                                 '15': 'fifteen',
+                                 '16': 'sixteen',
+                                 '17': 'seventeen',
+                                 '18': 'eighteen',
+                                 '19': 'nineteen',
+                                 chr(150): '-',
+                                 chr(151): '-'}
                 # Create a dictionary of single digits and their substitution values to be used later
                 digits = {'1': 'one', '2': 'two', '3': 'three', '4': 'four', '5': 'five', \
                           '6': 'six', '7': 'seven', '8': 'eight', '9': 'nine'}
