@@ -31,24 +31,27 @@ def DisplayError(message, display_header = 0):
 
 class advanced_search:
         def __init__(self):
+        	self.conjunction_list = []
+        	self.action = 'query'
+        	self.dbases = []
+                self.form = {}
+                self.id_field = ''
+        	self.join_list = []
+        	self.num = 0
+        	self.operator_list = []
+                self.order_by = ''
+        	self.query = ''
+        	self.records = []
+                self.search_type = ''
+                self.start = 0
+        	self.term_list = []
+        	self.terms = ''
+        	self.wildcards = '%*_'
+
                 user = User()
                 user.load()
                 user.load_moderator_flag()
                 self.user = user
-                self.form = {}
-                self.start = 0
-                self.search_type = ''
-                self.order_by = ''
-        	self.dbases = []
-        	self.term_list = []
-        	self.conjunction_list = []
-        	self.join_list = []
-        	self.operator_list = []
-        	self.terms = ''
-        	self.query = ''
-        	self.records = []
-        	self.num = 0
-        	self.wildcards = '%*_'
 
         def parse_parameters(self):
                 sys.stderr = sys.stdout
@@ -71,19 +74,28 @@ class advanced_search:
                         if self.search_type not in ('Author', 'Title', 'Publication'):
                                 raise
                         self.order_by = self.formatEntry(self.form['ORDERBY'])
+                        self.action = self.form.get('ACTION', 'query')
+                        if self.action not in ('query', 'count'):
+                                raise
                 except:
                         DisplayError('Invalid Search parameters', 1)
 
         def set_search_type(self):
                 if self.search_type == 'Author':
+                        self.table = 'authors'
+                        self.id_field = 'author_id'
                         self.SQLterm = self.MakeAuthorSQLterm
-                        self.executeQuery = self.executeAuthorQuery
+                        self.PrintResults = self.PrintAuthorResults
                 elif self.search_type == 'Title':
+                        self.table = 'titles'
+                        self.id_field = 'title_id'
                         self.SQLterm = self.MakeTitleSQLterm
-                        self.executeQuery = self.executeTitleQuery
+                        self.PrintResults = self.PrintTitleResults
                 elif self.search_type == 'Publication':
+                        self.table = 'pubs'
+                        self.id_field = 'pub_id'
                         self.SQLterm = self.MakePubSQLterm
-                        self.executeQuery = self.executePubQuery
+                        self.PrintResults = self.PrintPubResults
 
         def ProcessSort(self):
                 self.sort = self.formatEntry(self.order_by)
@@ -306,24 +318,27 @@ class advanced_search:
                 for join in self.join_list:
                         self.terms = self.terms + " and " + join
 
-        def executePubQuery(self):
-                self.query = "select distinct pubs.* from "
+        def ExecuteQuery(self):
+                if self.action == 'query':
+                        self.query = 'select distinct %s.* from ' % self.table
+                elif self.action == 'count':
+                        self.query = 'select count(distinct %s.%s) from ' % (self.table, self.id_field)
                 self.makeTableQuery()
                 self.search()
+                if self.action == 'count':
+                        print 'Count of matching records: %d' % self.records[0]
+                        PrintTrailer('adv_search_results', 0, 0)
+                        sys.exit(0)
+
+        def PrintPubResults(self):
                 PrintPubsTable(self.records, 'adv_search', self.user, 100)
 
-        def executeAuthorQuery(self):
-                self.query = "select distinct authors.* from "
-                self.makeTableQuery()
-                self.search()
+        def PrintAuthorResults(self):
                 PrintAuthorTable(self.records, 1, 100, self.user)
                 if self.user.moderator:
                         self.PrintMergeButton()
 
-        def executeTitleQuery(self):
-                self.query = "select distinct titles.* from "
-                self.makeTableQuery()
-                self.search()
+        def PrintTitleResults(self):
                 PrintTitleTable(self.records, 1, 100, self.user)
                 self.PrintMergeButton()
 
@@ -647,7 +662,9 @@ if __name__ == '__main__':
 
         search.MakeTerms()
 
-        search.executeQuery()
+        search.ExecuteQuery()
+
+        search.PrintResults()
 
         search.PrintPageButtons()
 

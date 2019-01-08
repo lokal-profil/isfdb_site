@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus and Bill Longley
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -40,6 +40,13 @@ def PrintRadioSelectors(number):
 	print '<input TYPE="RADIO" NAME="CONJUNCTION_%d" VALUE="AND" CHECKED>AND' % number
 	print '<input TYPE="RADIO" NAME="CONJUNCTION_%d" VALUE="OR">OR' % number
 	print '<p>'
+
+def PrintSubmitButton(record_type):
+	print '<button TYPE="SUBMIT" NAME="ACTION" VALUE="query">Get Results</button>'
+	print '<button TYPE="SUBMIT" NAME="ACTION" VALUE="count">Get Count</button>'
+	print '<input NAME="START" VALUE="0" TYPE="HIDDEN">'
+	print '<input NAME="TYPE" VALUE="%s" TYPE="HIDDEN">' % record_type
+	print '</form>'
 
 def PrintOperators(number):
 	print '<select NAME="OPERATOR_%d">' % number
@@ -101,11 +108,7 @@ def PrintTitleSearch():
                 if number < 3:
                         PrintRadioSelectors(number)
 	PrintTitleSortBy()
-
-	print '<input TYPE="SUBMIT" VALUE="Submit Query">'
-	print '<input NAME="START" VALUE="0" TYPE="HIDDEN">'
-	print '<input NAME="TYPE" VALUE="Title" TYPE="HIDDEN">'
-	print '</form>'
+        PrintSubmitButton('Title')
 
 def PrintTitleSortBy():
 	print '<b>Sort Results By:</b>'
@@ -160,11 +163,7 @@ def PrintAuthorSearch():
                 if number < 3:
                         PrintRadioSelectors(number)
 	PrintAuthorSortBy()
-
-	print '<input TYPE="SUBMIT" VALUE="Submit Query">'
-	print '<input NAME="START" VALUE="0" TYPE="HIDDEN">'
-	print '<input NAME="TYPE" VALUE="Author" TYPE="HIDDEN">'
-	print '</form>'
+        PrintSubmitButton('Author')
 
 def PrintPubSelectors(number):
 	print '<p id="pub_selectors_%d">' % number
@@ -226,11 +225,7 @@ def PrintPubSearch():
                 if number <3:
                         PrintRadioSelectors(number)
 	PrintPubSortBy()
-
-	print '<input TYPE="SUBMIT" VALUE="Submit Query">'
-	print '<input NAME="START" VALUE="0" TYPE="HIDDEN">'
-	print '<input NAME="TYPE" VALUE="Publication" TYPE="HIDDEN">'
-	print '</form>'
+        PrintSubmitButton('Publication')
 
 def PrintIdentifierSearch():
 	print '<h2>Publication Search by External Identifier</h2>'
