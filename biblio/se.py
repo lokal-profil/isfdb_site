@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -46,15 +46,29 @@ def PrintSummary(arg, count, limit):
 		print "<br>The first %d matches are displayed below. " % (limit)
 		print 'Use <a class="inverted" href="http:/%s/search.cgi">Advanced Search</a>' % (HTFAKE)
 		print " to see more matches."
-	print '</b><p>'
+	print '</b>'
+	print '<p>'
+
+def PrintGoogleSearch(arg, search_type):
+        print 'You can also try:'
+	print '<form METHOD="GET" action="http:/%s/google_search_redirect.cgi" accept-charset="utf-8">' % (HTFAKE)
+	print '<p>'
+	print '<select NAME="OPERATOR">'
+        print '<option VALUE="exact">exact %s search' % search_type
+        print '<option SELECTED VALUE="approximate">approximate %s search' % search_type
+	print '</select>'
+        print ' on <input NAME="SEARCH_VALUE" SIZE="50" VALUE="%s">' % arg
+	print '<input NAME="PAGE_TYPE" VALUE="%s" TYPE="HIDDEN">' % search_type
+	print '<input TYPE="SUBMIT" VALUE="using Google">'
+	print '</form>'
 
 def PrintReplaceScript(script, value):
         ServerSideRedirect('http:/%s/%s.cgi?%s' % (HTFAKE, script, value))
 
-def DoError(error, search_value, type):
-        PrintHeader("ISFDB Search Error")
-        PrintNavbar('search', '', 0, 'se.cgi', '', search_value, type)
-        print "<h2>%s</h2>" % (error)
+def DoError(error, search_value, search_type):
+        PrintHeader('ISFDB Search Error')
+        PrintNavbar('search', '', 0, 'se.cgi', '', search_value, search_type)
+        print '<h2>%s</h2>' % error
         PrintTrailer('search', '', 0)
         sys.exit(0)
 
@@ -246,10 +260,10 @@ def PrintTagRecord(tag, bgcolor):
         print '<td>%s</td>' % (status)
         print "</tr>"
 
-def LengthCheck(arg, record_name):
+def LengthCheck(arg, record_name, search_type):
         # Check that the search string contains at least 2 non-wildcard characters
         if len(arg.replace('_','').replace('*','').replace('%','')) < 2:
-                DoError('Regular search doesn\'t support single character searches for %s. Use Advanced Search instead.' % record_name, search_value, type)
+                DoError('Regular search doesn\'t support single character searches for %s. Use Advanced Search instead.' % record_name, arg, search_type)
 
 
 ##########################################################################################
@@ -286,7 +300,7 @@ if __name__ == '__main__':
 		sys.exit(0)
 
 	if type[:4] == 'Name':
-                LengthCheck(arg, 'names')
+                LengthCheck(arg, 'names', type)
 		results = SQLFindAuthors(arg, mode)
 		if len(results) == 1:
                         PrintReplaceScript("ea", str(results[0][AUTHOR_ID]))
@@ -296,9 +310,11 @@ if __name__ == '__main__':
                         PrintSummary(arg, len(results), 300)
 			if results:
                                 PrintAuthorTable(results, 0, 300)
+                        else:
+                                PrintGoogleSearch(arg, 'name')
 
 	elif type[:14] == 'Fiction Titles':
-                LengthCheck(arg, 'titles')
+                LengthCheck(arg, 'titles', type)
         	results = SQLFindFictionTitles(arg)
         	if len(results) == 1:
                         PrintReplaceScript("title", str(results[0][TITLE_PUBID]))
@@ -308,9 +324,11 @@ if __name__ == '__main__':
                         PrintSummary(arg, len(results), 300)
 			if results:
                                 PrintTitleTable(results, 0, 300, user)
+                        else:
+                                PrintGoogleSearch(arg, 'title')
 
 	elif type[:10] == 'All Titles':
-                LengthCheck(arg, 'titles')
+                LengthCheck(arg, 'titles', type)
                 results = SQLFindTitles(arg)
         	if len(results) == 1:
                         PrintReplaceScript("title", str(results[0][TITLE_PUBID]))
@@ -320,6 +338,8 @@ if __name__ == '__main__':
                         PrintSummary(arg, len(results), 300)
 			if results:
                                 PrintTitleTable(results, 0, 300, user)
+                        else:
+                                PrintGoogleSearch(arg, 'title')
         
 	elif type[:13] == 'Year of Title':
 		# Validate the passed in string and get the normalized year string
@@ -373,6 +393,8 @@ if __name__ == '__main__':
                         PrintSummary(arg, len(results), 300)
 			if results:
                                 PrintSeriesResults(results)
+                        else:
+                                PrintGoogleSearch(arg, 'series')
 
 	elif type[:8] == 'Magazine':
 		(results, count) = SQLFindMagazine(arg)
@@ -388,7 +410,7 @@ if __name__ == '__main__':
                                 PrintMagazineResults(results, arg)
 
 	elif type[:9] == 'Publisher':
-                LengthCheck(arg, 'publishers')
+                LengthCheck(arg, 'publishers', type)
 		(userid, username, usertoken) = GetUserData()
                 moderator = 0
 		results = SQLFindPublisher(arg, mode)
@@ -404,6 +426,9 @@ if __name__ == '__main__':
                         PrintSummary(arg, len(results), 300)
 			if results:
                                 PrintPublisherResults(results, moderator)
+                        else:
+                                print '</form>'
+                                PrintGoogleSearch(arg, 'publisher')
 
 		if moderator and (len(results) > 1):
 			print '<p>'
@@ -421,8 +446,11 @@ if __name__ == '__main__':
                         PrintSummary(arg, len(results), 300)
 			if results:
                                 PrintPubSeriesResults(results)
+                        else:
+                                PrintGoogleSearch(arg, 'pubseries')
 
 	elif type[:4] == 'ISBN':
+                LengthCheck(arg, 'ISBNs', type)
 		# Search for possible ISBN variations
 		targets = isbnVariations(arg)
 		results = SQLFindPubsByIsbn(targets)
