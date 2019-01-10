@@ -22,8 +22,8 @@ from isbn import *
 
 class advanced_search:
         def __init__(self):
-        	self.conjunction_list = []
         	self.action = 'query'
+        	self.conjunction = ''
         	self.dbases = []
                 self.form = {}
                 self.id_field = ''
@@ -78,6 +78,12 @@ class advanced_search:
                         self.order_by = self.formatEntry(self.form['ORDERBY'])
                         self.action = self.form.get('ACTION', 'query')
                         if self.action not in ('query', 'count'):
+                                raise
+                        self.conjunction = self.form.get('C', '')
+                        # Legacy queries send CONJUNCTION_1 instead of C
+                        if not self.conjunction:
+                                self.conjunction = self.form.get('CONJUNCTION_1', '')
+                        if self.conjunction not in ('AND', 'OR'):
                                 raise
                 except:
                         self.DisplayError('Invalid Advanced Search Parameters', 1)
@@ -144,18 +150,8 @@ class advanced_search:
                 if not self.term_list:
                         self.DisplayError("No search data entered")
 
-                # If we have term 2, only include the conjunction if there was also
-                # a term 1 (otherwise, term 2 is the first term, and the conjunction
-                # does not apply).
-                if self.form.has_key('TERM_1') and self.form.has_key('CONJUNCTION_1') and self.form.has_key('TERM_2'):
-                        self.ProcessConjunction(self.form.get('CONJUNCTION_1'))
-
                 if self.form.has_key('TERM_2'):
                         self.ProcessTerm(self.form.get('TERM_2'), self.form.get('USE_2'), self.form.get('OPERATOR_2'))
-
-                # If we have term 3, only include the conjunction if there was also a preceding term
-                if (self.form.has_key('TERM_1') or self.form.has_key('TERM_2')) and self.form.has_key('CONJUNCTION_2') and self.form.has_key('TERM_3'):
-                        self.ProcessConjunction(self.form.get('CONJUNCTION_2'))
 
                 if self.form.has_key('TERM_3'):
                         self.ProcessTerm(self.form.get('TERM_3'), self.form.get('USE_3'), self.form.get('OPERATOR_3'))
@@ -258,16 +254,6 @@ class advanced_search:
                         if not found:
                                 dest.append(sti)
 
-        def ProcessConjunction(self, raw_conjunction):
-                self.checkValidConjunction(raw_conjunction)
-                conjunction = self.formatEntry(raw_conjunction)
-                self.conjunction_list.append(conjunction)
-
-        def checkValidConjunction(self, value):
-                conjunctions = ('AND', 'OR')
-                if value not in conjunctions:
-                        self.DisplayError('Valid conjunctions are: %s' % ', '.join(conjunctions))
-
         def formatEntry(self, value):
                 value = db.escape_string(value)
                 # Change asterisks to % because * is also a supported wildcard character
@@ -275,30 +261,21 @@ class advanced_search:
                 return value
 
         def MakeTerms(self):
-                # If we have two conjunctions and only one of them is an OR,
-                # group the adjoining terms and the OR together
-                if (self.conjunction_list and (len(self.conjunction_list) == 2) and (self.conjunction_list[0] != self.conjunction_list[1])):
-                        if (self.conjunction_list[0] == "OR"):
-                                self.term_list[0] = "(" + self.term_list[0]
-                                self.term_list[1] = self.term_list[1] + ")"
-                        else:
-                                self.term_list[1] = "(" + self.term_list[1]
-                                self.term_list[2] = self.term_list[2] + ")"
-
-                # Construct the clause of term(s).  We wrap this in parens to avoid
-                # unintended interaction with the join clauses.
-                o = 0
+                # Concatenate terms using the conjunction. Wrap the result in parens
+                # to avoid unintended interaction with the join clauses.
                 self.terms = "("
+                count = 1
                 for term in self.term_list:
-                        self.terms += term
-                        if o < len(self.conjunction_list):
-                                self.terms = self.terms + " " + self.conjunction_list[o] + " "
-                                o = o + 1
+                        if count == 1:
+                                self.terms += '%s ' % term
+                        else:
+                                self.terms += '%s %s ' % (self.conjunction, term)
+                        count += 1
                 self.terms += ")"
 
                 # Add the join clauses to the end
                 for join in self.join_list:
-                        self.terms = self.terms + " and " + join
+                        self.terms += " and " + join
 
         def ExecuteQuery(self):
                 if self.action == 'query':

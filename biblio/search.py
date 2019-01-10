@@ -36,10 +36,9 @@ def PrintOneDropDown(name, values):
                         print '<option VALUE="%s">%s' % (value, value)
        	print '</select>'
 
-def PrintRadioSelectors(number):
-	print '<input TYPE="RADIO" NAME="CONJUNCTION_%d" VALUE="AND" CHECKED>AND' % number
-	print '<input TYPE="RADIO" NAME="CONJUNCTION_%d" VALUE="OR">OR' % number
-	print '<p>'
+def PrintRadioSelectors():
+	print '<input TYPE="RADIO" NAME="C" VALUE="AND" CHECKED>AND'
+	print '<input TYPE="RADIO" NAME="C" VALUE="OR">OR'
 
 def PrintSubmitButton(record_type):
 	print '<button TYPE="SUBMIT" NAME="ACTION" VALUE="query">Get Results</button>'
@@ -91,6 +90,8 @@ def PrintTitleSelectors(number):
         PrintOperators(number)
 
         print '<input id="titleterm_%d" NAME="TERM_%d" SIZE="50">' % (number, number)
+        if number == 1:
+                PrintRadioSelectors()
 	print '<p>'
 
 def PrintTitleSearch():
@@ -105,8 +106,6 @@ def PrintTitleSearch():
 
         for number in (1, 2, 3):
                 PrintTitleSelectors(number)
-                if number < 3:
-                        PrintRadioSelectors(number)
 	PrintTitleSortBy()
         PrintSubmitButton('Title')
 
@@ -140,6 +139,8 @@ def PrintAuthorSelectors(number):
         PrintOperators(number)
 
         print '<input id="authorterm_%d" NAME="TERM_%d" SIZE="50">' % (number, number)
+        if number == 1:
+                PrintRadioSelectors()
 	print '<p>'
 
 def PrintAuthorSortBy():
@@ -160,8 +161,6 @@ def PrintAuthorSearch():
 
         for number in (1, 2, 3):
                 PrintAuthorSelectors(number)
-                if number < 3:
-                        PrintRadioSelectors(number)
 	PrintAuthorSortBy()
         PrintSubmitButton('Author')
 
@@ -196,6 +195,8 @@ def PrintPubSelectors(number):
         PrintOperators(number)
 
         print '<input id="pubterm_%d" NAME="TERM_%d" TYPE="text" SIZE="50">' % (number, number)
+        if number == 1:
+                PrintRadioSelectors()
         print '<p>'
 
 def PrintPubSortBy():
@@ -222,8 +223,6 @@ def PrintPubSearch():
 
         for number in (1, 2, 3):
                 PrintPubSelectors(number)
-                if number <3:
-                        PrintRadioSelectors(number)
 	PrintPubSortBy()
         PrintSubmitButton('Publication')
 
