@@ -28,6 +28,7 @@ class advanced_search:
                 self.form = {}
                 self.id_field = ''
         	self.join_list = []
+        	self.max_term = 5
         	self.num = 0
         	self.operator_list = []
                 self.order_by = ''
@@ -145,16 +146,17 @@ class advanced_search:
                 if (self.search_type == 'Title') and self.form.has_key('exact'):
                         self.ProcessTerm(self.form.get('exact'), 'exact', 'exact')
 
-                if self.form.has_key('TERM_1'):
-                        self.ProcessTerm(self.form.get('TERM_1'), self.form.get('USE_1'), self.form.get('OPERATOR_1'))
+                for count in range(1, self.max_term + 1):
+                        term = 'TERM_%d' % count
+                        if self.form.has_key(term):
+                                use = self.form.get('USE_%d' % count)
+                                operator = self.form.get('O_%d' % count)
+                                if not operator:
+                                        operator = self.form.get('OPERATOR_%d' % count)
+                                self.ProcessTerm(self.form.get(term), use, operator)
+
                 if not self.term_list:
                         self.DisplayError("No search data entered")
-
-                if self.form.has_key('TERM_2'):
-                        self.ProcessTerm(self.form.get('TERM_2'), self.form.get('USE_2'), self.form.get('OPERATOR_2'))
-
-                if self.form.has_key('TERM_3'):
-                        self.ProcessTerm(self.form.get('TERM_3'), self.form.get('USE_3'), self.form.get('OPERATOR_3'))
 
         def ProcessTerm(self, term, use, operator):
                 term = normalizeInput(term)

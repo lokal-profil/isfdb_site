@@ -48,7 +48,7 @@ def PrintSubmitButton(record_type):
 	print '</form>'
 
 def PrintOperators(number):
-	print '<select NAME="OPERATOR_%d">' % number
+	print '<select NAME="O_%d">' % number
 	print '<option SELECTED VALUE="exact">is exactly'
 	print '<option VALUE="notexact">is not exactly'
 	print '<option VALUE="contains">contains'
@@ -94,7 +94,7 @@ def PrintTitleSelectors(number):
                 PrintRadioSelectors()
 	print '<p>'
 
-def PrintTitleSearch():
+def PrintTitleSearch(max_term):
 	print '<h2>Title Search</h2>'
 	print '<p>'
 	print '<ul>'
@@ -104,7 +104,7 @@ def PrintTitleSearch():
 	print '<form METHOD="GET" action="http:/%s/adv_search_results.cgi">' % (HTFAKE)
 	print '<p>'
 
-        for number in (1, 2, 3):
+        for number in range(1, max_term + 1):
                 PrintTitleSelectors(number)
 	PrintTitleSortBy()
         PrintSubmitButton('Title')
@@ -154,12 +154,12 @@ def PrintAuthorSortBy():
 	print '<option VALUE="author_deathdate">Deathdate'
        	print '</select>'
         
-def PrintAuthorSearch():
+def PrintAuthorSearch(max_term):
 	print '<h2>Author Search</h2>'
 	print '<form METHOD="GET" action="http:/%s/adv_search_results.cgi">' % (HTFAKE)
 	print '<p>'
 
-        for number in (1, 2, 3):
+        for number in range(1, max_term + 1):
                 PrintAuthorSelectors(number)
 	PrintAuthorSortBy()
         PrintSubmitButton('Author')
@@ -213,7 +213,7 @@ def PrintPubSortBy():
 	print '<option VALUE="pub_frontimage">Image URL'
        	print '</select>'
 
-def PrintPubSearch():
+def PrintPubSearch(max_term):
 	print '<h2>Publication Search</h2>'
 	print '<form METHOD="GET" action="http:/%s/adv_search_results.cgi">' % (HTFAKE)
 	print '<p>'
@@ -221,7 +221,7 @@ def PrintPubSearch():
 	print '<li> ISBN searches ignore dashes and search for both ISBN-10 and ISBN-13'
 	print '</ul>'
 
-        for number in (1, 2, 3):
+        for number in range(1, max_term + 1):
                 PrintPubSelectors(number)
 	PrintPubSortBy()
         PrintSubmitButton('Publication')
@@ -330,11 +330,12 @@ if __name__ == '__main__':
         print '<li>Supported wildcards: * and % match any number of characters, _ matches one character'
         print '</ul>'
         print '<hr>'
-	PrintTitleSearch()
+        max_term = 5
+	PrintTitleSearch(max_term)
 	print '<p><hr><p>'
-	PrintAuthorSearch()
+	PrintAuthorSearch(max_term)
 	print '<p><hr><p>'
-	PrintPubSearch()
+	PrintPubSearch(max_term)
 	print '<p><hr><p>'
 	PrintIdentifierSearch()
 	print '<p><hr><p>'
