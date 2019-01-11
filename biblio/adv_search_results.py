@@ -84,6 +84,9 @@ class advanced_search:
                         # Legacy queries send CONJUNCTION_1 instead of C
                         if not self.conjunction:
                                 self.conjunction = self.form.get('CONJUNCTION_1', '')
+                        # "Exact" queries from "Show All Title" do not use a conjunction, so use a default value
+                        if not self.conjunction:
+                                self.conjunction = 'AND'
                         if self.conjunction not in ('AND', 'OR'):
                                 raise
                 except:
