@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2013   Al von Ruff, Bill Longley, Uzume and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley, Uzume and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -41,7 +41,13 @@ if __name__ == '__main__':
 	result = db.store_result()
 	record = result.fetch_row()
 	if not record:
-		doError('Bad user name')
+		doError("""User name not recognized.<br>Note that both user name and password are case
+                sensitive and that the software forces the first character of the user name to uppercase.<br>
+                If you don't have an ISFDB account, you can create one using the link at the top of
+                this page.<br>
+                Note that the ISFDB database and the ISFDB Wiki have different user authentication:
+                although the userid and password are the same for both, so you can be logged in on
+                one of them but logged out on the other. """)
 
 	###################################################
 	#$p = md5( $password);
