@@ -1,4 +1,6 @@
 /*     Version: $Revision: 19 $
+      (C) COPYRIGHT 2017-2019   Ahasuerus
+         ALL RIGHTS RESERVED
       Date: $Date: 2017-10-31 19:26:25 -0400 (Tue, 31 Oct 2017) $ */
 
 
@@ -128,6 +130,12 @@ function createOnchange()	{
 		document.getElementById('author_3').onchange = function(event){
 			Selectors(3, this.value, 'author_selectors', 'authorterm');
 		};
+		document.getElementById('author_4').onchange = function(event){
+			Selectors(4, this.value, 'author_selectors', 'authorterm');
+		};
+		document.getElementById('author_5').onchange = function(event){
+			Selectors(5, this.value, 'author_selectors', 'authorterm');
+		};
 		document.getElementById('title_1').onchange = function(event){
 			Selectors(1, this.value, 'title_selectors', 'titleterm');
 		};
@@ -137,6 +145,12 @@ function createOnchange()	{
 		document.getElementById('title_3').onchange = function(event){
 			Selectors(3, this.value, 'title_selectors', 'titleterm');
 		};
+		document.getElementById('title_4').onchange = function(event){
+			Selectors(4, this.value, 'title_selectors', 'titleterm');
+		};
+		document.getElementById('title_5').onchange = function(event){
+			Selectors(5, this.value, 'title_selectors', 'titleterm');
+		};
 		document.getElementById('pub_1').onchange = function(event){
 			Selectors(1, this.value, 'pub_selectors', 'pubterm');
 		};
@@ -145,6 +159,12 @@ function createOnchange()	{
 		};
 		document.getElementById('pub_3').onchange = function(event){
 			Selectors(3, this.value, 'pub_selectors', 'pubterm');
+		};
+		document.getElementById('pub_4').onchange = function(event){
+			Selectors(4, this.value, 'pub_selectors', 'pubterm');
+		};
+		document.getElementById('pub_5').onchange = function(event){
+			Selectors(5, this.value, 'pub_selectors', 'pubterm');
 		};
 	}
 }
