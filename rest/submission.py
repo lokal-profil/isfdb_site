@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
 #	 ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -13,84 +13,139 @@ import cgi
 import sys
 from isfdb import *
 from SQLparsing import *
+from login import User
 from xml.dom import minidom
 from xml.dom import Node
 	
 
-def GetElementValue(element, tag):
-        document = element[0].getElementsByTagName(tag)
-        try:
-                value = document[0].firstChild.data.encode(UNICODE)
-        except:
-                value = ''
-        return value
+class Submission:
+        def __init__ (self):
+                self.doc = ''
+                self.holder = ''
+                self.holder_id = 0
+                self.merge = ''
+                self.submitter = ''
+                self.submitter_id = 0
+                self.valid_submitters = ('Ahasuerus', 'Fixer')
+                self.XMLdata = ''
 
+        def process_submission(self):
+                self.get_input()
+                self.get_submitter()
+                self.get_license()
+                self.get_holder()
+                self.remove_API_fields()
+                self.file_submission()
 
-def SendResponse(success, errorMessage):
-        print '<?xml version="1.0" encoding="%s" ?>' % UNICODE
-	print '<ISFDB>'
-	if success:
-		print '<Status>OK</Status>'
-	else:
-		print '<Status>FAIL</Status>'
-		print '<Error>%s</Error>' % errorMessage
-	print '</ISFDB>'
-	sys.exit(0)
+        def get_input(self):
+                input = sys.stdin.read()
+                index = string.find(input, "<?xml ")
+                self.XMLdata = input[index:]
+                try:
+                        self.doc = minidom.parseString(self.XMLdata)
+                        sub.merge = self.doc.getElementsByTagName('IsfdbSubmission')
+                        if not self.merge:
+                                raise
+                except:
+                        self.send_error('Malformed XML data.')
 
-def deleteLicenseKey(xmldata):
-	index = string.find(xmldata, '<LicenseKey>')
-	if index:
-		newxml = xmldata[:index]
-	else:
-		return(xmldata)
-	index = string.find(xmldata, '</LicenseKey>')
-	if index:
-		index += 13
-		newxml += xmldata[index:]
-		return(newxml)
-	return(xmldata)
+        def get_submitter(self):
+                self.submitter = self.get_element_value('Submitter')
+                if not self.submitter:
+                        self.send_error('No Submitter Field')
+                if self.submitter not in self.valid_submitters:
+                        self.send_error("""This user is not authorized to create submissions via the ISFDB Web API.
+                                        Post on the ISFDB Moderator Noticeboard if you need access.""")
+                try:
+                        self.submitter_id = int(SQLgetSubmitterID(self.submitter))
+                        if not self.submitter_id:
+                                raise
+                except:
+                        self.send_error('Invalid submitter.')
+
+        def get_license(self):
+                key = self.get_element_value('LicenseKey')
+                if key == '':
+                        self.send_error('No LicenseKey Field.')
+                query = "select * from license_keys where user_id=%d and license_key='%s'" % (self.submitter_id, db.escape_string(key))
+                db.query(query)
+                result = db.store_result()
+                if result.num_rows() == 0:
+                        self.send_error('Invalid License Key.')
+
+        def get_holder(self):
+                self.holder = self.get_element_value('Holder')
+                if not self.holder:
+                        return
+                try:
+                        self.holder_id = int(SQLgetSubmitterID(self.holder))
+                        if not self.holder_id:
+                                raise
+                except:
+                        self.send_error('Invalid holding moderator.')
+                if not SQLisUserModerator(self.holder_id):
+                        self.send_error('Specified holder is not a moderator.')
+
+        def remove_API_fields(self):
+                self.delete_field('LicenseKey')
+                self.delete_field('Holder')
+                self.XMLdata = " ".join(self.XMLdata.split()) # Collapse multiple adjacent spaces
+
+        def file_submission(self):
+                for sub_type in SUBMAP:
+                        merge = self.doc.getElementsByTagName(SUBMAP[sub_type][1])
+                        if merge:
+                                if self.holder_id:
+                                        submission = """insert into submissions(sub_state, sub_type, sub_data, sub_time, sub_submitter, sub_holdid)
+                                                        values('N', %d, '%s', NOW(), %d, %d)""" % (sub_type, db.escape_string(self.XMLdata), self.submitter_id, self.holder_id)
+                                else:
+                                        submission = """insert into submissions(sub_state, sub_type, sub_data, sub_time, sub_submitter)
+                                                        values('N', %d, '%s', NOW(), %d)""" % (sub_type, db.escape_string(self.XMLdata), self.submitter_id)
+                                db.query(submission)
+                                self.send_success()
+                self.send_error('Unknown Submission Type.')
+
+        def send_error(self, error):
+                self.response_headers()
+                print '<Status>FAIL</Status>'
+                print '<Error>%s</Error>' % error
+                self.response_footers()
+
+        def send_success(self):
+                self.response_headers()
+                print '<Status>OK</Status>'
+                self.response_footers()
+
+        def response_headers(self):
+                print 'Content-type: text/html\n'
+                print '<?xml version="1.0" encoding="%s" ?>' % UNICODE
+                print '<ISFDB>'
+
+        def response_footers(self):
+                print '</ISFDB>'
+                sys.exit(0)
+                
+        def get_element_value(self, tag):
+                document = self.merge[0].getElementsByTagName(tag)
+                try:
+                        value = document[0].firstChild.data.encode(UNICODE)
+                except:
+                        value = ''
+                return value
+
+        def delete_field(self, field_name):
+                index = string.find(self.XMLdata, '<%s>' % field_name)
+                if index == -1:
+                        return
+                newxml = self.XMLdata[:index]
+                index = string.find(self.XMLdata, '</%s>' % field_name)
+                if index == -1:
+                        return
+                index += len(field_name) + 3
+                newxml += self.XMLdata[index:]
+                self.XMLdata = newxml
 
 
 if __name__ == '__main__':
-
-	print 'Content-type: text/html\n'
-
-	XMLdata = sys.stdin.read()
-	index = string.find(XMLdata, "<?xml ")
-	XMLdata = XMLdata[index:]
-	try:
-		doc = minidom.parseString(XMLdata)
-	except:
-		SendResponse(0, "Bad XML data")
-
-	for type in SUBMAP:
-        	merge = doc.getElementsByTagName(SUBMAP[type][1])
-        	if merge:
-        		key = GetElementValue(merge, 'LicenseKey')
-			if key == '':
-				SendResponse(0, "No LicenseKey Field")
-
-        		submitter = GetElementValue(merge, 'Submitter')
-			if submitter == '':
-				SendResponse(0, "No Submitter Field")
-			valid_submitters = ('Ahasuerus', 'Fixer')
-			if submitter not in valid_submitters:
-                                SendResponse(0, "This user is not authorized to create submissions via the ISFDB Web API. Post on the ISFDB Moderator Noticeboard if you need access.")
-
-			submitter_id = SQLgetSubmitterID(submitter)
-
-			query = "select * from license_keys where user_id=%d and license_key='%s'" % (int(submitter_id), db.escape_string(key))
-			db.query(query)
-			result = db.store_result()
-			if result.num_rows() == 0:
-				SendResponse(0, "Bad License Key")
-
-			cleanData = deleteLicenseKey(XMLdata)
-			# Collapse multiple adjacent spaces
-			cleanData = " ".join(cleanData.split())
-			submission = "insert into submissions(sub_state, sub_type, sub_data, sub_time, sub_submitter) values('N', %d, '%s', NOW(), %d)" % (type, db.escape_string(cleanData), submitter_id)
-			db.query(submission)
-			SendResponse(1, 0)
-			sys.exit(0)
-
-	SendResponse(0, "Bad Submission Type")
+        sub = Submission()
+        sub.process_submission()
