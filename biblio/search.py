@@ -47,8 +47,8 @@ def PrintSubmitButton(record_type):
 	print '<input NAME="TYPE" VALUE="%s" TYPE="HIDDEN">' % record_type
 	print '</form>'
 
-def PrintOperators(number):
-	print '<select NAME="O_%d">' % number
+def PrintOperators(record_type, number):
+	print '<select NAME="O_%d" id="%s_operator_%d">' % (number, record_type, number)
 	print '<option SELECTED VALUE="exact">is exactly'
 	print '<option VALUE="notexact">is not exactly'
 	print '<option VALUE="contains">contains'
@@ -87,7 +87,7 @@ def PrintTitleSelectors(number):
         print '<option VALUE="title_graphic">Graphic Format'
 	print '</select>'
 
-        PrintOperators(number)
+        PrintOperators('title', number)
 
         print '<input id="titleterm_%d" NAME="TERM_%d" SIZE="50">' % (number, number)
         if number == 1:
@@ -136,7 +136,7 @@ def PrintAuthorSelectors(number):
         print '<option VALUE="author_note">Note'
        	print '</select>'
 
-        PrintOperators(number)
+        PrintOperators('author', number)
 
         print '<input id="authorterm_%d" NAME="TERM_%d" SIZE="50">' % (number, number)
         if number == 1:
@@ -192,7 +192,7 @@ def PrintPubSelectors(number):
 	print '<option VALUE="pub_frontimage">Image URL'
 	print '</select>'
 
-        PrintOperators(number)
+        PrintOperators('pub', number)
 
         print '<input id="pubterm_%d" NAME="TERM_%d" TYPE="text" SIZE="50">' % (number, number)
         if number == 1:
