@@ -20,7 +20,7 @@ from library import *
 from isbn import *
 
 
-class advanced_search:
+class AdvancedSearch:
         def __init__(self):
         	self.action = 'query'
         	self.conjunction = ''
@@ -45,13 +45,27 @@ class advanced_search:
                 user.load_moderator_flag()
                 self.user = user
 
-        def DisplayError(self, message, display_header = 0):
+        def results(self):
+                self.parse_parameters()
+                PrintHeader("Advanced %s Search" % self.search_type)
+                PrintNavbar('adv_search_results', 0, 0, 0, 0)
+                self.set_search_type()
+                self.process_terms()
+                self.process_sort()
+                self.print_merges()
+                self.make_terms()
+                self.execute_query()
+                self.print_results()
+                self.print_page_buttons()
+                PrintTrailer('adv_search_results', 0, 0)
+
+        def display_error(self, message, display_header = 0):
                 if display_header:
                         PrintHeader('Advanced Search')
                         PrintNavbar('adv_search_results', 0, 0, 0, 0)
-                self.DisplayMessage('Error: %s' % message)
+                self.display_message('Error: %s' % message)
 
-        def DisplayMessage(self, message):
+        def display_message(self, message):
                 print '<h2>%s</h2>' % message
                 PrintTrailer('adv_search_results', 0, 0)
                 sys.exit(0)
@@ -72,11 +86,11 @@ class advanced_search:
 
                         self.start = int(self.form['START'])
                         if self.start > 30000:
-                                self.DisplayError('Advanced Search Is Currently Limited to 300 pages or 30,000 records', 1)
+                                self.display_error('Advanced Search Is Currently Limited to 300 pages or 30,000 records', 1)
                         self.search_type = self.form['TYPE']
                         if self.search_type not in ('Author', 'Title', 'Publication'):
                                 raise
-                        self.order_by = self.formatEntry(self.form['ORDERBY'])
+                        self.order_by = self.format_entry(self.form['ORDERBY'])
                         self.action = self.form.get('ACTION', 'query')
                         if self.action not in ('query', 'count'):
                                 raise
@@ -90,42 +104,42 @@ class advanced_search:
                         if self.conjunction not in ('AND', 'OR'):
                                 raise
                 except:
-                        self.DisplayError('Invalid Advanced Search Parameters', 1)
+                        self.display_error('Invalid Advanced Search Parameters', 1)
 
         def set_search_type(self):
                 if self.search_type == 'Author':
                         self.table = 'authors'
                         self.id_field = 'author_id'
-                        self.SQLterm = self.MakeAuthorSQLterm
-                        self.PrintResults = self.PrintAuthorResults
+                        self.SQLterm = self.make_author_SQL_term
+                        self.print_results = self.print_author_results
                 elif self.search_type == 'Title':
                         self.table = 'titles'
                         self.id_field = 'title_id'
-                        self.SQLterm = self.MakeTitleSQLterm
-                        self.PrintResults = self.PrintTitleResults
+                        self.SQLterm = self.make_titles_SQL_term
+                        self.print_results = self.print_title_results
                 elif self.search_type == 'Publication':
                         self.table = 'pubs'
                         self.id_field = 'pub_id'
-                        self.SQLterm = self.MakePubSQLterm
-                        self.PrintResults = self.PrintPubResults
+                        self.SQLterm = self.make_pub_SQL_term
+                        self.print_results = self.print_pub_results
 
-        def ProcessSort(self):
-                self.sort = self.formatEntry(self.order_by)
+        def process_sort(self):
+                self.sort = self.format_entry(self.order_by)
                 if self.search_type == 'Publication' and self.sort not in ('pub_title', 'pub_ctype',
                                                          'pub_year', 'pub_isbn', 'pub_catalog',
                                                          'pub_price', 'pub_pages', 'pub_ptype', 'pub_frontimage'):
-                        self.DisplayError("Unknown sort field: %s" % self.sort)
+                        self.display_error("Unknown sort field: %s" % self.sort)
                 elif self.search_type == 'Author' and self.sort not in ('author_canonical',
                                                             'author_lastname',
                                                             'author_legalname',
                                                             'author_birthplace',
                                                             'author_birthdate',
                                                             'author_deathdate'):
-                        self.DisplayError("Unknown sort field: %s" % self.sort)
+                        self.display_error("Unknown sort field: %s" % self.sort)
                 elif self.search_type == 'Title' and self.sort not in ('title_title',
                                                             'title_copyright',
                                                             'title_ttype'):
-                        self.DisplayError("Unknown sort field: %s" % self.sort)
+                        self.display_error("Unknown sort field: %s" % self.sort)
                 if self.sort == 'pub_pages':
                         self.sort = 'CAST(pub_pages as SIGNED)'
                 elif self.sort == 'pub_price':
@@ -144,10 +158,10 @@ class advanced_search:
                         if self.sort != 'pub_year':
                                 self.sort += ', pub_year'
 
-        def ProcessTerms(self):
+        def process_terms(self):
                 # Special case for "Show All Titles"
                 if (self.search_type == 'Title') and self.form.has_key('exact'):
-                        self.ProcessTerm(self.form.get('exact'), 'exact', 'exact')
+                        self.process_term(self.form.get('exact'), 'exact', 'exact')
 
                 for count in range(1, self.max_term + 1):
                         term = 'TERM_%d' % count
@@ -156,20 +170,20 @@ class advanced_search:
                                 operator = self.form.get('O_%d' % count)
                                 if not operator:
                                         operator = self.form.get('OPERATOR_%d' % count)
-                                self.ProcessTerm(self.form.get(term), use, operator)
+                                self.process_term(self.form.get(term), use, operator)
 
                 if not self.term_list:
-                        self.DisplayError("No search data entered")
+                        self.display_error("No search data entered")
 
-        def ProcessTerm(self, term, use, operator):
+        def process_term(self, term, use, operator):
                 term = normalizeInput(term)
                 if not term:
                         return
                 raw_entry = term
-                entry = self.formatEntry(term)
-                self.validateTerm(use, entry)
+                entry = self.format_entry(term)
+                self.validate_term(use, entry)
 
-                self.checkValidOperator(operator)
+                self.check_valid_operator(operator)
                 self.operator_list.append(operator)
 
                 if use == 'pub_isbn':
@@ -178,7 +192,7 @@ class advanced_search:
                         isbn_count = 0
                         sql_value = '('
                         for isbn_value in isbn_values:
-                                padded_entry = self.padEntry(operator, isbn_value)
+                                padded_entry = self.pad_entry(operator, isbn_value)
                                 if isbn_count:
                                         if operator in ('notexact', 'notcontains'):
                                                 sql_value += ' and '
@@ -188,26 +202,26 @@ class advanced_search:
                                 isbn_count += 1
                         sql_value += ")"
                 else:
-                        sql_value = self.padEntry(operator, entry)
+                        sql_value = self.pad_entry(operator, entry)
 
                 (new_term, new_dbases, new_joins) = self.SQLterm(use, entry, sql_value)
                 self.term_list.append(new_term)
-                self.mergeTableInfoLists(self.dbases, new_dbases)
+                self.merge_table_info_lists(self.dbases, new_dbases)
 
                 for join in new_joins:
                         if join not in self.join_list:
                                 self.join_list.append(join)
 
-        def checkValidOperator(self, operator):
+        def check_valid_operator(self, operator):
                 operators = ('exact', 'notexact', 'contains', 'notcontains', 'starts_with', 'ends_with')
                 if operator not in operators:
                         message = 'Valid operators are: '
                         for operator in operators:
                                 message += operator
                                 message += ', '
-                        self.DisplayError(message[:-2])
+                        self.display_error(message[:-2])
 
-        def padEntry(self, operator, entry):
+        def pad_entry(self, operator, entry):
                 if operator == 'exact':
                         padded_entry = "like '%s'" % entry
                 elif operator == 'notexact':
@@ -221,51 +235,51 @@ class advanced_search:
                 elif operator == 'ends_with':
                         padded_entry = "like '%%%s'" % entry
                 else:
-                        self.DisplayError('An unexpected error has occurred. Please post the URL of this Web page on the Moderator noticeboard.')
+                        self.display_error('An unexpected error has occurred. Please post the URL of this Web page on the Moderator noticeboard.')
                 return padded_entry
 
-        def validateEmptyTerm(self, value):
+        def validate_empty_term(self, value):
                 stripped = value
                 for wildcard in self.wildcards:
                         stripped = stripped.replace(wildcard,'')
                         if not stripped:
-                                self.DisplayError('Search values must contain at least one non-wildcard character')
+                                self.display_error('Search values must contain at least one non-wildcard character')
 
-        def validateTerm(self, field, value):
-                self.validateEmptyTerm(value)
+        def validate_term(self, field, value):
+                self.validate_empty_term(value)
                 
                 if field in ('month', 'pub_month'):
                         (year, month, error) = validateMonth(value)
                         if error:
-                                self.DisplayError(error)
+                                self.display_error(error)
                 elif field == 'title_ttype':
                         if value.upper() not in ALL_TITLE_TYPES:
-                                self.DisplayError('Valid title types are: %s' % ', '.join(ALL_TITLE_TYPES))
+                                self.display_error('Valid title types are: %s' % ', '.join(ALL_TITLE_TYPES))
                 elif field in ('title_graphic', 'title_non_genre', 'title_jvn', 'title_nvz'):
                         if value.lower() not in ('yes', 'no'):
-                                self.DisplayError('Yes/No value required')
+                                self.display_error('Yes/No value required')
                 elif field == 'pub_ctype':
                         if value.upper() not in PUB_TYPES:
-                                self.DisplayError('Valid title types are: %s' % ', '.join(PUB_TYPES))
+                                self.display_error('Valid title types are: %s' % ', '.join(PUB_TYPES))
 
-        def mergeTableInfoLists(self, dest, src):
+        def merge_table_info_lists(self, dest, src):
                 for sti in src:
                         found = 0
                         for dti in dest:
                                 if dti == sti:
                                         found = 1
-                                        dti.mergeHints(sti)
+                                        dti.merge_hints(sti)
                                         break
                         if not found:
                                 dest.append(sti)
 
-        def formatEntry(self, value):
+        def format_entry(self, value):
                 value = db.escape_string(value)
                 # Change asterisks to % because * is also a supported wildcard character
                 value = string.replace(value, '*', '%')
                 return value
 
-        def MakeTerms(self):
+        def make_terms(self):
                 # Concatenate terms using the conjunction. Wrap the result in parens
                 # to avoid unintended interaction with the join clauses.
                 self.terms = "("
@@ -282,27 +296,27 @@ class advanced_search:
                 for join in self.join_list:
                         self.terms += " and " + join
 
-        def ExecuteQuery(self):
+        def execute_query(self):
                 if self.action == 'query':
                         self.query = 'select distinct %s.* from ' % self.table
                 elif self.action == 'count':
                         self.query = 'select count(distinct %s.%s) from ' % (self.table, self.id_field)
-                self.makeTableQuery()
+                self.make_table_query()
                 self.search()
                 if self.action == 'count':
-                        self.DisplayMessage('Count of matching records: %d' % self.records[0])
+                        self.display_message('Count of matching records: %d' % self.records[0])
 
-        def PrintPubResults(self):
+        def print_pub_results(self):
                 PrintPubsTable(self.records, 'adv_search', self.user, 100)
 
-        def PrintAuthorResults(self):
+        def print_author_results(self):
                 PrintAuthorTable(self.records, 1, 100, self.user)
                 if self.user.moderator:
-                        self.PrintMergeButton()
+                        self.print_merge_button()
 
-        def PrintTitleResults(self):
+        def print_title_results(self):
                 PrintTitleTable(self.records, 1, 100, self.user)
-                self.PrintMergeButton()
+                self.print_merge_button()
 
         def search(self):
                 db.query(self.query)
@@ -310,14 +324,14 @@ class advanced_search:
                 self.num = result.num_rows()
 
                 if not self.num:
-                        self.DisplayMessage('No records found')
+                        self.display_message('No records found')
 
                 record = result.fetch_row()
                 while record:
                         self.records.append(record[0])
                         record = result.fetch_row()
 
-        def makeTableQuery(self):
+        def make_table_query(self):
                 first = 1
                 for dbase in self.dbases:
                         tclause = dbase.tname
@@ -349,15 +363,15 @@ class advanced_search:
                 print '</div>'
                 print '<form METHOD="POST" ACTION="/cgi-bin/edit/%s.cgi">' % script
 
-        def PrintPageButtons(self):
+        def print_page_buttons(self):
                 print '<div class="button-container">'
                 if self.start > 99:
-                        self.PrintPageButton('Previous')
+                        self.print_page_button('Previous')
                 if search.num > 100:
-                        self.PrintPageButton('Next')
+                        self.print_page_button('Next')
                 print '</div>'
 
-        def PrintPageButton(self, direction):
+        def print_page_button(self, direction):
                 print '<form METHOD="GET" action="http:/%s/adv_search_results.cgi">' % HTFAKE
                 print '<div>'
                 for key in self.form.keys():
@@ -379,13 +393,13 @@ class advanced_search:
                 print '</div>'
                 print '</form>'
 
-        def PrintMergeButton(self):
+        def print_merge_button(self):
                 print '<p>'
                 print '<input TYPE="SUBMIT" VALUE="Merge Selected Records">'
                 print '</form>'
                 print '<hr>'
 
-        def MakeTitleSQLterm(self, field, value, sql_value):
+        def make_titles_SQL_term(self, field, value, sql_value):
 
                 # Set up default values
                 joins = []
@@ -453,10 +467,10 @@ class advanced_search:
                         dbases = [tableInfo('titles'), tableInfo('canonical_author')]
                         joins = ['titles.title_id=canonical_author.title_id']
                 else:
-                        self.DisplayError("Unknown field: %s" % field)
+                        self.display_error("Unknown field: %s" % field)
                 return ("(%s)" % clause, dbases, joins)
 
-        def MakeAuthorSQLterm(self, field, value, sql_value):
+        def make_author_SQL_term(self, field, value, sql_value):
 
                 # Set up default values
                 joins = []
@@ -500,10 +514,10 @@ class advanced_search:
                 elif field == 'author_note':
                         clause = "authors.author_note %s" % sql_value
                 else:
-                        self.DisplayError("Unknown field: %s" % field)
+                        self.display_error("Unknown field: %s" % field)
                 return ("(%s)" % clause, dbases, joins)
 
-        def MakePubSQLterm(self, field, value, sql_value):
+        def make_pub_SQL_term(self, field, value, sql_value):
 
                 # Set up default values
                 joins = []
@@ -536,7 +550,7 @@ class advanced_search:
                         dbases = [tableInfo('pubs'), tableInfo('trans_pub_series')]
                         joins = ['trans_pub_series.pub_series_id=pubs.pub_series_id']
                 elif field == 'pub_isbn':
-                        # ISBNs are a special case. The whole clause was pre-built in ProcessTerm
+                        # ISBNs are a special case. The whole clause was pre-built in process_term
                         clause = sql_value
                 elif field == 'pub_catalog':
                         clause = "pubs.pub_catalog %s" % sql_value
@@ -574,7 +588,7 @@ class advanced_search:
                 elif field == 'pub_ctype':
                         clause = "pubs.pub_ctype %s" % sql_value
                 else:
-                        self.DisplayError("Unknown field: %s" % field)
+                        self.display_error("Unknown field: %s" % field)
                 return ("(%s)" % clause, dbases, joins)
 
 class tableInfo:
@@ -595,7 +609,7 @@ class tableInfo:
 	def __eq__(self, ti):
 		return self.tname == ti.tname
 
-        def mergeHints(self, other):
+        def merge_hints(self, other):
             for hint in other.hints:
                 if not hint in self.hints:
                     self.hints.append(hint)
@@ -606,26 +620,5 @@ if __name__ == '__main__':
 	# Output the leading HTML stuff
 	##################################################################
 
-        search = advanced_search()
-        search.parse_parameters()
-
-	PrintHeader("Advanced %s Search" % search.search_type)
-	PrintNavbar('adv_search_results', 0, 0, 0, 0)
-
-        search.set_search_type()
-
-        search.ProcessTerms()
-
-        search.ProcessSort()
-
-        search.print_merges()
-
-        search.MakeTerms()
-
-        search.ExecuteQuery()
-
-        search.PrintResults()
-
-        search.PrintPageButtons()
-
-	PrintTrailer('adv_search_results', 0, 0)
+        search = AdvancedSearch()
+        search.results()
