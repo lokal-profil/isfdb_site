@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2007-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2007-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1033,6 +1033,7 @@ def RecognizedDomains():
         domains['sfsite.com'] = ('SF Site', 'www.sfsite.com', 0)
         domains['sfwa.org'] = ('SFWA', 'www.sfwa.org', 0)
         domains['shelfari.com'] = ('Shelfari','', 0)
+        domains['sinistercinema.com'] = ('Armchair Fiction', 'www.armchairfiction.com', 1)
         domains['slingshotnovel.com'] = ('Dr. Robert G. Williscroft', 'slingshotnovel.com', 1)
         domains['starchildcompact.com'] = ('Dr. Robert G. Williscroft', 'starchildcompact.com', 1)
         domains['thetrashcollector.com'] = ('The Trash Collector', 'www.thetrashcollector.com', 1)
