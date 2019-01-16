@@ -786,6 +786,8 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
                 'Narrator': ('%s', 'Narrated by'),
                 'NDL': ('https://id.ndl.go.jp/bib/%s/eng', 'NDL',
                         'National Diet Library'),
+                'NILF': ('http://nilf.it/%s/', 'NILF',
+                         'Numero Identificativo della Letteratura Fantastica'),
                 'OCLC': ('http://www.worldcat.org/oclc/%s', 'OCLC',
                          'WorldCat/Online Computer Library Center'),
                 'PPN': ('http://picarta.pica.nl/xslt/DB=3.9/XMLPRS=Y/PPN?PPN=%s', 'PPN',
