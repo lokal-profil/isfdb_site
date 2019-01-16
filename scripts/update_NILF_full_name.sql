@@ -14,4 +14,4 @@
 */
 
 
-UPDATE identifier_types set identifier_type_full_name = 'Numero Identificativo della Letteratura Fantastica / Fantascienza' where identifier_type_name = ''NILF'';
+UPDATE identifier_types set identifier_type_full_name = 'Numero Identificativo della Letteratura Fantastica / Fantascienza' where identifier_type_name = 'NILF';
