@@ -977,6 +977,7 @@ def RecognizedDomains():
         domains['daganbooks.com'] = ('Dagan Books', 'daganbooks.com', 1)
         domains['dbr.nu'] = ('Diamond Bay Research', 'dbr.nu', 1)
         domains['deboekenplank.nl'] = ('De Boekenplank', 'www.deboekenplank.nl', 1)
+        domains['d-nb.info'] = ('German National Library', 'https://www.dnb.de/EN/Home/home_node.html', 0)
         domains['downwarden.com'] = ('Black Bed Sheet Books', 'www.downwarden.com', 1)
         domains['dwtr67e3ikfml.cloudfront.net'] = ('Smashwords', 'www.smashwords.com', 1)
         domains['encyklopediafantastyki.pl'] = ('Encyklopedia Fantastyki', 'www.encyklopediafantastyki.pl', 0)
