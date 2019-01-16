@@ -6027,7 +6027,8 @@ def function244():
         cleanup.note = """This cleanup report finds publications with non-numeric
                         External IDs for the following External ID Types:
                         <ul>
-                        <li>BL, all Bleilers, COPAC, FantLab, Goodreads, JNB/JPNO, KBR, LTF, NDL, OCLC/WorldCat
+                        <li>BL, all Bleilers, COPAC, FantLab, Goodreads, JNB/JPNO, KBR, LTF, NDL, NILF, OCLC/WorldCat
+                        <li>NooSFere (optional leading hyphen allowed)
                         <li>DNB and PPN (optional trailing 'x'/'X' allowed)
                         <li>Reginald-1 and Reginald-3 (one optional trailing letter allowed)
                         <li>NDL (optional leading 'b' allowed)
@@ -6039,7 +6040,8 @@ def function244():
                 and p.pub_id = i.pub_id
                 and i.identifier_type_id = it.identifier_type_id
                 and (
-                ((it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads', 'JNB/JPNO', 'KBR', 'LTF', 'OCLC/WorldCat')
+                ((it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads',
+                'JNB/JPNO', 'KBR', 'LTF', 'NILF', 'OCLC/WorldCat')
                 or it.identifier_type_name like '%Bleiler%')
                 and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
                 or
@@ -6047,10 +6049,13 @@ def function244():
                 and i.identifier_value not regexp '^[[:digit:]]{1,30}[Xx]{0,1}$')
                 or
                 (it.identifier_type_name = 'NDL'
-                and i.identifier_value not regexp '^[b]*[[:digit:]]{1,30}$')
+                and i.identifier_value not regexp '^[b]{0,1}[[:digit:]]{1,30}$')
                 or
                 (it.identifier_type_name in ('Reginald-1', 'Reginald-3')
                 and i.identifier_value not regexp '^[[:digit:]]{1,6}[[:alpha:]]{0,1}$')
+                or
+                (it.identifier_type_name = 'NooSFere'
+                and i.identifier_value not regexp '^[-]{0,1}[[:digit:]]{1,30}$')
                 )
                 order by p.pub_title"""
         cleanup.none = 'No Publications with Invalid External ID Format'
