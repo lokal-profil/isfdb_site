@@ -6232,6 +6232,15 @@ def function253():
         cleanup.none = 'No Publications with non-linking External IDs in Notes'
         cleanup.print_pub_table()
 
+def function254():
+        ids_in_notes(254, '%www.noosfere.org%', 'direct NooSFere links')
+
+def function255():
+        ids_in_notes(255, '%nilf.it/%', 'direct NILF links')
+
+def function256():
+        ids_in_notes(256, '%fantascienza.com/catalogo%', 'direct Fantascienza links')
+
 def empty_containers_grid(report_id):
         anchor = '<a href="http:/%s/edit/empty_containers.cgi' % HTFAKE
         years = {}

@@ -1597,6 +1597,24 @@ def nightly_cleanup_reports():
                 or note_note like '%{{BREAK}}%Bleiler%Guide to Supernatural%')"""
         standardReport(query, 253)
 
+        #   Report 254: Publications with www.noosfere.org in Notes
+        query = """select p.pub_id from notes n, pubs p
+                 where p.note_id = n.note_id
+                 and n.note_note like '%www.noosfere.org%'"""
+        standardReport(query, 254)
+
+        #   Report 255: Publications with nilf.it in Notes
+        query = """select p.pub_id from notes n, pubs p
+                 where p.note_id = n.note_id
+                 and n.note_note like '%nilf.it/%'"""
+        standardReport(query, 255)
+
+        #   Report 256: Publications with fantascienza.com/catalogo in Notes
+        query = """select p.pub_id from notes n, pubs p
+                 where p.note_id = n.note_id
+                 and n.note_note like '%fantascienza.com/catalogo%'"""
+        standardReport(query, 256)
+
 def emptyContainers(report_id, container_types):
         elapsed = elapsedTime()
         query = """select xx.pub_id, IF(xx.pub_year='0000-00-00', 0, REPLACE(SUBSTR(xx.pub_year, 1,7),'-',''))
