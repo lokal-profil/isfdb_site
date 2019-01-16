@@ -788,6 +788,8 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
                         'National Diet Library'),
                 'NILF': ('http://nilf.it/%s/', 'NILF',
                          'Numero Identificativo della Letteratura Fantastica'),
+                'NooSFere': ('https://www.noosfere.org/livres/niourf.asp?numlivre=%s', 'NooSFere',
+                        'NooSFere'),
                 'OCLC': ('http://www.worldcat.org/oclc/%s', 'OCLC',
                          'WorldCat/Online Computer Library Center'),
                 'PPN': ('http://picarta.pica.nl/xslt/DB=3.9/XMLPRS=Y/PPN?PPN=%s', 'PPN',
