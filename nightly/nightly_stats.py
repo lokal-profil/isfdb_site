@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -649,27 +649,49 @@ class Output():
                 self.outputGraph(height, startyear, xscale, yscale, years, maximum, results_dict)
                 self.file(9, 0)
 
-        def pubsByFormat(self):
-                self.start('<h3>Legend:')
-                self.append('Red - %s, ' % ISFDBPubFormat('pb'))
-                self.append('Blue - %s, ' % ISFDBPubFormat('tp'))
-                self.append('Green - %s, ' % ISFDBPubFormat('hc'))
-                self.append('Yellow - %s, ' % ISFDBPubFormat('pulp'))
-                self.append('Orange - %s, ' % ISFDBPubFormat('digest'))
-                self.append('Pink - %s, ' % ISFDBPubFormat('ebook'))
+        def byFormat(self, report_type):
+                if report_type == 'magazines':
+                        pub_types = "in ('MAGAZINE', 'FANZINE')"
+                        self.append('<h3>Magazines and Fanzines</h3>')
+                        colors = {'red' : 'pulp',
+                                  'blue': 'digest',
+                                  'green': 'webzine',
+                                  'orange': 'ebook',
+                                  'yellow': 'quarto',
+                                  'pink': 'digital audio download',
+                                  'black': 'all others'
+                                  }
+                else:
+                        pub_types = "not in ('MAGAZINE', 'FANZINE')"
+                        self.append('<h3>Books</h3>')
+                        colors = {'red' : 'pb',
+                                  'yellow': 'tp',
+                                  'green': 'hc',
+                                  'orange': 'ebook',
+                                  'black': 'all others'
+                                  }
+                self.append('<h3>Legend:')
+                # Define recognized formats and print the legend
+                recognized = []
+                for color in sorted(colors):
+                        format = colors[color]
+                        recognized.append(format)
+                        if color != 'black':
+                                self.append('%s - %s, ' % (color.capitalize(), ISFDBPubFormat(format)))
                 self.append('Black - all other formats</h3>')
+                
                 # Set the start year to 1900
                 startyear = 1900
                 # Set the end year to the last year (current year may not have enough data points)
                 endyear = localtime()[0]-1
-                # Define recognize formats
-                recognized = ('pb','tp','hc','pulp','digest','ebook')
 
                 # Retrieve the data from the database
                 query = """select YEAR(pub_year), pub_ptype, count(*)
                            from pubs where YEAR(pub_year)>%d
-                           and YEAR(pub_year)<%d and pub_ptype!="unknown"
-                           group by pub_ptype, YEAR(pub_year)""" % (startyear-1, endyear+1)
+                           and YEAR(pub_year)<%d
+                           and pub_ptype != 'unknown'
+                           and pub_ctype %s
+                           group by pub_ptype, YEAR(pub_year)""" % (startyear-1, endyear+1, pub_types)
                 db.query(query)
                 result = db.store_result()
                 record = result.fetch_row()
@@ -683,7 +705,7 @@ class Output():
                             total[year] = 0
                     total[year] += count
                     if pub_type not in recognized:
-                            pub_type = 'other'
+                            pub_type = 'all others'
                     if not bytype[pub_type][year]:
                             bytype[pub_type][year] = 0
                     bytype[pub_type][year] += count
@@ -695,13 +717,6 @@ class Output():
                                 if year not in bytype[pub_type]:
                                         bytype[pub_type][year] = 0
 
-                colors = {'red' : 'pb',
-                          'blue': 'tp',
-                          'green': 'hc',
-                          'yellow':  'pulp',
-                          'orange': 'digest',
-                          'black': 'other',
-                          'pink': 'ebook'}
                 results_dict = {}
                 for color in colors:
                         pub_type = colors[color]
@@ -710,7 +725,6 @@ class Output():
                                 percent = bytype[pub_type][year] * 100 / total[year]
                                 year_tuple = (int(year) - startyear, percent)
                                 results_dict[color].append(year_tuple)
-
                 minimum = 0
                 maximum = 100
 
@@ -719,6 +733,11 @@ class Output():
                 xscale = 6
                 yscale = float(height)/float(maximum-minimum)
                 self.outputGraph(height, startyear, xscale, yscale, years, maximum, results_dict)
+
+        def pubsByFormat(self):
+                self.start('')
+                self.byFormat('magazines')
+                self.byFormat('books')
                 self.file(10, 0)
 
         def authorsByDebutDate(self):

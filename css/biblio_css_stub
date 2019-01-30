@@ -1093,6 +1093,11 @@ span.approval {
   stroke-width:2;
 }
 
+.svggreen {
+  stroke:green;
+  stroke-width:2;
+}
+
 .svgblack {
   stroke:black;
   stroke-width:2;
