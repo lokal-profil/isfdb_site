@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2016   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,8 +17,9 @@ INSTALL = $(INSTALL_CGI)
 MYLIBS	= awards.py \
 	  biblio.py \
 	  common.py \
-	  utils.py \
-	  isfdblib.py
+	  isfdblib.py \
+	  advSearchClass.py \
+	  utils.py
 
 LIBS	= authorClass.py \
 	 awardClass.py \
