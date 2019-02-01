@@ -1073,11 +1073,6 @@ span.approval {
   stroke-width:2;
 }
 
-.svgblue {
-  stroke:green;
-  stroke-width:2;
-}
-
 .svgorange {
   stroke:orange;
   stroke-width:2;
