@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1962,8 +1962,12 @@ def SQLloadVTsForTitleList(title_list):
 		record = result.fetch_row()
 	return results
 
-def SQLgetSubmitterID(submitter):
-	query = "select user_id from mw_user where user_name='%s'" % (db.escape_string(submitter))
+def SQLgetSubmitterID(submitter, case_sensitive = 1):
+        if case_sensitive:
+                query = "select user_id from mw_user where user_name='%s'" % db.escape_string(submitter)
+        else:
+                # We have to use LOWER because user_name in mw_user collates using latin1_bin
+                query = "select user_id from mw_user where LOWER(user_name)='%s'" % db.escape_string(submitter.lower())
         db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()

@@ -19,8 +19,58 @@ from SQLparsing import *
 from library import *
 from isbn import *
 
-
 class AdvancedSearch:
+        def __init__ (self):
+                pass
+
+        def print_invisible_drop_down_values(self):
+                self.print_one_invisible_drop_down('Formats', FORMATS)
+                self.print_one_invisible_drop_down('PubTypes', PUB_TYPES)
+                self.print_one_invisible_drop_down('TitleTypes', ALL_TITLE_TYPES)
+                self.print_one_invisible_drop_down('StoryLengths', STORYLEN_CODES)
+                selectable_languages = sorted(list(LANGUAGES))
+                if 'None' in selectable_languages:
+                        selectable_languages.remove('None')
+                self.print_one_invisible_drop_down('AllLanguages', selectable_languages)
+
+        def print_one_invisible_drop_down(self, name, values):
+                print '<select NAME="%s" id="%s" class="nodisplay">' % (name, name)
+                for value in values:
+                        # Skip empty values, e.g. in STORYLEN_CODES
+                        if value:
+                                print '<option VALUE="%s">%s' % (value, value)
+                print '</select>'
+
+        def print_full_header(self):
+                print '<ul>'
+                print '<li>A downloadable version of the ISFDB database is available <a href="http://%s/index.php/ISFDB_Downloads">here</a>' % WIKILOC
+                print '<li>Supported wildcards: * and % match any number of characters, _ matches one character'
+                print '</ul>'
+                print '<hr>'
+
+        def print_submit_button(self, record_type):
+                print '<button TYPE="SUBMIT" NAME="ACTION" VALUE="query">Get Results</button>'
+                print '<button TYPE="SUBMIT" NAME="ACTION" VALUE="count">Get Count</button>'
+                print '<input NAME="START" VALUE="0" TYPE="HIDDEN">'
+                print '<input NAME="TYPE" VALUE="%s" TYPE="HIDDEN">' % record_type
+                print '</form>'
+
+        def print_radio_selectors(self):
+                print '<input TYPE="RADIO" NAME="C" VALUE="AND" CHECKED>AND'
+                print '<input TYPE="RADIO" NAME="C" VALUE="OR">OR'
+
+        def print_operators(self, record_type, number):
+                print '<select NAME="O_%d" id="%s_operator_%d">' % (number, record_type, number)
+                print '<option SELECTED VALUE="exact">is exactly'
+                print '<option VALUE="notexact">is not exactly'
+                print '<option VALUE="contains">contains'
+                print '<option VALUE="notcontains">does not contain'
+                print '<option VALUE="starts_with">starts with'
+                print '<option VALUE="ends_with">ends with'
+                print '</select>'
+
+
+class AdvancedSearchResults:
         def __init__(self):
         	self.action = 'query'
         	self.conjunction = ''

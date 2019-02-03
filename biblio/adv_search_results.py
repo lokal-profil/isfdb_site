@@ -9,8 +9,8 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-from advSearchClass import AdvancedSearch
+from advSearchClass import AdvancedSearchResults
 
 if __name__ == '__main__':
-        search = AdvancedSearch()
+        search = AdvancedSearchResults()
         search.results()

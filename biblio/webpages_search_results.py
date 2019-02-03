@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2018   Ahasuerus
+#     (C) COPYRIGHT 2018-2019   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -48,6 +48,7 @@ class WebPagesSearch:
                 try:
                         self.note_value = form['WEBPAGE_VALUE'].value
                         self.note_value = string.strip(self.note_value)
+                        self.note_value = self.note_value.replace('*', '%')
                 except:
                         self.display_error('No Web Page value specified')
 

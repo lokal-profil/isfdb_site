@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2017   Ahasuerus
+#     (C) COPYRIGHT 2017-2019   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -36,11 +36,13 @@ if __name__ == '__main__':
                 PrintTrailer('search', '', 0)
                 sys.exit(0)
 
-        user_id = SQLgetSubmitterID(user_name)
+        user_id = SQLgetSubmitterID(user_name, 0)
         if not user_id:
                 print "<h2>Specified user name does not exist</h2>"
                 PrintTrailer('search', '', 0)
                 sys.exit(0)
+        # Re-retrieve the user name in case the captilization is different
+        user_name = SQLgetUserName(user_id)
         moderator = 'No'
         if SQLisUserModerator(user_id):
                 moderator = 'Yes'

@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2018 	Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2019 	Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Bill Longley and Dirk Stoecker
 #		ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -496,8 +496,8 @@ def PrintHeader(title):
         PrintHTMLHeaders(title)
 
         print '<script type="text/javascript" src="http://%s/isfdb_main.js"></script>' % HTMLLOC
-        # Advanced Search only:
-        if title == 'ISFDB Advanced Search':
+        # Advanced Search pages only:
+        if 'ISFDB Advanced' in title:
                 # Import functions to change drop-down values dynamically
                 print '<script type="text/javascript" src="http://%s/adv_search.js"></script>' % HTMLLOC
 

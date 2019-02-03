@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2017-2018   Ahasuerus
+#     (C) COPYRIGHT 2017-2019   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -42,6 +42,7 @@ class ExtIDSearch:
                 try:
                         self.id_value = form['ID_VALUE'].value
                         self.id_value = string.strip(self.id_value)
+                        self.id_value = self.id_value.replace('*', '%')
                 except:
                         self.display_error('No search value specified')
 

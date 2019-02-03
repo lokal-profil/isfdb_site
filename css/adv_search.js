@@ -138,6 +138,8 @@ function createOnchange()	{
 		document.getElementById('author_5').onchange = function(event){
 			Selectors(5, this.value, 'author');
 		};
+	}
+	if (document.getElementById('title_1')) {
 		document.getElementById('title_1').onchange = function(event){
 			Selectors(1, this.value, 'title');
 		};
@@ -153,6 +155,8 @@ function createOnchange()	{
 		document.getElementById('title_5').onchange = function(event){
 			Selectors(5, this.value, 'title');
 		};
+	}
+	if (document.getElementById('pub_1')) {
 		document.getElementById('pub_1').onchange = function(event){
 			Selectors(1, this.value, 'pub');
 		};
