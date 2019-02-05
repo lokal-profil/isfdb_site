@@ -1152,3 +1152,21 @@ div.tooltip:hover span.tooltiptext {
     display: inline;
     vertical-align: middle;
 }
+
+/* numeric_external_id_ranges.cgi table, table design */
+table.externalidranges {
+   border-top: 1px solid grey;
+   border-left: 1px solid grey;
+   border-bottom: 1px solid black;
+   border-right: 1px solid black;
+   background-color: #FFFFFF;
+}
+
+/* numeric_external_id_ranges.cgi table, table cell design */
+table.externalidranges td {
+   border-top: 1px solid black;
+   border-left: 1px solid black;
+   border-bottom: 1px solid grey;
+   border-right: 1px solid grey;
+   padding: 2px;
+}

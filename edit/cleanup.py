@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2012-2018 Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2012-2019 Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -106,10 +106,10 @@ if __name__ == '__main__':
                         print '<p>'
                 print '<hr>'
 
-        # Determine the number of outstanding SFE3 URLs
-        if user.moderator:
-                print '<h3 class="centered">Reports That Are Not Regenerated Nightly</h3>'
+        print '<h3 class="centered">Reports That Are Not Regenerated Nightly</h3>'
 
+        if user.moderator:
+                # Determine the number of outstanding SFE3 URLs
                 query = "select count(*) from missing_author_urls where resolved=0 and author_id IS NULL"
                 db.query(query)
                 result = db.store_result()
@@ -128,5 +128,8 @@ if __name__ == '__main__':
                 if int(record[0][0]) or all_reports:
                         print '<a href="http:/%s/mod/bad_images.cgi"><button type="button">Publications with Suspect Images (%d)</button></a>' % (HTFAKE, int(record[0][0]))
                         print '<p>'
+
+        print '<a href="http:/%s/edit/numeric_external_id_ranges.cgi"><button type="button">View Ranges of Numeric External Identifiers</button></a>' % HTFAKE
+        print '<p>'
 
 	PrintPostSearch(0, 0, 0, 0, 0, 0)

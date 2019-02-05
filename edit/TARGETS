@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -49,6 +49,7 @@ TARGETS = DIR/addaward.cgi \
 	  DIR/mkvariant.cgi \
 	  DIR/newawardtype.cgi \
 	  DIR/newpub.cgi \
+	  DIR/numeric_external_id_ranges.cgi \
 	  DIR/ps_merge.cgi \
 	  DIR/publisher_exceptions.cgi \
 	  DIR/pv_merge.cgi \
