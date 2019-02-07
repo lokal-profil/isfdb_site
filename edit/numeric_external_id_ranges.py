@@ -39,6 +39,7 @@ class ExternalIdRanges:
                 query = """select distinct identifier_type_id, CAST(identifier_value as UNSIGNED)
                         from identifiers
                         where identifier_type_id in (%s)
+                        and identifier_value regexp '^[[:digit:]]{1,30}$'
                         order by CAST(identifier_value as UNSIGNED)""" % self.in_clause
                 db.query(query)
                 result = db.store_result()
@@ -89,6 +90,11 @@ class ExternalIdRanges:
                                 print '</td>'
                                 if (count % 10) == 0:
                                         print '</tr>'
+                        if count % 10:
+                                for i in range(count % 10, 10):
+                                        print '<td>'
+                                        print '&nbsp;'
+                                        print '</td>'
                         print '</table>'
 
 if __name__ == '__main__':
