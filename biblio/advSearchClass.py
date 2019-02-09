@@ -175,6 +175,11 @@ class AdvancedSearchResults:
                         self.id_field = 'publisher_id'
                         self.SQLterm = self.make_publisher_SQL_term
                         self.print_results = self.print_publisher_results
+                elif self.search_type == 'Publication Series':
+                        self.table = 'pub_series'
+                        self.id_field = 'pub_series_id'
+                        self.SQLterm = self.make_pub_series_SQL_term
+                        self.print_results = self.print_pub_series_results
                 else:
                         self.display_error('Non-Existing Record Type')
 
@@ -196,6 +201,8 @@ class AdvancedSearchResults:
                                                             'title_ttype'):
                         self.display_error("Unknown sort field: %s" % self.sort)
                 elif self.search_type == 'Publisher' and self.sort != 'publisher_name':
+                        self.display_error("Unknown sort field: %s" % self.sort)
+                elif self.search_type == 'Publication Series' and self.sort != 'pub_series_name':
                         self.display_error("Unknown sort field: %s" % self.sort)
                 if self.sort == 'pub_pages':
                         self.sort = 'CAST(pub_pages as SIGNED)'
@@ -370,6 +377,9 @@ class AdvancedSearchResults:
                 PrintPublisherTable(self.records, 1, 100, self.user)
                 if self.user.moderator:
                         self.print_merge_button()
+
+        def print_pub_series_results(self):
+                PrintPubSeriesTable(self.records, 100)
 
         def print_author_results(self):
                 PrintAuthorTable(self.records, 1, 100, self.user)
@@ -670,6 +680,28 @@ class AdvancedSearchResults:
                         clause = 'webpages.url %s' % sql_value
                         dbases = [tableInfo('publishers'), tableInfo('webpages')]
                         joins = ['webpages.publisher_id=publishers.publisher_id']
+                else:
+                        self.display_error('Unknown field: %s' % field)
+                return ('(%s)' % clause, dbases, joins)
+
+        def make_pub_series_SQL_term(self, field, value, sql_value):
+                # Set up default values
+                joins = []
+                dbases = [tableInfo('pub_series')]
+                if field == 'pub_series_name':
+                        clause = 'pub_series.pub_series_name %s' % sql_value
+                elif field == 'trans_pub_series_name':
+                        clause = 'trans_pub_series.trans_pub_series_name %s' % sql_value
+                        dbases = [tableInfo('pub_series'), tableInfo('trans_pub_series')]
+                        joins = ['trans_pub_series.pub_series_id=pub_series.pub_series_id']
+                elif field == 'pub_series_note':
+                        clause = 'notes.note_note %s' % sql_value
+                        dbases = [tableInfo('pub_series'), tableInfo('notes')]
+                        joins = ['pub_series.pub_series_note_id = notes.note_id']
+                elif field == 'pub_series_webpage':
+                        clause = 'webpages.url %s' % sql_value
+                        dbases = [tableInfo('pub_series'), tableInfo('webpages')]
+                        joins = ['webpages.pub_series_id=pub_series.pub_series_id']
                 else:
                         self.display_error('Unknown field: %s' % field)
                 return ('(%s)' % clause, dbases, joins)

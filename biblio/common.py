@@ -1241,6 +1241,29 @@ def PrintPublisherRecord(record, bgcolor, user, merge):
         print '<td>%s</td>' % ISFDBLink('publisher.cgi', record[PUBLISHER_ID], record[PUBLISHER_NAME])
         print '</tr>'
 
+def PrintPubSeriesTable(pub_series, limit = 100):
+	print '<table class="generic_table">'
+	print '<tr align="left" class="generic_table_header">'
+	print '<th>Publication Series</th>'
+ 	print '</tr>'
+	counter = 1
+        bgcolor = 1
+        for one_pub_series in pub_series:
+                PrintPubSeriesRecord(one_pub_series, bgcolor)
+                bgcolor ^= 1
+                counter += 1
+                if counter > limit:
+                        break
+        print '</table>'
+
+def PrintPubSeriesRecord(record, bgcolor):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+        print '<td>%s</td>' % ISFDBLink('pubseries.cgi', record[PUB_SERIES_ID], record[PUB_SERIES_NAME])
+        print '</tr>'
+
 def PrintAuthorTable(authors, merge, limit = 100, user = None):
         author_ids = []
         for author in authors:

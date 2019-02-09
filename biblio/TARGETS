@@ -13,6 +13,7 @@ TARGETS = DIR/adv_author_search.cgi \
 	  DIR/adv_notes_search.cgi \
 	  DIR/adv_pub_search.cgi \
 	  DIR/adv_publisher_search.cgi \
+	  DIR/adv_pub_series_search.cgi \
 	  DIR/adv_search_menu.cgi \
 	  DIR/adv_search_results.cgi \
 	  DIR/adv_title_search.cgi \
