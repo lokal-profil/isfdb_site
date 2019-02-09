@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2009-2018   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -67,7 +67,7 @@ def PrintSearchBox(page, search_value = '', search_type = ''):
         print '<input value="Go" type="submit" >'
         print '</form>'
         print '<p class="bottomlinks">'
-        print ISFDBLink("search.cgi","","Advanced Search", argument='class="inverted"')
+        print ISFDBLink("adv_search_menu.cgi","","Advanced Search", argument='class="inverted"')
         print '</div>'
         return
 

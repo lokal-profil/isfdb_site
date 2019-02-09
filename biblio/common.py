@@ -1213,6 +1213,34 @@ def PrintTitleRecord(title, merge, limit, bgcolor, user):
 
         print "</tr>"
 
+def PrintPublisherTable(publishers, merge, limit = 100, user = None):
+	print '<table class="generic_table">'
+	print '<tr align="left" class="generic_table_header">'
+	if merge and user.moderator:
+        	print '<th>Merge</th>'
+	print '<th>Publisher</th>'
+ 	print '</tr>'
+	counter = 1
+        bgcolor = 1
+        for publisher in publishers:
+                PrintPublisherRecord(publisher, bgcolor, user, merge)
+                bgcolor ^= 1
+                counter += 1
+                if counter > limit:
+                        break
+        print '</table>'
+
+def PrintPublisherRecord(record, bgcolor, user, merge):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+
+	if merge and user.moderator:
+                print '<td><INPUT TYPE="checkbox" NAME="merge" VALUE="%s"></td>' % record[PUBLISHER_ID]
+        print '<td>%s</td>' % ISFDBLink('publisher.cgi', record[PUBLISHER_ID], record[PUBLISHER_NAME])
+        print '</tr>'
+
 def PrintAuthorTable(authors, merge, limit = 100, user = None):
         author_ids = []
         for author in authors:

@@ -44,7 +44,7 @@ def PrintSummary(arg, count, limit):
         print "<p><b>A search for '%s' found %d matches" % (arg, count)
         if count >= limit:
 		print "<br>The first %d matches are displayed below. " % (limit)
-		print 'Use <a class="inverted" href="http:/%s/search.cgi">Advanced Search</a>' % (HTFAKE)
+		print 'Use <a class="inverted" href="http:/%s/adv_search_menu.cgi">Advanced Search</a>' % (HTFAKE)
 		print " to see more matches."
 	print '</b>'
 	print '<p>'

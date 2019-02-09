@@ -10,8 +10,10 @@
 
 TARGETS = DIR/adv_author_search.cgi \
 	  DIR/adv_identifier_search.cgi \
-	  DIR/adv_pub_search.cgi \
 	  DIR/adv_notes_search.cgi \
+	  DIR/adv_pub_search.cgi \
+	  DIR/adv_publisher_search.cgi \
+	  DIR/adv_search_menu.cgi \
 	  DIR/adv_search_results.cgi \
 	  DIR/adv_title_search.cgi \
 	  DIR/adv_user_search.cgi \
@@ -63,7 +65,6 @@ TARGETS = DIR/adv_author_search.cgi \
 	  DIR/recent_primary_ver.cgi \
 	  DIR/recentver.cgi \
 	  DIR/se.cgi \
-	  DIR/search.cgi \
 	  DIR/seriesgrid.cgi \
 	  DIR/seriestags.cgi \
 	  DIR/stats.cgi \

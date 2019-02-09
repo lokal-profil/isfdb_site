@@ -138,8 +138,6 @@ class AdvancedSearchResults:
                         if self.start > 30000:
                                 self.display_error('Advanced Search Is Currently Limited to 300 pages or 30,000 records', 1)
                         self.search_type = self.form['TYPE']
-                        if self.search_type not in ('Author', 'Title', 'Publication'):
-                                raise
                         self.order_by = self.format_entry(self.form['ORDERBY'])
                         self.action = self.form.get('ACTION', 'query')
                         if self.action not in ('query', 'count'):
@@ -172,6 +170,13 @@ class AdvancedSearchResults:
                         self.id_field = 'pub_id'
                         self.SQLterm = self.make_pub_SQL_term
                         self.print_results = self.print_pub_results
+                elif self.search_type == 'Publisher':
+                        self.table = 'publishers'
+                        self.id_field = 'publisher_id'
+                        self.SQLterm = self.make_publisher_SQL_term
+                        self.print_results = self.print_publisher_results
+                else:
+                        self.display_error('Non-Existing Record Type')
 
         def process_sort(self):
                 self.sort = self.format_entry(self.order_by)
@@ -189,6 +194,8 @@ class AdvancedSearchResults:
                 elif self.search_type == 'Title' and self.sort not in ('title_title',
                                                             'title_copyright',
                                                             'title_ttype'):
+                        self.display_error("Unknown sort field: %s" % self.sort)
+                elif self.search_type == 'Publisher' and self.sort != 'publisher_name':
                         self.display_error("Unknown sort field: %s" % self.sort)
                 if self.sort == 'pub_pages':
                         self.sort = 'CAST(pub_pages as SIGNED)'
@@ -359,6 +366,11 @@ class AdvancedSearchResults:
         def print_pub_results(self):
                 PrintPubsTable(self.records, 'adv_search', self.user, 100)
 
+        def print_publisher_results(self):
+                PrintPublisherTable(self.records, 1, 100, self.user)
+                if self.user.moderator:
+                        self.print_merge_button()
+
         def print_author_results(self):
                 PrintAuthorTable(self.records, 1, 100, self.user)
                 if self.user.moderator:
@@ -400,9 +412,11 @@ class AdvancedSearchResults:
                 self.query += " where %s order by %s limit %d,%d" % (self.terms, self.sort, self.start, 101)
 
         def print_merges(self):
-                if self.search_type == 'Author' and self.user.moderator:
-                        self.print_help_merge('authors', 'av_merge')
-
+                if self.user.moderator:
+                        if self.search_type == 'Author':
+                                self.print_help_merge('authors', 'av_merge')
+                        if self.search_type == 'Publisher':
+                                self.print_help_merge('publishers', 'pv_merge')
                 if self.search_type == 'Title':
                         self.print_help_merge('titles', 'tv_merge')
 
@@ -450,7 +464,6 @@ class AdvancedSearchResults:
                 print '<hr>'
 
         def make_titles_SQL_term(self, field, value, sql_value):
-
                 # Set up default values
                 joins = []
                 dbases = [tableInfo('titles')]
@@ -521,7 +534,6 @@ class AdvancedSearchResults:
                 return ("(%s)" % clause, dbases, joins)
 
         def make_author_SQL_term(self, field, value, sql_value):
-
                 # Set up default values
                 joins = []
                 dbases = [tableInfo('authors')]
@@ -568,7 +580,6 @@ class AdvancedSearchResults:
                 return ("(%s)" % clause, dbases, joins)
 
         def make_pub_SQL_term(self, field, value, sql_value):
-
                 # Set up default values
                 joins = []
                 dbases = [tableInfo('pubs')]
@@ -640,6 +651,28 @@ class AdvancedSearchResults:
                 else:
                         self.display_error("Unknown field: %s" % field)
                 return ("(%s)" % clause, dbases, joins)
+
+        def make_publisher_SQL_term(self, field, value, sql_value):
+                # Set up default values
+                joins = []
+                dbases = [tableInfo('publishers')]
+                if field == 'publisher_name':
+                        clause = 'publishers.publisher_name %s' % sql_value
+                elif field == 'trans_publisher_name':
+                        clause = 'trans_publisher.trans_publisher_name %s' % sql_value
+                        dbases = [tableInfo('publishers'), tableInfo('trans_publisher')]
+                        joins = ['trans_publisher.publisher_id=publishers.publisher_id']
+                elif field == 'publisher_note':
+                        clause = 'notes.note_note %s' % sql_value
+                        dbases = [tableInfo('publishers'), tableInfo('notes')]
+                        joins = ['publishers.note_id = notes.note_id']
+                elif field == 'publisher_webpage':
+                        clause = 'webpages.url %s' % sql_value
+                        dbases = [tableInfo('publishers'), tableInfo('webpages')]
+                        joins = ['webpages.publisher_id=publishers.publisher_id']
+                else:
+                        self.display_error('Unknown field: %s' % field)
+                return ('(%s)' % clause, dbases, joins)
 
 class tableInfo:
 	def __init__(self, tname='', hints=None):
