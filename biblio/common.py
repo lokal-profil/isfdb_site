@@ -1264,6 +1264,41 @@ def PrintPubSeriesRecord(record, bgcolor):
         print '<td>%s</td>' % ISFDBLink('pubseries.cgi', record[PUB_SERIES_ID], record[PUB_SERIES_NAME])
         print '</tr>'
 
+def PrintSeriesTable(series_list, limit = 100):
+	print '<table class="generic_table">'
+	print '<tr align="left" class="generic_table_header">'
+	print '<th>Series</th>'
+	print '<th>Parent Series</th>'
+	print '<th>Position Within Parent Series</th>'
+ 	print '</tr>'
+	counter = 1
+        bgcolor = 1
+        for series in series_list:
+                PrintSeriesRecord(series, bgcolor)
+                bgcolor ^= 1
+                counter += 1
+                if counter > limit:
+                        break
+        print '</table>'
+
+def PrintSeriesRecord(record, bgcolor):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+        print '<td>%s</td>' % ISFDBLink('pe.cgi', record[SERIES_PUBID], record[SERIES_NAME])
+        parent_id = record[SERIES_PARENT]
+        if parent_id:
+		parent_name = SQLgetSeriesName(parent_id)
+                print '<td>%s</td>' % ISFDBLink('pe.cgi', parent_id, parent_name)
+        else:
+                print '<td>&nbsp;</td>'
+        if record[SERIES_PARENT_POSITION]:
+                print '<td>%s</td>' % record[SERIES_PARENT_POSITION]
+        else:
+                print '<td>&nbsp;</td>'
+        print '</tr>'
+
 def PrintAuthorTable(authors, merge, limit = 100, user = None):
         author_ids = []
         for author in authors:

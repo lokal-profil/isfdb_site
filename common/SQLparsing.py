@@ -1098,7 +1098,7 @@ def SQLFindSeriesChildren(id):
 	return results
 
 def SQLgetSeriesName(id):
-	query = "select series_title from series where series_id=%d" % (id)
+	query = "select series_title from series where series_id=%d" % int(id)
 	db.query(query)
 	result = db.store_result()
 	series = result.fetch_row()

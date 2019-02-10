@@ -34,6 +34,7 @@ class AdvancedSearchSelection(AdvancedSearch):
                 print '<ul>'
                 print '<li><a href="http://%s/adv_author_search.cgi">Authors</a>' % HTFAKE
                 print '<li><a href="http://%s/adv_title_search.cgi">Titles</a>' % HTFAKE
+                print '<li><a href="http://%s/adv_series_search.cgi">Series</a>' % HTFAKE
                 print '<li><a href="http://%s/adv_pub_search.cgi">Publications</a>' % HTFAKE
                 print '<li><a href="http://%s/adv_publisher_search.cgi">Publishers</a>' % HTFAKE
                 print '<li><a href="http://%s/adv_pub_series_search.cgi">Publication Series</a>' % HTFAKE
