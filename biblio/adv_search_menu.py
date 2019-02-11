@@ -39,6 +39,7 @@ class AdvancedSearchSelection(AdvancedSearch):
                 print '<li><a href="http://%s/adv_publisher_search.cgi">Publishers</a>' % HTFAKE
                 print '<li><a href="http://%s/adv_pub_series_search.cgi">Publication Series</a>' % HTFAKE
                 print '<li><a href="http://%s/adv_award_type_search.cgi">Award Types</a>' % HTFAKE
+                print '<li><a href="http://%s/adv_award_cat_search.cgi">Award Categories</a>' % HTFAKE
                 print '</ul>'
                 print '<li><b>Other Searches:</b>'
                 print '<ul>'

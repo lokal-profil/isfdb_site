@@ -190,6 +190,11 @@ class AdvancedSearchResults:
                         self.id_field = 'award_type_id'
                         self.SQLterm = self.make_award_type_SQL_term
                         self.print_results = self.print_award_type_results
+                elif self.search_type == 'Award Category':
+                        self.table = 'award_cats'
+                        self.id_field = 'award_cat_id'
+                        self.SQLterm = self.make_award_cat_SQL_term
+                        self.print_results = self.print_award_cat_results
                 else:
                         self.display_error('Non-Existing Record Type')
 
@@ -223,6 +228,9 @@ class AdvancedSearchResults:
                                                             'award_type_poll',
                                                             'award_type_non_genre'):
                         self.unknown_sort()
+                elif self.search_type == 'Award Category' and self.sort not in ('award_cat_name',
+                                                            'award_cat_order'):
+                        self.unknown_sort()
                 if self.sort == 'pub_pages':
                         self.sort = 'CAST(pub_pages as SIGNED)'
                 elif self.sort == 'pub_price':
@@ -240,6 +248,12 @@ class AdvancedSearchResults:
                                 self.sort += ', pub_title'
                         if self.sort != 'pub_year':
                                 self.sort += ', pub_year'
+                elif self.search_type == 'Award Type':
+                        if self.sort != 'award_type_short_name':
+                                self.sort += ', award_type_short_name'
+                elif self.search_type == 'Award Category':
+                        if self.sort != 'award_cat_name':
+                                self.sort += ', award_cat_name'
 
         def unknown_sort(self):
                 self.display_error("Unknown sort field: %s" % self.sort)
@@ -341,7 +355,7 @@ class AdvancedSearchResults:
                 elif field == 'title_ttype':
                         if value.upper() not in ALL_TITLE_TYPES:
                                 self.display_error('Valid title types are: %s' % ', '.join(ALL_TITLE_TYPES))
-                elif field in ('title_graphic', 'title_non_genre', 'title_jvn', 'title_nvz', 'poll', 'non_genre'):
+                elif field in ('title_graphic', 'title_non_genre', 'title_jvn', 'title_nvz', 'award_type_poll', 'award_type_non_genre'):
                         if value.lower() not in ('yes', 'no'):
                                 self.display_error('Yes/No value required')
                 elif field == 'pub_ctype':
@@ -408,6 +422,9 @@ class AdvancedSearchResults:
 
         def print_award_type_results(self):
                 PrintAwardResults(self.records, 100)
+
+        def print_award_cat_results(self):
+                PrintAwardCatResults(self.records, 100)
 
         def print_author_results(self):
                 PrintAuthorTable(self.records, 1, 100, self.user)
@@ -758,6 +775,34 @@ class AdvancedSearchResults:
                         clause = 'webpages.url %s' % sql_value
                         dbases = [tableInfo('award_types'), tableInfo('webpages')]
                         joins = ['webpages.award_type_id=award_types.award_type_id']
+                else:
+                        self.display_error('Unknown field: %s' % field)
+                return ('(%s)' % clause, dbases, joins)
+
+        def make_award_cat_SQL_term(self, field, value, sql_value):
+                # Set up default values
+                joins = []
+                dbases = [tableInfo('award_cats')]
+                if field == 'award_cat_name':
+                        clause = 'award_cats.award_cat_name %s' % sql_value
+                elif field == 'award_type_short_name':
+                        clause = 'award_types.award_type_short_name %s' % sql_value
+                        dbases = [tableInfo('award_types'), tableInfo('award_cats')]
+                        joins = ['award_cats.award_cat_type_id = award_types.award_type_id']
+                elif field == 'award_type_full_name':
+                        clause = 'award_types.award_type_name %s' % sql_value
+                        dbases = [tableInfo('award_types'), tableInfo('award_cats')]
+                        joins = ['award_cats.award_cat_type_id = award_types.award_type_id']
+                elif field == 'award_cat_order':
+                        clause = 'award_cats.award_cat_order %s' % sql_value
+                elif field == 'note':
+                        clause = 'notes.note_note %s' % sql_value
+                        dbases = [tableInfo('notes'), tableInfo('award_cats')]
+                        joins = ['award_cats.award_cat_note_id = notes.note_id']
+                elif field == 'webpage':
+                        clause = 'webpages.url %s' % sql_value
+                        dbases = [tableInfo('award_cats'), tableInfo('webpages')]
+                        joins = ['webpages.award_cat_id = award_cats.award_cat_id']
                 else:
                         self.display_error('Unknown field: %s' % field)
                 return ('(%s)' % clause, dbases, joins)

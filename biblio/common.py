@@ -869,7 +869,7 @@ def PrintAwardRecord(award, bgcolor):
         else:
                 print '<tr align=left class="table2">'
 
-        print '<td><a href="http:/%s/awardtype.cgi?%s">%s</a></td>' % (HTFAKE, award[AWARD_TYPE_ID], award[AWARD_TYPE_SHORT_NAME])
+        print '<td>%s</td>' % ISFDBLink('awardtype.cgi', award[AWARD_TYPE_ID], award[AWARD_TYPE_SHORT_NAME])
         print '<td>%s</td>' % award[AWARD_TYPE_NAME]
         award_for = award[AWARD_TYPE_FOR]
         if award_for is None:
@@ -881,6 +881,40 @@ def PrintAwardRecord(award, bgcolor):
         print '<td>%s</td>' % award_by
         print '<td>%s</td>' % award[AWARD_TYPE_POLL]
         print '<td>%s</td>' % award[AWARD_TYPE_NONGENRE]
+        print '</tr>'
+
+def PrintAwardCatResults(results, limit):
+	print '<table class="generic_table">'
+	print '<tr align="left" class="generic_table_header">'
+	print '<th>Award Category Name</th>'
+	print '<th>Parent Award Type</th>'
+	print '<th>Award Category Order</th>'
+ 	print '</tr>'
+
+        bgcolor = 1
+        counter = 0
+        for award in results:
+                PrintAwardCatRecord(award, bgcolor)
+                bgcolor ^= 1
+                counter += 1
+                if counter > limit:
+                        break
+        print '</table>'
+
+def PrintAwardCatRecord(award_cat, bgcolor):
+        if bgcolor:
+                print '<tr align=left class="table1">'
+        else:
+                print '<tr align=left class="table2">'
+
+        print '<td>%s</td>' % ISFDBLink('award_category.cgi', award_cat[AWARD_CAT_ID], award_cat[AWARD_CAT_NAME])
+        award_type_id = award_cat[AWARD_CAT_TYPE_ID]
+        award_type = SQLGetAwardTypeById(award_type_id)
+        print '<td>%s</td>' % ISFDBLink('awardtype.cgi', award_type[AWARD_TYPE_ID], award_type[AWARD_TYPE_SHORT_NAME])
+        if award_cat[AWARD_CAT_ORDER]:
+                print '<td>%s</td>' % award_cat[AWARD_CAT_ORDER]
+        else:
+                print '<td>&nbsp;</td>'
         print '</tr>'
 
 def CoverInfo(link, preview=False, direct=False):
