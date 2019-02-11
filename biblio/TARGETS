@@ -9,6 +9,7 @@
 #     Date: $Date$
 
 TARGETS = DIR/adv_author_search.cgi \
+	  DIR/adv_award_type_search.cgi \
 	  DIR/adv_identifier_search.cgi \
 	  DIR/adv_notes_search.cgi \
 	  DIR/adv_pub_search.cgi \

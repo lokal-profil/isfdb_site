@@ -842,14 +842,16 @@ def BuildDisplayedURL(webpage, domains):
         return (webpage, display, home_page)
        
         
-def PrintAwardResults(results):
+def PrintAwardResults(results, limit):
 	print '<table class="generic_table">'
 	print '<tr align="left" class="generic_table_header">'
-	print "<th>Short Award Name</th>"
-	print "<th>Full Award Name</th>"
-	print "<th>Given For</th>"
-	print "<th>Given By</th>"
- 	print "</tr>"
+	print '<th>Short Award Name</th>'
+	print '<th>Full Award Name</th>'
+	print '<th>Awarded For</th>'
+	print '<th>Awarded By</th>'
+	print '<th>Poll</th>'
+	print '<th>Non-Genre</th>'
+ 	print '</tr>'
 
         bgcolor = 1
         counter = 0
@@ -857,9 +859,9 @@ def PrintAwardResults(results):
                 PrintAwardRecord(award, bgcolor)
                 bgcolor ^= 1
                 counter += 1
-                if counter > 29999:
+                if counter > limit:
                         break
-        print "</table>"
+        print '</table>'
 
 def PrintAwardRecord(award, bgcolor):
         if bgcolor:
@@ -868,15 +870,17 @@ def PrintAwardRecord(award, bgcolor):
                 print '<tr align=left class="table2">'
 
         print '<td><a href="http:/%s/awardtype.cgi?%s">%s</a></td>' % (HTFAKE, award[AWARD_TYPE_ID], award[AWARD_TYPE_SHORT_NAME])
-        print '<td>%s</td>' % (award[AWARD_TYPE_NAME])
+        print '<td>%s</td>' % award[AWARD_TYPE_NAME]
         award_for = award[AWARD_TYPE_FOR]
         if award_for is None:
                 award_for = '-'
-        print '<td>%s</td>' % (award_for)
+        print '<td>%s</td>' % award_for
         award_by = award[AWARD_TYPE_BY]
         if award_by is None:
                 award_by = '-'
-        print '<td>%s</td>' % (award_by)
+        print '<td>%s</td>' % award_by
+        print '<td>%s</td>' % award[AWARD_TYPE_POLL]
+        print '<td>%s</td>' % award[AWARD_TYPE_NONGENRE]
         print '</tr>'
 
 def CoverInfo(link, preview=False, direct=False):

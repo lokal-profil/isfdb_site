@@ -482,10 +482,9 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB Award search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        # Use 30,000 as the limit since we don't have Advanced Search for Awards at this time
-                        PrintSummary(arg, len(results), 30000)
+                        PrintSummary(arg, len(results), 300)
 			if results:
-                                PrintAwardResults(results)
+                                PrintAwardResults(results, 300)
 
         else:
                 DoError('No search value specified', search_value, type)

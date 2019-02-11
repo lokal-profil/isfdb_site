@@ -85,6 +85,12 @@ function Selectors(selector_number, new_value, record_type) {
 	case "author_language":
 		values = AllLanguages();
 		break;
+	case "award_type_poll":
+		values = YesNo();
+		break;
+	case "award_type_non_genre":
+		values = YesNo();
+		break;
 	default:
 		values = "";
 		break;
@@ -171,6 +177,23 @@ function createOnchange()	{
 		};
 		document.getElementById('pub_5').onchange = function(event){
 			Selectors(5, this.value, 'pub');
+		};
+	}
+	if (document.getElementById('award_type_1')) {
+		document.getElementById('award_type_1').onchange = function(event){
+			Selectors(1, this.value, 'award_type');
+		};
+		document.getElementById('award_type_2').onchange = function(event){
+			Selectors(2, this.value, 'award_type');
+		};
+		document.getElementById('award_type_3').onchange = function(event){
+			Selectors(3, this.value, 'award_type');
+		};
+		document.getElementById('award_type_4').onchange = function(event){
+			Selectors(4, this.value, 'award_type');
+		};
+		document.getElementById('award_type_5').onchange = function(event){
+			Selectors(5, this.value, 'award_type');
 		};
 	}
 }
