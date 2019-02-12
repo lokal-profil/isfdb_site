@@ -195,6 +195,11 @@ class AdvancedSearchResults:
                         self.id_field = 'award_cat_id'
                         self.SQLterm = self.make_award_cat_SQL_term
                         self.print_results = self.print_award_cat_results
+                elif self.search_type == 'Award':
+                        self.table = 'awards'
+                        self.id_field = 'award_id'
+                        self.SQLterm = self.make_award_SQL_term
+                        self.print_results = self.print_award_results
                 else:
                         self.display_error('Non-Existing Record Type')
 
@@ -231,6 +236,9 @@ class AdvancedSearchResults:
                 elif self.search_type == 'Award Category' and self.sort not in ('award_cat_name',
                                                             'award_cat_order'):
                         self.unknown_sort()
+                elif self.search_type == 'Award' and self.sort not in ('award_year',
+                                                            'award_level'):
+                        self.unknown_sort()
                 if self.sort == 'pub_pages':
                         self.sort = 'CAST(pub_pages as SIGNED)'
                 elif self.sort == 'pub_price':
@@ -254,6 +262,9 @@ class AdvancedSearchResults:
                 elif self.search_type == 'Award Category':
                         if self.sort != 'award_cat_name':
                                 self.sort += ', award_cat_name'
+                elif self.search_type == 'Award':
+                        if self.sort != 'award_year':
+                                self.sort += ', award_year'
 
         def unknown_sort(self):
                 self.display_error("Unknown sort field: %s" % self.sort)
@@ -425,6 +436,9 @@ class AdvancedSearchResults:
 
         def print_award_cat_results(self):
                 PrintAwardCatResults(self.records, 100)
+
+        def print_award_results(self):
+                PrintAwardTable(self.records, 100)
 
         def print_author_results(self):
                 PrintAuthorTable(self.records, 1, 100, self.user)
@@ -803,6 +817,18 @@ class AdvancedSearchResults:
                         clause = 'webpages.url %s' % sql_value
                         dbases = [tableInfo('award_cats'), tableInfo('webpages')]
                         joins = ['webpages.award_cat_id = award_cats.award_cat_id']
+                else:
+                        self.display_error('Unknown field: %s' % field)
+                return ('(%s)' % clause, dbases, joins)
+
+        def make_award_SQL_term(self, field, value, sql_value):
+                # Set up default values
+                joins = []
+                dbases = [tableInfo('awards')]
+                if field == 'award_year':
+                        clause = 'awards.award_year %s' % sql_value
+                elif field == 'award_level':
+                        clause = 'award.award_level %s' % sql_value
                 else:
                         self.display_error('Unknown field: %s' % field)
                 return ('(%s)' % clause, dbases, joins)

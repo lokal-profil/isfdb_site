@@ -1337,6 +1337,27 @@ def PrintSeriesRecord(record, bgcolor):
                 print '<td>&nbsp;</td>'
         print '</tr>'
 
+def PrintAwardTable(award_list, limit = 10000):
+        print '<table>'
+        print '<tr bgcolor="#d6d6d6">'
+        print '<th>Place</th>'
+        print '<th>Year and Award</th>'
+        print '<th>Title</th>'
+        print '<th>Category</th>'
+        print '</tr>'
+	counter = 1
+        bgcolor = 0
+        for fullaward in award_list:
+                award = awards(db)
+                award.load(fullaward[AWARD_ID])
+                award.PrintAwardRow(1, bgcolor)
+                counter += 1
+                if counter > limit:
+                        break
+                bgcolor ^= 1
+        print '</table>'
+        print '<p>'
+
 def PrintAuthorTable(authors, merge, limit = 100, user = None):
         author_ids = []
         for author in authors:

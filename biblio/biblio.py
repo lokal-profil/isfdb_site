@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -746,27 +746,12 @@ class Bibliography:
                 sys.exit(0)
 
         def printAwards(self):
-                print "<p>"
+                print '<p>'
                 if not self.au_awards:
-                        print "<h2>No awards found for %s</h2>" % self.author_name
+                        print '<h2>No awards found for %s</h2>' % self.author_name
                         PrintTrailer('author', self.author_name, 0)
                         sys.exit(0)
-
-                print '<table>'
-                print '<tr bgcolor="#d6d6d6">'
-                print '<th>Place</th>'
-                print '<th>Year and Award</th>'
-                print '<th>Title</th>'
-                print '<th>Category</th>'
-                print '</tr>'
-                bgcolor = 0
-                for fullaward in self.au_awards:
-                        award = awards(db)
-                        award.load(fullaward[AWARD_ID])
-                        award.PrintAwardRow(1, bgcolor)
-                        bgcolor ^= 1
-                print '</table>'
-                print '<p>'
+                PrintAwardTable(self.au_awards)
 
         def ConvertDate(self, date):
                 decompose = string.split(date, '-')
