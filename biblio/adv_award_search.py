@@ -46,9 +46,10 @@ class AdvancedAwardSearch(AdvancedSearch):
 ##                print '<option VALUE="wins">Only Wins'
 ##                print '<option VALUE="award_level">Numeric Award Level'
 ##                print '<option VALUE="award_special">Special Award Level'
-##                print '<option VALUE="award_cat_name">Award Category'
-##                print '<option VALUE="award_type_name">Award Type'
-##                print '<option VALUE="note">Notes'
+                print '<option VALUE="award_cat_name">Award Category'
+                print '<option VALUE="award_type_short_name">Award Type Short Name'
+                print '<option VALUE="award_type_full_name">Award Type Full Name'
+                print '<option VALUE="note">Notes'
                 print '</select>'
 
                 self.print_operators('award', number)

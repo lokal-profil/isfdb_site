@@ -237,7 +237,11 @@ class AdvancedSearchResults:
                                                             'award_cat_order'):
                         self.unknown_sort()
                 elif self.search_type == 'Award' and self.sort not in ('award_year',
-                                                            'award_level'):
+                                                            'award_level',
+                                                            'award_cat_name',
+                                                            'award_type_short_name',
+                                                            'award_type_full_name',
+                                                            'note'):
                         self.unknown_sort()
                 if self.sort == 'pub_pages':
                         self.sort = 'CAST(pub_pages as SIGNED)'
@@ -263,6 +267,8 @@ class AdvancedSearchResults:
                         if self.sort != 'award_cat_name':
                                 self.sort += ', award_cat_name'
                 elif self.search_type == 'Award':
+                        if self.sort == 'award_level':
+                                self.sort = 'CAST(award_level as SIGNED)'
                         if self.sort != 'award_year':
                                 self.sort += ', award_year'
 
@@ -826,9 +832,25 @@ class AdvancedSearchResults:
                 joins = []
                 dbases = [tableInfo('awards')]
                 if field == 'award_year':
-                        clause = 'awards.award_year %s' % sql_value
+                        clause = 'SUBSTRING(awards.award_year,1,4) %s' % sql_value
                 elif field == 'award_level':
                         clause = 'award.award_level %s' % sql_value
+                elif field == 'award_cat_name':
+                        clause = 'award_cats.award_cat_name %s' % sql_value
+                        dbases = [tableInfo('award_cats'), tableInfo('awards')]
+                        joins = ['award_cats.award_cat_id = awards.award_cat_id']
+                elif field == 'award_type_short_name':
+                        clause = 'award_types.award_type_short_name %s' % sql_value
+                        dbases = [tableInfo('award_types'), tableInfo('award_cats'), tableInfo('awards')]
+                        joins = ['awards.award_cat_id = award_cats.award_cat_id and award_cats.award_cat_type_id = award_types.award_type_id']
+                elif field == 'award_type_full_name':
+                        clause = 'award_types.award_type_name %s' % sql_value
+                        dbases = [tableInfo('award_types'), tableInfo('award_cats'), tableInfo('awards')]
+                        joins = ['awards.award_cat_id = award_cats.award_cat_id and award_cats.award_cat_type_id = award_types.award_type_id']
+                elif field == 'note':
+                        clause = 'notes.note_note %s' % sql_value
+                        dbases = [tableInfo('notes'), tableInfo('awards')]
+                        joins = ['awards.award_note_id = notes.note_id']
                 else:
                         self.display_error('Unknown field: %s' % field)
                 return ('(%s)' % clause, dbases, joins)
