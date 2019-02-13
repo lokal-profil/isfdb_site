@@ -490,15 +490,13 @@ class AdvancedSearchResults:
                 if self.user.moderator:
                         if self.search_type == 'Author':
                                 self.print_help_merge('authors', 'av_merge')
-                        if self.search_type == 'Publisher':
-                                self.print_help_merge('publishers', 'pv_merge')
                 if self.search_type == 'Title':
                         self.print_help_merge('titles', 'tv_merge')
 
         def print_help_merge(self, record_type, script):
                 print '<div id="HelpBox">'
-                print '<b>Help on merging %s: </b>' % record_type
-                print '<a href="http://%s/index.php/Editing:Merging_%s">Editing:Merging %s</a><p>' % (WIKILOC, record_type.title(), record_type.title())
+                print '<b>Help:How to merge %s: </b>' % record_type
+                print '<a href="http://%s/index.php/Help:How_to_merge_%s">Help:How to merge %s</a><p>' % (WIKILOC, record_type, record_type)
                 print '</div>'
                 print '<form METHOD="POST" ACTION="/cgi-bin/edit/%s.cgi">' % script
 
