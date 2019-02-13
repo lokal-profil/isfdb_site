@@ -42,10 +42,7 @@ class AdvancedAwardSearch(AdvancedSearch):
                 print '<p id="award_selectors_%d">' % number
                 print '<select NAME="USE_%d" id="award_%d">' % (number, number)
                 print '<option VALUE="award_year">Award Year'
-##                print '<option VALUE="poll">Poll'
-##                print '<option VALUE="wins">Only Wins'
-##                print '<option VALUE="award_level">Numeric Award Level'
-##                print '<option VALUE="award_special">Special Award Level'
+                print '<option VALUE="award_level">Award Level'
                 print '<option VALUE="award_cat_name">Award Category'
                 print '<option VALUE="award_type_short_name">Award Type Short Name'
                 print '<option VALUE="award_type_full_name">Award Type Full Name'
@@ -54,7 +51,7 @@ class AdvancedAwardSearch(AdvancedSearch):
 
                 self.print_operators('award', number)
 
-                print '<input id="award_term_%d" NAME="TERM_%d" TYPE="text" SIZE="50">' % (number, number)
+                print '<input id="awardterm_%d" NAME="TERM_%d" TYPE="text" SIZE="50">' % (number, number)
                 if number == 1:
                         self.print_radio_selectors()
                 print '<p>'

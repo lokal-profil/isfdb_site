@@ -32,6 +32,7 @@ class AdvancedSearch:
                 if 'None' in selectable_languages:
                         selectable_languages.remove('None')
                 self.print_one_invisible_drop_down('AllLanguages', selectable_languages)
+                self.print_invisible_award_levels()
 
         def print_one_invisible_drop_down(self, name, values):
                 print '<select NAME="%s" id="%s" class="nodisplay">' % (name, name)
@@ -39,6 +40,23 @@ class AdvancedSearch:
                         # Skip empty values, e.g. in STORYLEN_CODES
                         if value:
                                 print '<option VALUE="%s">%s' % (value, value)
+                print '</select>'
+
+        def print_invisible_award_levels(self):
+                print '<select NAME="AwardLevels" id="AwardLevels" class="nodisplay">'
+                # First display regular award levels in the 1-70 range
+                for award_level in range(1,70):
+                        if award_level == 1:
+                                displayed_value = '1 (Win)'
+                        elif award_level == 9:
+                                displayed_value = '9 (Nomination)'
+                        else:
+                                displayed_value = '%d' % award_level
+                        print '<option VALUE="%s">%s</option>' % (displayed_value, displayed_value)
+                # Next display special award levels in the 71-99 range
+                special_levels = SpecialAwards()
+                for special_level in sorted(special_levels):
+                        print '<option VALUE="%s (%s)">%s (%s)</option>' % (special_level, special_levels[special_level], special_level, special_levels[special_level])
                 print '</select>'
 
         def print_full_header(self):
@@ -237,11 +255,7 @@ class AdvancedSearchResults:
                                                             'award_cat_order'):
                         self.unknown_sort()
                 elif self.search_type == 'Award' and self.sort not in ('award_year',
-                                                            'award_level',
-                                                            'award_cat_name',
-                                                            'award_type_short_name',
-                                                            'award_type_full_name',
-                                                            'note'):
+                                                            'award_level'):
                         self.unknown_sort()
                 if self.sort == 'pub_pages':
                         self.sort = 'CAST(pub_pages as SIGNED)'
@@ -318,6 +332,14 @@ class AdvancedSearchResults:
                                 sql_value += "pubs.pub_isbn %s" % padded_entry
                                 isbn_count += 1
                         sql_value += ")"
+                elif use == 'award_level':
+                        try:
+                                # Remove the trailing description of the award level
+                                entry = entry.split(' ')[0]
+                                entry = int(entry)
+                        except:
+                                self.display_error('Invalid Award Level')
+                        sql_value = self.pad_entry(operator, entry)
                 else:
                         sql_value = self.pad_entry(operator, entry)
 
@@ -832,7 +854,7 @@ class AdvancedSearchResults:
                 if field == 'award_year':
                         clause = 'SUBSTRING(awards.award_year,1,4) %s' % sql_value
                 elif field == 'award_level':
-                        clause = 'award.award_level %s' % sql_value
+                        clause = 'awards.award_level %s' % sql_value
                 elif field == 'award_cat_name':
                         clause = 'award_cats.award_cat_name %s' % sql_value
                         dbases = [tableInfo('award_cats'), tableInfo('awards')]

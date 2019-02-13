@@ -33,6 +33,10 @@ function AllLanguages()	{
 	return GetValidValues('AllLanguages');
 }
 
+function AwardLevels()	{
+	return GetValidValues('AwardLevels');
+}
+
 function GetValidValues(select_name)	{
 	var field = document.getElementById(select_name);
 	var field_values = [];
@@ -90,6 +94,9 @@ function Selectors(selector_number, new_value, record_type) {
 		break;
 	case "award_type_non_genre":
 		values = YesNo();
+		break;
+	case "award_level":
+		values = AwardLevels();
 		break;
 	default:
 		values = "";
@@ -194,6 +201,23 @@ function createOnchange()	{
 		};
 		document.getElementById('award_type_5').onchange = function(event){
 			Selectors(5, this.value, 'award_type');
+		};
+	}
+	if (document.getElementById('award_1')) {
+		document.getElementById('award_1').onchange = function(event){
+			Selectors(1, this.value, 'award');
+		};
+		document.getElementById('award_2').onchange = function(event){
+			Selectors(2, this.value, 'award');
+		};
+		document.getElementById('award_3').onchange = function(event){
+			Selectors(3, this.value, 'award');
+		};
+		document.getElementById('award_4').onchange = function(event){
+			Selectors(4, this.value, 'award');
+		};
+		document.getElementById('award_5').onchange = function(event){
+			Selectors(5, this.value, 'award');
 		};
 	}
 }
