@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff, Bill Longley, Uzume, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley, Uzume, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -525,27 +525,13 @@ if __name__ == '__main__':
 	########################################
 	# STEP 4 - Get the title's award data
 	########################################
-	if user.suppress_awards:
-                pass
-        else:
+	if not user.suppress_awards:
                 awards_list = SQLTitleAwards(title_id)
                 if awards_list:
                         print '<div class="ContentBox">'
                         print '<h3 class="contentheader">Awards</h3>'
-                        print '<table>'
-                        print '<tr class="table2">'
-                        print '<th>Place</th>'
-                        print '<th>Year and Award</th>'
-                        print '<th>Category</th>'
-                        print '</tr>'
-                        bgcolor = 0
-                        for one_award in awards_list:
-                                fullaward = SQLloadAwards(one_award[1])[0]
-                                award = awards(db)
-                                award.load(fullaward[AWARD_ID])
-                                award.PrintAwardRow(0, bgcolor, title_id)
-                                bgcolor ^= 1
-                        print '</table>'
+                        award = awards(db)
+                        award.PrintAwardTable(awards_list, 0)
                         print '</div>'
 
 	########################################################

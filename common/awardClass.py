@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -250,6 +250,26 @@ class awards:
 		if self.form.has_key('award_note'):
 			self.award_note = XMLescape(self.form['award_note'].value)
 			self.used_note = 1
+
+        def PrintAwardTable(self, award_list, withtitle = 1, limit = 10000):
+                print '<table>'
+                print '<tr class="table2">'
+                print '<th>Place</th>'
+                print '<th>Year and Award</th>'
+                if withtitle:
+                        print '<th>Title</th>'
+                print '<th>Category</th>'
+                print '</tr>'
+                counter = 1
+                bgcolor = 0
+                for fullaward in award_list:
+                        self.load(fullaward[AWARD_ID])
+                        self.PrintAwardRow(withtitle, bgcolor)
+                        counter += 1
+                        if counter > limit:
+                                break
+                        bgcolor ^= 1
+                print '</table>'
 
         def PrintAwardRow(self, withtitle, bgcolor, main_title_id = 0):
                 special_awards = SpecialAwards()

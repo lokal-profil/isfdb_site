@@ -1434,7 +1434,7 @@ def SQLTitleAwards(title_id):
         ############################################################
         if not title_id:
                 return ([])
-        query = "select DISTINCT title_id from titles where title_id='%d' or title_parent='%d'" % (title_id, title_id)
+        query = "select DISTINCT title_id from titles where title_id=%d or title_parent=%d" % (int(title_id), int(title_id))
         db.query(query)
         result0 = db.store_result()
         title = result0.fetch_row()
@@ -1449,15 +1449,12 @@ def SQLTitleAwards(title_id):
                 title = result0.fetch_row()
                 counter += 1
 
-        query = "select title_awards.* from title_awards,awards where title_awards.title_id in (%s) and title_awards.award_id=awards.award_id order by awards.award_year,awards.award_level;" % (db.escape_string(title_set))
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
-	results = []
-	while title:
-		results.append(title[0])
-		title = result.fetch_row()
-	return results
+        query = """select distinct awards.*
+                from title_awards, awards
+                where title_awards.title_id in (%s)
+                and title_awards.award_id=awards.award_id
+                order by awards.award_year, awards.award_level""" % (db.escape_string(title_set))
+        return StandardQuery(query)
 
 def SQLloadAwards(award_id):
 	query = "select * from awards where award_id='%d'" % (award_id)

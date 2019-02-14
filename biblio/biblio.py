@@ -16,6 +16,7 @@ import traceback
 from SQLparsing import *
 from common import *
 from login import *
+from awardClass import awards
 
 class Bibliography:
         def __init__(self):
@@ -751,7 +752,8 @@ class Bibliography:
                         print '<h2>No awards found for %s</h2>' % self.author_name
                         PrintTrailer('author', self.author_name, 0)
                         sys.exit(0)
-                PrintAwardTable(self.au_awards)
+                award = awards(db)
+                award.PrintAwardTable(self.au_awards)
 
         def ConvertDate(self, date):
                 decompose = string.split(date, '-')

@@ -466,7 +466,9 @@ class AdvancedSearchResults:
                 PrintAwardCatResults(self.records, 100)
 
         def print_award_results(self):
-                PrintAwardTable(self.records, 100)
+                from awardClass import awards
+                award = awards(db)
+                award.PrintAwardTable(self.records, 1)
 
         def print_author_results(self):
                 PrintAuthorTable(self.records, 1, 100, self.user)
