@@ -56,6 +56,7 @@ class awards:
                 self.award_type_poll  = ''
                 self.award_note_id    = ''
                 self.award_note       = ''
+                self.special_awards   = SpecialAwards()
 
                 self.error = ''
 
@@ -109,8 +110,7 @@ class awards:
                                 self.used_level = 1
                                 self.award_displayed_level = ''
                                 if int(self.award_level) > 70:
-                                        special_awards = SpecialAwards()
-                                        self.award_displayed_level = special_awards[self.award_level]
+                                        self.award_displayed_level = self.special_awards[self.award_level]
                                 elif self.award_type_poll == 'Yes':
                                                 self.award_displayed_level = self.award_level
                                 else:
@@ -204,7 +204,6 @@ class awards:
                         return
 
 		if self.form.has_key('LEVEL'):
-                        special_awards = SpecialAwards()
 			if self.form['LEVEL'].value == 'WIN':
 				self.award_level = '1'
 				self.used_level = 1
@@ -231,7 +230,7 @@ class awards:
                                                 self.award_level = self.form['award_special'].value
                                                 self.used_level = 1
                                                 # Check that the entered value is a recognized "special" value
-                                                if self.award_level not in special_awards:
+                                                if self.award_level not in self.special_awards:
                                                         raise
                                         except:
                                                 self.error = "Only displayed special award levels are supported"
@@ -251,34 +250,58 @@ class awards:
 			self.award_note = XMLescape(self.form['award_note'].value)
 			self.used_note = 1
 
-        def PrintAwardTable(self, award_list, withtitle = 1, limit = 10000):
+        def PrintAwardTable(self, award_list, print_title = 1, print_authors = 0, limit = 10000):
                 print '<table>'
                 print '<tr class="table2">'
                 print '<th>Place</th>'
                 print '<th>Year and Award</th>'
-                if withtitle:
+                if print_title:
                         print '<th>Title</th>'
+                if print_authors:
+                        print '<th>Author(s)</th>'
                 print '<th>Category</th>'
                 print '</tr>'
                 counter = 1
                 bgcolor = 0
                 for fullaward in award_list:
-                        self.load(fullaward[AWARD_ID])
-                        self.PrintAwardRow(withtitle, bgcolor)
+                        award = awards(db)
+                        award.load(fullaward[AWARD_ID])
+                        award.PrintAwardRow(print_title, print_authors, bgcolor)
                         counter += 1
                         if counter > limit:
                                 break
                         bgcolor ^= 1
                 print '</table>'
 
-        def PrintAwardRow(self, withtitle, bgcolor, main_title_id = 0):
-                special_awards = SpecialAwards()
+        def PrintAwardRow(self, print_title, print_authors, bgcolor):
                 print '<tr class="table%d">' % (bgcolor+1)
-                
                 # Display the award level/place
                 print '<td>'
+                self.PrintLevel(print_title)
+                print '</td>'
+                # Display the award year and link it to the annual award page for that year/award
+                self.PrintYear()
+                if print_title:
+                        print '<td>'
+                        self.PrintTitle()
+                        print '</td>'
+                if print_authors:
+                        print '<td>'
+                        self.PrintAwardAuthors()
+                        print '</td>'
+                # Display the award's category
+                print '<td><a href="http:/%s/award_category.cgi?%s+0">%s</a></td>' % (HTFAKE, self.award_cat_id, self.award_cat_name)
+                print '</tr>'
+
+        def PrintYear(self):
+                print '<td>'
+                year = self.award_year[:4]
+                print '<a href="http:/%s/ay.cgi?%s+%s">%s %s</a>' % (HTFAKE, self.award_type_id, year, year, self.award_type_short_name)
+                print '</td>'
+
+        def PrintLevel(self, print_title):
                 if int(self.award_level) > 70:
-                        level = '<i>%s</i>' % (special_awards[self.award_level])
+                        level = '<i>%s</i>' % self.special_awards[self.award_level]
                 elif self.award_type_poll == 'Yes':
                         if int(self.award_level) == 1:
                                 level = '<b>1</b>'
@@ -290,42 +313,31 @@ class awards:
                         else:
                                 level = 'Nomination'
                 print '<a href="http:/%s/award_details.cgi?%s">%s</a>' % (HTFAKE, self.award_id, level)
-                # For title-based awards given to VTs, display the VT if we are displaying the canonical title
-                if not withtitle:
-                        if self.title_id and main_title_id != self.title_id:
-                                title = SQLloadTitle(self.title_id)
-                                #  and self.title_id == title[TITLE_PUBID]
-                                if title[TITLE_PARENT]:
-                                        parent = SQLloadTitle(title[TITLE_PARENT])
-                                        if parent[TITLE_TITLE] != title[TITLE_TITLE]:
-                                                print '(as %s)' % ISFDBLink('title.cgi', title[TITLE_PUBID], title[TITLE_TITLE])
-                print '</td>'
-                
-                # Display the award year and link it to the annual award page for that year/award
-                print '<td><a href="http:/%s/ay.cgi?%s+%s">%s %s</a></td>' % (HTFAKE, self.award_type_id, self.award_year[:4], self.award_year[:4], self.award_type_short_name)
-                if withtitle:
-                        print '<td>'
-                        # For title-based awards, display and hyperlink the work's title
-                        if self.title_id:
-                                title = SQLloadTitle(self.title_id)
-                                print ISFDBLink('title.cgi', self.title_id, title[TITLE_TITLE])
-                                if title[TITLE_PARENT]:
-                                        parent = SQLloadTitle(title[TITLE_PARENT])
-                                        if title[TITLE_LANGUAGE] and parent[TITLE_LANGUAGE] and title[TITLE_LANGUAGE] != parent[TITLE_LANGUAGE]:
-                                                print ' (translation of %s)' % ISFDBLink('title.cgi', parent[TITLE_PUBID], parent[TITLE_TITLE])
-                                        elif parent[TITLE_TITLE] != title[TITLE_TITLE]:
-                                                print ' (variant of %s)' % ISFDBLink('title.cgi', parent[TITLE_PUBID], parent[TITLE_TITLE])
-                        else:
-                                if self.award_title and (self.award_title != "untitled"):
-                                        print self.award_title
-                        print '</td>'
-                # Display the award's category
-                print '<td><a href="http:/%s/award_category.cgi?%s+0">%s</a></td>' % (HTFAKE, self.award_cat_id, self.award_cat_name)
-                print '</tr>'
+                # For title-based awards given to VTs, display the VT
+                if not print_title and self.title_id:
+                        title = SQLloadTitle(self.title_id)
+                        if title[TITLE_PARENT]:
+                                parent = SQLloadTitle(title[TITLE_PARENT])
+                                if parent[TITLE_TITLE] != title[TITLE_TITLE]:
+                                        print '(as %s)' % ISFDBLink('title.cgi', title[TITLE_PUBID], title[TITLE_TITLE])
+
+        def PrintTitle(self):
+                # For title-based awards, display and hyperlink the work's title
+                if self.title_id:
+                        title = SQLloadTitle(self.title_id)
+                        print ISFDBLink('title.cgi', self.title_id, title[TITLE_TITLE])
+                        if title[TITLE_PARENT]:
+                                parent = SQLloadTitle(title[TITLE_PARENT])
+                                if title[TITLE_LANGUAGE] and parent[TITLE_LANGUAGE] and title[TITLE_LANGUAGE] != parent[TITLE_LANGUAGE]:
+                                        print ' (translation of %s)' % ISFDBLink('title.cgi', parent[TITLE_PUBID], parent[TITLE_TITLE])
+                                elif parent[TITLE_TITLE] != title[TITLE_TITLE]:
+                                        print ' (variant of %s)' % ISFDBLink('title.cgi', parent[TITLE_PUBID], parent[TITLE_TITLE])
+                else:
+                        if self.award_title and (self.award_title != "untitled"):
+                                print self.award_title
 
         def PrintAwardSummary(self):
                 from login import User
-                special_awards = SpecialAwards()
 
                 print '<ul>'
                 print '<li><b>Title: </b>'
@@ -354,7 +366,7 @@ class awards:
 
                 print '<li><b>Award Level: </b> '
                 if int(self.award_level) > 70:
-                        print '<i>%s</i>' % special_awards[self.award_level]
+                        print '<i>%s</i>' % self.special_awards[self.award_level]
                 elif self.award_type_poll == 'Yes':
                                 print "<i>Poll Place</i>: %s" % self.award_level
                 else:
