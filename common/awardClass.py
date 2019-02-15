@@ -289,8 +289,9 @@ class awards:
                         print '<td>'
                         self.PrintAwardAuthors()
                         print '</td>'
-                # Display the award's category
-                print '<td><a href="http:/%s/award_category.cgi?%s+0">%s</a></td>' % (HTFAKE, self.award_cat_id, self.award_cat_name)
+                # Link to all awards for this category for this year
+                year = self.award_year[:4]
+                print '<td><a href="http:/%s/award_category_year.cgi?%s+%s">%s</a></td>' % (HTFAKE, self.award_cat_id, year, self.award_cat_name)
                 print '</tr>'
 
         def PrintYear(self):

@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2013-2018   Ahasuerus
+#     (C) COPYRIGHT 2013-2019   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -127,36 +127,31 @@ class award_cat:
                                         self.used_webpages = 1
 
 
-        def PrintAwardCatSummary(self, win_nom):
-                from awardtypeClass import award_type
+        def PrintAwardCatYear(self, year):
+                self.PrintAwardCatPageHeader()
+                print 'Displaying awards and nominations for this category for %d.' % year
+                print 'You can also <a href="http:/%s/award_category.cgi?%d+1">view all awards and nominations</a> for this category for all years.' % (HTFAKE, self.award_cat_id)
+                years = {}
+                padded_year = '%d-00-00' % year
+                years[padded_year] = SQLloadAwardsForCatYear(self.award_cat_id, year)
+                self.PrintAwardCatTable(years)
+
+        def PrintAwardCatTable(self, years):
                 from awards import PrintOneList
-                from common import PrintWebPages
-                from login import User
-                awardType = award_type()
-                awardType.award_type_id = self.award_cat_type_id
-                awardType.load()
-                print '<ul>'
-                print '<li><b>Award Category: </b> %s' % self.award_cat_name
+        	print '<table>'
+        	for year in sorted(years.keys()):
+                        print '<tr>'
+                        print '<td colspan=3> </td>'
+                        print '</tr>'
+                        print '<tr>'
+                        print '<th colspan=3><a href="http:/%s/award_category_year.cgi?%d+%s">%s</a></th>' % (HTFAKE, self.award_cat_id, year[:4], year[:4])
+                        print '</tr>'
+                        PrintOneList(years[year])
+        	print '</table>'
 
-                #Retrieve this user's data
-                user = User()
-                user.load()
-                printRecordID('Award Category', self.award_cat_id, user.id, user)
-
-                print '<li><b>Award Name: </b> <a href="http:/%s/awardtype.cgi?%s">%s</a>' % (HTFAKE, awardType.award_type_id, awardType.award_type_name)
-                if self.award_cat_order:
-                        print '<li><b>Display Order: </b> %s' % self.award_cat_order
-
-                # Webpages
-                if self.award_cat_webpages:
-                        PrintWebPages(self.award_cat_webpages)
-
-                # Note
-                if self.award_cat_note:
-                        print '<li>'
-                        print FormatNote(self.award_cat_note, 'Note', 'short', self.award_cat_id, 'AwardCat')
-                print '</ul>'
-
+        def PrintAwardCatSummary(self, win_nom):
+                from awards import PrintOneList
+                self.PrintAwardCatPageHeader()
                 years = SQLloadAwardsForCat(self.award_cat_id, win_nom)
                 if win_nom == 0:
                         if years:
@@ -172,13 +167,33 @@ class award_cat:
                         print 'Displaying all wins and nominations for this category. '
                         print 'You can also limit the list to <a href="http:/%s/award_category.cgi?%d+%d">wins</a> in this category.' % (HTFAKE, self.award_cat_id, 0)
                 print '<p>'
-        	print '<table>'
-        	for year in sorted(years.keys()):
-                        print '<tr>'
-                        print '<td colspan=3> </td>'
-                        print '</tr>'
-                        print '<tr>'
-                        print '<td colspan=3><b><a href="http:/%s/ay.cgi?%d+%s">%s</a></b></td>' % (HTFAKE, awardType.award_type_id, year[:4], year[:4])
-                        print '</tr>'
-                        PrintOneList(years[year])
-        	print '</table>'
+                self.PrintAwardCatTable(years)
+
+        def PrintAwardCatPageHeader(self):
+                from awardtypeClass import award_type
+                from common import PrintWebPages
+                from login import User
+                awardType = award_type()
+                awardType.award_type_id = self.award_cat_type_id
+                awardType.load()
+                print '<ul>'
+                print '<li><b>Award Category: </b> %s' % self.award_cat_name
+
+                #Retrieve this user's data
+                user = User()
+                user.load()
+                printRecordID('Award Category', self.award_cat_id, user.id, user)
+
+                print '<li><b>Award Type: </b> %s' % ISFDBLink('awardtype.cgi', awardType.award_type_id, awardType.award_type_name)
+                if self.award_cat_order:
+                        print '<li><b>Display Order: </b> %s' % self.award_cat_order
+
+                # Webpages
+                if self.award_cat_webpages:
+                        PrintWebPages(self.award_cat_webpages)
+
+                # Note
+                if self.award_cat_note:
+                        print '<li>'
+                        print FormatNote(self.award_cat_note, 'Note', 'short', self.award_cat_id, 'AwardCat')
+                print '</ul>'

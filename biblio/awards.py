@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -21,7 +21,7 @@ from library import SpecialAwards
 
 
 def PrintOneList(awards):
-        # Print the awards for one list, which may be for one category or for one year
+        # Print the awards for one list, which may be for one category, one year or one category/year
 	special_awards = SpecialAwards()
 	last_level = 1
 	for level in range(1,100):

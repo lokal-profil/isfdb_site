@@ -448,6 +448,14 @@ def SQLloadAwardsForCat(award_cat_id, win_nom):
 		record = result.fetch_row()
 	return records
 
+def SQLloadAwardsForCatYear(award_cat_id, award_year):
+	query = """select a.* from awards a, award_cats c
+                where a.award_cat_id = %d
+                and a.award_cat_id = c.award_cat_id
+                and YEAR(a.award_year) = %d
+                order by ABS(a.award_level), a.award_title""" % (int(award_cat_id), int(award_year))
+	return StandardQuery(query)
+
 def SQLloadTitlesXBS(series):
 	query = "select * from titles where series_id = '%d';" % (series)
 	db.query(query)
