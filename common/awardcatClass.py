@@ -137,7 +137,8 @@ class award_cat:
                 self.PrintAwardCatTable(years)
 
         def PrintAwardCatTable(self, years):
-                from awards import PrintOneList
+                from awardClass import awardShared
+                shared = awardShared()
         	print '<table>'
         	for year in sorted(years.keys()):
                         print '<tr>'
@@ -146,11 +147,10 @@ class award_cat:
                         print '<tr>'
                         print '<th colspan=3><a href="http:/%s/award_category_year.cgi?%d+%s">%s</a></th>' % (HTFAKE, self.award_cat_id, year[:4], year[:4])
                         print '</tr>'
-                        PrintOneList(years[year])
+                        shared.PrintOneAwardList(years[year])
         	print '</table>'
 
         def PrintAwardCatSummary(self, win_nom):
-                from awards import PrintOneList
                 self.PrintAwardCatPageHeader()
                 years = SQLloadAwardsForCat(self.award_cat_id, win_nom)
                 if win_nom == 0:

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2004-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -16,8 +16,8 @@ import string
 from isfdb import *
 from SQLparsing import *
 from common import *
-from awards import PrintOneList
-from awardtypeClass import *
+from awardClass import awardShared
+from awardtypeClass import award_type
 
 
 def AllAwards(award_Type, year):
@@ -54,8 +54,8 @@ def AllAwards(award_Type, year):
                         print '<td colspan=3><b><a href="http:/%s/award_category.cgi?%s+0">%s</a></b></td>' \
                               % (HTFAKE, awards_for_category[0][AWARD_CATID], awards_for_category[0][AWARD_NOTEID+1])
                         print '</tr>'
-                        PrintOneList(awards_for_category)
-
+                        shared = awardShared()
+                        shared.PrintOneAwardList(awards_for_category)
 	print '</table>'
 
 
