@@ -783,6 +783,8 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
                            'The Locus Index to Science Fiction'),
                 'Miller/Contento': ('http:/%s/title.cgi?1088499' % HTFAKE, 'Miller/Contento',
                                    'Science Fiction, Fantasy, & Weird Fiction Magazine Index (1890-2007) by Stephen T. Miller and William G. Contento'),
+                'MultiS': ('', 'Note that this title belongs to multiple series. Because of software limitations, only one of them currently appears in the Series field.', ),
+                'MultiPubS': ('', 'Note that this publication belongs to multiple publication series. Because of software limitations, only one of them currently appears in the Publication Series field.', ),
                 'Narrator': ('%s', 'Narrated by'),
                 'NDL': ('https://id.ndl.go.jp/bib/%s/eng', 'NDL',
                         'National Diet Library'),
@@ -838,7 +840,10 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
                 regex = re.compile(pattern, flags=re.I)
                 fragments = regex.split(note)
                 if '%s' not in template_link:
-                        substituted_text = '<a href="%s">%s</a>' % (template_link, template_name)
+                        if template_link == '':
+                                substituted_text = template_name
+                        else:
+                                substituted_text = '<a href="%s">%s</a>' % (template_link, template_name)
                         if template_description:
                                 substituted_text = '<abbr class="template" title="%s">%s</abbr>' % (template_description, substituted_text)
                         note = substituted_text.join(fragments)
