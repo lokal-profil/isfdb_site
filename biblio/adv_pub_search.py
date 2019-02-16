@@ -58,6 +58,8 @@ class AdvancedPubSearch(AdvancedSearch):
                 print '<option VALUE="trans_publisher">Transliterated Publisher'
                 print '<option VALUE="pub_series">Publication Series'
                 print '<option VALUE="trans_pub_series">Transliterated Publication Series'
+                print '<option VALUE="title_language">Language of an Included Title (list)'
+                print '<option VALUE="title_language_free">Language of an Included Title (free form)'
                 print '<option VALUE="pub_isbn">ISBN'
                 print '<option VALUE="pub_catalog">Catalog ID'
                 print '<option VALUE="pub_price">Price'

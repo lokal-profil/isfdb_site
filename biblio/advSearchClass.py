@@ -729,8 +729,16 @@ class AdvancedSearchResults:
                 elif field == 'pub_coverart':
                         clause = "titles.title_ttype='COVERART' and authors.author_canonical %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('pub_content'), tableInfo('canonical_author'), tableInfo('titles'), tableInfo('authors')]
-                        joins = ['pubs.pub_id=pub_content.pub_id', 'pub_content.title_id=canonical_author.title_id',
-                                 'canonical_author.title_id=titles.title_id', 'canonical_author.author_id=authors.author_id']
+                        joins = ['pubs.pub_id=pub_content.pub_id',
+                                 'pub_content.title_id=canonical_author.title_id',
+                                 'canonical_author.title_id=titles.title_id',
+                                 'canonical_author.author_id=authors.author_id']
+                elif field in ('title_language', 'title_language_free'):
+                        clause = "languages.lang_name %s" % sql_value
+                        dbases = [tableInfo('pubs'), tableInfo('pub_content'), tableInfo('titles'), tableInfo('languages')]
+                        joins = ['pubs.pub_id=pub_content.pub_id',
+                                 'pub_content.title_id=titles.title_id',
+                                 'languages.lang_id=titles.title_language']
                 elif field == 'pub_note':
                         clause = "notes.note_note %s" % sql_value
                         # dbases = [tableInfo('pubs',['USE INDEX(note_id)']), tableInfo('notes',['IGNORE INDEX (PRIMARY)'])]
