@@ -9,7 +9,6 @@
 #     Date: $Date$
 
 from isfdb import *
-from awards import *
 from SQLparsing import *
 from awardClass import *
 from login import *

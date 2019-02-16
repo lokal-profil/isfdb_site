@@ -14,8 +14,7 @@ include ../INSTALLDIRS
 
 INSTALL = $(INSTALL_CGI)
 
-MYLIBS	= awards.py \
-	  biblio.py \
+MYLIBS	= biblio.py \
 	  common.py \
 	  isfdblib.py \
 	  advSearchClass.py \

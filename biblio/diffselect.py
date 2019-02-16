@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -12,7 +12,6 @@
 
 from SQLparsing import *
 from common import *
-from awards import *
 from library import *
 
 
