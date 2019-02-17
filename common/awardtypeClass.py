@@ -255,4 +255,41 @@ class award_type:
                                 print '</tr>'
                         print '</table>'
                         print '</div>'
-        
+
+        def display_awards_for_year(self, year):
+                from awardClass import awardShared
+                # Display a grid of all years when the award was given
+                self.display_table_grid(year)
+
+                all_awards = SQLloadAwardsForYearType(self.award_type_id, year)
+
+                if not all_awards:
+                        print "<h2>No awards available for %s</h2>" % year
+                        return
+
+                print '<table>'
+                while all_awards:
+                        # Get the name of the category of the first award in the list;
+                        # it will be the category that we will be processing in this iteration of the while loop
+                        name = all_awards[0][AWARD_NOTEID+1]
+                        counter = 0
+                        # Create a list of awards for the current category only
+                        awards_for_category = []
+                        while counter < len(all_awards):
+                                if all_awards[counter][AWARD_NOTEID+1] == name:
+                                        awards_for_category.append(all_awards[counter])
+                                        del all_awards[counter]
+                                else:
+                                        counter += 1
+                        if awards_for_category:
+                                # Print awards for one category
+                                print '<tr>'
+                                print '<td colspan=3> </td>'
+                                print '</tr>'
+                                print '<tr>'
+                                print '<td colspan=3><b><a href="http:/%s/award_category.cgi?%s+0">%s</a></b></td>' \
+                                      % (HTFAKE, awards_for_category[0][AWARD_CATID], awards_for_category[0][AWARD_NOTEID+1])
+                                print '</tr>'
+                                shared = awardShared()
+                                shared.PrintOneAwardList(awards_for_category)
+                print '</table>'

@@ -16,47 +16,7 @@ import string
 from isfdb import *
 from SQLparsing import *
 from common import *
-from awardClass import awardShared
 from awardtypeClass import award_type
-
-
-def AllAwards(award_Type, year):
-        # Display a grid of all years when the award was given
-        award_Type.display_table_grid(year)
-
-	all_awards = SQLloadAwardsForYearType(award_Type.award_type_id, year)
-
-	if len(all_awards) == 0:
-		print "<h2>No awards available for %s</h2>" % (year)
-		return
-
-	print '<table>'
-
-	while all_awards:
-                # Get the name of the category of the first award in the list;
-                # it will be the category that we will be processing in this iteration of the while loop
-		name = all_awards[0][AWARD_NOTEID+1]
-		counter = 0
-		# Create a list of awards for the current category only
-		awards_for_category = []
-		while counter < len(all_awards):
-			if all_awards[counter][AWARD_NOTEID+1] == name:
-				awards_for_category.append(all_awards[counter])
-				del all_awards[counter]
-			else:
-				counter += 1
-		if awards_for_category:
-                        # Print awards for one category
-                        print '<tr>'
-                        print '<td colspan=3> </td>'
-                        print '</tr>'
-                        print '<tr>'
-                        print '<td colspan=3><b><a href="http:/%s/award_category.cgi?%s+0">%s</a></b></td>' \
-                              % (HTFAKE, awards_for_category[0][AWARD_CATID], awards_for_category[0][AWARD_NOTEID+1])
-                        print '</tr>'
-                        shared = awardShared()
-                        shared.PrintOneAwardList(awards_for_category)
-	print '</table>'
 
 
 if __name__ == '__main__':
@@ -89,7 +49,7 @@ if __name__ == '__main__':
         title = '%s %s' % (year, award_Type.award_type_name)
         PrintHeader(title)
 	PrintNavbar('award', 0, award_Type.award_type_id, 'ay.cgi', 0)
-	AllAwards(award_Type, year)
+	award_Type.display_awards_for_year(year)
 	print '<p>'
 	PrintTrailer('award', 0, 0)
 
