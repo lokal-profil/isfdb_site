@@ -938,24 +938,6 @@ def ServerSideRedirect(location):
 	print '</body>'
 	sys.exit(0)
 
-def SpecialAwards():
-        return {
-                '71' : 'No Winner -- Insufficient Votes',
-                '72' : 'Not on ballot -- Insufficient Nominations',
-                '73' : 'No Award Given This Year',
-                '81' : 'Withdrawn',
-                '82' : 'Withdrawn -- Nomination Declined',
-                '83' : 'Withdrawn -- Conflict of Interest',
-                '84' : 'Withdrawn -- Official Publication in a Previous Year',
-                '85' : 'Withdrawn -- Ineligible',
-                '90' : 'Finalists',
-                '91' : 'Made First Ballot',
-                '92' : "Preliminary Nominees",
-                '93' : 'Honorable Mentions',
-                '98' : 'Early Submissions',
-                '99' : 'Nominations Below Cutoff',
-        }
-
 def RecognizedDomains():
         # A dictionary of all "recognized" Web sites and their names
         # The key is the domain name
@@ -1077,7 +1059,7 @@ def AwardLevelDescription(award_level, award_id):
         awardType.award_type_id = award_id
         awardType.load()
         # Retrieve the list of special award levels
-        special_awards = SpecialAwards()
+        special_awards = awardType.SpecialAwards()
         
         if award_level in special_awards:
                 award_level_desc = special_awards[award_level]

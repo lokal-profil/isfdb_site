@@ -22,10 +22,29 @@ from SQLparsing import *
 class awardShared:
         def __init__(self):
                 pass
+
+        @staticmethod
+        def SpecialAwards():
+                return {
+                        '71' : 'No Winner -- Insufficient Votes',
+                        '72' : 'Not on ballot -- Insufficient Nominations',
+                        '73' : 'No Award Given This Year',
+                        '81' : 'Withdrawn',
+                        '82' : 'Withdrawn -- Nomination Declined',
+                        '83' : 'Withdrawn -- Conflict of Interest',
+                        '84' : 'Withdrawn -- Official Publication in a Previous Year',
+                        '85' : 'Withdrawn -- Ineligible',
+                        '90' : 'Finalists',
+                        '91' : 'Made First Ballot',
+                        '92' : "Preliminary Nominees",
+                        '93' : 'Honorable Mentions',
+                        '98' : 'Early Submissions',
+                        '99' : 'Nominations Below Cutoff',
+                }
         
         def PrintOneAwardList(self, awards):
                 # Print all awards for one list of awards. The awards may be for one award type/year, one category or one category/year.
-                special_awards = SpecialAwards()
+                special_awards = self.SpecialAwards()
                 last_level = 1
                 for level in range(1,100):
                         for award in awards:
@@ -103,7 +122,7 @@ class awardShared:
                 print '</tr>'
 
 
-class awards:
+class awards(awardShared):
 	def __init__(self, db):
 		self.db = db
 		self.used_id         = 0
@@ -138,7 +157,7 @@ class awards:
                 self.award_type_poll  = ''
                 self.award_note_id    = ''
                 self.award_note       = ''
-                self.special_awards   = SpecialAwards()
+                self.special_awards   = self.SpecialAwards()
 
                 self.error = ''
 

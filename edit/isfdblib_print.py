@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2010-2018   Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2010-2019   Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -815,6 +815,7 @@ def printAwardCategory(field, label, award_type_id, default_award_cat_id, help):
         print '</tr>'
 
 def printAwardLevel(label, value, poll, help):
+        from awardClass import awardShared
 	print '<tr>'
 	printfieldlabel(label, help)
 	print '<td>'
@@ -846,13 +847,13 @@ def printAwardLevel(label, value, poll, help):
                 print '<br><INPUT TYPE="radio" NAME="LEVEL" ID="LEVEL_SPECIAL" VALUE="SPECIAL" CHECKED tabindex="1">Special:'
         else:
                 print '<br><INPUT TYPE="radio" NAME="LEVEL" ID="LEVEL_SPECIAL" VALUE="SPECIAL" tabindex="1">Special:'
-        special_awards = SpecialAwards()
+        special_levels = awardShared.SpecialAwards()
         print '<select NAME="award_special" tabindex="1">'
-	for special_level in sorted(special_awards.keys()):
+	for special_level in sorted(special_levels.keys()):
 		if special_level == value:
-        		print '<option selected="selected" value="%s">%s</option>' % (special_level, special_awards[special_level])
+        		print '<option selected="selected" value="%s">%s</option>' % (special_level, special_levels[special_level])
         	else:
-                        print '<option value="%s">%s</option>' % (special_level, special_awards[special_level])
+                        print '<option value="%s">%s</option>' % (special_level, special_levels[special_level])
 	print '</select></td>'
 	print '</tr>'
 

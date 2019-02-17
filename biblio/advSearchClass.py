@@ -43,9 +43,10 @@ class AdvancedSearch:
                 print '</select>'
 
         def print_invisible_award_levels(self):
+                from awardClass import awardShared
                 print '<select NAME="AwardLevels" id="AwardLevels" class="nodisplay">'
                 # First display regular award levels in the 1-70 range
-                for award_level in range(1,70):
+                for award_level in range(1,71):
                         if award_level == 1:
                                 displayed_value = '1 (Win)'
                         elif award_level == 9:
@@ -54,7 +55,7 @@ class AdvancedSearch:
                                 displayed_value = '%d' % award_level
                         print '<option VALUE="%s">%s</option>' % (displayed_value, displayed_value)
                 # Next display special award levels in the 71-99 range
-                special_levels = SpecialAwards()
+                special_levels = awardShared.SpecialAwards()
                 for special_level in sorted(special_levels):
                         print '<option VALUE="%s (%s)">%s (%s)</option>' % (special_level, special_levels[special_level], special_level, special_levels[special_level])
                 print '</select>'
