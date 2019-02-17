@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2013-2018   Ahasuerus
+#     (C) COPYRIGHT 2013-2019   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -12,13 +12,14 @@ import cgi
 import sys
 import os
 from SQLparsing import SQLGetAwardTypeById, SQLgetNotes, SQLloadAwardTypeWebpages
+from awardClass import awardShared
 from isfdb import *
 from library import *
 from xml.dom import minidom
 from xml.dom import Node
 
 
-class award_type:
+class award_type(awardShared):
 	def __init__(self):
                 self.used_id = 0
                 self.used_code = 0
@@ -257,7 +258,6 @@ class award_type:
                         print '</div>'
 
         def display_awards_for_year(self, year):
-                from awardClass import awardShared
                 # Display a grid of all years when the award was given
                 self.display_table_grid(year)
 
@@ -290,6 +290,5 @@ class award_type:
                                 print '<td colspan=3><b><a href="http:/%s/award_category.cgi?%s+0">%s</a></b></td>' \
                                       % (HTFAKE, awards_for_category[0][AWARD_CATID], awards_for_category[0][AWARD_NOTEID+1])
                                 print '</tr>'
-                                shared = awardShared()
-                                shared.PrintOneAwardList(awards_for_category)
+                                self.PrintOneAwardList(awards_for_category)
                 print '</table>'

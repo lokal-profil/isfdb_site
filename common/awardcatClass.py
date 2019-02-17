@@ -16,9 +16,10 @@ from isfdb import *
 from library import *
 from xml.dom import minidom
 from xml.dom import Node
+from awardClass import awardShared
 
 
-class award_cat:
+class award_cat(awardShared):
 	def __init__(self):
                 self.used_cat_id = 0
                 self.used_cat_name = 0
@@ -137,8 +138,6 @@ class award_cat:
                 self.PrintAwardCatTable(years)
 
         def PrintAwardCatTable(self, years):
-                from awardClass import awardShared
-                shared = awardShared()
         	print '<table>'
         	for year in sorted(years.keys()):
                         print '<tr>'
@@ -147,7 +146,7 @@ class award_cat:
                         print '<tr>'
                         print '<th colspan=3><a href="http:/%s/award_category_year.cgi?%d+%s">%s</a></th>' % (HTFAKE, self.award_cat_id, year[:4], year[:4])
                         print '</tr>'
-                        shared.PrintOneAwardList(years[year])
+                        self.PrintOneAwardList(years[year])
         	print '</table>'
 
         def PrintAwardCatSummary(self, win_nom):
