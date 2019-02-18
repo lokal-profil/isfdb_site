@@ -62,6 +62,7 @@ class AdvancedTitleSearch(AdvancedSearch):
                 print '<option VALUE="title_ttype">Title Type'
                 print '<option VALUE="title_note">Notes'
                 print '<option VALUE="title_synopsis">Synopsis'
+                print '<option VALUE="single_vote">Single User Vote'
                 print '<option VALUE="series">Series'
                 print '<option VALUE="title_language">Title Language (list)'
                 print '<option VALUE="title_language_free">Title Language (free form)'

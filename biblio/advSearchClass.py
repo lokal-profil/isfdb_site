@@ -610,6 +610,10 @@ class AdvancedSearchResults:
                         clause = "n2.note_note %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('notes n2')]
                         joins = ['n2.note_id=titles.title_synopsis']
+                elif field == 'single_vote':
+                        clause = "votes.rating %s" % sql_value
+                        dbases = [tableInfo('titles'), tableInfo('votes')]
+                        joins = ['votes.title_id=titles.title_id']
                 elif field == 'title_webpage':
                         clause = "webpages.url %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('webpages')]
