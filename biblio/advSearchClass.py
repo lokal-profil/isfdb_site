@@ -256,7 +256,8 @@ class AdvancedSearchResults:
                                                             'award_cat_order'):
                         self.unknown_sort()
                 elif self.search_type == 'Award' and self.sort not in ('award_year',
-                                                            'award_level'):
+                                                            'award_level',
+                                                            'title_ttype'):
                         self.unknown_sort()
                 if self.sort == 'pub_pages':
                         self.sort = 'CAST(pub_pages as SIGNED)'
@@ -870,6 +871,11 @@ class AdvancedSearchResults:
                         clause = 'SUBSTRING(awards.award_year,1,4) %s' % sql_value
                 elif field == 'award_level':
                         clause = 'awards.award_level %s' % sql_value
+                elif field == 'title_ttype':
+                        clause = 'titles.title_ttype %s' % sql_value
+                        dbases = [tableInfo('awards'), tableInfo('titles'), tableInfo('title_awards')]
+                        joins = ['awards.award_id = title_awards.award_id',
+                                 'title_awards.title_id=titles.title_id']
                 elif field == 'award_cat_name':
                         clause = 'award_cats.award_cat_name %s' % sql_value
                         dbases = [tableInfo('award_cats'), tableInfo('awards')]
