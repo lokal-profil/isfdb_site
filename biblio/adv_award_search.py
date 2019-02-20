@@ -43,6 +43,7 @@ class AdvancedAwardSearch(AdvancedSearch):
                 print '<select NAME="USE_%d" id="award_%d">' % (number, number)
                 print '<option VALUE="award_year">Award Year'
                 print '<option VALUE="award_level">Award Level'
+                print '<option VALUE="title_title">Title (for title-based awards)'
                 print '<option VALUE="title_ttype">Title Type'
                 print '<option VALUE="award_cat_name">Award Category'
                 print '<option VALUE="award_type_short_name">Award Type Short Name'
@@ -62,6 +63,7 @@ class AdvancedAwardSearch(AdvancedSearch):
                 print '<select NAME="ORDERBY">'
                 print '<option SELECTED VALUE="award_year">Award Year'
                 print '<option VALUE="award_level">Award Level'
+                print '<option VALUE="title_title">Title'
                 print '<option VALUE="title_ttype">Title Type'
                 print '</select>'
 
