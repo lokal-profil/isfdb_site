@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2014-2018 Ahasuerus
+#     (C) COPYRIGHT 2014-2019 Ahasuerus
 #     ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -59,6 +59,14 @@ def HelpSeries():
 
         text = 'The name of this series.'
         help['Name'] = [text, '']
+
+        text = 'If the name of this series is spelled using a non-Latin alphabet/script,'
+        text += ' enter the Romanized form of the name in this field.'
+        text += ' If there is more than one possible Romanization, click the +'
+        text += ' button, which will create a new input field, and enter the other spellings of the name.'
+        text += ' Follow this link for more details.'
+        link = 'http://%s/index.php/Help:Screen:EditSeries' % (WIKILOC)
+        help['Transliterated Name 1'] = [text, link]
 
         text = 'The name of the series that contains this series. You can nest series as deeply as necessary.'
         help['Parent'] = [text, '']

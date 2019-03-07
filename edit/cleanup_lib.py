@@ -267,6 +267,7 @@ def reportsDict():
         reports[254] = ("Publications with direct NooSFere links in Notes")
         reports[255] = ("Publications with direct NILF links in Notes")
         reports[256] = ("Publications with direct Fantascienza links in Notes")
+        reports[257] = ("Series with non-Latin Characters in the Series Name without a Transliterated Name")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -300,7 +301,8 @@ def reportsDict():
                                               146, 147, 148, 149, 150, 151, 152, 153, 154,
                                               155, 156, 157, 158, 159, 160, 161, 162, 163,
                                               164, 165, 166, 167, 169, 170, 171, 172, 173,
-                                              174, 175, 176, 177, 178, 179, 180, 181, 182)), )
+                                              174, 175, 176, 177, 178, 179, 180, 181, 182,
+                                              257)), )
         sections.append(('Wiki Cleanup', (101, 102, 103, 104, 105, 106, 107, 108, 109,
                                           110, 111, 112, 113, 114, 115, 116, 117, 118,
                                           119, 120, 200, 201, 202, 203, 204, 205, 206, 207)), )
@@ -326,6 +328,6 @@ def reportsDict():
                          221, 222, 223, 224, 225, 226, 227, 228, 229, 230,
                          232, 233, 234, 235, 236, 237, 238, 239, 240, 241,
                          242, 243, 244, 245, 246, 247, 248, 249, 250, 251,
-                         252, 253, 254, 255, 256, 9999)
+                         252, 253, 254, 255, 256, 257, 9999)
         
         return (reports, sections, non_moderator)

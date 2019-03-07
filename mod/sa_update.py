@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2015   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -63,6 +63,22 @@ if __name__ == '__main__':
         	Record = GetElementValue(merge, 'Record')
 
 		UpdateColumn(merge, 'Name', 'series_title', Record)
+
+		value = GetElementValue(merge, 'SeriesTransNames')
+        	if value:
+			# Delete the old transliterated names
+			delete = "delete from trans_series where series_id=%d" % int(Record)
+			print "<li> ", delete
+        		db.query(delete)
+
+			# Insert the new transliterated names
+			trans_names = doc.getElementsByTagName('SeriesTransName')
+			for trans_name in trans_names:
+                                name = XMLunescape(trans_name.firstChild.data.encode('iso-8859-1'))
+                                update = """insert into trans_series(series_id, trans_series_name)
+                                            values(%d, '%s')""" % (int(Record), db.escape_string(name))
+                                print "<li> ", update
+                                db.query(update)
 
 		parent = GetElementValue(merge, 'Parent')
 		#If the Parent element is present and the value is NULL, set the MySQL value to NULL

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -37,7 +37,7 @@ def printSeries(seriesData, seriesTitles, seriesTree, parentAuthors,
         output = '<li>'
 	if ser.series_parentposition > 0:
 		output += '%s ' % ser.series_parentposition
-        output += '<a href="http:/%s/pe.cgi?%s" dir="ltr">%s</a>' % (HTFAKE, ser.series_id, ser.series_name)
+        output += ISFDBLink('pe.cgi', ser.series_id, ser.series_name)
         print output
         magazine_found = 0
         for ser_id in seriesTitles:

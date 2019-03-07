@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -82,7 +82,7 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
         if title[TITLE_SERIES]:
                 output += " &#8226; "
                 seriesname = SQLgetSeriesName(title[TITLE_SERIES])
-                output += '[<a href="http:/%s/pe.cgi?%d" dir="ltr">%s</a>' % (HTFAKE, title[TITLE_SERIES], seriesname)
+                output += '[%s' % ISFDBLink('pe.cgi', title[TITLE_SERIES], seriesname)
                 if title[TITLE_SERIESNUM] is not None:
                         output += " &#8226; %d" % title[TITLE_SERIESNUM]
                         if title[TITLE_SERIESNUM_2] is not None:
@@ -95,8 +95,7 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
                                 if parent_title[TITLE_SERIES]:
                                         seriesname = SQLgetSeriesName(parent_title[TITLE_SERIES])
                                         if seriesname:
-                                                output += " &#8226; "
-                                                output += '[<a href="http:/%s/pe.cgi?%d" dir="ltr">%s</a>' % (HTFAKE, parent_title[TITLE_SERIES], seriesname)
+                                                output += ' &#8226; [%s' % ISFDBLink('pe.cgi', parent_title[TITLE_SERIES], seriesname)
                                                 if parent_title[TITLE_SERIESNUM] is not None:
                                                         output += " &#8226; %d" % parent_title[TITLE_SERIESNUM]
                                                         if parent_title[TITLE_SERIESNUM_2] is not None:
@@ -208,7 +207,7 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
                         #    or if they have different language codes
                         #    or it's an INTERIORART/COVERART variant
                         if display_parent and ((parent_title[TITLE_TITLE] != title[TITLE_TITLE]) or translation or interior_cover_vt):
-                                output += ' (%s <i>%s</i>' % (aka, ISFDBLink('title.cgi', parent_title[TITLE_PUBID], parent_title[TITLE_TITLE]))
+                                output += ' (%s %s' % (aka, ISFDBLink('title.cgi', parent_title[TITLE_PUBID], '<i>%s</i>' % parent_title[TITLE_TITLE]))
                                 if parent_title[TITLE_YEAR][:4] != title[TITLE_YEAR][:4]:
                                         output += " %s" % (convertYear(parent_title[TITLE_YEAR][:4]))
                                 output += ")"

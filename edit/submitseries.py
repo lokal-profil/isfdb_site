@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2015   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -93,6 +93,10 @@ if __name__ == '__main__':
 	(changes, update) = CheckSeriesField(new.used_name, old.used_name, new.series_name, old.series_name, 'Name', 0)
 	if changes:
                 update_string += update
+
+	(changes, update) = CheckSeriesField(new.used_trans_names, old.used_trans_names, new.series_trans_names, old.series_trans_names, 'SeriesTransName', 1)
+	if changes:
+		update_string += update
 
 	(changes, update) = CheckSeriesField(new.used_parent, old.used_parent, new.series_parent, old.series_parent, 'Parent', 0)
 	if changes:

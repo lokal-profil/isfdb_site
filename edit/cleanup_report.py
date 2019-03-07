@@ -702,7 +702,7 @@ def function17():
                         else:
                                 print '<tr align=left class="table2">'
                         print '<td>%d</td>' % count
-                        print '<td><a href="http:/%s/pe.cgi?%s">%s</a></td>' % (HTFAKE, series_id, series_name)
+                        print '<td>%s</td>' % ISFDBLink('pe.cgi', series_id, series_name)
                         display_series_num = str(series_number)
                         if series_number_2 is not None:
                                 display_series_num += '.%s' % series_number_2
@@ -3661,7 +3661,7 @@ def function90():
                         record1 = result1.fetch_row()
                         parent_series_id = record1[0][0]
                         parent_series_name = record1[0][1]
-                        print '<td><a href="http:/%s/pe.cgi?%s">%s</a></td>' % (HTFAKE, parent_series_id, parent_series_name)
+                        print '<td>%s</td>' % ISFDBLink('pe.cgi', parent_series_id, parent_series_name)
                         
                         # Retrieve the sub-series position
                         query2 = """select series_parent_position from series where
@@ -3683,7 +3683,7 @@ def function90():
                         while record3:
                                 subseries_id = record3[0][0]
                                 subseries_name = record3[0][1]
-                                print '<a href="http:/%s/pe.cgi?%s">%s</a><br>' % (HTFAKE, subseries_id, subseries_name)
+                                print '%s<br>' % ISFDBLink('pe.cgi', subseries_id, subseries_name)
                                 record3 = result3.fetch_row()
                         print '</td>'
                         print '</tr>'
@@ -6245,6 +6245,36 @@ def function255():
 
 def function256():
         ids_in_notes(256, '%fantascienza.com/catalogo%', 'direct Fantascienza links')
+
+def function257():
+        query = """select s.series_id, s.series_title
+                 from series s, cleanup c
+                 where s.series_title regexp '&#'
+                 and s.series_id = c.record_id
+                 and c.report_type = 257
+                 and not exists
+                  (select 1 from trans_series ts
+                  where ts.series_id = s.series_id)
+                 order by s.series_title"""
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		bgcolor = 1
+		count = 1
+		PrintTableColumns(('', 'Series Name',))
+		while record:
+                        series_id = record[0][0]
+                        series_name = record[0][1]
+			PrintSeriesRecord(series_id, series_name, bgcolor, count)
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print '</table>'
+	else:
+		print '<h2>No Series with non-Latin Characters in the Series Name without a Transliterated Name found</h2>'
 
 def empty_containers_grid(report_id):
         anchor = '<a href="http:/%s/edit/empty_containers.cgi' % HTFAKE

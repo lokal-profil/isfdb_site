@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -66,6 +66,9 @@ if __name__ == '__main__':
 
         # Display the series name
 	printfield("Name", "series_name", help, series[SERIES_NAME])
+
+        trans_series_names = SQLloadTransSeriesNames(series[SERIES_PUBID])
+        printmultiple(trans_series_names, "Transliterated Name", "trans_series_names", help)
 
         # Display the name of this series' parent (if one exists)
 	parent_series_name = ''

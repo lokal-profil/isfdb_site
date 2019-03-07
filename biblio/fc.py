@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -479,7 +479,7 @@ class PublicationMonth:
                         series_id = title[TITLE_SERIES]
                         if series_id:
                                 series = self.series[series_id]
-                                output += ' &#8226; <a href="http:/%s/pe.cgi?%s"><i>%s</i></a>' % (HTFAKE, series[SERIES_PUBID], series[SERIES_NAME])
+                                output += ' &#8226; %s' % ISFDBLink('pe.cgi', series[SERIES_PUBID], '<i>%s</i>' % series[SERIES_NAME])
                                 if title[TITLE_SERIESNUM] is not None:
                                         output += ' #%s' % (title[TITLE_SERIESNUM])
                                         if title[TITLE_SERIESNUM_2] is not None:

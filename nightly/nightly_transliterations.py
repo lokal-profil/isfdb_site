@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -272,6 +272,14 @@ def nightly_transliterations():
         #   Report 189: Authors with Non-Latin Directory Entries
         query = "select author_id from authors where author_lastname regexp '&#'"
         standardReport(query, 189)
+
+        #   Report 257: Series with non-Latin Characters in the Series Name without a Transliterated Name
+        query = """select s.series_id from series s
+                 where s.series_title regexp '&#'
+                 and not exists
+                 (select 1 from trans_series ts
+                 where ts.series_id = s.series_id)"""
+        standardReport(query, 257)
 
 def nonLatiTitlesWithLatinChars():
         #   Reports 138-143: Non-Latin titles with Latin characters

@@ -501,6 +501,7 @@ def ISFDBLink(script, record_id, displayed_value, brackets=False, argument='', t
         if script == 'ea.cgi' and displayed_value == 'uncredited':
                 return 'uncredited'
         trans_functions = {'ea.cgi': SQLloadTransAuthorNames,
+                           'pe.cgi': SQLloadTransSeriesNames,
                            'pl.cgi': SQLloadTransPubTitles,
                            'title.cgi': SQLloadTransTitles,
                            'publisher.cgi': SQLloadTransPublisherNames,

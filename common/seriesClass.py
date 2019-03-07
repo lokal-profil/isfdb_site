@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff, Bill Longley nad Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley nad Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -26,6 +26,7 @@ class series:
 		self.db = db
 		self.used_id         = 0
 		self.used_name       = 0
+		self.used_trans_names = 0
 		self.used_parent_id  = 0
 		self.used_parent     = 0
 		self.used_type       = 0
@@ -36,6 +37,7 @@ class series:
 
 		self.series_id         = ''
 		self.series_name       = ''
+		self.series_trans_names = []
 		self.series_parent_id  = ''
 		self.series_parent     = ''
 		self.series_type       = ''
@@ -63,6 +65,12 @@ class series:
 			if record[SERIES_NAME]:
 				self.series_name = record[SERIES_NAME]
 				self.used_name = 1
+
+                        res2 = SQLloadTransSeriesNames(record[PUB_SERIES_ID])
+                        if res2:
+                                self.series_trans_names = res2
+                                self.used_trans_names = 1
+
 			if record[SERIES_PARENT]:
 				self.series_parent_id = record[SERIES_PARENT]
 				self.used_parent_id = 1
@@ -116,7 +124,16 @@ class series:
 		except:
                         self.error = "Series name is required"
                         return
-                
+
+      		for key in self.form:
+                        if 'trans_series_names' in key:
+                                value = XMLescape(self.form[key].value)
+                                if value:
+                                        if value in self.series_trans_names:
+                                                continue
+                                        self.series_trans_names.append(value)
+                                        self.used_trans_names = 1
+
 		if self.form.has_key('series_parent'):
 			self.series_parent = XMLescape(self.form['series_parent'].value)
 			if self.series_parent:
@@ -168,10 +185,11 @@ class series:
                         displayRecordList('series', other_series)
                         print '</h3>'
                 print '<ul>'
-                print '<li><b>Series: </b>%s' % self.series_name
+                trans_names = SQLloadTransSeriesNames(self.series_id)
+                print '<li><b>Series: </b>%s' % ISFDBMouseover(trans_names, self.series_name, '')
                 printRecordID('Series', self.series_id, user.id)
                 if self.series_parent:
-                        print '<li><b>Sub-series of:</b> <a href="http:/%s/pe.cgi?%s">%s</a>' % (HTFAKE, self.series_parent_id, self.series_parent)
+                        print '<li><b>Sub-series of:</b> %s' % ISFDBLink("pe.cgi", self.series_parent_id, self.series_parent)
                         if display_type == 'grid':
                                 print '<a href=http:/%s/seriesgrid.cgi?%s>(View Issue Grid)</a>' % (HTFAKE, self.series_parent_id)
 
@@ -222,7 +240,7 @@ class series:
                                 print_string += '<a href="http:/%s/tag.cgi?%d">%s</a> (%d)' % (HTFAKE, tag[0], tag[1], tag[2])
                                 count += 1
                         print print_string
-                print '<p>[<a href="http:/%s/pe.cgi?%d"><b>Back to the series page for %s</b></a>]' % (HTFAKE, self.series_id, self.series_name)
+                print '<p>%s' % ISFDBLink("pe.cgi", self.series_id, '<b>Back to the series page for %s</b>' % self.series_name)
 
         def BuildTreeData(self, user):
                 from common import buildVariants, buildVTAuthors, builtTranslitTitles, builtTranslitAuthors

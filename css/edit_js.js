@@ -1,5 +1,5 @@
 /*     Version: $Revision$
-      (C) COPYRIGHT 2015-2018   Ahasuerus
+      (C) COPYRIGHT 2015-2019   Ahasuerus
          ALL RIGHTS RESERVED
       Date: $Date$ */
 
@@ -108,6 +108,12 @@ function createOnclick(title)	{
 	if (document.getElementById('trans_pub_series_names.addsign')) {
 		document.getElementById('trans_pub_series_names.addsign').onclick = function(event){
 			AddMultipleField('Transliterated Name', 'trans_pub_series_names');
+		};
+	}
+
+	if (document.getElementById('trans_series_names.addsign')) {
+		document.getElementById('trans_series_names.addsign').onclick = function(event){
+			AddMultipleField('Transliterated Name', 'trans_series_names');
 		};
 	}
 

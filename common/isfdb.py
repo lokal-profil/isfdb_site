@@ -473,6 +473,7 @@ SUBMISSION_DISPLAY = {
     'PubType': 'Pub Type',
     'Seriesnum': 'Series Number',
     'SeriesNum': 'Series Number',
+    'SeriesTransNames': 'Transliterated Name',
     'ShortName': 'Short Name',
     'Storylen': 'Length',
     'TitleNote': 'Title Note',

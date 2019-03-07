@@ -74,41 +74,6 @@ def DoError(error, search_value, search_type):
 
 
 ##########################################################################################
-# SERIES SECTION
-##########################################################################################
-
-def PrintSeriesResults(results):
-	print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-	print "<tr align=left bgcolor=\"#d6d6d6\">"
-	print "<td><b>Series</b></td>"
-	print "<td><b>Parent Series</b></td>"
- 	print "</tr>"
-
-	bgcolor = 1
-	counter = 0
-	for result in results:
-		PrintSeriesRecord(result, bgcolor)
-		bgcolor ^= 1
-		counter += 1
-		if counter > 299:
-			break
-	print "</table>"
-
-def PrintSeriesRecord(record, bgcolor):
-        if bgcolor:
-                print '<tr align=left class="table1">'
-        else:
-                print '<tr align=left class="table2">'
-
-        print "<td><a href=\"http:/"+HTFAKE+"/pe.cgi?%s\">%s</a></td>" % (record[0][SERIES_PUBID], record[0][SERIES_NAME])
-	if record[0][SERIES_PARENT]:
-		parent = SQLgetSeriesName( int(record[0][SERIES_PARENT]))
-        	print "<td><a href=\"http:/"+HTFAKE+"/pe.cgi?%s\">%s</a></td>" % (record[0][SERIES_PARENT], parent)
-	else:
-		print "<td>-</td>"
-        print "</tr>"
-
-##########################################################################################
 # MAGAZINE SECTION
 ##########################################################################################
 
@@ -144,21 +109,21 @@ def PrintMagazineRecord(title, series_id, parent_id, series_title, bgcolor, arg)
         else:
                 print '<tr align=left class="table2">'
 
-        print "<td>"
-        print '<a href="http:/%s/pe.cgi?%s">%s</a>' % (HTFAKE, series_id, title)
+        print '<td>'
+        print ISFDBLink('pe.cgi', series_id, title)
         if title != series_title:
                 print '*'
         print '<a href="http:/%s/seriesgrid.cgi?%s"> (issue grid)</a>' % (HTFAKE, series_id)
-        print "</td>"
+        print '</td>'
 	if parent_id:
 		parent_title = SQLgetSeriesName(int(parent_id))
-        	print "<td>"
-        	print '<a href="http:/%s/pe.cgi?%s">%s</a>' % (HTFAKE, parent_id, parent_title)
+        	print '<td>'
+        	print ISFDBLink('pe.cgi', parent_id, parent_title)
                 print '<a href="http:/%s/seriesgrid.cgi?%s"> (issue grid)</a>' % (HTFAKE, parent_id)
-        	print "</td>"
+        	print '</td>'
 	else:
-		print "<td>-</td>"
-        print "</tr>"
+		print '<td>-</td>'
+        print '</tr>'
 
 ##########################################################################################
 # PUBLISHER SECTION
@@ -386,13 +351,13 @@ if __name__ == '__main__':
 	elif type[:6] == 'Series':
 		results = SQLFindSeries(arg)
         	if len(results) == 1:
-                        PrintReplaceScript("pe", str(results[0][0][SERIES_PUBID]))
+                        PrintReplaceScript("pe", str(results[0][SERIES_PUBID]))
 		else:
                         PrintHeader("ISFDB Series search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
                         PrintSummary(arg, len(results), 300)
 			if results:
-                                PrintSeriesResults(results)
+                                PrintSeriesTable(results, 300)
                         else:
                                 PrintGoogleSearch(arg, 'series')
 

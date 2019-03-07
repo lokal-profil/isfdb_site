@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2014   Ahasuerus
+#     (C) COPYRIGHT 2009-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -81,10 +81,13 @@ if __name__ == '__main__':
         	print "<h1>SQL Updates:</h1>"
         	print "<hr>"
         	print "<ul>"
-		update = "delete from series where series_id=%d" % (int(Record))
+		update = "delete from series where series_id=%d" % int(Record)
 		print "<li> ", update
 		db.query(update)
-		update = "delete from webpages where series_id=%d" % (int(Record))
+                delete = 'delete from trans_series where series_id=%d' % int(Record)
+                print "<li> ", delete
+                db.query(delete)
+		update = "delete from webpages where series_id=%d" % int(Record)
 		print "<li> ", update
 		db.query(update)
 		if seriesRecord[SERIES_NOTE]:

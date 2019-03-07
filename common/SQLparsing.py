@@ -1027,9 +1027,16 @@ def SQLFindMagazine(arg, directory = 0):
         # First retrieve matching series names
 	query = """select distinct s.series_id, s.series_title, s.series_parent
                 from series s, titles t
-                where t.series_id = s.series_id and
-                t.title_ttype = 'EDITOR' and
-                s.series_title like '%s'""" % target
+                where t.series_id = s.series_id
+                and t.title_ttype = 'EDITOR'
+                and s.series_title like '%s'
+                UNION
+                select distinct s.series_id, s.series_title, s.series_parent
+                from series s, titles t, trans_series ts
+                where t.series_id = s.series_id
+                and t.title_ttype = 'EDITOR'
+                and s.series_id = ts.series_id
+                and ts.trans_series_name like '%s'""" % (target, target)
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()
@@ -1085,12 +1092,18 @@ def SQLFindMagazine(arg, directory = 0):
 def SQLFindSeries(target):
 	results = []
 	target = db.escape_string('%'+target+'%')
-	query = "select * from series where series_title like '%s' order by series_title" % (target)
+	query = """select distinct s.* from series s
+                   where s.series_title like '%s'
+                   union
+                   select distinct s.* from series s, trans_series ts
+                   where ts.trans_series_name like '%s'
+                   and ts.series_id = s.series_id
+                   order by series_title""" % (target, target)
 	db.query(query)
 	result = db.store_result()
 	title = result.fetch_row()
 	while title:
-		results.append(title)
+		results.append(title[0])
 		title = result.fetch_row()
 	return results
 
@@ -1606,7 +1619,6 @@ def SQLLoadTransPubSeriesList(pub_series_ids):
                   record = result.fetch_row()
         return results
 
-
 def SQLloadTransPublisherNames(publisher_id):
 	query = "select trans_publisher_name from trans_publisher where publisher_id=%d" % int(publisher_id)
 	db.query(query)
@@ -1639,6 +1651,17 @@ def SQLLoadTransPublisherList(publisher_ids):
                   results[publisher_id].append(trans_publisher_name)
                   record = result.fetch_row()
         return results
+
+def SQLloadTransSeriesNames(series_id):
+	query = "select trans_series_name from trans_series where series_id=%d" % int(series_id)
+	db.query(query)
+	result = db.store_result()
+	row = result.fetch_row()
+	results = []
+	while row:
+		results.append(row[0][0])
+		row = result.fetch_row()
+	return results
 
 def SQLloadTransTitles(title_id):
 	query = "select trans_title_title from trans_titles where title_id=%d" % int(title_id)

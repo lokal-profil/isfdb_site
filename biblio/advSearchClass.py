@@ -908,6 +908,10 @@ class AdvancedSearchResults:
                 dbases = [tableInfo('series')]
                 if field == 'series_title':
                         clause = 'series.series_title %s' % sql_value
+                elif field == 'trans_series_name':
+                        clause = 'trans_series.trans_series_name %s' % sql_value
+                        dbases = [tableInfo('series'), tableInfo('trans_series')]
+                        joins = ['trans_series.series_id=series.series_id']
                 elif field == 'parent_series_name':
                         clause = 's2.series_title %s' % sql_value
                         dbases = [tableInfo('series'), tableInfo('series s2')]

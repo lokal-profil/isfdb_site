@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2010-2018   Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2010-2019   Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -117,7 +117,7 @@ class SeriesGrid:
                 print '<br>'
                 print '<b>Legend:</b> Unverified issues are gold, secondary verifications are light blue.'
 
-                print '<p class="textindent">%s &#8226; ' % ISFDBLink("pe.cgi", self.seriesId, "View this magazine as a series")
+                print '<p class="textindent"> <a href="http:/%s/pe.cgi?%d">View this magazine as a series</a> &#8226; ' % (HTFAKE, self.seriesId)
 
                 if self.displayOrder:
                         print ISFDBLink("seriesgrid.cgi", "%s+0" % self.seriesId, "Show earliest year first")

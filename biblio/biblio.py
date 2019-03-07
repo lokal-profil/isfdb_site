@@ -463,7 +463,7 @@ class Bibliography:
                         position = ''
                 else:
                         position = int(series_data[SERIES_PARENT_POSITION])
-                print '<li> %s <a href="http:/%s/pe.cgi?%s">%s</a>' % (position, HTFAKE, series_id, series_data[SERIES_NAME])
+                print '<li> %s %s' % (position, ISFDBLink('pe.cgi', series_id, series_data[SERIES_NAME]))
                 print '<ul>'
                 counter = 0
                 delete_list = []

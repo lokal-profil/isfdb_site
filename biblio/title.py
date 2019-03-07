@@ -288,8 +288,8 @@ if __name__ == '__main__':
 
 	if title[TITLE_SERIES]:
 		series = SQLget1Series(title[TITLE_SERIES])
-		print "<br>"
-		print '<b>Series:</b> <a href="http:/%s/pe.cgi?%s" dir="ltr">%s</a>' % (HTFAKE, series[SERIES_PUBID], series[SERIES_NAME])
+		print '<br>'
+		print '<b>Series:</b> %s' % ISFDBLink('pe.cgi', series[SERIES_PUBID], series[SERIES_NAME])
 		if title[TITLE_SERIESNUM] is not None:
 			print "<br>"
 			output = '<b>Series Number:</b> %d' % title[TITLE_SERIESNUM]
@@ -304,8 +304,8 @@ if __name__ == '__main__':
 		else:
 			if parent_title[TITLE_SERIES]:
 				series = SQLget1Series(parent_title[TITLE_SERIES])
-				print "<br>"
-				print '<b>Series:</b> <a href="http:/%s/pe.cgi?%s" dir="ltr">%s</a>' % (HTFAKE, series[SERIES_PUBID], series[SERIES_NAME])
+				print '<br>'
+				print '<b>Series:</b> %s' % ISFDBLink('pe.cgi', series[SERIES_PUBID], series[SERIES_NAME])
 			if parent_title[TITLE_SERIESNUM] is not None:
 				print "<br>"
                                 output = '<b>Series Number:</b> %d' % parent_title[TITLE_SERIESNUM]

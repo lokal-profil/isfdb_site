@@ -829,6 +829,8 @@ def DisplaySeriesChanges(submission_id):
                         InvalidSubmission(submission_id, 'Series no longer exists')
 
                 PrintField2XML('Name',            merge, current.used_name,            current.series_name)
+                PrintMultField('SeriesTransNames','SeriesTransName',   '<br>', doc, merge,
+                               current.used_trans_names,   current.series_trans_names)
                 PrintField2XML('Parent',          merge, current.used_parent,          current.series_parent)
                 PrintField2XML('Parentposition',  merge, current.used_parentposition,  current.series_parentposition)
                 PrintField2XML('Note',            merge, current.used_note,            current.series_note)
@@ -1246,7 +1248,11 @@ def DisplaySeriesDelete(submission_id):
 		current.load(int(Record))
 
 		PrintField1('Series',       current.used_name,        current.series_name)
+		PrintMultField1('SeriesTransNames', 'SeriesTransName', '<br>', current.used_trans_names, current.series_trans_names)
 		PrintField1('Parent',       current.used_parent,      current.series_parent)
+                PrintField1('Parent Position',  current.used_parentposition,  current.series_parentposition)
+		PrintMultField1('Webpages', 'Web page', '<br>', current.used_webpages, current.series_webpages)
+                PrintField1('Note',         current.used_note,        current.series_note)
 
 		print '</tr>'
 

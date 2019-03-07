@@ -41,6 +41,7 @@ class AdvancedSeriesSearch(AdvancedSearch):
                 print '<p id="series_selectors_%d">' % number
                 print '<select NAME="USE_%d" id="series_%d">' % (number, number)
                 print '<option VALUE="series_title">Series Name'
+                print '<option VALUE="trans_series_name">Transliterated Series Name'
                 print '<option VALUE="parent_series_name">Parent Series Name'
                 print '<option VALUE="parent_series_position">Position within Parent Series'
                 print '<option VALUE="series_note">Notes'
