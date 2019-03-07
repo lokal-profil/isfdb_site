@@ -268,6 +268,12 @@ def reportsDict():
         reports[255] = ("Publications with direct NILF links in Notes")
         reports[256] = ("Publications with direct Fantascienza links in Notes")
         reports[257] = ("Series with non-Latin Characters in the Series Name without a Transliterated Name")
+        reports[258] = ("Series with Bulgarian titles and without Unicode characters in the Series Name")
+        reports[259] = ("Series with Chinese titles and without Unicode characters in the Series Name")
+        reports[260] = ("Series with Greek titles and without Unicode characters in the Series Name")
+        reports[261] = ("Series with Japanese titles and without Unicode characters in the Series Name")
+        reports[262] = ("Series with Russian titles and without Unicode characters in the Series Name")
+        reports[263] = ("Series with titles in less popular non-Latin languages and without Unicode characters in the Series Name")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -302,7 +308,7 @@ def reportsDict():
                                               155, 156, 157, 158, 159, 160, 161, 162, 163,
                                               164, 165, 166, 167, 169, 170, 171, 172, 173,
                                               174, 175, 176, 177, 178, 179, 180, 181, 182,
-                                              257)), )
+                                              257, 258, 259, 260, 261, 262, 263)), )
         sections.append(('Wiki Cleanup', (101, 102, 103, 104, 105, 106, 107, 108, 109,
                                           110, 111, 112, 113, 114, 115, 116, 117, 118,
                                           119, 120, 200, 201, 202, 203, 204, 205, 206, 207)), )

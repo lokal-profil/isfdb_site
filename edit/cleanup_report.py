@@ -6276,6 +6276,108 @@ def function257():
 	else:
 		print '<h2>No Series with non-Latin Characters in the Series Name without a Transliterated Name found</h2>'
 
+def function258():
+        nonLatinSeries(258)
+
+def function259():
+        nonLatinSeries(259)
+
+def function260():
+        nonLatinSeries(260)
+
+def function261():
+        nonLatinSeries(261)
+
+def function262():
+        nonLatinSeries(262)
+
+def function263():
+        reports = popularNonLatinLanguages('series')
+        languages = []
+        for report in reports:
+                language_name = report[0]
+                languages.append(language_name)
+        languages_in_clause = list_to_in_clause(languages)
+        query = """select distinct s.series_id, s.series_title, c.cleanup_id
+                   from series s, titles t, languages l, cleanup c
+                   where s.series_title not regexp '&#'
+                   and s.series_id = t.series_id
+                   and t.title_language = l.lang_id
+                   and t.title_ttype != 'COVERART'
+                   and t.title_ttype != 'INTERIORART'
+                   and l.lang_name not in (%s)
+                   and l.latin_script = 'No'
+                   and s.series_id = c.record_id
+                   and c.report_type = 263
+                   and c.resolved is NULL
+                   order by s.series_title
+                   """ % languages_in_clause
+
+        nonModeratorMessage()
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Series', 'Ignore'))
+		while record:
+                        series_id = record[0][0]
+                        series_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintSeriesRecord(series_id, series_title, bgcolor, count, cleanup_id, 263)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print '</table>'
+	else:
+                print '<h2>No matching Series with Latin characters.</h2>'
+	return
+
+def nonLatinSeries(report_id):
+        reports = popularNonLatinLanguages('series')
+        for report in reports:
+                if report_id == report[1]:
+                        language = report[0]
+                        break
+
+        query = """select distinct s.series_id, s.series_title, c.cleanup_id
+                   from series s, titles t, languages l, cleanup c
+                   where s.series_title not regexp '&#'
+                   and s.series_id = t.series_id
+                   and t.title_language = l.lang_id
+                   and l.lang_name = '%s'
+                   and s.series_id = c.record_id
+                   and c.report_type = %d
+                   and c.resolved is NULL
+                   order by s.series_title
+                   """ % (language, report_id)
+        nonLatinSeriesDisplay(report_id, query, language)
+
+def nonLatinSeriesDisplay(report_id, query, language):
+        nonModeratorMessage()
+	db.query(query)
+	result = db.store_result()
+
+	if result.num_rows() > 0:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Series', 'Ignore'))
+		while record:
+                        series_id = record[0][0]
+                        series_title = record[0][1]
+                        cleanup_id = record[0][2]
+                        PrintSeriesRecord(series_id, series_title, bgcolor, count, cleanup_id, report_id)
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print '</table>'
+	else:
+                print '<h2>No %s Series with Latin characters.</h2>' % language
+	return
+
 def empty_containers_grid(report_id):
         anchor = '<a href="http:/%s/edit/empty_containers.cgi' % HTFAKE
         years = {}

@@ -281,6 +281,43 @@ def nightly_transliterations():
                  where ts.series_id = s.series_id)"""
         standardReport(query, 257)
 
+        #   Reports 258-262: Series without Unicode characters in the series names and
+        # with constituent titles written in common non-Latin languages
+        reports = popularNonLatinLanguages('series')
+        for report in reports:
+                report_id = report[1]
+                language_name = report[0]
+                query = """select distinct s.series_id
+                        from series s, titles t, languages l
+                        where s.series_title not regexp '&#'
+                        and s.series_id = t.series_id
+                        and t.title_language = l.lang_id
+                        and t.title_ttype != 'COVERART'
+                        and t.title_ttype != 'INTERIORART'
+                        and l.lang_name = '%s'
+                        """ % language_name
+                standardReport(query, report_id)
+
+        #   Report 263: Series without Unicode characters in the series names and
+        # with constituent titles written in less common non-Latin languages
+        reports = popularNonLatinLanguages('series')
+        languages = []
+        for report in reports:
+                language_name = report[0]
+                languages.append(language_name)
+        languages_in_clause = list_to_in_clause(languages)
+        query = """select distinct s.series_id
+                   from series s, titles t USE INDEX (language), languages l
+                   where s.series_title not regexp '&#'
+                   and s.series_id = t.series_id
+                   and t.title_language = l.lang_id
+                   and t.title_ttype != 'COVERART'
+                   and t.title_ttype != 'INTERIORART'
+                   and l.lang_name not in (%s)
+                   and l.latin_script = 'No'
+                """ % languages_in_clause
+        standardReport(query, 263)
+
 def nonLatiTitlesWithLatinChars():
         #   Reports 138-143: Non-Latin titles with Latin characters
         reports = popularNonLatinLanguages('titles')

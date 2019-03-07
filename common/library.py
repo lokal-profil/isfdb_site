@@ -1485,15 +1485,15 @@ def WikiLink(user_name):
 
 def popularNonLatinLanguages(types):
         # Each language is associated with a tuple of report IDs.
-        # The first number in the tuple is the report ID of the
-        # title-specific cleanup report. The second number is the
-        # report ID of the publication-specific cleanup report.
+        # The numbers in the tuple are the report ID of the
+        # title-specific, publication-specific, author-specific and series-specific
+        # cleanup reports respectively.
         languages = {
-                   'Bulgarian': (138, 162, 183),
-                   'Chinese': (139, 163, 184),
-                   'Greek': (140, 164, 185),
-                   'Japanese': (141, 165, 186),
-                   'Russian': (142, 166, 187)
+                   'Bulgarian': (138, 162, 183, 258),
+                   'Chinese': (139, 163, 184, 259),
+                   'Greek': (140, 164, 185, 260),
+                   'Japanese': (141, 165, 186, 261),
+                   'Russian': (142, 166, 187, 262)
                    }
         if types == 'titles':
                 position = 0
@@ -1501,6 +1501,8 @@ def popularNonLatinLanguages(types):
                 position = 1
         elif types == 'authors':
                 position = 2
+        elif types == 'series':
+                position = 3
         else:
                 raise
         results = []
