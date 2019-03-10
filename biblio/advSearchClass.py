@@ -20,8 +20,196 @@ from library import *
 from isbn import *
 
 class AdvancedSearch:
-        def __init__ (self):
-                pass
+        def __init__ (self, search_type, selector_id):
+                self.search_type = search_type
+                self.selector_id = selector_id
+                self.max_term = 5
+                self.selection = {}
+                self.sort = {}
+                self.message = {}
+
+                self.selection['Award'] = (('award_year', 'Award Year'),
+                                           ('award_level', 'Award Level'),
+                                           ('title_title', 'Title (for title-based awards)'),
+                                           ('title_ttype', 'Title Type'),
+                                           ('award_cat_name', 'Award Category'),
+                                           ('award_type_short_name', 'Award Type Short Name'),
+                                           ('award_type_full_name', 'Award Type Full Name'),
+                                           ('note', 'Notes')
+                                           )
+                self.sort['Award'] = (('award_year', 'Award Year'),
+                                      ('award_level', 'Award Level')
+                                      )
+
+                self.selection['Award Category'] = (('award_cat_name', 'Award Category Name'),
+                                           ('award_type_short_name', 'Parent Award Type Short Name'),
+                                           ('award_type_full_name', 'Parent Award Type Full Name'),
+                                           ('award_cat_order', 'Award Category Order'),
+                                           ('note', 'Notes'),
+                                           ('webpage', 'Webpage')
+                                           )
+                self.sort['Award Category'] = (('award_cat_name', 'Award Category Name'),
+                                      ('award_cat_order', 'Award Category Order')
+                                      )
+
+                self.selection['Award Type'] = (('award_type_short_name', 'Award Type Name (Short)'),
+                                           ('award_type_name', 'Award Type Name (Full)'),
+                                           ('award_type_for', 'Awarded For'),
+                                           ('award_type_by', 'Awarded By'),
+                                           ('award_type_poll', 'Poll'),
+                                           ('award_type_non_genre', 'Non-Genre'),
+                                           ('note', 'Notes'),
+                                           ('webpage', 'Webpage')
+                                           )
+                self.sort['Award Type'] = (('award_type_short_name', 'Short Award Type Name'),
+                                      ('award_type_name', 'Full Award Type Name'),
+                                      ('award_type_for', 'Awarded For'),
+                                      ('award_type_by', 'Awarded By'),
+                                      ('award_type_poll', 'Poll'),
+                                      ('award_type_non_genre', 'Non-Genre')
+                                      )
+
+                self.selection['Publication Series'] = (('pub_series_name', 'Publication Series Name'),
+                                           ('trans_pub_series_name', 'Transliterated Publication Series Name'),
+                                           ('pub_series_note', 'Notes'),
+                                           ('pub_series_webpage', 'Webpage')
+                                           )
+                self.sort['Publication Series'] = (('pub_series_name', 'Publication Series Name'),
+                                      )
+
+                self.selection['Publisher'] = (('publisher_name', 'Publisher Name'),
+                                           ('trans_publisher_name', 'Transliterated Publisher Name'),
+                                           ('publisher_note', 'Notes'),
+                                           ('publisher_webpage', 'Webpage')
+                                           )
+                self.sort['Publisher'] = (('publisher_name', 'Publisher Name'),
+                                      )
+
+                self.selection['Series'] = (('series_title', 'Series Name'),
+                                           ('trans_series_name', 'Transliterated Series Name'),
+                                           ('parent_series_name', 'Parent Series Name'),
+                                           ('parent_series_position', 'Position within Parent Series'),
+                                           ('series_note', 'Notes'),
+                                           ('series_webpage', 'Webpage')
+                                           )
+                self.sort['Series'] = (('series_title', 'Series Name'),
+                                      )
+
+                self.selection['Publication'] = (('pub_title', 'Title'),
+                                           ('pub_trans_title', 'Transliterated Title'),
+                                           ('pub_ctype', 'Publication Type'),
+                                           ('author_canonical', 'Author\'s Name'),
+                                           ('author_birthplace', 'Author\'s Birth Place'),
+                                           ('author_birthdate', 'Author\'s Birthdate'),
+                                           ('author_deathdate', 'Author\'s Deathdate'),
+                                           ('author_webpage', 'Author\'s Webpage'),
+                                           ('pub_year', 'Publication Year'),
+                                           ('pub_month', 'Publication Month'),
+                                           ('pub_publisher', 'Publisher'),
+                                           ('trans_publisher', 'Transliterated Publisher'),
+                                           ('pub_series', 'Publication Series'),
+                                           ('trans_pub_series', 'Transliterated Publication Series'),
+                                           ('title_language', 'Language of an Included Title (list)'),
+                                           ('title_language_free', 'Language of an Included Title (free form)'),
+                                           ('pub_isbn', 'ISBN'),
+                                           ('pub_catalog', 'Catalog ID'),
+                                           ('pub_price', 'Price'),
+                                           ('pub_pages', 'Page Count'),
+                                           ('pub_coverart', 'Cover Artist'),
+                                           ('pub_ptype', 'Format'),
+                                           ('pub_verifier', 'Primary Verifier'),
+                                           ('pub_note', 'Notes'),
+                                           ('pub_frontimage', 'Image URL')
+                                           )
+                self.sort['Publication'] = (('pub_title', 'Title'),
+                                      ('pub_ctype', 'Publication Type'),
+                                      ('pub_year', 'Date'),
+                                      ('pub_isbn', 'ISBN'),
+                                      ('pub_catalog', 'Catalog ID'),
+                                      ('pub_price', 'Price'),
+                                      ('pub_pages', 'Page Count'),
+                                      ('pub_ptype', 'Format'),
+                                      ('pub_frontimage', 'Image URL')
+                                      )
+                self.message['Publication'] = 'ISBN searches ignore dashes and search for both ISBN-10 and ISBN-13'
+
+                self.selection['Title'] = (('title_title', 'Title'),
+                                           ('title_trans_title', 'Transliterated Title'),
+                                           ('author_canonical', 'Author\'s Name'),
+                                           ('author_birthplace', 'Author\'s Birth Place'),
+                                           ('author_birthdate', 'Author\'s Birthdate'),
+                                           ('author_deathdate', 'Author\'s Deathdate'),
+                                           ('author_webpage', 'Author\'s Webpage'),
+                                           ('reviewee', 'Reviewed Author'),
+                                           ('interviewee', 'Interviewed Author'),
+                                           ('title_copyright', 'Title Year'),
+                                           ('month', 'Title Month'),
+                                           ('title_storylen', 'Length'),
+                                           ('title_content', 'Content (omnibus only)'),
+                                           ('title_ttype', 'Title Type'),
+                                           ('title_note', 'Notes'),
+                                           ('title_synopsis', 'Synopsis'),
+                                           ('single_vote', 'Single User Vote'),
+                                           ('series', 'Series'),
+                                           ('title_language', 'Title Language (list)'),
+                                           ('title_language_free', 'Title Language (free form)'),
+                                           ('title_webpage', 'Title Webpage'),
+                                           ('tag', 'Tag'),
+                                           ('title_jvn', 'Juvenile'),
+                                           ('title_nvz', 'Novelization'),
+                                           ('title_non_genre', 'Non-Genre'),
+                                           ('title_graphic', 'Graphic Format')
+                                           )
+                self.sort['Title'] = (('title_title', 'Title'),
+                                      ('title_copyright', 'Date'),
+                                      ('title_ttype', 'Title Type')
+                                      )
+                self.message['Title'] = 'When specifying multiple authors and/or multiple tags, OR is supported but AND is not'
+
+                self.selection['Author'] = (('author_canonical', 'Canonical Name'),
+                                           ('author_trans_name', 'Transliterated Name'),
+                                           ('author_lastname', 'Directory Entry'),
+                                           ('author_legalname', 'Legal Name'),
+                                           ('author_trans_legalname', 'Transliterated Legal Name'),
+                                           ('author_birthplace', 'Birth Place'),
+                                           ('author_birthdate', 'Birthdate'),
+                                           ('author_deathdate', 'Deathdate'),
+                                           ('author_language', 'Working Language (list)'),
+                                           ('author_language_free', 'Working Language (free form)'),
+                                           ('author_webpage', 'Webpage'),
+                                           ('author_email', 'E-mail'),
+                                           ('author_pseudos', 'Alternate Name'),
+                                           ('author_note', 'Note')
+                                           )
+                self.sort['Author'] = (('author_canonical', 'Canonical Name'),
+                                      ('author_lastname', 'Directory Entry'),
+                                      ('author_legalname', 'Legal Name'),
+                                      ('author_birthplace', 'Birth Place'),
+                                      ('author_birthdate', 'Birthdate'),
+                                      ('author_deathdate', 'Deathdate')
+                                      )
+
+        def display_selection(self):
+                PrintHeader('ISFDB Advanced %s Search' % self.search_type)
+                script_name = 'adv_%s_search' % self.selector_id
+                PrintNavbar(script_name, 0, 0, 0, 0)
+                self.print_invisible_drop_down_values()
+                self.print_full_header()
+                self.print_search_table()
+                PrintTrailer(script_name, 0, 0)
+
+        def print_search_table(self):
+                print '<h2>Selection Criteria</h2>'
+                print '<form METHOD="GET" action="http:/%s/adv_search_results.cgi">' % (HTFAKE)
+                print '<p>'
+                if self.search_type in self.message:
+                        print '<ul>'
+                        print '<li> %s' % self.message[self.search_type]
+                        print '</ul>'
+                for number in range(1, self.max_term + 1):
+                        self.print_selectors(number)
+                self.print_sort_by()
+                self.print_submit_button(self.search_type)
 
         def print_invisible_drop_down_values(self):
                 self.print_one_invisible_drop_down('Formats', FORMATS)
@@ -86,6 +274,34 @@ class AdvancedSearch:
                 print '<option VALUE="notcontains">does not contain'
                 print '<option VALUE="starts_with">starts with'
                 print '<option VALUE="ends_with">ends with'
+                print '</select>'
+
+        def print_selectors(self, number):
+                print '<p id="%s_selectors_%d">' % (self.selector_id, number)
+                print '<select NAME="USE_%d" id="%s_%d">' % (number, self.selector_id, number)
+                for value_display_pair in self.selection[self.search_type]:
+                        print '<option VALUE="%s">%s' % (value_display_pair[0], value_display_pair[1])
+                print '</select>'
+
+                self.print_operators(self.selector_id, number)
+
+                print '<input id="%sterm_%d" NAME="TERM_%d" TYPE="text" SIZE="50">' % (self.selector_id, number, number)
+                if number == 1:
+                        self.print_radio_selectors()
+                print '<p>'
+
+        def print_sort_by(self):
+                if self.search_type not in self.sort:
+                        return
+                # If there is only one way to sort the search results, hide the sort value
+                if len(self.sort[self.search_type]) == 1:
+                        print '<input NAME="ORDERBY" VALUE="%s" TYPE="HIDDEN">' % self.sort[self.search_type][0][0]
+                        return
+
+                print '<b>Sort Results By:</b>'
+                print '<select NAME="ORDERBY">'
+                for value_display_pair in self.sort[self.search_type]:
+                        print '<option VALUE="%s">%s' % (value_display_pair[0], value_display_pair[1])
                 print '</select>'
 
 
@@ -256,9 +472,7 @@ class AdvancedSearchResults:
                                                             'award_cat_order'):
                         self.unknown_sort()
                 elif self.search_type == 'Award' and self.sort not in ('award_year',
-                                                            'award_level',
-                                                            'title_title',
-                                                            'title_ttype'):
+                                                            'award_level'):
                         self.unknown_sort()
                 if self.sort == 'pub_pages':
                         self.sort = 'CAST(pub_pages as SIGNED)'
