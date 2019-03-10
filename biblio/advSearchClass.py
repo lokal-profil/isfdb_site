@@ -20,13 +20,20 @@ from library import *
 from isbn import *
 
 class AdvancedSearch:
-        def __init__ (self, search_type, selector_id):
-                self.search_type = search_type
-                self.selector_id = selector_id
+        def __init__ (self):
                 self.max_term = 5
                 self.selection = {}
                 self.sort = {}
                 self.message = {}
+                self.search_types = {'author': 'Author',
+                                     'award': 'Award',
+                                     'award_cat': 'Award Category',
+                                     'award_type': 'Award Type',
+                                     'pub': 'Publication',
+                                     'pub_series': 'Publication Series',
+                                     'publisher': 'Publisher',
+                                     'series': 'Series',
+                                     'title': 'Title'}
 
                 self.selection['Award'] = (('award_year', 'Award Year'),
                                            ('award_level', 'Award Level'),
@@ -189,7 +196,19 @@ class AdvancedSearch:
                                       ('author_deathdate', 'Deathdate')
                                       )
 
+        def parseArguments(self):
+                try:
+                        self.selector_id = sys.argv[1]
+                        self.search_type = self.search_types[self.selector_id]
+                except:
+                        PrintHeader('Advanced Search - Selection Criteria')
+                        PrintNavbar('adv_search_selection', 0, 0, 0, 0)
+                        print '<h2>Error: Invalid Search Type</h2>'
+                        PrintTrailer('adv_search_selection', 0, 0)
+                        sys.exit(0)
+
         def display_selection(self):
+                self.parseArguments()
                 PrintHeader('ISFDB Advanced %s Search' % self.search_type)
                 script_name = 'adv_%s_search' % self.selector_id
                 PrintNavbar(script_name, 0, 0, 0, 0)
@@ -209,7 +228,7 @@ class AdvancedSearch:
                 for number in range(1, self.max_term + 1):
                         self.print_selectors(number)
                 self.print_sort_by()
-                self.print_submit_button(self.search_type)
+                self.print_submit_button()
 
         def print_invisible_drop_down_values(self):
                 self.print_one_invisible_drop_down('Formats', FORMATS)
@@ -255,11 +274,11 @@ class AdvancedSearch:
                 print '</ul>'
                 print '<hr>'
 
-        def print_submit_button(self, record_type):
+        def print_submit_button(self):
                 print '<button TYPE="SUBMIT" NAME="ACTION" VALUE="query">Get Results</button>'
                 print '<button TYPE="SUBMIT" NAME="ACTION" VALUE="count">Get Count</button>'
                 print '<input NAME="START" VALUE="0" TYPE="HIDDEN">'
-                print '<input NAME="TYPE" VALUE="%s" TYPE="HIDDEN">' % record_type
+                print '<input NAME="TYPE" VALUE="%s" TYPE="HIDDEN">' % self.search_type
                 print '</form>'
 
         def print_radio_selectors(self):

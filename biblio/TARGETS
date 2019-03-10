@@ -20,6 +20,7 @@ TARGETS = DIR/adv_author_search.cgi \
 	  DIR/adv_search_menu.cgi \
 	  DIR/adv_search_results.cgi \
 	  DIR/adv_series_search.cgi \
+	  DIR/adv_search_selection.cgi \
 	  DIR/adv_title_search.cgi \
 	  DIR/adv_user_search.cgi \
 	  DIR/adv_web_page_search.cgi \

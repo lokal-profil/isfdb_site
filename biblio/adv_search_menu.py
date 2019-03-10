@@ -15,16 +15,14 @@ import string
 from isfdb import *
 from SQLparsing import *
 from common import *
-from advSearchClass import AdvancedSearch
 
-class AdvancedSearchSelection(AdvancedSearch):
+class AdvancedSearchMenu:
         def __init__(self):
                 pass
         
         def display_selection(self):
                 PrintHeader('ISFDB Advanced Search')
                 PrintNavbar('adv_search_menu', 0, 0, 0, 0)
-                self.print_invisible_drop_down_values()
                 print '<ul>'
                 print '<li>A downloadable version of the ISFDB database is available <a href="http://%s/index.php/ISFDB_Downloads">here</a>' % WIKILOC
                 print '</ul>'
@@ -32,15 +30,15 @@ class AdvancedSearchSelection(AdvancedSearch):
                 print '<ul>'
                 print '<li><b>Custom Searches of Individual Record Types:</b>'
                 print '<ul>'
-                print '<li><a href="http://%s/adv_author_search.cgi">Authors</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_title_search.cgi">Titles</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_series_search.cgi">Series</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_pub_search.cgi">Publications</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_publisher_search.cgi">Publishers</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_pub_series_search.cgi">Publication Series</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_award_type_search.cgi">Award Types</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_award_cat_search.cgi">Award Categories</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_award_search.cgi">Awards</a>' % HTFAKE
+                print '<li><a href="http://%s/adv_search_selection.cgi?author">Authors</a>' % HTFAKE
+                print '<li><a href="http://%s/adv_search_selection.cgi?title">Titles</a>' % HTFAKE
+                print '<li><a href="http://%s/adv_search_selection.cgi?series">Series</a>' % HTFAKE
+                print '<li><a href="http://%s/adv_search_selection.cgi?pub">Publications</a>' % HTFAKE
+                print '<li><a href="http://%s/adv_search_selection.cgi?publisher">Publishers</a>' % HTFAKE
+                print '<li><a href="http://%s/adv_search_selection.cgi?pub_series">Publication Series</a>' % HTFAKE
+                print '<li><a href="http://%s/adv_search_selection.cgi?award_type">Award Types</a>' % HTFAKE
+                print '<li><a href="http://%s/adv_search_selection.cgi?award_cat">Award Categories</a>' % HTFAKE
+                print '<li><a href="http://%s/adv_search_selection.cgi?award">Awards</a>' % HTFAKE
                 print '</ul>'
                 print '<li><b>Other Searches:</b>'
                 print '<ul>'
@@ -81,5 +79,5 @@ class AdvancedSearchSelection(AdvancedSearch):
 
         
 if __name__ == '__main__':
-        search = AdvancedSearchSelection()
+        search = AdvancedSearchMenu()
         search.display_selection()
