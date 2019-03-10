@@ -210,12 +210,11 @@ class AdvancedSearch:
         def display_selection(self):
                 self.parseArguments()
                 PrintHeader('ISFDB Advanced %s Search' % self.search_type)
-                script_name = 'adv_%s_search' % self.selector_id
-                PrintNavbar(script_name, 0, 0, 0, 0)
+                PrintNavbar('adv_search_selection', 0, 0, 0, 0)
                 self.print_invisible_drop_down_values()
                 self.print_full_header()
                 self.print_search_table()
-                PrintTrailer(script_name, 0, 0)
+                PrintTrailer('adv_search_selection', 0, 0)
 
         def print_search_table(self):
                 print '<h2>Selection Criteria</h2>'
@@ -225,8 +224,8 @@ class AdvancedSearch:
                         print '<ul>'
                         print '<li> %s' % self.message[self.search_type]
                         print '</ul>'
-                for number in range(1, self.max_term + 1):
-                        self.print_selectors(number)
+                for self.number in range(1, self.max_term + 1):
+                        self.print_selectors()
                 self.print_sort_by()
                 self.print_submit_button()
 
@@ -285,8 +284,8 @@ class AdvancedSearch:
                 print '<input TYPE="RADIO" NAME="C" VALUE="AND" CHECKED>AND'
                 print '<input TYPE="RADIO" NAME="C" VALUE="OR">OR'
 
-        def print_operators(self, record_type, number):
-                print '<select NAME="O_%d" id="%s_operator_%d">' % (number, record_type, number)
+        def print_operators(self):
+                print '<select NAME="O_%d" id="%s_operator_%d">' % (self.number, self.selector_id, self.number)
                 print '<option SELECTED VALUE="exact">is exactly'
                 print '<option VALUE="notexact">is not exactly'
                 print '<option VALUE="contains">contains'
@@ -295,17 +294,17 @@ class AdvancedSearch:
                 print '<option VALUE="ends_with">ends with'
                 print '</select>'
 
-        def print_selectors(self, number):
-                print '<p id="%s_selectors_%d">' % (self.selector_id, number)
-                print '<select NAME="USE_%d" id="%s_%d">' % (number, self.selector_id, number)
+        def print_selectors(self):
+                print '<p id="%s_selectors_%d">' % (self.selector_id, self.number)
+                print '<select NAME="USE_%d" id="%s_%d">' % (self.number, self.selector_id, self.number)
                 for value_display_pair in self.selection[self.search_type]:
                         print '<option VALUE="%s">%s' % (value_display_pair[0], value_display_pair[1])
                 print '</select>'
 
-                self.print_operators(self.selector_id, number)
+                self.print_operators()
 
-                print '<input id="%sterm_%d" NAME="TERM_%d" TYPE="text" SIZE="50">' % (self.selector_id, number, number)
-                if number == 1:
+                print '<input id="%sterm_%d" NAME="TERM_%d" TYPE="text" SIZE="50">' % (self.selector_id, self.number, self.number)
+                if self.number == 1:
                         self.print_radio_selectors()
                 print '<p>'
 
