@@ -27,7 +27,7 @@ class AdvancedSearchResults(AdvancedSearch):
         	self.dbases = []
                 self.form = {}
                 self.id_field = ''
-        	self.join_list = []
+        	self.joins = set()
         	self.num = 0
         	self.operator_list = []
         	self.query = ''
@@ -248,13 +248,9 @@ class AdvancedSearchResults(AdvancedSearch):
                 else:
                         sql_value = self.pad_entry(operator, entry)
 
-                (new_term, new_dbases, new_joins) = self.SQLterm(use, entry, sql_value)
+                (new_term, new_dbases) = self.SQLterm(use, entry, sql_value)
                 self.term_list.append(new_term)
                 self.merge_table_info_lists(self.dbases, new_dbases)
-
-                for join in new_joins:
-                        if join not in self.join_list:
-                                self.join_list.append(join)
 
         def check_valid_operator(self, operator):
                 found_operator = 0
@@ -337,7 +333,7 @@ class AdvancedSearchResults(AdvancedSearch):
                 self.terms += ")"
 
                 # Add the join clauses to the end
-                for join in self.join_list:
+                for join in self.joins:
                         self.terms += " and " + join
 
         def execute_query(self):
@@ -467,15 +463,13 @@ class AdvancedSearchResults(AdvancedSearch):
 
         def make_titles_SQL_term(self, field, value, sql_value):
                 # Set up default values
-                joins = []
                 dbases = [tableInfo('titles')]
-
                 if field == 'title_title':
                         clause = "titles.title_title %s" % sql_value
                 elif field == 'title_trans_title':
                         clause = "trans_titles.trans_title_title %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('trans_titles')]
-                        joins = ['trans_titles.title_id=titles.title_id']
+                        self.joins.add('trans_titles.title_id=titles.title_id')
                 elif field == 'title_copyright':
                         clause = "SUBSTRING(titles.title_copyright,1,4) %s" % sql_value
                 elif field == 'month':
@@ -487,75 +481,78 @@ class AdvancedSearchResults(AdvancedSearch):
                 elif field in ('author_canonical', 'author_birthplace', 'author_birthdate', 'author_deathdate'):
                         clause = "authors.%s %s and canonical_author.ca_status=1" % (field, sql_value)
                         dbases = [tableInfo('titles'), tableInfo('authors'), tableInfo('canonical_author',['USE INDEX(authors)'])]
-                        joins = ['authors.author_id=canonical_author.author_id', 'titles.title_id=canonical_author.title_id']
+                        self.joins.add('authors.author_id=canonical_author.author_id')
+                        self.joins.add('titles.title_id=canonical_author.title_id')
                 elif field == 'author_webpage':
                         clause = "webpages.url %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('canonical_author'), tableInfo('webpages')]
-                        joins = ['canonical_author.title_id=titles.title_id','canonical_author.author_id=webpages.author_id']
+                        self.joins.add('canonical_author.title_id=titles.title_id')
+                        self.joins.add('canonical_author.author_id=webpages.author_id')
                 elif field == 'series':
                         clause = "series.series_title %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('series')]
-                        joins = ['series.series_id=titles.series_id']
+                        self.joins.add('series.series_id=titles.series_id')
                 elif field == 'reviewee':
                         clause = "titles.title_ttype='REVIEW' AND ca1.ca_status=3"
                         dbases = [tableInfo("titles"),tableInfo("canonical_author ca1"),
                                   tableInfo("(select author_id from authors where author_canonical %s) a1" % sql_value)]
-                        joins = ['titles.title_id=ca1.title_id','ca1.author_id=a1.author_id']
+                        self.joins.add('titles.title_id=ca1.title_id')
+                        self.joins.add('ca1.author_id=a1.author_id')
                 elif field == 'interviewee':
                         clause = "titles.title_ttype='INTERVIEW' AND ca2.ca_status=2"
                         dbases = [tableInfo("titles"),tableInfo("canonical_author ca2"),
                                   tableInfo("(select author_id from authors where author_canonical %s) a2" % sql_value)]
-                        joins = ['titles.title_id=ca2.title_id','ca2.author_id=a2.author_id']
+                        self.joins.add('titles.title_id=ca2.title_id')
+                        self.joins.add('ca2.author_id=a2.author_id')
                 elif field == 'title_note':
                         clause = "n1.note_note %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('notes n1')]
-                        joins = ['n1.note_id=titles.note_id']
+                        self.joins.add('n1.note_id=titles.note_id')
                 elif field == 'title_synopsis':
                         clause = "n2.note_note %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('notes n2')]
-                        joins = ['n2.note_id=titles.title_synopsis']
+                        self.joins.add('n2.note_id=titles.title_synopsis')
                 elif field == 'single_vote':
                         clause = "votes.rating %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('votes')]
-                        joins = ['votes.title_id=titles.title_id']
+                        self.joins.add('votes.title_id=titles.title_id')
                 elif field == 'title_webpage':
                         clause = "webpages.url %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('webpages')]
-                        joins = ['webpages.title_id=titles.title_id']
+                        self.joins.add('webpages.title_id=titles.title_id')
                 elif field in ('title_language', 'title_language_free'):
                         clause = "languages.lang_name %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('languages')]
-                        joins = ['languages.lang_id=titles.title_language']
+                        self.joins.add('languages.lang_id=titles.title_language')
                 elif field == 'tag':
                         clause = "tags.tag_name %s" % sql_value
                         dbases = [tableInfo('titles'), tableInfo('tags'), tableInfo('tag_mapping')]
-                        joins = ['tag_mapping.title_id=titles.title_id','tags.tag_id=tag_mapping.tag_id']
+                        self.joins.add('tag_mapping.title_id=titles.title_id')
+                        self.joins.add('tags.tag_id=tag_mapping.tag_id')
                 # "exact" is used by "Show All Titles" and by "view all titles by this alternate name"
                 elif field == 'exact':
                         clause = "canonical_author.author_id=%d and canonical_author.ca_status=1" % int(value)
                         dbases = [tableInfo('titles'), tableInfo('canonical_author')]
-                        joins = ['titles.title_id=canonical_author.title_id']
+                        self.joins.add('titles.title_id=canonical_author.title_id')
                 else:
                         self.display_error("Unknown field: %s" % field)
-                return ("(%s)" % clause, dbases, joins)
+                return ("(%s)" % clause, dbases)
 
         def make_author_SQL_term(self, field, value, sql_value):
                 # Set up default values
-                joins = []
                 dbases = [tableInfo('authors')]
-
                 if field == 'author_canonical':
                         clause = "authors.author_canonical %s" % sql_value
                 elif field == 'author_trans_name':
                         clause = "trans_authors.trans_author_name %s" % sql_value
                         dbases = [tableInfo('authors'), tableInfo('trans_authors')]
-                        joins = ['trans_authors.author_id=authors.author_id']
+                        self.joins.add('trans_authors.author_id=authors.author_id')
                 elif field == 'author_legalname':
                         clause = "authors.author_legalname %s" % sql_value
                 elif field == 'author_trans_legalname':
                         clause = "trans_legal_names.trans_legal_name %s" % sql_value
                         dbases = [tableInfo('authors'), tableInfo('trans_legal_names')]
-                        joins = ['trans_legal_names.author_id=authors.author_id']
+                        self.joins.add('trans_legal_names.author_id=authors.author_id')
                 elif field == 'author_lastname':
                         clause = "authors.author_lastname %s" % sql_value
                 elif field == 'author_birthplace':
@@ -567,35 +564,33 @@ class AdvancedSearchResults(AdvancedSearch):
                 elif field in ('author_language', 'author_language_free'):
                         clause = "languages.lang_name %s" % sql_value
                         dbases = [tableInfo('authors'), tableInfo('languages')]
-                        joins = ['languages.lang_id=authors.author_language']
+                        self.joins.add('languages.lang_id=authors.author_language')
                 elif field == 'author_pseudos':
                         clause = """authors.author_id in (SELECT pseudonyms.author_id from pseudonyms,
                                   authors a1 WHERE pseudonym = a1.author_id AND a1.author_canonical %s)""" % sql_value
                 elif field == 'author_webpage':
                         clause = "webpages.url %s" % sql_value
                         dbases = [tableInfo('authors'), tableInfo('webpages')]
-                        joins = ['webpages.author_id=authors.author_id']
+                        self.joins.add('webpages.author_id=authors.author_id')
                 elif field == 'author_email':
                         clause = "emails.email_address %s" % sql_value
                         dbases = [tableInfo('authors'), tableInfo('emails')]
-                        joins = ['emails.author_id=authors.author_id']
+                        self.joins.add('emails.author_id=authors.author_id')
                 elif field == 'author_note':
                         clause = "authors.author_note %s" % sql_value
                 else:
                         self.display_error("Unknown field: %s" % field)
-                return ("(%s)" % clause, dbases, joins)
+                return ("(%s)" % clause, dbases)
 
         def make_pub_SQL_term(self, field, value, sql_value):
                 # Set up default values
-                joins = []
                 dbases = [tableInfo('pubs')]
-
                 if field == 'pub_title':
                         clause = "pubs.pub_title %s" % sql_value
                 elif field == 'pub_trans_title':
                         clause = "trans_pubs.trans_pub_title %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('trans_pubs')]
-                        joins = ['trans_pubs.pub_id=pubs.pub_id']
+                        self.joins.add('trans_pubs.pub_id=pubs.pub_id')
                 elif field == 'pub_year':
                         clause = "SUBSTRING(pubs.pub_year,1,4) %s" % sql_value
                 elif field == 'pub_month':
@@ -603,19 +598,19 @@ class AdvancedSearchResults(AdvancedSearch):
                 elif field == 'pub_publisher':
                         clause = "publishers.publisher_name %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('publishers')]
-                        joins = ['pubs.publisher_id=publishers.publisher_id']
+                        self.joins.add('pubs.publisher_id=publishers.publisher_id')
                 elif field == 'trans_publisher':
                         clause = "trans_publisher.trans_publisher_name %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('trans_publisher')]
-                        joins = ['trans_publisher.publisher_id=pubs.publisher_id']
+                        self.joins.add('trans_publisher.publisher_id=pubs.publisher_id')
                 elif field == 'pub_series':
                         clause = "pub_series.pub_series_name %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('pub_series')]
-                        joins = ['pubs.pub_series_id=pub_series.pub_series_id']
+                        self.joins.add('pubs.pub_series_id=pub_series.pub_series_id')
                 elif field == 'trans_pub_series':
                         clause = "trans_pub_series.trans_pub_series_name %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('trans_pub_series')]
-                        joins = ['trans_pub_series.pub_series_id=pubs.pub_series_id']
+                        self.joins.add('trans_pub_series.pub_series_id=pubs.pub_series_id')
                 elif field == 'pub_isbn':
                         # ISBNs are a special case. The whole clause was pre-built in process_term
                         clause = sql_value
@@ -626,11 +621,13 @@ class AdvancedSearchResults(AdvancedSearch):
                 elif field in ('author_canonical', 'author_birthplace', 'author_birthdate', 'author_deathdate'):
                         clause = "authors.%s %s" % (field, sql_value)
                         dbases = [tableInfo('pubs'), tableInfo('authors'), tableInfo('pub_authors',['USE INDEX(author_id)'])]
-                        joins = ['authors.author_id=pub_authors.author_id', 'pubs.pub_id=pub_authors.pub_id']
+                        self.joins.add('authors.author_id=pub_authors.author_id')
+                        self.joins.add('pubs.pub_id=pub_authors.pub_id')
                 elif field == 'author_webpage':
                         clause = "webpages.url %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('pub_authors'), tableInfo('webpages')]
-                        joins = ['pub_authors.pub_id=pubs.pub_id','pub_authors.author_id=webpages.author_id']
+                        self.joins.add('pub_authors.pub_id=pubs.pub_id')
+                        self.joins.add('pub_authors.author_id=webpages.author_id')
                 elif field == 'pub_price':
                         clause = "pubs.pub_price %s" % sql_value
                 elif field == 'pub_pages':
@@ -638,81 +635,78 @@ class AdvancedSearchResults(AdvancedSearch):
                 elif field == 'pub_coverart':
                         clause = "titles.title_ttype='COVERART' and authors.author_canonical %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('pub_content'), tableInfo('canonical_author'), tableInfo('titles'), tableInfo('authors')]
-                        joins = ['pubs.pub_id=pub_content.pub_id',
-                                 'pub_content.title_id=canonical_author.title_id',
-                                 'canonical_author.title_id=titles.title_id',
-                                 'canonical_author.author_id=authors.author_id']
+                        self.joins.add('pubs.pub_id=pub_content.pub_id')
+                        self.joins.add('pub_content.title_id=canonical_author.title_id')
+                        self.joins.add('canonical_author.title_id=titles.title_id')
+                        self.joins.add('canonical_author.author_id=authors.author_id')
                 elif field in ('title_language', 'title_language_free'):
                         clause = "languages.lang_name %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('pub_content'), tableInfo('titles'), tableInfo('languages')]
-                        joins = ['pubs.pub_id=pub_content.pub_id',
-                                 'pub_content.title_id=titles.title_id',
-                                 'languages.lang_id=titles.title_language']
+                        self.joins.add('pubs.pub_id=pub_content.pub_id')
+                        self.joins.add('pub_content.title_id=titles.title_id')
+                        self.joins.add('languages.lang_id=titles.title_language')
                 elif field == 'pub_note':
                         clause = "notes.note_note %s" % sql_value
                         # dbases = [tableInfo('pubs',['USE INDEX(note_id)']), tableInfo('notes',['IGNORE INDEX (PRIMARY)'])]
                         dbases = [tableInfo('pubs'), tableInfo('notes')]
-                        joins = ['pubs.note_id = notes.note_id']
+                        self.joins.add('pubs.note_id = notes.note_id')
                 elif field == 'pub_verifier':
                         clause = "mw_user.user_name %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('mw_user'), tableInfo('primary_verifications')]
-                        joins = ['pubs.pub_id = primary_verifications.pub_id',
-                                 'primary_verifications.user_id = mw_user.user_id']
+                        self.joins.add('pubs.pub_id = primary_verifications.pub_id')
+                        self.joins.add('primary_verifications.user_id = mw_user.user_id')
                 elif field == 'pub_frontimage':
                         clause = "pub_frontimage %s" % sql_value
                 elif field == 'pub_ctype':
                         clause = "pubs.pub_ctype %s" % sql_value
                 else:
                         self.display_error("Unknown field: %s" % field)
-                return ("(%s)" % clause, dbases, joins)
+                return ("(%s)" % clause, dbases)
 
         def make_publisher_SQL_term(self, field, value, sql_value):
                 # Set up default values
-                joins = []
                 dbases = [tableInfo('publishers')]
                 if field == 'publisher_name':
                         clause = 'publishers.publisher_name %s' % sql_value
                 elif field == 'trans_publisher_name':
                         clause = 'trans_publisher.trans_publisher_name %s' % sql_value
                         dbases = [tableInfo('publishers'), tableInfo('trans_publisher')]
-                        joins = ['trans_publisher.publisher_id=publishers.publisher_id']
+                        self.joins.add('trans_publisher.publisher_id=publishers.publisher_id')
                 elif field == 'publisher_note':
                         clause = 'notes.note_note %s' % sql_value
                         dbases = [tableInfo('publishers'), tableInfo('notes')]
-                        joins = ['publishers.note_id = notes.note_id']
+                        self.joins.add('publishers.note_id = notes.note_id')
                 elif field == 'publisher_webpage':
                         clause = 'webpages.url %s' % sql_value
                         dbases = [tableInfo('publishers'), tableInfo('webpages')]
-                        joins = ['webpages.publisher_id=publishers.publisher_id']
+                        self.joins.add('webpages.publisher_id=publishers.publisher_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases, joins)
+                return ('(%s)' % clause, dbases)
 
         def make_pub_series_SQL_term(self, field, value, sql_value):
                 # Set up default values
-                joins = []
                 dbases = [tableInfo('pub_series')]
                 if field == 'pub_series_name':
                         clause = 'pub_series.pub_series_name %s' % sql_value
                 elif field == 'trans_pub_series_name':
                         clause = 'trans_pub_series.trans_pub_series_name %s' % sql_value
                         dbases = [tableInfo('pub_series'), tableInfo('trans_pub_series')]
-                        joins = ['trans_pub_series.pub_series_id=pub_series.pub_series_id']
+                        self.joins.add('trans_pub_series.pub_series_id=pub_series.pub_series_id')
                 elif field == 'pub_series_note':
                         clause = 'notes.note_note %s' % sql_value
                         dbases = [tableInfo('pub_series'), tableInfo('notes')]
-                        joins = ['pub_series.pub_series_note_id = notes.note_id']
+                        self.joins.add('pub_series.pub_series_note_id = notes.note_id')
                 elif field == 'pub_series_webpage':
                         clause = 'webpages.url %s' % sql_value
                         dbases = [tableInfo('pub_series'), tableInfo('webpages')]
-                        joins = ['webpages.pub_series_id=pub_series.pub_series_id']
+                        self.joins.add('webpages.pub_series_id=pub_series.pub_series_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases, joins)
+                return ('(%s)' % clause, dbases)
 
         def make_award_type_SQL_term(self, field, value, sql_value):
                 # Set up default values
-                joins = []
                 dbases = [tableInfo('award_types')]
                 if field == 'award_type_short_name':
                         clause = 'award_types.award_type_short_name %s' % sql_value
@@ -729,46 +723,44 @@ class AdvancedSearchResults(AdvancedSearch):
                 elif field == 'note':
                         clause = 'notes.note_note %s' % sql_value
                         dbases = [tableInfo('notes'), tableInfo('award_types')]
-                        joins = ['award_types.award_type_note_id = notes.note_id']
+                        self.joins.add('award_types.award_type_note_id = notes.note_id')
                 elif field == 'webpage':
                         clause = 'webpages.url %s' % sql_value
                         dbases = [tableInfo('award_types'), tableInfo('webpages')]
-                        joins = ['webpages.award_type_id=award_types.award_type_id']
+                        self.joins.add('webpages.award_type_id=award_types.award_type_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases, joins)
+                return ('(%s)' % clause, dbases)
 
         def make_award_cat_SQL_term(self, field, value, sql_value):
                 # Set up default values
-                joins = []
                 dbases = [tableInfo('award_cats')]
                 if field == 'award_cat_name':
                         clause = 'award_cats.award_cat_name %s' % sql_value
                 elif field == 'award_type_short_name':
                         clause = 'award_types.award_type_short_name %s' % sql_value
                         dbases = [tableInfo('award_types'), tableInfo('award_cats')]
-                        joins = ['award_cats.award_cat_type_id = award_types.award_type_id']
+                        self.joins.add('award_cats.award_cat_type_id = award_types.award_type_id')
                 elif field == 'award_type_full_name':
                         clause = 'award_types.award_type_name %s' % sql_value
                         dbases = [tableInfo('award_types'), tableInfo('award_cats')]
-                        joins = ['award_cats.award_cat_type_id = award_types.award_type_id']
+                        self.joins.add('award_cats.award_cat_type_id = award_types.award_type_id')
                 elif field == 'award_cat_order':
                         clause = 'award_cats.award_cat_order %s' % sql_value
                 elif field == 'note':
                         clause = 'notes.note_note %s' % sql_value
                         dbases = [tableInfo('notes'), tableInfo('award_cats')]
-                        joins = ['award_cats.award_cat_note_id = notes.note_id']
+                        self.joins.add('award_cats.award_cat_note_id = notes.note_id')
                 elif field == 'webpage':
                         clause = 'webpages.url %s' % sql_value
                         dbases = [tableInfo('award_cats'), tableInfo('webpages')]
-                        joins = ['webpages.award_cat_id = award_cats.award_cat_id']
+                        self.joins.add('webpages.award_cat_id = award_cats.award_cat_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases, joins)
+                return ('(%s)' % clause, dbases)
 
         def make_award_SQL_term(self, field, value, sql_value):
                 # Set up default values
-                joins = []
                 dbases = [tableInfo('awards')]
                 if field == 'award_year':
                         clause = 'SUBSTRING(awards.award_year,1,4) %s' % sql_value
@@ -777,60 +769,59 @@ class AdvancedSearchResults(AdvancedSearch):
                 elif field == 'title_title':
                         clause = 'titles.title_title %s' % sql_value
                         dbases = [tableInfo('awards'), tableInfo('titles'), tableInfo('title_awards')]
-                        joins = ['awards.award_id = title_awards.award_id',
-                                 'title_awards.title_id=titles.title_id']
+                        self.joins.add('awards.award_id = title_awards.award_id')
+                        self.joins.add('title_awards.title_id=titles.title_id')
                 elif field == 'title_ttype':
                         clause = 'titles.title_ttype %s' % sql_value
                         dbases = [tableInfo('awards'), tableInfo('titles'), tableInfo('title_awards')]
-                        joins = ['awards.award_id = title_awards.award_id',
-                                 'title_awards.title_id=titles.title_id']
+                        self.joins.add('awards.award_id = title_awards.award_id')
+                        self.joins.add('title_awards.title_id=titles.title_id')
                 elif field == 'award_cat_name':
                         clause = 'award_cats.award_cat_name %s' % sql_value
                         dbases = [tableInfo('award_cats'), tableInfo('awards')]
-                        joins = ['award_cats.award_cat_id = awards.award_cat_id']
+                        self.joins.add('award_cats.award_cat_id = awards.award_cat_id')
                 elif field == 'award_type_short_name':
                         clause = 'award_types.award_type_short_name %s' % sql_value
                         dbases = [tableInfo('award_types'), tableInfo('award_cats'), tableInfo('awards')]
-                        joins = ['awards.award_cat_id = award_cats.award_cat_id and award_cats.award_cat_type_id = award_types.award_type_id']
+                        self.joins.add('awards.award_cat_id = award_cats.award_cat_id and award_cats.award_cat_type_id = award_types.award_type_id')
                 elif field == 'award_type_full_name':
                         clause = 'award_types.award_type_name %s' % sql_value
                         dbases = [tableInfo('award_types'), tableInfo('award_cats'), tableInfo('awards')]
-                        joins = ['awards.award_cat_id = award_cats.award_cat_id and award_cats.award_cat_type_id = award_types.award_type_id']
+                        self.joins.add('awards.award_cat_id = award_cats.award_cat_id and award_cats.award_cat_type_id = award_types.award_type_id')
                 elif field == 'note':
                         clause = 'notes.note_note %s' % sql_value
                         dbases = [tableInfo('notes'), tableInfo('awards')]
-                        joins = ['awards.award_note_id = notes.note_id']
+                        self.joins.add('awards.award_note_id = notes.note_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases, joins)
+                return ('(%s)' % clause, dbases)
 
         def make_series_SQL_term(self, field, value, sql_value):
                 # Set up default values
-                joins = []
                 dbases = [tableInfo('series')]
                 if field == 'series_title':
                         clause = 'series.series_title %s' % sql_value
                 elif field == 'trans_series_name':
                         clause = 'trans_series.trans_series_name %s' % sql_value
                         dbases = [tableInfo('series'), tableInfo('trans_series')]
-                        joins = ['trans_series.series_id=series.series_id']
+                        self.joins.add('trans_series.series_id=series.series_id')
                 elif field == 'parent_series_name':
                         clause = 's2.series_title %s' % sql_value
                         dbases = [tableInfo('series'), tableInfo('series s2')]
-                        joins = ['s2.series_id = series.series_parent']
+                        self.joins.add('s2.series_id = series.series_parent')
                 elif field == 'parent_series_position':
                         clause = 'series.series_parent_position %s' % sql_value
                 elif field == 'series_note':
                         clause = 'notes.note_note %s' % sql_value
                         dbases = [tableInfo('series'), tableInfo('notes')]
-                        joins = ['series.series_note_id = notes.note_id']
+                        self.joins.add('series.series_note_id = notes.note_id')
                 elif field == 'series_webpage':
                         clause = 'webpages.url %s' % sql_value
                         dbases = [tableInfo('series'), tableInfo('webpages')]
-                        joins = ['webpages.series_id=series.series_id']
+                        self.joins.add('webpages.series_id=series.series_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases, joins)
+                return ('(%s)' % clause, dbases)
 
 class tableInfo:
 	def __init__(self, tname='', hints=None):

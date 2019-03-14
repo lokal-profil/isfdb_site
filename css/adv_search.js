@@ -151,6 +151,9 @@ function createOnchange()	{
 		document.getElementById('author_5').onchange = function(event){
 			Selectors(5, this.value, 'author');
 		};
+		document.getElementById('author_6').onchange = function(event){
+			Selectors(6, this.value, 'author');
+		};
 	}
 	if (document.getElementById('title_1')) {
 		document.getElementById('title_1').onchange = function(event){
@@ -167,6 +170,9 @@ function createOnchange()	{
 		};
 		document.getElementById('title_5').onchange = function(event){
 			Selectors(5, this.value, 'title');
+		};
+		document.getElementById('title_6').onchange = function(event){
+			Selectors(6, this.value, 'title');
 		};
 	}
 	if (document.getElementById('pub_1')) {
@@ -185,6 +191,9 @@ function createOnchange()	{
 		document.getElementById('pub_5').onchange = function(event){
 			Selectors(5, this.value, 'pub');
 		};
+		document.getElementById('pub_6').onchange = function(event){
+			Selectors(6, this.value, 'pub');
+		};
 	}
 	if (document.getElementById('award_type_1')) {
 		document.getElementById('award_type_1').onchange = function(event){
@@ -202,6 +211,9 @@ function createOnchange()	{
 		document.getElementById('award_type_5').onchange = function(event){
 			Selectors(5, this.value, 'award_type');
 		};
+		document.getElementById('award_type_6').onchange = function(event){
+			Selectors(6, this.value, 'award_type');
+		};
 	}
 	if (document.getElementById('award_1')) {
 		document.getElementById('award_1').onchange = function(event){
@@ -218,6 +230,9 @@ function createOnchange()	{
 		};
 		document.getElementById('award_5').onchange = function(event){
 			Selectors(5, this.value, 'award');
+		};
+		document.getElementById('award_6').onchange = function(event){
+			Selectors(6, this.value, 'award');
 		};
 	}
 }
