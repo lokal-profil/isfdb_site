@@ -249,7 +249,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         sql_value = self.pad_entry(operator, entry)
 
                 (new_term, new_dbases) = self.SQLterm(use, entry, sql_value)
-                self.term_list.append(new_term)
+                self.term_list.append('(%s)' % new_term)
                 self.merge_table_info_lists(self.dbases, new_dbases)
 
         def check_valid_operator(self, operator):
@@ -536,7 +536,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.joins.add('titles.title_id=canonical_author.title_id')
                 else:
                         self.display_error("Unknown field: %s" % field)
-                return ("(%s)" % clause, dbases)
+                return (clause, dbases)
 
         def make_author_SQL_term(self, field, value, sql_value):
                 # Set up default values
@@ -580,7 +580,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         clause = "authors.author_note %s" % sql_value
                 else:
                         self.display_error("Unknown field: %s" % field)
-                return ("(%s)" % clause, dbases)
+                return (clause, dbases)
 
         def make_pub_SQL_term(self, field, value, sql_value):
                 # Set up default values
@@ -661,7 +661,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         clause = "pubs.pub_ctype %s" % sql_value
                 else:
                         self.display_error("Unknown field: %s" % field)
-                return ("(%s)" % clause, dbases)
+                return (clause, dbases)
 
         def make_publisher_SQL_term(self, field, value, sql_value):
                 # Set up default values
@@ -682,7 +682,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.joins.add('webpages.publisher_id=publishers.publisher_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases)
+                return (clause, dbases)
 
         def make_pub_series_SQL_term(self, field, value, sql_value):
                 # Set up default values
@@ -703,7 +703,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.joins.add('webpages.pub_series_id=pub_series.pub_series_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases)
+                return (clause, dbases)
 
         def make_award_type_SQL_term(self, field, value, sql_value):
                 # Set up default values
@@ -730,7 +730,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.joins.add('webpages.award_type_id=award_types.award_type_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases)
+                return (clause, dbases)
 
         def make_award_cat_SQL_term(self, field, value, sql_value):
                 # Set up default values
@@ -757,7 +757,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.joins.add('webpages.award_cat_id = award_cats.award_cat_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases)
+                return (clause, dbases)
 
         def make_award_SQL_term(self, field, value, sql_value):
                 # Set up default values
@@ -794,7 +794,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.joins.add('awards.award_note_id = notes.note_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases)
+                return (clause, dbases)
 
         def make_series_SQL_term(self, field, value, sql_value):
                 # Set up default values
@@ -821,7 +821,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.joins.add('webpages.series_id=series.series_id')
                 else:
                         self.display_error('Unknown field: %s' % field)
-                return ('(%s)' % clause, dbases)
+                return (clause, dbases)
 
 class tableInfo:
 	def __init__(self, tname='', hints=None):
