@@ -29,11 +29,12 @@ class AdvancedSearchResults(AdvancedSearch):
                 self.id_field = ''
         	self.joins = set()
         	self.num = 0
-        	self.operator_list = []
         	self.query = ''
         	self.records = []
                 self.search_type = ''
+                self.selection_criteria = set()
                 self.sort = ''
+                self.sort_name = ''
                 self.start = 0
         	self.term_list = []
         	self.terms = ''
@@ -52,8 +53,10 @@ class AdvancedSearchResults(AdvancedSearch):
                 PrintNavbar('adv_search_results', 0, 0, 0, 0)
                 self.set_search_type()
                 self.process_terms()
+                self.validate_conjunction()
                 self.validate_sort()
                 self.expand_sort()
+                self.print_selection_criteria()
                 self.print_merge_form()
                 self.make_terms()
                 self.execute_query()
@@ -101,8 +104,6 @@ class AdvancedSearchResults(AdvancedSearch):
                         # "Exact" queries from "Show All Title" do not use a conjunction, so use a default value
                         if not self.conjunction:
                                 self.conjunction = 'AND'
-                        if self.conjunction not in ('AND', 'OR'):
-                                raise
                 except:
                         self.display_error('Invalid Advanced Search Parameters', 1)
 
@@ -155,13 +156,16 @@ class AdvancedSearchResults(AdvancedSearch):
                 else:
                         self.display_error('Non-Existing Record Type')
 
+        def validate_conjunction(self):
+                if self.conjunction not in ('AND', 'OR'):
+                        self.display_error('Only AND and OR conjunction values are allowed')
+                
         def validate_sort(self):
-                found_sort = 0
                 for sort_tuple in self.sort_values[self.search_type]:
                         if sort_tuple[0] == self.sort:
-                                found_sort = 1
+                                self.sort_name = sort_tuple[1]
                                 break
-                if not found_sort:
+                if not self.sort_name:
                         self.display_error("Unknown sort field: %s" % self.sort)
 
         def expand_sort(self):
@@ -197,7 +201,7 @@ class AdvancedSearchResults(AdvancedSearch):
         def process_terms(self):
                 # Special case for "Show All Titles"
                 if (self.search_type == 'Title') and self.form.has_key('exact'):
-                        self.process_term(self.form.get('exact'), 'exact', 'exact')
+                        self.process_one_term(self.form.get('exact'), 'exact', 'exact')
 
                 for count in range(1, self.max_term + 1):
                         term = 'TERM_%d' % count
@@ -206,12 +210,14 @@ class AdvancedSearchResults(AdvancedSearch):
                                 operator = self.form.get('O_%d' % count)
                                 if not operator:
                                         operator = self.form.get('OPERATOR_%d' % count)
-                                self.process_term(self.form.get(term), use, operator)
+                                term_value = self.form.get(term)
+                                self.process_one_term(term_value, use, operator)
+                                self.selection_criteria.add((use, operator, term_value))
 
                 if not self.term_list:
                         self.display_error("No search data entered")
 
-        def process_term(self, term, use, operator):
+        def process_one_term(self, term, use, operator):
                 term = normalizeInput(term)
                 if not term:
                         return
@@ -220,8 +226,8 @@ class AdvancedSearchResults(AdvancedSearch):
                 self.validate_term(use, entry)
 
                 self.check_valid_operator(operator)
-                self.operator_list.append(operator)
 
+                # Process special cases: ISBNs and award levels
                 if use == 'pub_isbn':
                         # Search for possible ISBN variations
                         isbn_values = isbnVariations(entry)
@@ -245,6 +251,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         except:
                                 self.display_error('Invalid Award Level')
                         sql_value = self.pad_entry(operator, entry)
+                # Process standard cases which require simply padding the entered values
                 else:
                         sql_value = self.pad_entry(operator, entry)
 
@@ -320,7 +327,7 @@ class AdvancedSearchResults(AdvancedSearch):
                 return value
 
         def make_terms(self):
-                # Concatenate terms using the conjunction. Wrap the result in parens
+                # Concatenate terms using the conjunction. Wrap the result in parentheses
                 # to avoid unintended interaction with the join clauses.
                 self.terms = "("
                 count = 1
@@ -341,10 +348,29 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.query = 'select distinct %s.* from ' % self.table
                 elif self.action == 'count':
                         self.query = 'select count(distinct %s.%s) from ' % (self.table, self.id_field)
-                self.make_table_query()
+                self.build_full_query()
                 self.search()
                 if self.action == 'count':
                         self.display_message('Count of matching records: %d' % self.records[0])
+
+        def print_selection_criteria(self):
+                # Do not try to display the selection criteria if they are not defined, which
+                # happens for "exact" title queries used by author-specific "Show All Titles"
+                if not self.selection_criteria:
+                        return
+                print '<b>Selection Criteria (joined using %s):</b>' % self.conjunction
+                for selection in sorted(self.selection_criteria):
+                        print '<br>'
+                        for term_tuple in self.selection[self.search_type]:
+                                if term_tuple[0] == selection[0]:
+                                        print term_tuple[1]
+                                        break
+                        for operator_tuple in self.operators:
+                                if operator_tuple[0] == selection[1]:
+                                        print operator_tuple[1]
+                                        break
+                        print selection[2]
+                print '<br>Sort by %s' % self.sort_name
 
         def print_pub_results(self):
                 PrintPubsTable(self.records, 'adv_search', self.user, 100)
@@ -393,7 +419,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.records.append(record[0])
                         record = result.fetch_row()
 
-        def make_table_query(self):
+        def build_full_query(self):
                 first = 1
                 for dbase in self.dbases:
                         tclause = dbase.tname
@@ -612,7 +638,7 @@ class AdvancedSearchResults(AdvancedSearch):
                         dbases = [tableInfo('pubs'), tableInfo('trans_pub_series')]
                         self.joins.add('trans_pub_series.pub_series_id=pubs.pub_series_id')
                 elif field == 'pub_isbn':
-                        # ISBNs are a special case. The whole clause was pre-built in process_term
+                        # ISBNs are a special case. The whole clause was pre-built in process_one_term
                         clause = sql_value
                 elif field == 'pub_catalog':
                         clause = "pubs.pub_catalog %s" % sql_value
@@ -647,7 +673,6 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.joins.add('languages.lang_id=titles.title_language')
                 elif field == 'pub_note':
                         clause = "notes.note_note %s" % sql_value
-                        # dbases = [tableInfo('pubs',['USE INDEX(note_id)']), tableInfo('notes',['IGNORE INDEX (PRIMARY)'])]
                         dbases = [tableInfo('pubs'), tableInfo('notes')]
                         self.joins.add('pubs.note_id = notes.note_id')
                 elif field == 'pub_verifier':
