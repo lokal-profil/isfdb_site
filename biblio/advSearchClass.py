@@ -219,7 +219,7 @@ class AdvancedSearch:
 
         def display_selection(self):
                 self.parseArguments()
-                PrintHeader('ISFDB Advanced %s Search' % self.search_type)
+                PrintHeader('Advanced %s Search' % self.search_type)
                 PrintNavbar('adv_search_selection', 0, 0, 0, 0)
                 self.print_invisible_drop_down_values()
                 self.print_full_header()

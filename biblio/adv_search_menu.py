@@ -21,7 +21,7 @@ class AdvancedSearchMenu:
                 pass
         
         def display_selection(self):
-                PrintHeader('ISFDB Advanced Search')
+                PrintHeader('Advanced Search')
                 PrintNavbar('adv_search_menu', 0, 0, 0, 0)
                 print '<ul>'
                 print '<li>A downloadable version of the ISFDB database is available <a href="http://%s/index.php/ISFDB_Downloads">here</a>' % WIKILOC

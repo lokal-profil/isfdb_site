@@ -496,7 +496,7 @@ def PrintHeader(title):
 
         print '<script type="text/javascript" src="http://%s/isfdb_main.js"></script>' % HTMLLOC
         # Advanced Search pages only:
-        if 'ISFDB Advanced' in title:
+        if title.startswith('Advanced'):
                 # Import functions to change drop-down values dynamically
                 print '<script type="text/javascript" src="http://%s/adv_search.js"></script>' % HTMLLOC
 
