@@ -1089,23 +1089,19 @@ def SQLFindMagazine(arg, directory = 0):
                         count += 1
 	return (series, count)
 
-def SQLFindSeries(target):
-	results = []
-	target = db.escape_string('%'+target+'%')
-	query = """select distinct s.* from series s
-                   where s.series_title like '%s'
-                   union
-                   select distinct s.* from series s, trans_series ts
-                   where ts.trans_series_name like '%s'
-                   and ts.series_id = s.series_id
-                   order by series_title""" % (target, target)
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
-	while title:
-		results.append(title[0])
-		title = result.fetch_row()
-	return results
+def SQLFindSeries(target, mode = 'contains'):
+        if mode == 'exact':
+                query = "select distinct * from series where series_title = '%s'" % db.escape_string(target)
+        else:
+                target = db.escape_string('%'+target+'%')
+                query = """select distinct s.* from series s
+                           where s.series_title like '%s'
+                           union
+                           select distinct s.* from series s, trans_series ts
+                           where ts.trans_series_name like '%s'
+                           and ts.series_id = s.series_id
+                           order by series_title""" % (target, target)
+        return StandardQuery(query)
 
 def SQLFindSeriesChildren(id):
 	query = "select series_id,IF(series.series_parent_position IS NULL or series.series_parent_position='', 1, 0) AS isnull from series where series_parent=%d ORDER BY isnull,series_parent_position" % (id)

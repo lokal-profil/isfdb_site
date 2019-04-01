@@ -349,7 +349,7 @@ if __name__ == '__main__':
 
 			
 	elif type[:6] == 'Series':
-		results = SQLFindSeries(arg)
+		results = SQLFindSeries(arg, mode)
         	if len(results) == 1:
                         PrintReplaceScript("pe", str(results[0][SERIES_PUBID]))
 		else:
