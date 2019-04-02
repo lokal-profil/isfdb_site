@@ -40,11 +40,12 @@ def CheckPubSeries(value):
 
 def CheckPublisher(value):
         warning = ''
-        publisher = SQLGetPublisherByName(value)
+        publisher = SQLFindPublisher(value, 'exact')
         if not publisher:
                 warning = 'Unknown Publisher'
         else:
-                value = '<a href="http:/%s/publisher.cgi?%s">%s</a>' % (HTFAKE, publisher[PUBLISHER_ID], value)
+                if len(publisher) == 1:
+                        value = '<a href="http:/%s/publisher.cgi?%s">%s</a>' % (HTFAKE, publisher[0][PUBLISHER_ID], value)
         return (value, warning)
 
 def CheckISBN(value, XmlData):

@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -136,10 +136,10 @@ class publishers:
                 
                 # If the publisher name has been edited, check if another publisher with the new name
                 # already exists in the database
-                current_publisher = SQLGetPublisherByName(unescaped_name)
+                current_publisher = SQLFindPublisher(unescaped_name, 'exact')
                 if current_publisher:
-                        if (int(self.publisher_id) != int(current_publisher[PUBLISHER_ID])) and \
-                           (current_publisher[PUBLISHER_NAME] == unescaped_name):
+                        if (int(self.publisher_id) != int(current_publisher[0][PUBLISHER_ID])) and \
+                           (current_publisher[0][PUBLISHER_NAME] == unescaped_name):
                                 self.error = "A publisher with this name already exists"
                                 return
 

@@ -961,16 +961,6 @@ def SQLFindPublisher(target, mode = 'contains'):
                            order by publisher_name""" % (target, target)
         return StandardQuery(query)
 
-def SQLGetPublisherByName(target):
-	query = "select * from publishers where publisher_name = '%s'" % db.escape_string(target)
-	db.query(query)
-	result = db.store_result()
-	publisher = result.fetch_row()
-	if publisher:
-		return publisher[0]
-	else:
-		return []
-
 def SQLGetPublisherYears(publisher_id):
 	results = []
 	query = "select distinct YEAR(pub_year) from pubs where publisher_id='%d' order by pub_year" % int(publisher_id)
