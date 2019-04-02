@@ -154,9 +154,9 @@ def PrintPublisherRecord(record, bgcolor, moderator):
                 print '<tr align=left class="table2">'
 
 	if moderator:
-		print '<td><INPUT TYPE="checkbox" NAME="merge" VALUE="%d"></td>' % (record[0][PUBLISHER_ID])
+		print '<td><INPUT TYPE="checkbox" NAME="merge" VALUE="%d"></td>' % (record[PUBLISHER_ID])
 
-        print '<td>%s</td>' % ISFDBLink('publisher.cgi', record[0][PUBLISHER_ID], record[0][PUBLISHER_NAME])
+        print '<td>%s</td>' % ISFDBLink('publisher.cgi', record[PUBLISHER_ID], record[PUBLISHER_NAME])
         print '</tr>'
 
 
@@ -381,7 +381,7 @@ if __name__ == '__main__':
 		results = SQLFindPublisher(arg, mode)
 
         	if len(results) == 1:
-                        PrintReplaceScript("publisher", str(results[0][0][PUBLISHER_ID]))
+                        PrintReplaceScript("publisher", str(results[0][PUBLISHER_ID]))
 		else:
                         PrintHeader("ISFDB Publisher search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)

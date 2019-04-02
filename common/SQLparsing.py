@@ -959,14 +959,7 @@ def SQLFindPublisher(target, mode = 'contains'):
                            where tp.trans_publisher_name like '%s' and
                            tp.publisher_id = p.publisher_id
                            order by publisher_name""" % (target, target)
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
-	results = []
-	while title:
-		results.append(title)
-		title = result.fetch_row()
-	return results
+        return StandardQuery(query)
 
 def SQLGetPublisherByName(target):
 	query = "select * from publishers where publisher_name = '%s'" % db.escape_string(target)
