@@ -30,7 +30,7 @@ def CheckSeries(value):
 
 def CheckPubSeries(value):
         warning = ''
-        pubseries = SQLFindPubSeriesExact(value)
+        pubseries = SQLFindPubSeries(value, 'exact')
         if not len(pubseries):
                 warning = 'Unknown Publication Series'
         else:

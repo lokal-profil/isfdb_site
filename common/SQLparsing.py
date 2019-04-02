@@ -989,31 +989,22 @@ def SQLGetPublisherYears(publisher_id):
 		year = result.fetch_row()
 	return results
 
-def SQLFindPubSeries(target):
-	results = []
-	target = db.escape_string('%'+target+'%')
-	query = """select distinct ps.* from pub_series ps
-                   where ps.pub_series_name like '%s'
-                   union
-                   select distinct ps.* from pub_series ps, trans_pub_series tps
-                   where tps.trans_pub_series_name like '%s'
-                   and tps.pub_series_id = ps.pub_series_id
-                   order by pub_series_name""" % (target, target)
+def SQLFindPubSeries(target, mode = 'contains'):
+        if mode == 'exact':
+                query = "select * from pub_series where pub_series_name = '%s'" % db.escape_string(target)
+        else:
+                target = db.escape_string('%'+target+'%')
+                query = """select distinct ps.* from pub_series ps
+                           where ps.pub_series_name like '%s'
+                           union
+                           select distinct ps.* from pub_series ps, trans_pub_series tps
+                           where tps.trans_pub_series_name like '%s'
+                           and tps.pub_series_id = ps.pub_series_id
+                           order by pub_series_name""" % (target, target)
 	db.query(query)
 	result = db.store_result()
 	title = result.fetch_row()
-	while title:
-		results.append(title)
-		title = result.fetch_row()
-	return results
-
-def SQLFindPubSeriesExact(target):
 	results = []
-	target = db.escape_string(target)
-	query = "select * from pub_series where pub_series_name = '%s'" % (target)
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
 	while title:
 		results.append(title)
 		title = result.fetch_row()

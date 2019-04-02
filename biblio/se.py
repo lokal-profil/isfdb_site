@@ -401,7 +401,7 @@ if __name__ == '__main__':
 			print '</form>'
 
 	elif type[:18] == 'Publication Series':
-		results = SQLFindPubSeries(arg)
+		results = SQLFindPubSeries(arg, mode)
 
         	if len(results) == 1:
                         PrintReplaceScript("pubseries",str(results[0][0][PUB_SERIES_ID]))
