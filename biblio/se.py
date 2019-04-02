@@ -186,7 +186,7 @@ def PrintPubSeriesRecord(record, bgcolor):
         else:
                 print '<tr align=left class="table2">'
 
-        print '<td>%s</td>' % ISFDBLink('pubseries.cgi', record[0][PUB_SERIES_ID], record[0][PUB_SERIES_NAME])
+        print '<td>%s</td>' % ISFDBLink('pubseries.cgi', record[PUB_SERIES_ID], record[PUB_SERIES_NAME])
         print '</tr>'
 
 
@@ -404,7 +404,7 @@ if __name__ == '__main__':
 		results = SQLFindPubSeries(arg, mode)
 
         	if len(results) == 1:
-                        PrintReplaceScript("pubseries",str(results[0][0][PUB_SERIES_ID]))
+                        PrintReplaceScript("pubseries",str(results[0][PUB_SERIES_ID]))
 		else:
                         PrintHeader("ISFDB Publication Series search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)

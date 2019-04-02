@@ -31,11 +31,11 @@ def CheckSeries(value):
 def CheckPubSeries(value):
         warning = ''
         pubseries = SQLFindPubSeries(value, 'exact')
-        if not len(pubseries):
+        if not pubseries:
                 warning = 'Unknown Publication Series'
         else:
-                if len(pubseries[0]) == 1:
-                        value = '<a href="http:/%s/pubseries.cgi?%s">%s</a>' % (HTFAKE, pubseries[0][0][PUB_SERIES_ID], value)
+                if len(pubseries) == 1:
+                        value = '<a href="http:/%s/pubseries.cgi?%s">%s</a>' % (HTFAKE, pubseries[0][PUB_SERIES_ID], value)
         return (value, warning)
 
 def CheckPublisher(value):

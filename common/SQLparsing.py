@@ -1001,14 +1001,7 @@ def SQLFindPubSeries(target, mode = 'contains'):
                            where tps.trans_pub_series_name like '%s'
                            and tps.pub_series_id = ps.pub_series_id
                            order by pub_series_name""" % (target, target)
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
-	results = []
-	while title:
-		results.append(title)
-		title = result.fetch_row()
-	return results
+        return StandardQuery(query)
 
 def SQLFindMagazine(arg, directory = 0):
         if directory:
