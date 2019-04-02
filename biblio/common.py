@@ -646,7 +646,11 @@ def PrintEditTools(page_type, userid, arg1, arg2):
 	if (page_type == 'author') and (int(arg2) > 0):
 		output.append('<a href="http:/%s/edit/editauth.cgi?%s">Edit Author Data</a>' % (HTFAKE, arg2))
 		output.append('<a href="http:/%s/edit/mkpseudo.cgi?%s">Make/Remove Alternate Name</a>' % (HTFAKE, arg2))
-		link = AdvSearchLink((('TYPE', 'Title'), ('exact', str(arg2)), ('ORDERBY', 'title_title')))
+                link = AdvSearchLink((('TYPE', 'Title'),
+                                     ('USE_1', 'author_canonical'),
+                                     ('O_1', 'exact'),
+                                     ('TERM_1', arg1),
+                                     ('ORDERBY', 'title_title')))
                 output.append('%s%s</a>' % (link, 'Show All Titles'))
 		output.append('<a href="http:/%s/edit/find_dups.cgi?%s">Check for Duplicate Titles</a>' % (HTFAKE, arg2))
 	elif page_type == 'title':
