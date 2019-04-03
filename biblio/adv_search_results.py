@@ -101,9 +101,6 @@ class AdvancedSearchResults(AdvancedSearch):
                         # Legacy queries send CONJUNCTION_1 instead of C
                         if not self.conjunction:
                                 self.conjunction = self.form.get('CONJUNCTION_1', '')
-                        # "Exact" queries from "Show All Title" do not use a conjunction, so use a default value
-                        if not self.conjunction:
-                                self.conjunction = 'AND'
                 except:
                         self.display_error('Invalid Advanced Search Parameters', 1)
 
@@ -199,10 +196,6 @@ class AdvancedSearchResults(AdvancedSearch):
                                 self.sort += ', award_year'
 
         def process_terms(self):
-                # Special case for "Show All Titles"
-                if (self.search_type == 'Title') and self.form.has_key('exact'):
-                        self.process_one_term(self.form.get('exact'), 'exact', 'exact')
-
                 for count in range(1, self.max_term + 1):
                         term = 'TERM_%d' % count
                         if self.form.has_key(term):
@@ -354,10 +347,6 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.display_message('Count of matching records: %d' % self.records[0])
 
         def print_selection_criteria(self):
-                # Do not try to display the selection criteria if they are not defined, which
-                # happens for "exact" title queries used by author-specific "Show All Titles"
-                if not self.selection_criteria:
-                        return
                 print '<b>Selection Criteria (joined using %s):</b>' % self.conjunction
                 for selection in sorted(self.selection_criteria):
                         print '<br>'
@@ -555,11 +544,6 @@ class AdvancedSearchResults(AdvancedSearch):
                         dbases = [tableInfo('titles'), tableInfo('tags'), tableInfo('tag_mapping')]
                         self.joins.add('tag_mapping.title_id=titles.title_id')
                         self.joins.add('tags.tag_id=tag_mapping.tag_id')
-                # "exact" is used by "Show All Titles" and by "view all titles by this alternate name"
-                elif field == 'exact':
-                        clause = "canonical_author.author_id=%d and canonical_author.ca_status=1" % int(value)
-                        dbases = [tableInfo('titles'), tableInfo('canonical_author')]
-                        self.joins.add('titles.title_id=canonical_author.title_id')
                 else:
                         self.display_error("Unknown field: %s" % field)
                 return (clause, dbases)

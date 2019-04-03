@@ -608,11 +608,7 @@ class Bibliography:
                 if len(authors) > 0:
                         print '<b>Alternate Name. See: '
                         displayAuthorList(authors)
-                        print AdvSearchLink((('TYPE', 'Title'),
-                                             ('USE_1', 'author_canonical'),
-                                             ('O_1', 'exact'),
-                                             ('TERM_1', self.author_name),
-                                             ('ORDERBY', 'title_title')))
+                        print AuthorSearchLink(self.author_name)
                         print '(or view all titles published using this alternate name)</a></b>'
 
         def printInterviews(self):
