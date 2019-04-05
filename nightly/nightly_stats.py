@@ -500,18 +500,38 @@ class Output():
                 endage = 101
                 results = []
                 lastage=startage-1
+                min_age = 0
+                max_age = 101
 
                 if chart == 'all':
-                    query = "select YEAR(t.title_copyright)-YEAR(a.author_birthdate),count(t.title_id) from titles t, "
-                    query += "canonical_author c, authors a where t.title_id=c.title_id and c.author_id=a.author_id and "
-                    query += "YEAR(t.title_copyright)<8888 and YEAR(t.title_copyright)>0 and title_ttype='%s' " % title_type
-                    query += "and a.author_birthdate IS NOT NULL group by YEAR(t.title_copyright)-YEAR(a.author_birthdate) limit 120"
+                    query = """select YEAR(t.title_copyright)-YEAR(a.author_birthdate),count(t.title_id)
+                        from titles t, canonical_author c, authors a
+                        where t.title_id=c.title_id
+                        and c.author_id=a.author_id
+                        and YEAR(t.title_copyright)<8888
+                        and YEAR(t.title_copyright)>0
+                        and title_ttype='%s'
+                        and title_parent=0
+                        and a.author_birthdate IS NOT NULL
+                        and YEAR(t.title_copyright)-YEAR(a.author_birthdate) > %d
+                        and YEAR(t.title_copyright)-YEAR(a.author_birthdate) < %d
+                        group by YEAR(t.title_copyright)-YEAR(a.author_birthdate)"""  % (title_type, min_age, max_age)
                 else:
-                    query = "select v.FIRST-v.DOB,count(v.FIRST-v.DOB) from (select YEAR(a.author_birthdate) as DOB, "
-                    query += "(select min(YEAR(t.title_copyright)) from titles t, canonical_author c where "
-                    query += "t.title_copyright!='0000-00-00' and t.title_id=c.title_id and t.title_ttype='%s' and " % title_type
-                    query += "c.author_id=a.author_id and c.ca_status=1) as FIRST from authors a where a.author_birthdate "
-                    query += "IS NOT NULL) as v where v.FIRST IS NOT NULL group by v.FIRST-v.DOB"
+                    query = """select v.FIRST-v.DOB,count(v.FIRST-v.DOB)
+                                from (select YEAR(a.author_birthdate) as DOB,
+                                (select min(YEAR(t.title_copyright)) from titles t, canonical_author c
+                                where t.title_copyright!='0000-00-00'
+                                and t.title_id=c.title_id
+                                and t.title_ttype='%s'
+                                and t.title_parent=0
+                                and c.author_id=a.author_id
+                                and c.ca_status=1) as FIRST
+                                from authors a
+                                where a.author_birthdate IS NOT NULL) as v
+                                where v.FIRST IS NOT NULL
+                                and v.FIRST-v.DOB > %d
+                                and v.FIRST-v.DOB < %d
+                                group by v.FIRST-v.DOB""" % (title_type, min_age, max_age)
                 db.query(query)
                 result = db.store_result()
                 record = result.fetch_row()
