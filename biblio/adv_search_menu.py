@@ -30,22 +30,22 @@ class AdvancedSearchMenu:
                 print '<ul>'
                 print '<li><b>Custom Searches of Individual Record Types:</b>'
                 print '<ul>'
-                print '<li><a href="http://%s/adv_search_selection.cgi?author">Authors</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_search_selection.cgi?title">Titles</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_search_selection.cgi?series">Series</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_search_selection.cgi?pub">Publications</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_search_selection.cgi?publisher">Publishers</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_search_selection.cgi?pub_series">Publication Series</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_search_selection.cgi?award_type">Award Types</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_search_selection.cgi?award_cat">Award Categories</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_search_selection.cgi?award">Awards</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_search_selection.cgi?author">Authors</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_search_selection.cgi?title">Titles</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_search_selection.cgi?series">Series</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_search_selection.cgi?pub">Publications</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_search_selection.cgi?publisher">Publishers</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_search_selection.cgi?pub_series">Publication Series</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_search_selection.cgi?award_type">Award Types</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_search_selection.cgi?award_cat">Award Categories</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_search_selection.cgi?award">Awards</a>' % HTFAKE
                 print '</ul>'
                 print '<li><b>Other Searches:</b>'
                 print '<ul>'
-                print '<li><a href="http://%s/adv_identifier_search.cgi">Publication Search by External Identifier</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_notes_search.cgi">Notes Search</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_web_page_search.cgi">Web Page Search</a>' % HTFAKE
-                print '<li><a href="http://%s/adv_user_search.cgi">User Search</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_identifier_search.cgi">Publication Search by External Identifier</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_notes_search.cgi">Notes Search</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_web_page_search.cgi">Web Page Search</a>' % HTFAKE
+                print '<li><a href="http:/%s/adv_user_search.cgi">User Search</a>' % HTFAKE
                 print '</ul>'
                 print '</ul>'
                 print '<p><hr><p>'

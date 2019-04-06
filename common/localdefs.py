@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,7 +10,7 @@
 
 
 HTMLLOC	   	= "www.isfdb.org"
-HTFAKE	   	= "/www.isfdb.org/cgi-bin"
+HTFAKE	   	= "cgi-bin"
 DBASEHOST  	= "localhost"
 HTMLHOST   	= "www.isfdb.org"
 COOKIEHOST   	= "www.isfdb.org"
