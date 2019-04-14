@@ -19,4 +19,4 @@ create table IF NOT EXISTS sfe3_authors (
 	PRIMARY KEY (sfe3_authors_id)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
 
-create index series_id on sfe3_authors (url(50));
+create index url on sfe3_authors (url(50));
