@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -112,7 +112,8 @@ if __name__ == '__main__':
                                                                                    ('OPERATOR_1', 'starts_with'),
                                                                                    ('TERM_1', key),
                                                                                    ('ORDERBY', 'author_lastname'),
-                                                                                   ('TYPE', 'Author')))
+                                                                                   ('TYPE', 'Author'),
+                                                                                   ('C', 'AND')))
                                                 output += '<b>%s%s</b></a></td>' % (x.upper(), y)
                                                 print output
                                         else:
