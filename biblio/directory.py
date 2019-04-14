@@ -18,10 +18,10 @@ from biblio import *
 
 
 def PrintPublisherTableColumns():
-	print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-	print "<tr align=left bgcolor=\"#d6d6d6\">"
-	print "<td><b>Publisher</b></td>"
- 	print "</tr>"
+	print '<table class="generic_table">'
+	print '<tr class="generic_table_header">'
+	print '<td><b>Publisher</b></td>'
+ 	print '</tr>'
  	return
 
 def PrintPublisherRecord(publisher_id, publisher_name, bgcolor):
@@ -33,11 +33,11 @@ def PrintPublisherRecord(publisher_id, publisher_name, bgcolor):
         print '</tr>'
 
 def PrintMagazineTableColumns():
-	print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-	print "<tr align=left bgcolor=\"#d6d6d6\">"
-	print "<th>Magazine</th>"
-	print "<th>Parent Series</th>"
- 	print "</tr>"
+	print '<table class="generic_table">'
+	print '<tr class="generic_table_header">'
+	print '<th>Magazine</th>'
+	print '<th>Parent Series</th>'
+ 	print '</tr>'
  	return
 
 def PrintMagazineRecord(title_title, series_id, parent_id, series_title, bgcolor):
@@ -52,12 +52,12 @@ def PrintMagazineRecord(title_title, series_id, parent_id, series_title, bgcolor
         print ' <a href="http:/%s/seriesgrid.cgi?%s"> (issue grid)</a></td>' % (HTFAKE, series_id)
 	if parent_id:
 		parent_title = SQLgetSeriesName(int(parent_id))
-        	print "<td>"
+        	print '<td>'
         	print ISFDBLink('pe.cgi', parent_id, parent_title)
                 print '<a href="http:/%s/seriesgrid.cgi?%s"> (issue grid)</a>' % (HTFAKE, parent_id)
-        	print "</td>"
+        	print '</td>'
 	else:
-		print "<td>-</td>"
+		print '<td>-</td>'
         print '</tr>'
 
 
@@ -166,7 +166,7 @@ if __name__ == '__main__':
                                                 series_name = results[title][series_id][1]
                                                 PrintMagazineRecord(title, series_id, parent_id, series_name, bgcolor)
                                                 bgcolor ^= 1
-                                print "</table><p />"
+                                print '</table><p>'
                         else:
                                 print '<h3>No %s names found starting with: %s</h3>' % (dir_type, section)
                         PrintTrailer('directory', 0, 0)
@@ -194,7 +194,7 @@ if __name__ == '__main__':
                                 PrintPublisherRecord(record_id, record_name, bgcolor)
 				bgcolor ^= 1
                                 record = result.fetch_row()
-                        print "</table><p />"
+                        print '</table><p>'
 		else:
 			print '<h3>No %s names found starting with: %s</h3>' % (dir_type, section)
 
