@@ -19,6 +19,7 @@ from nightly_lib import *
 from nightly_stats import *
 from nightly_transliterations import *
 from nightly_wiki import *
+from nightly_3rd_parties import *
 
 
 def nightly_cleanup_reports():
@@ -1682,3 +1683,4 @@ if __name__ == '__main__':
         nightly_wiki()
         nightly_transliterations()
         nightly_html()
+        nightly_3rd_parties()

@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2013-2018   Ahasuerus
+#     (C) COPYRIGHT 2013-2019   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -15,6 +15,7 @@ include ../INSTALLDIRS
 INSTALL = $(INSTALL_HTML)/nightly
 
 MYLIBS	= dup_authors.py \
+	  nightly_3rd_parties.py \
           nightly_awards.py \
 	  nightly_html.py \
 	  nightly_lib.py \
@@ -38,7 +39,8 @@ LIBS	= authorClass.py \
 	  viewers.py \
 	  login.py \
 	  SQLparsing.py \
-	  isfdb.py 
+	  isfdb.py \
+	  sfe3.py
 
 all:	$(TARGETS)
 	cp $(MYLIBS) local

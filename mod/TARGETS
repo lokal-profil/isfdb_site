@@ -39,7 +39,6 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/library.cgi \
 	  DIR/list.cgi \
 	  DIR/marque.cgi \
-	  DIR/missing_author_urls.cgi \
 	  DIR/pv_new.cgi \
 	  DIR/pv_delete.cgi \
 	  DIR/pv_update.cgi \
@@ -53,6 +52,7 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/resolve_bad_url.cgi \
 	  DIR/resolve_cleanup.cgi \
 	  DIR/resolve_missing_author_url.cgi \
+	  DIR/resolve_sfe3_url.cgi \
 	  DIR/rv_link.cgi \
 	  DIR/sa_delete.cgi \
 	  DIR/sa_update.cgi \

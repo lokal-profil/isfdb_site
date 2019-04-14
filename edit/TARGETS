@@ -55,6 +55,7 @@ TARGETS = DIR/addaward.cgi \
 	  DIR/pv_merge.cgi \
 	  DIR/rmtitles.cgi \
 	  DIR/select_award_type.cgi \
+	  DIR/sfe3_authors.cgi \
 	  DIR/submitaddpub.cgi \
 	  DIR/submitauth.cgi \
 	  DIR/submitaward.cgi \

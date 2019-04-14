@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2016   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -15,7 +15,8 @@ BASE_FILES = login.py \
 	isfdb.py \
 	library.py \
 	navbar.py \
-	install.py
+	install.py \
+	sfe3.py
 
 CLASS_FILES = authorClass.py \
 	awardClass.py \

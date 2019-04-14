@@ -34,7 +34,8 @@ LIBS	= authorClass.py \
 	  viewers.py \
 	  login.py \
 	  SQLparsing.py \
-	  isfdb.py 
+	  isfdb.py \
+	  sfe3.py
 
 all:	$(TARGETS)
 	cp $(MYLIBS) local

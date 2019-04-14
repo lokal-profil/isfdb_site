@@ -18,6 +18,7 @@ from isfdb import *
 from isfdblib import *
 from library import *
 from SQLparsing import *
+from sfe3 import Sfe3
 
 
 if __name__ == '__main__':
@@ -106,19 +107,16 @@ if __name__ == '__main__':
                         print '<p>'
                 print '<hr>'
 
+        print '<h3 class="centered">Reconciliation with Other Sources</h3>'
+        sfe3 = Sfe3()
+        print """<a href="http:/%s/edit/sfe3_authors.cgi"><button type="button">
+                SFE3 Author Articles without Matching ISFDB Author Records (%d)</button></a>""" % (HTFAKE, sfe3.count_of_unresolved())
+        print '<p>'
+        print '<hr>'
+
         print '<h3 class="centered">Reports That Are Not Regenerated Nightly</h3>'
 
         if user.moderator:
-                # Determine the number of outstanding SFE3 URLs
-                query = "select count(*) from missing_author_urls where resolved=0 and author_id IS NULL"
-                db.query(query)
-                result = db.store_result()
-                record = result.fetch_row()
-
-                if int(record[0][0]) or all_reports:
-                        print '<a href="http:/%s/mod/missing_author_urls.cgi?1"><button type="button">ISFDB-SFE3 Author Mismatches (%d)</button></a>' % (HTFAKE, int(record[0][0]))
-                        print '<p>'
-
                 # Determine the number of suspect pub images
                 query = "select count(*) from bad_images"
                 db.query(query)
