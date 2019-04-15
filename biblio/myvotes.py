@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2016   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -41,10 +41,10 @@ def PrintRecord(record, eccolor):
 		title_type = "-"
 		title_year = "-"
 
-	print "<td>%d</td>" % (record[0][3])
-	print '<td>%s</td>' % (title_link)
-	print '<td>%s</td>' % (title_type)
-	print '<td>%s</td>' % (title_year)
+	print '<td class="vote_table">%d</td>' % (record[0][3])
+	print '<td class="vote_table">%s</td>' % (title_link)
+	print '<td class="vote_table">%s</td>' % (title_type)
+	print '<td class="vote_table">%s</td>' % (title_year)
 
 	# Only display author(s) if there is a title
 	print '<td>'
@@ -53,7 +53,7 @@ def PrintRecord(record, eccolor):
 		counter = 0
 		for author in authors:
 			if counter:
-				print " <b>and</b> "
+				print ' <b>and</b> '
 			displayAuthorById(author[0], author[1])
 			counter += 1
 	else:
@@ -61,7 +61,7 @@ def PrintRecord(record, eccolor):
 
 	print '</td>'
 
-	print "</tr>"
+	print '</tr>'
 
 
 if __name__ == '__main__':
@@ -71,7 +71,7 @@ if __name__ == '__main__':
 	except:
 		start = 0
 
-	PrintHeader("My Votes")
+	PrintHeader('My Votes')
 	PrintNavbar('myvotes', 0, 0, 'myvotes.cgi', 0)
 
 	(myID, username, usertoken) = GetUserData()
@@ -90,14 +90,14 @@ if __name__ == '__main__':
 		PrintTrailer('votes', 0, 0)
 		sys.exit(0)
 
-        print "<table cellpadding=3 BGCOLOR=\"#FFFFFF\">"
-        print "<tr>"
-        print "  <td><b>Vote</b></td>"
-        print "  <td><b>Title</b></td>"
-        print "  <td><b>Type</b></td>"
-        print "  <td><b>Year</b></td>"
-        print "  <td><b>Author</b></td>"
-        print "</tr>"
+        print '<table class="vote_table">'
+        print '<tr class="table1">'
+        print '<th class="vote_table">Vote</th>'
+        print '<th class="vote_table">Title</th>'
+        print '<th class="vote_table">Type</th>'
+        print '<th class="vote_table">Year</th>'
+        print '<th class="vote_table">Author</th>'
+        print '</tr>'
 
         record = result.fetch_row()
 	color = 0
@@ -106,7 +106,7 @@ if __name__ == '__main__':
 		color = color ^ 1
         	record = result.fetch_row()
 
-	print "</table>"
+	print '</table>'
 	print '<p> [<a href="http:/%s/myvotes.cgi?%d">MORE</a>]' % (HTFAKE, start+50)
 
 	PrintTrailer('votes', 0, 0)

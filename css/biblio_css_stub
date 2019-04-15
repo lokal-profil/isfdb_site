@@ -783,6 +783,23 @@ tr.generic_table_header {
    text-align: left;
 }
 
+/* votes table, table design */
+table.vote_table {
+   background-color: #FFFFFF;
+   padding: 3px;
+}
+
+/* votes table, table design */
+td.vote_table {
+   padding: 3px;
+}
+
+/* votes table, cell design */
+td.vote_table {
+   padding: 3px;
+}
+
+
 /* edit dialogs headlines */
 .editheadline {
    margin-top:10px;
