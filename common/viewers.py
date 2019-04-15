@@ -79,7 +79,8 @@ def DuplicateCatalogId(value):
                                       ('USE_1', 'pub_catalog'),
                                       ('OPERATOR_1', 'exact'),
                                       ('TERM_1', value),
-                                      ('ORDERBY', 'pub_title')))
+                                      ('ORDERBY', 'pub_title'),
+                                      ('C', 'AND')))
                 warning = '%sCatalog ID already on file</a>' % link
         return warning
 
@@ -94,7 +95,8 @@ def DuplicateISBN(value, current_pub_id = 0):
                                       ('USE_1', 'pub_isbn'),
                                       ('OPERATOR_1', 'exact'),
                                       ('TERM_1', value),
-                                      ('ORDERBY', 'pub_title')))
+                                      ('ORDERBY', 'pub_title'),
+                                      ('C', 'AND')))
                 warning = '%sISBN already on file</a>' % link
         return warning
 
