@@ -41,10 +41,10 @@ def PrintRecord(record, eccolor):
 		title_type = "-"
 		title_year = "-"
 
-	print '<td class="vote_table">%d</td>' % (record[0][3])
-	print '<td class="vote_table">%s</td>' % (title_link)
-	print '<td class="vote_table">%s</td>' % (title_type)
-	print '<td class="vote_table">%s</td>' % (title_year)
+	print '<td>%d</td>' % (record[0][3])
+	print '<td>%s</td>' % (title_link)
+	print '<td>%s</td>' % (title_type)
+	print '<td>%s</td>' % (title_year)
 
 	# Only display author(s) if there is a title
 	print '<td>'
@@ -92,11 +92,11 @@ if __name__ == '__main__':
 
         print '<table class="vote_table">'
         print '<tr class="table1">'
-        print '<th class="vote_table">Vote</th>'
-        print '<th class="vote_table">Title</th>'
-        print '<th class="vote_table">Type</th>'
-        print '<th class="vote_table">Year</th>'
-        print '<th class="vote_table">Author</th>'
+        print '<th>Vote</th>'
+        print '<th>Title</th>'
+        print '<th>Type</th>'
+        print '<th>Year</th>'
+        print '<th>Author</th>'
         print '</tr>'
 
         record = result.fetch_row()

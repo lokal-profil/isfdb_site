@@ -790,7 +790,7 @@ table.vote_table {
 }
 
 /* votes table, table design */
-td.vote_table {
+table.vote_table td,th {
    padding: 3px;
 }
 
