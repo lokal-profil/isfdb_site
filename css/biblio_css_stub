@@ -800,7 +800,8 @@ table.pub_comparison_table {
 }
 
 /* publication comparison table, cell design */
-table.pub_comparison_table td, table.pub_comparison_table th {
+table.pub_comparison_table td,
+table.pub_comparison_table th {
    padding: 3px;
    border-top: 1px solid black;
    border-left: 1px solid black;
@@ -811,7 +812,8 @@ table.pub_comparison_table td, table.pub_comparison_table th {
 }
 
 /* publication comparison title not found, cell design */
-table.pub_comparison_table td.pub_comparison_title_not_found, table.pub_comparison_table th.pub_comparison_title_not_found {
+table.pub_comparison_table td.pub_comparison_title_not_found,
+table.pub_comparison_table th.pub_comparison_title_not_found {
    padding: 3px;
    background: #ffc0c0;
    font-size: 100%; 

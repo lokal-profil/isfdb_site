@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2007-2014   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2007-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -26,12 +26,18 @@ if __name__ == '__main__':
 		sys.exit(0)
 
 	user_name = SQLgetUserName(user_id)
-	label = "%s's Tags" % user_name
+##	label = "%s's Tags" % user_name
 
-	PrintHeader(label)
+	PrintHeader("%s's Tags" % user_name)
 	PrintNavbar('usertag', 0, 0, 'usertag.cgi', user_id)
 
-	query = "select distinct tag_mapping.tag_id,count(tag_mapping.tag_id) as xx, tags.tag_name, tags.tag_status from tag_mapping,tags where tag_mapping.user_id=%d and tags.tag_id=tag_mapping.tag_id group by tag_mapping.tag_id order by xx desc" % user_id
+	query = """select distinct tag_mapping.tag_id,count(tag_mapping.tag_id) as xx,
+                tags.tag_name, tags.tag_status
+                from tag_mapping,tags
+                where tag_mapping.user_id=%d
+                and tags.tag_id=tag_mapping.tag_id
+                group by tag_mapping.tag_id
+                order by xx desc""" % user_id
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()
@@ -39,12 +45,13 @@ if __name__ == '__main__':
         bgcolor = 1
 	while record:
                 if first:
-                        print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-                        print "<tr align=left bgcolor=\"#d6d6d6\">"
-                        print "<td><b>Tag Name</b></td>"
-                        print "<td><b>Count</b></td>"
-                        print "<td><b>Private?</b></td>"
-                        print "</tr>"
+##                        print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
+                        print '<table class="generic_table">'
+                        print '<tr class="generic_table_header">'
+                        print '<th>Tag Name</th>'
+                        print '<th>Count</th>'
+                        print '<th>Private?</th>'
+                        print '</tr>'
                         first = 0
                 if bgcolor:
                         print '<tr align=left class="table1">'
