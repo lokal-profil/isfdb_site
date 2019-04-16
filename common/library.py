@@ -513,7 +513,7 @@ def ISFDBLink(script, record_id, displayed_value, brackets=False, argument='', t
                 separator = ''
         if argument:
                 argument += ' '
-	link = '<a %shref="/%s/%s%s%s" dir="ltr">%s</a>' % (argument, HTFAKE, script, separator, record_id, displayed_value)
+	link = '<a %shref="http:/%s/%s%s%s" dir="ltr">%s</a>' % (argument, HTFAKE, script, separator, record_id, displayed_value)
 
         # Transliterated values
 	trans_values = None
@@ -1686,7 +1686,7 @@ def printRecordID(record_type, record_id, user_id, user = None):
                                 if not user.moderator:
                                         edit_mode = 0
                         if edit_mode:
-                                output += ' [<a href="/%s/edit/%s.cgi?%d">Edit</a>]' % (HTFAKE, cgi_script, int(record_id))
+                                output += ' [<a href="http:/%s/edit/%s.cgi?%d">Edit</a>]' % (HTFAKE, cgi_script, int(record_id))
         output += '</span>'
         print output
 
