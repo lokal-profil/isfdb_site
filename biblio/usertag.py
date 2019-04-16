@@ -20,13 +20,12 @@ if __name__ == '__main__':
 	try:
 		user_id = int(sys.argv[1])
 	except:
-		PrintHeader("Bad Argument")
+		PrintHeader('Bad Argument')
 		PrintNavbar('usertag', 0, 0, 'usertag.cgi', 0)
 		PrintTrailer('usertag', 0, 0)
 		sys.exit(0)
 
 	user_name = SQLgetUserName(user_id)
-##	label = "%s's Tags" % user_name
 
 	PrintHeader("%s's Tags" % user_name)
 	PrintNavbar('usertag', 0, 0, 'usertag.cgi', user_id)
@@ -45,7 +44,6 @@ if __name__ == '__main__':
         bgcolor = 1
 	while record:
                 if first:
-##                        print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
                         print '<table class="generic_table">'
                         print '<tr class="generic_table_header">'
                         print '<th>Tag Name</th>'

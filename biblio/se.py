@@ -82,11 +82,11 @@ def PrintMagazineResults(results, arg):
                  AND magazine title records that match the entered value.
                  Matching magazines whose series titles do not match the
                  entered value have asterisks next to their titles.</h3>"""
-	print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-	print "<tr align=left bgcolor=\"#d6d6d6\">"
-	print "<td><b>Magazine Series</b></td>"
-	print "<td><b>Parent Series</b></td>"
- 	print "</tr>"
+	print '<table class="generic_table">'
+	print '<tr class="generic_table_header">'
+	print '<th>Magazine Series</th>'
+	print '<th>Parent Series</th>'
+ 	print '</tr>'
 
 	bgcolor = 1
 	counter = 0
@@ -101,7 +101,7 @@ def PrintMagazineResults(results, arg):
                                 break
                 if counter > 299:
                         break
-	print "</table>"
+	print '</table>'
 
 def PrintMagazineRecord(title, series_id, parent_id, series_title, bgcolor, arg):
         if bgcolor:
@@ -130,12 +130,12 @@ def PrintMagazineRecord(title, series_id, parent_id, series_title, bgcolor, arg)
 ##########################################################################################
 
 def PrintPublisherResults(results,moderator):
-	print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-	print "<tr align=left bgcolor=\"#d6d6d6\">"
+	print '<table class="generic_table">'
+	print '<tr class="generic_table_header">'
 	if moderator:
-		print "<td><b>Merge</b></td>"
-	print "<td><b>Publisher</b></td>"
- 	print "</tr>"
+		print '<th>Merge</th>'
+	print '<th>Publisher</th>'
+ 	print '</tr>'
 
 	bgcolor = 1
 	counter = 0
@@ -145,7 +145,7 @@ def PrintPublisherResults(results,moderator):
 		counter += 1
 		if counter > 299:
 			break
-	print "</table>"
+	print '</table>'
 
 def PrintPublisherRecord(record, bgcolor, moderator):
         if bgcolor:
@@ -165,10 +165,10 @@ def PrintPublisherRecord(record, bgcolor, moderator):
 ##########################################################################################
 
 def PrintPubSeriesResults(results):
-	print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-	print "<tr align=left bgcolor=\"#d6d6d6\">"
-	print "<td><b>Publication Series</b></td>"
- 	print "</tr>"
+	print '<table class="generic_table">'
+	print '<tr class="generic_table_header">'
+	print '<th>Publication Series</th>'
+ 	print '</tr>'
 
         bgcolor = 1
         counter = 0
@@ -178,7 +178,7 @@ def PrintPubSeriesResults(results):
                 counter += 1
                 if counter > 299:
                         break
-        print "</table>"
+        print '</table>'
 
 def PrintPubSeriesRecord(record, bgcolor):
         if bgcolor:
@@ -195,11 +195,11 @@ def PrintPubSeriesRecord(record, bgcolor):
 ##########################################################################################
 
 def PrintTagResults(results):
-	print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-	print "<tr align=left bgcolor=\"#d6d6d6\">"
-	print "<td><b>Tag Name</b></td>"
-	print "<td><b>Private?</b></td>"
- 	print "</tr>"
+	print '<table class="generic_table">'
+	print '<tr class="generic_table_header">'
+	print '<th>Tag Name</th>'
+	print '<th>Private?</th>'
+ 	print '</tr>'
 
         bgcolor = 1
         counter = 0
@@ -209,7 +209,7 @@ def PrintTagResults(results):
                 counter += 1
                 if counter > 299:
                         break
-        print "</table>"
+        print '</table>'
 
 def PrintTagRecord(tag, bgcolor):
         if bgcolor:
