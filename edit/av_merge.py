@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -19,33 +19,32 @@ from SQLparsing import *
 from authorClass import authors
 
 def Compare(field1, field2, fieldname):
-	print '<tr align=left>'
+	print '<tr class="generic_table_header">'
 	if field1 != field2:
 		print '<td class="drop">'
 		print "<b>" +fieldname+ " Conflict:</b><br>"
 		print '<INPUT TYPE="radio" NAME="' +fieldname+ '" VALUE="1" CHECKED>'
 		print field1
-		print "<br>"
+		print '<br>'
 		print '<INPUT TYPE="radio" NAME="' +fieldname+ '" VALUE="2">'
 		print field2
 	else:
-		print '<tr align=left>'
 		print '<td class="keep">'
 		print "<b>Merged " +fieldname+ ": </b>", field1
         print '</td>'
-        print "</tr>"
+        print '</tr>'
 
 def Merge2(field1, field2, fieldname):
-	print '<tr align=left>'
+	print '<tr class="generic_table_header">'
 	print '<td class="keep">'
-	print "<b>Merged %s </b><br>" % (fieldname)
+	print '<b>Merged %s </b><br>' % fieldname
 	# Combine the two lists in a set, which removes duplicates, then print all values
 	for value in set(field1 + field2):
 		if value:
 			print value
-			print "<br>"
+			print '<br>'
 	print '</td>'
-	print "</tr>"
+	print '</tr>'
 
 def SelectionError():
 	print "<h2>Error: You need to select exactly two records to merge.</h2>"
@@ -97,8 +96,8 @@ if __name__ == '__main__':
 	if not record2.author_id:
                 SelectionError("Record %d no longer exists.</b>" % recno2)
 
-	print "<form METHOD=\"POST\" ACTION=\"/cgi-bin/edit/as_merge.cgi\">"
-	print '<table cellpadding=0 BGCOLOR="#FFFFFF">'
+	print '<form METHOD="POST" ACTION="/cgi-bin/edit/as_merge.cgi">'
+	print '<table class="generic_table">'
 
 	Compare(record1.author_canonical,   record2.author_canonical, "author_canonical")
 	Merge2(record1.author_trans_names, record2.author_trans_names, "trans_names")
@@ -116,9 +115,9 @@ if __name__ == '__main__':
 	print '</table>'
 	print '<p>'
 
-	print "<input NAME=\"record1\" VALUE=\"%d\" TYPE=\"HIDDEN\">" % (recno1)
-	print "<input NAME=\"record2\" VALUE=\"%d\" TYPE=\"HIDDEN\">" % (recno2)
-	print "<input TYPE=\"SUBMIT\" VALUE=\"Complete Merge\">"
-	print "</form>"
+	print '<input NAME="record1" VALUE="%d" TYPE="HIDDEN">' % (recno1)
+	print '<input NAME="record2" VALUE="%d" TYPE="HIDDEN">' % (recno2)
+	print '<input TYPE="SUBMIT" VALUE="Complete Merge">'
+	print '</form>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)
