@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -70,30 +70,30 @@ if __name__ == '__main__':
                         page_number = pc[PUB_CONTENTS_PAGE]
                         pages[pub_id][title_id] = page_number
 
-	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+	print '<table class="pub_comparison_table">'
 	# Publication title
 	print '<tr>'
-	print '<td class="keep">Pub. Title:</td>'
+	print '<th>Pub. Title:</th>'
 	for pub in pubs:
                 pub_id = int(pub[PUB_PUBID])
                 pub_title = pub[PUB_TITLE]
                 pub_date = pub[PUB_YEAR]
-                print '<td class="keep"><b>%s</a></b></td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
+                print '<th>%s</th>' % ISFDBLink('pl.cgi', pub_id, pub_title)
 	print '</tr>'
 
         # Publication Date
 	print '<tr>'
-	print '<td class="keep">Pub. Date:</td>'
+	print '<th>Pub. Date:</th>'
 	for pub in pubs:
                 pub_date = pub[PUB_YEAR]
-                print '<td class="keep">%s</a></td>' % pub_date
+                print '<td>%s</td>' % pub_date
 	print '</tr>'
 
         # Publisher
 	print '<tr>'
-	print '<td class="keep">Publisher:</td>'
+	print '<th>Publisher:</th>'
 	for pub in pubs:
-                print '<td class="keep">'
+                print '<td>'
                 publisher_id = pub[PUB_PUBLISHER]
                 if publisher_id:
                         publisher_data = SQLGetPublisher(publisher_id)
@@ -106,25 +106,25 @@ if __name__ == '__main__':
 
         # Publication Note
 	print '<tr>'
-	print '<td class="keep">Pub. Note:</td>'
+	print '<th>Pub. Note:</th>'
 	for pub in pubs:
                 note_id = pub[PUB_NOTE]
                 note_data = SQLgetNotes(note_id)
-                print '<td class="keep">'
+                print '<td>'
                 print note_data
                 print '</td>'
 	print '</tr>'
 
         # Cover images
 	print '<tr>'
-	print '<td class="keep">Pub. Cover:</td>'
+	print '<th>Pub. Cover:</th>'
 	for pub in pubs:
                 pub_image = pub[PUB_IMAGE]
-                print '<td class="keep">'
+                print '<td>'
                 if not pub_image:
                         print '&nbsp;'
                 else:
-                        print '<img src="%s" height="250"><br>' % (pub_image.split("|")[0])
+                        print '<img src="%s" height="250" alt="cover image"><br>' % (pub_image.split("|")[0])
                 print '</td>'
 	print '</tr>'
 
@@ -133,14 +133,14 @@ if __name__ == '__main__':
                 title = title_bodies[title_id]
                 title_title = title[TITLE_TITLE]
                 title_type = title[TITLE_TTYPE]
-                print '</tr>'
-                print '<td class="keep">&nbsp;</td>'
+                print '<tr>'
+                print '<td>&nbsp;</td>'
                 for pub in pubs:
                         pub_id = int(pub[PUB_PUBID])
                         if pub_id not in titles_dict[title_id]:
-                                print '<td class="drop">-</td>'
+                                print '<td class="pub_comparison_title_not_found">-</td>'
                                 continue
-                        print '<td class="keep">'
+                        print '<td>'
                         if pages[pub_id][title_id]:
                                 print '<b>%s</b> ' % pages[pub_id][title_id]
                         print '%s %s by ' % (ISFDBLink('title.cgi', title_id, title_title), title_type)
@@ -156,11 +156,11 @@ if __name__ == '__main__':
                 print '</tr>'
 
 	print '<tr>'
-	print '<td class="keep">&nbsp;</td>'
+	print '<td>&nbsp;</td>'
 	for pub in pubs:
                 pub_id = int(pub[PUB_PUBID])
                 pub_title = pub[PUB_TITLE]
-                print '<td class="keep">'
+                print '<td>'
                 print '[<a href="http:/%s/edit/editpub.cgi?%d">Edit %s</a>]' % (HTFAKE, pub_id, pub_title)
                 print '</td>'
 	print '</tr>'

@@ -789,16 +789,33 @@ table.vote_table {
    padding: 3px;
 }
 
-/* votes table, table design */
-table.vote_table td,th {
-   padding: 3px;
-}
-
 /* votes table, cell design */
-td.vote_table {
+table.vote_table td, table.vote_table th {
    padding: 3px;
 }
 
+/* publication comparison table, table design */
+table.pub_comparison_table {
+   padding: 3px;
+}
+
+/* publication comparison table, cell design */
+table.pub_comparison_table td, table.pub_comparison_table th {
+   padding: 3px;
+   border-top: 1px solid black;
+   border-left: 1px solid black;
+   border-bottom: 1px solid grey;
+   border-right: 1px solid grey;
+   background: #d0ffd0;
+   font-size: 100%; 
+}
+
+/* publication comparison title not found, cell design */
+table.pub_comparison_table td.pub_comparison_title_not_found, table.pub_comparison_table th.pub_comparison_title_not_found {
+   padding: 3px;
+   background: #ffc0c0;
+   font-size: 100%; 
+}
 
 /* edit dialogs headlines */
 .editheadline {
