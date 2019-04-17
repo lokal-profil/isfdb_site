@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -26,7 +26,7 @@ Records      = []
 
 def Compare(value1, value2, fieldname):
 	if value1 != value2:
-		print '<tr align=left>'
+		print '<tr align="left">'
 		print '<td class="drop">'
 		print "<b>" +fieldname+ " Conflict:</b><br>"
 		print '<INPUT TYPE="radio" NAME="' +fieldname+ '" VALUE="1" CHECKED>'
@@ -37,7 +37,7 @@ def Compare(value1, value2, fieldname):
 		print '</td>'
 		print "</tr>"
 	else:
-		print '<tr align=left>'
+		print '<tr align="left">'
 		print '<td class="keep">'
 		print "<b>Merged " +fieldname+ ": </b>", value1
 		print '</td>'
@@ -76,7 +76,7 @@ def Compare2(fieldname, values):
 	recno = 1
 	while recno < MaxRecords:
         	if values[0] != values[recno]:
-			print '<tr align=left>'
+			print '<tr align="left">'
 			print '<td class="drop"><b>%s</b></td>' % fieldname
 			print '<td class="drop"><b>Conflict</b></td>'
 			print '<td class="drop">'
@@ -93,7 +93,7 @@ def Compare2(fieldname, values):
 			print '</tr>'
 			return
 		recno += 1
-	print '<tr align=left>'
+	print '<tr align="left">'
 	print '<td class="keep"><b>%s</b></td>' % fieldname
 	print '<td class="keep">Merged</td>'
 	print '<td class="keep">%s</td>' % values[0]
@@ -101,7 +101,7 @@ def Compare2(fieldname, values):
 
 def Merge2(fieldname, values):
 
-	print '<tr align=left>'
+	print '<tr align="left">'
 	print '<td class="keep"><b>%s</b></td>' % fieldname
 	print '<td class="keep">Merged</td>'
 	print '<td class="keep">'
@@ -226,8 +226,8 @@ if __name__ == '__main__':
 			check += 1
 		target += 1
 
-	print "<form METHOD=\"POST\" ACTION=\"/cgi-bin/edit/ts_merge.cgi\">"
-	print '<table cellpadding=0 BGCOLOR="#FFFFFF">'
+	print '<form METHOD="POST" ACTION="/cgi-bin/edit/ts_merge.cgi">'
+	print '<table class="generic_table">'
 
 	##################################################
 	# title_title
@@ -462,7 +462,7 @@ if __name__ == '__main__':
 		print '<input NAME="record%s" VALUE="%s" TYPE="HIDDEN">' % ((recno+1), RecordNumber[recno])
 		recno += 1
 
-	print "<input TYPE=\"SUBMIT\" VALUE=\"Complete Merge\">"
-	print "</form>"
+	print '<input TYPE="SUBMIT" VALUE="Complete Merge">'
+	print '</form>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)
