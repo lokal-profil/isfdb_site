@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2016   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2008-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -24,22 +24,22 @@ Records      = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
 
 def Compare(value1, value2, fieldname):
 	if value1 != value2:
-		print '<tr align=left>'
+		print '<tr align="left">'
 		print '<td class="drop">'
 		print "<b>" +fieldname+ " Conflict:</b><br>"
 		print '<INPUT TYPE="radio" NAME="' +fieldname+ '" VALUE="1" CHECKED>'
 		print value1
-		print "<br>"
+		print '<br>'
 		print '<INPUT TYPE="radio" NAME="' +fieldname+ '" VALUE="2">'
 		print value2
 		print '</td>'
-		print "</tr>"
+		print '</tr>'
 	else:
-		print '<tr align=left>'
+		print '<tr align="left">'
 		print '<td class="keep">'
 		print "<b>Merged " +fieldname+ ": </b>", value1
 		print '</td>'
-		print "</tr>"
+		print '</tr>'
 
 def Compare2(fieldname, values):
 
@@ -54,7 +54,7 @@ def Compare2(fieldname, values):
 	recno = 1
 	while recno < MaxRecords:
         	if values[0] != values[recno]:
-			print '<tr align=left>'
+			print '<tr align="left">'
 			print '<td class="drop">'
 			print "<b>" +fieldname+ " Conflict:</b><br>"
 			index = 1
@@ -70,11 +70,11 @@ def Compare2(fieldname, values):
 			print "</tr>"
 			return
 		recno += 1
-	print '<tr align=left>'
+	print '<tr align="left">'
 	print '<td class="keep">'
 	print "<b>Merged " +fieldname+ ": </b>", values[0]
 	print '</td>'
-	print "</tr>"
+	print '</tr>'
 
 def Merge2(fieldname, values):
 
@@ -86,7 +86,7 @@ def Merge2(fieldname, values):
 			print value
 			print "<br>"
 	print '</td>'
-	print "</tr>"
+	print '</tr>'
 
 def SelectionError():
 	print "<h1>Error: You need to select at least two records to merge.</h1>"
@@ -113,12 +113,12 @@ if __name__ == '__main__':
 				break
 			MaxRecords += 1
 		rec = 0;
-		print "<h2>Merging Records: "
+		print '<h2>Merging Records: '
 		while rec < MaxRecords:
 			print RecordNumber[rec]
 			rec += 1
-		print "</h2>"
-		print "<hr>"
+		print '</h2>'
+		print '<hr>'
 	else:
 		SelectionError()
 
@@ -138,8 +138,8 @@ if __name__ == '__main__':
         	Records[recno].load(int(RecordNumber[recno]))
 		recno += 1
 
-	print "<form METHOD=\"POST\" ACTION=\"/cgi-bin/edit/ps_merge.cgi\">"
-	print '<table cellpadding=0 BGCOLOR="#FFFFFF">'
+	print '<form METHOD="POST" ACTION="/cgi-bin/edit/ps_merge.cgi">'
+	print '<table class="generic_table">'
 
 	##################################################
 	# publisher_name
@@ -193,7 +193,7 @@ if __name__ == '__main__':
 		print '<input NAME="record%s" VALUE="%s" TYPE="HIDDEN">' % ((recno+1), RecordNumber[recno])
 		recno += 1
 
-	print "<input TYPE=\"SUBMIT\" VALUE=\"Complete Merge\">"
-	print "</form>"
+	print '<input TYPE="SUBMIT" VALUE="Complete Merge">'
+	print '</form>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)
