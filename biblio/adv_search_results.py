@@ -23,7 +23,7 @@ from advSearchClass import AdvancedSearch
 class AdvancedSearchResults(AdvancedSearch):
         def __init__(self):
         	self.action = 'query'
-        	self.conjunction = ''
+        	self.conjunction = 'AND'
         	self.dbases = []
                 self.form = {}
                 self.id_field = ''
@@ -89,7 +89,7 @@ class AdvancedSearchResults(AdvancedSearch):
                                 if value:
                                         self.form[key] = value
 
-                        self.start = int(self.form['START'])
+                        self.start = int(self.form.get('START', 0))
                         if self.start > 30000:
                                 self.display_error('Advanced Search Is Currently Limited to 300 pages or 30,000 records', 1)
                         self.search_type = self.form['TYPE']
@@ -97,10 +97,11 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.action = self.form.get('ACTION', 'query')
                         if self.action not in ('query', 'count'):
                                 raise
-                        self.conjunction = self.form.get('C', '')
+                        if 'C' in self.form:
+                                self.conjunction = self.form.get('C')
                         # Legacy queries send CONJUNCTION_1 instead of C
-                        if not self.conjunction:
-                                self.conjunction = self.form.get('CONJUNCTION_1', '')
+                        elif 'CONJUNCTION_1' in self.form:
+                                self.conjunction = self.form.get('CONJUNCTION_1')
                 except:
                         self.display_error('Invalid Advanced Search Parameters', 1)
 
@@ -451,15 +452,15 @@ class AdvancedSearchResults(AdvancedSearch):
         def print_page_button(self, direction):
                 print '<form METHOD="GET" action="http:/%s/adv_search_results.cgi">' % HTFAKE
                 print '<div>'
+                if direction == 'Previous':
+                        new_start = self.start - 100
+                else:
+                        new_start = self.start + 100
+                print '<input NAME="START" value="%s" type="HIDDEN">' % new_start
                 for key in self.form.keys():
-                        if key == 'START':
-                                if direction == 'Previous':
-                                        key_value = self.start - 100
-                                else:
-                                        key_value = self.start + 100
-                        else:
+                        if key != 'START':
                                 key_value = cgi.escape(self.form[key], True)
-                        print '<input NAME="%s" value="%s" type="HIDDEN">' % (key, key_value)
+                                print '<input NAME="%s" value="%s" type="HIDDEN">' % (key, key_value)
                 if direction == 'Previous':
                         start = self.start-99
                         end = self.start
