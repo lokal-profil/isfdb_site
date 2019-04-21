@@ -40,11 +40,11 @@ def validateYear(string):
         except:
                 return (0, error)
 
-def PrintSummary(arg, count, limit):
+def PrintSummary(arg, count, limit, search_type, search_abbreviation):
         print "<p><b>A search for '%s' found %d matches" % (arg, count)
         if count >= limit:
 		print "<br>The first %d matches are displayed below. " % (limit)
-		print 'Use <a class="inverted" href="http:/%s/adv_search_menu.cgi">Advanced Search</a>' % (HTFAKE)
+		print 'Use <a class="inverted" href="http:/%s/adv_search_selection.cgi?%s">Advanced %s Search</a>' % (HTFAKE, search_abbreviation, search_type)
 		print " to see more matches."
 	print '</b>'
 	print '<p>'
@@ -272,7 +272,7 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB Name search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        PrintSummary(arg, len(results), 300)
+                        PrintSummary(arg, len(results), 300, 'Author', 'author')
 			if results:
                                 PrintAuthorTable(results, 0, 300)
                         else:
@@ -286,7 +286,7 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB Fiction Title search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        PrintSummary(arg, len(results), 300)
+                        PrintSummary(arg, len(results), 300, 'Title', 'title')
 			if results:
                                 PrintTitleTable(results, 0, 300, user)
                         else:
@@ -300,7 +300,7 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB Title search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        PrintSummary(arg, len(results), 300)
+                        PrintSummary(arg, len(results), 300, 'Title', 'title')
 			if results:
                                 PrintTitleTable(results, 0, 300, user)
                         else:
@@ -317,7 +317,7 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB Year of Title search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        PrintSummary(arg, len(results), 300)
+                        PrintSummary(arg, len(results), 300, 'Title', 'title')
 			if results:
                                 PrintTitleTable(results, 0, 300, user)
 
@@ -335,7 +335,7 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB Month of Title search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        PrintSummary(arg, len(results), 300)
+                        PrintSummary(arg, len(results), 300, 'Title', 'title')
 			if results:
                                 PrintTitleTable(results, 0, 300, user)
 
@@ -355,7 +355,7 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB Series search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        PrintSummary(arg, len(results), 300)
+                        PrintSummary(arg, len(results), 300, 'Series', 'series')
 			if results:
                                 PrintSeriesTable(results, 300)
                         else:
@@ -370,7 +370,7 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB Magazine search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        PrintSummary(arg, count, 300)
+                        PrintSummary(arg, count, 300, 'Title', 'title')
 			if results:
                                 PrintMagazineResults(results, arg)
 
@@ -388,7 +388,7 @@ if __name__ == '__main__':
                         if SQLisUserModerator(userid):
                                 moderator = 1
        			print '<form METHOD="POST" ACTION="/cgi-bin/edit/pv_merge.cgi">'
-                        PrintSummary(arg, len(results), 300)
+                        PrintSummary(arg, len(results), 300, 'Publisher', 'publisher')
 			if results:
                                 PrintPublisherResults(results, moderator)
                         else:
@@ -408,7 +408,7 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB Publication Series search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        PrintSummary(arg, len(results), 300)
+                        PrintSummary(arg, len(results), 300, 'Publication Series', 'pub_series')
 			if results:
                                 PrintPubSeriesResults(results)
                         else:
@@ -425,7 +425,7 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB ISBN search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        PrintSummary(arg, len(results), 300)
+                        PrintSummary(arg, len(results), 300, 'Publication', 'pub')
                         PrintPubsTable(results, "isbn_search")
 
 	elif type[:3] == 'Tag':
@@ -436,7 +436,7 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB Tag search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        PrintSummary(arg, len(results), 300)
+                        PrintSummary(arg, len(results), 300, 'Title', 'title')
 			if results:
                                 PrintTagResults(results)
 
@@ -447,7 +447,7 @@ if __name__ == '__main__':
 		else:
                         PrintHeader("ISFDB Award search")
                         PrintNavbar('search', 0, 0, 0, 0, search_value, type)
-                        PrintSummary(arg, len(results), 300)
+                        PrintSummary(arg, len(results), 300, 'Award Type', 'award_type')
 			if results:
                                 PrintAwardResults(results, 300)
 
