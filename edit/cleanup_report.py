@@ -6017,8 +6017,14 @@ def function243():
                 from pubs p, cleanup c
                 where c.report_type = 243
                 and p.pub_id = c.record_id
-                and pub_frontimage like '%L.\_%'
-                and pub_frontimage like '%amazon%'
+                and p.pub_frontimage like '%amazon%'
+                and (
+                        LENGTH(p.pub_frontimage) - LENGTH(REPLACE(p.pub_frontimage, '_', '')) > 1
+                        or (
+                                p.pub_frontimage not like '%L.\_CR%'
+                                and p.pub_frontimage like '%\_%'
+                        )
+                )
                 order by p.pub_title"""
         cleanup.none = 'No Publications with Images with Extra Formatting in Amazon URLs'
         cleanup.print_pub_table()

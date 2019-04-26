@@ -1472,8 +1472,15 @@ def nightly_cleanup_reports():
         #   Report 243: Publication Images with Extra Formatting in Amazon URLs
         query = """select pub_id
                 from pubs
-                where pub_frontimage like '%L.\_%'
-                and pub_frontimage like '%amazon%'"""
+                where pub_frontimage like '%amazon%'
+                and (
+                        LENGTH(pub_frontimage) - LENGTH(REPLACE(pub_frontimage, '_', '')) > 1
+                        or (
+                                pub_frontimage not like '%L.\_CR%'
+                                and pub_frontimage like '%\_%'
+                        )
+                )
+                """
         standardReport(query, 243)
 
         #   Report 244: Publications with Invalid Non-numeric External IDs
