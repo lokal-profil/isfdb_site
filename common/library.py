@@ -804,6 +804,7 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
                 'Reginald3': ('http:/%s/title.cgi?102835' % HTFAKE, 'Reginald3',
                                    'Science Fiction and Fantasy Literature 1975 - 1991 by Robert Reginald, 1992'),
                 'S': ('http:/%s/se.cgi?arg=%%s&amp;type=Series&amp;mode=exact' % HTFAKE, ),
+                'SF-Leihbuch': ('http://www.sf-leihbuch.de/index.cfm?bid=%s', 'SF-Leihbuch', 'Science Fiction-Leihbuch-Datenbank'),
                 'SFBG': ('http://www.sfbg.us', 'SFBG',
                          'Bulgarian SF'),
                 'SFBG-pub': ('http://www.sfbg.us/book/%s', 'SFBG publication',
