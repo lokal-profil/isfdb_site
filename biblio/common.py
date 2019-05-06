@@ -779,11 +779,10 @@ def PrintAllAuthors(title_id, prefix = '', suffix = ''):
 def PrintWebPages(webpages, format = '<li>'):
         if not webpages:
                 return
-        domains = RecognizedDomains()
         printed = {}
 	for webpage in webpages:
                 # Get the corrected link and the displayed form of this URL
-                (corrected_webpage, display, home_page) = BuildDisplayedURL(webpage, domains)
+                (corrected_webpage, display, home_page) = BuildDisplayedURL(webpage)
                 # Add this URL to the list of sites for this domain
                 if display not in printed:
                         printed[display] = []
@@ -807,7 +806,7 @@ def PrintWebPages(webpages, format = '<li>'):
                         count += 1
 	print output
 
-def BuildDisplayedURL(webpage, domains):
+def BuildDisplayedURL(webpage):
         from urlparse import urlparse
         parsed_url = urlparse(webpage)
         # Extract the "domain:port" part of the URL
@@ -822,6 +821,7 @@ def BuildDisplayedURL(webpage, domains):
         # not to a location on the local server, which could cause a security issue.
         if not parsed_url[0]:
                 webpage = "http://%s" % webpage
+        domains = RecognizedDomains()
         display = ''
         for index in (4, 3, 2):
                 # Extract the last 4, then 3, then 2 period-delimited parts of the domain
@@ -924,7 +924,7 @@ def PrintAwardCatRecord(award_cat, bgcolor):
         print '</tr>'
 
 def CoverInfo(link, preview=False, direct=False):
-        (finallink, credit, home_page) = BuildDisplayedURL(link, RecognizedDomains())
+        (finallink, credit, home_page) = BuildDisplayedURL(link)
         if credit == 'ISFDB':
                 site_name = 'ISFDB'
                 if not direct:

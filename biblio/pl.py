@@ -549,8 +549,7 @@ if __name__ == '__main__':
 	if pub.pub_image:
         	print '</td>'
         	print '</table>'
-                domains = RecognizedDomains()
-                (webpage, credit, home_page) = BuildDisplayedURL(pub.pub_image, domains)
+                (webpage, credit, home_page) = BuildDisplayedURL(pub.pub_image)
                 print 'Cover art supplied by <a href="http://%s" target="_blank">%s</a>' % (home_page, credit)
 
        	print '</div>'

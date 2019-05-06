@@ -597,8 +597,7 @@ class Bibliography:
 		if self.au_data[AUTHOR_IMAGE]:
 			print "</td>"
 			print "</table>"
-                        domains = RecognizedDomains()
-                        (webpage, credit, home_page) = BuildDisplayedURL(self.au_data[AUTHOR_IMAGE], domains)
+                        (webpage, credit, home_page) = BuildDisplayedURL(self.au_data[AUTHOR_IMAGE])
                         print 'Image supplied by <a href="http://%s" target="_blank">%s</a>' % (home_page, credit)
 
                 print '</div>'
