@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -47,6 +47,7 @@ TARGETS	= apple-touch-icon.png \
 install:
 	python index_install.py
 	cp $(TARGETS) $(INSTALL)
+	rm -f *.pyc
 
 clean: clobber
 
