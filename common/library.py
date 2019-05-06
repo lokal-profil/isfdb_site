@@ -1021,7 +1021,6 @@ def RecognizedDomains():
         domains['sff.net'] = ('SFF Net', 'sff.net', 0)
         domains['sf-encyclopedia.com'] = ('SFE3', 'www.sf-encyclopedia.com', 1)
         domains['sf-encyclopedia.uk'] = ('Encyclopedia of Fantasy', 'sf-encyclopedia.uk/fe/', 1)
-        domains['sf-encyclopedia.co.uk'] = ('Encyclopedia of Fantasy', 'sf-encyclopedia.uk/fe/', 1)
         domains['sfsite.com'] = ('SF Site', 'www.sfsite.com', 0)
         domains['sfwa.org'] = ('SFWA', 'www.sfwa.org', 0)
         domains['shelfari.com'] = ('Shelfari','', 0)
