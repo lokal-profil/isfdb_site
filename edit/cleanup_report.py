@@ -1273,10 +1273,10 @@ def function36():
 	domains = RecognizedDomains()
         for domain in domains:
                 # Skip domains that are "recognized", but we don't have permission to link to
-                if domains[domain][2] == 0:
+                if domain[3] == 0:
                         continue
                 query += " and pubs.pub_frontimage not like '%"
-                query += "%s" % domain
+                query += "%s" % domain[0]
                 query += "%'"
         query += " order by pubs.pub_frontimage"
 	db.query(query)

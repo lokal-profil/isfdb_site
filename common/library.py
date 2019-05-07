@@ -941,104 +941,108 @@ def ServerSideRedirect(location):
 	sys.exit(0)
 
 def RecognizedDomains():
-        # A dictionary of all "recognized" Web sites and their names
-        # The key is the domain name
-        # The value is a tuple consiting of the following three values:
+        # A tuple of all "recognized" Web sites and their names
+        # The tuple contains domain-specific tuples
+        # Each domain-specific tuple contains the following values:
+        #   0 - domain name
         #   1 - the name of the site that will be credited
         #   2 - the URL of the site that will be linked in the credit
         #   3 - 1 if the site has given us permission to link to their images or 0 if it hasn't
-        domains = {}
-        domains['1632.org'] = ('1632, Inc.', 'www.1632.org', 1)
-        domains['amazon.com'] = ('Amazon.com', 'www.amazon.com', 1)
-        domains['animenewsnetwork.com'] = ('Anime News Network', 'animenewsnetwork.com', 0)
-        domains['ansible.co.uk'] = ('Ansible', 'ansible.uk', 0)
-        domains['ansible.uk'] = ('Ansible', 'ansible.uk', 0)
-        domains['aozora.gr.jp'] = ('Aozora Bunko', 'www.aozora.gr.jp', 0)
-        domains['argee.net'] = ('Dr. Robert G. Williscroft', 'argee.net/', 1)
-        domains['bookscans.fatcow.com'] = ('Bookscans', 'www.bookscans.com', 1)
-        domains['ssl-images-amazon.com'] = ('Amazon.com', 'www.amazon.com', 1)
-        domains['images-eu.amazon.com'] = ('Amazon UK', 'www.amazon.co.uk', 1)
-        domains['amazon.ca'] = ('Amazon.ca', 'www.amazon.ca', 1)
-        domains['armchairfiction.com'] = ('Armchair Fiction', 'www.armchairfiction.com', 1)
-        domains['asahi-net.or.jp'] = ('A. E. van Vogt Cover Art Gallery', 'www.asahi-net.or.jp/~we8y-mrt/vanvogt/', 1)
-        domains['bestsf.net'] = ('Best SF', 'www.bestsf.net', 0)
-        domains['blogspot.com'] = ('Blogspot', 'www.blogger.com', 0)
-        domains['bnf.fr'] = ('National Library of France', 'www.bnf.fr', 0)
-        domains['bookscans.com'] = ('Bookscans', 'www.bookscans.com', 1)
-        domains['chickenlittleagenda.com'] = ('Dr. Robert G. Williscroft', 'chickenlittleagenda.com', 1)
-        domains['collectorshowcase.fr'] = ('Collectors Showcase', 'www.collectorshowcase.fr/intro.htm', 1)
-        domains['daganbooks.com'] = ('Dagan Books', 'daganbooks.com', 1)
-        domains['dbr.nu'] = ('Diamond Bay Research', 'dbr.nu', 1)
-        domains['deboekenplank.nl'] = ('De Boekenplank', 'www.deboekenplank.nl', 1)
-        domains['d-nb.info'] = ('German National Library', 'https://www.dnb.de/EN/Home/home_node.html', 0)
-        domains['downwarden.com'] = ('Black Bed Sheet Books', 'www.downwarden.com', 1)
-        domains['dwtr67e3ikfml.cloudfront.net'] = ('Smashwords', 'www.smashwords.com', 1)
-        domains['encyklopediafantastyki.pl'] = ('Encyklopedia Fantastyki', 'www.encyklopediafantastyki.pl', 0)
-        domains['ericflint.net'] = ('1632, Inc.', 'www.1632.org', 1)
-        domains['facebook.com'] = ('Facebook', 'www.facebook.com', 1)
-        domains['fancyclopedia.org'] = ('Fancyclopedia 3', 'www.fancyclopedia.org', 0)
-        domains['fantascienza.com'] = ('Fantascienza', 'fantascienza.com', 1)
-        domains['fantlab.ru'] = ('FantLab', 'fantlab.ru', 1)
-        domains['fantasticfiction.com'] = ('Fantastic Fiction', 'fantasticfiction.com', 1)
-        domains['fantasticfiction.co.uk'] = ('Fantastic Fiction', 'fantasticfiction.com', 1)
-        domains['goodreads.com'] = ('Goodreads', 'goodreads.com', 0)
-        domains['grantvillegazette.com'] = ('1632, Inc.', 'www.1632.org', 1)
-        domains['gutenberg.org'] = ('Gutenberg', 'gutenberg.org', 0)
-        domains['howardworks.com'] = ('Howard Works', 'howardworks.com', 1)
-        domains['icshi.net'] = ('The Weird Worlds of A. E. van Vogt', 'www.icshi.net/worlds/', 1)
-        domains['images-amazon.com'] = ('Amazon.com', 'www.amazon.com', 1)
-        domains['imdb.com'] = ('IMDB', 'imdb.com', 0)
-        domains['instagram.com'] = ('Instagram', 'instagram.com', 0)
-        domains['ivy-bells.com'] = ('Dr. Robert G. Williscroft', 'ivy-bells.com', 1)
-        domains['wp.com'] = ('Nitchevo Factory', 'nitchevo.net/', 1)
-        domains['isfdb.org'] = ('ISFDB', 'www.isfdb.org', 1)
-        domains['kirjasto.sci.fi'] = ('Books and Writers', 'kirjasto.sci.fi', 0)
-        domains['librarything.com'] = ('LibraryThing', 'librarything.com', 0)
-        domains['linkedin.com'] = ('LinkedIn', 'linkedin.com', 0)
-        domains['livejournal.com'] = ('LiveJournal', 'livejournal.com', 0)
-        domains['lndb.info'] = ('Light Novel Database', 'lndb.info', 0)
-        domains['loc.gov'] = ('Library of Congress', 'www.loc.gov', 0)
-        domains['locusmag.com'] = ('Locus', 'locusmag.com', 0)
-        domains['luminist.org'] = ('The Luminist League', 'www.luminist.org', 1)
-        domains['metaphorosis.com'] = ('Metaphorosis', 'www.metaphorosis.com', 1)
-        domains['mondourania.com'] = ('Mondourania', 'www.mondourania.com', 1)
-        domains['myanimelist.net'] = ('MyAnimeList', 'myanimelist.net', 0)
-        domains['myspace.com'] = ('Myspace', 'myspace.com', 0)
-        domains['nasa.gov'] = ('NASA', 'www.nasa.gov', 0)
-        domains['nla.gov.au'] = ('National Library of Australia', 'www.nla.gov.au', 0)
-        domains['ofearna.us'] = ('Susan O\'Fearna', 'ofearna.us', 1)
-        domains['openlibrary.org'] = ('Open Library', 'openlibrary.org', 1)
-        domains['people.uncw.edu'] = ('Ace Image library', 'people.uncw.edu/smithms/ACE.html', 1)
-        domains['philsp.com'] = ('Galactic Central', 'philsp.com', 1)
-        domains['pinterest.com'] = ('Pinterest', 'pinterest.com', 0)
-        domains['plus.google.com'] = ('Google+', 'plus.google.com', 0)
-        domains['pulpcovers.com'] = ('PulpCovers.com', 'pulpcovers.com', 1)
-        domains['relativitybirthdaypresent.com'] = ('Dr. Robert G. Williscroft', 'relativitybirthdaypresent.com', 1)
-        domains['riversofwar.com'] = ('1632, Inc.', 'www.1632.org', 1)
-        domains['rusf.ru'] = ('Russian SF&F', 'rusf.ru', 0)
-        domains['scifiinc.net'] = ('Fan Gallery', 'scifiinc.net', 0)
-        domains['sfadb.com'] = ('Science Fiction Awards Database', 'sfadb.com', 0)
-        domains['sff.net'] = ('SFF Net', 'sff.net', 0)
-        domains['sf-encyclopedia.com'] = ('SFE3', 'www.sf-encyclopedia.com', 1)
-        domains['sf-encyclopedia.uk'] = ('Encyclopedia of Fantasy', 'sf-encyclopedia.uk/fe/', 1)
-        domains['sfsite.com'] = ('SF Site', 'www.sfsite.com', 0)
-        domains['sfwa.org'] = ('SFWA', 'www.sfwa.org', 0)
-        domains['shelfari.com'] = ('Shelfari','', 0)
-        domains['sinistercinema.com'] = ('Armchair Fiction', 'www.armchairfiction.com', 1)
-        domains['slingshotnovel.com'] = ('Dr. Robert G. Williscroft', 'slingshotnovel.com', 1)
-        domains['starchildcompact.com'] = ('Dr. Robert G. Williscroft', 'starchildcompact.com', 1)
-        domains['thetrashcollector.com'] = ('The Trash Collector', 'www.thetrashcollector.com', 1)
-        domains['thrawnrickle.com'] = ('Dr. Robert G. Williscroft', 'thrawnrickle.com', 1)
-        domains['tumblr.com'] = ('Tumblr', 'www.tumblr.com', 0)
-        domains['twitter.com'] = ('Twitter', 'www.twitter.com', 0)
-        domains['uraniamania.com'] = ('Urania Mania', 'www.uraniamania.com', 1)
-        domains['vonniewinslowcrist.files.wordpress.com'] = ('Vonnie Winslow Crist', 'vonniewinslowcrist.wordpress.com', 1)
-        domains['wattpad.com'] = ('Wattpad', 'www.wattpad.com', 0)
-        domains['wikipedia.org'] = ('Wikipedia', 'www.wikipedia.org', 0)
-        domains['worldcat.org'] = ('WorldCat', 'www.worldcat.org', 0)
-        domains['wordpress.com'] = ('WordPress', 'www.wordpress.com', 0)
-        domains['youtube.com'] = ('YouTube', 'www.youtube.com', 0)
-        domains['yunchtime.net'] = ('Diamond Bay Research', 'yunchtime.net', 1)
+        #   4 - (optional) URL segment which must be present in the URL
+        domains = (
+                ('1632.org', '1632, Inc.', 'www.1632.org', 1),
+                ('amazon.ca', 'Amazon.ca', 'www.amazon.ca', 1),
+                ('amazon.com', 'Amazon.com', 'www.amazon.com', 1),
+                ('animenewsnetwork.com', 'Anime News Network', 'animenewsnetwork.com', 0),
+                ('ansible.co.uk', 'Ansible', 'ansible.uk', 0),
+                ('ansible.uk', 'Ansible', 'ansible.uk', 0),
+                ('aozora.gr.jp', 'Aozora Bunko', 'www.aozora.gr.jp', 0),
+                ('argee.net', 'Dr. Robert G. Williscroft', 'argee.net/', 1),
+                ('armchairfiction.com', 'Armchair Fiction', 'www.armchairfiction.com', 1),
+                ('asahi-net.or.jp', 'A. E. van Vogt Cover Art Gallery', 'www.asahi-net.or.jp/~we8y-mrt/vanvogt/', 1),
+                ('bestsf.net', 'Best SF', 'www.bestsf.net', 0),
+                ('blogspot.com', 'Blogspot', 'www.blogger.com', 0),
+                ('bnf.fr', 'National Library of France', 'www.bnf.fr', 0),
+                ('bookscans.com', 'Bookscans', 'www.bookscans.com', 1),
+                ('bookscans.fatcow.com', 'Bookscans', 'www.bookscans.com', 1),
+                ('chickenlittleagenda.com', 'Dr. Robert G. Williscroft', 'chickenlittleagenda.com', 1),
+                ('collectorshowcase.fr', 'Collectors Showcase', 'www.collectorshowcase.fr/intro.htm', 1),
+                ('d-nb.info', 'German National Library', 'https://www.dnb.de/EN/Home/home_node.html', 0),
+                ('daganbooks.com', 'Dagan Books', 'daganbooks.com', 1),
+                ('dbr.nu', 'Diamond Bay Research', 'dbr.nu', 1),
+                ('deboekenplank.nl', 'De Boekenplank', 'www.deboekenplank.nl', 1),
+                ('downwarden.com', 'Black Bed Sheet Books', 'www.downwarden.com', 1),
+                ('dwtr67e3ikfml.cloudfront.net', 'Smashwords', 'www.smashwords.com', 1),
+                ('encyklopediafantastyki.pl', 'Encyklopedia Fantastyki', 'www.encyklopediafantastyki.pl', 0),
+                ('ericflint.net', '1632, Inc.', 'www.1632.org', 1),
+                ('facebook.com', 'Facebook', 'www.facebook.com', 1),
+                ('fancyclopedia.org', 'Fancyclopedia 3', 'www.fancyclopedia.org', 0),
+                ('fantascienza.com', 'Fantascienza', 'fantascienza.com', 1),
+                ('fantasticfiction.co.uk', 'Fantastic Fiction', 'fantasticfiction.com', 1),
+                ('fantasticfiction.com', 'Fantastic Fiction', 'fantasticfiction.com', 1),
+                ('fantlab.ru', 'FantLab', 'fantlab.ru', 1),
+                ('goodreads.com', 'Goodreads', 'goodreads.com', 0),
+                ('grantvillegazette.com', '1632, Inc.', 'www.1632.org', 1),
+                ('gutenberg.org', 'Gutenberg', 'gutenberg.org', 0),
+                ('howardworks.com', 'Howard Works', 'howardworks.com', 1),
+                ('icshi.net', 'The Weird Worlds of A. E. van Vogt', 'www.icshi.net/worlds/', 1),
+                ('images-amazon.com', 'Amazon.com', 'www.amazon.com', 1),
+                ('images-eu.amazon.com', 'Amazon UK', 'www.amazon.co.uk', 1),
+                ('imdb.com', 'IMDB', 'imdb.com', 0),
+                ('instagram.com', 'Instagram', 'instagram.com', 0),
+                ('isfdb.org', 'ISFDB', 'www.isfdb.org', 1),
+                ('ivy-bells.com', 'Dr. Robert G. Williscroft', 'ivy-bells.com', 1),
+                ('kirjasto.sci.fi', 'Books and Writers', 'kirjasto.sci.fi', 0),
+                ('librarything.com', 'LibraryThing', 'librarything.com', 0),
+                ('linkedin.com', 'LinkedIn', 'linkedin.com', 0),
+                ('livejournal.com', 'LiveJournal', 'livejournal.com', 0),
+                ('lndb.info', 'Light Novel Database', 'lndb.info', 0),
+                ('loc.gov', 'Library of Congress', 'www.loc.gov', 0),
+                ('locusmag.com', 'Locus', 'locusmag.com', 0),
+                ('luminist.org', 'The Luminist League', 'www.luminist.org', 1),
+                ('metaphorosis.com', 'Metaphorosis', 'www.metaphorosis.com', 1),
+                ('mondourania.com', 'Mondourania', 'www.mondourania.com', 1),
+                ('myanimelist.net', 'MyAnimeList', 'myanimelist.net', 0),
+                ('myspace.com', 'Myspace', 'myspace.com', 0),
+                ('nasa.gov', 'NASA', 'www.nasa.gov', 0),
+                ('nla.gov.au', 'National Library of Australia', 'www.nla.gov.au', 0),
+                ('ofearna.us', 'Susan O\'Fearna', 'ofearna.us', 1),
+                ('openlibrary.org', 'Open Library', 'openlibrary.org', 1),
+                ('people.uncw.edu', 'Ace Image library', 'people.uncw.edu/smithms/ACE.html', 1),
+                ('philsp.com', 'Galactic Central', 'philsp.com', 1),
+                ('pinterest.com', 'Pinterest', 'pinterest.com', 0),
+                ('plus.google.com', 'Google+', 'plus.google.com', 0),
+                ('pulpcovers.com', 'PulpCovers.com', 'pulpcovers.com', 1),
+                ('relativitybirthdaypresent.com', 'Dr. Robert G. Williscroft', 'relativitybirthdaypresent.com', 1),
+                ('riversofwar.com', '1632, Inc.', 'www.1632.org', 1),
+                ('rusf.ru', 'Russian SF&F', 'rusf.ru', 0),
+                ('scifiinc.net', 'Fan Gallery', 'scifiinc.net', 0),
+                ('sf-encyclopedia.com', 'SFE3', 'www.sf-encyclopedia.com', 1),
+                ('sf-encyclopedia.uk', 'SFE3', 'www.sf-encyclopedia.com', 1, 'gal/'),
+                ('sf-encyclopedia.uk', 'Encyclopedia of Fantasy', 'sf-encyclopedia.uk/fe/', 1, 'fe.php'),
+                ('sfadb.com', 'Science Fiction Awards Database', 'sfadb.com', 0),
+                ('sff.net', 'SFF Net', 'sff.net', 0),
+                ('sfsite.com', 'SF Site', 'www.sfsite.com', 0),
+                ('sfwa.org', 'SFWA', 'www.sfwa.org', 0),
+                ('shelfari.com', 'Shelfari', '', 0),
+                ('sinistercinema.com', 'Armchair Fiction', 'www.armchairfiction.com', 1),
+                ('slingshotnovel.com', 'Dr. Robert G. Williscroft', 'slingshotnovel.com', 1),
+                ('ssl-images-amazon.com', 'Amazon.com', 'www.amazon.com', 1),
+                ('starchildcompact.com', 'Dr. Robert G. Williscroft', 'starchildcompact.com', 1),
+                ('thetrashcollector.com', 'The Trash Collector', 'www.thetrashcollector.com', 1),
+                ('thrawnrickle.com', 'Dr. Robert G. Williscroft', 'thrawnrickle.com', 1),
+                ('tumblr.com', 'Tumblr', 'www.tumblr.com', 0),
+                ('twitter.com', 'Twitter', 'www.twitter.com', 0),
+                ('uraniamania.com', 'Urania Mania', 'www.uraniamania.com', 1),
+                ('vonniewinslowcrist.files.wordpress.com', 'Vonnie Winslow Crist', 'vonniewinslowcrist.wordpress.com', 1),
+                ('wattpad.com', 'Wattpad', 'www.wattpad.com', 0),
+                ('wikipedia.org', 'Wikipedia', 'www.wikipedia.org', 0),
+                ('wordpress.com', 'WordPress', 'www.wordpress.com', 0),
+                ('worldcat.org', 'WorldCat', 'www.worldcat.org', 0),
+                ('wp.com', 'Nitchevo Factory', 'nitchevo.net/', 1),
+                ('youtube.com', 'YouTube', 'www.youtube.com', 0),
+                ('yunchtime.net', 'Diamond Bay Research', 'yunchtime.net', 1),
+         )
         return domains
 
 def FormatAuthors(authors):

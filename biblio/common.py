@@ -823,21 +823,34 @@ def BuildDisplayedURL(webpage):
                 webpage = "http://%s" % webpage
         domains = RecognizedDomains()
         display = ''
+        # Extract the last 4, then 3, then 2 period-delimited parts of the domain name and evaluate them
         for index in (4, 3, 2):
-                # Extract the last 4, then 3, then 2 period-delimited parts of the domain
                 part = ".".join(domain.split('.')[-index:])
-                if part in domains:
-                        display = domains[part][0]
-                        home_page = domains[part][1]
-                        if part == 'wikipedia.org':
-                                # For Wikipedia, display the language
-                                language = domain.split('.')[0]
-                                display += '-%s' % language.upper()
-                        # If the image is hosted by ISFDB, link directly to the image page rather than to the home page
-                        if part == 'isfdb.org':
-                                home_page = "%s%s" % (HTMLHOST, parsed_url[2])
-                                home_page = "%s/index.php/Image:%s" % (WIKILOC, webpage.rpartition('/')[-1])
-                        return (webpage, display, home_page)
+                credit_data = ''
+                for domain_tuple in domains:
+                        if part != domain_tuple[0]:
+                                continue
+                        # If an optional "required url segment" is defined for this domain, check its presence in the URL
+                        if len(domain_tuple) > 4:
+                                required_url_segment = domain_tuple[4]
+                                if required_url_segment and required_url_segment not in parsed_url[2]:
+                                        continue
+                        credit_data = domain_tuple
+                        break
+                if not credit_data:
+                        continue
+                recognized_domain = credit_data[0]
+                display = credit_data[1]
+                home_page = credit_data[2]
+                if part == 'wikipedia.org':
+                        # For Wikipedia, display the language
+                        language = domain.split('.')[0]
+                        display += '-%s' % language.upper()
+                # If the image is hosted by ISFDB, link directly to the image page rather than to the home page
+                if part == 'isfdb.org':
+                        home_page = "%s%s" % (HTMLHOST, parsed_url[2])
+                        home_page = "%s/index.php/Image:%s" % (WIKILOC, webpage.rpartition('/')[-1])
+                return (webpage, display, home_page)
         # If this is not a "recognized" Web site, then display the raw domain name padded with "http://"
         if not display:
                 display = domain

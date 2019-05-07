@@ -105,7 +105,7 @@ def CheckImage(value):
         domains = RecognizedDomains()
         valid_domain = 0
         for domain in domains:
-                if (domain in value) and (domains[domain][2] == 1):
+                if (domain[0] in value) and (domain[3] == 1):
                         valid_domain = 1
                         break
         if not valid_domain:
