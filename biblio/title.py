@@ -571,10 +571,21 @@ if __name__ == '__main__':
 	# STEP 6a - Display cover art of the pubs for COVERART records only
 	###################################################################
         if title[TITLE_TTYPE] == 'COVERART':
-                # For cover art display purposes, retrieve only pubs where this title record is the cover rather than INTERIORART
-                cover_pubs = SQLGetCoverPubsByTitle(title_id)
-                for pub in cover_pubs:
-                        if pub[PUB_IMAGE]:
+                title_ids = [title_id]
+                for one_title in titles:
+                        title_ids.append(one_title[TITLE_PUBID])
+                for pub in pubs:
+                        # Skip pubs without a cover image
+                        if not pub[PUB_IMAGE]:
+                                continue
+                        # Skip pubs with INTERIORART variants of this cover art title
+                        covers = SQLPubCovers(pub[PUB_PUBID])
+                        eligible = 0
+                        for cover in covers:
+                                cover_id = cover[TITLE_PUBID]
+                                if cover_id in title_ids:
+                                        eligible = 1
+                        if eligible:
                                 print ISFDBLink("pl.cgi", pub[PUB_PUBID], '<img src="%s" alt="Coverart" class="scans">' % pub[PUB_IMAGE].split("|")[0])
 	#####################################################################
 	# STEP 6b - Display a link to the cover page for non-COVERART records
