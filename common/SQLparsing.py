@@ -1480,11 +1480,13 @@ def SQLgetTitleReferral(pub_id, pub_ctype, include_editors=0):
 		title_data = result.fetch_row()
 	return 0
 
-def SQLgetTitleReferralList(pub_ids, pubs, include_editors=0):
+def SQLgetTitleReferralList(pubs, include_editors=0):
         from library import list_to_in_clause
+        pub_ids = []
         pub_types = {}
         for pub in pubs:
                 pub_id = pub[PUB_PUBID]
+                pub_ids.append(pub_id)
                 pub_type = pub[PUB_CTYPE]
                 pub_types[pub_id] = pub_type
 

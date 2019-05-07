@@ -149,7 +149,7 @@ class PublicationMonth:
                 self.pub_authors = SQLPubListBriefAuthorRecords(self.pub_ids)
 
         def loadTitles(self):
-                self.referral_titles = SQLgetTitleReferralList(self.pub_ids, self.pub_list, 1)
+                self.referral_titles = SQLgetTitleReferralList(self.pub_list, 1)
                 # Retrieve all parent titles
                 parent_ids = []
                 for pub_id in self.referral_titles:
