@@ -782,7 +782,7 @@ def PrintWebPages(webpages, format = '<li>'):
         printed = {}
 	for webpage in webpages:
                 # Get the corrected link and the displayed form of this URL
-                (corrected_webpage, display, home_page) = BuildDisplayedURL(webpage)
+                (corrected_webpage, display, home_page, linked_page) = BuildDisplayedURL(webpage)
                 # Add this URL to the list of sites for this domain
                 if display not in printed:
                         printed[display] = []
@@ -807,6 +807,10 @@ def PrintWebPages(webpages, format = '<li>'):
 	print output
 
 def BuildDisplayedURL(webpage):
+        linked_page = ''
+        if '|' in webpage:
+                linked_page = webpage.split('|')[1]
+                webpage = webpage.split('|')[0]
         from urlparse import urlparse
         parsed_url = urlparse(webpage)
         # Extract the "domain:port" part of the URL
@@ -846,11 +850,10 @@ def BuildDisplayedURL(webpage):
                         # For Wikipedia, display the language
                         language = domain.split('.')[0]
                         display += '-%s' % language.upper()
-                # If the image is hosted by ISFDB, link directly to the image page rather than to the home page
-                if part == 'isfdb.org':
-                        home_page = "%s%s" % (HTMLHOST, parsed_url[2])
-                        home_page = "%s/index.php/Image:%s" % (WIKILOC, webpage.rpartition('/')[-1])
-                return (webpage, display, home_page)
+                # If the image is hosted by ISFDB, also link to the Wiki-based image description page
+                if display == 'ISFDB':
+                        linked_page = "http://%s/index.php/Image:%s" % (WIKILOC, parsed_url[2].rpartition('/')[-1])
+                break
         # If this is not a "recognized" Web site, then display the raw domain name padded with "http://"
         if not display:
                 display = domain
@@ -858,8 +861,7 @@ def BuildDisplayedURL(webpage):
                 # If the first four letters are 'www.', strip them
                 if display[:4] == 'www.':
                         display = display[4:]
-        return (webpage, display, home_page)
-       
+        return (webpage, display, home_page, linked_page)
         
 def PrintAwardResults(results, limit):
 	print '<table class="generic_table">'
@@ -937,7 +939,7 @@ def PrintAwardCatRecord(award_cat, bgcolor):
         print '</tr>'
 
 def CoverInfo(link, preview=False, direct=False):
-        (finallink, credit, home_page) = BuildDisplayedURL(link)
+        (finallink, credit, home_page, linked_page) = BuildDisplayedURL(link)
         if credit == 'ISFDB':
                 site_name = 'ISFDB'
                 if not direct:
