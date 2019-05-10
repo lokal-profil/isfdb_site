@@ -241,7 +241,7 @@ def reportsDict():
         reports[228] = ("ISBN-less e-pubs without an ASIN")
         reports[229] = ("Mismatched HTML tags in Publication Notes")
         reports[230] = ("Mismatched OCLC URLs in Publication Notes")
-        reports[231] = ("Invalid Smashwords Image Links")
+        reports[231] = ("Missing Required Web Pages for Cover Images")
         reports[232] = ("Award Years with Month/Day Data")
         reports[233] = ("Potential Duplicate E-book Publications")
         reports[234] = ("Publications with direct De Nederlandse Bibliografie links in Notes")

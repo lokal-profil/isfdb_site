@@ -949,6 +949,7 @@ def RecognizedDomains():
         #   2 - the URL of the site that will be linked in the credit
         #   3 - 1 if the site has given us permission to link to their images or 0 if it hasn't
         #   4 - (optional) URL segment which must be present in the URL
+        #   5 - (optional) 1 if the site requires linking to the Web page associated with the image
         domains = (
                 ('1632.org', '1632, Inc.', 'www.1632.org', 1),
                 ('amazon.ca', 'Amazon.ca', 'www.amazon.ca', 1),
@@ -972,7 +973,7 @@ def RecognizedDomains():
                 ('dbr.nu', 'Diamond Bay Research', 'dbr.nu', 1),
                 ('deboekenplank.nl', 'De Boekenplank', 'www.deboekenplank.nl', 1),
                 ('downwarden.com', 'Black Bed Sheet Books', 'www.downwarden.com', 1),
-                ('dwtr67e3ikfml.cloudfront.net', 'Smashwords', 'www.smashwords.com', 1),
+                ('dwtr67e3ikfml.cloudfront.net', 'Smashwords', 'www.smashwords.com', 1, '', 1),
                 ('encyklopediafantastyki.pl', 'Encyklopedia Fantastyki', 'www.encyklopediafantastyki.pl', 0),
                 ('ericflint.net', '1632, Inc.', 'www.1632.org', 1),
                 ('facebook.com', 'Facebook', 'www.facebook.com', 1),
@@ -1018,8 +1019,9 @@ def RecognizedDomains():
                 ('rusf.ru', 'Russian SF&F', 'rusf.ru', 0),
                 ('scifiinc.net', 'Fan Gallery', 'scifiinc.net', 0),
                 ('sf-encyclopedia.com', 'SFE3', 'www.sf-encyclopedia.com', 1),
-                ('sf-encyclopedia.uk', 'SFE3', 'www.sf-encyclopedia.com', 1, 'gal/'),
+                ('sf-encyclopedia.uk', 'SFE3', 'www.sf-encyclopedia.com', 1, 'gal/', 1),
                 ('sf-encyclopedia.uk', 'Encyclopedia of Fantasy', 'sf-encyclopedia.uk/fe/', 1, 'fe.php'),
+                ('sf-leihbuch.de', 'SF-Leihbuch', 'www.sf-leihbuch.de/index.cfm?page=home', 1, '', 1),
                 ('sfadb.com', 'Science Fiction Awards Database', 'sfadb.com', 0),
                 ('sff.net', 'SFF Net', 'sff.net', 0),
                 ('sfsite.com', 'SF Site', 'www.sfsite.com', 0),

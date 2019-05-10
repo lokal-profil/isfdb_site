@@ -2206,18 +2206,15 @@ def function56():
 		print "<h2>No Publications with HTML in Titles.</h2>"
 
 def function57():
-        print """<h3>For SFE3-hosted images, only links to /clute/,
-                /langford/ and /robinson/ sub-directories are allowed.
-                In addition, the associated Gallery Web page 
-                must be entered in the Image field after a '|'.</h3>"""
+        print '<h3>For SFE3-hosted images, only links to /clute/, /langford/ and /robinson/ sub-directories are allowed.</h3>'
         
         query = """select pub_id, pub_title from pubs, cleanup c
-                   where c.report_type=57 and pubs.pub_id=c.record_id
+                   where c.report_type=57
+                   and pubs.pub_id=c.record_id
                    and pub_frontimage like '%sf-encyclopedia.uk%'
-                   and ((pub_frontimage not like '%/clute/%'
+                   and pub_frontimage not like '%/clute/%'
                    and pub_frontimage not like '%/langford/%'
-                   and pub_frontimage not like '%/robinson/%')
-                   or (pub_frontimage not like '%|%'))"""
+                   and pub_frontimage not like '%/robinson/%'"""
 
 	db.query(query)
 	result = db.store_result()
@@ -2235,9 +2232,9 @@ def function57():
 			bgcolor ^= 1
 			count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No invalid SFE3 image links found</h2>"
+		print '<h2>No invalid SFE3 image links found</h2>'
 
 def function58():
 	query = """select a.author_id, a.author_canonical
@@ -5834,15 +5831,24 @@ def function230():
                 print "<h2>No publications with mismatched OCLC URLs in Notes.</h2>"
 
 def function231():
-        cleanup.note="""For Smashwords-hosted images, the publication-specific Web page 
-                must be entered in the Image field after a '|'."""
+	domains = RecognizedDomains()
+        cleanup.note="""The following third party sites require that links to their hosted images
+                        include publication-specific Web pages, which must be entered in the Image
+                        field after a '|':"""
+        for domain in domains:
+                if len(domain) > 5 and domain[5]:
+                        cleanup.note += ' %s,' % domain[1]
+        cleanup.note = cleanup.note[:-1]
         cleanup.query = """select pub_id, pub_title from pubs, cleanup c
                    where c.report_type=231
                    and pubs.pub_id=c.record_id
-                   and pub_frontimage like '%dwtr67e3ikfml.cloudfront.net%'
-                   and pub_frontimage not like '%|%'
-                   order by pub_title"""
-        cleanup.none = 'No invalid Smashwords image links found'
+                   and pub_frontimage not like '%|%' and ("""
+        for domain in domains:
+                if len(domain) > 5 and domain[5]:
+                        cleanup.query += "pub_frontimage like '%%%s/%%' or " % domain[0]
+        cleanup.query = cleanup.query[:-4]
+        cleanup.query += ') order by pub_title'
+        cleanup.none = 'No Missing Required Web Pages for Cover Images found'
         cleanup.print_pub_table()
 
 def function232():

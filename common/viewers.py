@@ -107,16 +107,13 @@ def CheckImage(value):
         for domain in domains:
                 if (domain[0] in value) and (domain[3] == 1):
                         valid_domain = 1
+                        if len(domain) > 5 and domain[5] and '|' not in value:
+                                warning = "For images hosted by this site, the URL of the associated Web page must be entered after a '|'."
                         break
         if not valid_domain:
                 warning = 'Image hosted by a site that we do not have permission to link to'
-        if 'sf-encyclopedia.uk' in value:
-                if '/clute/' not in value and '/langford/' not in value and '/robinson/' not in value:
-                        warning = """For SFE3-hosted images, only links to /clute/,
-                                /langford/ and /robinson/ sub-directories are allowed."""
-                if "|" not in value:
-                        warning += """ For SFE3-hosted images, the associated Gallery Web page
-                                        must be entered after a '|'."""
+        if 'sf-encyclopedia.uk' in value and '/clute/' not in value and '/langford/' not in value and '/robinson/' not in value:
+                warning += 'For SFE3-hosted images, only links to /clute/, /langford/ and /robinson/ sub-directories are allowed.'
         # For Amazon images, only cropping ("CR") suffixes are allowed
         if not warning and 'amazon.' in value and '_' in value.replace('_CR', ''):
                 warning = 'Unsupported formatting in an Amazon URL (only CR is currently allowed)'

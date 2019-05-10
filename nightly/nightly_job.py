@@ -639,11 +639,9 @@ def nightly_cleanup_reports():
         #   Report 57: Invalid SFE3 image links
         query = """select pub_id from pubs where
                    pub_frontimage like '%sf-encyclopedia.uk%'
-                   and ((pub_frontimage not like '%/clute/%'
+                   and pub_frontimage not like '%/clute/%'
                    and pub_frontimage not like '%/langford/%'
-                   and pub_frontimage not like '%/robinson/%')
-                   or
-                   (pub_frontimage not like '%|%'))"""
+                   and pub_frontimage not like '%/robinson/%'"""
         standardReport(query, 57)
 
         # Excluded authors are 'uncredited', 'unknown', 'various' and 'The Readers'
@@ -1366,10 +1364,12 @@ def nightly_cleanup_reports():
                 query = "select pub_id from pubs where pub_id in (%s)" % in_clause
                 standardReport(query, 230)
 
-        #   Report 231: Invalid Smashwords image links
-        query = """select pub_id from pubs where
-                   pub_frontimage like '%dwtr67e3ikfml.cloudfront.net%'
-                   and pub_frontimage not like '%|%'"""
+        #   Report 231: Missing Required Web Pages for Cover Images
+        query = "select pub_id from pubs where pub_frontimage not like '%|%' and ("
+        for domain in domains:
+                if len(domain) > 5 and domain[5]:
+                        query += "pub_frontimage like '%%%s/%%' or " % domain[0]
+        query = '%s)' % query [:-4]
         standardReport(query, 231)
 
         #   Report 232: Award Years with Month/Day Data
