@@ -8,6 +8,7 @@
 #     Version: $Revision$
 #     Date: $Date$
 
+import re
 import string
 from xml.dom import minidom
 from xml.dom import Node
@@ -114,9 +115,12 @@ def CheckImage(value):
                 warning = 'Image hosted by a site that we do not have permission to link to'
         if 'sf-encyclopedia.uk' in value and '/clute/' not in value and '/langford/' not in value and '/robinson/' not in value:
                 warning += 'For SFE3-hosted images, only links to /clute/, /langford/ and /robinson/ sub-directories are allowed.'
-        # For Amazon images, only cropping ("CR") suffixes are allowed
-        if not warning and 'amazon.' in value and '_' in value.replace('_CR', ''):
-                warning = 'Unsupported formatting in an Amazon URL (only CR is currently allowed)'
+        # For Amazon images, only cropping ("_CR") suffixes are allowed
+        if (not warning
+            and 'amazon.' in value
+            and not re.match('.*/images/[PIG]/[0-9A-Za-z+-]{10}[LS]?(\._CR[0-9]+,[0-9]+,[0-9]+,[0-9]+)?\.(gif|png|jpg)$', value.replace('%2B','+'))
+            and not re.match('.*\.images-amazon\.com/images/G/0[1-3]/ciu/[0-9a-f]{2}/[0-9a-f]{2}/[0-9a-f]{22,24}\.L\.(gif|png|jpg)$', value)):
+                warning = 'Unsupported formatting in an Amazon URL. Only properly structured _CR formatting codes are currently allowed.'
         return warning
 
 #################################################################
