@@ -198,8 +198,11 @@ def nightly_cleanup_reports():
         standardReport(query, 16)
 
         #   Report 17: Series with Duplicate Series Numbers
-        query = 'select series_id from titles where series_id IS NOT NULL and title_seriesnum IS NOT NULL \
-                group by series_id, title_seriesnum, title_seriesnum_2 having count(*) >1'
+        query = """select distinct series_id from titles
+                where series_id IS NOT NULL
+                and title_seriesnum IS NOT NULL
+                group by series_id, title_seriesnum, title_seriesnum_2
+                having count(*) >1"""
         standardReport(query, 17)
 
         #   Report 18: Titles with Bad Ellipses
