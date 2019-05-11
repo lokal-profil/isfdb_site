@@ -1470,16 +1470,12 @@ def nightly_cleanup_reports():
         standardReport(query, 242)
 
         #   Report 243: Publication Images with Extra Formatting in Amazon URLs
-        query = """select pub_id
-                from pubs
-                where pub_frontimage like '%amazon%'
-                and (
-                        LENGTH(pub_frontimage) - LENGTH(REPLACE(pub_frontimage, '_', '')) > 1
-                        or (
-                                pub_frontimage not like '%L.\_CR%'
-                                and pub_frontimage like '%\_%'
-                        )
-                )
+        query = """select pub_id from pubs
+                where pub_frontimage like '%amazon.com/%'
+                and not
+                (REPLACE(pub_frontimage,'%2B','+') REGEXP '/images/[PIG]/[0-9A-Za-z+-]{10,13}[LS]?(\._CR[0-9]+,[0-9]+,[0-9]+,[0-9]+)?\.(gif|png|jpg)$'
+                or
+                pub_frontimage REGEXP '\.images(\-|\.)amazon\.com/images/G/0[1-3]/ciu/[0-9a-f]{2}/[0-9a-f]{2}/[0-9a-f]{22,24}\.L\.(gif|png|jpg)$')
                 """
         standardReport(query, 243)
 
