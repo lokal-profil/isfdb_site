@@ -1782,32 +1782,19 @@ def SQLloadSeriesWebpages(series_id):
 		webpage = result.fetch_row()
 	return results
 
-def SQLbornToday():
-	query = "select * from authors where MONTH(author_birthdate)=MONTH(NOW()) and DAYOFMONTH(author_birthdate)=DAYOFMONTH(NOW()) order by author_birthdate"
-	try:
-		db.query(query)
-	except Exception, e:
-		print "*** MySQL Query Failed", e
-		traceback.print_exc()
-		return
-	result = db.store_result()
-	author = result.fetch_row()
-	results = []
-	while author:
-		results.append(author[0])
-		author = result.fetch_row()
-	return results
+def SQLAuthorsBorn(date):
+	query = """select * from authors
+                where MONTH(author_birthdate)=MONTH('%s')
+                and DAYOFMONTH(author_birthdate)=DAYOFMONTH('%s')
+                order by author_birthdate""" % (date, date)
+	return StandardQuery(query)
 
-def SQLdiedToday():
-	query = "select * from authors where MONTH(author_deathdate)=MONTH(NOW()) and DAYOFMONTH(author_deathdate)=DAYOFMONTH(NOW()) order by author_birthdate"
-	db.query(query)
-	result = db.store_result()
-	author = result.fetch_row()
-	results = []
-	while author:
-		results.append(author[0])
-		author = result.fetch_row()
-	return results
+def SQLAuthorsDied(date):
+	query = """select * from authors
+                where MONTH(author_deathdate)=MONTH('%s')
+                and DAYOFMONTH(author_deathdate)=DAYOFMONTH('%s')
+                order by author_birthdate""" % (date, date)
+	return StandardQuery(query)
 
 def SQLgetUserName(userId):
 	query = "select user_name from mw_user where user_id=%d" % int(userId)

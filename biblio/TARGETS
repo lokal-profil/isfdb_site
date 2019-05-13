@@ -25,6 +25,8 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/award_directory.cgi \
 	  DIR/awardtype.cgi \
 	  DIR/ay.cgi \
+	  DIR/calendar_day.cgi \
+	  DIR/calendar_menu.cgi \
 	  DIR/cancelsubmission.cgi \
 	  DIR/ch.cgi \
 	  DIR/changed_verified_pubs.cgi \

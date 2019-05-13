@@ -14,10 +14,11 @@ include ../INSTALLDIRS
 
 INSTALL = $(INSTALL_CGI)
 
-MYLIBS	= biblio.py \
+MYLIBS	= advSearchClass.py \
+	  biblio.py \
+	  calendarClass.py \
 	  common.py \
 	  isfdblib.py \
-	  advSearchClass.py \
 	  utils.py
 
 LIBS	= authorClass.py \

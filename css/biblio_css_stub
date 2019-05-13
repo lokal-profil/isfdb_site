@@ -396,7 +396,7 @@ td.label {
    font-size: 100%; 
 }
 
-td.dividerrow {
+th.dividerrow {
    background: #004;
    color: #fff;
    margin-top: 10px;
@@ -1205,4 +1205,16 @@ table.externalidranges td {
    border-bottom: 1px solid grey;
    border-right: 1px solid grey;
    padding: 2px;
+}
+
+table.calendar_row {
+   width: 100%;
+   border-top: 1px solid black;
+   border-left: 1px solid black;
+   border-bottom: 1px solid grey;
+   border-right: 1px solid grey;
+}
+
+th.calendar {
+   text-align: center; 
 }

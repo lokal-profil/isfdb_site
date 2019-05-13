@@ -73,6 +73,7 @@ def PrintSearchBox(page, search_value = '', search_type = ''):
 
 #Display the Other Pages section in the navigation bar
 def PrintOtherPages(choice):
+        from library import ISFDBLink
 	print '<div class="divider">'
 	print 'Other Pages:'
 	print '</div>'
@@ -83,6 +84,7 @@ def PrintOtherPages(choice):
         	print '<li><a href="http:/%s/mod/list.cgi?N">Moderator</a>' % (HTFAKE)
 	print '<li><a href="http://%s/index.php/Main_Page">ISFDB Wiki</a>' % (WIKILOC)
 	print '<li><a href="http://%s/index.php/ISFDB:FAQ">ISFDB FAQ</a>' % (WIKILOC)
+        print '<li>%s' % ISFDBLink("calendar_menu.cgi","","SF Calendar")
         print '<li><a href="http:/%s/directory.cgi?author">Author Directory</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/award_directory.cgi">Award Directory</a>' % (HTFAKE)
         print '<li><a href="http:/%s/directory.cgi?publisher">Publisher Directory</a>' % (HTFAKE)

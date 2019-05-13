@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff, Ahasuerus, Uzume and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus, Uzume and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,35 +17,8 @@ from SQLparsing import *
 from biblio import *
 from time import *
 from common import *
+from calendarClass import CalendarDay
 
-
-def printAuthorList(authors):
-        print '<td>'
-	if authors:
-                print '<ul>'
-                for author in authors:
-                        print '<li>%s %s' % (ISFDBLink('ea.cgi', author[AUTHOR_ID], author[AUTHOR_CANONICAL]), lifeSpan(author))
-                print '</ul>'
-        print '</td>'
-
-def lifeSpan(author):
-        birthyear = author[AUTHOR_BIRTHDATE]
-        if birthyear:
-                birthyear = birthyear[:4]
-        if birthyear == '0000':
-                birthyear = 'unknown'
-
-        deathyear = author[AUTHOR_DEATHDATE]
-        if deathyear:
-                deathyear = deathyear[:4]
-        if deathyear == '0000':
-                deathyear = 'unknown'
-
-        if deathyear:
-                lifespan = " (%s-%s)" % (birthyear, deathyear)
-        else:
-                lifespan = " (%s)" % birthyear
-        return lifespan
 
 def displayLinks():
         print '<p class="bottomlinks">\n%s\n%s' % (
@@ -65,29 +38,11 @@ if __name__ == '__main__':
 	print 'publication bibliographies, award listings, magazine content listings, anthology '
 	print 'and collection content listings, and forthcoming books.'
 
-        print '<table class="mainauthors">'
-        print '<tr>'
-        print '<td class="dividerrow"><b>Authors Born On This Day:</b></td>'
-        print '<td class="dividerrow"><b>Authors Who Died On This Day:</b></td>'
-        print '</tr>'
-	########################################################
-	# Authors born today
-	########################################################
-	print '<tr>'
-	authors = SQLbornToday()
-	printAuthorList(authors)
-
-        ########################################################
-        # Authors who died today
-        ########################################################
-        authors = SQLdiedToday()
-	printAuthorList(authors)
-        print '</tr>'
-        print '</table>'
-
-	########################################################
-	# Forthcoming Books section
-	########################################################
+        # Authors who were born and died on this day
+        calendar_day = CalendarDay()
+        calendar_day.padded_day = todaysDate()
+        calendar_day.print_authors_section()
+	# Forthcoming Books
 	displayLinks()
 	print '<div class="divider">'
 	print '<b>Selected Forthcoming Books:</b>'
