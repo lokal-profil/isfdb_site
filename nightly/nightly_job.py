@@ -6,8 +6,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 284 $
-#     Date: $Date: 2018-12-27 20:11:30 -0500 (Thu, 27 Dec 2018) $
+#     Version: $Revision$
+#     Date: $Date$
 
 import os
 import sys
@@ -1476,7 +1476,7 @@ def nightly_cleanup_reports():
         query = """select pub_id from pubs
                 where pub_frontimage like '%amazon.com/%'
                 and not
-                (REPLACE(pub_frontimage,'%2B','+') REGEXP '/images/[PIG]/[0-9A-Za-z+-]{10,13}[LS]?(\._CR[0-9]+,[0-9]+,[0-9]+,[0-9]+)?\.(gif|png|jpg)$'
+                (REPLACE(pub_frontimage,'%2B','+') REGEXP '/images/[PIG]/[0-9A-Za-z+-]{10}[LS]?(\._CR[0-9]+,[0-9]+,[0-9]+,[0-9]+)?\.(gif|png|jpg)$'
                 or
                 pub_frontimage REGEXP '\.images(\-|\.)amazon\.com/images/G/0[1-3]/ciu/[0-9a-f]{2}/[0-9a-f]{2}/[0-9a-f]{22,24}\.L\.(gif|png|jpg)$')
                 """
