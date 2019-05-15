@@ -5,8 +5,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 210 $
-#     Date: $Date: 2018-09-18 10:44:12 -0400 (Tue, 18 Sep 2018) $
+#     Version: $Revision$
+#     Date: $Date$
 
 
 def reportsDict():

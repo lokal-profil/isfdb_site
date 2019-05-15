@@ -6,8 +6,8 @@
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision: 152 $
-#     Date: $Date: 2018-06-19 11:47:00 -0400 (Tue, 19 Jun 2018) $
+#     Version: $Revision$
+#     Date: $Date$
 
 
 from common import *
