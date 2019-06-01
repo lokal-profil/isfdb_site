@@ -231,4 +231,4 @@ class Sfe3:
                         # Append the previously saved last name
                         if last_name:
                                 isfdb_author_name = isfdb_author_name + ' ' + last_name
-                return isfdb_author_name
+                return string.strip(isfdb_author_name)
