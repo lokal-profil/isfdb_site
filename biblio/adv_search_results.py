@@ -431,6 +431,8 @@ class AdvancedSearchResults(AdvancedSearch):
                 if self.user.moderator:
                         if self.search_type == 'Author':
                                 self.print_help_merge('authors', 'av_merge')
+                        elif self.search_type == 'Publisher':
+                                self.print_help_merge('publishers', 'pv_merge')
                 if self.search_type == 'Title':
                         self.print_help_merge('titles', 'tv_merge')
 
