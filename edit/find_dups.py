@@ -33,7 +33,7 @@ def CheckOneList(titles, mode):
                                 if sameAuthors(title_authors, target_authors):
                                         found = 1
                                         if first:
-                                                print "<form METHOD=\"POST\" ACTION=\"/cgi-bin/edit/tv_merge.cgi\">"
+                                                print '<form METHOD="POST" ACTION="/cgi-bin/edit/tv_merge.cgi">'
                                                 PrintDuplicateTableColumns()
                                                 PrintDuplicateTitleRecord(title, 0, title_authors)
                                                 first = 0
@@ -48,17 +48,18 @@ def CheckOneList(titles, mode):
 		counter += 1
 
 		if first == 0:
-			print "</table>"
-			print "<input TYPE=\"SUBMIT\" VALUE=\"Merge Selected Records\">"
-			print "</form>"
-			print "<p>"
+			print '</table>'
+			print '<p>'
+			print '<input TYPE="SUBMIT" VALUE="Merge Selected Records">'
+			print '</form>'
+			print '<p>'
 	return found
 
 def displayError(error_text):
         PrintPreSearch('Duplicate Finder')
 	PrintNavBar('edit/find_dups.cgi', 0)
         print '<h3>%s.</h3>' % error_text
-        PrintPostSearch(0, 0, 0, 0, 0)
+        PrintPostSearch(0, 0, 0, 0, 0, 0)
         sys.exit(0)
 
         
@@ -193,4 +194,4 @@ if __name__ == '__main__':
 		print '<h2>No duplicate candidates found.</h2>'
 
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2015   Ahasuerus
+#     (C) COPYRIGHT 2015-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -21,7 +21,7 @@ def displayError(error_text):
         PrintPreSearch('Duplicate Finder for one or more Titles')
 	PrintNavBar('edit/find_title_dups.cgi', 0)
         print '<h3>%s.</h3>' % error_text
-        PrintPostSearch(0, 0, 0, 0, 0)
+        PrintPostSearch(0, 0, 0, 0, 0, 0)
         sys.exit(0)
 
         
@@ -65,4 +65,4 @@ if __name__ == '__main__':
 	if not found:
 		print '<h2>No duplicate candidates found.</h2>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)

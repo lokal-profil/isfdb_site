@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2004-2018 Al von Ruff, Bill Longley, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Jesse Weinstein <jesse@wefu.org>, Uzume and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2019 Al von Ruff, Bill Longley, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Jesse Weinstein <jesse@wefu.org>, Uzume and Dirk Stoecker
 #     ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -568,18 +568,18 @@ def PrintDuplicateTitleRecord(record, bgcolor, authors):
         print "</tr>"
 
 def PrintDuplicateTableColumns():
-	print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-	print "<tr align=left bgcolor=\"#d6d6d6\">"
-	print "<td><b>Merge</b></td>"
-	print "<td><b>Year</b></td>"
-	print "<td><b>Type</b></td>"
-	print "<td><b>Length</b></td>"
-	print "<td><b>Variant</b></td>"
-	print "<td><b>Language</b></td>"
-	print "<td><b>Title</b></td>"
-	print "<td><b>Authors</b></td>"
-	print "<td><b>Note</b></td>"
- 	print "</tr>"
+	print '<table class="generic_table">'
+	print '<tr class="generic_table_header">'
+	print '<th>Merge</th>'
+	print '<th>Year</th>'
+	print '<th>Type</th>'
+	print '<th>Length</th>'
+	print '<th>Variant</th>'
+	print '<th>Language</th>'
+	print '<th>Title</th>'
+	print '<th>Authors</th>'
+	print '<th>Note</th>'
+ 	print '</tr>'
 
 def CompareTwoTitles(title, target, mode):
         match = 0
@@ -695,17 +695,18 @@ def CheckOneTitle(title):
                         if sameAuthors(title_authors, target_authors):
                                 found = 1
                                 if first:
-                                        print "<form METHOD=\"POST\" ACTION=\"/cgi-bin/edit/tv_merge.cgi\">"
+                                        print '<form METHOD="POST" ACTION="/cgi-bin/edit/tv_merge.cgi">'
                                         PrintDuplicateTableColumns()
                                         PrintDuplicateTitleRecord(title, 0, title_authors)
                                         first = 0
                                 PrintDuplicateTitleRecord(target, 0, target_authors)
 
         if first == 0:
-                print "</table>"
-                print "<input TYPE=\"SUBMIT\" VALUE=\"Merge Selected Records\">"
-                print "</form>"
-                print "<p>"
+                print '</table>'
+                print '<p>'
+                print '<input TYPE="SUBMIT" VALUE="Merge Selected Records">'
+                print '</form>'
+                print '<p>'
 	return found
 
 class Submission:

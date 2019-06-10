@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2015   Ahasuerus
+#     (C) COPYRIGHT 2014-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -21,7 +21,7 @@ def displayError(error_text):
         PrintPreSearch('Duplicate Finder for a Publication')
 	PrintNavBar('edit/find_pub_dups.cgi', 0)
         print '<h3>%s.</h3>' % error_text
-        PrintPostSearch(0, 0, 0, 0, 0)
+        PrintPostSearch(0, 0, 0, 0, 0, 0)
         sys.exit(0)
 
         
@@ -49,8 +49,9 @@ if __name__ == '__main__':
 
 	print '<h3>Note: Unlike the Duplicate Finder for author records, the Duplicate Finder for \
                 publication records does not identify potential duplicates with different capitalization. \
-                Also, be sure to check the title types and languages carefully before merging.</h3'
-	print '<p><hr>'
+                Also, be sure to check the title types and languages carefully before merging.</h3>'
+	print '<p>'
+	print '<hr>'
 
         found = 0
 
@@ -61,4 +62,4 @@ if __name__ == '__main__':
 	if not found:
 		print '<h2>No duplicate candidates found.</h2>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)
