@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -99,19 +99,20 @@ def PrintNavBar():
                 sys.exit(0)
 
 
-def PrintPostMod():
-	print "</table>\n"
+def PrintPostMod(closetable = 1):
+    if closetable:
+        print '</table>'
 
-        print '</div>'
-        print '<div id="bottom">'
-        print COPYRIGHT
-        print '<br>'
-        print ENGINE
-        print '</div>'
-        print '</div>'
-        print '</body>'
-        print '</html>'
-	db.close()
+    print '</div>'
+    print '<div id="bottom">'
+    print COPYRIGHT
+    print '<br>'
+    print ENGINE
+    print '</div>'
+    print '</div>'
+    print '</body>'
+    print '</html>'
+    db.close()
 
 def markIntegrated(db, sub_id, new_record_id = None, pub_id = None):
     (reviewerid, username, usertoken) = GetUserData()
@@ -166,14 +167,3 @@ def NotApprovable(submission):
     # If we are here, then this submission is approvable. Temporarily set its status to "inProgress".
     SQLmarkInProgress(submission)
     return 0
-
-def PrintTableColumns(columns):
-	print "<table cellpadding=0 BGCOLOR=\"#FFFFFF\">"
-	print "<tr align=left bgcolor=\"#d6d6d6\">"
-	for column in columns:
-            if not column:
-                data = '&nbsp;'
-            else:
-                data = column
-            print "<td><b>%s</b></td>" % data
- 	print "</tr>"

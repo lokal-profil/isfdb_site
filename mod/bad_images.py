@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014   Ahasuerus 
+#     (C) COPYRIGHT 2014-2019   Ahasuerus 
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,6 +17,13 @@ from common import *
 from isfdblib import *
 from SQLparsing import *
 from library import *
+
+def PrintTableHeaders():
+        print '<table class="generic_table">'
+        print '<tr class="generic_table_header">'
+        for column in ('#', 'Publication', 'Suspect URL', 'Click Once Resolved'):
+                print '<th>%s</th>' % column
+        print '</tr>'
 
 def PrintPubRecord(count, pub_id, url, pub_title, bgcolor):
         if bgcolor:
@@ -38,15 +45,17 @@ if __name__ == '__main__':
 	PrintPreMod('Publications with Suspect Images')
         PrintNavBar()
 
-        query = 'select bad_images.pub_id,bad_images.image_url,pubs.pub_title from \
-                bad_images,pubs where pubs.pub_id=bad_images.pub_id order by pubs.pub_title'
+        query = """select bad_images.pub_id, bad_images.image_url, pubs.pub_title
+                from bad_images, pubs
+                where pubs.pub_id=bad_images.pub_id
+                order by pubs.pub_title"""
 
 	db.query(query)
 	result = db.store_result()
 	num = result.num_rows()
 
         if num:
-                PrintTableColumns(('#', 'Publication', 'Suspect URL', 'Click Once Resolved'))
+                PrintTableHeaders()
                 record = result.fetch_row()
                 bgcolor = 1
                 count = 1
@@ -59,6 +68,8 @@ if __name__ == '__main__':
                         bgcolor ^= 1
                         count += 1
 
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No publications with bad images found</h2>"
+		print '<h2>No publications with bad images found</h2>'
+
+        PrintPostMod(0)
