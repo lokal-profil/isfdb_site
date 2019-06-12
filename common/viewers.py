@@ -993,7 +993,7 @@ def DisplayAwardTypeChanges(submission_id):
 
 	xmlData = SQLloadXML(submission_id)
 
-        print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         submitter = ''
         doc = minidom.parseString(XMLunescape2(xmlData))
         if doc.getElementsByTagName('AwardTypeUpdate'):
@@ -1047,11 +1047,11 @@ def DisplayAwardTypeDelete(submission_id):
                         InvalidSubmission(submission_id, 'Award Type no longer exists')
 
                 print '<p>'
-        	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-		print "<tr>"
+                print '<table border="2" class="generic_table">'
+		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
 		print '<td class="label"><b>Record to Delete: <a href="http:/%s/awardtype.cgi?%d">%d</a></b></td>' % (HTFAKE, AwardTypeId, AwardTypeId)
-		print "</tr>"
+		print '</tr>'
 
 		PrintField1('Short Name',    current.used_short_name, current.award_type_short_name)
 		PrintField1('Full Name',     current.used_name,       current.award_type_name)
@@ -1059,13 +1059,10 @@ def DisplayAwardTypeDelete(submission_id):
 		PrintField1('Awarded By',    current.used_by,         current.award_type_by)
 		PrintField1('Poll',          current.used_poll,       current.award_type_poll)
 		PrintField1('NonGenre',      current.used_non_genre,  current.award_type_non_genre)
-		
 		PrintMultField1('WebPages', 'Web page', '<br>', current.used_webpages, current.award_type_webpages)
-
 		PrintField1('Note',          current.used_note,       current.award_type_note)
-		PrintField1('Deletion Reason', 1,               reason)
+		PrintField1('Deletion Reason', 1, reason)
 
-		print "</tr>"
         	print '</table>'
 
         return submitter
@@ -1076,7 +1073,7 @@ def DisplayNewAwardCat(submission_id):
 
 	xmlData = SQLloadXML(submission_id)
 
-        print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         submitter = ''
         doc = minidom.parseString(XMLunescape2(xmlData))
         if doc.getElementsByTagName('NewAwardCat'):
@@ -1147,11 +1144,11 @@ def DisplayAwardCatDelete(submission_id):
                         InvalidSubmission(submission_id, 'Award Category no longer exists')
 
                 print '<p>'
-        	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-		print "<tr>"
+                print '<table border="2" class="generic_table">'
+		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
 		print '<td class="label"><b>Record to Delete: <a href="http:/%s/award_category.cgi?%d+1">%d</a></b></td>' % (HTFAKE, AwardCatId, AwardCatId)
-		print "</tr>"
+		print '</tr>'
 
 		PrintField1('Category Name', current.used_cat_name, current.award_cat_name)
 
@@ -1160,17 +1157,13 @@ def DisplayAwardCatDelete(submission_id):
 		awardType.load()
                 if awardType.error:
                         InvalidSubmission(submission_id, 'Award Type no longer exists')
+
 		PrintField1('Award Type', awardType.used_name, awardType.award_type_name)
-
 		PrintField1('Display Order', current.used_cat_order, current.award_cat_order)
-		
 		PrintMultField1('WebPages', 'Web page', '<br>', current.used_webpages, current.award_cat_webpages)
-
 		PrintField1('Note',          current.used_note,       current.award_cat_note)
-
 		PrintField1('Deletion Reason', 1, reason)
 
-		print "</tr>"
         	print '</table>'
 
         return submitter
@@ -1180,7 +1173,7 @@ def DisplayAwardCatChanges(submission_id):
 
 	xmlData = SQLloadXML(submission_id)
 
-        print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         submitter = ''
         doc = minidom.parseString(XMLunescape2(xmlData))
         if doc.getElementsByTagName('AwardCategoryUpdate'):
@@ -1201,11 +1194,8 @@ def DisplayAwardCatChanges(submission_id):
                 print '</tr>'
 
                 PrintField2XML('CategoryName',         merge, current.used_cat_name,  current.award_cat_name)
-
                 PrintField2XML('DisplayOrder',         merge, current.used_cat_order, current.award_cat_order)
-
                 PrintField2XML('Note',                 merge, current.used_note,      current.award_cat_note)
-
 		PrintMultField('Webpages', 'Webpage', '<br>', doc, merge, current.used_webpages, current.award_cat_webpages)
 
         print '</table>'
