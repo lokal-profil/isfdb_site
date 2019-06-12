@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2014   Ahasuerus
+#     (C) COPYRIGHT 2009-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 		print '<div id="ErrorBox">'
 		print '<h3>Error: Bad argument</h3>'
 		print '</div>'
-		PrintPostMod()
+		PrintPostMod(0)
 		sys.exit(0)
 
 	submitter = DisplaySeriesDelete(submission_id)
@@ -42,5 +42,5 @@ if __name__ == '__main__':
 	print '<a href="http://%s/index.php/User_Talk:%s">(Talk)</a>' % (WIKILOC, submitter)
 
 	ApproveOrReject('sa_delete.cgi', submission_id)
-	PrintPostMod()
+	PrintPostMod(0)
 

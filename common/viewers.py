@@ -1209,17 +1209,17 @@ def DisplaySeriesDelete(submission_id):
 
 	submitter = ''
 	reason = ''
-	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         if doc.getElementsByTagName('SeriesDelete'):
 		delete = doc.getElementsByTagName('SeriesDelete')
         	Record = GetElementValue(delete, 'Record')
         	reason = GetElementValue(delete, 'Reason')
         	submitter = GetElementValue(delete, 'Submitter')
 
-		print "<tr>"
+		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
 		print '<td class="label"><b>Record to Delete: #%s</b></td>' % (Record)
-		print "</tr>"
+		print '</tr>'
 
                 #Check if the series has already been deleted
                 seriesRecord = SQLget1Series(int(Record))
@@ -1246,8 +1246,6 @@ def DisplaySeriesDelete(submission_id):
 		PrintMultField1('Webpages', 'Web page', '<br>', current.used_webpages, current.series_webpages)
                 PrintField1('Note',         current.used_note,        current.series_note)
 
-		print '</tr>'
-
         print '</table>'
         print '<br><b>Reason for deletion:</b> %s<br>' % reason
 
@@ -1260,7 +1258,7 @@ def DisplayTitleEdit(submission_id):
 	doc = minidom.parseString(XMLunescape2(xml))
 
 	submitter = ''
-	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         if doc.getElementsByTagName('TitleUpdate'):
                 merge = doc.getElementsByTagName('TitleUpdate')
                 Record = GetElementValue(merge, 'Record')
@@ -1302,13 +1300,10 @@ def DisplayTitleEdit(submission_id):
                 PrintField2XML('Juvenile',  merge, current.used_jvn,       current.title_jvn)
                 PrintField2XML('Novelization', merge, current.used_nvz,    current.title_nvz)
                 PrintField2XML('Graphic',   merge, current.used_graphic,   current.title_graphic)
-                
                 PrintMultField('Webpages', 'Webpage', '<br>', doc, merge, current.used_webpages, current.title_webpages)
-
                 PrintField2XML('Language',  merge, current.used_language,  current.title_language)
                 PrintField2XML('Note',      merge, current.used_note,      current.title_note)
 
-                print '</tr>'
                 print '</table>'
                 mod_note = GetElementValue(merge, 'ModNote')
                 if mod_note:
@@ -1365,7 +1360,7 @@ def DisplayTitleDelete(submission_id):
 	submitter = ''
 	reason = ''
 	reviews = []
-	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         if doc.getElementsByTagName('TitleDelete'):
 		delete = doc.getElementsByTagName('TitleDelete')
         	Record = GetElementValue(delete, 'Record')
@@ -1373,10 +1368,10 @@ def DisplayTitleDelete(submission_id):
         	submitter = GetElementValue(delete, 'Submitter')
         	reviews = SQLloadTitleReviews(int(Record))
 
-		print "<tr>"
+		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
 		print '<td class="label"><b>Record to Delete: <a href="http:/%s/title.cgi?%s">%s</a></b></td>'  % (HTFAKE, Record, Record)	
-		print "</tr>"
+		print '</tr>'
 
 		current = titles(db)
 		current.load(int(Record))
@@ -1401,13 +1396,12 @@ def DisplayTitleDelete(submission_id):
 		PrintMultField1('Authors',  'Author',   '+', current.num_authors,   current.title_authors)
 		PrintField1('Note',       current.used_note,      current.title_note)
 
-		print "</tr>"
         print '</table>'
         print '<br><b>Reason for deletion:</b> %s<br>' % reason
 
 	if reviews:
         	print '<p><div id="WarningBox">'
-                print '<br /><b>Reviews of this title:</b>'
+                print '<br><b>Reviews of this title:</b>'
                 print '<ul>'
                 for review in reviews:
                         print '<li><a href="http:/%s/title.cgi?%d">%d</a>' % (HTFAKE, review[0], review[0])
