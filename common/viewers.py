@@ -628,7 +628,7 @@ def DisplayPublisherChanges(submission_id):
 
 	xmlData = SQLloadXML(submission_id)
 
-        print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         submitter = ''
         doc = minidom.parseString(XMLunescape2(xmlData))
         if doc.getElementsByTagName('PublisherUpdate'):
@@ -663,7 +663,7 @@ def DisplayPubSeriesChanges(submission_id):
 
 	xmlData = SQLloadXML(submission_id)
 
-        print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         submitter = ''
         doc = minidom.parseString(XMLunescape2(xmlData))
         if doc.getElementsByTagName('PubSeriesUpdate'):
@@ -704,7 +704,7 @@ def DisplayAuthorChanges(submission_id):
 
 	xmlData = SQLloadXML(submission_id)
 
-        print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         submitter = ''
         doc = minidom.parseString(XMLunescape2(xmlData))
         if doc.getElementsByTagName('AuthorUpdate'):
@@ -752,7 +752,7 @@ def DisplayAuthorMerge(submission_id):
 
 	xmlData = SQLloadXML(submission_id)
 
-        print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         submitter = ''
         doc = minidom.parseString(XMLunescape2(xmlData))
         if doc.getElementsByTagName('AuthorMerge'):
@@ -761,11 +761,11 @@ def DisplayAuthorMerge(submission_id):
         	DropId = GetElementValue(merge, 'DropId')
         	submitter = GetElementValue(merge, 'Submitter')
 
-		print "<tr>"
+		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
 		print '<td class="label"><b>Keepid [Record #<a href="http:/%s/ea.cgi?%s">%s</a>]</b></td>' % (HTFAKE, KeepId, KeepId)
 		print '<td class="label"><b>Dropid [Record #<a href="http:/%s/ea.cgi?%s">%s</a>]</b></td>' % (HTFAKE, DropId, DropId)
-                print "</tr>"
+                print '</tr>'
 
 		keep = authors(db)
 		keep.load(int(KeepId))
@@ -801,10 +801,7 @@ def DisplayAuthorMerge(submission_id):
 		PrintComparison3('Note', merge, KeepId, keep.used_note, drop.used_note, 
 			keep.author_note, drop.author_note)
 
-		print "</tr>"
-
 	print '</table>'
-
 	print '<p>'
 	return submitter
 
@@ -813,7 +810,7 @@ def DisplaySeriesChanges(submission_id):
 
 	xmlData = SQLloadXML(submission_id)
 
-        print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         submitter = ''
         doc = minidom.parseString(XMLunescape2(xmlData))
         if doc.getElementsByTagName('SeriesUpdate'):
