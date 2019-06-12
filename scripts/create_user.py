@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#    (C) COPYRIGHT 2008-2013   Al von Ruff, MaryD, RobertGl and Ahasuerus
+#    (C) COPYRIGHT 2008-2019   Al von Ruff, MaryD, RobertGl and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -27,7 +27,6 @@ def IsfdbConvSetup():
         return(IsfdbConv)
 
 
-
 if __name__ == '__main__':
 
 
@@ -36,15 +35,15 @@ if __name__ == '__main__':
 		password = sys.argv[2]
 	except:
 		print 'usage: create_user.py username password'
-		print '       The third parameter, if specified, should be 1 for moderator users'
-		print '       and 0 for non-moderator users. The default is 1 (moderator).'
+		print '       The third parameter, if specified, should be 1 for moderator/bureaucrat users'
+		print '       and 0 for non-privileged users. The default is 1, i.e. moderator AND bureaucrat.'
 		sys.exit(1)
 
-        # By default, the new user is a moderator. The third parameter passed to this script (if '0')
+        # By default, the new user is a moderator AND bureaucrat. The third parameter passed to this script (if '0')
         # overrides the default behavior and makes the new user a non-privileged user.
-        moderator = '1'
+        privileged = 1
         try:
-		moderator = sys.argv[3]
+		privileged = int(sys.argv[3])
 	except:
 		pass
 
@@ -54,7 +53,8 @@ if __name__ == '__main__':
 	###############################################################
 	# Insert a username and password into mw_user
 	###############################################################
-	query = "insert into mw_user(user_name,user_real_name,user_password,user_newpassword,user_email,user_options,user_token,user_touched) values('%s','','','','','','','')" % (username)
+	query = """insert into mw_user(user_name,user_real_name,user_password,user_newpassword,user_email,user_options,user_token,user_touched)
+                values('%s','','','','','','','')""" % db.escape_string(username)
 	db.query(query)
 	user_id = db.insert_id()
 
@@ -67,12 +67,14 @@ if __name__ == '__main__':
 	hash2.update(newstr)
 	submitted_password = hash2.hexdigest()
 
-	query = "update mw_user set user_password='%s' where user_id='%d'" % (submitted_password, user_id)
+	query = "update mw_user set user_password='%s' where user_id=%d" % (db.escape_string(submitted_password), user_id)
 	db.query(query)
 
-        if moderator == '1':
-                # Insert moderator rights into mw_user_groups
+        if privileged:
+                # Insert moderator/bureaucrat rights into mw_user_groups
                 query = "insert into mw_user_groups(ug_user, ug_group) values(%d, '%s')" % (user_id, 'sysop')
+                db.query(query)
+                query = "insert into mw_user_groups(ug_user, ug_group) values(%d, '%s')" % (user_id, 'bureaucrat')
                 db.query(query)
         
         ###############################################################
@@ -80,5 +82,4 @@ if __name__ == '__main__':
         # otherwise this insertion does nothing.
         ###############################################################
 	db.commit()
-
 	db.close()

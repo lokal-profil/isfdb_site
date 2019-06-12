@@ -851,7 +851,7 @@ def DisplayAwardLink(submission_id):
 	from awardClass import awards
 	from titleClass import titles
         xml = SQLloadXML(submission_id)
-	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         doc = minidom.parseString(XMLunescape2(xml))
         if doc.getElementsByTagName('LinkAward'):
                 merge = doc.getElementsByTagName('LinkAward')
@@ -931,7 +931,7 @@ def DisplayNewAwardType(submission_id):
 
 	xmlData = SQLloadXML(submission_id)
 
-        print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         submitter = ''
         doc = minidom.parseString(XMLunescape2(xmlData))
         if doc.getElementsByTagName('NewAwardType'):
