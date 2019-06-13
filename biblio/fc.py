@@ -371,7 +371,7 @@ class PublicationMonth:
                         elif pub[PUB_IMAGE]:
                                 print '<td><img src="%s" width="90" alt="Book Image"></td>' % (pub[PUB_IMAGE])
                         else:
-                                print '<td bgcolor="black"></td>'
+                                print '<td class="generic_black_cell"></td>'
 
                 # If sorting by author, print the authors and title first
                 if self.sorting == 'author':

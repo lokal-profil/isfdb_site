@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2014   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2006-2019   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -27,7 +27,7 @@ if __name__ == '__main__':
                 PrintPreSearch("Vote Error")
                 PrintNavBar(0, 0)
                 print "<h3>Invalid or non-existent title ID.</h3>"
-                PrintPostSearch(0, 0, 0, 0, 0)
+                PrintPostSearch(0, 0, 0, 0, 0, 0)
                 sys.exit(0)
 
         PrintPreSearch("Title Vote")
@@ -82,12 +82,11 @@ if __name__ == '__main__':
 	else:
 		print "No votes have been recorded for this title"
 
-
-	print '<table bgcolor="#fff">'
+	print '<table class="generic_table">'
 	print '<tr>'
-	print '<td><b>Rating</b></td>'
-	print '<td><b>Votes</b></td>'
-	print '<td><b>Percentage</b></td>'
+	print '<th>Rating</th>'
+	print '<th>Votes</th>'
+	print '<th>Percentage</th>'
 	print '</tr>'
 	counter = 1
 	while counter < 11:
@@ -136,6 +135,7 @@ if __name__ == '__main__':
 	else:
 		print '<br><p>Your vote:'
 	print '<form method="POST" action="/cgi-bin/edit/submitvote.cgi">'
+	print '<p>'
         print '<select name="vote">'
 	counter = 0
 	while counter < 11:
@@ -149,4 +149,4 @@ if __name__ == '__main__':
 	print '<input type="SUBMIT" value="Submit Vote">'
 	print '</form>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)

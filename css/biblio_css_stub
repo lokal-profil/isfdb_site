@@ -783,6 +783,11 @@ tr.generic_table_header {
    text-align: left;
 }
 
+/* generic cell with a black background */
+td.generic_black_cell {
+   background-color: black;
+}
+
 /* votes table, table design */
 table.vote_table {
    background-color: #FFFFFF;
