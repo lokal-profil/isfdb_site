@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2014   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2006-2019   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -33,7 +33,7 @@ if __name__ == '__main__':
 		print '<div id="ErrorBox">'
 		print '<h3>Error: Bad argument</h3>'
 		print '</div>'
-		PrintPostMod()
+		PrintPostMod(0)
 		sys.exit(0)
 
 	xml = SQLloadXML(submission_id)
@@ -45,5 +45,5 @@ if __name__ == '__main__':
 	print '<a href="http://%s/index.php/User_Talk:%s">(Talk)</a>' % (WIKILOC, submitter)
 
 	ApproveOrReject('wa_delete.cgi', submission_id)
-	PrintPostMod()
+	PrintPostMod(0)
 

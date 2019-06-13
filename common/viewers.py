@@ -1416,7 +1416,7 @@ def DisplayNewAward(submission_id):
 	xmlData = SQLloadXML(submission_id)
         doc = minidom.parseString(XMLunescape2(xmlData))
 
-        print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         submitter = ''
         if doc.getElementsByTagName('NewAward'):
                 merge = doc.getElementsByTagName('NewAward')
@@ -1428,14 +1428,14 @@ def DisplayNewAward(submission_id):
                         title = SQLloadTitle(int(Record))
                         if not title:
                                 InvalidSubmission(submission_id, 'Title no longer exists')
-                        print "<tr>"
+                        print '<tr>'
                         print '<td class="label"><b>Add Award to <a href="http:/%s/title.cgi?%s">[Title #%s]</a></b></td>' % (HTFAKE, Record, Record)
                         print '<td class="label">%s</td>' % (title[TITLE_TITLE])
-                        print "</tr>"
-                        print "<tr>"
+                        print '</tr>'
+                        print '<tr>'
                         print '<td class="label">Award Title</td>'
                         print '<td class="keep">%s</td>' % (title[TITLE_TITLE])
-                        print "</tr>"
+                        print '</tr>'
                         authors = SQLTitleAuthors(int(Record))
                         counter = 0
                         for author in authors:
@@ -1446,10 +1446,10 @@ def DisplayNewAward(submission_id):
 
                 else:
                         AwardTitle = GetElementValue(merge, 'AwardTitle')
-                        print "<tr>"
+                        print '<tr>'
                         print '<td class="label">Award Title</td>'
                         print '<td class="keep">%s</td>' % (AwardTitle)
-                        print "</tr>"
+                        print '</tr>'
                         value = GetElementValue(merge, 'AwardAuthors')
                         if value:
                                 counter = 0
@@ -1461,50 +1461,50 @@ def DisplayNewAward(submission_id):
                                         austring += data
                                         counter += 1
 
-                print "<tr>"
+                print '<tr>'
                 print '<td class="label">Award Authors</td>'
                 print '<td class="keep">%s</td>' % (austring)
-                print "</tr>"
+                print '</tr>'
 
 
                 award_type_id = GetElementValue(merge, 'AwardType')
                 award_type = SQLGetAwardTypeById(award_type_id)
                 award_type_name = award_type[AWARD_TYPE_NAME]
-                print "<tr>"
+                print '<tr>'
                 print '<td class="label">Award Type</td>'
                 print '<td class="keep">%s</td>' % (award_type_name)
-                print "</tr>"
+                print '</tr>'
 
                 AwardYear = GetElementValue(merge, 'AwardYear')
-                print "<tr>"
+                print '<tr>'
                 print '<td class="label">Award Year</td>'
                 print '<td class="keep">%s</td>' % (AwardYear)
-                print "</tr>"
+                print '</tr>'
 
                 AwardCategoryId = GetElementValue(merge, 'AwardCategory')
-                print "<tr>"
+                print '<tr>'
                 print '<td class="label">Award Category</td>'
                 AwardCategoryName = SQLGetAwardCatById(AwardCategoryId)[AWARD_CAT_NAME]
                 print '<td class="keep">%s</td>' % (AwardCategoryName)
-                print "</tr>"
+                print '</tr>'
 
                 AwardLevel = GetElementValue(merge, 'AwardLevel')
-                print "<tr>"
+                print '<tr>'
                 print '<td class="label">Award Level</td>'
                 print '<td class="keep">%s</td>' % (AwardLevelDescription(AwardLevel, award_type[AWARD_TYPE_ID]))
-                print "</tr>"
+                print '</tr>'
 
                 AwardMovie = GetElementValue(merge, 'AwardMovie')
-                print "<tr>"
+                print '<tr>'
                 print '<td class="label">Award Movie</td>'
                 print '<td class="keep">%s</td>' % (AwardMovie)
-                print "</tr>"
+                print '</tr>'
 
                 AwardNote = GetElementValue(merge, 'AwardNote')
-                print "<tr>"
+                print '<tr>'
                 print '<td class="label">Award Note</td>'
                 print '<td class="keep">%s</td>' % (AwardNote)
-                print "</tr>"
+                print '</tr>'
 
 	print '</table>'
         mod_note = GetElementValue(merge, 'ModNote')
@@ -1519,7 +1519,7 @@ def DisplayAwardEdit(submission_id):
 	xmlData = SQLloadXML(submission_id)
         doc = minidom.parseString(XMLunescape2(xmlData))
 
-        print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         submitter = ''
         xml = SQLloadXML(submission_id)
         doc = minidom.parseString(XMLunescape2(xml))
@@ -1528,12 +1528,12 @@ def DisplayAwardEdit(submission_id):
                 Record = GetElementValue(merge, 'Record')
                 submitter = GetElementValue(merge, 'Submitter')
 
-                print "<tr>"
+                print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
                 print '<td class="label"><b>Current [Record #%s]</b></td>' % (Record)
                 print '<td class="label"><b>Proposed Changes</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
-                print "</tr>"
+                print '</tr>'
 
                 current = awards(db)
                 current.load(int(Record))
@@ -1580,8 +1580,6 @@ def DisplayAwardEdit(submission_id):
 
                 PrintField2XML('AwardNote',    merge, current.used_note, current.award_note)
 
-                print "</tr>"
-
 	print '</table>'
         mod_note = GetElementValue(merge, 'ModNote')
         if mod_note != '': 
@@ -1613,11 +1611,11 @@ def DisplayAwardDelete(submission_id):
                 else:
                         print '<h3>This award is not associated with an ISFDB title</h3>'
                 print '<p>'
-        	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-		print "<tr>"
+                print '<table border="2" class="generic_table">'
+		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
 		print '<td class="label"><b>Record to Delete: #%s</b></td>' % (Record)
-		print "</tr>"
+		print '</tr>'
 
 		PrintField1('Title',    current.used_title, current.award_title)
 		PrintField1('Year',     current.used_year,  current.award_year)
@@ -1625,12 +1623,9 @@ def DisplayAwardDelete(submission_id):
 		PrintField1('Category', current.used_cat_name, current.award_cat_name)
 		PrintField1('Level',    current.used_level, AwardLevelDescription(current.award_level, current.award_type_id))
 		PrintField1('IMDB Title',    current.used_movie, current.award_movie)
-
 		PrintMultField1('Authors', 'Author', '+', current.num_authors, current.award_authors)
-
 		PrintField1('Note',    current.used_note, current.award_note)
 
-		print "</tr>"
                 print '</table>'
                 print '<br><b>Reason for deletion:</b> %s<br>' % reason
 
@@ -1648,8 +1643,8 @@ def DisplayLinkReview(submission_id):
                 Record = GetElementValue(merge, 'Record')
                 submitter = GetElementValue(merge, 'Submitter')
 
-                print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-                print "<tr>"
+                print '<table border="2" class="generic_table">'
+                print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
                 print '<td class="label"><b>Review [Record #<a href="http:/%s/title.cgi?%d">%d</a>]</b></td>' % (HTFAKE, int(Record), int(Record))
 
@@ -1661,7 +1656,7 @@ def DisplayLinkReview(submission_id):
                         parent = GetElementValue(merge, 'Parent')
                         print """<td class="label"><b>Link Review to [Title
                                 #<a href="http:/%s/title.cgi?%d">%d</a>]</b></td>""" % (HTFAKE, int(parent), int(parent))
-                        print "</tr>"
+                        print '</tr>'
                         reviewedTitle = titles(db)
                         reviewedTitle.load(int(parent))
                         if reviewedTitle.error:
@@ -1674,7 +1669,7 @@ def DisplayLinkReview(submission_id):
                         ###################################
                         # Book Authors
                         ###################################
-                        print "<tr>"
+                        print '<tr>'
                         print '<td class="label"><b>Book Authors</b></td>'
                         print '<td class="drop">'
                         notfirst = 0
@@ -1688,7 +1683,7 @@ def DisplayLinkReview(submission_id):
                                         break
                                 notfirst = 1
                         print multfield
-                        print "</td>"
+                        print '</td>'
                         print '<td class="keep">'
                         notfirst = 0
                         multfield = ''
@@ -1701,12 +1696,12 @@ def DisplayLinkReview(submission_id):
                                         break
                                 notfirst = 1
                         print multfield
-                        print "</td>"
+                        print '</td>'
 
                         ###################################
                         # Reviewer
                         ###################################
-                        print "<tr>"
+                        print '<tr>'
                         print '<td class="label"><b>Reviewers</b></td>'
                         print '<td class="drop">'
                         notfirst = 0
@@ -1720,10 +1715,10 @@ def DisplayLinkReview(submission_id):
                                         break
                                 notfirst = 1
                         print multfield
-                        print "</td>"
+                        print '</td>'
                         print '<td class="keep">'
-                        print " - "
-                        print "</td>"
+                        print ' - '
+                        print '</td>'
                 else:
                         pass
                 print '</table>'
@@ -1753,14 +1748,14 @@ def DisplayPublisherMerge(submission_id):
 		except:
 			InvalidSubmission(submission_id, 'Missing Required XML tags')
 
-                print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+                print '<table border="2" class="generic_table">'
 		RecordIds[0] = KeepId
 		dropIds = doc.getElementsByTagName('DropId')
 		for dropid in dropIds:
 			RecordIds[MaxIds] = int(dropid.firstChild.data)
 			MaxIds += 1
 
-		print "<tr>"
+		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
 		print '<td class="label"><b><a href="http:/%s/publisher.cgi?%d">KeepId [%d]</a></b></td>' % (HTFAKE, KeepId, KeepId)
 	
@@ -1768,7 +1763,7 @@ def DisplayPublisherMerge(submission_id):
 		while RecordIds[index]:
 			print '<td class="label"><b><a href="http:/%s/publisher.cgi?%d">DropId [%d]</a></b></td>' % (HTFAKE, RecordIds[index], RecordIds[index])
 			index += 1
-		print "</tr>"
+		print '</tr>'
 
 		try:
 			Records[0] = publishers(db)
@@ -1793,8 +1788,7 @@ def DisplayPublisherMerge(submission_id):
 		PrintPublisherMerge('Trans_names', Document, KeepId, Records, RecordIds)
 		PrintPublisherMerge('Webpages', Document, KeepId, Records, RecordIds)
 		PrintPublisherMerge('Note', Document, KeepId, Records, RecordIds)
-				
-		print "</tr>"
+
                 print '</table>'
         
         return submitter
@@ -1847,16 +1841,16 @@ def DisplayMakePseudonym(submission_id):
                 Record = GetElementValue(merge, 'Record')
                 submitter = GetElementValue(merge, 'Submitter')
 
-                print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-                print "<tr>"
+                print '<table border="2" class="generic_table">'
+                print '<tr>'
                 print '<td class="label"><b>Alternate Name [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE,Record,Record)	
 
                 if TagPresent(merge, 'Parent'):
                         parent = GetElementValue(merge, 'Parent')
                         print '<td class="label"><b>Parent Author [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE,parent,parent)
-                        print "</tr>"
+                        print '</tr>'
 
-                        print "<tr>"
+                        print '<tr>'
                         try:
                                 author = SQLloadAuthorData(int(Record))
                                 print '<td class="drop">%s</td>' % (author[AUTHOR_CANONICAL])
@@ -1867,7 +1861,7 @@ def DisplayMakePseudonym(submission_id):
                                 print '<td class="keep">%s</td>' % (author[AUTHOR_CANONICAL])
                         except:
                                 InvalidSubmission(submission_id, "Parent author not found: %d" % int(parent))
-                        print "</tr>"
+                        print '</tr>'
                 print '</table>'
                 mod_note = GetElementValue(merge, 'ModNote')
                 if mod_note:
@@ -1886,7 +1880,7 @@ def DisplayMakePseudonym(submission_id):
 
 def DisplayRemovePseudonym(submission_id):
 	submitter = ''
-	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
 	try:
 		xml = SQLloadXML(submission_id)
 		doc = minidom.parseString(XMLunescape2(xml))
@@ -1895,15 +1889,15 @@ def DisplayRemovePseudonym(submission_id):
         		Record = GetElementValue(merge, 'Record')
         		submitter = GetElementValue(merge, 'Submitter')
 	
-			print "<tr>"
+			print '<tr>'
 			print '<td class="label"><b>Alternate Name [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE, Record, Record)
 	
        			if TagPresent(merge, 'Parent'):
         			parent = GetElementValue(merge, 'Parent')
 				print '<td class="label"><b>Parent Author [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE, parent, parent)
-				print "</tr>"
+				print '</tr>'
 
-				print "<tr>"
+				print '<tr>'
 				try:
 					author = SQLloadAuthorData(int(Record))
 					print '<td class="drop">%s</td>' % (author[AUTHOR_CANONICAL])
@@ -1914,7 +1908,7 @@ def DisplayRemovePseudonym(submission_id):
 					print '<td class="keep">%s</td>' % (author[AUTHOR_CANONICAL])
 				except:
                                         InvalidSubmission(submission_id, 'Parent author record no longer exists')
-				print "</tr>"
+				print '</tr>'
 			else:
                                 InvalidSubmission(submission_id, 'Parent record not specified')
 
@@ -1949,7 +1943,7 @@ def DisplayDeletePub(submission_id):
 
 	submitter = ''
 	reason = ''
-	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         if doc.getElementsByTagName('PubDelete'):
 		delete = doc.getElementsByTagName('PubDelete')
         	Record = GetElementValue(delete, 'Record')
