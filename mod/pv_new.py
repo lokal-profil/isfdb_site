@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2015   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -34,7 +34,7 @@ if __name__ == '__main__':
                 print '<div id="ErrorBox">'
                 print '<h3>Error: Bad argument</h3>'
                 print '</div>'
-                PrintPostMod()
+                PrintPostMod(0)
                 sys.exit(0)
 
         submitter = DisplayNewPub(submission_id)
@@ -42,8 +42,6 @@ if __name__ == '__main__':
         print '<a href="http://%s/index.php/User_Talk:%s">(Talk)</a>' % (WIKILOC, submitter)
 
 	ApproveOrReject('pa_new.cgi', submission_id)
-
         display_sources(submission_id)
-
-	PrintPostMod()
+	PrintPostMod(0)
 

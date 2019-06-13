@@ -2104,7 +2104,7 @@ def PrintTitleRemoveHeader(section):
         print '<h2>'
         print section
         print '</h2>'
-        print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         print '<tr>'
         print '<td class="label"><b>Keep</b></td>'
         print '<td class="label"><b>Drop</b></td>'
@@ -2177,18 +2177,18 @@ def DisplayAddVariant(submission_id):
 	doc = minidom.parseString(XMLunescape2(xml))
 
 	submitter = ''
-	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         if doc.getElementsByTagName('VariantTitle'):
 		merge = doc.getElementsByTagName('VariantTitle')
         	Parent = GetElementValue(merge, 'Parent')
         	submitter = GetElementValue(merge, 'Submitter')
 
-		print "<tr>"
+		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
 		print '<td class="label"><b>Current [Parent #<a href="http:/%s/title.cgi?%d">%d</a>]</b></td>' % (HTFAKE, int(Parent), int(Parent))
 		print '<td class="label"><b>Proposed Variant Title</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
-		print "</tr>"
+		print '</tr>'
 
 		current = titles(db)
 		current.load(int(Parent))
@@ -2203,9 +2203,8 @@ def DisplayAddVariant(submission_id):
 		PrintField2XML('Storylen',  merge, current.used_storylen,  current.title_storylen)
 		PrintField2XML('Language',  merge, current.used_language,  current.title_language)
 		PrintField2XML('Note',      merge, current.used_note,      current.title_note)
-
 		PrintMultField('Authors', 'Author', '+', doc, merge, current.num_authors, current.title_authors)
-		print "</tr>"
+		print '</tr>'
 
 	print '</table>'
 	mod_note = GetElementValue(merge, 'ModNote')
@@ -2234,12 +2233,12 @@ def DisplayUnmergeTitle(submission_id):
 		print '<br><b>Authors:</b>'
 		for author in authors:
 			print author
-		print "<br><b>Date:</b>", title[TITLE_YEAR]
-		print "<br><b>Type:</b>", title[TITLE_TTYPE]
+		print '<br><b>Date:</b>', title[TITLE_YEAR]
+		print '<br><b>Type:</b>', title[TITLE_TTYPE]
 		print '<hr>'
 
 		print '<h3>Unmerging these works:</h3>'
-		print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+                print '<table border="2" class="generic_table">'
 		print '<tr>'
 		print '<td class="label"><b>Publication</b></td>'
 		print '<td class="label"><b>Unmerged Title Name</b></td>'
@@ -2289,7 +2288,7 @@ def DisplayMergeTitles(submission_id):
         if doc.getElementsByTagName('TitleMerge'):
                 KeepId    = 0
                 Records   = {}
-                print '<table border="2" cellpadding=0 BGCOLOR="#FFFFFF">'
+                print '<table border="2" class="generic_table">'
 		try:
 			Document = doc.getElementsByTagName('TitleMerge')
         		KeepId = int(GetElementValue(Document, 'KeepId'))
@@ -2336,9 +2335,6 @@ def DisplayMergeTitles(submission_id):
 		PrintMergeField('Synopsis',  Document, KeepId, Records)
 		PrintMergeField('Note',      Document, KeepId, Records)
 		PrintMergeField('Parent',    Document, KeepId, Records)
-				
-		print "</tr>"
-
                 print '</table>'
 
                 mod_note = GetElementValue(Document, 'ModNote')
@@ -2474,7 +2470,7 @@ def PrintMergeField(Label, XmlData, KeepId, Records):
 
 def DisplayMakeVariant(submission_id):
         from titleClass import titles
-	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
 	submitter = ''
         xml = SQLloadXML(submission_id)
         doc = minidom.parseString(XMLunescape2(xml))
@@ -2483,7 +2479,7 @@ def DisplayMakeVariant(submission_id):
                 Record = GetElementValue(merge, 'Record')
                 submitter = GetElementValue(merge, 'Submitter')
 
-                print "<tr>"
+                print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
                 print '<td class="label"><b>Make Variant [Record #<a href="http:/%s/title.cgi?%s">%s</a></b>]</td>' % (HTFAKE, Record, Record)	
                 theVariant = titles(db)
@@ -2497,7 +2493,7 @@ def DisplayMakeVariant(submission_id):
                         else:
                                 print '<td class="label"><b>Variant of Nothing</b></td>'
                         print '<td class="label"><b>Warnings</b></td>'
-                        print "</tr>"
+                        print '</tr>'
                         existingParent = titles(db)
                         existingParent.load(int(parent))
 			if existingParent.error:
@@ -2563,7 +2559,7 @@ def DisplayMakeVariant(submission_id):
                         print '<td class="label"><b>Authors</b></td>'
                         print '<td class="drop">'
                         PrintAuthorNames(theVariant.title_authors, '+')
-                        print "</td>"
+                        print '</td>'
                         print '<td class="keep">'
                         PrintAuthorNames(existingParent.title_authors, '+')
                         print '</td>'
@@ -2573,7 +2569,7 @@ def DisplayMakeVariant(submission_id):
                 else:
                         print '<td class="label"><b>Variant of [New Title]</b></td>'
                         print '<td class="label"><b>Warnings</b></td>'
-                        print "</tr>"
+                        print '</tr>'
                         PrintField2XML('Title',     merge, theVariant.used_title,     theVariant.title_title)
                         PrintMultField('TransTitles',   'TransTitle',   '<br>', doc, merge,
                                         theVariant.used_trans_titles,   theVariant.title_trans_titles)
@@ -2589,8 +2585,7 @@ def DisplayMakeVariant(submission_id):
                         PrintField2('Graphic', theVariant.title_graphic, 1, 1, theVariant.title_graphic, warning, 1)
                         PrintField2XML('Language',  merge, theVariant.used_language,  theVariant.title_language)
                         PrintMultField('Authors', 'Author', '+', doc, merge, theVariant.num_authors, theVariant.title_authors)
-
-                        print "</tr>"
+                        print '</tr>'
 
 	print '</table>'
 
@@ -2624,7 +2619,7 @@ def DisplayEditPub(submission_id):
 		InvalidSubmission("Badly formed XML")
 	submitter = ''
 	pub_id = 0
-	print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+        print '<table border="2" class="generic_table">'
         if doc.getElementsByTagName('PubUpdate'):
 		merge = doc.getElementsByTagName('PubUpdate')
         	Record = GetElementValue(merge, 'Record')
@@ -2677,7 +2672,7 @@ def DisplayEditPub(submission_id):
 						if needCover:
 							needCover = 0
 							print '<h2>Modified Cover Art</h2>'
-							print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+                                                        print '<table border="2" class="generic_table">'
                                                 displayCoverChanged(child, record, submission_id, current)
 				if needCover == 0:
 					print '</table>'
@@ -2694,7 +2689,7 @@ def DisplayEditPub(submission_id):
 						if needTitle:
 							needTitle = 0
 							print '<h2>Modified Regular Titles</h2>'
-							print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+                                                        print '<table border="2" class="generic_table">'
                                                 displayTitleContentChanged(child, record, submission_id, current)
 				if needTitle == 0:
 					print '</table>'
@@ -2711,7 +2706,7 @@ def DisplayEditPub(submission_id):
 						if needTitle:
 							needTitle = 0
 							print '<h2>Modified Reviews</h2>'
-							print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+                                                        print '<table border="2" class="generic_table">'
                                                 displayOtherContentChanged(child, 'review', record, submission_id, current)
 				if needTitle == 0:
 					print '</table>'
@@ -2728,7 +2723,7 @@ def DisplayEditPub(submission_id):
 						if needTitle:
 							needTitle = 0
 							print '<h2>Modified Interviews</h2>'
-							print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+                                                        print '<table border="2" class="generic_table">'
                                                 displayOtherContentChanged(child, 'interview', record, submission_id, current)
 				if needTitle == 0:
 					print '</table>'
@@ -2745,7 +2740,7 @@ def DisplayEditPub(submission_id):
 						if needCover:
 							needCover = 0
 							print '<h2>New Cover Art</h2>'
-							print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
+                                                        print '<table border="2" class="generic_table">'
 							print '<tr>'
 							print '<td class="label"><b>Title</b></td>'
 							print '<td class="label"><b>Artists</b></td>'
@@ -2768,8 +2763,8 @@ def DisplayEditPub(submission_id):
 						if needTitle:
 							needTitle = 0
 							print '<h2>New Regular Titles</h2>'
-							print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-							print "<tr>"
+                                                        print '<table border="2" class="generic_table">'
+							print '<tr>'
 							print '<td class="label"><b>Page</b></td>'
 							print '<td class="label"><b>Title</b></td>'
 							print '<td class="label"><b>Authors</b></td>'
@@ -2777,7 +2772,7 @@ def DisplayEditPub(submission_id):
 							print '<td class="label"><b>Type</b></td>'
 							print '<td class="label"><b>Length</b></td>'
 							print '<td class="label"><b>Warnings</b></td>'
-							print "</tr>"
+							print '</tr>'
 						displayTitleContentAdded(child, submission_id, current)
 
 				if needTitle == 0:
@@ -2795,15 +2790,15 @@ def DisplayEditPub(submission_id):
 						if needTitle:
 							needTitle = 0
 							print '<h2>New Reviews</h2>'
-							print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-							print "<tr>"
+                                                        print '<table border="2" class="generic_table">'
+							print '<tr>'
 							print '<td class="label"><b>Page</b></td>'
 							print '<td class="label"><b>Title</b></td>'
 							print '<td class="label"><b>Authors</b></td>'
 							print '<td class="label"><b>Reviewers</b></td>'
 							print '<td class="label"><b>Date</b></td>'
 							print '<td class="label"><b>Warnings</b></td>'
-							print "</tr>"
+							print '</tr>'
 						displayOtherContentAdded(child, 'review', submission_id, current)
 				if needTitle == 0:
 					print '</table>'
@@ -2820,15 +2815,15 @@ def DisplayEditPub(submission_id):
 						if needTitle:
 							needTitle = 0
 							print '<h2>New Interviews</h2>'
-							print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-							print "<tr>"
+                                                        print '<table border="2" class="generic_table">'
+							print '<tr>'
 							print '<td class="label"><b>Page</b></td>'
 							print '<td class="label"><b>Title</b></td>'
 							print '<td class="label"><b>Interviewees</b></td>'
 							print '<td class="label"><b>Interviewers</b></td>'
 							print '<td class="label"><b>Date</b></td>'
 							print '<td class="label"><b>Warnings</b></td>'
-							print "</tr>"
+							print '</tr>'
 						displayOtherContentAdded(child, 'interview', submission_id, current)
 				if needTitle == 0:
 					print '</table>'
@@ -3099,14 +3094,14 @@ def DisplayClonePublication(submission_id):
                 children = doc.getElementsByTagName('Cover')
                 if len(children):
                         print '<h2>Cover Art</h2>'
-                        print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-                        print "<tr>"
+                        print '<table border="2" class="generic_table">'
+                        print '<tr>'
                         print '<td class="label"><b>Title</b></td>'
                         print '<td class="label"><b>Artists</b></td>'
                         print '<td class="label"><b>Date</b></td>'
                         print '<td class="label"><b>Merge Method</b></td>'
                         print '<td class="label"><b>Warnings</b></td>'
-                        print "</tr>"
+                        print '</tr>'
                         for child in children:
                                 displayCoverClone(pub_date, child, submission_id)
                         print '</table>'
@@ -3117,8 +3112,8 @@ def DisplayClonePublication(submission_id):
                 children = doc.getElementsByTagName('ContentTitle')
                 if len(children):
                         print '<h2>Regular Titles</h2>'
-                        print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-                        print "<tr>"
+                        print '<table border="2" class="generic_table">'
+                        print '<tr>'
                         print '<td class="label"><b>Page</b></td>'
                         print '<td class="label"><b>Title</b></td>'
                         print '<td class="label"><b>Authors</b></td>'
@@ -3127,7 +3122,7 @@ def DisplayClonePublication(submission_id):
                         print '<td class="label"><b>Length</b></td>'
                         print '<td class="label"><b>Merge Method</b></td>'
                         print '<td class="label"><b>Warnings</b></td>'
-                        print "</tr>"
+                        print '</tr>'
                         for child in children:
                                 displayTitleContentClone(pub_date, child, submission_id)
                         print '</table>'
@@ -3138,8 +3133,8 @@ def DisplayClonePublication(submission_id):
                 children = doc.getElementsByTagName('ContentReview')
                 if len(children):
                         print '<h2>Book Reviews</h2>'
-                        print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-                        print "<tr>"
+                        print '<table border="2" class="generic_table">'
+                        print '<tr>'
                         print '<td class="label"><b>Page</b></td>'
                         print '<td class="label"><b>Title</b></td>'
                         print '<td class="label"><b>Book Authors</b></td>'
@@ -3147,7 +3142,7 @@ def DisplayClonePublication(submission_id):
                         print '<td class="label"><b>Date</b></td>'
                         print '<td class="label"><b>Merge Method</b></td>'
                         print '<td class="label"><b>Warnings</b></td>'
-                        print "</tr>"
+                        print '</tr>'
                         for child in children:
                                 displayOtherContentClone(pub_date, child, submission_id, 'review')
                         print '</table>'
@@ -3158,8 +3153,8 @@ def DisplayClonePublication(submission_id):
                 children = doc.getElementsByTagName('ContentInterview')
                 if len(children):
                         print '<h2>Interviews</h2>'
-                        print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-                        print "<tr>"
+                        print '<table border="2" class="generic_table">'
+                        print '<tr>'
                         print '<td class="label"><b>Page</b></td>'
                         print '<td class="label"><b>Title</b></td>'
                         print '<td class="label"><b>Interviewees</b></td>'
@@ -3167,7 +3162,7 @@ def DisplayClonePublication(submission_id):
                         print '<td class="label"><b>Date</b></td>'
                         print '<td class="label"><b>Merge Method</b></td>'
                         print '<td class="label"><b>Warnings</b></td>'
-                        print "</tr>"
+                        print '</tr>'
                         for child in children:
                                 displayOtherContentClone(pub_date, child, submission_id, 'interview')
                         print '</table>'
@@ -3400,13 +3395,13 @@ def DisplayNewPub(submission_id):
                 children = doc.getElementsByTagName('Cover')
                 if len(children):
                         print '<h2>Cover Art</h2>'
-                        print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-                        print "<tr>"
+                        print '<table border="2" class="generic_table">'
+                        print '<tr>'
                         print '<td class="label"><b>Title</b></td>'
                         print '<td class="label"><b>Artists</b></td>'
                         print '<td class="label"><b>Date</b></td>'
                         print '<td class="label"><b>Warnings</b></td>'
-                        print "</tr>"
+                        print '</tr>'
                         for child in children:
                                 displayCoverNew(child)
                         print '</table>'
@@ -3416,8 +3411,8 @@ def DisplayNewPub(submission_id):
                 children = doc.getElementsByTagName('ContentTitle')
                 if len(children):
                         print '<h2>Regular Titles</h2>'
-                        print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-                        print "<tr>"
+                        print '<table border="2" class="generic_table">'
+                        print '<tr>'
                         print '<td class="label"><b>Page</b></td>'
                         print '<td class="label"><b>Title</b></td>'
                         print '<td class="label"><b>Authors</b></td>'
@@ -3425,7 +3420,7 @@ def DisplayNewPub(submission_id):
                         print '<td class="label"><b>Type</b></td>'
                         print '<td class="label"><b>Length</b></td>'
                         print '<td class="label"><b>Warnings</b></td>'
-                        print "</tr>"
+                        print '</tr>'
                         for child in children:
                                 displayTitleContentNew(child, merge)
                         print '</table>'
@@ -3436,15 +3431,15 @@ def DisplayNewPub(submission_id):
                 children = doc.getElementsByTagName('ContentReview')
                 if len(children):
                         print '<h2>Reviews</h2>'
-                        print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-                        print "<tr>"
+                        print '<table border="2" class="generic_table">'
+                        print '<tr>'
                         print '<td class="label"><b>Page</b></td>'
                         print '<td class="label"><b>Title</b></td>'
                         print '<td class="label"><b>Authors</b></td>'
                         print '<td class="label"><b>Reviewers</b></td>'
                         print '<td class="label"><b>Date</b></td>'
                         print '<td class="label"><b>Warnings</b></td>'
-                        print "</tr>"
+                        print '</tr>'
                         for child in children:
                                 displayOtherContentNew(child, 'review', merge)
                         print '</table>'
@@ -3455,15 +3450,15 @@ def DisplayNewPub(submission_id):
                 children = doc.getElementsByTagName('ContentInterview')
                 if len(children):
                         print '<h2>Interviews</h2>'
-                        print '<table border="1" cellpadding=2 BGCOLOR="#FFFFFF">'
-                        print "<tr>"
+                        print '<table border="2" class="generic_table">'
+                        print '<tr>'
                         print '<td class="label"><b>Page</b></td>'
                         print '<td class="label"><b>Title</b></td>'
                         print '<td class="label"><b>Interviewees</b></td>'
                         print '<td class="label"><b>Interviewers</b></td>'
                         print '<td class="label"><b>Date</b></td>'
                         print '<td class="label"><b>Warnings</b></td>'
-                        print "</tr>"
+                        print '</tr>'
                         for child in children:
                                 displayOtherContentNew(child, 'interview', merge)
                         print '</table>'
