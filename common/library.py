@@ -1669,7 +1669,10 @@ def EscapeParams(params):
                 param_string += '&amp;%s=%s' % (urllib.quote(param[0]), urllib.quote(param[1]))
         return param_string
 
-def printRecordID(record_type, record_id, user_id, user = None):
+def printRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
+        print buildRecordID(record_type, record_id, user_id, user, edit_mode)
+
+def buildRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
 	output = '<span class="recordID"><b>%s Record # </b>%d' % (record_type, int(record_id))
 	if user_id:
                 cgi_scripts = {'Publication': 'editpub',
@@ -1684,7 +1687,6 @@ def printRecordID(record_type, record_id, user_id, user = None):
                                }
                 if record_type in cgi_scripts:
                         cgi_script = cgi_scripts[record_type]
-                        edit_mode = 1
                         if record_type in ('Award Category', 'Award Type'):
                                 user.load_moderator_flag()
                                 if not user.moderator:
@@ -1692,7 +1694,7 @@ def printRecordID(record_type, record_id, user_id, user = None):
                         if edit_mode:
                                 output += ' [<a href="http:/%s/edit/%s.cgi?%d">Edit</a>]' % (HTFAKE, cgi_script, int(record_id))
         output += '</span>'
-        print output
+        return output
 
 class isfdbUI:
         def __init__(self):

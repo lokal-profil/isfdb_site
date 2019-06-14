@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -382,6 +382,7 @@ class pubs:
 		self.cover_changed  = {}
                 self.reference_title_count = 0
                 self.identifiers    = {}
+                self.body   = ''
 
 	def pushTitle(self, titleEntry):
 		if self.titles == '':
@@ -1700,3 +1701,25 @@ class pubs:
                                 formatted_line += ' %s' % formatted_id
                         formatted_ids.append(formatted_line)
                 return formatted_ids
+
+        def build_page_body(self, userid):
+                self.body = '<div class="ContentBox">'
+                self._build_image()
+                self._build_pub_title_line(userid)
+
+        def _build_image(self):
+                if not self.pub_image:
+                        return
+		self.body += '<table>'
+		self.body += '<tr class="scan">'
+		self.body += '<td>'
+                image = self.pub_image.split("|")[0]
+		self.body += '<a href="%s"><img src="%s" ' % (image, image)
+		self.body += 'alt="picture" class="scan"></a></td>'
+		self.body += '<td class="pubheader">'
+
+        def _build_pub_title_line(self, userid):
+                self.body += '<ul>'
+                self.body += '<li><b>Publication:</b> '
+                self.body += ISFDBMouseover(self.pub_trans_titles, self.pub_title, '')
+                self.body += buildRecordID('Publication', self.pub_id, userid, None, 1)

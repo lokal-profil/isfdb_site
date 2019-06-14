@@ -346,20 +346,8 @@ if __name__ == '__main__':
 	PrintHeader(title)
 	PrintNavbar('publication', publication, concise, 'pl.cgi', sys.argv[1])
 
-	print '<div class="ContentBox">'
-
-	if pub.pub_image:
-		print '<table>'
-		print '<tr class="scan">'
-		print '<td>'
-                image = pub.pub_image.split("|")[0]
-		print '<a href="%s"><img src="%s" ' % (image, image)
-		print 'alt="picture" class="scan"></a></td>'
-		print '<td class="pubheader">'
-
-	print '<ul>'
-	print '<li><b>Publication:</b>', ISFDBMouseover(pub.pub_trans_titles, pub.pub_title, '')
-	printRecordID('Publication', pub.pub_id, userid)
+        pub.build_page_body(userid)
+	print pub.body
 
 	titles = SQLloadTitlesXBT(pub.pub_id)
 	# Display a link to other issues for Magazines
