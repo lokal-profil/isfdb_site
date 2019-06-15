@@ -1702,24 +1702,61 @@ class pubs:
                         formatted_ids.append(formatted_line)
                 return formatted_ids
 
-        def build_page_body(self, userid):
+class pubBody():
+        def __init__(self):
+                self.body = ''
+                self.pub = pubs(db)
+                self.userid = ''
+                self.titles = []
+
+        def build_page_body(self):
                 self.body = '<div class="ContentBox">'
                 self._build_image()
-                self._build_pub_title_line(userid)
+                self._build_pub_title_line()
+                self._build_magazine_link()
 
         def _build_image(self):
-                if not self.pub_image:
+                if not self.pub.pub_image:
                         return
 		self.body += '<table>'
 		self.body += '<tr class="scan">'
 		self.body += '<td>'
-                image = self.pub_image.split("|")[0]
+                image = self.pub.pub_image.split("|")[0]
 		self.body += '<a href="%s"><img src="%s" ' % (image, image)
 		self.body += 'alt="picture" class="scan"></a></td>'
 		self.body += '<td class="pubheader">'
 
-        def _build_pub_title_line(self, userid):
+        def _build_pub_title_line(self):
                 self.body += '<ul>'
                 self.body += '<li><b>Publication:</b> '
-                self.body += ISFDBMouseover(self.pub_trans_titles, self.pub_title, '')
-                self.body += buildRecordID('Publication', self.pub_id, userid, None, 1)
+                self.body += ISFDBMouseover(self.pub.pub_trans_titles, self.pub.pub_title, '')
+                self.body += buildRecordID('Publication', self.pub.pub_id, self.userid, None, 1)
+
+        def _build_magazine_link(self):
+                # Display a link to other issues for Magazines
+                if not self.pub.pub_ctype in ('MAGAZINE', 'FANZINE'):
+                        return
+
+                editor = ''
+                # Find the EDITOR Title in this Magazine issues
+                for title in self.titles:
+                        if title[TITLE_TTYPE] != 'EDITOR':
+                                continue
+                        editor = title
+                # Check that the editor Title was found -- some issues may not have it
+                if not editor:
+                        return
+
+                # If there is a parent EDITOR record, load it instead of the child EDITOR record
+                if editor[TITLE_PARENT]:
+                        editor = SQLloadTitle(editor[TITLE_PARENT])
+                # If this EDITOR record is in a Series, link to that Series
+                if editor[TITLE_SERIES]:
+                        self.body += '<a href="http:/%s/pe.cgi?%s">(View All Issues)</a>' % (HTFAKE, editor[TITLE_SERIES])
+                        self.body += '<a href="http:/%s/seriesgrid.cgi?%s">(View Issue Grid)</a>' % (HTFAKE, editor[TITLE_SERIES])
+                # If the EDITOR record is not in a Series, check the number of magazine pubs for the record
+                else:
+                        pubs_for_editor = SQLGetPubsByTitle(editor[TITLE_PUBID])
+                        # Link the EDITOR record directly if it has more than 1 issue
+                        if len(pubs_for_editor) > 1:
+                                self.body += '<a "href=http:/%s/title.cgi?%s">(View All Issues)</a>' % (HTFAKE, editor[TITLE_PUBID])

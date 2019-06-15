@@ -18,7 +18,7 @@ from common import *
 from SQLparsing import *
 from library import *
 from isbn import convertISBN
-from pubClass import pubs
+from pubClass import pubs, pubBody
 
 def DoError(message):
         PrintHeader('Unknown Publication Record')
@@ -342,37 +342,18 @@ if __name__ == '__main__':
 
 	pub = pubs(db)
 	pub.load(publication[PUB_PUBID])
-	title = 'Publication: %s' % pub.pub_title
-	PrintHeader(title)
+
+	PrintHeader('Publication: %s' % pub.pub_title)
 	PrintNavbar('publication', publication, concise, 'pl.cgi', sys.argv[1])
 
-        pub.build_page_body(userid)
-	print pub.body
-
+        pub_body = pubBody()
+        pub_body.pub = pub
+        pub_body.userid = userid
 	titles = SQLloadTitlesXBT(pub.pub_id)
-	# Display a link to other issues for Magazines
-	if pub.pub_ctype in ('MAGAZINE', 'FANZINE'):
-                editor = ''
-                #Find the EDITOR Title in this Magazine issues
-        	for title in titles:
-                        if title[TITLE_TTYPE] != 'EDITOR':
-                                continue
-                        editor = title
-                #Check that the editor Title was found -- some issues may not have it
-                if editor:
-                        #If there is a parent EDITOR record, load it instead of the child EDITOR record
-                        if editor[TITLE_PARENT]:
-                                editor = SQLloadTitle(editor[TITLE_PARENT])
-                        #If this EDITOR record is in a Series, link to that Series
-                        if editor[TITLE_SERIES]:
-                                print '<a href="http:/%s/pe.cgi?%s">(View All Issues)</a>' % (HTFAKE, editor[TITLE_SERIES])
-                                print '<a href="http:/%s/seriesgrid.cgi?%s">(View Issue Grid)</a>' % (HTFAKE, editor[TITLE_SERIES])
-                        #If the EDITOR record is not in a Series, check the number of magazine pubs for the record
-                        else:
-                                pubs_for_editor = SQLGetPubsByTitle(editor[TITLE_PUBID])
-                                #Link the EDITOR record directly if it has more than 1 issue
-                                if len(pubs_for_editor) > 1:
-                                        print '<a "href=http:/%s/title.cgi?%s">(View All Issues)</a>' % (HTFAKE, editor[TITLE_PUBID])
+	pub_body.titles = titles
+        pub_body.build_page_body()
+        print pub_body.body
+
 	print '<li>'
         authors = SQLPubBriefAuthorRecords(pub.pub_id)
 	if pub.pub_ctype in ('ANTHOLOGY', 'MAGAZINE', 'FANZINE'):
