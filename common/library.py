@@ -519,11 +519,10 @@ def ISFDBLink(script, record_id, displayed_value, brackets=False, argument='', t
 	trans_values = None
 	# If a list of transliterated values was passed in and contains
 	# transliterated values for this record ID, display them
-	if transliterations:
+	if transliterations is not None:
                 trans_values = transliterations.get(record_id, None)
-        # If no list was passed in, but the CGI script is associated with
-        # a data retrieval function, use that function to retrieve a list
-        # of transliterated values
+        # If no transliterations  were passed in, but the CGI script is associated with
+        # a data retrieval function, use that function to retrieve transliterations
 	elif trans_function:
                 trans_values = trans_function(record_id)
         # If transliterated values have been found, add them to the link
