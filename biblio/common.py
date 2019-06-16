@@ -756,8 +756,6 @@ def displayRecordList(record_type, records):
         print LIBbuildRecordList(record_type, records)
 
 def displayAuthorById(id, name, trans_authors = None):
-        if not trans_authors:
-                trans_authors = {}
 	print ISFDBLink('ea.cgi', id, name, False, '', trans_authors)
 
 def displayPubAuthors(pub_id):

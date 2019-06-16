@@ -132,7 +132,7 @@ class PublicationMonth:
                 self.publishers = SQLGetPublisherList(self.publisher_ids)
 
                 # Populate a dictionary of publisher name transliterations indexed by publisher ID
-                self.publisher_trans = SQLLoadTransPublisherList(self.pub_ids)
+                self.publisher_trans = SQLLoadTransPublisherList(self.publisher_ids)
 
         def loadPubSeries(self):
                 for pub in self.pub_list:
@@ -143,7 +143,7 @@ class PublicationMonth:
                 self.pub_series = SQLGetPubSeriesList(self.pub_series_ids)
 
                 # Populate a dictionary of pub series name transliterations indexed by pub series ID
-                self.pub_series_trans = SQLLoadTransPubSeriesList(self.pub_ids)
+                self.pub_series_trans = SQLLoadTransPubSeriesList(self.pub_series_ids)
 
         def loadPubAuthors(self):
                 self.pub_authors = SQLPubListBriefAuthorRecords(self.pub_ids)

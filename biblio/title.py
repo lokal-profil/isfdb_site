@@ -70,7 +70,7 @@ def PrintOneVariant(variant, parent, parent_authors, bgcolor, translation):
         variant_authors = SQLTitleBriefAuthorRecords(variant[TITLE_PUBID])
         # Display the variant's authors only if they are different from the parent title's authors
         if set(variant_authors) != set(parent_authors):
-                displayVariantAuthors(variant_authors, '', ())
+                displayVariantAuthors(variant_authors, '', None)
         print '</td>'
         print '</tr>'
         return
