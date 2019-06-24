@@ -253,7 +253,10 @@ if __name__ == '__main__':
                                 label = '%s interior art' % label
 			if parent_title[TITLE_TTYPE] == 'COVERART' and title[TITLE_TTYPE] == 'INTERIORART':
                                 label = '%s cover art for' % label
-			print '<b>%s:</b> %s (by' % (label, ISFDBLink('title.cgi', title[TITLE_PARENT], parent_title[TITLE_TITLE]))
+			print '<b>%s:</b> %s' % (label, ISFDBLink('title.cgi', title[TITLE_PARENT], parent_title[TITLE_TITLE]))
+			if title[TITLE_YEAR] != parent_title[TITLE_YEAR]:
+                                print '(%s)' % convertYear(parent_title[TITLE_YEAR][:4])
+			print ' (by'
 			vauthors = SQLTitleBriefAuthorRecords(parent_title[TITLE_PUBID])
 			counter = 0
 			for vauthor in vauthors:
