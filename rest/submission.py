@@ -26,7 +26,7 @@ class Submission:
                 self.merge = ''
                 self.submitter = ''
                 self.submitter_id = 0
-                self.valid_submitters = ('Ahasuerus', 'Fixer')
+                self.valid_submitters = ('Ahasuerus', 'Fixer', 'Stoecker')
                 self.XMLdata = ''
 
         def process_submission(self):
