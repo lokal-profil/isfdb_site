@@ -254,7 +254,7 @@ if __name__ == '__main__':
 			if parent_title[TITLE_TTYPE] == 'COVERART' and title[TITLE_TTYPE] == 'INTERIORART':
                                 label = '%s cover art for' % label
 			print '<b>%s:</b> %s' % (label, ISFDBLink('title.cgi', title[TITLE_PARENT], parent_title[TITLE_TITLE]))
-			if title[TITLE_LANGUAGE] != parent_title[TITLE_LANGUAGE]:
+			if parent_title[TITLE_LANGUAGE] and title[TITLE_LANGUAGE] != parent_title[TITLE_LANGUAGE]:
                                 print '[%s]' % LANGUAGES[int(parent_title[TITLE_LANGUAGE])]
 			if title[TITLE_YEAR] != parent_title[TITLE_YEAR]:
                                 print '(%s)' % convertYear(parent_title[TITLE_YEAR][:4])
