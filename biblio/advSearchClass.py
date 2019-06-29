@@ -193,6 +193,7 @@ class AdvancedSearch:
                                            ('author_deathdate', 'Deathdate'),
                                            ('author_language', 'Working Language (list)'),
                                            ('author_language_free', 'Working Language (free form)'),
+                                           ('author_image', 'Author Image'),
                                            ('author_webpage', 'Webpage'),
                                            ('author_email', 'E-mail'),
                                            ('author_pseudos', 'Alternate Name'),

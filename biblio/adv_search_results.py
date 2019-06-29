@@ -581,6 +581,8 @@ class AdvancedSearchResults(AdvancedSearch):
                 elif field == 'author_pseudos':
                         clause = """authors.author_id in (SELECT pseudonyms.author_id from pseudonyms,
                                   authors a1 WHERE pseudonym = a1.author_id AND a1.author_canonical %s)""" % sql_value
+                elif field == 'author_image':
+                        clause = "authors.author_image %s" % sql_value
                 elif field == 'author_webpage':
                         clause = "webpages.url %s" % sql_value
                         dbases = [tableInfo('authors'), tableInfo('webpages')]
