@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -375,13 +375,9 @@ if __name__ == '__main__':
 			if debug == 0:
         			markIntegrated(db, submission)
 
-	print "</ul>"
-	print "<hr>"
-	print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
 	print '[<a href="http:/' +HTFAKE+ '/edit/edittitle.cgi?%d">Edit This Title</a>]' % (int(MergedTitle))
 	print '[<a href="http:/' +HTFAKE+ '/title.cgi?%d">View This Title</a>]' % (int(MergedTitle))
 
 	print "<hr>"
 
-
-	PrintPostMod()
+	PrintPostMod(0)

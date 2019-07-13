@@ -98,9 +98,6 @@ if __name__ == '__main__':
 		submitter = GetElementValue(merge, 'Submitter')
 		markIntegrated(db, submission)
 
-	print "</ul>"
-	print "<hr>"
-	print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
 	print "<p>"
 
-	PrintPostMod()
+	PrintPostMod(0)

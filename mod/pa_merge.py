@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2009   Al von Ruff
+#     (C) COPYRIGHT 2005-2019   Al von Ruff
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -129,14 +129,7 @@ if __name__ == '__main__':
 	merge = doc.getElementsByTagName('PubMerge')
 	if merge:
 		PubMerge(db, recno, doc)
-
 		submitter = GetElementValue(merge, 'Submitter')
         	markIntegrated(db, recno)
 
-	print "</ul>"
-	print "<hr>"
-	print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
-	print "<hr>"
-
-
-	PrintPostMod()
+	PrintPostMod(0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2016   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -121,10 +121,6 @@ if __name__ == '__main__':
         if debug == 0:
                 markIntegrated(db, submission, award_id)
 
-        print "</ul>"
-        print "<hr>"
-        print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
-
         try:
                 # Only display title links if this award was entered for a Title record
                 if TagPresent(merge, 'Record'):
@@ -138,3 +134,4 @@ if __name__ == '__main__':
                 pass
         print "<p>"
 
+        PrintPostMod(0)

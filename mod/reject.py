@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -56,14 +56,13 @@ if __name__ == '__main__':
         print "<li> ", update
 	db.query(update)
 
-        print "</ul><p /><hr />"
-
+        print "</ul><p><hr>"
 	
-	print "Record %d has been moved to the Rejected state.<br />" % sub_id
+	print "Record %d has been moved to the Rejected state.<br>" % sub_id
 	print "<b>Reason:</b> ", reason
 
-	print "<p />"
-	print "<hr />"
-	print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
+	print "<p>"
+	print "<hr>"
+	print ISFDBLink('mod/list.cgi', 'N', 'Submission List', 1)
 
-	PrintPostMod()
+	PrintPostMod(0)

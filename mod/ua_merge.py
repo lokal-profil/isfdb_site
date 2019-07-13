@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2016   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2008-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -156,12 +156,8 @@ if __name__ == '__main__':
                 PrintPostMod()
                 sys.exit(0)
 
-	print "</ul>"
-	print "<hr>"
-	print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
 	print '[<a href="http:/' +HTFAKE+ '/publisher.cgi?%d">View Publisher</a>]' % (int(KeepId))
 	print '[<a href="http:/' +HTFAKE+ '/edit/editpublisher.cgi?%d">Edit Publisher</a>]' % (int(KeepId))
 	print "<hr>"
 
-
-	PrintPostMod()
+	PrintPostMod(0)

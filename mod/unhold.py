@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009   Ahasuerus
+#     (C) COPYRIGHT 2009-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -51,6 +51,6 @@ if __name__ == '__main__':
                         db.query(update)
                         print "<h3>Submission %d is no longer on hold.</h3>" % int(submission)
 
-        print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
+        print ISFDBLink('mod/list.cgi', 'N', 'Submission List', 1)
 
-	PrintPostMod()
+	PrintPostMod(0)

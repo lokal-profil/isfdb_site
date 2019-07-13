@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2010-2018   Ahasuerus
+#     (C) COPYRIGHT 2010-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -70,11 +70,8 @@ if __name__ == '__main__':
 	except:
 		submitter = 'unknown'
 
-        print '</ul>'
-        print '<hr>'
-        print '[<a href="http:/%s/mod/list.cgi?N">Submission List</a>]' % HTFAKE
         print '[<a href="http:/%s/ea.cgi?%d">View Former Canonical Name</a>]' % (HTFAKE, int(parent))
         print '[<a href="http:/%s/ea.cgi?%d">View Former Alternate Name</a>]' % (HTFAKE, int(Record))
         print '<p>'
 
-        PrintPostMod()
+        PrintPostMod(0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2018   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -60,12 +60,8 @@ if __name__ == '__main__':
 	except:
 		submitter = 'unknown'
 
-        print "</ul>"
-        print "<hr>"
-        print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
 	print '[<a href="http:/' +HTFAKE+ '/ea.cgi?%d">View Canonical Name</a>]' % int(parent)
 	print '[<a href="http:/' +HTFAKE+ '/ea.cgi?%d">View Alternate Name</a>]' % int(Record)
         print "<p>"
 
-
-
+        PrintPostMod(0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2011   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -66,13 +66,12 @@ def DoSubmission(db, submission):
 		submitter = GetElementValue(merge, 'Submitter')
 		if debug == 0:
 			markIntegrated(db, submission)
-		print "</ul>"
 	return (ParentRecord, ChildRecord)
 
 
 if __name__ == '__main__':
 
-        PrintPreMod('Make Variant - SQL Statements')
+        PrintPreMod('Link Review - SQL Statements')
         PrintNavBar()
 
 	try:
@@ -92,8 +91,6 @@ if __name__ == '__main__':
 
 	(ParentRecord, ChildRecord) = DoSubmission(db, submission)
 
-	print "<hr>"
-	print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
 	if ParentRecord > 0:
 		print '[<a href="http:/' +HTFAKE+ '/title.cgi?%d">View Reviewed Title</a>]' % ParentRecord
 	if ChildRecord > 0:
@@ -101,5 +98,5 @@ if __name__ == '__main__':
 
 	print "<p>"
 
-	PrintPostMod()
+	PrintPostMod(0)
 	

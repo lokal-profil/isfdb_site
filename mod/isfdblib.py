@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -144,6 +144,17 @@ def markIntegrated(db, sub_id, new_record_id = None, pub_id = None):
             print "<li> ", update
             db.query(update)
             SQLUpdate_last_changed_verified_pubs_DTS(verifier_id)
+
+    print '</ul>'
+    print '<hr>'
+    next_sub = SQLloadNextSubmission(sub_id)
+    if next_sub:
+        subtype = next_sub[SUB_TYPE]
+        if SUBMAP.has_key(subtype):
+            approval_script = SUBMAP[subtype][0]
+            print ISFDBLink('mod/%s.cgi' % approval_script, next_sub[SUB_ID], 'Next Submission', 1)
+    print ISFDBLink('mod/list.cgi', 'N', 'Submission List', 1)
+    print '<p>'
 
 def NotApprovable(submission):
     if SQLloadState(submission) != 'N':

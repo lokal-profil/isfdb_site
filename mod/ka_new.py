@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -252,7 +252,6 @@ def DoSubmission(db, submission):
 		submitter = GetElementValue(merge, 'Submitter')
 		if debug == 0:
 			markIntegrated(db, submission)
-		print "</ul>"
 	return (ParentRecord, ChildRecord)
 
 
@@ -279,8 +278,6 @@ if __name__ == '__main__':
 
 	(ParentRecord, ChildRecord) = DoSubmission(db, submission)
 
-	print '<hr>'
-	print '[<a href="http:/%s/mod/list.cgi?N">Submission List</a>]' % HTFAKE
 	if ParentRecord:
 		print '[<a href="http:/%s/edit/edittitle.cgi?%d">Edit Parent Title</a>]' % (HTFAKE, int(ParentRecord))
 		print '[<a href="http:/%s/title.cgi?%d">View Parent Title</a>]' % (HTFAKE, int(ParentRecord))
@@ -290,4 +287,4 @@ if __name__ == '__main__':
 		print '[<a href="http:/%s/title.cgi?%d">View Variant Title</a>]' % (HTFAKE, int(ChildRecord))
 	print '<p>'
 
-	PrintPostMod()
+	PrintPostMod(0)

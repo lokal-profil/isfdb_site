@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014   Ahasuerus
+#     (C) COPYRIGHT 2014-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -75,9 +75,4 @@ if __name__ == '__main__':
 
         markIntegrated(db, submission)
 
-	print "</ul>"
-	print "<hr>"
-	print '[<a href="http:/%s/mod/list.cgi?N">Submission List</a>]' % (HTFAKE)
-
-	PrintPostMod()
-
+	PrintPostMod(0)

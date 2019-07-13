@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004   Ahasuerus
+#     (C) COPYRIGHT 2004-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -65,7 +65,6 @@ def DoSubmission(db, submission):
 		submitter = GetElementValue(merge, 'Submitter')
 		if debug == 0:
 			markIntegrated(db, submission)
-		print "</ul>"
 	return (title_id, award_id)
 
 
@@ -87,8 +86,6 @@ if __name__ == '__main__':
 
 	(title_id, award_id) = DoSubmission(db, submission)
 
-	print '<hr>'
-	print '[<a href="http:/%s/mod/list.cgi?N">Submission List</a>]' % HTFAKE
 	if title_id > 0:
 		print '[<a href="http:/%s/title.cgi?%d">View Title record</a>]' % (HTFAKE, title_id)
 	if award_id > 0:
@@ -96,5 +93,5 @@ if __name__ == '__main__':
 
 	print "<p>"
 
-	PrintPostMod()
+	PrintPostMod(0)
 	

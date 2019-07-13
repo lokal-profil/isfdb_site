@@ -2078,6 +2078,16 @@ def SQLloadSubmission(sub_id):
         except:
                 return None
 
+def SQLloadNextSubmission(sub_id):
+	query = "select * from submissions where sub_state='N' and sub_holdid=0 and sub_id > %d order by sub_reviewed limit 1" % int(sub_id)
+	db.query(query)
+	result = db.store_result()
+	record = result.fetch_row()
+	try:
+                return record[0]
+        except:
+                return None
+
 def SQLwikiLinkExists(namespace, title):
 	if namespace == 'Author':
 		num = 100

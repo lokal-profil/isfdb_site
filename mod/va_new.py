@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff and Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -69,7 +69,7 @@ def addAuthor(author, title_id):
 
 if __name__ == '__main__':
 
-        PrintPreMod('Title Update - SQL Statements')
+        PrintPreMod('Add Variant Title - SQL Statements')
         PrintNavBar()
 
 	try:
@@ -181,12 +181,9 @@ if __name__ == '__main__':
 		submitter = GetElementValue(merge, 'Submitter')
 		markIntegrated(db, submission)
 
-	print "</ul>"
-	print "<hr>"
-	print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
 	print '[<a href="http:/' + HTFAKE + '/title.cgi?%d">View Original Title</a>]' % int(Parent)
 	print '[<a href="http:/' + HTFAKE + '/title.cgi?%d">View New Title</a>]' % int(TitleRecord)
 
 	print "<p>"
 
-	PrintPostMod()
+	PrintPostMod(0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2016   Ahasuerus
+#     (C) COPYRIGHT 2014-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -92,11 +92,7 @@ if __name__ == '__main__':
 
         markIntegrated(db, submission, award_type_id)
 
-	print "</ul>"
-	print "<hr>"
-	print '[<a href="http:/%s/mod/list.cgi?N">Submission List</a>]' % (HTFAKE)
 	print '[<a href="http:/%s/edit/editawardtype.cgi?%d">Edit This Award Type</a>]' % (HTFAKE, award_type_id)
 	print '[<a href="http:/%s/awardtype.cgi?%d">View This Award Type</a>]' % (HTFAKE, award_type_id)
 
-	PrintPostMod()
-
+	PrintPostMod(0)

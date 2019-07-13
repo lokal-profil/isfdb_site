@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2016   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -74,11 +74,11 @@ if __name__ == '__main__':
                 PrintPostMod()
                 sys.exit(0)
 
-	update = "update submissions set sub_state='R', sub_reason='%s', sub_reviewer='%d', sub_reviewed=NOW() where sub_id='%d';" % ("Forced", int(reviewerid), sub_id)
+	update = "update submissions set sub_state='R', sub_reason='Forced', sub_reviewer=%d, sub_reviewed=NOW() where sub_id=%d" % (int(reviewerid), int(sub_id))
 	print '<ul>'
         print '<li> ', update
 	db.query(update)
+        print '</ul>'
+        print ISFDBLink('mod/list.cgi', 'N', 'Submission List', 1)
 
-        print '</ul>[<a href="http:/%s/mod/list.cgi?N">Submission List</a>]<hr />' % HTFAKE
-
-	PrintPostMod()
+	PrintPostMod(0)

@@ -1,7 +1,7 @@
 #!_PYTHONLOC
 
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -658,13 +658,12 @@ def DoSubmission(db, submission):
 
 		if debug == 0:
 			markIntegrated(db, submission, Record)
-		print "</ul>"
 
 	return(Record)
 
 if __name__ == '__main__':
 
-        PrintPreMod('Publication Update - SQL Statements')
+        PrintPreMod('New Publication - SQL Statements')
         PrintNavBar()
 
 	try:
@@ -684,11 +683,9 @@ if __name__ == '__main__':
 
 	Record = DoSubmission(db, submission)
 
-	print "<hr>"
-	print '[<a href="http:/%s/mod/list.cgi?N">Submission List</a>]' % HTFAKE
 	print '[<a href="http:/%s/edit/editpub.cgi?%d">Edit This Pub</a>]' % (HTFAKE, int(Record))
 	print '[<a href="http:/%s/pl.cgi?%d">View This Pub</a>]' % (HTFAKE, int(Record))
 	print '[<a href="http:/%s/edit/find_pub_dups.cgi?%d">Check for Duplicate Titles</a>]' % (HTFAKE, int(Record))
 	print "<p>"
 
-	PrintPostMod()
+	PrintPostMod(0)

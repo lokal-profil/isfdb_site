@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2014   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -137,9 +137,6 @@ if __name__ == '__main__':
 		submitter = GetElementValue(merge, 'Submitter')
 		markIntegrated(db, submission)
 
-	print '</ul>'
-	print '<hr>'
-	print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
 	# Load the award data
 	award = awards(db)
 	award.load(int(Record))
@@ -153,4 +150,4 @@ if __name__ == '__main__':
         print '[<a href="http:/' +HTFAKE+ '/ay.cgi?%s+%s">View Award Year</a>]' % (award.award_type_id, award.award_year[:4])
 	print '<p>'
 
-	PrintPostMod()
+	PrintPostMod(0)

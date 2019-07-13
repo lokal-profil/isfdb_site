@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -380,13 +380,10 @@ if __name__ == '__main__':
 		submitter = GetElementValue(merge, 'Submitter')
 		markIntegrated(db, submission)
 
-	print "</ul>"
-	print "<hr>"
-	print '[<a href="http:/%s/mod/list.cgi?N">Submission List</a>]' % HTFAKE
 	print '[<a href="http:/%s/edit/edittitle.cgi?%d">Edit This Title</a>]' % (HTFAKE, int(Record))
 	print '[<a href="http:/%s/title.cgi?%d">View This Title</a>]' % (HTFAKE, int(Record))
         print '[<a href="http:/%s/edit/find_title_dups.cgi?%s">Check for Duplicate Titles</a>]' % (HTFAKE, int(Record))
 
 	print "<p>"
 
-	PrintPostMod()
+	PrintPostMod(0)

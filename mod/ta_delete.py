@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2015   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -58,9 +58,6 @@ if __name__ == '__main__':
                         submitter = GetElementValue(merge, 'Submitter')
                         markIntegrated(db, submission)
 
-	print "</ul>"
-	print "<hr>"
-	print '[<a href="http:/%s/mod/list.cgi?N">Submission List</a>]' % HTFAKE
 	print "<p>"
 
-	PrintPostMod()
+	PrintPostMod(0)

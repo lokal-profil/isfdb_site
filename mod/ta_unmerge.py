@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
 #	 ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -169,9 +169,6 @@ if __name__ == '__main__':
 	submitter = GetElementValue(merge, 'Submitter')
 	markIntegrated(db, submission)
 
-	print "</ul>"
-	print "<hr>"
-	print '[<a href="http:/' +HTFAKE+ '/mod/list.cgi?N">Submission List</a>]'
 	if Record:
                 print '[<a href="http:/%s/title.cgi?%d">View Original Title</a>]' % (HTFAKE, int(Record))
         count_unmerged = 1
@@ -189,4 +186,4 @@ if __name__ == '__main__':
         print '[<a href="http:/%s/edit/find_title_dups.cgi?%s">Check for Duplicate Titles</a>]' % (HTFAKE, duplicates_check_string)
 	print '<p>'
 
-	PrintPostMod()
+	PrintPostMod(0)

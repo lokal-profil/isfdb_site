@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -604,7 +604,6 @@ def DoSubmission(db, submission):
                         else:
                                 # Pass the ID of the newly created pub
                                 markIntegrated(db, submission, Record, None)
-		print "</ul>"
 	return(Record)
 
 
@@ -635,11 +634,9 @@ if __name__ == '__main__':
 
 	Record = DoSubmission(db, submission)
 
-	print "<hr>"
-	print '[<a href="http:/%s/mod/list.cgi?N">Submission List</a>]' % HTFAKE
 	print '[<a href="http:/%s/edit/editpub.cgi?%d">Edit This Pub</a>]' % (HTFAKE, int(Record))
 	print '[<a href="http:/%s/pl.cgi?%d">View This Pub</a>]' % (HTFAKE, int(Record))
 	print '[<a href="http:/%s/edit/find_pub_dups.cgi?%d">Check for Duplicate Titles</a>]' % (HTFAKE, int(Record))
 	print "<p>"
 
-	PrintPostMod()
+	PrintPostMod(0)
