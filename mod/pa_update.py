@@ -706,7 +706,7 @@ if __name__ == '__main__':
 
 		submitter = GetElementValue(merge, 'Submitter')
 		if debug == 0:
-			markIntegrated(db, submission, None, pub_id, 1)
+			markIntegrated(db, submission, None, pub_id)
 
 	print '[<a href="http:/%s/edit/editpub.cgi?%d">Edit This Pub</a>]' % (HTFAKE, int(Record))
 	print '[<a href="http:/%s/pl.cgi?%d">View This Pub</a>]' % (HTFAKE, int(Record))
