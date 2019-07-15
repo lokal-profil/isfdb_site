@@ -86,6 +86,13 @@ def ApproveOrReject(app, submission_id):
                 print '<a class="hold" href="http:/'+HTFAKE+'/mod/hold.cgi?%s">HOLD</a>  ' % submission_id
 
         print '<a class="approval" href="http:/'+HTFAKE+'/mod/%s?%s">Approve</a>' % (app, submission_id)
+        next_sub = SQLloadNextSubmission(submission_id)
+        if next_sub:
+                subtype = next_sub[SUB_TYPE]
+                if SUBMAP.has_key(subtype):
+                        next_approval_script = SUBMAP[subtype][0]
+                        print ISFDBLink('mod/%s.cgi' % next_approval_script, next_sub[SUB_ID], 'Next Submission', False, 'class="approval"')
+        print ISFDBLink('mod/list.cgi', 'N', 'Submission List', False, 'class="approval"')
         print '<span class="approval"><small>'
         print '<a class="approval" href="http:/%s/view_submission.cgi?%s">Public View</a>' % (HTFAKE, submission_id)
         print '<a class="approval" href="http:/%s/dumpxml.cgi?%s">View Raw XML</a>' % (HTFAKE, submission_id)
