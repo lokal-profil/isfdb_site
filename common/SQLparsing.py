@@ -2078,8 +2078,20 @@ def SQLloadSubmission(sub_id):
         except:
                 return None
 
-def SQLloadNextSubmission(sub_id):
-	query = "select * from submissions where sub_state='N' and sub_holdid=0 and sub_id > %d order by sub_reviewed limit 1" % int(sub_id)
+def SQLloadNextSubmission(sub_id, reviewer_id):
+	query = """select * from submissions s
+                where s.sub_state = 'N'
+                and s.sub_holdid = 0
+                and s.sub_id > %d
+                and not exists (
+                        select 1 from mw_user u, mw_user_groups groups
+                        where s.sub_submitter != %d
+                        and s.sub_submitter = u.user_id
+                        and u.user_id = groups.ug_user
+                        and groups.ug_group = 'sysop'
+                        )
+                order by s.sub_reviewed
+                limit 1""" % (int(sub_id), int(reviewer_id))
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()

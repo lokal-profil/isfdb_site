@@ -147,7 +147,7 @@ def markIntegrated(db, sub_id, new_record_id = None, pub_id = None):
 
     print '</ul>'
     print '<hr>'
-    next_sub = SQLloadNextSubmission(sub_id)
+    next_sub = SQLloadNextSubmission(sub_id, reviewerid)
     if next_sub:
         subtype = next_sub[SUB_TYPE]
         if SUBMAP.has_key(subtype):
