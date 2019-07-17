@@ -90,14 +90,8 @@ def ApproveOrReject(app, submission_id):
         print '<a class="approval" href="http:/%s/view_submission.cgi?%s">Public View</a>' % (HTFAKE, submission_id)
         print '<a class="approval" href="http:/%s/dumpxml.cgi?%s">View Raw XML</a>' % (HTFAKE, submission_id)
         print '</small></span>'
-        print '<p>'
-        next_sub = SQLloadNextSubmission(submission_id, reviewer_id)
-        if next_sub:
-                subtype = next_sub[SUB_TYPE]
-                if SUBMAP.has_key(subtype):
-                        next_approval_script = SUBMAP[subtype][0]
-                        print ISFDBLink('mod/%s.cgi' % next_approval_script, next_sub[SUB_ID], 'Next Submission', False, 'class="approval"')
-        print ISFDBLink('mod/list.cgi', 'N', 'Submission List', False, 'class="approval"')
+        print '<p><br>'
+        PrintSubmissionLinks(submission_id, reviewer_id)
         print '<hr>'
         print '<form METHOD="POST" ACTION="/cgi-bin/mod/reject.cgi">'
         print '<p class="topspace"><b>Rejection Reason</b><p>'
@@ -105,6 +99,15 @@ def ApproveOrReject(app, submission_id):
         print '<input name="sub_id" value="%d" type="HIDDEN">' % int(submission_id)
         print '<p class="topspace"><input id="rejection" type="SUBMIT" value="Reject">'
         print '</form>'
+
+def PrintSubmissionLinks(submission_id, reviewer_id):
+        next_sub = SQLloadNextSubmission(submission_id, reviewer_id)
+        if next_sub:
+                subtype = next_sub[SUB_TYPE]
+                if SUBMAP.has_key(subtype):
+                        next_approval_script = SUBMAP[subtype][0]
+                        print ISFDBLink('mod/%s.cgi' % next_approval_script, next_sub[SUB_ID], 'Next Submission', False, 'class="approval"')
+        print ISFDBLink('mod/list.cgi', 'N', 'Submission List', False, 'class="approval"')
 
 ########################################################################
 #                      T I T L E   F I E L D S
