@@ -61,8 +61,9 @@ if __name__ == '__main__':
 	print "Record %d has been moved to the Rejected state.<br>" % sub_id
 	print "<b>Reason:</b> ", reason
 
-	print "<p>"
-	print "<hr>"
-	print ISFDBLink('mod/list.cgi', 'N', 'Submission List', 1)
+	print '<p>'
+	print '<hr>'
+	print '<p>'
+	PrintSubmissionLinks(sub_id, reviewerid)
 
 	PrintPostMod(0)

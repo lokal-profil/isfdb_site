@@ -79,6 +79,6 @@ if __name__ == '__main__':
         print '<li> ', update
 	db.query(update)
         print '</ul>'
-        print ISFDBLink('mod/list.cgi', 'N', 'Submission List', 1)
-
+	print '<p>'
+	PrintSubmissionLinks(sub_id, reviewerid)
 	PrintPostMod(0)
