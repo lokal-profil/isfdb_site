@@ -4369,6 +4369,9 @@ def function123():
                 from authors a, languages l, cleanup c
                 where a.author_language = l.lang_id
                 and (a.author_legalname = '' or a.author_legalname IS NULL)
+                and exists
+                        (select 1 from trans_legal_names tr
+                        where tr.author_id = a.author_id)
                 and a.author_id = c.record_id
                 and c.report_type = 123
                 order by a.author_lastname"""
