@@ -1005,6 +1005,7 @@ def RecognizedDomains():
                 ('myanimelist.net', 'MyAnimeList', 'myanimelist.net', 0),
                 ('myspace.com', 'Myspace', 'myspace.com', 0),
                 ('nasa.gov', 'NASA', 'www.nasa.gov', 0),
+                ('nathanmhurst.com', 'Nathan M Hurst', 'nathanmhurst.com', 1),
                 ('nla.gov.au', 'National Library of Australia', 'www.nla.gov.au', 0),
                 ('ofearna.us', 'Susan O\'Fearna', 'ofearna.us', 1),
                 ('openlibrary.org', 'Open Library', 'openlibrary.org', 1),
