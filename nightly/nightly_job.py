@@ -811,6 +811,7 @@ def nightly_cleanup_reports():
         problems = []
         notes = {}
         pub_tag_notes = {}
+        ignored_scripts = ('se', 'note')
         scripts = {'title': ('titles', 'title_id'),
                    'pl': ('pubs', 'pub_id'),
                    'ea': ('authors', 'author_id'),
@@ -839,6 +840,8 @@ def nightly_cleanup_reports():
                         if len(split_link) != 2:
                                 continue
                         script = split_link[0]
+                        if script in ignored_scripts:
+                                continue
                         record_id = split_link[1]
                         # If the record ID is followed by a double quote, strip everything to the right of the ID
                         if '"' in record_id:
