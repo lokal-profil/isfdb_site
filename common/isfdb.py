@@ -418,7 +418,8 @@ LANGUAGES = ('None','Afrikaans','Albanian','Ancient Greek','Arabic','Armenian',
              'Tswana', 'Zulu', 'Acoli', 'Fulah', 'Ganda', 'Kinyarwanda', 'Luo', 'Mandingo',
              'Oriya', 'Pedi/Sepedi/Northern Sotho', 'South Ndebele', 'Southern Sotho',
              'Standard Moroccan Tamazight', 'Wolof', 'North Ndebele', 'Montenegrin',
-             'Mirandese', 'Lao')
+             'Mirandese', 'Lao', 'South American Indian language', 'Interlingua',
+             'Guarani')
 
 # List of all supported format codes
 FORMATS = ('unknown','hc','tp','pb','ph','digest','dos','ebook','webzine','pulp',
