@@ -1432,18 +1432,18 @@ def nightly_cleanup_reports():
                 where p.note_id = n.note_id"""
         standardReport(query, 237)
 
-        #   Report 238: Translations without Notes
+        #   Report 238: Translations without Notes - Less Common Languages
         query = """select t3.title_id from
                 (select t1.title_id
                 from titles t1, titles t2
                 where t1.title_parent = t2.title_id
                 and t1.title_ttype not in ('COVERART','INTERIORART')
                 and t1.title_language != t2.title_language
+                and t1.title_language not in (17, 36, 22, 26, 16, 53, 59, 37)
                 and not exists (select 1 from notes n where t1.note_id = n.note_id))
                 as t3, titles t4
                 where t3.title_id = t4.title_id
-                order by t4.title_title
-                limit 500"""
+                order by t4.title_title"""
         standardReport(query, 238)
 
         #   Report 239: Translations without the Tr Template in Notes
@@ -1628,6 +1628,27 @@ def nightly_cleanup_reports():
                  where p.note_id = n.note_id
                  and n.note_note like '%fantascienza.com/catalogo%'"""
         standardReport(query, 256)
+
+        #   Reports 264-271: Language-specific Translations without Notes
+        reports = ISFDBtranslatedReports()
+        for report_id in sorted(reports):
+                language_id = reports[report_id]
+                translationsWithoutNotes(report_id, language_id)
+
+def translationsWithoutNotes(report_id, language_id):
+        query = """select t3.title_id from
+                (select t1.title_id
+                from titles t1, titles t2
+                where t1.title_parent = t2.title_id
+                and t1.title_ttype not in ('COVERART','INTERIORART')
+                and t1.title_language != t2.title_language
+                and t1.title_language = %d
+                and not exists (select 1 from notes n where t1.note_id = n.note_id))
+                as t3, titles t4
+                where t3.title_id = t4.title_id
+                order by t4.title_title
+                limit 1000""" % language_id
+        standardReport(query, report_id)
 
 def emptyContainers(report_id, container_types):
         elapsed = elapsedTime()

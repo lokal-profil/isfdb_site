@@ -1553,6 +1553,19 @@ def transliteratedReports(types):
                 results.append((language, report_id))
         return results
 
+def ISFDBtranslatedReports():
+        reports = {
+                264: 17,
+                265: 36,
+                266: 22,
+                267: 26,
+                268: 16,
+                269: 53,
+                270: 59,
+                271: 37
+                }
+        return reports
+
 def LIBprintISFDBtime():
         print '<p><b>Current ISFDB time:</b> %s' % str(datetime.datetime.now()).split('.')[0]
 

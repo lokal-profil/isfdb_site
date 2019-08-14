@@ -248,7 +248,7 @@ def reportsDict():
         reports[235] = ("Publications with invalid BNF identifiers")
         reports[236] = ("SFBC Publications with an ISBN and no Catalog ID")
         reports[237] = ("Publications with non-template Library of Congress numbers in notes")
-        reports[238] = ("Translations without Notes (first 500)")
+        reports[238] = ("Translations without Notes - Less Common Languages")
         reports[239] = ("Translations without the Tr Template in Notes (first 500)")
         reports[240] = ("Anthologies and Collections without Fiction Titles")
         reports[241] = ("Magazines without Fiction Titles")
@@ -274,6 +274,14 @@ def reportsDict():
         reports[261] = ("Series with Japanese titles and without Unicode characters in the Series Name")
         reports[262] = ("Series with Russian titles and without Unicode characters in the Series Name")
         reports[263] = ("Series with titles in less popular non-Latin languages and without Unicode characters in the Series Name")
+        reports[264] = ("English Translations without Notes (first 1000)")
+        reports[265] = ("Italian Translations without Notes (first 1000)")
+        reports[266] = ("French Translations without Notes (first 1000)")
+        reports[267] = ("German Translations without Notes (first 1000)")
+        reports[268] = ("Dutch Translations without Notes (first 1000)")
+        reports[269] = ("Portuguese Translations without Notes (first 1000)")
+        reports[270] = ("Spanish Translations without Notes (first 1000)")
+        reports[271] = ("Japanese Translations without Notes (first 1000)")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -288,7 +296,8 @@ def reportsDict():
         sections.append(('Titles', (19, 1, 3, 18, 47, 55, 62, 63, 69, 74, 80, 87,
                                     91, 96, 194, 195, 196, 197, 227)), )
         sections.append(('Variant Titles', (20, 21, 9, 2, 45)), )
-        sections.append(('Translations', (238, 239)), )
+        sections.append(('Translations', (239, 238, 264, 265, 266, 267, 268, 269, 270,
+                                          271)), )
         sections.append(('Chapbooks', (27, 28, 30, 242)), )
         sections.append(('Serials', (22, 83, 84)), )
         sections.append(('Awards', (23, 24, 25, 26, 190, 232)), )
@@ -334,6 +343,7 @@ def reportsDict():
                          221, 222, 223, 224, 225, 226, 227, 228, 229, 230,
                          232, 233, 234, 235, 236, 237, 238, 239, 240, 241,
                          242, 243, 244, 245, 246, 247, 248, 249, 250, 251,
-                         252, 253, 254, 255, 256, 257, 9999)
+                         252, 253, 254, 255, 256, 257, 264, 265, 266, 267,
+                         268, 269, 270, 271, 9999)
         
         return (reports, sections, non_moderator)

@@ -5974,17 +5974,60 @@ def function237():
         cleanup.print_pub_table()
 
 def function238():
-        cleanup.query = """select t1.title_id, t1.title_title
+        query = """select t1.title_id, t1.title_title, t1.title_language,
+                t2.title_id, t2.title_title, t2.title_language
                 from titles t1, titles t2, cleanup c
                 where t1.title_parent = t2.title_id
                 and t1.title_ttype not in ('COVERART','INTERIORART')
                 and t1.title_language != t2.title_language
+                and t1.title_language not in (17, 36, 22, 26, 16, 53, 59, 37)
                 and not exists (select 1 from notes n where t1.note_id = n.note_id)
                 and c.report_type = 238
                 and t1.title_id = c.record_id
                 order by t1.title_title"""
-        cleanup.none = 'No translations without notes found'
-        cleanup.print_title_table()
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		PrintTableColumns(('#', 'Translated Title', 'Tr. Language', 'Original Title', 'Orig. Language'))
+		bgcolor = 1
+                count = 1
+		while record:
+                        variant_id = record[0][0]
+                        variant_title = record[0][1]
+                        variant_language_id = record[0][2]
+                        if variant_language_id:
+                                variant_language = LANGUAGES[variant_language_id]
+                        else:
+                                variant_language = '&nbsp;'
+                        parent_id = record[0][3]
+                        parent_title = record[0][4]
+                        parent_language_id = record[0][5]
+                        if parent_language_id:
+                                parent_language = LANGUAGES[parent_language_id]
+                        else:
+                                parent_language = '&nbsp;'
+
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % count
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', variant_id, variant_title)
+                        print '<td>%s</td>' % variant_language
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', parent_id, parent_title)
+                        print '<td>%s</td>' % parent_language
+                        print '</tr>'
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print '</table>'
+	else:
+                print '<h3>No translations without notes found for less common languages</h3>'
+	print '<p>'
 
 def function239():
         cleanup.query = """select t1.title_id, t1.title_title
@@ -6346,6 +6389,81 @@ def function263():
 	else:
                 print '<h2>No matching Series with Latin characters.</h2>'
 	return
+
+def function264():
+        translated_report(264)
+
+def function265():
+        translated_report(265)
+
+def function266():
+        translated_report(266)
+
+def function267():
+        translated_report(267)
+
+def function268():
+        translated_report(268)
+
+def function269():
+        translated_report(269)
+
+def function270():
+        translated_report(270)
+
+def function271():
+        translated_report(271)
+
+def translated_report(report_id):
+        language_id = ISFDBtranslatedReports()[report_id]
+        query = """select t1.title_id, t1.title_title,
+                t2.title_id, t2.title_title, t2.title_language
+                from titles t1, titles t2, cleanup c
+                where t1.title_parent = t2.title_id
+                and t1.title_ttype not in ('COVERART','INTERIORART')
+                and t1.title_language != t2.title_language
+                and t1.title_language = %d
+                and not exists (select 1 from notes n where t1.note_id = n.note_id)
+                and c.report_type = %d
+                and t1.title_id = c.record_id
+                order by t1.title_title""" % (language_id, report_id)
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+	if num > 0:
+		record = result.fetch_row()
+		PrintTableColumns(('#', 'Translated Title', 'Original Title', 'Orig. Language'))
+		bgcolor = 1
+                count = 1
+		while record:
+                        variant_id = record[0][0]
+                        variant_title = record[0][1]
+                        parent_id = record[0][2]
+                        parent_title = record[0][3]
+                        parent_language_id = record[0][4]
+                        if parent_language_id:
+                                parent_language = LANGUAGES[parent_language_id]
+                        else:
+                                parent_language = '&nbsp;'
+
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % count
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', variant_id, variant_title)
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', parent_id, parent_title)
+                        print '<td>%s</td>' % parent_language
+                        print '</tr>'
+			bgcolor ^= 1
+			count += 1
+			record = result.fetch_row()
+		print '</table>'
+	else:
+                print '<h3>No %s translations without notes found.</h3>' % LANGUAGES[language_id]
+	print '<p>'
 
 def nonLatinSeries(report_id):
         reports = popularNonLatinLanguages('series')
