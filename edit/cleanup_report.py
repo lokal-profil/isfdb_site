@@ -625,11 +625,16 @@ def function14():
 		print "<h2>No records found</h2>"
 
 def function15():
-	query =  """select pubs.pub_id, pubs.pub_title
-                from pubs, cleanup
-                where pubs.pub_id = cleanup.record_id
+	query =  """select p.pub_id, p.pub_title
+                from pubs p, cleanup, titles t, pub_content pc
+                where p.pub_id = cleanup.record_id
                 and cleanup.report_type=15
-                order by pubs.pub_title"""
+                and pc.title_id = t.title_id
+                and pc.pub_id = p.pub_id
+                and t.title_ttype = 'EDITOR'
+                group by pc.pub_id, p.pub_title
+                HAVING COUNT(*) > 1
+                order by p.pub_title"""
 
 	db.query(query)
 	result = db.store_result()
@@ -649,7 +654,7 @@ def function15():
 			record = result.fetch_row()
 		print "</table>"
 	else:
-		print "<h2>No records found</h2>"
+		print "<h2>No Publications with Extra EDITOR Records found</h2>"
 
 def function16():
 	query = """select s1.series_id, s1.series_title from series s1, cleanup 
