@@ -2209,7 +2209,7 @@ def SQLgetTitlesForAuthorAndTag(tag_id, author_id):
 	return results
 
 def SQLgetTitlesForTag(tag_id, start):
-	query = """select t.* from tag_mapping tm, titles t
+	query = """select distinct t.* from tag_mapping tm, titles t
                  where tm.tag_id=%d and t.title_id=tm.title_id
                  order by YEAR(t.title_copyright) desc, t.title_title
                  limit %d, 101
