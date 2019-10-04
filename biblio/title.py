@@ -654,8 +654,11 @@ if __name__ == '__main__':
 				nonefound = 0
 
                         year_num = int(pub[PUB_YEAR][0:4])
-                        # If the book has an ISBN or a catalog ID or is an e-book, magazine or fanzine, then we are OK
-			if pub[PUB_ISBN] or pub[PUB_CATALOG] or (pub[PUB_PTYPE] == 'ebook') or (pub[PUB_CTYPE] in ('MAGAZINE', 'FANZINE')):
+                        # If the book has an ISBN or a catalog ID or is an e-book, magazine, fanzine, then we are OK
+			if (pub[PUB_ISBN]
+                            or pub[PUB_CATALOG]
+                            or pub[PUB_PTYPE] in ('ebook', 'digital audio download')
+                            or pub[PUB_CTYPE] in ('MAGAZINE', 'FANZINE')):
 				pass
 			elif year_num > 1950:
                                 # Do not check for catalog ID/ISBN for hardcovers published prior to 1972
