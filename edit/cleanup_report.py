@@ -289,12 +289,13 @@ def OneType(record_id, record_title, table, record_name, cgi_script, note_id, te
 	print '<p>'
 
 def function6():
-	query = """select authors.author_id, authors.author_canonical, authors.author_lastname 
-                from cleanup, authors
-                where (author_lastname like '%&#%' or not hex(author_lastname) regexp '^([0-7][0-9A-F])*$')
-                and cleanup.record_id=authors.author_id
-                and cleanup.report_type=6
-                order by author_lastname"""
+	query = """select a.author_id, a.author_canonical, a.author_lastname, a.author_language
+                from cleanup c, authors a
+                where (a.author_lastname like '%&#%'
+                or not hex(a.author_lastname) regexp '^([0-7][0-9A-F])*$')
+                and c.record_id = a.author_id
+                and c.report_type = 6
+                order by a.author_lastname"""
 
 	db.query(query)
 	result = db.store_result()
@@ -303,7 +304,8 @@ def function6():
 	if num > 0:
 		record = result.fetch_row()
 		bgcolor = 1
-		PrintTableColumns(('Author', 'Directory Entry'))
+		count = 1
+		PrintTableColumns(('', 'Directory Entry', 'Author', 'Working Language'))
 		while record:
                         if bgcolor:
                                 print '<tr align=left class="table1">'
@@ -312,14 +314,20 @@ def function6():
                         author_id = record[0][0]
                         author_canonical = record[0][1]
                         author_lastname = record[0][2]
-                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_canonical)
+                        author_language = record[0][3]
+                        if not author_language:
+                                author_language = 0
+                        print '<td>%d</td>' % count
                         print '<td>%s</td>' % author_lastname
+                        print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id, author_canonical)
+                        print '<td>%s</td>' % LANGUAGES[author_language]
                         print '</tr>'
 			bgcolor ^= 1
+			count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No invalid directory names found</h2>"
+		print '<h2>No invalid directory names found</h2>'
 
 def function7():
         print 'This report identifies author names with:'
