@@ -199,7 +199,7 @@ def reportsDict():
         reports[186] = ("Japanese Titles with a Latin Author Name")
         reports[187] = ("Russian Titles with a Latin Author Name")
         reports[188] = ("Other Non-Latin Language Titles with a Latin Author Name")
-        reports[189] = ("Authors with Non-Latin Directory Entries")
+        reports[189] = ("Publication Series Names That May Need Disambiguation")
         reports[190] = ("Awards with Invalid IMDB Links")
         reports[191] = ("Invalid HREFs in Publication Notes")
         reports[192] = ("Authors without a Working Language")
@@ -307,9 +307,9 @@ def reportsDict():
                                             255, 256)), )
         sections.append(('Reviews', (40, 41, 42)), )
         sections.append(('Publishers', (43, 44, 65, 73)), )
-        sections.append(('Publication Series', (66, 77, 98)), )
+        sections.append(('Publication Series', (66, 77, 98, 189)), )
         sections.append(('Author Languages', (192, 11, 58, 59, 60, 61, 168, 183, 184, 185,
-                                                186, 187, 188, 189)), )
+                                                186, 187, 188)), )
         sections.append(('Transliterations', (85, 99, 97, 121, 122, 123, 124, 125, 126,
                                               127, 128, 129, 130, 131, 132, 133, 134, 135,
                                               136, 137, 138, 139, 140, 141, 142, 143, 145,

@@ -5178,45 +5178,67 @@ def nonLatinAuthors(report_id):
         nonLatinAuthorsDisplay(report_id, query, language)
 
 def function189():
-	query = """select a.author_id, a.author_canonical,
-                a.author_lastname, a.author_language
-                from cleanup c, authors a
-                where c.record_id = a.author_id
-                and a.author_lastname regexp '&#'
-                and c.report_type=189
-                order by a.author_lastname"""
+        nonModeratorMessage()
+
+	query = """select x.pub_series_id, x.pub_series_name, c.cleanup_id
+		   from cleanup c,
+		    (select distinct ps1.pub_series_id, ps1.pub_series_name
+                    from pub_series ps1, pub_series ps2
+                    where ps1.pub_series_id != ps2.pub_series_id
+                    and ps1.pub_series_name = substring(ps2.pub_series_name, 1, LOCATE(' (', ps2.pub_series_name)-1)
+		    ) as x
+                   where c.report_type=189
+                   and c.resolved IS NULL
+                   and c.record_id = x.pub_series_id
+                   order by x.pub_series_name"""
 
 	db.query(query)
 	result = db.store_result()
-	num = result.num_rows()
 
-	if num > 0:
+	if result.num_rows() > 0:
 		record = result.fetch_row()
-		bgcolor = 1
-		count = 1
-		PrintTableColumns(('', 'Directory Entry', 'Author', 'Working Language'))
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Pub. Series Title', 'Other Pub. Series Titles', 'Ignore'))
 		while record:
-                        author_id = record[0][0]
-                        author_canonical = record[0][1]
-                        author_lastname = record[0][2]
-                        author_language = record[0][3]
-                        if not author_language:
-                                author_language = 0
+                        pub_series_id = record[0][0]
+                        pub_series_title = record[0][1]
+                        cleanup_id = record[0][2]
                         if bgcolor:
                                 print '<tr align=left class="table1">'
                         else:
                                 print '<tr align=left class="table2">'
-                        print '<td>%d</td>' % int(count)
-                        print '<td>%s</td>' % author_lastname
-                        print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id, author_canonical)
-                        print '<td>%s</td>' % LANGUAGES[author_language]
+
+                        print '<td>%d</td>' % count
+                        print '<td>%s</td>' % ISFDBLink("pubseries.cgi", pub_series_id, pub_series_title)
+
+                        print '<td>'
+                        query2 = """select pub_series_id, pub_series_name from pub_series
+                                where pub_series_name like '%s (%%'""" % db.escape_string(pub_series_title)
+                        db.query(query2)
+                        result2 = db.store_result()
+                        record2 = result2.fetch_row()
+                        count2 = 1
+                        while record2:
+                                parenthetical_id = record2[0][0]
+                                parenthetical_title = record2[0][1]
+                                if count2 > 1:
+                                        print '<br>'
+                                print ISFDBLink("pubseries.cgi", parenthetical_id, parenthetical_title)
+                                count2 += 1
+                                record2 = result2.fetch_row()
+                        
+                        if user.moderator:
+                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                                        %s this series</a></td>""" % (HTFAKE, int(cleanup_id), 1, 189, 'Ignore')
                         print '</tr>'
-			bgcolor ^= 1
-			count += 1
+                        bgcolor ^= 1
+                        count += 1
 			record = result.fetch_row()
 		print "</table>"
 	else:
-		print "<h2>No records found</h2>"
+		print "<h2>No Publication Series Names That May Need Disambiguation Found</h2>"
+	return
 
 def function190():
 	query = """select a.award_id, a.award_movie

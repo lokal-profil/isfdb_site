@@ -269,10 +269,6 @@ def nightly_transliterations():
                 """ % languages_in_clause
         standardReport(query, 188)
 
-        #   Report 189: Authors with Non-Latin Directory Entries
-        query = "select author_id from authors where author_lastname regexp '&#'"
-        standardReport(query, 189)
-
         #   Report 257: Series with non-Latin Characters in the Series Name without a Transliterated Name
         query = """select s.series_id from series s
                  where s.series_title regexp '&#'

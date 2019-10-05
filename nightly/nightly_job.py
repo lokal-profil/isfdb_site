@@ -1200,6 +1200,13 @@ def nightly_cleanup_reports():
                    """
         standardReport(query, 144)
 
+        #   Report 189: Publication series names potentially in need of disambiguation
+        query = """select distinct ps1.pub_series_id from pub_series ps1, pub_series ps2
+                   where ps1.pub_series_id != ps2.pub_series_id
+                   and ps1.pub_series_name = substring(ps2.pub_series_name, 1, LOCATE(' (', ps2.pub_series_name)-1)
+                   """
+        standardReport(query, 189)
+
         #   Report 190: Awards with Invalid IMDB Links
         query = """select award_id from awards
                    where award_movie is not NULL
