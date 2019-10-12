@@ -669,7 +669,7 @@ if __name__ == '__main__':
                                         print '%s (%s)' % (ISFDBLink("pl.cgi", pub[PUB_PUBID], pub[PUB_TITLE]), convertDate(pub[PUB_YEAR], 1))
                                         nonefound = 0
 
-			if pub[PUB_PRICE]:
+			if pub[PUB_PRICE] or pub[PUB_PTYPE] == 'webzine':
 				pass
 			else:
 				print '<li> Missing price:'
