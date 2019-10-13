@@ -6449,6 +6449,29 @@ def function270():
 def function271():
         translated_report(271)
 
+def function272():
+        nonModeratorMessage()
+        cleanup.query = """select p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, cleanup c, notes n
+                where n.note_note not like '%{{Incomplete}}%'
+		and
+                (n.note_note like '%not complete%'
+                or n.note_note like '%incomplete%'
+                or n.note_note like '%partial content%'
+                or n.note_note like '%partial data%'
+                or n.note_note like '%to be entered%'
+                or n.note_note like '%to be added%'
+                or n.note_note like '%more%added%'
+                or n.note_note like '%not entered yet%')
+                and p.note_id = n.note_id
+                and c.report_type = 272
+                and p.pub_id = c.record_id
+                and c.resolved is null
+                order by p.pub_title"""
+        cleanup.none = 'No Publications with incomplete contents and no Incomplete Template'
+        cleanup.ignore = 1
+        cleanup.print_pub_table()
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,

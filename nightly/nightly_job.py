@@ -1642,6 +1642,23 @@ def nightly_cleanup_reports():
                 language_id = reports[report_id]
                 translationsWithoutNotes(report_id, language_id)
 
+        #   Report 272: Publications with incomplete contents and no Incomplete template
+        query = """select p.pub_id from pubs p,
+                (select n.note_id from notes n
+                where note_note not like '%{{Incomplete}}%' and
+                (note_note like '%not complete%'
+                or note_note like '%incomplete%'
+                or note_note like '%partial content%'
+                or note_note like '%partial data%'
+                or note_note like '%to be entered%'
+                or note_note like '%to be added%'
+                or note_note like '%more%added%'
+                or note_note like '%not entered yet%')
+                ) x
+                where p.note_id = x.note_id
+                """
+        standardReport(query, 272)
+
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from
                 (select t1.title_id
