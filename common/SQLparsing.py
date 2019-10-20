@@ -1962,10 +1962,11 @@ def SQLmarkInProgress(submission):
         db.query(update)
 
 def SQLGetPubContentList(pub_id):
-	query = """select pc.* from pub_content pc, titles t
-                where pc.pub_id = %d
-                and pc.title_id = t.title_id
-                order by t.title_title""" % int(pub_id)
+        query = "select * from pub_content where pub_id=%d" % int(pub_id)
+##	query = """select pc.* from pub_content pc, titles t
+##                where pc.pub_id = %d
+##                and pc.title_id = t.title_id
+##                order by t.title_title""" % int(pub_id)
 	return StandardQuery(query)
 
 def SQLGetRefDetails():
