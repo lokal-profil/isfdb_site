@@ -692,17 +692,19 @@ def ConvertPageNumber(page):
 def getPubContentList(pubid):
 	pub_content_list = SQLGetPubContentList(pubid)
 	sorted_list = []
+	alphabetical_position = 1
 	# Build a list of content items with "sort group" and "normalized page number" information
 	for pub_content_record in pub_content_list:
                 page = pub_content_record[PUB_CONTENTS_PAGE]
                 (group, normalized_page, decimal_part) = ConvertPageNumber(page)
-                sorted_list.append((group, normalized_page, decimal_part, pub_content_record))
-        # Re-sort the list of content items based on group and page number
+                sorted_list.append((group, normalized_page, decimal_part, alphabetical_position, pub_content_record))
+                alphabetical_position += 1
+        # Re-sort the list of content items based on group, page number and record's title
         sorted_list.sort()
         # Strip intermediate sorting data and build a list of content record in display order
         result = []
         for content_item in sorted_list:
-                result.append(content_item[3])
+                result.append(content_item[4])
 	return result
 
 def getSortedTitlesInPub(pub_id):
