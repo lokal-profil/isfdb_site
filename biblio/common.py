@@ -563,21 +563,14 @@ def PrintNavbar(page_type, arg1, arg2, executable, argument, search_value = '', 
 			#Retrieve the Web sites for this user
 			websites = LoadWebSites(arg1[PUB_ISBN], userid, arg1[PUB_PTYPE])
 			if websites:
-                                print '<div class="divider">'
-                                print 'Other Sites <i class="downarrow"></i>'
-                                print '<div id="divothersites" class="divothersites">'
-                                print '<ul class="listothersites">'
-                                for website in websites:
-                                        print '<li><a href="%s" target="_blank">%s</a>' % (website[1], ISFDBText(website[0]))
-                                print '</ul>'
-                                print '</div>'
-                                print '</div>'
+                                PrintThirdPartyLinks(websites, 'Amazon')
+                                PrintThirdPartyLinks(websites, 'Other')
                 #For Project Gutenberg pubs, display a link to the PG site
                 elif arg1[PUB_PUBLISHER]:
                         publisher = SQLGetPublisher(arg1[PUB_PUBLISHER])
                         if publisher[PUBLISHER_NAME] == 'Project Gutenberg' and arg1[PUB_CATALOG]:
                                 print '<div class="divider">'
-                                print 'Other Sites:'
+                                print 'Other Links:'
                                 print '</div>'
                                 print '<ul class="navbar">'
                                 print '<li><a href="http://www.gutenberg.org/etext/%s" target="_blank">Project Gutenberg</a>' % arg1[PUB_CATALOG]
@@ -634,6 +627,21 @@ def PrintNavbar(page_type, arg1, arg2, executable, argument, search_value = '', 
 	onlineVersion = SQLgetSchemaVersion()
 	if onlineVersion != SCHEMA_VER:
 		print "<h3>Warning: database schema mismatch (%s vs %s)</h3>" % (onlineVersion, SCHEMA_VER)
+
+def PrintThirdPartyLinks(websites, type_of_sites):
+        print '<div class="divider">'
+        print '%s Links <i class="downarrow"></i>' % type_of_sites
+        print '<div id="div%ssites" class="divothersites">' % type_of_sites
+        print '<ul class="listothersites">'
+        for website in websites:
+                if type_of_sites != 'Amazon' and 'www.amazon.' in website[1]:
+                        continue
+                if type_of_sites == 'Amazon' and 'www.amazon.' not in website[1]:
+                        continue
+                print '<li><a href="%s" target="_blank">%s</a>' % (website[1], ISFDBText(website[0]))
+        print '</ul>'
+        print '</div>'
+        print '</div>'
 
 def AuthorSearchLink(author_name):
         return AdvSearchLink((('TYPE', 'Title'),
