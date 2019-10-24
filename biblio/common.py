@@ -629,15 +629,19 @@ def PrintNavbar(page_type, arg1, arg2, executable, argument, search_value = '', 
 		print "<h3>Warning: database schema mismatch (%s vs %s)</h3>" % (onlineVersion, SCHEMA_VER)
 
 def PrintThirdPartyLinks(websites, type_of_sites):
+        displayed_sites = []
+        for website in websites:
+                if type_of_sites == 'Amazon' and 'www.amazon.' in website[1]:
+                        displayed_sites.append(website)
+                if type_of_sites != 'Amazon' and 'www.amazon.' not in website[1]:
+                        displayed_sites.append(website)
+        if not displayed_sites:
+                return
         print '<div class="divider">'
         print '%s Links <i class="downarrow"></i>' % type_of_sites
         print '<div id="div%ssites" class="divothersites">' % type_of_sites
         print '<ul class="listothersites">'
-        for website in websites:
-                if type_of_sites != 'Amazon' and 'www.amazon.' in website[1]:
-                        continue
-                if type_of_sites == 'Amazon' and 'www.amazon.' not in website[1]:
-                        continue
+        for website in displayed_sites:
                 print '<li><a href="%s" target="_blank">%s</a>' % (website[1], ISFDBText(website[0]))
         print '</ul>'
         print '</div>'

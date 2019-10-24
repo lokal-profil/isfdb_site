@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2017   Ahasuerus
+#     (C) COPYRIGHT 2009-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -50,9 +50,9 @@ if __name__ == '__main__':
 		user_sites.append(row[0])
 		row = result.fetch_row()
 
-        print "<h3>Select Web Sites to link Publications to. At least one Amazon site needs to be selected since ISFDB links to Amazon-hosted images.</h3>"
+        print '<h3>Select Web Sites to link Publications to. At least one Amazon site needs to be selected since ISFDB links to Amazon-hosted images.</h3>'
         print '<form id="data" METHOD="POST" ACTION="/cgi-bin/submitmywebsites.cgi">'
-        print "<ul>"
+        print '<ul>'
         for website in websites:
                 checked = 'checked'
                 for user_site in user_sites:
@@ -60,11 +60,12 @@ if __name__ == '__main__':
                                 if user_site[1] == 0:
                                         checked = ''
                                         break
-        	print '<li><input type="checkbox" name="site_choice.%s" value="on" %s>%s</li>' % (website[0], checked, website[1])
-        	print '<input name="site_id.%d" value="%s" type="HIDDEN">' % (website[0], website[1])
-        print "</ul>"
+        	print '<li><input type="checkbox" name="site_choice.%s" value="on" %s>%s ' % (website[0], checked, website[1])
+        	print '<input name="site_id.%d" value="%s" type="HIDDEN"></li>' % (website[0], website[1])
+        print '</ul>'
+        print '<p>'
 	print '<input type="SUBMIT" value="Update List of Web Sites">'
-        print "</form>"
+        print '</form>'
 
 	PrintTrailer('mywebsites', 0, 0)
 
