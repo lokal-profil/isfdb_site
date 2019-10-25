@@ -1659,6 +1659,12 @@ def nightly_cleanup_reports():
                 """
         standardReport(query, 272)
 
+        #   Report 273: Mismatched Template Braces
+        query = """select note_id, LENGTH(note_note) - LENGTH(REPLACE(note_note, '{{', '')) openbraces,
+                LENGTH(note_note) - LENGTH(REPLACE(note_note, '}}', '')) closebraces
+                from notes having openbraces != closebraces"""
+        standardReport(query, 273)
+
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from
                 (select t1.title_id

@@ -6472,6 +6472,16 @@ def function272():
         cleanup.ignore = 1
         cleanup.print_pub_table()
 
+def function273():
+        query = """select cleanup.record_id, notes.note_id,
+                LENGTH(notes.note_note) - LENGTH(REPLACE(notes.note_note, '{{', '')) openquote, 
+                LENGTH(notes.note_note) - LENGTH(REPLACE(notes.note_note, '}}', '')) closequote 
+                from cleanup, notes
+                where cleanup.record_id=notes.note_id
+                and cleanup.report_type=273
+                having openquote != closequote"""
+        MismatchesInNotes(query, 'Mismatched Template Braces')
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,
