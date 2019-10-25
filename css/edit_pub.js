@@ -1,5 +1,5 @@
 /*     Version: $Revision$
-      (C) COPYRIGHT 2015-2018   Ahasuerus
+      (C) COPYRIGHT 2015-2019   Ahasuerus
          ALL RIGHTS RESERVED
       Date: $Date$ */
 
@@ -305,8 +305,8 @@ function validateExternalID(i) {
 	if (id_value == "") {
 		return true;
 	}
-	// Check that the External ID field doesn't contain angle brackets, double quotes or spaces
-	if ((/\</.test(id_value) == true) || (/\>/.test(id_value) == true) || (/\"/.test(id_value) == true) || (/\ /.test(id_value) == true)) {
+	// Check that the External ID field doesn't contain angle brackets, double quotes or embedded spaces
+	if ((/\</.test(id_value) == true) || (/\>/.test(id_value) == true) || (/\"/.test(id_value) == true) || (/\ /.test(id_value.trim()) == true)) {
 		alert("External IDs must not contain angle brackets, double quotes or spaces");
 		id_name.focus();
 		return false;

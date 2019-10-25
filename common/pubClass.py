@@ -873,7 +873,7 @@ class pubs:
                                 except:
                                         self.error = 'Invalid identifier type'
                                         return
-                                ext_id_value = self.form[key].value
+                                ext_id_value = self.form[key].value.strip()
 
                                 # Check if there are invalid characters in the user-entered value
                                 self.error = invalidURLcharacters(ext_id_value, 'External ID', 'unescaped')
