@@ -669,6 +669,10 @@ class AdvancedSearchResults(AdvancedSearch):
                         dbases = [tableInfo('pubs'), tableInfo('mw_user'), tableInfo('primary_verifications')]
                         self.joins.add('pubs.pub_id = primary_verifications.pub_id')
                         self.joins.add('primary_verifications.user_id = mw_user.user_id')
+                elif field == 'pub_ver_date':
+                        clause = "DATE(primary_verifications.ver_time) %s" % sql_value
+                        dbases = [tableInfo('pubs'), tableInfo('primary_verifications')]
+                        self.joins.add('pubs.pub_id = primary_verifications.pub_id')
                 elif field == 'pub_frontimage':
                         clause = "pub_frontimage %s" % sql_value
                 elif field == 'pub_ctype':

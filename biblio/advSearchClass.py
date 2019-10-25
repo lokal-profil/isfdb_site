@@ -135,6 +135,7 @@ class AdvancedSearch:
                                            ('pub_coverart', 'Cover Artist'),
                                            ('pub_ptype', 'Format'),
                                            ('pub_verifier', 'Primary Verifier'),
+                                           ('pub_ver_date', 'Primary Verification Date'),
                                            ('pub_note', 'Notes'),
                                            ('pub_frontimage', 'Image URL')
                                            )
