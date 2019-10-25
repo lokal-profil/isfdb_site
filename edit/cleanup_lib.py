@@ -284,6 +284,7 @@ def reportsDict():
         reports[271] = ("Japanese Translations without Notes (first 1000)")
         reports[272] = ("Publications with incomplete contents and no Incomplete template")
         reports[273] = ("Mismatched Template Braces")
+        reports[274] = ("References to Non-Existent Templates")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -306,7 +307,7 @@ def reportsDict():
         sections.append(('Notes/Synopses', (4, 5, 82, 191, 217, 208, 209, 216, 210, 211,
                                             212, 213, 214, 215, 218, 219, 220, 221, 222,
                                             223, 224, 225, 237, 226, 229, 230, 234, 254,
-                                            255, 256, 273)), )
+                                            255, 256, 273, 274)), )
         sections.append(('Reviews', (40, 41, 42)), )
         sections.append(('Publishers', (43, 44, 65, 73)), )
         sections.append(('Publication Series', (66, 77, 98, 189)), )
@@ -346,6 +347,6 @@ def reportsDict():
                          232, 233, 234, 235, 236, 237, 238, 239, 240, 241,
                          242, 243, 244, 245, 246, 247, 248, 249, 250, 251,
                          252, 253, 254, 255, 256, 257, 264, 265, 266, 267,
-                         268, 269, 270, 271, 272, 273, 9999)
+                         268, 269, 270, 271, 272, 273, 274, 9999)
         
         return (reports, sections, non_moderator)

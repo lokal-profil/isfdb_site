@@ -1665,6 +1665,15 @@ def nightly_cleanup_reports():
                 from notes having openbraces != closebraces"""
         standardReport(query, 273)
 
+        #   Report 274: References to Non-Existent Templates
+        query = "select note_id from notes where "
+        replace_string = "REPLACE(lower(note_note), '{{break', '')"
+        for template in ISFDBTemplates():
+                query += "REPLACE("
+                replace_string += ", '{{%s', '')" % template.lower()
+        query += "%s like '%%{{%%'" % replace_string
+        standardReport(query, 274)
+
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from
                 (select t1.title_id

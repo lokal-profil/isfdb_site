@@ -723,20 +723,7 @@ def getSortedTitlesInPub(pub_id):
                         new_titles.append(title)
         return new_titles
 
-def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, record_type = '', div = 1):
-        import urllib
-        import re
-        if display_mode == 'short' and '{{BREAK}}' in note:
-                note = note[:note.index('{{BREAK}}')]
-                note += """ ... <big><a class="inverted" href="http:/%s/note.cgi?%s+%d">view
-                        full %s</a></big>""" % (HTFAKE, record_type, int(record_id), note_type)
-        # Strip {{BREAK}} for full note display mode, but not for edit mode
-        if display_mode == 'full' and '{{BREAK}}' in note:
-                # Replace {{BREAK}} and any spaces next to it with a single space
-                note1 = note[:note.index('{{BREAK}}')].rstrip(' ')
-                note2 = note[note.index('{{BREAK}}')+9:].lstrip(' ')
-                note = note1 + ' ' + note2
-
+def ISFDBTemplates():
         # Dictionary of supported templates. The structure is:
         #   key = template name
         #   1st tuple value = HTML link
@@ -821,7 +808,23 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
                 'Tuck': ('http:/%s/pe.cgi?10230' % HTFAKE, 'Tuck',
                                    'The Encyclopedia of Science Fiction and Fantasy through 1968 by Donald H. Tuck, 1974-1982')
                 }
+        return templates
 
+def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, record_type = '', div = 1):
+        import urllib
+        import re
+        if display_mode == 'short' and '{{BREAK}}' in note:
+                note = note[:note.index('{{BREAK}}')]
+                note += """ ... <big><a class="inverted" href="http:/%s/note.cgi?%s+%d">view
+                        full %s</a></big>""" % (HTFAKE, record_type, int(record_id), note_type)
+        # Strip {{BREAK}} for full note display mode, but not for edit mode
+        if display_mode == 'full' and '{{BREAK}}' in note:
+                # Replace {{BREAK}} and any spaces next to it with a single space
+                note1 = note[:note.index('{{BREAK}}')].rstrip(' ')
+                note2 = note[note.index('{{BREAK}}')+9:].lstrip(' ')
+                note = note1 + ' ' + note2
+
+        templates = ISFDBTemplates()
         # Substitute templates
         for template in templates:
                 dict_node = templates[template]

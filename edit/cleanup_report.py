@@ -6482,6 +6482,18 @@ def function273():
                 having openquote != closequote"""
         MismatchesInNotes(query, 'Mismatched Template Braces')
 
+def function274():
+        query = """select cleanup.record_id, notes.note_id
+                from cleanup, notes where """
+        replace_string = "REPLACE(lower(note_note), '{{break', '')"
+        for template in ISFDBTemplates():
+                query += "REPLACE("
+                replace_string += ", '{{%s', '')" % template.lower()
+        query += "%s like '%%{{%%'" % replace_string
+        query += """ and cleanup.record_id=notes.note_id
+                and cleanup.report_type=274"""
+        MismatchesInNotes(query, 'References to Non-Existent Templates')
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,
