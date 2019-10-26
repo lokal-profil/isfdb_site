@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -29,7 +29,7 @@ class Stats:
                                 9: 'Percent of Book Titles by Type by Year',
                                 10: 'Percent of Publications by Format by Year',
                                 11: 'Submissions per Year',
-                                12: 'Top 100 Novels as Voted by ISFDB Users',
+                                12: 'Top Novels as Voted by ISFDB Users',
                                 13: 'Most-Viewed Authors',
                                 14: 'Most-Viewed Novels',
                                 15: 'Most-Viewed Short Fiction',
@@ -41,7 +41,9 @@ class Stats:
                                 21: 'Titles by Language',
                                 22: 'Top Taggers',
                                 23: 'Top Voters',
-                                24: 'Top Forthcoming'}
+                                24: 'Top Forthcoming',
+                                25: 'Top Short Fiction Titles as Voted by ISFDB Users'
+                                }
 
         def params(self):
                 try:

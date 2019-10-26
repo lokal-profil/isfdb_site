@@ -828,24 +828,22 @@ class Output():
                 self.top100('novel', 12)
         
         def topShorts(self):
-                self.top100('short', 999999)
+                self.top100('short', 25)
         
         def top100(self, report_type, report_id):
                 if report_type == 'novel':
                         ttype = 'NOVEL'
-                        ltype = "Novels"
                 elif report_type == 'short':
                         ttype = 'SHORTFICTION'
-                        ltype = 'Shortfiction'
 
-                self.start('<h3>Top 100 %s as voted by ISFDB users:</h3>' % ltype)
+                self.start('')
                 query = """select t.title_id, t.title_title, t.title_copyright, AVG(v.rating)
                         from titles t, votes v
                         where t.title_id = v.title_id
                         and t.title_ttype = '%s'
                         group by t.title_id
                         having COUNT(v.rating)>5
-                        order by AVG(v.rating) desc limit 100""" % ttype
+                        order by AVG(v.rating) desc limit 500""" % ttype
                 db.query(query)
                 result = db.store_result()
                 record = result.fetch_row()
@@ -1300,6 +1298,7 @@ def nightly_stats():
         output.report("pubsByFormat")
         output.report("authorsByDebutDate")
         output.report("topNovels")
+        output.report("topShorts")
         output.report("mostViewedAuthors")
         output.report("mostViewedNovels")
         output.report("mostViewedShorts")

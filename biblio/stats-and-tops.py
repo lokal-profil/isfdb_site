@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2013-2018   Ahasuerus
+#     (C) COPYRIGHT 2013-2019   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -73,7 +73,8 @@ if __name__ == '__main__':
         print '<li><a href="http:/%s/most_popular_table.cgi?5">Non-Fiction</a>' % (HTFAKE)
         print '<li><a href="http:/%s/most_popular_table.cgi?6">Other Types</a>' % (HTFAKE)
         print '</ul>'
-        print '<li><a href="http:/%s/stats.cgi?12">Top 100 Novels as Voted by ISFDB Users</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?12">Top Novels as Voted by ISFDB Users</a>' % (HTFAKE)
+        print '<li><a href="http:/%s/stats.cgi?25">Top Short Fiction Titles as Voted by ISFDB Users</a>' % (HTFAKE)
         print '<li>Most-Viewed Titles:'
         print '<ul>'
         print '<li><a href="http:/%s/stats.cgi?14">Most-Viewed Novels</a>' % (HTFAKE)
