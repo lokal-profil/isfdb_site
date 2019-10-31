@@ -37,6 +37,10 @@ function AwardLevels()	{
 	return GetValidValues('AwardLevels');
 }
 
+function SecondaryVerSources()	{
+	return GetValidValues('SecondaryVerSources');
+}
+
 function GetValidValues(select_name)	{
 	var field = document.getElementById(select_name);
 	var field_values = [];
@@ -97,6 +101,9 @@ function Selectors(selector_number, new_value, record_type) {
 		break;
 	case "award_level":
 		values = AwardLevels();
+		break;
+	case "secondary_ver_source":
+		values = SecondaryVerSources();
 		break;
 	default:
 		values = "";

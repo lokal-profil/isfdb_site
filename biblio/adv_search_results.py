@@ -673,6 +673,11 @@ class AdvancedSearchResults(AdvancedSearch):
                         clause = "DATE(primary_verifications.ver_time) %s" % sql_value
                         dbases = [tableInfo('pubs'), tableInfo('primary_verifications')]
                         self.joins.add('pubs.pub_id = primary_verifications.pub_id')
+                elif field == 'secondary_ver_source':
+                        clause = "reference.reference_label %s and verification.ver_status = 1" % sql_value
+                        dbases = [tableInfo('pubs'), tableInfo('reference'), tableInfo('verification')]
+                        self.joins.add('pubs.pub_id = verification.pub_id')
+                        self.joins.add('verification.reference_id = reference.reference_id')
                 elif field == 'pub_frontimage':
                         clause = "pub_frontimage %s" % sql_value
                 elif field == 'pub_ctype':

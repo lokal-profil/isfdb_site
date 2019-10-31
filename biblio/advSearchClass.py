@@ -136,6 +136,7 @@ class AdvancedSearch:
                                            ('pub_ptype', 'Format'),
                                            ('pub_verifier', 'Primary Verifier'),
                                            ('pub_ver_date', 'Primary Verification Date'),
+                                           ('secondary_ver_source', 'Secondary Verification Source'),
                                            ('pub_note', 'Notes'),
                                            ('pub_frontimage', 'Image URL')
                                            )
@@ -250,6 +251,7 @@ class AdvancedSearch:
                 if 'None' in selectable_languages:
                         selectable_languages.remove('None')
                 self.print_one_invisible_drop_down('AllLanguages', selectable_languages)
+                self.print_invisible_secondary_verifications()
                 self.print_invisible_award_levels()
 
         def print_one_invisible_drop_down(self, name, values):
@@ -259,6 +261,13 @@ class AdvancedSearch:
                         if value:
                                 print '<option VALUE="%s">%s' % (value, value)
                 print '</select>'
+
+        def print_invisible_secondary_verifications(self):
+                sources = SQLGetRefDetails()
+                labels = []
+                for source in sorted(sources, key = lambda x: x[1]):
+                        labels.append(source[REFERENCE_LABEL])
+                self.print_one_invisible_drop_down('SecondaryVerSources', labels)
 
         def print_invisible_award_levels(self):
                 from awardClass import awardShared
