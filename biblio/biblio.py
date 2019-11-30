@@ -595,10 +595,12 @@ class Bibliography:
 		print '</ul>'
 
 		if self.au_data[AUTHOR_IMAGE]:
-			print "</td>"
-			print "</table>"
+			print '</td>'
+			print '</table>'
                         (webpage, credit, home_page, linked_page) = BuildDisplayedURL(self.au_data[AUTHOR_IMAGE])
                         print 'Image supplied by <a href="http://%s" target="_blank">%s</a>' % (home_page, credit)
+                        if linked_page:
+                                print ' on <a href="%s" target="_blank">this Web page</a>' % linked_page
 
                 print '</div>'
 
