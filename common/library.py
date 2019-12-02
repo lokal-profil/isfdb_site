@@ -1572,11 +1572,11 @@ def ISFDBtranslatedReports():
                 }
         return reports
 
-def LIBprintISFDBtime():
+def ISFDBprintTime():
         print '<p><b>Current ISFDB time:</b> %s' % str(datetime.datetime.now()).split('.')[0]
 
-def printSubmissionTable(status):
-        LIBprintISFDBtime()
+def ISFDBprintSubmissionTable(result, status):
+        ISFDBprintTime()
         print '<table class="generic_table">'
         print '<tr align="left" class="generic_table_header">'
         print '<th>Submission</th>'
@@ -1595,8 +1595,15 @@ def printSubmissionTable(status):
         elif status == 'N':
                 print '<th>Cancel</th>'
         print '</tr>'
+        record = result.fetch_row()
+	color = 0
+	while record:
+		ISFDBprintSubmissionRecord(record, color, status)
+		color = color ^ 1
+        	record = result.fetch_row()
+	print '</table>'
 
-def printSubmissionRecord(record, eccolor, status):
+def ISFDBprintSubmissionRecord(record, eccolor, status):
 	if eccolor:
 		print '<tr align=left class="table1">'
 	else:
@@ -1712,6 +1719,8 @@ def buildRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
                                         edit_mode = 0
                         if edit_mode:
                                 output += ' [<a href="http:/%s/edit/%s.cgi?%d">Edit</a>]' % (HTFAKE, cgi_script, int(record_id))
+                                if record_type == 'Publication':
+                                        output += ' [<a href="http:/%s/pub_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
         output += '</span>'
         return output
 

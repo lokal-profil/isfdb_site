@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -79,16 +79,8 @@ if __name__ == '__main__':
 		Please check your wiki Talk page frequently for comments or questions.""" % (WIKILOC, username)
 		print wikipointer
 
-        printSubmissionTable(type)
-	color = 0
-        for n in range(results_per_page):
-                record = result.fetch_row()
-                if not record:
-                        break
-		printSubmissionRecord(record, color, type)
-		color = color ^ 1
-
-	print "</table>"
+        ISFDBprintSubmissionTable(result, type)
+        
         # Check if there is more since "results_per_page+1" was requested from the database
         if numRows > results_per_page:
                 print '<p> [<a href="http:/%s/myrecent.cgi?%d+%s">OLDER</a>]' % (HTFAKE, start+results_per_page, type)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2016   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -43,17 +43,7 @@ if __name__ == '__main__':
 		PrintTrailer('recent', 0, 0)
 		sys.exit(0)
 
-        printSubmissionTable('I')
-
-	color = 0
-	while 1:
-                record = result.fetch_row()
-                if not record:
-                        break
-		printSubmissionRecord(record, color, 'I')
-		color = color ^ 1
-
-	print "</table>"
+        ISFDBprintSubmissionTable(result, 'I')
 	print '<p> [<a href="http:/%s/recent.cgi?%d">MORE</a>]' % (HTFAKE, start+200)
 
 	PrintTrailer('recent', 0, 0)

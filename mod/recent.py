@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2016   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -70,16 +70,8 @@ if __name__ == '__main__':
 		PrintPostMod()
 		sys.exit(0)
 
-        printSubmissionTable(status)
+        ISFDBprintSubmissionTable(result, status)
 
-        record = result.fetch_row()
-	color = 0
-	while record:
-		printSubmissionRecord(record, color, status)
-		color = color ^ 1
-        	record = result.fetch_row()
-
-	print "</table>"
 	print '<p> [<a href="http:/%s/mod/recent.cgi?%d+%s">MORE</a>]' % (HTFAKE, start+200, status)
 
 	PrintPostMod()

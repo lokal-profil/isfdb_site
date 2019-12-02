@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Ahasuerus and Dirk Stoeker
+#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus and Dirk Stoeker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -126,7 +126,7 @@ if __name__ == '__main__':
         print '<a href="http://%s/index.php/Help:Screen:Moderator">Help:Screen:Moderator</a><p>' % WIKILOC
         print '</div>'
 
-        LIBprintISFDBtime()
+        ISFDBprintTime()
         
 	query = "select * from submissions where sub_state='%s' order by sub_reviewed;" % (arg)
 	db.query(query)
