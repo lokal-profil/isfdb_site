@@ -731,6 +731,8 @@ def ISFDBTemplates():
         #   3rd tuple value = hover-over display value
         templates = {
                 'A': ('http:/%s/se.cgi?arg=%%s&amp;type=Name&amp;mode=exact' % HTFAKE, ),
+                'ANL': ('https://nla.gov.au/nla.cat-vn%s', 'ANL',
+                         'Australian National Library ID'),
                 'ASIN': ('https://www.amazon.com/dp/%s', 'ASIN',
                          'Amazon Standard Identification Number'),
                 'Audible-ASIN': ('https://www.audible.com/pd/%s', 'Audible-ASIN',
