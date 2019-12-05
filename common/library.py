@@ -759,7 +759,7 @@ def ISFDBTemplates():
                 'FantLab-author': ('https://fantlab.ru/autor%s', 'FantLab author'),
                 'FantLab-pub': ('https://fantlab.ru/edition%s', 'FantLab publication'),
                 'FantLab-title': ('https://fantlab.ru/work%s', 'FantLab title'),
-                'Incomplete': ('', 'Contents incomplete.', ),
+                'Incomplete': ('', 'The Contents section of this record is incomplete; additional eligible titles still need to be added.', ),
                 'ISBN': ('%s', 'Additional ISBN'),
                 'JNB': ('https://iss.ndl.go.jp/api/openurl?ndl_jpno=%s&locale=en', 'JNB',
                         'Japanese National Bibliography'),
