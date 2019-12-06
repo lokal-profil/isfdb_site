@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2004-2019   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -66,6 +66,8 @@ if __name__ == '__main__':
 
         printtextarea('Note', 'publisher_note', help, SQLgetNotes(record[PUBLISHER_NOTE]))
 
+        printtextarea('Note to Moderator', 'mod_note', help, '')
+
 	print '</tbody>'
 	print '</table>'
 
@@ -75,5 +77,5 @@ if __name__ == '__main__':
 	print '</form>'
 	print '<p>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)
 

@@ -656,6 +656,11 @@ def DisplayPublisherChanges(submission_id):
 		PrintMultField('Webpages', 'Webpage', '<br>', doc, merge, current.used_webpages, current.publisher_webpages)
 
         print '</table>'
+
+        mod_note = GetElementValue(merge, 'ModNote')
+        if mod_note:
+                print '<h3>Note to Moderator: </h3>%s<p><p>' % (mod_note)
+
 	return submitter
 
 def DisplayPubSeriesChanges(submission_id):

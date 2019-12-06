@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2016   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2019   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -63,7 +63,10 @@ if __name__ == '__main__':
 	(changes, update) = submission.CheckField(new.used_webpages, old.used_webpages, new.publisher_webpages, old.publisher_webpages, 'Webpage', 1)
 	if changes:
 		update_string += update
-	
+
+	if new.form.has_key('mod_note'):
+		update_string += "    <ModNote>%s</ModNote>\n" % (db.escape_string(XMLescape(new.form['mod_note'].value)))
+		
 	update_string += "  </PublisherUpdate>\n"
 	update_string += "</IsfdbSubmission>\n"
 
