@@ -6504,6 +6504,22 @@ def function274():
                 and cleanup.report_type=274"""
         MismatchesInNotes(query, 'References to Non-Existent Templates')
 
+def function275():
+        cleanup.query = """select t1.title_id, t1.title_title
+                from titles t1, cleanup c
+                where t1.title_ttype in ('COVERART')
+                and YEAR(t1.title_copyright) <
+                        (select YEAR(min(p.pub_year))
+                        from pubs p, pub_content pc
+                        where pc.pub_id = p.pub_id
+                        and pc.title_id = t1.title_id)
+                and c.report_type = 275
+                and t1.title_id = c.record_id
+                order by t1.title_title"""
+        cleanup.none = 'Title Dates Before First Publication Dates'
+        cleanup.note = 'This report is currently limited to COVERART titles'
+        cleanup.print_title_table()
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,

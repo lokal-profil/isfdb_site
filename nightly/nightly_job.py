@@ -1685,6 +1685,17 @@ def nightly_cleanup_reports():
         query += "%s like '%%{{%%'" % replace_string
         standardReport(query, 274)
 
+        #   Report 275: Title Dates Before First Publication Dates
+        query = """select t1.title_id from titles t1
+                where t1.title_ttype in ('COVERART')
+                and YEAR(t1.title_copyright) <
+                (select YEAR(min(p.pub_year))
+                from pubs p, pub_content pc
+                where pc.pub_id = p.pub_id
+                and pc.title_id = t1.title_id)
+                limit 1000"""
+        standardReport(query, 275)
+
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from
                 (select t1.title_id
