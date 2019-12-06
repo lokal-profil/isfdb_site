@@ -57,7 +57,7 @@ def reportsDict():
         reports[44] = ("Publishers with Similar Names")
         reports[45] = ("Variant Title Type Mismatches")
         reports[46] = ("EDITOR records not in MAGAZINE/FANZINE publications")
-        reports[47] = ("Title Dates after Publication Dates")
+        reports[47] = ("Title Dates after Publication Dates (first 1000)")
         reports[48] = ("Series with Numbering Gaps")
         reports[49] = ("Publications with Invalid ISBN Formats")
         reports[50] = ("Publications with Invalid ISBN Checksums")

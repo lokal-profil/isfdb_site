@@ -1708,9 +1708,19 @@ def function47():
                 where pc.title_id = t.title_id
                 and pc.pub_id = p.pub_id
                 and p.pub_year != '0000-00-00'
-                and YEAR(t.title_copyright) > YEAR(p.pub_year)
-                and t.title_id=c.record_id
-                and c.report_type=47"""
+                and p.pub_year != '8888-00-00'
+                and
+                (
+                        YEAR(t.title_copyright) > YEAR(p.pub_year)
+                or
+                        (
+                                YEAR(p.pub_year) = YEAR(t.title_copyright)
+                                and MONTH(p.pub_year) != '00'
+                                and MONTH(t.title_copyright) > MONTH(p.pub_year)
+                        )
+                )
+                and t.title_id = c.record_id
+                and c.report_type = 47"""
 	db.query(query)
 	result = db.store_result()
 	num = result.num_rows()
@@ -1727,7 +1737,7 @@ def function47():
                 title_type = record[0][2]
                 if title_type not in titles:
                         titles[title_type] = []
-                titles[title_type].append((title_id, title_title))
+                titles[title_type].append((title_title, title_id))
                 record = result.fetch_row()
 
         for title_type in sorted(titles.keys()):
@@ -1737,9 +1747,9 @@ def function47():
                 PrintTableColumns(('', '%s titles' % title_type))
                 bgcolor = 1
                 count = 1
-                for title in titles[title_type]:
-                        title_id = title[0]
-                        title_title = title[1]
+                for title in sorted(titles[title_type]):
+                        title_title = title[0]
+                        title_id = title[1]
                         PrintTitleRecord(title_id, title_title, bgcolor, count)
                         bgcolor = bgcolor ^ 1
                         count += 1
