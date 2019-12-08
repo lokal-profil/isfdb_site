@@ -6508,6 +6508,7 @@ def function275():
         cleanup.query = """select t1.title_id, t1.title_title
                 from titles t1, cleanup c
                 where t1.title_ttype in ('COVERART')
+                and t1.title_parent > 0
                 and YEAR(t1.title_copyright) <
                         (select YEAR(min(p.pub_year))
                         from pubs p, pub_content pc
@@ -6517,7 +6518,7 @@ def function275():
                 and t1.title_id = c.record_id
                 order by t1.title_title"""
         cleanup.none = 'Title Dates Before First Publication Dates'
-        cleanup.note = 'This report is currently limited to COVERART titles'
+        cleanup.note = 'This report is currently limited to COVERART <b>variant</b> titles'
         cleanup.print_title_table()
 
 def translated_report(report_id):
