@@ -1697,6 +1697,17 @@ def nightly_cleanup_reports():
                 limit 1000"""
         standardReport(query, 275)
 
+        #   Report 276: Variant Title Dates Before Canonical Title Dates
+        query = """select t1.title_id from titles t1, titles t2
+                where t1.title_parent = t2.title_id
+                and t1.title_copyright < t2.title_copyright
+                and t1.title_copyright != '0000-00-00'
+                and t2.title_copyright != '0000-00-00'
+                and month(t1.title_copyright) != '00'
+                and month(t2.title_copyright) != '00'
+                and t1.title_ttype != 'SERIAL'"""
+        standardReport(query, 276)
+
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from
                 (select t1.title_id

@@ -6521,6 +6521,24 @@ def function275():
         cleanup.note = 'This report is currently limited to COVERART <b>variant</b> titles'
         cleanup.print_title_table()
 
+def function276():
+        cleanup.query = """select t1.title_id, t1.title_title, c.cleanup_id
+                from titles t1, titles t2, cleanup c
+                where t1.title_parent = t2.title_id
+                and t1.title_copyright < t2.title_copyright
+                and t1.title_copyright != '0000-00-00'
+                and t2.title_copyright != '0000-00-00'
+                and month(t1.title_copyright) != '00'
+                and month(t2.title_copyright) != '00'
+                and t1.title_ttype != 'SERIAL'
+                and c.report_type = 276
+                and c.resolved IS NULL
+                and t1.title_id = c.record_id
+                order by t1.title_title"""
+        cleanup.none = 'Variant Title Dates Before Canonical Title Dates'
+        cleanup.ignore = 1
+        cleanup.print_title_table()
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,
