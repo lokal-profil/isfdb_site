@@ -3521,7 +3521,7 @@ def function89():
         query = """select author_id, author_canonical, author_birthplace, author_birthdate
                 from authors, cleanup c
                 where (
-                (author_birthplace like '%US' COLLATE latin1_general_cs)
+                (author_birthplace like '%, US')
                 or
                 (author_birthplace like "%England%"
                 and author_birthplace not like "%Kingdom of England"
@@ -3583,7 +3583,8 @@ def function89():
                 or (author_birthplace like '%Ohio%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%Oklahoma%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%Oregon%' and author_birthplace not like '%, USA')
-                or (author_birthplace like '%Pennsylvania%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Pennsylvania%' and author_birthplace not like '%, USA'
+                    and author_birthplace not like '%British Empire')
                 or (author_birthplace like '%Rhode Island%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%South Carolina%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%South Dakota%' and author_birthplace not like '%, USA')
@@ -3591,7 +3592,8 @@ def function89():
                 or (author_birthplace like '%Texas%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%Utah%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%Vermont%' and author_birthplace not like '%, USA')
-                or (author_birthplace like '%Virginia%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Virginia%' and author_birthplace not like '%, USA'
+                    and author_birthplace not like '%British Empire')
                 or (author_birthplace like '%Washington%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%West Virginia%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%Wisconsin%' and author_birthplace not like '%, USA')
@@ -3622,6 +3624,8 @@ def function89():
         db.query(query)
         result = db.store_result()
 
+        print """<h3>See <a href="http://%s/index.php?title=Template:AuthorFields:BirthPlace">
+                        this template</a> for formatting information.</h3>""" % WIKILOC
         if result.num_rows() > 0:
                 record = result.fetch_row()
                 bgcolor = 1
@@ -3643,9 +3647,9 @@ def function89():
                         bgcolor ^= 1
                         count += 1
                         record = result.fetch_row()
-                print "</table>"
+                print '</table>'
         else:
-                print "<h2>No authors with invalid birthplaces</h2>"
+                print '<h2>No authors with invalid birthplaces</h2>'
         return
 
 def function90():

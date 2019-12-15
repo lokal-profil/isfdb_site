@@ -995,7 +995,7 @@ def nightly_cleanup_reports():
         #   Report 89: Authors with Invalid Birthplaces
         query = """select author_id from authors
                 where
-                (author_birthplace like '%US' COLLATE latin1_general_cs)
+                (author_birthplace like '%, US')
                 or
                   (author_birthplace like "%England%"
                   and author_birthplace not like "%Kingdom of England"
@@ -1056,7 +1056,8 @@ def nightly_cleanup_reports():
                 or (author_birthplace like '%Ohio%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%Oklahoma%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%Oregon%' and author_birthplace not like '%, USA')
-                or (author_birthplace like '%Pennsylvania%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Pennsylvania%' and author_birthplace not like '%, USA'
+                    and author_birthplace not like '%British Empire')
                 or (author_birthplace like '%Rhode Island%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%South Carolina%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%South Dakota%' and author_birthplace not like '%, USA')
@@ -1064,7 +1065,8 @@ def nightly_cleanup_reports():
                 or (author_birthplace like '%Texas%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%Utah%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%Vermont%' and author_birthplace not like '%, USA')
-                or (author_birthplace like '%Virginia%' and author_birthplace not like '%, USA')
+                or (author_birthplace like '%Virginia%' and author_birthplace not like '%, USA'
+                    and author_birthplace not like '%British Empire')
                 or (author_birthplace like '%Washington%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%West Virginia%' and author_birthplace not like '%, USA')
                 or (author_birthplace like '%Wisconsin%' and author_birthplace not like '%, USA')
