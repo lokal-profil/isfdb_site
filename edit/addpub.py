@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2018   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -83,6 +83,7 @@ if __name__ == '__main__':
 
 	printfield("Pub Series", "pub_series", help)
 	printfield("Pub Series #", "pub_series_num", help)
+        printWebPages([], 'pub', help)
 
         printsource(help)
 

@@ -154,39 +154,33 @@ if __name__ == '__main__':
 		print "<li> ", query
 		db.query(query)
 
-		##########################################################
 		# Delete transliterated titles 
-		##########################################################
 		query = "delete from trans_pubs where pub_id=%d" % int(Record)
 		print "<li> ", query
 		db.query(query)
 
+                # Delete Web Pages
+		query = "delete from webpages where pub_id=%d" % int(Record)
+		print "<li> ", query
+		db.query(query)
 
-		##########################################################
 		# Delete external identifiers
-		##########################################################
 		query = "delete from identifiers where pub_id=%d" % int(Record)
 		print "<li> ", query
 		db.query(query)
 
-		##########################################################
 		# Delete the pub itself
-		##########################################################
 		query = "delete from pubs where pub_id=%d" % int(Record)
 		print "<li> ", query
 		db.query(query)
 
-		############################################################
 		# Delete Publication Series if there are no more pubs for it
-		############################################################
 		if pub.pub_series_id:
                         pubseries = pub_series(db)
                         pubseries.load(pub.pub_series_id)
                         pubseries.delete()
 
-		##########################################################
 		# Delete Publisher if there are no more pubs for it
-		##########################################################
 		if pub.pub_publisher_id:
                         publisher = publishers(db)
                         publisher.load(pub.pub_publisher_id)

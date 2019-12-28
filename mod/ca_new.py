@@ -354,6 +354,16 @@ def DoSubmission(db, submission):
                                         print "<li> ", update
                                         db.query(update)
 
+                        # Web Pages
+                        value = GetElementValue(merge, 'Webpages')
+                        if value:
+                                webpages = doc.getElementsByTagName('Webpage')
+                                for webpage in webpages:
+                                        address = XMLunescape(webpage.firstChild.data.encode('iso-8859-1'))
+                                        update = "insert into webpages(pub_id, url) values(%d, '%s')" % (int(Record), db.escape_string(address))
+                                        print "<li> ", update
+                                        db.query(update)
+
 			UpdatePubColumn(merge, 'Tag',     'pub_tag',        Record)
 			UpdatePubColumn(merge, 'Year',    'pub_year',       Record)
 			UpdatePubColumn(merge, 'Pages',   'pub_pages',      Record)

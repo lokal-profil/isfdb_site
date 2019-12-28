@@ -682,6 +682,10 @@ class AdvancedSearchResults(AdvancedSearch):
                         clause = "pub_frontimage %s" % sql_value
                 elif field == 'pub_ctype':
                         clause = "pubs.pub_ctype %s" % sql_value
+                elif field == 'pub_webpage':
+                        clause = "webpages.url %s" % sql_value
+                        dbases = [tableInfo('pubs'), tableInfo('webpages')]
+                        self.joins.add('webpages.pub_id=pubs.pub_id')
                 else:
                         self.display_error("Unknown field: %s" % field)
                 return (clause, dbases)

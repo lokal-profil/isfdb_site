@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -64,6 +64,13 @@ if __name__ == '__main__':
 		for trans_title in new.pub_trans_titles:
 			update_string += "      <TransTitle>%s</TransTitle>\n" % (db.escape_string(trans_title))
 		update_string += "    </TransTitles>\n"
+
+        # Web pages
+	if new.used_webpages:
+                update_string += "    <Webpages>\n"
+                for webpage in new.pub_webpages:
+                        update_string += "         <Webpage>%s</Webpage>\n" % (db.escape_string(webpage))
+                update_string += "    </Webpages>\n"
 
 	if new.used_tag:
 		update_string += "    <Tag>%s</Tag>\n" % (db.escape_string(new.pub_tag))

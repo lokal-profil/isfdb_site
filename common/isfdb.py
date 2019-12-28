@@ -471,6 +471,7 @@ SUBMISSION_DISPLAY = {
     'PubSeries': 'Pub Series',
     'PubSeriesNum': 'Pub Series #',
     'PubSeriesTransNames': 'Transliterated Name',
+    'PubWebpages': 'Publication Web Page',
     'PubType': 'Pub Type',
     'Seriesnum': 'Series Number',
     'SeriesNum': 'Series Number',

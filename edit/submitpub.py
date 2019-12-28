@@ -156,6 +156,13 @@ if __name__ == '__main__':
 	if changed:
 		update_string += val
 
+        # Web pages
+	(changed, val) = submission.CheckField(new.used_webpages, old.used_webpages,
+                                                  new.pub_webpages, old.pub_webpages, 'Webpage', 1)
+	changes += changed
+	if changed:
+		update_string += val
+
 	# Build the XML payload for the Content section
 	update_string += db.escape_string(new.xmlContent())
         update_string += "  </PubUpdate>\n"

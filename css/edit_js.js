@@ -57,6 +57,24 @@ function createOnclick(title)	{
 		};
 	}
 
+	if (document.getElementById('shared_title_webpages.addsign')) {
+		document.getElementById('shared_title_webpages.addsign').onclick = function(event){
+			AddMultipleField('Title Web Page', 'shared_title_webpages');
+		};
+	}
+
+	if (document.getElementById('shared_pub_webpages.addsign')) {
+		document.getElementById('shared_pub_webpages.addsign').onclick = function(event){
+			AddMultipleField('Pub Web Page', 'shared_pub_webpages');
+		};
+	}
+
+	if (document.getElementById('pub_webpages.addsign')) {
+		document.getElementById('pub_webpages.addsign').onclick = function(event){
+			AddMultipleField('Web Page', 'pub_webpages');
+		};
+	}
+
 	if (document.getElementById('award_type_webpages.addsign')) {
 		document.getElementById('award_type_webpages.addsign').onclick = function(event){
 			AddMultipleField('Web Page', 'award_type_webpages');

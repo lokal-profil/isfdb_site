@@ -33,6 +33,16 @@ def StandardQuery(query):
 		record = result.fetch_row()
 	return results
 
+def OneField(query):
+	db.query(query)
+	result = db.store_result()
+	record = result.fetch_row()
+	results = []
+	while record:
+		results.append(record[0][0])
+		record = result.fetch_row()
+	return results
+
 def SQLUpdateQueries():
 	query = "select metadata_counter from metadata"
 	db.query(query)
@@ -1739,15 +1749,12 @@ def SQLloadPubSeriesWebpages(publisher_id):
 	return results
 
 def SQLloadTitleWebpages(title_id):
-	query = "select url from webpages where title_id='%d'" % (title_id)
-	db.query(query)
-	result = db.store_result()
-	webpage = result.fetch_row()
-	results = []
-	while webpage:
-		results.append(webpage[0][0])
-		webpage = result.fetch_row()
-	return results
+	query = "select url from webpages where title_id=%d" % int(title_id)
+	return OneField(query)
+
+def SQLloadPubWebpages(pub_id):
+	query = "select url from webpages where pub_id=%d" % int(pub_id)
+	return OneField(query)
 
 def SQLloadAwardTypeWebpages(award_type_id):
 	query = "select url from webpages where award_type_id='%d'" % (int(award_type_id))

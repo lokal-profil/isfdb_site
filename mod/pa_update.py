@@ -549,6 +549,28 @@ if __name__ == '__main__':
                                         pubseries.delete()
 
 		##########################################################
+                # Webpages
+		##########################################################
+		value = GetElementValue(merge, 'Webpages')
+        	if value:
+			##########################################################
+			# Delete the old webpages
+			##########################################################
+			delete = 'delete from webpages where pub_id=%d' % int(Record)
+			print '<li> ', delete
+        		db.query(delete)
+
+			##########################################################
+			# Insert the new webpages
+			##########################################################
+			webpages = doc.getElementsByTagName('Webpage')
+			for webpage in webpages:
+                                address = XMLunescape(webpage.firstChild.data.encode('iso-8859-1'))
+                                update = "insert into webpages(pub_id, url) values(%d, '%s')" % (int(Record), db.escape_string(address))
+                                print '<li> ', update
+                                db.query(update)
+
+		##########################################################
 		# AUTHORS
 		##########################################################
 		value = GetElementValue(merge, 'Authors')

@@ -527,7 +527,7 @@ def PrintWarning(Label, unknown, pseudonym, disambig, title_date = '', pub_date 
 def PrintMultiLine(lines, newline, ParentLabel, Separator):
         if lines:
                 lines += Separator
-        if ParentLabel == 'Webpages':
+        if 'Webpages' in ParentLabel:
                 lines += '<a href="%s" target="_blank">%s</a>' % (newline, newline)
         else:
                 lines += newline
@@ -1981,6 +1981,7 @@ def DisplayDeletePub(submission_id):
 		PrintField1('Catalog',   current.used_catalog,   current.pub_catalog)
 		PrintField1('Price',     current.used_price,     current.pub_price)
 		PrintField1('Image',     current.used_image,     current.pub_image)
+		PrintMultField1('Webpages', 'Web page', '<br>', current.used_webpages, current.pub_webpages)
 		PrintField1('Note',      current.used_note,      current.pub_note)
 		PrintDeleteExternalIDs(current)
 
@@ -2658,6 +2659,7 @@ def DisplayEditPub(submission_id):
 		PrintField2XML('Catalog',   merge, current.used_catalog,   current.pub_catalog)
 		PrintField2XML('Price',     merge, current.used_price,     current.pub_price)
 		PrintField2XML('Image',     merge, current.used_image,     current.pub_image)
+                PrintMultField('Webpages', 'Webpage', '<br>', doc, merge, current.used_webpages, current.pub_webpages)
 		PrintField2XML('Note',      merge, current.used_note,      current.pub_note)
 		PrintEditExternalIDs(merge, doc, current, submission_id)
 
@@ -3086,6 +3088,7 @@ def DisplayClonePublication(submission_id):
         PrintField1XML('Catalog',   merge, 0)
         PrintField1XML('Price',     merge, 0)
         PrintField1XML('Image',     merge, 0)
+        PrintMultFieldRaw(merge, doc, 'Webpages', 'Webpage')
         PrintField1XML('Note',      merge, 0)
         PrintNewExternalIDs(merge, doc, submission_id)
         print '</table>'
@@ -3389,6 +3392,7 @@ def DisplayNewPub(submission_id):
         PrintField1XML('PubSeries', merge, title_data)
         PrintField1XML('PubSeriesNum', merge, title_data)
         PrintField1XML('Image',     merge, title_data)
+        PrintMultFieldRaw(merge, doc, 'PubWebpages', 'PubWebpage')
         PrintField1XML('Note',      merge, title_data)
         PrintNewExternalIDs(merge, doc, submission_id)
         print '</table>'

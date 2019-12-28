@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -58,23 +58,19 @@ def printpubrecord(pub, image_url, reuse_external_ids):
         print '</tr>'
 	
         printISBN(help, pub.pub_isbn)
-
 	printfield("Catalog ID", "pub_catalog", help, pub.pub_catalog)
-
 	printfield("Price", "pub_price", help, pub.pub_price)
 
         if image_url:
                 cover_url = pub.pub_image
         else:
                 cover_url = ''
+
 	printfield("Image URL", "pub_image", help, cover_url)
-
 	printfield("Pub Series", "pub_series", help, pub.pub_series)
-
 	printfield("Pub Series #", "pub_series_num", help, pub.pub_series_num)
-
+        printWebPages([], 'pub', help)
         printsource(help)
-
         printtextarea('Pub Note', 'pub_note', help, pub.pub_note)
 
         if reuse_external_ids:

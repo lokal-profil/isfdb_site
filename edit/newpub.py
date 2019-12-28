@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -78,12 +78,9 @@ if __name__ == '__main__':
                 printfield("Content", "title_content", help, '', 1)
 
         printTitleFlags('', help)
-
         printtextarea('Synopsis', 'title_synopsis', help, '', 4, readonly)
-
         printtextarea('Title Note', 'title_note', help, '', 2)
-        
-        printWebPages([], 'title', help)
+        printWebPages([], 'shared_title', help, 'Title')
 
 	print '</tbody>'
         print '</table>'
@@ -94,27 +91,20 @@ if __name__ == '__main__':
 	print '<tbody id="pubBody">'
 
         printfield("Publication Type", "pub_ctype", help, pub_ctype, 1)
-
 	printfield("Date", "pub_year", help)
 	printfield("Publisher", "pub_publisher", help)
 	printfield("Pages", "pub_pages", help)
-	
 	printformat("pub_ptype", "Format", help)
-
 	printfield("ISBN", "pub_isbn", help)
 	printfield("Catalog ID", "pub_catalog", help)
         printfield("Price", "pub_price", help)
-
 	printfield("Image URL", "pub_image", help)
-
 	printfield("Pub Series", "pub_series", help)
 	printfield("Pub Series #", "pub_series_num", help)
-
+        printWebPages([], 'shared_pub', help, 'Pub')
         printsource(help)
-
         printtextarea('Pub Note', 'pub_note', help)
         printExternalIDs(None, "External ID", "external_id", help)
-
         printtextarea('Note to Moderator', 'mod_note', help)
 
 	print '</tbody>'

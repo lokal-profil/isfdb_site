@@ -240,8 +240,16 @@ function validatePubForm() {
 	if (validateContentIndicator() == false) {
 		return false;
 	}
-	// Validate the Web Page URLs (for NewPubs)
-	if (validateWebPages("title_webpages") == false) {
+	// Validate the Web Page URLs for Title Web Pages in the NewPub edit form
+	if (validateWebPages("shared_title_webpages") == false) {
+		return false;
+	}
+	// Validate the Web Page URLs for Publication Web Pages on the NewPub edit page
+	if (validateWebPages("shared_pub_webpages") == false) {
+		return false;
+	}
+	// Validate the Web Page URLs for Publication Web Pages on non-NewPub pages
+	if (validateWebPages("pub_webpages") == false) {
 		return false;
 	}
 	// Validate the External IDs

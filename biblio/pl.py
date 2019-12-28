@@ -432,6 +432,10 @@ if __name__ == '__main__':
                         PrintTitleLine(title, pub, None, None, 1)
 			cover_count += 1
 
+	# Webpages
+	webpages = SQLloadPubWebpages(int(pub.pub_id))
+        PrintWebPages(webpages, '<br>')
+
 	if pub.pub_note:
 		print '<li>'
 		print FormatNote(pub.pub_note, 'Notes', 'short', pub.pub_id, 'Publication')

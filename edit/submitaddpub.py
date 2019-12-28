@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2017   Ahasuerus
+#     (C) COPYRIGHT 2017-2019   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -164,6 +164,13 @@ if __name__ == '__main__':
         # Transliterated titles
 	(changed, val) = submission.CheckField(new.used_trans_titles, old.used_trans_titles,
                                                   new.pub_trans_titles, old.pub_trans_titles, 'TransTitle', 1)
+	changes += changed
+	if changed:
+		update_string += val
+
+        # Web pages
+	(changed, val) = submission.CheckField(new.used_webpages, old.used_webpages,
+                                                  new.pub_webpages, old.pub_webpages, 'PubWebpage', 1)
 	changes += changed
 	if changed:
 		update_string += val

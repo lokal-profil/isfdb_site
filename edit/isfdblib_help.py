@@ -597,6 +597,21 @@ def HelpPub():
         link = 'http://%s/index.php?title=Template:PublicationFields:PubNote' % (WIKILOC)
         help['Pub Note'] = [text, link]
 
+        text = 'URL of a Web site about this title. This is a repeating field and you can enter as many '
+        text += ' Web pages as necessary. To add another Web Page, click the + button.'
+        text += ' Follow this link for more details.'
+        link = 'http://%s/index.php?title=Template:TitleFields:WebPage' % (WIKILOC)
+        help['Title Web Page 1'] = [text, link]
+
+        text = 'URL of a Web site about this publication. This is a repeating field and you can enter as many '
+        text += ' Web pages as necessary. To add another Web Page, click the + button.'
+        text += ' Follow this link for more details.'
+        link = 'http://%s/index.php?title=Template:PubFields:WebPage' % (WIKILOC)
+        # The label of this field is normally "Web Page", but the NewPub edit form
+        # uses "Pub Web Page" in order to distinguish this field from title-specific Web Pages
+        help['Pub Web Page 1'] = [text, link]
+        help['Web Page 1'] = [text, link]
+
         return help
 
 def HelpCoverArt():

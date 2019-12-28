@@ -137,6 +137,7 @@ class AdvancedSearch:
                                            ('pub_verifier', 'Primary Verifier'),
                                            ('pub_ver_date', 'Primary Verification Date'),
                                            ('secondary_ver_source', 'Secondary Verification Source'),
+                                           ('pub_webpage', 'Publication Webpage'),
                                            ('pub_note', 'Notes'),
                                            ('pub_frontimage', 'Image URL')
                                            )

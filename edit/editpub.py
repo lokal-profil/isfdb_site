@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -55,6 +55,7 @@ def printpubrecord(pub):
 	printfield("Image URL", "pub_image", help, pub.pub_image)
 	printfield("Pub Series", "pub_series", help, pub.pub_series)
         printfield("Pub Series #", "pub_series_num", help, pub.pub_series_num)
+        printWebPages(pub.pub_webpages, 'pub', help)
         printtextarea('Pub Note', 'pub_note', help, pub.pub_note)
         printExternalIDs(pub.identifiers, "External ID", "external_id", help)
         printtextarea('Note to Moderator', 'mod_note', help)

@@ -346,6 +346,7 @@ class pubs:
 		self.used_image     = 0
 		self.used_price     = 0
 		self.used_note      = 0
+		self.used_webpages  = 0
 		self.title_id       = 0
 		self.num_authors    = 0
 		self.pub_authors    = []
@@ -369,6 +370,7 @@ class pubs:
 		self.pub_series_id  = ''
 		self.pub_series_num = ''
 		self.pub_note       = ''
+		self.pub_webpages   = []
 		self.titles         = ''
 		self.reviews        = ''
 		self.interviews     = ''
@@ -562,6 +564,10 @@ class pubs:
 			if record[0][PUB_SERIES_NUM]:
 				self.pub_series_num = record[0][PUB_SERIES_NUM]
 				self.used_series_num = 1
+
+                        self.pub_webpages = SQLloadPubWebpages(record[0][PUB_PUBID])
+                        if self.pub_webpages:
+                                self.used_webpages = 1
 
                         res2 = SQLloadTransPubTitles(record[0][PUB_PUBID])
                         if res2:
@@ -860,6 +866,18 @@ class pubs:
                         if value:
         			self.pub_catalog = value
         			self.used_catalog = 1
+
+		for key in self.form:
+                        if key.startswith('pub_webpages') or key.startswith('shared_pub_webpages'):
+                                value = XMLescape(self.form[key].value)
+                                if value:
+                                        if value in self.pub_webpages:
+                                                continue
+                                        self.error = invalidURL(value)
+                                        if self.error:
+                                                return
+                                        self.pub_webpages.append(value)
+                                        self.used_webpages = 1
 
                 # External identifiers
                 identifier_types = SQLLoadIdentifierTypes()

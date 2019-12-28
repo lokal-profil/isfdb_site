@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -83,6 +83,11 @@ if __name__ == '__main__':
 		update_string += "    <Price>%s</Price>\n" % (db.escape_string(new.pub_price))
 	if new.used_image:
 		update_string += "    <Image>%s</Image>\n" % (db.escape_string(new.pub_image))
+	if new.used_webpages:
+                update_string += "    <PubWebpages>\n"
+                for webpage in new.pub_webpages:
+                        update_string += "         <PubWebpage>%s</PubWebpage>\n" % (db.escape_string(webpage))
+                update_string += "    </PubWebpages>\n"
 	if new.used_note:
 		update_string += "    <Note>%s</Note>\n" % (db.escape_string(new.pub_note))
 
