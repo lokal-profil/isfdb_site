@@ -6668,10 +6668,10 @@ def empty_containers_grid(report_id):
         print '<th>Year</th>'
         print '<th colspan="13">Month</th>'
         print '</tr>'
-        # Get the current year based on system time
-        current_year = localtime()[0]
+        # Get the next year based on system time
+        next_year = localtime()[0] + 1
         bgcolor = 1
-        for year in range(current_year, 1999, -1):
+        for year in range(next_year, 1999, -1):
                 if year not in years:
                         continue
                 print '<tr class="table%d">' % (bgcolor+1)
