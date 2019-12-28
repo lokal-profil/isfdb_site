@@ -434,7 +434,7 @@ if __name__ == '__main__':
 
 	# Webpages
 	webpages = SQLloadPubWebpages(int(pub.pub_id))
-        PrintWebPages(webpages, '<br>')
+        PrintWebPages(webpages)
 
 	if pub.pub_note:
 		print '<li>'
