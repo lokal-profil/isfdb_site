@@ -1689,7 +1689,7 @@ def nightly_cleanup_reports():
 
         #   Report 275: Title Dates Before First Publication Dates
         query = """select t1.title_id from titles t1
-                where t1.title_ttype in ('COVERART')
+                where t1.title_ttype in ('COVERART', 'SERIAL')
 		and t1.title_parent > 0
                 and YEAR(t1.title_copyright) <
                 (select YEAR(min(p.pub_year))
