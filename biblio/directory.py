@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -84,7 +84,11 @@ if __name__ == '__main__':
 	PrintHeader(title)
 	PrintNavbar('directory', 0, 0, 'directory.cgi', 0)
 
-        records_map = SQLGetDirectory(dir_type)
+        if dir_type == 'publisher':
+                records_map = SQLGetPublisherDirectory()
+        else:
+                records_map = SQLGetDirectory(dir_type)
+        
         first_characters = string.ascii_lowercase + "'"
         if dir_type != 'author':
                 # The Author Directory doesn't support asterisks in author names because
@@ -174,11 +178,13 @@ if __name__ == '__main__':
 
                 # Publisher directory
                 query = """select distinct p.* from publishers p
-                        where p.publisher_name like "%s"
+                        where p.publisher_name like _utf8"%s"
+                        COLLATE 'utf8_general_ci'
                         union
                         select distinct p.* from publishers p, trans_publisher tp
                         where p.publisher_id = tp.publisher_id
-                        and tp.trans_publisher_name like "%s"
+                        and tp.trans_publisher_name like _utf8"%s"
+                        COLLATE 'utf8_general_ci'
                         order by publisher_name""" % (search_string, search_string)
 		db.query(query)
 		result = db.store_result()

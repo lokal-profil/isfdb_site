@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2020   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -735,14 +735,32 @@ def SQLGetPublisherList(publisher_list):
 		record = result.fetch_row()
 	return results
 
-def SQLGetDirectory(dir_type):
-        if dir_type == 'publisher':
-                query = """select lower(substring(publisher_name,1,2)) as xx, count(*)
-                from publishers group by xx
+def SQLGetPublisherDirectory():
+        import unicodedata
+        query = """select publisher_name from publishers
                 UNION
-                select lower(substring(trans_publisher_name,1,2)) as xx, count(*)
-                from trans_publisher group by xx"""
-        elif dir_type == 'author':
+                select trans_publisher_name from trans_publisher"""
+        db.query(query)
+        result = db.store_result()
+        record = result.fetch_row()
+        records_map = {}
+        while record:
+                two_latin1_letters = record[0][0]
+                first_latin_letter = two_latin1_letters[0]
+                first_unicode_letter = first_latin_letter.decode('iso-8859-1')
+                first_normalized_letter = unicodedata.normalize('NFKD', first_unicode_letter).encode('ascii', 'ignore').decode('ascii', 'strict').lower()
+                second_normalized_letter = ' '
+                if len(two_latin1_letters) > 1:
+                        second_latin_letter = two_latin1_letters[1]
+                        second_unicode_letter = second_latin_letter.decode('iso-8859-1')
+                        second_normalized_letter = unicodedata.normalize('NFKD', second_unicode_letter).encode('ascii', 'ignore').decode('ascii', 'strict').lower()
+                two_normalized_letters = first_normalized_letter + second_normalized_letter
+                records_map[two_normalized_letters] = ''
+                record = result.fetch_row()
+        return records_map
+
+def SQLGetDirectory(dir_type):
+        if dir_type == 'author':
                 query = """select lower(substring(author_lastname,1,2)) as xx, count(*)
                 from authors group by xx"""
         elif dir_type == 'magazine':
