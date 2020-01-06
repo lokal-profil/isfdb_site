@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2007-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2007-2020   Al von Ruff, Ahasuerus and Bill Longley
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -418,9 +418,7 @@ def PrintMultField1(ParentLabel, ChildLabel, Separator, Used, Current, warnings 
                         multfield = ''
                         for item in Current:
                                 if item:
-                                        if notfirst:
-                                                multfield += Separator
-                                        multfield += item
+                                        multfield = BuildMultiLine(multfield, item, ParentLabel, Separator)
                                 else:
                                         break
                                 notfirst = 1
@@ -524,7 +522,7 @@ def PrintWarning(Label, unknown, pseudonym, disambig, title_date = '', pub_date 
                 print '<td class="blankwarning">&nbsp;</td>'
         return
 
-def PrintMultiLine(lines, newline, ParentLabel, Separator):
+def BuildMultiLine(lines, newline, ParentLabel, Separator):
         if lines:
                 lines += Separator
         if 'Webpages' in ParentLabel:
@@ -554,7 +552,7 @@ def PrintMultField(ParentLabel, ChildLabel, Separator, doc, XmlData, Used, Curre
                                 multfield = ''
                                 for item in Current:
                                         if item:
-                                                multfield = PrintMultiLine(multfield, item, ParentLabel, Separator)
+                                                multfield = BuildMultiLine(multfield, item, ParentLabel, Separator)
                                         else:
                                                 break
                                 print multfield
@@ -572,7 +570,7 @@ def PrintMultField(ParentLabel, ChildLabel, Separator, doc, XmlData, Used, Curre
                         multfield = ''
                         for child in children:
                                 item = child.firstChild.data.encode('iso-8859-1')
-                                multfield = PrintMultiLine(multfield, item, ParentLabel, Separator)
+                                multfield = BuildMultiLine(multfield, item, ParentLabel, Separator)
                         print multfield
 		print "</td>"
 	else:
@@ -584,7 +582,7 @@ def PrintMultField(ParentLabel, ChildLabel, Separator, doc, XmlData, Used, Curre
                                 multfield = ''
                                 for item in Current:
                                         if item:
-                                                multfield = PrintMultiLine(multfield, item, ParentLabel, Separator)
+                                                multfield = BuildMultiLine(multfield, item, ParentLabel, Separator)
                                         else:
                                                 break
                                 print multfield
