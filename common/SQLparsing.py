@@ -736,10 +736,13 @@ def SQLGetPublisherList(publisher_list):
 	return results
 
 def SQLGetPublisherDirectory():
-        import unicodedata
         query = """select publisher_name from publishers
                 UNION
                 select trans_publisher_name from trans_publisher"""
+        return ASCIIDirectory(query)
+
+def ASCIIDirectory(query):
+        import unicodedata
         db.query(query)
         result = db.store_result()
         record = result.fetch_row()
@@ -759,24 +762,25 @@ def SQLGetPublisherDirectory():
                 record = result.fetch_row()
         return records_map
 
-def SQLGetDirectory(dir_type):
-        if dir_type == 'author':
-                query = """select lower(substring(author_lastname,1,2)) as xx, count(*)
-                from authors group by xx"""
-        elif dir_type == 'magazine':
-                query = """select distinct tmp.xx, 1 from (
-                select lower(substring(s.series_title,1,2)) as xx
-                from series s, titles t where t.series_id = s.series_id
-                and t.title_ttype = 'EDITOR' group by xx
-                UNION
-                select lower(substring(t.title_title,1,2)) as xx
-                   from titles t where t.title_ttype='EDITOR' group by xx) tmp
-                UNION
-                select lower(substring(tt.trans_title_title,1,2)) as xx, count(*)
-                from trans_titles tt, titles t
-                where t.title_ttype = 'EDITOR'
-                and t.title_id = tt.title_id
-                group by xx"""
+def SQLGetMagazineDirectory():
+        query = """select s.series_title
+        from series s, titles t
+        where t.series_id = s.series_id
+        and t.title_ttype = 'EDITOR'
+        UNION
+        select t.title_title
+        from titles t
+        where t.title_ttype='EDITOR'
+        UNION
+        select tt.trans_title_title
+        from trans_titles tt, titles t
+        where t.title_ttype = 'EDITOR'
+        and t.title_id = tt.title_id"""
+        return ASCIIDirectory(query)
+
+def SQLGetAuthorDirectory():
+        query = """select lower(substring(author_lastname,1,2)) as xx, count(*)
+        from authors group by xx"""
         db.query(query)
         result = db.store_result()
         record = result.fetch_row()
@@ -1024,14 +1028,17 @@ def SQLFindMagazine(arg, directory = 0):
                 from series s, titles t
                 where t.series_id = s.series_id
                 and t.title_ttype = 'EDITOR'
-                and s.series_title like '%s'
+                and s.series_title like _utf8'%s'
+                COLLATE 'utf8_general_ci'
                 UNION
                 select distinct s.series_id, s.series_title, s.series_parent
                 from series s, titles t, trans_series ts
                 where t.series_id = s.series_id
                 and t.title_ttype = 'EDITOR'
                 and s.series_id = ts.series_id
-                and ts.trans_series_name like '%s'""" % (target, target)
+                and ts.trans_series_name like _utf8'%s'
+                COLLATE 'utf8_general_ci'
+                """ % (target, target)
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()
@@ -1049,18 +1056,20 @@ def SQLFindMagazine(arg, directory = 0):
         # series titles don't match it
         query="""select distinct t.title_title, s.series_id, s.series_title,
                 s.series_parent from series s, titles t
-                where t.title_title like '%s'
+                where t.title_title like _utf8'%s'
                 and t.title_ttype = 'EDITOR'
                 and t.series_id=s.series_id
-                and s.series_title not like '%s'
+                and s.series_title not like _utf8'%s'
+                COLLATE 'utf8_general_ci'
                 UNION
                 select distinct t.title_title, s.series_id, s.series_title,
                 s.series_parent from series s, titles t, trans_titles tt
-                where tt.trans_title_title like '%s'
+                where tt.trans_title_title like _utf8'%s'
                 and tt.title_id=t.title_id
                 and t.title_ttype = 'EDITOR'
                 and t.series_id=s.series_id
-                and s.series_title not like '%s'
+                and s.series_title not like _utf8'%s'
+                COLLATE 'utf8_general_ci'
                 """ % (target, target, target, target)
 	db.query(query)
 	result = db.store_result()

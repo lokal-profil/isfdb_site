@@ -86,8 +86,10 @@ if __name__ == '__main__':
 
         if dir_type == 'publisher':
                 records_map = SQLGetPublisherDirectory()
+        elif dir_type == 'magazine':
+                records_map = SQLGetMagazineDirectory()
         else:
-                records_map = SQLGetDirectory(dir_type)
+                records_map = SQLGetAuthorDirectory()
         
         first_characters = string.ascii_lowercase + "'"
         if dir_type != 'author':
