@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2011-2019   Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2011-2020   Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -4223,23 +4223,9 @@ def WikiPages(report_number, namespace_number, namespace_name, record_name,
                 record = result.fetch_row()
 
         # Step 2:
-        #  Branch A: For publications only, build a query to find all records with a link 
-        #  to the ISFDB Wiki in the Note field
-        if record_name == 'Publication':
-                records_in_clause = dict_to_in_clause(records)
-                query = """select distinct pub_id from pubs p, notes n
-                           where pub_id in (%s)
-                           and p.note_id = n.note_id
-                           and n.note_note like '%%www.isfdb.org%%'
-                           """ % records_in_clause
-
-        # Step 2:
-        #  Branch B: If not publications, build a query to find all records with
-        #  a "webpages" link to the ISFDB Wiki 
-        else:
-                query = """select distinct %s from webpages
-                           where %s is not null
-                           and url like '%%www.isfdb.org%%'""" % (record_id_field, record_id_field)
+        query = """select distinct %s from webpages
+                   where %s is not null
+                   and url like '%%www.isfdb.org%%'""" % (record_id_field, record_id_field)
 
         # Step 3:
         #  Retrieve records and delete them from the record ID list built in Step 1
