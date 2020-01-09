@@ -6079,10 +6079,10 @@ def function239():
         cleanup.print_title_table()
 
 def function240():
-        empty_containers_grid(240)
+        containers_grid(240)
 
 def function241():
-        empty_containers_grid(241)
+        containers_grid(241)
 
 def function242():
         cleanup.query = """select distinct t1.title_id, t1.title_title
@@ -6529,6 +6529,9 @@ def function276():
         cleanup.ignore = 1
         cleanup.print_title_table()
 
+def function277():
+        containers_grid(277, 'incomplete_contents')
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,
@@ -6623,8 +6626,8 @@ def nonLatinSeriesDisplay(report_id, query, language):
                 print '<h2>No %s Series with Latin characters.</h2>' % language
 	return
 
-def empty_containers_grid(report_id):
-        anchor = '<a href="http:/%s/edit/empty_containers.cgi' % HTFAKE
+def containers_grid(report_id, script = 'empty_containers'):
+        anchor = '<a href="http:/%s/edit/%s.cgi' % (HTFAKE, script)
         years = {}
         decades = {}
         months = {}

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1709,6 +1709,29 @@ def nightly_cleanup_reports():
                 and month(t2.title_copyright) != '00'
                 and t1.title_ttype != 'SERIAL'"""
         standardReport(query, 276)
+
+        #   Report 277: Publications with the 'Incomplete' Template in Notes
+        elapsed = elapsedTime()
+        query = """select p.pub_id,
+                IF(p.pub_year='0000-00-00', 0, REPLACE(SUBSTR(p.pub_year, 1,7),'-',''))
+                from pubs p, notes n
+                where p.note_id = n.note_id
+                and n.note_note like '%{{Incomplete}}%'
+                """
+        db.query(query)
+        result = db.store_result()
+        containers = {}
+        record = result.fetch_row()
+        while record:
+                pub_id = record[0][0]
+                pub_month = record[0][1]
+                containers[pub_id] = pub_month
+                record = result.fetch_row()
+        # Insert the new pub IDs and their months into the cleanup table
+        for pub_id in containers:
+                update = "insert into cleanup (record_id, report_type, record_id_2) values(%d, 277, %d)" % (int(pub_id), int(containers[pub_id]))
+                db.query(update)
+        elapsed.print_elapsed(277)
 
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from

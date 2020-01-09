@@ -1,13 +1,13 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2018   Ahasuerus
+#     (C) COPYRIGHT 2020   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision$
-#     Date: $Date$
+#     Version: $Revision: 419 $
+#     Date: $Date: 2019-05-15 10:54:53 -0400 (Wed, 15 May 2019) $
 
 
 import string
@@ -18,8 +18,8 @@ from library import *
 from SQLparsing import *
 
 def doError():
-	PrintPreSearch("Containers with no Fiction Titles")
-	PrintNavBar('edit/empty_container_table.cgi', 0)
+	PrintPreSearch('Publications with Incomplete Contents')
+	PrintNavBar('edit/incomplete_contents.cgi', 0)
         print '<h3>Bad argument</h3>'
         PrintPostSearch(0, 0, 0, 0, 0)
         sys.exit(0)
@@ -32,10 +32,7 @@ def PrintTableColumns(columns, user):
                         data = '&nbsp;'
                 else:
                         data = column
-                # Skip 'Ignore' and 'Resolve' columns if the user is not a moderator
-                if ('Ignore' in column or 'Resolve' in column) and not user.moderator:
-                        continue
-                print "<td><b>%s</b></td>" % data
+                print '<td><b>%s</b></td>' % data
  	print '</tr>'
 
 if __name__ == '__main__':
@@ -57,33 +54,23 @@ if __name__ == '__main__':
                 else:
                         raise
                 report_id = int(sys.argv[3])
-                if report_id not in (240, 241, 277):
+                if report_id not in (277, ):
                         raise
         except:
                 doError()
 
-        if report_id == 240:
-                container_names = 'Anthologies and Collections'
-        else:
-                container_names = 'Magazines'
-	PrintPreSearch("%s with no Fiction Titles" % container_names)
-	PrintNavBar('edit/empty_container_table.cgi', 0)
+	PrintPreSearch('Publications with Incomplete Contents')
+	PrintNavBar('edit/incomplete_contents.cgi', 0)
 
         print '<h3>Date range: %s</h3>' % display_range
         query = """select c.cleanup_id, p.*
-                from pubs p, cleanup c
-                where c.resolved IS NULL
-                and c.report_type = %d
-                and c.record_id_2 like '%d%%'
+                from pubs p, notes n, cleanup c
+                where p.note_id = n.note_id
+                and n.note_note like '%%{{Incomplete}}%%'
                 and c.record_id = p.pub_id
-                and p.pub_year != '8888-00-00'
-                and NOT EXISTS
-                        (select 1 from pub_content pc, titles t
-                        where p.pub_id=pc.pub_id 
-                        and pc.title_id=t.title_id
-                        and t.title_ttype in ('NOVEL', 'SHORTFICTION', 'POEM', 'SERIAL')
-                        )
-                order by pub_title""" % (report_id, date_range)
+                and c.report_type = 277
+                and c.record_id_2 like '%d%%'
+                """ % date_range
         db.query(query)
         result = db.store_result()
         if not result.num_rows():
@@ -94,10 +81,7 @@ if __name__ == '__main__':
         user.load()
         user.load_moderator_flag()
 
-        if report_id == 240:
-                PrintTableColumns(('', 'Title', 'Authors', 'Pub. Date', 'Type', '1st Edition', 'Publisher', 'Note', 'Ignore'), user)
-        else:
-                PrintTableColumns(('', 'Title', 'Editors', 'Pub. Date', 'Publisher', 'Note', 'Ignore'), user)
+        PrintTableColumns(('', 'Title', 'Authors', 'Pub. Date', 'Type', '1st Edition', 'Publisher', 'Note',), user)
         record = result.fetch_row()
         count = 1
         bgcolor = 1
@@ -122,25 +106,22 @@ if __name__ == '__main__':
                 print '<td>%s</td>' % ISFDBLink("pl.cgi", pub_id, pub_title)
                 print '<td>%s</td>' % LIBbuildRecordList('author', authors)
                 print '<td>%s</td>' % pub_date
-                if report_id == 240:
-                        print '<td>%s</td>' % pub_type[:4]
+                print '<td>%s</td>' % pub_type[:4]
 
-                        referral_column = 0
-                        if referral_id:
-                                referral_title = SQLloadTitle(referral_id)
-                                if referral_title[TITLE_YEAR] != pub_date:
-                                        print '<td>%s</td>' % referral_title[TITLE_YEAR]
-                                        referral_column = 1
-                        if not referral_column:
-                                print '<td>&nbsp;</td>'
+                referral_column = 0
+                if referral_id:
+                        referral_title = SQLloadTitle(referral_id)
+                        if referral_title[TITLE_YEAR] != pub_date:
+                                print '<td>%s</td>' % referral_title[TITLE_YEAR]
+                                referral_column = 1
+                if not referral_column:
+                        print '<td>&nbsp;</td>'
 
                 if publisher:
                         print '<td>%s</td>' % ISFDBLink('publisher.cgi', publisher_id, publisher[PUBLISHER_NAME])
                 else:
                         print '<td>&nbsp;</td>'
                 print '<td>%s</td>' % FormatNote(note_note)
-                if user.moderator:
-                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+%d">Ignore</a></td>' % (HTFAKE, cleanup_id, report_id)
                 print '</tr>'
                 count += 1
                 bgcolor ^= 1

@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2020   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -42,6 +42,7 @@ TARGETS = DIR/addaward.cgi \
 	  DIR/find_pub_dups.cgi \
 	  DIR/find_title_dups.cgi \
 	  DIR/importcontent.cgi \
+	  DIR/incomplete_contents.cgi \
 	  DIR/keygen.cgi \
 	  DIR/linkaward.cgi \
 	  DIR/linkreview.cgi \
