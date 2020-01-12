@@ -27,6 +27,10 @@ function validatePubURL(field_name) {
 
 function validateModNoteRequired() {
 	var flag_handle = document.getElementsByName("mod_note_required")[0];
+	// If there is no "Mod Note Required" field, validation is successful
+	if (flag_handle == null) {
+		return true;
+	}
 	var flag_value = flag_handle.value;
 	var mod_note_handle = document.getElementsByName("mod_note")[0];
 	var mod_note_value = mod_note_handle.value;
