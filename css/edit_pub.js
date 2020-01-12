@@ -1,5 +1,5 @@
 /*     Version: $Revision$
-      (C) COPYRIGHT 2015-2019   Ahasuerus
+      (C) COPYRIGHT 2015-2020   Ahasuerus
          ALL RIGHTS RESERVED
       Date: $Date$ */
 
@@ -20,6 +20,21 @@ function validatePubURL(field_name) {
 	if (element_value.indexOf("http://www.isfdb.org/wiki/index.php/Image") !== -1) {
 		alert("URL for the cover image should be for the image, not the Wiki page that the image is on");
 		element_name.focus();
+		return false;
+	}
+	return true;
+}
+
+function validateModNoteRequired() {
+	var flag_handle = document.getElementsByName("mod_note_required")[0];
+	var flag_value = flag_handle.value;
+	var mod_note_handle = document.getElementsByName("mod_note")[0];
+	var mod_note_value = mod_note_handle.value;
+	// Strip all spaces in case the mod note consists of nothing but spaces
+	mod_note_value = mod_note_value.split(" ").join("");
+	if ((flag_value == 1) && (mod_note_value == "")) {
+		alert("This publication has been primary verified by at least one editor other than you. Please enter a moderator note to document the submitted changes.");
+		mod_note_handle.focus();
 		return false;
 	}
 	return true;
@@ -216,6 +231,10 @@ function validateCovers() {
 }
 
 function validatePubForm() {
+	// Validate that a non-empty Moderator Note was entered for pubs primary verified by users other than the current editor
+	if (validateModNoteRequired() == false) {
+		return false;
+	}
 	// Validate that a non-empty pub title has been entered
 	if (validateRequired("pub_title","Publication Title") == false) {
 		return false;

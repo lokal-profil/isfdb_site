@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2020   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -132,8 +132,16 @@ if __name__ == '__main__':
 	update_string += val
 	changes += changed
 
-	if new.form.has_key('mod_note'):
-		update_string += "    <ModNote>%s</ModNote>\n" % (db.escape_string(XMLescape(new.form['mod_note'].value)))
+        try:
+                mod_note = XMLescape(new.form['mod_note'].value)
+        except:
+                mod_note = ''
+	if mod_note:
+		update_string += "    <ModNote>%s</ModNote>\n" % db.escape_string(mod_note)
+	else:
+                if new.requiresModeratorNote(submission.user.id):
+                        submission.error("""This publication has been primary verified by at least one editor other than you.
+                                         Please enter a moderator note to document the submitted changes""")
 
 	if new.form.has_key('Source'):
 		update_string += "    <Source>%s</Source>\n" % (db.escape_string(XMLescape(new.form['Source'].value)))

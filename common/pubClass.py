@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2020   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1719,6 +1719,14 @@ class pubs:
                                 formatted_line += ' %s' % formatted_id
                         formatted_ids.append(formatted_line)
                 return formatted_ids
+
+        def requiresModeratorNote(self, user_id):
+                # Returns 1 if there is at least one primary verifier who is not the current user
+                verifiers = SQLPrimaryVerifiers(self.pub_id)
+                for verifier in verifiers:
+                        if int(verifier[0]) != int(user_id):
+                                return 1
+                return 0
 
 class pubBody():
         def __init__(self):

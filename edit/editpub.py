@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2020   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -16,11 +16,19 @@ import MySQLdb
 from SQLparsing import *
 from pubClass import pubs
 from isfdb import *
+from login import User
 from library import *
 from isfdblib import *
 from isfdblib_help import *
 from isfdblib_print import *
 
+def printModNoteRequired(pub):
+        user = User()
+        user.load()
+        mod_note_required = 0
+        if pub.requiresModeratorNote(user.id):
+                mod_note_required = 1
+        print '<input name="mod_note_required" value="%d" type="HIDDEN">' % mod_note_required
 
 def printpubrecord(pub):
         help = HelpPub()
@@ -89,7 +97,6 @@ if __name__ == '__main__':
         printHelpBox('publication', 'EditPub')
 
 	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitpub.cgi">'
-
         printpubrecord(pub)
 
         print '<hr class="topspace">'
@@ -238,13 +245,14 @@ if __name__ == '__main__':
         print "</tbody>"
         print "</table>"
 
-        print "<hr class=\"topspace\">"
-	print "<p>"
+        print '<hr class="topspace">'
+	print '<p>'
 	print '<input name="pub_id" value="%d" type="HIDDEN">' % pub_id
 	print '<input name="editor" value="editpub" type="HIDDEN">'
 	print '<input type="SUBMIT" value="Submit Changed Data" tabindex="1">'
-	print "</form>"
-        print "<hr class=\"topspace\">"
+        printModNoteRequired(pub)
+	print '</form>'
+        print '<hr class="topspace">'
 	print ISFDBLink("edit/deletepub.cgi", pub_id, "Delete record")
 
         PrintPostSearch(tableclose=False)
