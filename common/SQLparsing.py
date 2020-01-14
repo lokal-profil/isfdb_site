@@ -2284,6 +2284,18 @@ def SQLgetAllTitleTags(title_id, parent_id, user_id):
 		record = result.fetch_row()
 	return results
 
+def SQLgetTitleTagsByUser(title_id):
+        query = """select tm.tag_id, t.tag_name, tm.user_id, tm.tagmap_id
+                from tag_mapping tm, tags t
+                where t.tag_id = tm.tag_id
+                and tm.title_id = %d
+                order by t.tag_name""" % int(title_id)
+        return StandardQuery(query)
+
+def SQLgetTitleByTagId(tagmap_id):
+        query = """select title_id from tag_mapping where tagmap_id = %d""" % int(tagmap_id)
+        return OneField(query)
+
 def SQLgetUserTags(title_id, user_id):
         query = "select tags.tag_name from tags,tag_mapping where tag_mapping.title_id='%d' and tag_mapping.user_id='%d' and tag_mapping.tag_id=tags.tag_id;" % (int(title_id), int(user_id))
 	db.query(query)
@@ -2378,6 +2390,15 @@ def SQLDeleteDuplicateTags(title_id):
                 db.query(update)
                 update = "insert into tag_mapping(tag_id, title_id, user_id) values(%d, %d, %d)" % (int(tag_id), int(title_id), int(user_id))
                 db.query(update)
+
+def SQLDeleteTagMapping(tagmap_id):
+        update = "delete from tag_mapping where tagmap_id = %d" % int(tagmap_id)
+	db.query(update)
+	SQLDeteleOrphanTags()
+        
+def SQLDeteleOrphanTags():
+	update = 'delete from tags where NOT EXISTS (select 1 from tag_mapping where tags.tag_id = tag_mapping.tag_id)'
+        db.query(update)
 
 def SQLFindReviewParent(title, author):
 	# Attempt to find Book-Length Works first:

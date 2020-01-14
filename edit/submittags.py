@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2014   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2004-2020   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -66,22 +66,15 @@ if __name__ == '__main__':
                                 tags.append(tag)
 		counter += 1
 
-	#############################################
 	# Delete the old tags
-	#############################################
 	update = 'delete from tag_mapping where title_id=%d and user_id=%d' % ( int(title_id), int(user_id))
-	if debug == 0:
-		db.query(update)
+        db.query(update)
 
-	#############################################
 	# Insert the new tags
-	#############################################
 	for tag in tags:
                 result = SQLaddTagToTitle(tag, title_id, user_id)
 
 	# Delete all old tags that are now without an associated entry in the tag_mapping table
-	update = 'delete from tags where NOT EXISTS (select * from tag_mapping where tags.tag_id = tag_mapping.tag_id)'
-	if debug == 0:
-		db.query(update)
+	SQLDeteleOrphanTags()
 
         ServerSideRedirect('http:/%s/title.cgi?%d' % (HTFAKE, int(title_id)))

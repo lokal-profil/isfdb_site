@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley, Uzume, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2020   Al von Ruff, Bill Longley, Uzume, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -370,9 +370,9 @@ if __name__ == '__main__':
 
         # Retrieve all tags for this title and its parent (if present)
 	tags = SQLgetAllTitleTags(title[TITLE_PUBID], title[TITLE_PARENT], int(user.id))
-	print "<br>"
-        print "<b>Current Tags:</b>"
-	if tags == []:
+	print '<br>'
+        print '<b>Current Tags:</b>'
+	if not tags:
 		print 'None'
 	else:
 		first = 1
@@ -384,6 +384,8 @@ if __name__ == '__main__':
 			else:
 				output += ', <a href="http:/%s/tag.cgi?%d">%s</a> (%d)' % (HTFAKE, tag[0], tag[1], tag[2])
 		print output
+		if SQLisUserModerator(user.id):
+                        print ISFDBLink('mod/tag_breakdown.cgi', title[TITLE_PUBID], 'View Tag Breakdown', False, 'class="inverted" ')
 
 	# Only allow adding tags if the current title is not a variant of another one
 	if not title[TITLE_PARENT]:
