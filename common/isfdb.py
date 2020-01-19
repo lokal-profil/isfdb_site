@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -260,6 +260,7 @@ WEBPAGE_TITLE        = 5
 WEBPAGE_AWARD_TYPE   = 6
 WEBPAGE_SERIES       = 7
 WEBPAGE_AWARD_CAT    = 8
+WEBPAGE_PUB          = 9
 
 # Field offsets for primary verifications
 PRIM_VERIF_ID        = 0

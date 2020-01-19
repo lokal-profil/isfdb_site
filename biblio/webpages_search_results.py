@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2018-2019   Ahasuerus
+#     (C) COPYRIGHT 2018-2020   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -30,6 +30,7 @@ class WebPagesSearch:
                         'Authors': ('author_id', 'author_canonical', 'ea', 'authors', 'author_lastname'),
                         'Titles': ('title_id', 'title_title', 'title', 'titles', 'title_title'),
                         'Series': ('series_id', 'series_title', 'pe', 'series', 'series_title'),
+                        'Publications': ('pub_id', 'pub_title', 'pl', 'pubs', 'pub_title'),
                         'Publishers': ('publisher_id', 'publisher_name', 'publisher', 'publishers', 'publisher_name'),
                         'Publication Series': ('pub_series_id', 'pub_series_name', 'pubseries', 'pub_series', 'pub_series_name'),
                         'Award Categories': ('award_cat_id', 'award_cat_name', 'award_category', 'award_cats', 'award_cat_name'),
@@ -76,6 +77,8 @@ class WebPagesSearch:
                 record = result.fetch_row()
                 while record:
                         fields = record[0]
+                        record_type = ''
+                        record_id = 0
                         if fields[WEBPAGE_AUTHOR]:
                                 record_type = 'Authors'
                                 record_id = fields[WEBPAGE_AUTHOR]
@@ -97,7 +100,11 @@ class WebPagesSearch:
                         elif fields[WEBPAGE_AWARD_CAT]:
                                 record_type = 'Award Categories'
                                 record_id = fields[WEBPAGE_AWARD_CAT]
-                        self.webpages[record_type][record_id] = fields[WEBPAGE_URL]
+                        elif fields[WEBPAGE_PUB]:
+                                record_type = 'Publications'
+                                record_id = fields[WEBPAGE_PUB]
+                        if record_type:
+                                self.webpages[record_type][record_id] = fields[WEBPAGE_URL]
                         record = result.fetch_row()
 
         def get_records(self):
