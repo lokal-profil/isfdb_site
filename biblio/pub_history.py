@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2019   Ahasuerus
+#     (C) COPYRIGHT 2019-2020   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -24,7 +24,7 @@ from xml.dom import Node
 
 def DoError(message):
         PrintHeader('Unknown Publication Record')
-        PrintNavbar(0, 0, 0, 'pl.cgi', 0)
+        PrintNavbar(0, 0, 0, 'pub_history.cgi', 0)
         print '<h3>%s</h3>' % message
         PrintTrailer('pub_history', 0, 0)
         sys.exit(0)
@@ -37,9 +37,12 @@ if __name__ == '__main__':
                 DoError('Invalid Publication ID specified')
 
 	PrintHeader('Publication Edit History')
-	PrintNavbar('pub_history', 0, 0, 'pub_history.cgi', 0)
+	PrintNavbar('pub_history', 0, 0, 'pub_history.cgi', pub_id)
 
-        query = "select * from submissions where new_record_id = %d order by sub_reviewed desc" % pub_id
+        query = """select * from submissions
+                where new_record_id = %d
+                and sub_type in (%d, %d)
+                order by sub_reviewed desc""" % (pub_id, MOD_PUB_NEW, MOD_PUB_CLONE)
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
