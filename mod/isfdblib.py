@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2020   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -114,7 +114,7 @@ def PrintPostMod(closetable = 1):
     print '</html>'
     db.close()
 
-def markIntegrated(db, sub_id, new_record_id = None, pub_id = None):
+def markIntegrated(db, sub_id, affected_record_id = None, pub_id = None):
     from common import PrintSubmissionLinks
     (reviewerid, username, usertoken) = GetUserData()
     update = "update submissions set sub_state='I', sub_reviewer='%d', sub_reviewed=NOW() where sub_id=%d" %  (int(reviewerid), int(sub_id))
@@ -123,8 +123,8 @@ def markIntegrated(db, sub_id, new_record_id = None, pub_id = None):
 
     # For submissions that created a new database record in the database,
     # add the record number to the bofy of the submission
-    if new_record_id:
-        update = "update submissions set new_record_id=%d where sub_id=%d" %  (int(new_record_id), int(sub_id))
+    if affected_record_id:
+        update = "update submissions set affected_record_id=%d where sub_id=%d" %  (int(affected_record_id), int(sub_id))
         print "<li> ", update
         db.query(update)
 

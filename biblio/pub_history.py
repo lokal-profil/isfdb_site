@@ -40,7 +40,7 @@ if __name__ == '__main__':
 	PrintNavbar('pub_history', 0, 0, 'pub_history.cgi', pub_id)
 
         query = """select * from submissions
-                where new_record_id = %d
+                where affected_record_id = %d
                 and sub_type in (%d, %d)
                 order by sub_reviewed desc""" % (pub_id, MOD_PUB_NEW, MOD_PUB_CLONE)
 	db.query(query)
