@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -728,7 +728,7 @@ if __name__ == '__main__':
 
 		submitter = GetElementValue(merge, 'Submitter')
 		if debug == 0:
-			markIntegrated(db, submission, None, pub_id)
+			markIntegrated(db, submission, Record, pub_id)
 
 	print '[<a href="http:/%s/edit/editpub.cgi?%d">Edit This Pub</a>]' % (HTFAKE, int(Record))
 	print '[<a href="http:/%s/pl.cgi?%d">View This Pub</a>]' % (HTFAKE, int(Record))

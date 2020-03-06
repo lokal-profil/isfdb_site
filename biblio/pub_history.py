@@ -41,8 +41,8 @@ if __name__ == '__main__':
 
         query = """select * from submissions
                 where affected_record_id = %d
-                and sub_type in (%d, %d)
-                order by sub_reviewed desc""" % (pub_id, MOD_PUB_NEW, MOD_PUB_CLONE)
+                and sub_type in (%d, %d, %d)
+                order by sub_reviewed desc""" % (pub_id, MOD_PUB_NEW, MOD_PUB_CLONE, MOD_PUB_UPDATE)
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
@@ -50,7 +50,10 @@ if __name__ == '__main__':
 		PrintTrailer('pub_history', 0, 0)
 		sys.exit(0)
 
-        print '<h3>At this time only the submission that created this publication is listed</h3>'
+        print """<h3>At this time the list below displays ALL submissions which
+                directly edited this publication. The submission which created
+                this publication is displayed for publications created after
+                2019-12-01. Import/Export submissions are currently not included.</h3>"""
         ISFDBprintSubmissionTable(result, 'I')
 
 	PrintTrailer('pub_history', 0, 0)
