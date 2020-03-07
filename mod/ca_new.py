@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2020   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -610,7 +610,7 @@ def DoSubmission(db, submission):
 		if debug == 0:
                         if doingExport:
                                 # Pass the ID of the pub that the data was imported into
-                                markIntegrated(db, submission, None, Record)
+                                markIntegrated(db, submission, Record, Record)
                         else:
                                 # Pass the ID of the newly created pub
                                 markIntegrated(db, submission, Record, None)

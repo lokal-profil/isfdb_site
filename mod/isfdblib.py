@@ -121,8 +121,8 @@ def markIntegrated(db, sub_id, affected_record_id = None, pub_id = None):
     print "<li> ", update
     db.query(update)
 
-    # For submissions that created a new database record in the database,
-    # add the record number to the bofy of the submission
+    # For submissions that created a new record or affected an existing record
+    # of a supported type, update the "affected record ID" field in the submission record
     if affected_record_id:
         update = "update submissions set affected_record_id=%d where sub_id=%d" %  (int(affected_record_id), int(sub_id))
         print "<li> ", update

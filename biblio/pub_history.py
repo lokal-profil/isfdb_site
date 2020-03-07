@@ -50,10 +50,9 @@ if __name__ == '__main__':
 		PrintTrailer('pub_history', 0, 0)
 		sys.exit(0)
 
-        print """<h3>At this time the list below displays ALL submissions which
-                directly edited this publication. The submission which created
-                this publication is displayed for publications created after
-                2016-10-24. Import/Export submissions are currently not included.</h3>"""
+        print """<h3>At this time the list below displays ALL submissions which edited
+                this publication or imported titles into it. The submission which created
+                this publication is displayed for publications created after 2016-10-24.</h3>"""
         ISFDBprintSubmissionTable(result, 'I')
 
 	PrintTrailer('pub_history', 0, 0)
