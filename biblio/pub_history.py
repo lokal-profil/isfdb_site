@@ -41,8 +41,9 @@ if __name__ == '__main__':
 
         query = """select * from submissions
                 where affected_record_id = %d
-                and sub_type in (%d, %d, %d)
-                order by sub_reviewed desc""" % (pub_id, MOD_PUB_NEW, MOD_PUB_CLONE, MOD_PUB_UPDATE)
+                and sub_type in (%d, %d, %d, %d)
+                order by sub_reviewed desc
+                """ % (pub_id, MOD_PUB_NEW, MOD_PUB_CLONE, MOD_PUB_UPDATE, MOD_RMTITLE)
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
@@ -50,9 +51,9 @@ if __name__ == '__main__':
 		PrintTrailer('pub_history', 0, 0)
 		sys.exit(0)
 
-        print """<h3>At this time the list below displays ALL submissions which edited
-                this publication or imported titles into it. The submission which created
-                this publication is displayed for publications created after 2016-10-24.</h3>"""
+        print """<h3>The list below displays all submissions which edited this publication,
+                imported titles into it or removed titles from it. The submission which created
+                this publication is displayed if the publication was created after 2016-10-24.</h3>"""
         ISFDBprintSubmissionTable(result, 'I')
 
 	PrintTrailer('pub_history', 0, 0)

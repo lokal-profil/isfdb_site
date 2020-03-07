@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2020   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -96,10 +96,9 @@ if __name__ == '__main__':
 						db.query(query)
 
 	if debug == 0:
-		markIntegrated(db, submission)
+		markIntegrated(db, submission, pub_id)
 
 	print '[<a href="http:/' +HTFAKE+ '/edit/editpub.cgi?%d">Edit This Pub</a>]' % (int(Record))
 	print '[<a href="http:/' +HTFAKE+ '/pl.cgi?%d">View This Pub</a>]' % (int(Record))
-
 
 	PrintPostMod(0)
