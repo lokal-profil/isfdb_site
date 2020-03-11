@@ -582,7 +582,7 @@ def nightly_cleanup_reports():
                 query = "select distinct pub_id from pubs where pub_isbn in ('%s')" % isbns_string
                 standardReport(query, 51)
 
-        #   Report 52: Publications-Title mismatches
+        #   Report 52: Publications with 0 or 2+ Reference Titles
         only_one = {'ANTHOLOGY': ['ANTHOLOGY'],
                     'COLLECTION': ['COLLECTION'],
                     'CHAPBOOK': ['CHAPBOOK'],
@@ -591,16 +591,6 @@ def nightly_cleanup_reports():
                     'NONFICTION': ['NONFICTION'],
                     'NOVEL': ['NOVEL'],
                     'OMNIBUS': ['OMNIBUS']}
-        # The "not_exists" dictionary is currently not used, but will be leveraged in the future
-        # once the discrepancies found by the "only_one" logic have been resolved
-        not_exists = {'ANTHOLOGY': ['CHAPBOOK','NONFICTION','OMNIBUS','EDITOR'],
-                      'COLLECTION': ['ANTHOLOGY','CHAPBOOK','NONFICTION','OMNIBUS','EDITOR'],
-                      'CHAPBOOK': ['ANTHOLOGY','COLLECTION','NONFICTION','OMNIBUS','EDITOR','NOVEL'],
-                      'MAGAZINE': ['ANTHOLOGY','CHAPBOOK','NONFICTION','OMNIBUS'],
-                      'FANZINE': ['ANTHOLOGY','CHAPBOOK','NONFICTION','OMNIBUS'],
-                      'NONFICTION': ['ANTHOLOGY','COLLECTION','EDITOR','NOVEL','OMNIBUS','SERIAL','CHAPBOOK'],
-                      'NOVEL': ['ANTHOLOGY','COLLECTION','EDITOR','NONFICTION','OMNIBUS','SERIAL','CHAPBOOK'],
-                      'OMNIBUS': ['EDITOR','SERIAL','CHAPBOOK']}
                       
         query = ""
         for pub_type in only_one:
@@ -1732,6 +1722,30 @@ def nightly_cleanup_reports():
                 update = "insert into cleanup (record_id, report_type, record_id_2) values(%d, 277, %d)" % (int(pub_id), int(containers[pub_id]))
                 db.query(update)
         elapsed.print_elapsed(277)
+
+        #   Report 278-285: Publications with Invalid Title Types
+        exclusions = {278: ('ANTHOLOGY', ('CHAPBOOK','NONFICTION','OMNIBUS','EDITOR')),
+                      279: ('COLLECTION', ('ANTHOLOGY','CHAPBOOK','NONFICTION','OMNIBUS','EDITOR')),
+                      280: ('CHAPBOOK', ('ANTHOLOGY','COLLECTION','NONFICTION','OMNIBUS','EDITOR','NOVEL')),
+                      281: ('MAGAZINE', ('CHAPBOOK','NONFICTION','OMNIBUS')),
+                      282: ('FANZINE', ('ANTHOLOGY','CHAPBOOK','NONFICTION','OMNIBUS')),
+                      283: ('NONFICTION', ('ANTHOLOGY','COLLECTION','EDITOR','NOVEL','OMNIBUS','SERIAL','CHAPBOOK')),
+                      284: ('NOVEL', ('ANTHOLOGY','COLLECTION','EDITOR','NONFICTION','OMNIBUS','SERIAL','CHAPBOOK')),
+                      285: ('OMNIBUS', ('EDITOR','SERIAL','CHAPBOOK'))
+                      }
+
+        for report_id in sorted(exclusions):
+                pub_type = exclusions[report_id][0]
+                title_list = exclusions[report_id][1]
+                title_types = list_to_in_clause(title_list)
+                query = """(select p.pub_id from pubs p
+                        where p.pub_ctype='%s'
+                        and exists
+                        (select 1 from pub_content pc, titles t
+                        where pc.pub_id=p.pub_id
+                        and t.title_id=pc.title_id
+                        and t.title_ttype in (%s)))""" % (pub_type, title_types)
+                standardReport(query, report_id)
 
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from

@@ -74,6 +74,92 @@ class Cleanup():
                 self.record_name = 'Award'
                 self.print_generic_table()
 
+        def invalid_title_types(self, pub_type, excluded_title_types):
+                excluded = ExcludedTitleTypes()
+                excluded.report_id = self.report_id
+                excluded.pub_type = pub_type
+                excluded.excluded_title_types = excluded_title_types
+                excluded.retrieve_data()
+                excluded.print_data()
+
+class ExcludedTitleTypes():
+        def __init__(self):
+                self.query = ''
+                self.ignore = 0
+                self.note = ''
+                self.pub_type = ''
+                self.excluded_title_types = ()
+                self.report_id = 0
+                self.pub_id = 0
+                self.pub_title = ''
+                self.mode = 1
+
+        def retrieve_data(self):
+                self.query = """select p.pub_id, p.pub_title, c.cleanup_id
+                        from pubs p, cleanup c
+                        where p.pub_ctype='%s'
+                        and exists
+                        (select 1 from pub_content pc, titles t
+                        where pc.pub_id=p.pub_id
+                        and t.title_id=pc.title_id
+                        and t.title_ttype in (%s)
+                        )
+                        and c.report_type = %d
+                        and p.pub_id = c.record_id
+                        order by p.pub_title""" % (self.pub_type, list_to_in_clause(self.excluded_title_types), self.report_id)
+                self.none = 'No %s Publications with Invalid Title Types' % self.pub_type.lower().capitalize()
+                self.note = 'Invalid title types for %s publications: %s' % (self.pub_type.capitalize(), ', '.join(self.excluded_title_types))
+                db.query(self.query)
+                self.result = db.store_result()
+                self.num = self.result.num_rows()
+
+        def print_data(self):
+                if self.num > 0:
+                        if self.note:
+                                print '<h3>%s</h3>' % self.note
+                        record = self.result.fetch_row()
+                        if self.ignore:
+                                PrintTableColumns(('#', 'Publication', 'Invalid Titles', 'Ignore'))
+                        else:
+                                PrintTableColumns(('#', 'Publication', 'Invalid Titles'))
+                        self.bgcolor = 1
+                        self.count = 1
+                        while record:
+                                self.pub_id = record[0][0]
+                                self.pub_title = record[0][1]
+                                self.cleanup_id = record[0][2]
+                                self.print_row()
+                                self.bgcolor ^= 1
+                                self.count += 1
+                                record = self.result.fetch_row()
+                        print '</table>'
+                else:
+                        print '<h2>%s.</h2>' % self.none
+
+        def print_row(self):
+                if self.bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td>%d</td>' % self.count
+                print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, self.pub_id, self.pub_title)
+                invalid_titles = SQLloadTitlesXBT(self.pub_id)
+                print '<td>'
+                first_title = True
+                for title in invalid_titles:
+                        if title[TITLE_TTYPE] in self.excluded_title_types:
+                                if not first_title:
+                                        print '<br>'
+                                print '%s - ' % title[TITLE_TTYPE]
+                                print ISFDBLink('title.cgi', title[TITLE_PUBID], title[TITLE_TITLE])
+                                first_title = False
+                print '</td>'
+                if self.ignore and user.moderator:
+                        message = {0: 'Resolve', 1: 'Ignore'}
+                        print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                                %s this publication</a></td>""" % (HTFAKE, int(self.cleanup_id), self.mode, self.report_id, message[mode])
+                print '</tr>'
 
 def PrintTableColumns(columns):
 	print '<table class="generic_table">'
@@ -1991,8 +2077,7 @@ def function51():
         print '</table>'
 
 def function52():
-        print """<h3>This report currently checks that each publication has one 
-                (and only one) title of the matching type.</h3>"""
+        print """<h3>This report finds publication with 0 or 2+ reference titles.</h3>"""
 
         only_one = {'ANTHOLOGY': ['ANTHOLOGY'],
                     'COLLECTION': ['COLLECTION'],
@@ -2026,7 +2111,7 @@ def function52():
 	num = result.num_rows()
 
         if not num:
-                print "<h2>No Publication-Title Type Mismatches.</h2>"
+                print "<h2>No Publications with 0 or 2+ Reference Titles.</h2>"
                 return
 
         record = result.fetch_row()
@@ -2042,7 +2127,7 @@ def function52():
 
         for pub_type in sorted(pubs.keys()):
                 if not pubs[pub_type]:
-                        print "<h3>No %s Publication-Title Type Mismatches.</h3>" % pub_type
+                        print "<h3>No %s Publications with 0 or 2+ Reference Titles.</h3>" % pub_type
                         continue
                 PrintTableColumns(('', '%s publications' % pub_type, ''))
                 bgcolor = 1
@@ -6531,6 +6616,30 @@ def function276():
 
 def function277():
         containers_grid(277, 'incomplete_contents')
+
+def function278():
+        cleanup.invalid_title_types('ANTHOLOGY', ('CHAPBOOK','NONFICTION','OMNIBUS','EDITOR'))
+
+def function279():
+        cleanup.invalid_title_types('COLLECTION', ('ANTHOLOGY','CHAPBOOK','NONFICTION','OMNIBUS','EDITOR'))
+
+def function280():
+        cleanup.invalid_title_types('CHAPBOOK', ('ANTHOLOGY','COLLECTION','NONFICTION','OMNIBUS','EDITOR','NOVEL'))
+
+def function281():
+        cleanup.invalid_title_types('MAGAZINE', ('CHAPBOOK','NONFICTION','OMNIBUS'))
+
+def function282():
+        cleanup.invalid_title_types('FANZINE', ('ANTHOLOGY','CHAPBOOK','NONFICTION','OMNIBUS'))
+
+def function283():
+        cleanup.invalid_title_types('NONFICTION', ('ANTHOLOGY','COLLECTION','EDITOR','NOVEL','OMNIBUS','SERIAL','CHAPBOOK'))
+
+def function284():
+        cleanup.invalid_title_types('NOVEL', ('ANTHOLOGY','COLLECTION','EDITOR','NONFICTION','OMNIBUS','SERIAL','CHAPBOOK'))
+
+def function285():
+        cleanup.invalid_title_types('OMNIBUS', ('EDITOR','SERIAL','CHAPBOOK'))
 
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]

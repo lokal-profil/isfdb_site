@@ -62,7 +62,7 @@ def reportsDict():
         reports[49] = ("Publications with Invalid ISBN Formats")
         reports[50] = ("Publications with Invalid ISBN Checksums")
         reports[51] = ("Publications with Identical ISBNs and Different Titles")
-        reports[52] = ("Publication-Title Type Mismatches")
+        reports[52] = ("Publications with 0 or 2+ Reference Titles")
         reports[53] = ("Authors with Duplicate Alternate Names")
         reports[54] = ("Container Titles in Publications with no Contents")
         reports[55] = ("Title records with HTML in Titles")
@@ -288,6 +288,14 @@ def reportsDict():
         reports[275] = ("Title Dates Before First Publication Date (first 1000)")
         reports[276] = ("Variant Title Dates Before Canonical Title Dates")
         reports[277] = ("Publications with the 'Incomplete' Template in Notes")
+        reports[278] = ("Anthology Publications with Invalid Title Types")
+        reports[279] = ("Collection Publications with Invalid Title Types")
+        reports[280] = ("Chapbook Publications with Invalid Title Types")
+        reports[281] = ("Magazine Publications with Invalid Title Types")
+        reports[282] = ("Fanzine Publications with Invalid Title Types")
+        reports[283] = ("Nonfiction Publications with Invalid Title Types")
+        reports[284] = ("Novel Publications with Invalid Title Types")
+        reports[285] = ("Omnibus Publications with Invalid Title Types")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -297,7 +305,8 @@ def reportsDict():
                                           51, 52, 56, 57, 70, 75, 79, 86, 88, 93,
                                           100, 193, 228, 231, 233, 235, 236, 243,
                                           244, 245, 246, 247, 248, 249, 250, 251,
-                                          252, 253, 272, 277)), )
+                                          252, 253, 272, 277, 278, 279, 280, 281,
+                                          282, 283, 284, 285)), )
         sections.append(('Series', (16, 17, 48, 64, 67, 76, 81, 90, 144)), )
         sections.append(('Titles', (19, 1, 3, 18, 47, 55, 62, 63, 69, 74, 80, 87,
                                     91, 96, 194, 195, 196, 197, 227, 275, 276)), )
@@ -351,6 +360,6 @@ def reportsDict():
                          242, 243, 244, 245, 246, 247, 248, 249, 250, 251,
                          252, 253, 254, 255, 256, 257, 264, 265, 266, 267,
                          268, 269, 270, 271, 272, 273, 274, 275, 276, 277,
-                         9999)
+                         278, 279, 280, 281, 282, 283, 284, 285, 9999)
         
         return (reports, sections, non_moderator)
