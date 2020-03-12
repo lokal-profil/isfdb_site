@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2020   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -77,6 +77,7 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/tag.cgi \
 	  DIR/tag_author.cgi \
 	  DIR/title.cgi \
+	  DIR/title_history.cgi \
 	  DIR/titlecovers.cgi \
 	  DIR/topcontrib.cgi \
 	  DIR/user_search_results.cgi\
