@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1161,7 +1161,7 @@ class Output():
 
         def topForthcoming(self):
                 self.start("<h3>The following forthcoming novels are those with the most interest as generated")
-                self.append("by the users of the ISFDB.</h3>")
+                self.append("by the users of the ISFDB. Note: Forthcoming books may be delayed due to the Coronavirus pandemic.</h3>")
                 self.append('<p>')
 
                 query = """select title_views, title_title, title_id, title_copyright

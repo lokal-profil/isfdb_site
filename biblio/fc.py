@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -252,7 +252,7 @@ class PublicationMonth:
                         print '<h1 class="centered"> All Books for %s %s by Author</h1>' % (monthmap[self.target_month], self.target_year)
                         print '<a href="http:/%s/fc.cgi?date+%d+%s">Sort by Genre and Date</a><br>' % (HTFAKE, self.target_month, self.target_year)
                 else:
-                        print '<h1 class="centered"> Future Books for %s %s by Author</h1>' % (monthmap[self.target_month], self.target_year)
+                        print '<h1 class="centered"> Future Books for %s %s by Author (may be delayed due to the Coronavirus pandemic)</h1>' % (monthmap[self.target_month], self.target_year)
                         print '<a href="http:/%s/fc.cgi?date">Sort by Genre and Date</a><br>' % (HTFAKE)
                 self.PrintTableHeader()
 
@@ -285,7 +285,7 @@ class PublicationMonth:
                         print '<h1 class="centered"> All Books for %s %s by Genre and Date</h1>' % (monthmap[self.target_month], self.target_year)
                         print '<a href="http:/%s/fc.cgi?author+%d+%s">Sort by Author</a><br>' % (HTFAKE, self.target_month, self.target_year)
                 else:
-                        print '<h1 class="centered"> Future Books for %s %s by Genre and Date</h1>' % (monthmap[self.target_month], self.target_year)
+                        print '<h1 class="centered"> Future Books for %s %s by Genre and Date (may be delayed due to the Coronavirus pandemic)</h1>' % (monthmap[self.target_month], self.target_year)
                         print '<a href="http:/%s/fc.cgi?author">Sort by Author</a><br>' % (HTFAKE)
                 print 'Or jump to:'
                 print '<ul>'

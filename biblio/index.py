@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus, Uzume and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus, Uzume and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -21,7 +21,7 @@ from calendarClass import CalendarDay
 
 
 def displayLinks():
-        print '<p class="bottomlinks">\n%s\n%s' % (
+        print '<p class="bottomlinks">\n%s\n%s Note: Forthcoming books may be delayed due to the Coronavirus pandemic' % (
                 ISFDBLink("fc.cgi", "", "View All Forthcoming Books", argument='class="inverted"'),
                 ISFDBLink("stats.cgi?24", "", "View Top Forthcoming", argument='class="inverted"')
                 )
