@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2020   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -270,7 +270,6 @@ if __name__ == '__main__':
 		sys.exit(0)
 
         if NotApprovable(submission):
-                PrintPostMod()
                 sys.exit(0)
 
 	print "<h1>SQL Updates:</h1>"

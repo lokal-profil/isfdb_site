@@ -154,9 +154,9 @@ def markIntegrated(db, sub_id, affected_record_id = None, pub_id = None):
 def NotApprovable(submission):
     if SQLloadState(submission) != 'N':
             print '<div id="ErrorBox">'
-            print "<h3>Submission %d not in NEW state</h3>" % (int(submission))
+            print '<h3>Submission %d not in NEW state</h3>' % (int(submission))
             print '</div>'
-            PrintPostMod()
+            PrintPostMod(0)
             return 1
     (reviewerid, username, usertoken) = GetUserData()
     hold_id = SQLGetSubmissionHoldId(submission)
@@ -165,10 +165,10 @@ def NotApprovable(submission):
                     holding_user = SQLgetUserName(hold_id)
                     print '<div id="ErrorBox">'
                     print "<h3>Submission can't be moderated because it is on hold by "
-                    print '<a href=http://%s/index.php/User:%s>%s</a> ' % (WIKILOC, holding_user, holding_user)
-                    print '<a href=http://%s/index.php/User_talk:%s>(Talk)</a></h3>' % (WIKILOC, holding_user)
+                    print '<a href="http://%s/index.php/User:%s">%s</a> ' % (WIKILOC, holding_user, holding_user)
+                    print '<a href="http://%s/index.php/User_talk:%s">(Talk)</a></h3>' % (WIKILOC, holding_user)
                     print '</div>'
-                    PrintPostMod()
+                    PrintPostMod(0)
                     return 1
     # If we are here, then this submission is approvable. Temporarily set its status to "inProgress".
     SQLmarkInProgress(submission)
