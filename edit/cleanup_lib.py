@@ -296,6 +296,7 @@ def reportsDict():
         reports[283] = ("Nonfiction Publications with Invalid Title Types")
         reports[284] = ("Novel Publications with Invalid Title Types")
         reports[285] = ("Omnibus Publications with Invalid Title Types")
+        reports[286] = ("Variant Title Length Mismatches")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -310,7 +311,7 @@ def reportsDict():
         sections.append(('Series', (16, 17, 48, 64, 67, 76, 81, 90, 144)), )
         sections.append(('Titles', (19, 1, 3, 18, 47, 55, 62, 63, 69, 74, 80, 87,
                                     91, 96, 194, 195, 196, 197, 227, 275, 276)), )
-        sections.append(('Variant Titles', (20, 21, 9, 2, 45)), )
+        sections.append(('Variant Titles', (20, 21, 9, 2, 45, 286)), )
         sections.append(('Translations', (239, 238, 264, 265, 266, 267, 268, 269, 270,
                                           271)), )
         sections.append(('Chapbooks', (27, 28, 30, 242)), )
@@ -360,6 +361,6 @@ def reportsDict():
                          242, 243, 244, 245, 246, 247, 248, 249, 250, 251,
                          252, 253, 254, 255, 256, 257, 264, 265, 266, 267,
                          268, 269, 270, 271, 272, 273, 274, 275, 276, 277,
-                         278, 279, 280, 281, 282, 283, 284, 285, 9999)
+                         278, 279, 280, 281, 282, 283, 284, 285, 286, 9999)
         
         return (reports, sections, non_moderator)

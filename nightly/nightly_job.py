@@ -1747,6 +1747,14 @@ def nightly_cleanup_reports():
                         and t.title_ttype in (%s)))""" % (pub_type, title_types)
                 standardReport(query, report_id)
 
+        #   Report 286: Variant Title Length Mismatches
+        query = """select distinct t1.title_id
+                from titles t1, titles t2
+                where t1.title_parent = t2.title_id
+                and t1.title_storylen != t2.title_storylen
+                """
+        standardReport(query, 286)
+
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from
                 (select t1.title_id

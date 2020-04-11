@@ -6641,6 +6641,17 @@ def function284():
 def function285():
         cleanup.invalid_title_types('OMNIBUS', ('EDITOR','SERIAL','CHAPBOOK'))
 
+def function286():
+        cleanup.query = """select distinct t1.title_id, t1.title_title
+                from titles t1, titles t2, cleanup c
+                where t1.title_parent = t2.title_id
+                and t1.title_storylen != t2.title_storylen
+                and t1.title_id = c.record_id
+                and c.report_type = 286
+                order by t1.title_title"""
+        cleanup.none = 'Variant Title Length Mismatches'
+        cleanup.print_title_table()
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,
