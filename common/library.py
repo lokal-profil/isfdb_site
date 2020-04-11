@@ -1011,6 +1011,7 @@ def RecognizedDomains():
                 ('loc.gov', 'Library of Congress', 'www.loc.gov', 0),
                 ('locusmag.com', 'Locus', 'locusmag.com', 0),
                 ('luminist.org', 'The Luminist League', 'www.luminist.org', 1),
+                ('media-amazon.com', 'Amazon.com', 'www.amazon.com', 1),
                 ('metaphorosis.com', 'Metaphorosis', 'www.metaphorosis.com', 1),
                 ('mondourania.com', 'Mondourania', 'www.mondourania.com', 1),
                 ('myanimelist.net', 'MyAnimeList', 'myanimelist.net', 0),
