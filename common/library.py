@@ -786,6 +786,8 @@ def ISFDBTemplates():
                         'NooSFere'),
                 'OCLC': ('http://www.worldcat.org/oclc/%s', 'OCLC',
                          'WorldCat/Online Computer Library Center'),
+                'PORBASE': ('http://id.bnportugal.gov.pt/bib/porbase/%s',
+                            'PORBASE', 'Biblioteca Nacional de Portugal'),
                 'PPN': ('http://picarta.pica.nl/xslt/DB=3.9/XMLPRS=Y/PPN?PPN=%s', 'PPN',
                         'De Nederlandse Bibliografie Pica Productie Nummer'),
                 'Publisher': ('http:/%s/se.cgi?arg=%%s&amp;type=Publisher&amp;mode=exact' % HTFAKE, ),
