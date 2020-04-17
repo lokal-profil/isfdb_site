@@ -6652,6 +6652,56 @@ def function286():
         cleanup.none = 'Variant Title Length Mismatches'
         cleanup.print_title_table()
 
+def function287():
+        cleanup.note = """This cleanup report finds publications with Contents page
+                number values containing "del" and the HTML pipe character &#448."""
+        cleanup.query = """select distinct p.pub_id, p.pub_title
+                from pubs p, pub_content pc, cleanup c
+                where (pc.pubc_page like '%del%' or pc.pubc_page like '%&#448;%')
+                and pc.pub_id = p.pub_id
+                and c.record_id = p.pub_id
+                and c.report_type = 287
+                order by p.pub_title"""
+        cleanup.none = 'Publications with Invalid Page Numbers'
+        cleanup.print_pub_table()
+
+def function288():
+        query = """select distinct p.pub_id, p.pub_title, p.pub_pages
+                from pubs p, pub_content pc, cleanup c
+                where p.pub_pages REGEXP '[^\]\[0-9ivxlcdm+ ]'
+                and pc.pub_id = p.pub_id
+                and c.record_id = p.pub_id
+                and c.report_type = 288
+                order by p.pub_title"""
+
+	db.query(query)
+	result = db.store_result()
+	num = result.num_rows()
+
+        if num:
+		record = result.fetch_row()
+                bgcolor = 1
+                count = 1
+                PrintTableColumns(('', 'Publication', 'Page Count'))
+		while record:
+                        pub_id = record[0][0]
+                        pub_title = record[0][1]
+                        pub_pages = record[0][2]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+                        print '<td>%d</td>' % int(count)
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
+                        print '<td>%s</td>' % pub_pages
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+			record = result.fetch_row()
+		print '</table>'
+	else:
+		print '<h2>No Publications with Invalid Page Numbers</h2>'
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,

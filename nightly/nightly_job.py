@@ -1755,6 +1755,18 @@ def nightly_cleanup_reports():
                 """
         standardReport(query, 286)
 
+        #   Report 287: Publications with Invalid Page Numbers
+        query = """select distinct pub_id
+                from pub_content
+                where pubc_page like '%del%'
+                or pubc_page like '%&#448;%'"""
+        standardReport(query, 287)
+
+        #   Report 288: Publications with an Invalid Page Count
+        query = """select distinct pub_id from pubs
+                where pub_pages REGEXP '[^\]\[0-9ivxlcdm+ ]'"""
+        standardReport(query, 288)
+
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from
                 (select t1.title_id
