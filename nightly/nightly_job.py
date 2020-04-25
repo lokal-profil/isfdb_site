@@ -1767,6 +1767,19 @@ def nightly_cleanup_reports():
                 where pub_pages REGEXP '[^\]\[0-9ivxlcdm+ ]'"""
         standardReport(query, 288)
 
+        #   Report 289: CHAPBOOKs with Multiple Fiction Titles
+        query = """select distinct p.pub_id
+                from pubs p
+                where p.pub_ctype='CHAPBOOK'
+                and
+                        (select count(t.title_id)
+                        from pub_content pc, titles t
+                        where p.pub_id = pc.pub_id
+                        and pc.title_id = t.title_id
+                        and t.title_ttype in ('SHORTFICTION', 'POEM', 'SERIAL'))
+                > 1"""
+        standardReport(query, 289)
+
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from
                 (select t1.title_id

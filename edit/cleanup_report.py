@@ -6702,6 +6702,23 @@ def function288():
 	else:
 		print '<h2>No Publications with Invalid Page Numbers</h2>'
 
+def function289():
+        cleanup.query = """select distinct p.pub_id, p.pub_title
+                from pubs p, cleanup c
+                where p.pub_ctype='CHAPBOOK'
+                and
+                        (select count(t.title_id)
+                        from pub_content pc, titles t
+                        where p.pub_id = pc.pub_id
+                        and pc.title_id = t.title_id
+                        and t.title_ttype in ('SHORTFICTION', 'POEM', 'SERIAL'))
+                > 1
+                and c.record_id = p.pub_id
+                and c.report_type = 289
+                order by p.pub_title"""
+        cleanup.none = 'CHAPBOOKs with Multiple Fiction Titles'
+        cleanup.print_pub_table()
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,
