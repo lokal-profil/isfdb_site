@@ -1028,16 +1028,14 @@ def SQLFindMagazine(arg, directory = 0):
                 from series s, titles t
                 where t.series_id = s.series_id
                 and t.title_ttype = 'EDITOR'
-                and s.series_title like _utf8'%s'
-                COLLATE 'utf8_general_ci'
+                and s.series_title like '%s'
                 UNION
                 select distinct s.series_id, s.series_title, s.series_parent
                 from series s, titles t, trans_series ts
                 where t.series_id = s.series_id
                 and t.title_ttype = 'EDITOR'
                 and s.series_id = ts.series_id
-                and ts.trans_series_name like _utf8'%s'
-                COLLATE 'utf8_general_ci'
+                and ts.trans_series_name like '%s'
                 """ % (target, target)
 	db.query(query)
 	result = db.store_result()
@@ -1056,20 +1054,18 @@ def SQLFindMagazine(arg, directory = 0):
         # series titles don't match it
         query="""select distinct t.title_title, s.series_id, s.series_title,
                 s.series_parent from series s, titles t
-                where t.title_title like _utf8'%s'
+                where t.title_title like '%s'
                 and t.title_ttype = 'EDITOR'
                 and t.series_id=s.series_id
-                and s.series_title not like _utf8'%s'
-                COLLATE 'utf8_general_ci'
+                and s.series_title not like '%s'
                 UNION
                 select distinct t.title_title, s.series_id, s.series_title,
                 s.series_parent from series s, titles t, trans_titles tt
-                where tt.trans_title_title like _utf8'%s'
+                where tt.trans_title_title like '%s'
                 and tt.title_id=t.title_id
                 and t.title_ttype = 'EDITOR'
                 and t.series_id=s.series_id
-                and s.series_title not like _utf8'%s'
-                COLLATE 'utf8_general_ci'
+                and s.series_title not like '%s'
                 """ % (target, target, target, target)
 	db.query(query)
 	result = db.store_result()
