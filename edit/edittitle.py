@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2020   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -20,7 +20,6 @@ from library import *
 from SQLparsing import *
 from isfdblib_print import *
 
-help = HelpTitle()
 
 def printReadOnlyTitleType(title_type):
 	print '<tr>'
@@ -57,7 +56,7 @@ def printCommonSection(record, help):
         printlanguage(record[TITLE_LANGUAGE], 'language', 'Language', help)
 
 
-def printtitlerecord(record, series_number):
+def printtitlerecord(record, series_number, help):
 	authors = SQLTitleAuthors(record[TITLE_PUBID])
         printmultiple(authors, "Author", "title_author", help)
 
@@ -81,7 +80,7 @@ def printtitlerecord(record, series_number):
         printtextarea('Synopsis', 'title_synopsis', help, SQLgetNotes(record[TITLE_SYNOP]), 10, readonly)
 
 
-def printreviewrecord(record, series_number):
+def printreviewrecord(record, series_number, help):
 	authors = SQLReviewAuthors(record[TITLE_PUBID])
         printmultiple(authors, "Author", "review_author1.", help)
 
@@ -93,7 +92,7 @@ def printreviewrecord(record, series_number):
         printReadOnlyTitleType('REVIEW')
 
 
-def printinterviewrecord(record, series_number):
+def printinterviewrecord(record, series_number, help):
 	authors = SQLInterviewAuthors(record[TITLE_PUBID])
         printmultiple(authors, "Interviewee", "interviewee_author1.", help)
 
@@ -122,6 +121,8 @@ if __name__ == '__main__':
                         raise
         except:
                 displayError()
+
+        help = HelpTitle(title_data[TITLE_TTYPE])
 
 	##################################################################
 	# Output the leading HTML stuff
@@ -163,11 +164,11 @@ if __name__ == '__main__':
         printmultiple(trans_titles, "Transliterated Title", "trans_titles", help)
 
 	if interview:
-		printinterviewrecord(title_data, series_number)
+		printinterviewrecord(title_data, series_number, help)
 	elif review:
-		printreviewrecord(title_data, series_number)
+		printreviewrecord(title_data, series_number, help)
 	else:
-		printtitlerecord(title_data, series_number)
+		printtitlerecord(title_data, series_number, help)
 
         printtextarea('Note', 'title_note', help, SQLgetNotes(title_data[TITLE_NOTE]), 10)
 

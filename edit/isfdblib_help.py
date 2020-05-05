@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2014-2019 Ahasuerus
+#     (C) COPYRIGHT 2014-2020 Ahasuerus
 #     ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -372,7 +372,7 @@ def HelpMakeVariant():
 
         return help
 
-def HelpTitle():
+def HelpTitle(title_type = 'NOVEL'):
 
         ##################################################################################
         # This function defines Help text displayed by Edit Title entry forms
@@ -408,24 +408,27 @@ def HelpTitle():
 
         text = 'The name of the author of this title. To add another author, click the + button.'
         text += ' Follow this link for more details.'
-        link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
+        if title_type == 'REVIEW':
+                link = 'http://%s/index.php?title=Template:TitleFields:ReviewAuthor' % (WIKILOC)
+        else:
+                link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
         help['Author 1'] = [text, link]
 
         text = 'The name of the reviewer exactly as it appears on the title page.'
         text += ' This includes pseudonyms, abbreviated names, etc. If no author is stated, use \'uncredited\'.'
         text += ' To add another reviewer, click the + button. Follow this link for more details.'
-        link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
+        link = 'http://%s/index.php?title=Template:TitleFields:Reviewer' % (WIKILOC)
         help['Reviewer 1'] = [text, link]
 
         text = 'The name of the person who was interviewed. To add another interviewee, click the + button.'
         text += ' Follow this link for more details.'
-        link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
+        link = 'http://%s/index.php?title=Template:TitleFields:Interviewee' % (WIKILOC)
         help['Interviewee 1'] = [text, link]
 
         text = 'The name of the interviewer exactly as it appears on the title page.'
         text += ' This includes pseudonyms, abbreviated names, etc. If no author is stated, use \'uncredited\'.'
         text += ' To add another interviewer, click the + button. Follow this link for more details.'
-        link = 'http://%s/index.php?title=Template:TitleFields:Author' % (WIKILOC)
+        link = 'http://%s/index.php?title=Template:TitleFields:Interviewer' % (WIKILOC)
         help['Interviewer 1'] = [text, link]
 
         text = 'The date of the first appearance of this title in the form of YYYY-MM-DD. If the month or day is not known, use 00.'
