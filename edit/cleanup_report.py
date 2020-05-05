@@ -6668,7 +6668,7 @@ def function287():
 def function288():
         query = """select distinct p.pub_id, p.pub_title, p.pub_pages
                 from pubs p, pub_content pc, cleanup c
-                where p.pub_pages REGEXP '[^\]\[0-9ivxlcdm+ ]'
+                where p.pub_pages REGEXP '[^\]\[0-9ivxlcdm+ ,]'
                 and pc.pub_id = p.pub_id
                 and c.record_id = p.pub_id
                 and c.report_type = 288

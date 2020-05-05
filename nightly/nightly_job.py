@@ -1764,7 +1764,7 @@ def nightly_cleanup_reports():
 
         #   Report 288: Publications with an Invalid Page Count
         query = """select distinct pub_id from pubs
-                where pub_pages REGEXP '[^\]\[0-9ivxlcdm+ ]'"""
+                where pub_pages REGEXP '[^\]\[0-9ivxlcdm+ ,]'"""
         standardReport(query, 288)
 
         #   Report 289: CHAPBOOKs with Multiple Fiction Titles
