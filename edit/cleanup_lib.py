@@ -299,7 +299,8 @@ def reportsDict():
         reports[286] = ("Variant Title Length Mismatches")
         reports[287] = ("Publications with Invalid Page Numbers")
         reports[288] = ("Publications with an Invalid Page Count")
-        reports[289] = ("CHAPBOOKs with Multiple Fiction Titles")
+        reports[289] = ("CHAPBOOK Publications with Multiple Fiction Titles")
+        reports[290] = ("Suspected Ineligible Reviewed NONFICTION Titles (first 1000)")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -313,7 +314,7 @@ def reportsDict():
                                           282, 283, 284, 285, 287, 288)), )
         sections.append(('Series', (16, 17, 48, 64, 67, 76, 81, 90, 144)), )
         sections.append(('Titles', (19, 1, 3, 18, 47, 55, 62, 63, 69, 74, 80, 87,
-                                    91, 96, 194, 195, 196, 197, 227, 275, 276)), )
+                                    91, 96, 194, 195, 196, 197, 227, 275, 276, 290)), )
         sections.append(('Variant Titles', (20, 21, 9, 2, 45, 286)), )
         sections.append(('Translations', (239, 238, 264, 265, 266, 267, 268, 269, 270,
                                           271)), )

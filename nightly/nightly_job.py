@@ -1780,6 +1780,18 @@ def nightly_cleanup_reports():
                 > 1"""
         standardReport(query, 289)
 
+        #   Report 290: Suspected Ineligible Reviewed NONFICTION Titles (first 1000)
+        query = """select distinct t1.title_id
+        	from titles t1, title_relationships tr, titles t2, pubs p, pub_content pc
+        	where t1.title_ttype = 'NONFICTION'
+        	and t1.title_id = tr.title_id
+        	and t2.title_id = tr.review_id
+        	and t2.title_ttype = 'REVIEW'
+        	and t1.title_id = pc.title_id
+        	and p.pub_id = pc.pub_id
+        	limit 1000"""
+        standardReport(query, 290)
+
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from
                 (select t1.title_id

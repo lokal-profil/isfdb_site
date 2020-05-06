@@ -6719,6 +6719,24 @@ def function289():
         cleanup.none = 'CHAPBOOKs with Multiple Fiction Titles'
         cleanup.print_pub_table()
 
+def function290():
+        cleanup.query = """select distinct t1.title_id, t1.title_title, c.cleanup_id
+                from titles t1, title_relationships tr, titles t2, pubs p, pub_content pc, cleanup c
+        	where t1.title_ttype = 'NONFICTION'
+        	and t1.title_id = tr.title_id
+        	and t2.title_id = tr.review_id
+        	and t2.title_ttype = 'REVIEW'
+        	and t1.title_id = pc.title_id
+        	and p.pub_id = pc.pub_id
+        	and c.record_id = t1.title_id
+                and c.report_type = 290
+                and c.resolved IS NULL
+                order by t1.title_title"""
+        cleanup.none = 'NONFICTION Titles Which Exist Only Due to Reviews'
+        cleanup.ignore = 1
+        cleanup.note = 'Note: Reviews of ineligible non-fiction titles should be entered as ESSAYs.'
+        cleanup.print_title_table()
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,
