@@ -317,7 +317,7 @@ MOD_AUTHOR_UPDATE    = 2
 MOD_AUTHOR_DELETE    = 3 # Never used
 MOD_PUB_UPDATE       = 4 # Edit History supported
 MOD_PUB_MERGE        = 5 # No longer used
-MOD_PUB_DELETE       = 6
+MOD_PUB_DELETE       = 6 # Edit History supported
 MOD_PUB_NEW          = 7 # Edit History supported for submisisons created after 2016-10-24
 MOD_TITLE_UPDATE     = 8 # Edit History supported
 MOD_TITLE_MERGE      = 9
@@ -360,7 +360,7 @@ SUBMAP = {
   MOD_AUTHOR_UPDATE :	 ('av_update', 'AuthorUpdate', 'ea.cgi', 'Author Update', 'Record', 'DisplayAuthorChanges'),
   MOD_AUTHOR_DELETE :	 ('av_delete', 'AuthorDelete', None, None, 'Record'), # currently unused
   MOD_PUB_UPDATE :	 ('pv_update', 'PubUpdate', 'pl.cgi', 'Publication Update', 'Record', 'DisplayEditPub'),
-  MOD_PUB_DELETE :	 ('pv_delete', 'PubDelete', None, 'Publication Delete', 'Record', 'DisplayDeletePub'),
+  MOD_PUB_DELETE :	 ('pv_delete', 'PubDelete', 'pl.cgi', 'Publication Delete', 'Record', 'DisplayDeletePub'),
   MOD_PUB_NEW :		 ('pv_new',    'NewPub', 'pl.cgi', 'New Publication', 'Record', 'DisplayNewPub'),
   MOD_TITLE_UPDATE :	 ('tv_update', 'TitleUpdate', 'title.cgi', 'Title Update', 'Record', 'DisplayTitleEdit'),
   MOD_TITLE_MERGE :	 ('tv_merge',  'TitleMerge', 'title.cgi', 'Title Merge', 'Record', 'DisplayMergeTitles'),

@@ -41,9 +41,9 @@ if __name__ == '__main__':
 
         query = """select * from submissions
                 where affected_record_id = %d
-                and sub_type in (%d, %d, %d, %d)
+                and sub_type in (%d, %d, %d, %d, %d)
                 order by sub_reviewed desc
-                """ % (pub_id, MOD_PUB_NEW, MOD_PUB_CLONE, MOD_PUB_UPDATE, MOD_RMTITLE)
+                """ % (pub_id, MOD_PUB_NEW, MOD_PUB_CLONE, MOD_PUB_UPDATE, MOD_RMTITLE, MOD_PUB_DELETE)
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
@@ -51,8 +51,8 @@ if __name__ == '__main__':
 		PrintTrailer('pub_history', 0, 0)
 		sys.exit(0)
 
-        print """<h3>The list below displays all submissions which edited this publication,
-                imported titles into it or removed titles from it. The submission which created
+        print """<h3>The list below displays the following types of submissions: Edit Publication,
+                Delete Publication, Import Titles, Remove Titles. The submission which created
                 this publication is displayed if the publication was created after 2016-10-24.</h3>"""
         ISFDBprintSubmissionTable(result, 'I')
 

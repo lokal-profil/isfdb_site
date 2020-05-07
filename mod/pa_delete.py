@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -68,7 +68,7 @@ if __name__ == '__main__':
         PrintNavBar()
 
 	try:
-		submission = sys.argv[1]
+		submission = int(sys.argv[1])
 	except:
                 doError('Bad argument')
 
@@ -187,7 +187,7 @@ if __name__ == '__main__':
                         publisher.delete()
 
 		submitter = GetElementValue(merge, 'Submitter')
-		markIntegrated(db, submission)
+		markIntegrated(db, submission, Record)
 
 	print "<p>"
 

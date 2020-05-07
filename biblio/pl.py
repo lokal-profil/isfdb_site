@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2020   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -23,7 +23,7 @@ from pubClass import pubs, pubBody
 def DoError(message):
         PrintHeader('Unknown Publication Record')
         PrintNavbar(0, 0, 0, 'pl.cgi', 0)
-        print "<h3>%s</h3>" % message
+        print """<h3>%s</h3>""" % message
         PrintTrailer('publication', 0, 0)
         sys.exit(0)
 
@@ -332,9 +332,15 @@ if __name__ == '__main__':
                 concise = preferences[USER_CONCISE_DISP]
 
 	try:
-		pubid = int(tag)
-		publication = SQLGetPubById(pubid)
+		numeric_record = int(tag)
 	except:
+                numeric_record = 0
+
+        if numeric_record:
+		publication = SQLGetPubById(numeric_record)
+                if not publication and SQLDeletedPub(numeric_record):
+                        DoError('This publication has been deleted. See %s for details.' % ISFDBLink('pub_history.cgi', numeric_record, 'Edit History'))
+	else:
 		publication = SQLGetPubByTag(tag)
 
 	if not publication:
