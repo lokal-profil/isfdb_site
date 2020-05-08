@@ -251,7 +251,7 @@ def DoSubmission(db, submission):
 
 		submitter = GetElementValue(merge, 'Submitter')
 		if debug == 0:
-			markIntegrated(db, submission)
+			markIntegrated(db, submission, ChildRecord)
 	return (ParentRecord, ChildRecord)
 
 
