@@ -321,7 +321,7 @@ MOD_PUB_DELETE       = 6 # Edit History supported
 MOD_PUB_NEW          = 7 # Edit History supported for submisisons created after 2016-10-24
 MOD_TITLE_UPDATE     = 8 # Edit History supported
 MOD_TITLE_MERGE      = 9
-MOD_TITLE_DELETE     = 10
+MOD_TITLE_DELETE     = 10 # Edit History supported
 MOD_TITLE_NEW        = 11 # Never used
 MOD_TITLE_UNMERGE    = 12
 MOD_SERIES_UPDATE    = 13
@@ -364,7 +364,7 @@ SUBMAP = {
   MOD_PUB_NEW :		 ('pv_new',    'NewPub', 'pl.cgi', 'New Publication', 'Record', 'DisplayNewPub'),
   MOD_TITLE_UPDATE :	 ('tv_update', 'TitleUpdate', 'title.cgi', 'Title Update', 'Record', 'DisplayTitleEdit'),
   MOD_TITLE_MERGE :	 ('tv_merge',  'TitleMerge', 'title.cgi', 'Title Merge', 'Record', 'DisplayMergeTitles'),
-  MOD_TITLE_DELETE :	 ('tv_delete', 'TitleDelete', None, 'Title Delete', 'Record', 'DisplayTitleDelete'),
+  MOD_TITLE_DELETE :	 ('tv_delete', 'TitleDelete', 'title.cgi', 'Title Delete', 'Record', 'DisplayTitleDelete'),
   MOD_TITLE_NEW :	 ('tv_new',    'TitleNew', None, None, 'Record'), #currently unused, but referenced in submittitle
   MOD_TITLE_UNMERGE :	 ('tv_unmerge','TitleUnmerge', 'title.cgi', 'Title Unmerge', 'Record', 'DisplayUnmergeTitle'),
   MOD_SERIES_UPDATE :	 ('sv_update', 'SeriesUpdate', 'pe.cgi', 'Series Update', 'Record', 'DisplaySeriesChanges'),

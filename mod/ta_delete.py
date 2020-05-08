@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2020   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -56,7 +56,7 @@ if __name__ == '__main__':
                         hard reject this submission</h3>"""
                 else:
                         submitter = GetElementValue(merge, 'Submitter')
-                        markIntegrated(db, submission)
+                        markIntegrated(db, submission, Record)
 
 	print "<p>"
 

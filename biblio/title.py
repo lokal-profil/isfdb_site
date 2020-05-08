@@ -17,6 +17,13 @@ from library import *
 from login import *
 
 
+def DoError(message):
+        PrintHeader('Unknown Title Record')
+        PrintNavbar(0, 0, 0, 'title.cgi', 0)
+        print """<h3>%s</h3>""" % message
+        PrintTrailer('title', 0, 0)
+        sys.exit(0)
+
 def displayCommon(title, user):
         printRecordID('Title', title[TITLE_PUBID], user.id)
 
@@ -155,10 +162,7 @@ if __name__ == '__main__':
         try:
                 title_id = int(sys.argv[1])
         except:
-        	PrintHeader("Bad Argument")
-		PrintNavbar('title', 0, 0, 'title.cgi', 0)
-		PrintTrailer('title', 0, 0)
-                sys.exit(0)
+                DoError('Bad Argument')
 
         # Determine the variant display option:
         # 0 means display all variants
@@ -176,10 +180,10 @@ if __name__ == '__main__':
 	########################################
 	title = SQLloadTitle(title_id)
 	if not title:
-        	PrintHeader("Unknown Title Record")
-		PrintNavbar('title', 0, title_id, 'title.cgi', title_id)
-		PrintTrailer('title', title_id, title_id)
-		sys.exit(0)
+		if SQLDeletedTitle(title_id):
+                        DoError('This title has been deleted. See %s for details.' % ISFDBLink('title_history.cgi', title_id, 'Edit History'))
+                else:
+                        DoError('Unknown Title Record')
 
         browser_title = "Title: " + title[TITLE_TITLE]
         PrintHeader(browser_title)

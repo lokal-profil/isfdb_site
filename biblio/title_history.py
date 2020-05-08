@@ -41,9 +41,9 @@ if __name__ == '__main__':
 
         query = """select * from submissions
                 where affected_record_id = %d
-                and sub_type in (%d)
+                and sub_type in (%d, %d)
                 order by sub_reviewed desc
-                """ % (title_id, MOD_TITLE_UPDATE)
+                """ % (title_id, MOD_TITLE_UPDATE, MOD_TITLE_DELETE)
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
@@ -51,7 +51,7 @@ if __name__ == '__main__':
 		PrintTrailer('title_history', 0, 0)
 		sys.exit(0)
 
-        print """<h3>The list below displays all submissions which edited this title.</h3>"""
+        print """<h3>The list below displays Edit Title and Delete Title submissions for this title record.</h3>"""
         ISFDBprintSubmissionTable(result, 'I')
 
 	PrintTrailer('title_history', 0, 0)

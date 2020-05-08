@@ -3072,7 +3072,16 @@ def SQLGetLangIdByTitle(title_id):
         return lang_id
 
 def SQLDeletedPub(pubid):
-        query = "select 1 from submissions where sub_type = 6 and affected_record_id = %d" % pubid
+        query = "select 1 from submissions where sub_type = %d and affected_record_id = %d" % (MOD_PUB_DELETE, pubid)
+        db.query(query)
+        result = db.store_result()
+	if result.num_rows() > 0:
+		return 1
+	else:
+		return 0
+
+def SQLDeletedTitle(title_id):
+        query = "select 1 from submissions where sub_type = %d and affected_record_id = %d" % (MOD_TITLE_DELETE, title_id)
         db.query(query)
         result = db.store_result()
 	if result.num_rows() > 0:
