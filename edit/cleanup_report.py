@@ -6703,7 +6703,7 @@ def function288():
 		print '<h2>No Publications with Invalid Page Numbers</h2>'
 
 def function289():
-        cleanup.query = """select distinct p.pub_id, p.pub_title
+        cleanup.query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
                 from pubs p, cleanup c
                 where p.pub_ctype='CHAPBOOK'
                 and
@@ -6715,8 +6715,10 @@ def function289():
                 > 1
                 and c.record_id = p.pub_id
                 and c.report_type = 289
+                and c.resolved IS NULL
                 order by p.pub_title"""
         cleanup.none = 'CHAPBOOKs with Multiple Fiction Titles'
+        cleanup.ignore = 1
         cleanup.print_pub_table()
 
 def function290():
