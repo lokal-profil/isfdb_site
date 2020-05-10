@@ -22,13 +22,6 @@ from isfdblib import *
 from isfdblib_help import *
 from isfdblib_print import *
 
-def printModNoteRequired(pub):
-        user = User()
-        user.load()
-        mod_note_required = 0
-        if pub.requiresModeratorNote(user.id):
-                mod_note_required = 1
-        print '<input name="mod_note_required" value="%d" type="HIDDEN">' % mod_note_required
 
 def printpubrecord(pub):
         help = HelpPub()
@@ -250,7 +243,7 @@ if __name__ == '__main__':
 	print '<input name="pub_id" value="%d" type="HIDDEN">' % pub_id
 	print '<input name="editor" value="editpub" type="HIDDEN">'
 	print '<input type="SUBMIT" value="Submit Changed Data" tabindex="1">'
-        printModNoteRequired(pub)
+        pub.printModNoteRequired()
 	print '</form>'
         print '<hr class="topspace">'
 	print ISFDBLink("edit/deletepub.cgi", pub_id, "Delete record")

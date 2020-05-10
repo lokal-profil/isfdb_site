@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2013   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2004-2020   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -29,29 +29,30 @@ if __name__ == '__main__':
 	##################################################################
 	# Output the leading HTML stuff
 	##################################################################
-	PrintPreSearch("Publication Delete Submission")
+	PrintPreSearch("Delete Publication")
 
 	try:
 		record = int(sys.argv[1])
+                pub = pubs(db)
+                pub.load(record)
+                if not pub.pub_title:
+                        raise
 	except:
 		PrintNavBar(0, 0)
-		displayError("Integer publication number required")
+		displayError('Publication does not exist')
 	
-	PrintNavBar("edit/deletepub.cgi", record)
+	PrintNavBar('edit/deletepub.cgi', record)
 	
-	publication = SQLGetPubById(record)
-	if not publication:
-		displayError("Publication does not exist")
-
-	print "<b>Request to Delete:</b> <i>%s</i>" % publication[PUB_TITLE]
-	print "<p />"
-
-        print "<form METHOD=\"POST\" ACTION=\"/cgi-bin/edit/submitdelpub.cgi\">"
-        print "<b>Deletion Reason</b><br />"
-        print '<textarea name="reason" rows="4" cols="45"></textarea>'
-        print '<p />'
+	print '<b>Publication to Delete:</b> <i>%s</i>' % pub.pub_title
+	print '<p>'
+        print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitdelpub.cgi">'
+	print '<p>'
+        print '<b>Note to Moderator:</b><br>'
+        print '<textarea tabindex="1" name="mod_note" rows="4" cols="60"></textarea>'
+        print '<p>'
         print '<input name="pub_id" value="%d" type="HIDDEN">' % (record)
         print '<input type="SUBMIT" value="Delete">'
-        print "</form>"
+        pub.printModNoteRequired()
+        print '</form>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(tableclose=False)

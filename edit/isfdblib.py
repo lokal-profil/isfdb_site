@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2004-2019 Al von Ruff, Bill Longley, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Jesse Weinstein <jesse@wefu.org>, Uzume and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2020 Al von Ruff, Bill Longley, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Jesse Weinstein <jesse@wefu.org>, Uzume and Dirk Stoecker
 #     ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -101,7 +101,8 @@ def PrintPreSearch(title):
 
 	if title in ('Publication Editor', 'Add Publication', 'New Novel', 'New Magazine',
                      'New Anthology', 'New Collection', 'New Omnibus', 'New Nonfiction',
-                     'New Fanzine', 'New Chapbook', 'Clone Publication', 'Import/Export Contents'):
+                     'New Fanzine', 'New Chapbook', 'Clone Publication', 'Import/Export Contents',
+                     'Delete Publication'):
         	JSscript('edit_pub')
         	JSscript('edit_title')
 	elif title in ('Title Editor', 'Make Variant Title', 'Add Variant Title'):

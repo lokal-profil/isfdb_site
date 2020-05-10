@@ -672,6 +672,14 @@ function createOnsubmit(title)	{
 		};
 	}
 
+	else if (title == 'Delete Publication') {
+		document.getElementById('data').onsubmit = function(event){
+			if (validateModNoteRequired() == false) {
+				event.preventDefault();
+			}
+		};
+	}
+
 	else if (title == 'Add Variant Title') {
 		document.getElementById('data').onsubmit = function(event){
 			if (validateVariantTitleForm() == false) {

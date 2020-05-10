@@ -1720,6 +1720,15 @@ class pubs:
                         formatted_ids.append(formatted_line)
                 return formatted_ids
 
+        def printModNoteRequired(self):
+                user = User()
+                user.load()
+                mod_note_required = 0
+                if self.requiresModeratorNote(user.id):
+                        mod_note_required = 1
+                print '<input name="mod_note_required" value="%d" type="HIDDEN">' % mod_note_required
+
+
         def requiresModeratorNote(self, user_id):
                 # Returns 1 if there is at least one primary verifier who is not the current user
                 verifiers = SQLPrimaryVerifiers(self.pub_id)

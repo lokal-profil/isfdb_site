@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2014   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2020   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -43,8 +43,8 @@ if __name__ == '__main__':
 	if not submission.user.id:
                 submission.error('', pub_id)
         
-        if form.has_key('reason'):
-		reason = form['reason'].value
+        if form.has_key('mod_note'):
+		reason = form['mod_note'].value
 	else:
 		reason = 'No reason given.'
 
