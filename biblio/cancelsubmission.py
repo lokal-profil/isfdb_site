@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2013   Ahasuerus
+#     (C) COPYRIGHT 2009-2020   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -56,16 +56,18 @@ if __name__ == '__main__':
         print "<ul>"
 
 	reason = 'Cancelled by the submitter'
-	update = "update submissions set sub_state='R', sub_reason='%s', sub_reviewer='%d', sub_reviewed=NOW() where sub_id='%d';" % (db.escape_string(reason), int(myID), submission)
+	update = """update submissions
+                set sub_state='R', sub_reason='%s', sub_reviewer=%d, sub_reviewed=NOW(), sub_holdid=0
+                where sub_id=%d""" % (db.escape_string(reason), int(myID), submission)
         print "<li> ", update
 	db.query(update)
 
-        print "</ul><p /><hr />"
+        print "</ul><p><hr>"
 
-	print "Record %d has been moved to the Rejected state.<br />" % submission
+	print "Record %d has been moved to the Rejected state.<br>" % submission
 	print "<b>Reason:</b> ", reason
 
-	print "<p />"
-	print "<hr />"
+	print "<p>"
+	print "<hr>"
 
 	PrintTrailer('cancelsubmission', 0, 0)

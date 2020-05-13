@@ -117,8 +117,10 @@ def PrintPostMod(closetable = 1):
 def markIntegrated(db, sub_id, affected_record_id = None, pub_id = None):
     from common import PrintSubmissionLinks
     (reviewerid, username, usertoken) = GetUserData()
-    update = "update submissions set sub_state='I', sub_reviewer='%d', sub_reviewed=NOW() where sub_id=%d" %  (int(reviewerid), int(sub_id))
-    print "<li> ", update
+    update = """update submissions
+        set sub_state='I', sub_reviewer=%d, sub_reviewed=NOW(), sub_holdid=0
+        where sub_id=%d""" %  (int(reviewerid), int(sub_id))
+    print '<li> ', update
     db.query(update)
 
     # For submissions that created a new record or affected an existing record

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2020   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -51,8 +51,9 @@ if __name__ == '__main__':
 
 	(reviewerid, username, usertoken) = GetUserData()
 	update = """update submissions set sub_state='R', sub_reason='%s',
-                    sub_reviewer='%d', sub_reviewed=NOW()
-                    where sub_id=%d""" % (db.escape_string(reason), int(reviewerid), sub_id)
+                    sub_reviewer='%d', sub_reviewed=NOW(), sub_reason=NULL,
+                    sub_holdid=0 where sub_id=%d
+                    """ % (db.escape_string(reason), int(reviewerid), sub_id)
         print "<li> ", update
 	db.query(update)
 
