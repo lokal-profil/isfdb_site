@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2020   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -76,6 +76,9 @@ def ApproveOrReject(app, submission_id):
                 if int(hold_id) != int(reviewer_id):
                         holding_user = SQLgetUserName(hold_id)
                         print "<h3>Submission is currently on hold by %s</h3>" % WikiLink(holding_user)
+                        # Let bureaucrats unhold submissions held by other moderators
+                        if SQLisUserBureaucrat(reviewer_id):
+                                print '<a class="hold" href="http:/'+HTFAKE+'/mod/unhold.cgi?%s">UNHOLD</a><p>' % submission_id
                         return
                 #If the submission is currently on hold by the reviewing moderator, allow to remove from hold
                 print "<h3>Submission is currently on hold by you.</h3><p>"

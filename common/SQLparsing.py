@@ -1903,7 +1903,7 @@ def SQLisUserModerator(userId):
 		return 0
 
 def SQLisUserBureaucrat(userId):
-        query = "select * from mw_user_groups where ug_user='%d' and ug_group='bureaucrat'" % (int(userId))
+        query = "select * from mw_user_groups where ug_user=%d and ug_group='bureaucrat'" % int(userId)
         db.query(query)
         result = db.store_result()
 	if result.num_rows():
