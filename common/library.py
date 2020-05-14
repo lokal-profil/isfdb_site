@@ -1582,6 +1582,7 @@ def ISFDBprintTime():
         print '<p><b>Current ISFDB time:</b> %s' % str(datetime.datetime.now()).split('.')[0]
 
 def ISFDBprintSubmissionTable(result, status):
+        from login import GetUserData
         ISFDBprintTime()
         print '<table class="generic_table">'
         print '<tr align="left" class="generic_table_header">'
@@ -1600,16 +1601,23 @@ def ISFDBprintSubmissionTable(result, status):
                 print '<th>Reason</th>'
         elif status == 'N':
                 print '<th>Cancel</th>'
+
+        unreject = 0
+        (userid, username, usertoken) = GetUserData()
+        if status == 'R' and SQLisUserModerator(userid):
+                unreject = 1
+                print '<th>Unreject?</th>'
+        
         print '</tr>'
         record = result.fetch_row()
 	color = 0
 	while record:
-		ISFDBprintSubmissionRecord(record, color, status)
+		ISFDBprintSubmissionRecord(record, color, status, unreject)
 		color = color ^ 1
         	record = result.fetch_row()
 	print '</table>'
 
-def ISFDBprintSubmissionRecord(record, eccolor, status):
+def ISFDBprintSubmissionRecord(record, eccolor, status, unreject):
 	if eccolor:
 		print '<tr align=left class="table1">'
 	else:
@@ -1664,7 +1672,9 @@ def ISFDBprintSubmissionRecord(record, eccolor, status):
                         print '<td>-</td>'
         elif status == 'N':
                 print '<td><a href="http:/%s/cancelsubmission.cgi?%d">Cancel submission</a></td>' % (HTFAKE, subId)
-        
+
+        if unreject:
+                print '<td>%s</td>' % ISFDBLink('mod/unreject.cgi', subId, 'Unreject')
         print '</tr>'
 
 def getSubjectLink(record, doc2, subType):

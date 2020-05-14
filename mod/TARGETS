@@ -73,6 +73,7 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/tv_unmerge.cgi \
 	  DIR/ua_merge.cgi \
 	  DIR/unhold.cgi \
+	  DIR/unreject.cgi \
 	  DIR/uv_merge.cgi \
           DIR/va_new.cgi \
 	  DIR/vv_new.cgi \

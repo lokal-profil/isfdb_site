@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -74,5 +74,5 @@ if __name__ == '__main__':
 
 	print '<p> [<a href="http:/%s/mod/recent.cgi?%d+%s">MORE</a>]' % (HTFAKE, start+200, status)
 
-	PrintPostMod()
+	PrintPostMod(0)
 
