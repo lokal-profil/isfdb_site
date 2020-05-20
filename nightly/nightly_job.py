@@ -461,9 +461,12 @@ def nightly_cleanup_reports():
 
         #   Report 47: Title Dates after Publication Dates
         query = """select distinct t.title_id from titles t, pubs p, pub_content pc
-                where pc.title_id = t.title_id and pc.pub_id = p.pub_id
+                where pc.title_id = t.title_id
+		and pc.pub_id = p.pub_id
                 and p.pub_year != '0000-00-00'
                 and p.pub_year != '8888-00-00'
+		and t.title_copyright != '0000-00-00'
+		and t.title_copyright != '0000-00-00'
                 and
                 (
                         YEAR(t.title_copyright) > YEAR(p.pub_year)
@@ -472,6 +475,14 @@ def nightly_cleanup_reports():
                                 YEAR(p.pub_year) = YEAR(t.title_copyright)
                                 and MONTH(p.pub_year) != '00'
                                 and MONTH(t.title_copyright) > MONTH(p.pub_year)
+                        )
+		or
+                        (
+                                YEAR(p.pub_year) = YEAR(t.title_copyright)
+                                and MONTH(p.pub_year) = MONTH(t.title_copyright)
+                                and MONTH(p.pub_year) != '00'
+                                and DAY(p.pub_year) != '00'
+				and DAY(t.title_copyright) > DAY(p.pub_year)
                         )
                 )
                 limit 1000"""
