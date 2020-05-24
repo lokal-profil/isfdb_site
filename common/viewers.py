@@ -607,12 +607,17 @@ def InvalidSubmission(submission_id, message = ''):
         print '</table>'
         error_text = 'This submission is no longer valid. %s.' % message
         print '<div id="ErrorBox">'
+        submission = SQLloadSubmission(submission_id)
+        submitter_id = submission[SUB_SUBMITTER]
+        submitter = SQLgetUserName(submitter_id)
+        print '<b>Submitted by:</b> <a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, submitter, submitter)
+        print '<a href="http://%s/index.php/User_Talk:%s">(Talk)</a>' % (WIKILOC, submitter)
         print '<h3>Error: %s</h3>' % error_text
         print '<h3>You can <a href="http:/%s/dumpxml.cgi?%d">view the submission as raw XML</a>.' % (HTFAKE, int(submission_id))
 	(userid, username, usertoken) = GetUserData()
 	# If the user is a moderator and the submission is "N"ew, allow the user to hard reject it
-        if SQLisUserModerator(userid) and SQLloadState(submission_id) == 'N':
-        	print '<br>Use <a href="http:/%s/mod/hardreject.cgi?%d">Hard Reject</a> to reject it.</h3>' % (HTFAKE, int(submission_id))
+        if SQLisUserModerator(userid) and submission[SUB_STATE] == 'N':
+        	print '<br>Use <a href="http:/%s/mod/hardreject.cgi?%d">Hard Reject</a> to reject it.' % (HTFAKE, int(submission_id))
         print '</h3>'
         print '</div>'
         print '</div>'
