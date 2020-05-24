@@ -199,6 +199,8 @@ def PrintField1XML(Label, XmlData, title = 0):
                 elif Label == 'Binding':
                         if value and (value not in FORMATS):
                                 warning = 'Uncommon format'
+                        elif value == 'unknown':
+                                warning = 'Format is "unknown"'
                         elif value == 'ebook':
                                 pub_date = GetElementValue(XmlData, 'Year')
                                 if Compare2Dates(pub_date, '2000-01-01') == 1:
@@ -343,6 +345,10 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
         elif Label == 'Title':
                 if ui.goodHtmlTagsPresent(value):
                         warning = 'HTML tag(s) in title'
+
+        elif Label == 'Binding':
+                if value == 'unknown':
+                        warning = 'Format is "unknown"'
 
         if TagPresent(XmlData, Label):
 		PrintField2(Label, value, 1, ExistsNow, value2, warning, 1, warning_class)
