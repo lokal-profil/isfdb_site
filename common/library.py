@@ -1156,6 +1156,7 @@ def unicode_translation():
                    '&#8239;': ' ',      # Narrow no-break space
                    '&#8287;': ' ',      # Medium mathematical space
                    '&#12288;':' ',      # Ideographic space
+                   '&#65279;':'',       # Zero width no-break space, which we replace with "no character"
                    '&#65509;':chr(165), # Fullwidth Unicode yen changed to Latin-1 yen
                    'A&#768;': chr(192), # A grave accent
                    'A&#769;': chr(193), # A acute accent
