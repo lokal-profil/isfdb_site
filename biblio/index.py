@@ -66,7 +66,7 @@ if __name__ == '__main__':
 		results = SQLGetForthcoming(month, year, day, 0)
 
 		maxmonths += 1
-		if maxmonths > 1:
+		if maxmonths > 2:
 			break
 
 		for result in results:
