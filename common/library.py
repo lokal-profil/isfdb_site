@@ -367,9 +367,14 @@ def GetChildValue(doc, label):
 		value = ''
 	return value
 
-def XMLunescape(input):
+def XMLunescape(input, compliant = 0):
 	retval = string.replace(str(input), "&amp;", "&")
-	retval = string.replace(retval, "&rsquo;", "'")
+	# If standards-compliant XML was requested, unescape &apos;.
+	# Internally we use HTML-specific &rsquo; instead (for now)
+	if compliant:
+        	retval = string.replace(retval, "&apos;", "'")
+        else:
+                retval = string.replace(retval, "&rsquo;", "'")
 	retval = string.replace(retval, "&quot;", '"')
 	retval = string.replace(retval, "&lt;", "<")
 	retval = string.replace(retval, "&gt;", ">")

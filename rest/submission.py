@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
 #	 ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -13,6 +13,7 @@ import cgi
 import sys
 from isfdb import *
 from SQLparsing import *
+from library import normalizeInput, XMLunescape, XMLescape
 from login import User
 from xml.dom import minidom
 from xml.dom import Node
@@ -35,6 +36,7 @@ class Submission:
                 self.get_license()
                 self.get_holder()
                 self.remove_API_fields()
+                self.normalize_input()
                 self.file_submission()
 
         def get_input(self):
@@ -89,7 +91,29 @@ class Submission:
         def remove_API_fields(self):
                 self.delete_field('LicenseKey')
                 self.delete_field('Holder')
-                self.XMLdata = " ".join(self.XMLdata.split()) # Collapse multiple adjacent spaces
+
+        def normalize_input(self):
+                try:
+                        pieces = self.XMLdata.split('>')
+                        new_pieces = []
+                        for piece in pieces:
+                                if not piece:
+                                        continue
+                                subpieces = piece.split('<')
+                                if len(subpieces) !=2:
+                                        continue
+                                data = subpieces[0]
+                                tag = subpieces[1]
+                                unescaped_data = XMLunescape(data, 1)
+                                normalized_data = normalizeInput(unescaped_data)
+                                # second parameter controls the use of ISFDB-specific non-XML-standard aspostrophe encoding
+                                re_escaped_data = XMLescape(normalized_data, 0)
+                                new_piece = re_escaped_data + '<' + tag
+                                new_pieces.append(new_piece)
+                        result = '>'.join(new_pieces)
+                        self.XMLdata = result.replace('><', '> <') + '>'
+                except:
+                        self.send_error('XML parsing failed')
 
         def file_submission(self):
                 for sub_type in SUBMAP:
