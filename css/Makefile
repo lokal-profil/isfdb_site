@@ -23,6 +23,7 @@ TARGETS	= apple-touch-icon.png \
 	  isfdb.gif \
 	  isfdb_logo.jpg \
 	  index.html \
+	  IsfdbBanner1.jpg \
 	  IsfdbBanner2.jpg \
 	  IsfdbBanner3.jpg \
 	  IsfdbBanner4.jpg \
