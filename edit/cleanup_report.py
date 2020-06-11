@@ -6749,6 +6749,34 @@ def function290():
         cleanup.note = 'Note: Reviews of ineligible non-fiction titles should be entered as ESSAYs.'
         cleanup.print_title_table()
 
+def function291():
+        cleanup.note = """This cleanup report finds publications with a non-audio
+                format and the Narrator template in the Note field."""
+        cleanup.query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, notes n, cleanup c
+                where p.note_id = n.note_id
+                and note_note like '%{{narrator%'
+                and p.pub_ptype not like '%audio%'
+                and c.record_id = p.pub_id
+                and c.report_type = 291
+                and c.resolved IS NULL
+                order by p.pub_title"""
+        cleanup.none = 'No suspected invalid uses of the Narrator template'
+        cleanup.ignore = 1
+        cleanup.print_pub_table()
+
+def function292():
+        cleanup.query = """select distinct p.pub_id, p.pub_title
+                from pubs p, notes n, cleanup c
+                where p.pub_ptype like '%audio%'
+                and p.note_id = n.note_id
+                and n.note_note not like '%{{narrator%'
+                and c.record_id = p.pub_id
+                and c.report_type = 292
+                order by p.pub_title"""
+        cleanup.none = 'No audio books without the Narrator template'
+        cleanup.print_pub_table()
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,

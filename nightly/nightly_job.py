@@ -1803,6 +1803,23 @@ def nightly_cleanup_reports():
         	limit 1000"""
         standardReport(query, 290)
 
+        #   Report 291: Suspected Invalid Uses of the Narrator Template
+        query = """select distinct p.pub_id
+                from pubs p, notes n
+                where p.note_id = n.note_id
+                and note_note like '%{{narrator%'
+                and p.pub_ptype not like '%audio%'"""
+        standardReport(query, 291)
+
+        #   Report 292: Audio Books without the Narrator Template
+        query = """select distinct p.pub_id
+                from pubs p, notes n
+                where p.pub_ptype like '%audio%'
+                and p.note_id = n.note_id
+                and n.note_note not like '%{{narrator%'
+                limit 1000"""
+        standardReport(query, 292)
+
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from
                 (select t1.title_id
