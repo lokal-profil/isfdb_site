@@ -1053,6 +1053,7 @@ def RecognizedDomains():
                 ('tumblr.com', 'Tumblr', 'www.tumblr.com', 0),
                 ('twitter.com', 'Twitter', 'www.twitter.com', 0),
                 ('uraniamania.com', 'Urania Mania', 'www.uraniamania.com', 1),
+                ('vectoreditors.files.wordpress.com', 'Vector', 'vector-bsfa.com', 1),
                 ('vonniewinslowcrist.files.wordpress.com', 'Vonnie Winslow Crist', 'vonniewinslowcrist.wordpress.com', 1),
                 ('wattpad.com', 'Wattpad', 'www.wattpad.com', 0),
                 ('wikipedia.org', 'Wikipedia', 'www.wikipedia.org', 0),
