@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2019   Ahasuerus
+#     (C) COPYRIGHT 2014-2020   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -113,10 +113,13 @@ if __name__ == '__main__':
         # If the submission has been reviewed, display the reviewer's name
         elif sub_reviewer:
                 moderator_name = SQLgetUserName(sub_reviewer)
-                status = 'Approved'
                 if sub_state == 'R':
                         status = 'Rejected'
+                else:
+                        status = 'Approved'
                 print '<p><b>%s by</b> %s on %s' % (status, WikiLink(moderator_name), sub_reviewed)
+                if sub_state == 'R' and SQLisUserModerator(userID):
+                        print '<p>%s' % ISFDBLink('mod/unreject.cgi', submission_id, 'Unreject Submission')
 
 	PrintTrailer('recent', 0, 0)
 
