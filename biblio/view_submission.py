@@ -49,6 +49,7 @@ if __name__ == '__main__':
         sub_data = submission[SUB_DATA]
         sub_time = submission[SUB_TIME]
         sub_reviewed = submission[SUB_REVIEWED]
+        approval_script = SUBMAP[sub_type][0]
         xml_tag = SUBMAP[sub_type][1]
         displayPage = SUBMAP[sub_type][2]
 
@@ -118,8 +119,12 @@ if __name__ == '__main__':
                 else:
                         status = 'Approved'
                 print '<p><b>%s by</b> %s on %s' % (status, WikiLink(moderator_name), sub_reviewed)
-                if sub_state == 'R' and SQLisUserModerator(userID):
+
+        if SQLisUserModerator(userID):
+                if sub_state == 'R':
                         print '<p>%s' % ISFDBLink('mod/unreject.cgi', submission_id, 'Unreject Submission')
+                elif sub_state == 'N':
+                        print '<p>%s' % ISFDBLink('mod/%s.cgi' % approval_script, submission_id, 'Moderator View')
 
 	PrintTrailer('recent', 0, 0)
 
