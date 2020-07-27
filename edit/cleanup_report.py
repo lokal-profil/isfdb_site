@@ -6655,7 +6655,11 @@ def function286():
         cleanup.query = """select distinct t1.title_id, t1.title_title
                 from titles t1, titles t2, cleanup c
                 where t1.title_parent = t2.title_id
-                and t1.title_storylen != t2.title_storylen
+                and (
+                        (t1.title_storylen != t2.title_storylen)
+                        or
+                        (t1.title_storylen is not NULL and t2.title_storylen is NULL)
+                )
                 and t1.title_id = c.record_id
                 and c.report_type = 286
                 order by t1.title_title"""

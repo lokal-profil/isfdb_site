@@ -296,7 +296,7 @@ def reportsDict():
         reports[283] = ("Nonfiction Publications with Invalid Title Types")
         reports[284] = ("Novel Publications with Invalid Title Types")
         reports[285] = ("Omnibus Publications with Invalid Title Types")
-        reports[286] = ("Variant Title Length Mismatches")
+        reports[286] = ("Variant Title Length Mismatches (first 1000)")
         reports[287] = ("Publications with Invalid Page Numbers")
         reports[288] = ("Publications with an Invalid Page Count")
         reports[289] = ("CHAPBOOK Publications with Multiple Fiction Titles")

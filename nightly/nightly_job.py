@@ -1762,7 +1762,12 @@ def nightly_cleanup_reports():
         query = """select distinct t1.title_id
                 from titles t1, titles t2
                 where t1.title_parent = t2.title_id
-                and t1.title_storylen != t2.title_storylen
+                and (
+                        (t1.title_storylen != t2.title_storylen)
+                        or
+                        (t1.title_storylen is not NULL and t2.title_storylen is NULL)
+                )
+                limit 1000
                 """
         standardReport(query, 286)
 
