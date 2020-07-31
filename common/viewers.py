@@ -119,7 +119,8 @@ def CheckImage(value):
         if (not warning
             and 'amazon.' in value
             and not re.match('.*/images/[PIG]/[0-9A-Za-z+-]{10}[LS]?(\._CR[0-9]+,[0-9]+,[0-9]+,[0-9]+)?\.(gif|png|jpg)$', value.replace('%2B','+'))
-            and not re.match('.*\.images-amazon\.com/images/G/0[1-3]/ciu/[0-9a-f]{2}/[0-9a-f]{2}/[0-9a-f]{22,24}\.L\.(gif|png|jpg)$', value)):
+            and not re.match('.*\.images-amazon\.com/images/G/0[1-3]/ciu/[0-9a-f]{2}/[0-9a-f]{2}/[0-9a-f]{22,24}\.L\.(gif|png|jpg)$', value)
+            and not re.match('.*\.ssl-images-amazon\.com/images/S/amzn-author-media-prod/[0-9a-z]{26}\.(gif|png|jpg)$', value)):
                 warning = 'Unsupported formatting in an Amazon URL. Only properly structured _CR formatting codes are currently allowed.'
         return warning
 
