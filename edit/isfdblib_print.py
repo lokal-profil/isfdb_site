@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2010-2019   Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2010-2020   Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -887,10 +887,16 @@ def printWebPages(webpages, web_page_type, help, display_name = ''):
         else:
                 printmultiple(webpages, "Web Page", "%s_webpages" % web_page_type, help)
 
-def printHelpBox(type, helplink):
+def printHelpBox(record_type, helplink, new_flag = 0):
 	print '<div id="HelpBox">'
-	print '<a href="http://%s/index.php/Help:Screen:%s">Help on editing %s records</a><br>' % (WIKILOC, helplink, type)
-	print '<a href="http://%s/index.php/Help:Using_Templates_and_HTML_in_Note_Fields">List of supported templates and HTML tags in notes</a><p>' % WIKILOC
+	if new_flag:
+                print '<b>Help on adding new %s records:</b>' % record_type
+        else:
+                print '<b>Help on editing %s records:</b>' % record_type
+	print '<ul>'
+	print '<li><a href="http://%s/index.php/Help:Screen:%s">Help:Screen:%s</a>' % (WIKILOC, helplink, helplink)
+	print '<li><a href="http://%s/index.php/Help:Using_Templates_and_HTML_in_Note_Fields">List of supported templates and HTML tags in notes</a>' % WIKILOC
+	print '</ul>'
 	print '</div>'
 
 def printISBN(help, isbn):

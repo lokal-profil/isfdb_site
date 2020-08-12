@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2020   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -36,10 +36,7 @@ if __name__ == '__main__':
 
 	PrintNavBar('edit/newpub.cgi', pub_type)
 
-	print '<div id="HelpBox">'
-        print '<b>Help on adding new publication records: </b>'
-        print '<a href="http://%s/index.php/Help:Screen:NewPub">Help:Screen:NewPub</a><p>' % (WIKILOC)
-	print '</div>'
+        printHelpBox('publication', 'NewPub', 1)
 
 	##################################################################
 	# Output the leading HTML stuff
