@@ -1007,6 +1007,7 @@ def RecognizedDomains():
                 ('instagram.com', 'Instagram', 'instagram.com', 0),
                 ('isfdb.org', 'ISFDB', 'www.isfdb.org', 1),
                 ('ivy-bells.com', 'Dr. Robert G. Williscroft', 'ivy-bells.com', 1),
+                ('jeddicon.com', 'JeddiCon', 'jeddicon.com', 1),
                 ('jenniferrpovey.com', 'Jennifer R. Povey', 'www.jenniferrpovey.com', 1),
                 ('kirjasto.sci.fi', 'Books and Writers', 'kirjasto.sci.fi', 0),
                 ('librarything.com', 'LibraryThing', 'librarything.com', 0),
