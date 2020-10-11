@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2019 	Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2020 	Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Bill Longley and Dirk Stoecker
 #		ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -642,7 +642,13 @@ def PrintThirdPartyLinks(websites, type_of_sites):
         print '<div id="div%ssites" class="divothersites">' % type_of_sites
         print '<ul class="listothersites">'
         for website in displayed_sites:
-                print '<li><a href="%s" target="_blank">%s</a>' % (website[1], ISFDBText(website[0]))
+                displayed_site_name = ISFDBText(website[0])
+                suffix=''
+                if type_of_sites == 'Amazon':
+                        displayed_site_name = displayed_site_name.replace('Amazon ','')
+                        if displayed_site_name in ('US','UK'):
+                                suffix = ' (paid link)'
+                print '<li><a href="%s" target="_blank">%s</a>%s' % (website[1], displayed_site_name, suffix)
         print '</ul>'
         print '</div>'
         print '</div>'
@@ -731,6 +737,9 @@ def PrintTrailer(page_type, arg1, arg2):
 	print COPYRIGHT
 	print '<br>'
 	print ENGINE
+	if page_type == 'publication':
+                print '<br>'
+                print 'As an Amazon Associate ISFDB earns from qualifying purchases. This relationship lets ISFDB access Amazon\'s product data.'
 	print '</div>'
 	print '</div>'
 	print '</body>'
