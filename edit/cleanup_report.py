@@ -6783,6 +6783,28 @@ def function292():
         cleanup.none = 'No audio books without the Narrator template'
         cleanup.print_pub_table()
 
+def function293():
+        cleanup.query = """select t.title_id, t.title_title, c.cleanup_id
+                from titles t, cleanup c
+        	where binary t.title_title REGEXP "[^:\.\!\;](%s)"
+                and t.title_language = 17
+        	and c.record_id = t.title_id
+                and c.report_type = 293
+                and c.resolved IS NULL
+                order by t.title_title""" % requiredLowerCase()
+        cleanup.none = """This cleanup report finds English language title records with
+                        capitalized words which should not be capitalized as per the ISFDB
+                        data entry rules. The words are: %s""" % " ".join(ENGLISH_LOWER_CASE)
+        cleanup.ignore = 1
+        cleanup.print_title_table()
+
+def requiredLowerCase():
+        clause = ''
+        for word in ENGLISH_LOWER_CASE:
+                clause += ' %s |' % word.capitalize()
+        clause = clause[:-1]
+        return clause
+
 def translated_report(report_id):
         language_id = ISFDBtranslatedReports()[report_id]
         query = """select t1.title_id, t1.title_title,

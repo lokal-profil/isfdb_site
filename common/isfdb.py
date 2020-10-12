@@ -495,3 +495,5 @@ SUBMISSION_TYPE_DISPLAY = {
 QUESTION_MARK = '?'
 # "More info" sign for mouseover bubbles
 INFO_SIGN = '&#x24d8;'
+
+ENGLISH_LOWER_CASE = ['and', 'or', 'the', 'a', 'an', 'for', 'of', 'in', 'on', 'by', 'at', 'from', 'with', 'to']

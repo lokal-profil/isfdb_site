@@ -1827,6 +1827,20 @@ def nightly_cleanup_reports():
                 limit 1000"""
         standardReport(query, 292)
 
+        #   Report 293: Titles with Suspect English Capitalization
+        query = """select title_id from titles
+                where binary title_title REGEXP "[^:\.\!\;](%s)"
+                and title_language = 17
+                limit 1000""" % requiredLowerCase()
+        standardReport(query, 293)
+
+def requiredLowerCase():
+        clause = ''
+        for word in ENGLISH_LOWER_CASE:
+                clause += ' %s |' % word.capitalize()
+        clause = clause[:-1]
+        return clause
+
 def translationsWithoutNotes(report_id, language_id):
         query = """select t3.title_id from
                 (select t1.title_id
