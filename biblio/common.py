@@ -647,7 +647,7 @@ def PrintThirdPartyLinks(websites, type_of_sites):
                 if type_of_sites == 'Amazon':
                         displayed_site_name = displayed_site_name.replace('Amazon ','')
                         if displayed_site_name in ('US','UK'):
-                                suffix = ' (paid link)'
+                                suffix = ' (commissions earned)'
                 print '<li><a href="%s" target="_blank">%s</a>%s' % (website[1], displayed_site_name, suffix)
         print '</ul>'
         print '</div>'
@@ -739,7 +739,7 @@ def PrintTrailer(page_type, arg1, arg2):
 	print ENGINE
 	if page_type == 'publication':
                 print '<br>'
-                print 'As an Amazon Associate ISFDB earns from qualifying purchases. This relationship lets ISFDB access Amazon\'s product data.'
+                print 'ISFDB is an Amazon Associate in order to have access to Amazon\'s product data. As an Amazon Associate ISFDB earns from qualifying purchases.'
 	print '</div>'
 	print '</div>'
 	print '</body>'

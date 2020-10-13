@@ -1854,7 +1854,7 @@ def FormatExternalIDSite(sites, type_id, id_value):
                         if site[IDSITE_TYPE_ID] == type_id:
                                 formatted_id += ' %s' % FormatExternalIDLink(site[IDSITE_URL], id_value, site[IDSITE_NAME])
                 if '.amazon.' in url:
-                        formatted_id += ' (US/UK are paid links)'
+                        formatted_id += ' (US/UK earn commissions)'
         return formatted_id
 
 def FormatExternalIDLink(url, value, display_value):
