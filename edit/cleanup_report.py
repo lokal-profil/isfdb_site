@@ -6792,9 +6792,9 @@ def function293():
                 and c.report_type = 293
                 and c.resolved IS NULL
                 order by t.title_title""" % requiredLowerCase()
-        cleanup.none = """This cleanup report finds English language title records with
+        cleanup.note = """This cleanup report finds English language title records with
                         capitalized words which should not be capitalized as per the ISFDB
-                        data entry rules. The words are: %s""" % " ".join(ENGLISH_LOWER_CASE)
+                        data entry rules. The words are: %s""" % ", ".join(ENGLISH_LOWER_CASE)
         cleanup.ignore = 1
         cleanup.print_title_table()
 
