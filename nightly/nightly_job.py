@@ -1807,6 +1807,12 @@ def nightly_cleanup_reports():
         	and t2.title_ttype = 'REVIEW'
         	and t1.title_id = pc.title_id
         	and p.pub_id = pc.pub_id
+                and not exists (
+                        select 1 from cleanup c
+                        where c.report_type = 290
+                        and c.record_id = t1.title_id
+                        and c.resolved is not NULL
+                        )
         	limit 1000"""
         standardReport(query, 290)
 
