@@ -6249,9 +6249,10 @@ def function244():
         cleanup.print_pub_table()
 
 def function245():
-        cleanup.note = """This cleanup report finds publications with ASIN IDs and
-                        Audible-ASIN IDs that do not start with the letter B. Moderators
-                        have the ability to ignore false positives."""
+        cleanup.note = """This cleanup report finds publications with ASIN IDs which do
+                        not start with the letter B. It also finds Audible-ASIN IDs which
+                        do not start with the letter B or use an ISBN-10 as the Audible-ASIN.
+                        Moderators have the ability to ignore false positives."""
         cleanup.query = """select p.pub_id, p.pub_title, c.cleanup_id
                 from pubs p, identifiers i, identifier_types it, cleanup c
                 where c.report_type = 245
@@ -6259,10 +6260,19 @@ def function245():
                 and p.pub_id = c.record_id
                 and p.pub_id = i.pub_id
                 and i.identifier_type_id = it.identifier_type_id
-                and it.identifier_type_name in ('ASIN', 'Audible-ASIN')
-                and i.identifier_value not like 'B%'
+                and (
+                        (
+                                it.identifier_type_name = 'ASIN'
+                                and i.identifier_value not like 'B%'
+                        )
+                        or (
+                                it.identifier_type_name = 'Audible-ASIN'
+                                and i.identifier_value not like 'B%'
+                                and i.identifier_value not regexp '^[[:digit:]]{9}[0-9Xx]{1}$'
+                        )
+                )
                 order by p.pub_title"""
-        cleanup.none = 'No Publications with Non-Standard ASINs'
+        cleanup.none = 'No Publications with Non-Standard ASINs or Audible-ASINs'
         cleanup.ignore = 1
         cleanup.print_pub_table()
 

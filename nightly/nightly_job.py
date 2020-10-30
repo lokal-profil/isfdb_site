@@ -1540,8 +1540,18 @@ def nightly_cleanup_reports():
                 from pubs p, identifiers i, identifier_types it
                 where p.pub_id = i.pub_id
                 and i.identifier_type_id = it.identifier_type_id
-                and it.identifier_type_name in ('ASIN', 'Audible-ASIN')
-                and i.identifier_value not like 'B%'"""
+                and (
+                        (
+                                it.identifier_type_name = 'ASIN'
+                                and i.identifier_value not like 'B%'
+                        )
+                        or (
+                                it.identifier_type_name = 'Audible-ASIN'
+                                and i.identifier_value not like 'B%'
+                                and i.identifier_value not regexp '^[[:digit:]]{9}[0-9Xx]{1}$'
+                        )
+                )
+                """
         standardReport(query, 245)
 
         #   Report 246: Publications with non-standard Barnes & Noble IDs
