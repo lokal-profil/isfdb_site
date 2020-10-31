@@ -58,7 +58,7 @@ try:
 	db.select_db(DBASE)
 	SQLUpdateQueries()
 except:
-        PrintHTMLHeaders('Database Connection Error')
+        PrintHTMLHeaders('ISFDB Maintenance')
         print '</div>'
         print '<div id="nav">'
        	print '<a href="http:/%s/index.cgi">' % HTFAKE
@@ -67,7 +67,7 @@ except:
         print '</div>'
         print '<div id="main2">'
         print '<div id="ErrorBox">'
-	print 'Cannot connect to the ISFDB database'
+	print 'The ISFDB database is currently undergoing maintenance. Please try again in a few minutes.'
 	print '</div>'
 	print '</div>'
 	print '</div>'
