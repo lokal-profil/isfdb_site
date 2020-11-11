@@ -101,7 +101,8 @@ def DuplicateISBN(value, current_pub_id = 0):
                 warning = '%sISBN already on file</a>' % link
         return warning
 
-def CheckImage(value):
+def CheckImage(value, XmlData):
+        from pubClass import pubs
         warning = ''
         domains = RecognizedDomains()
         valid_domain = 0
@@ -112,9 +113,10 @@ def CheckImage(value):
                                 warning = "For images hosted by this site, the URL of the associated Web page must be entered after a '|'."
                         break
         if not valid_domain:
-                warning = 'Image hosted by a site that we do not have permission to link to'
+                warning = 'Image hosted by a site which we do not have permission to link to'
         if 'sf-encyclopedia.uk' in value and '/clute/' not in value and '/langford/' not in value and '/robinson/' not in value:
                 warning += 'For SFE3-hosted images, only links to /clute/, /langford/ and /robinson/ sub-directories are allowed.'
+        
         # For Amazon images, only cropping ("_CR") suffixes are allowed
         if (not warning
             and 'amazon.' in value
@@ -122,6 +124,18 @@ def CheckImage(value):
             and not re.match('.*\.images-amazon\.com/images/G/0[1-3]/ciu/[0-9a-f]{2}/[0-9a-f]{2}/[0-9a-f]{22,24}\.L\.(gif|png|jpg)$', value)
             and not re.match('.*\.ssl-images-amazon\.com/images/S/amzn-author-media-prod/[0-9a-z]{26}\.(gif|png|jpg)$', value)):
                 warning = 'Unsupported formatting in an Amazon URL. Only properly structured _CR formatting codes are currently allowed.'
+        if (not warning
+            and 'amazon.' in value
+            and not re.match('.*/images/I/[0-9A-Za-z+-]{10}[LS]', value.replace('%2B','+'))):
+                warning = 'Note that Amazon URLs which do not start with "/images/I/" may not be stable.'
+
+        if not warning and WIKILOC in value:
+                pub_id = GetElementValue(XmlData, 'Record')
+                if pub_id:
+                        current = pubs(db)
+                        current.load(int(pub_id))
+                        if current.pub_tag not in value:
+                                warning = 'Wiki-hosted image URL %s doesn\'t match the internal publication tag %s.' % (value, current.pub_tag)
         return warning
 
 #################################################################
@@ -172,7 +186,7 @@ def PrintField1XML(Label, XmlData, title = 0):
         if TagPresent(XmlData, Label):
                 ui = isfdbUI()
                 if Label == 'Image':
-                        warning = CheckImage(value)
+                        warning = CheckImage(value, XmlData)
                         value = FormatImage(value)
                 
                 elif Label == 'Publisher':
@@ -297,7 +311,7 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
         warning_class = 'warn'
         if Label == 'Image':
                 if value:
-                        warning = CheckImage(value)
+                        warning = CheckImage(value, XmlData)
                 value = FormatImage(value)
                 value2 = FormatImage(Current)
         elif Label in ('TitleNote', 'Note', 'Synopsis'):
