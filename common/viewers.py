@@ -2210,6 +2210,8 @@ def DisplayAddVariant(submission_id):
 		current.load(int(Parent))
                 if current.error:
                         InvalidSubmission(submission_id, current.error)
+                if current.title_parent:
+                        InvalidSubmission(submission_id, 'The proposed parent title is a variant of another title record')
 
 		PrintField2XML('Title',     merge, current.used_title,     current.title_title)
                 PrintMultField('TransTitles',   'TransTitle',   '<br>', doc, merge,
@@ -2514,7 +2516,8 @@ def DisplayMakeVariant(submission_id):
                         existingParent.load(int(parent))
 			if existingParent.error:
                                 InvalidSubmission(submission_id, existingParent.error)
-
+                        if existingParent.title_parent:
+                                InvalidSubmission(submission_id, 'The proposed parent title is a variant of another title record')
                         PrintField2('Title', existingParent.title_title, 1, 1, theVariant.title_title, '', 1)
                         PrintField2('Year', existingParent.title_year, 1, 1, theVariant.title_year, '', 1)
                         if existingParent.title_ttype == 'COVERART' and theVariant.title_ttype == 'COVERART':
