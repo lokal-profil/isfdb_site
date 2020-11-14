@@ -3088,3 +3088,12 @@ def SQLDeletedTitle(title_id):
 		return 1
 	else:
 		return 0
+
+def SQLDuplicateFrontImage(pub_id, value):
+        query = "select 1 from pubs where pub_frontimage = '%s' and pub_id != %d" % (db.escape_string(value), int(pub_id))
+        db.query(query)
+        result = db.store_result()
+	if result.num_rows() > 0:
+		return 1
+	else:
+		return 0
