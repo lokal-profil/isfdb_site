@@ -103,7 +103,6 @@ def DuplicateISBN(value, current_pub_id = 0):
 
 def CheckImage(value, XmlData):
         from pubClass import pubs
-        pub_id = GetElementValue(XmlData, 'Record')
         warning = ''
         domains = RecognizedDomains()
         valid_domain = 0
@@ -130,21 +129,13 @@ def CheckImage(value, XmlData):
             and not re.match('.*/images/I/[0-9A-Za-z+-]{10}[LS]', value.replace('%2B','+'))):
                 warning = 'Note that Amazon URLs which do not start with "/images/I/" may not be stable.'
 
-        if not warning and WIKILOC in value and pub_id:
-                current = pubs(db)
-                current.load(int(pub_id))
-                if current.pub_tag not in value:
-                        warning = 'Wiki-hosted image URL %s doesn\'t match the internal publication tag %s.' % (value, current.pub_tag)
-
-        if not warning and pub_id and SQLDuplicateFrontImage(pub_id, value):
-                warning = """This URL is associated with
-                                %sat least one other publication</a>.""" % AdvSearchLink((('TYPE', 'Publication'),
-                                                                                          ('USE_1', 'pub_frontimage'),
-                                                                                          ('O_1', 'exact'),
-                                                                                          ('TERM_1', value),
-                                                                                          ('ORDERBY', 'pub_title'),
-                                                                                          ('C', 'AND')))
-        
+        if not warning and WIKILOC in value:
+                pub_id = GetElementValue(XmlData, 'Record')
+                if pub_id:
+                        current = pubs(db)
+                        current.load(int(pub_id))
+                        if current.pub_tag not in value:
+                                warning = 'Wiki-hosted image URL %s doesn\'t match the internal publication tag %s.' % (value, current.pub_tag)
         return warning
 
 #################################################################
