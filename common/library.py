@@ -1829,6 +1829,22 @@ class isfdbUI:
                         return 'Mismatched HTML tags'
                 return ''
 
+        def mismatchedTemplateBraces(self, value):
+                if value.count('{{') != value.count('}}'):
+                        return 'Mismatched template braces'
+                return ''
+
+        def unrecognizedTemplate(self, value):
+                new_value = value.lower()
+                templates = ISFDBTemplates().keys()
+                templates.append('break')
+                for template in templates:
+                        remove_template = '{{%s}}' % template.lower()
+                        new_value = new_value.replace(remove_template, '')
+                if ('{{' in new_value) or ('}}' in new_value):
+                        return 'Unrecognized template'
+                return ''
+
 def FormatExternalIDType(type_name, types):
         formatted_type = ''
         for type_number in types:

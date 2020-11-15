@@ -222,7 +222,17 @@ def PrintField1XML(Label, XmlData, title = 0):
                                         warning = 'Pre-2000 e-book submitted'
 
                 elif Label in ('TitleNote', 'Note', 'Synopsis'):
-                        warning = ui.invalidHtmlInNotes(value)
+                        warnings = []
+                        warnings.append(ui.invalidHtmlInNotes(value))
+                        warnings.append(ui.mismatchedTemplateBraces(value))
+                        warnings.append(ui.unrecognizedTemplate(value))
+                        for match in warnings:
+                                if not match:
+                                        continue
+                                if warning:
+                                        warning += '. %s' % match
+                                else:
+                                        warning = match
                         value = FormatNote(value, '', 'edit')
 
                 elif Label == 'Series':
