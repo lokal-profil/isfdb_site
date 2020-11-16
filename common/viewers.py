@@ -136,6 +136,18 @@ def CheckImage(value, XmlData):
                         current.load(int(pub_id))
                         if current.pub_tag not in value:
                                 warning = 'Wiki-hosted image URL %s doesn\'t match the internal publication tag %s.' % (value, current.pub_tag)
+
+        if value and not cloningFlag(XmlData):
+                results = SQLDuplicateImageURL(value)
+                if results:
+                        link = AdvSearchLink((('TYPE', 'Publication'),
+                                              ('USE_1', 'pub_frontimage'),
+                                              ('O_1', 'exact'),
+                                              ('TERM_1', value),
+                                              ('ORDERBY', 'pub_title'),
+                                              ('C', 'AND')))
+                        warning = '%sImage URL already on file</a>' % link
+
         return warning
 
 #################################################################
