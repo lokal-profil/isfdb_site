@@ -1830,7 +1830,7 @@ class isfdbUI:
                 return ''
 
         def mismatchedTemplateBraces(self, value):
-                if value.count('{{') != value.count('}}'):
+                if (value.count('{{') != value.count('}}')) or ('{{{' in value) or ('}}}' in value):
                         return 'Mismatched template braces'
                 return ''
 
@@ -1839,9 +1839,11 @@ class isfdbUI:
                 templates = ISFDBTemplates().keys()
                 templates.append('break')
                 for template in templates:
-                        remove_template = '{{%s}}' % template.lower()
-                        new_value = new_value.replace(remove_template, '')
-                if ('{{' in new_value) or ('}}' in new_value):
+                        non_linking_template = '{{%s}}' % template.lower()
+                        new_value = new_value.replace(non_linking_template, '')
+                        linking_template = '{{%s|' % template.lower()
+                        new_value = new_value.replace(linking_template, '')
+                if '{{' in new_value:
                         return 'Unrecognized template'
                 return ''
 
