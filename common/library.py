@@ -1589,6 +1589,17 @@ def ISFDBtranslatedReports():
 def ISFDBprintTime():
         print '<p><b>Current ISFDB time:</b> %s' % str(datetime.datetime.now()).split('.')[0]
 
+def ISFDBdaysFromToday(future_date):
+        if future_date == '8888-00-00' or future_date == '0000-00-00':
+                return 0
+        today_date = datetime.datetime.today()
+        try:
+                normalized_future_date = datetime.datetime.strptime(future_date, "%Y-%m-%d")
+        except:
+                return 0 # Invalid date format
+        days_from_today = normalized_future_date - today_date
+        return days_from_today.days
+
 def ISFDBprintSubmissionTable(result, status):
         from login import GetUserData
         ISFDBprintTime()

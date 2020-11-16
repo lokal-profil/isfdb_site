@@ -207,12 +207,15 @@ def PrintField1XML(Label, XmlData, title = 0):
                 elif Label == 'PubSeries':
                         (value, warning) = CheckPubSeries(value)
 
-                elif (Label == 'Year') and title:
-                        date_status = Compare2Dates(value, title[TITLE_YEAR])
-                        if date_status == 1:
-                                warning = 'Pub date earlier than title date'
-                        elif date_status == 2:
-                                warning = 'Pub date more exact than title date'
+                elif Label == 'Year':
+                        if title:
+                                date_status = Compare2Dates(value, title[TITLE_YEAR])
+                                if date_status == 1:
+                                        warning = 'Pub date earlier than title date'
+                                elif date_status == 2:
+                                        warning = 'Pub date more exact than title date'
+                        if not warning and ISFDBdaysFromToday(value) > MAX_FUTURE_DAYS:
+                                warning = 'Date more than %d days in the future' % MAX_FUTURE_DAYS
 
                 elif Label == 'Isbn':
                         warning = CheckISBN(value, XmlData)
@@ -300,6 +303,9 @@ def PrintField2(Label, value, Changed, ExistsNow, Current, warning = '', warning
                 if Label == 'Type' and (value != Current):
                         if Current in ('ANTHOLOGY', 'COLLECTION', 'CHAPBOOK', 'EDITOR', 'OMNIBUS'):
                                 warning = 'Changed container title type'
+                elif Label == 'Year':
+                        if not warning and ISFDBdaysFromToday(value) > MAX_FUTURE_DAYS:
+                                warning = 'Date more than %d days in the future' % MAX_FUTURE_DAYS
         else:
                 print '<td class="keep">'
                 if ExistsNow:
@@ -386,6 +392,10 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
         elif Label == 'Binding':
                 if value == 'unknown':
                         warning = 'Format is "unknown"'
+
+        elif Label == 'Year':
+                if not warning and ISFDBdaysFromToday(value) > MAX_FUTURE_DAYS:
+                        warning = 'Date more than %d days in the future' % MAX_FUTURE_DAYS
 
         if TagPresent(XmlData, Label):
 		PrintField2(Label, value, 1, ExistsNow, value2, warning, 1, warning_class)
@@ -558,6 +568,11 @@ def PrintWarning(Label, unknown, pseudonym, disambig, title_date = '', pub_date 
                 if output:
                         output += ", "
                 output += 'Title date after publication date'
+
+        if ISFDBdaysFromToday(title_date) > MAX_FUTURE_DAYS:
+                if output:
+                        output += ", "
+                output += 'Date more than %d days in the future' % MAX_FUTURE_DAYS
 
         if output:
                 print '<td class="warn">%s</td>' % output

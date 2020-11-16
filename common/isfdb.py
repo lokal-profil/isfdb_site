@@ -497,3 +497,5 @@ QUESTION_MARK = '?'
 INFO_SIGN = '&#x24d8;'
 
 ENGLISH_LOWER_CASE = ['and', 'or', 'the', 'a', 'an', 'for', 'of', 'in', 'on', 'by', 'at', 'from', 'with', 'to']
+
+MAX_FUTURE_DAYS = 90
