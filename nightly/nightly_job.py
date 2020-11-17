@@ -1845,7 +1845,7 @@ def nightly_cleanup_reports():
 
         #   Report 293: Titles with Suspect English Capitalization
         query = """select t.title_id from titles t
-                where binary title_title REGEXP "[^:\.\!\;](%s)"
+                where binary title_title REGEXP "[^\:\.\!\;\/](%s)"
                 and t.title_language = 17
                 and not exists (
                         select 1 from cleanup c
@@ -1855,6 +1855,24 @@ def nightly_cleanup_reports():
                         )
                 limit 1000""" % requiredLowerCase()
         standardReport(query, 293)
+
+        #   Report 294: Titles with Suspect English Capitalization
+        query = """select distinct p.pub_id from pubs p
+                where binary p.pub_title REGEXP "[^\:\.\!\;\/](%s)"
+                and exists (
+                        select 1 from titles t, pub_content pc
+                        where t.title_id = pc.title_id
+                        and p.pub_id = pc.pub_id
+                        and t.title_language = 17
+                )
+                and not exists (
+                        select 1 from cleanup c
+                        where c.report_type = 294
+                        and c.record_id = p.pub_id
+                        and c.resolved is not NULL
+                        )
+                limit 1000""" % requiredLowerCase()
+        standardReport(query, 294)
 
 def requiredLowerCase():
         clause = ''

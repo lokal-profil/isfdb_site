@@ -6796,7 +6796,7 @@ def function292():
 def function293():
         cleanup.query = """select t.title_id, t.title_title, c.cleanup_id
                 from titles t, cleanup c
-        	where binary t.title_title REGEXP "[^:\.\!\;](%s)"
+        	where binary t.title_title REGEXP "[^\:\.\!\;\/](%s)"
                 and t.title_language = 17
         	and c.record_id = t.title_id
                 and c.report_type = 293
@@ -6807,6 +6807,28 @@ def function293():
                         data entry rules. The words are: %s""" % ", ".join(ENGLISH_LOWER_CASE)
         cleanup.ignore = 1
         cleanup.print_title_table()
+
+def function294():
+        cleanup.query = """select p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, cleanup c
+                where binary p.pub_title REGEXP "[^\:\.\!\;\/](%s)"
+                and exists (
+                        select 1 from titles t, pub_content pc
+                        where t.title_id = pc.title_id
+                        and p.pub_id = pc.pub_id
+                        and t.title_language = 17
+                )
+        	and c.record_id = p.pub_id
+                and c.report_type = 294
+                and c.resolved IS NULL
+                order by p.pub_title""" % requiredLowerCase()
+        cleanup.note = """This cleanup report finds publications whose titles include
+                        capitalized words which should not be capitalized as per
+                        the ISFDB data entry rules. The report is curently limited
+                        to publications with English language title records.
+                        The words are: %s""" % ", ".join(ENGLISH_LOWER_CASE)
+        cleanup.ignore = 1
+        cleanup.print_pub_table()
 
 def requiredLowerCase():
         clause = ''
