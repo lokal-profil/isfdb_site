@@ -2072,7 +2072,9 @@ def DisplayRemoveTitle(submission_id):
                         InvalidSubmission(submission_id, pub.error)
 
 		# Add a link to existing Publication
-		print 'Removing titles from <a href="http:/%s/pl.cgi?%d">%s</a>' % (HTFAKE, pub_id, subject)
+		print 'Removing titles from <a href="http:/%s/pl.cgi?%d">%s</a><p>' % (HTFAKE, pub_id, subject)
+
+                DisplayVerifications(pub_id, 0)
 
         	# Get the list of titles in this pub and sort them by page number
         	current_contents = getPubContentList(pub_id)
@@ -3688,7 +3690,7 @@ def displayOtherContentNew(child, record_type, merge):
         PrintWarning('Author', unknown, pseudonym, disambig, title_date, pub_date)
 	print "</tr>"
 
-def DisplayVerifications(pub_id):
+def DisplayVerifications(pub_id, include_secondary = 1):
         from pubClass import pubs
         pub = pubs(db)
         pub.pub_id = pub_id
@@ -3698,4 +3700,5 @@ def DisplayVerifications(pub_id):
 		print '<b>WARNING:</b> This publication has been verified against the primary source.'
                 print '</div><p>'
         pub.PrintPrimaryVerifications()
-        pub.PrintActiveSecondaryVerifications()
+        if include_secondary:
+                pub.PrintActiveSecondaryVerifications()
