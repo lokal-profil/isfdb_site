@@ -49,6 +49,7 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/ra_link.cgi \
 	  DIR/recent.cgi \
 	  DIR/reject.cgi \
+	  DIR/remove_secondary_verification.cgi \
 	  DIR/remove_tag.cgi \
 	  DIR/resolve_bad_url.cgi \
 	  DIR/resolve_cleanup.cgi \
@@ -56,6 +57,7 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/rv_link.cgi \
 	  DIR/sa_delete.cgi \
 	  DIR/sa_update.cgi \
+	  DIR/select_secondary_verification.cgi \
 	  DIR/submitcpanel.cgi \
 	  DIR/submitref.cgi \
 	  DIR/sv_delete.cgi \

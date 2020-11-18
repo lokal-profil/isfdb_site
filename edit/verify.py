@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2018   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2020   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -133,5 +133,8 @@ if __name__ == '__main__':
 	print '<input type="SUBMIT" VALUE="Update Secondary Verifications">'
 	print '</form>'
 
+        if SQLisUserModerator(user_id):
+                print '<hr class="divider">'
+                print ISFDBLink('mod/select_secondary_verification.cgi', pub_id, 'Select a Secondary Verification to Remove (Moderator Only)')
 
 	PrintPostSearch(tableclose=False)

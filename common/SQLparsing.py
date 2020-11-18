@@ -3092,3 +3092,8 @@ def SQLDeletedTitle(title_id):
 def SQLDuplicateImageURL(value):
         query = "select * from pubs where pub_frontimage = '%s'" % db.escape_string(value)
 	return StandardQuery(query)
+
+def SQLGetPubIdFromSecondaryVerification(ver_id):
+        query = "select pub_id from verification where verification_id = %d" % int(ver_id)
+	return OneField(query)
+        
