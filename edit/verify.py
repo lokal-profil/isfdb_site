@@ -133,8 +133,8 @@ if __name__ == '__main__':
 	print '<input type="SUBMIT" VALUE="Update Secondary Verifications">'
 	print '</form>'
 
-        if SQLisUserModerator(user_id):
-                print '<hr class="divider">'
-                print ISFDBLink('mod/select_secondary_verification.cgi', pub_id, 'Select a Secondary Verification to Remove (Moderator Only)')
+##        if SQLisUserModerator(user_id):
+##                print '<hr class="divider">'
+##                print ISFDBLink('mod/select_secondary_verification.cgi', pub_id, 'Select a Secondary Verification to Remove (Moderator Only)')
 
 	PrintPostSearch(tableclose=False)
