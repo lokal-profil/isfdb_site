@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2017   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -23,7 +23,7 @@ from xml.dom import Node
 
 if __name__ == '__main__':
 
-	PrintHeader("Recent Secondary Verifications")
+	PrintHeader('Recently Added Secondary Verifications')
 	PrintNavbar('recent', 0, 0, 'recentver.cgi', 0)
 
 	try:

@@ -45,6 +45,8 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/most_popular_table.cgi \
 	  DIR/most_reviewed.cgi \
 	  DIR/most_reviewed_table.cgi \
+	  DIR/my_removed_secondary_verifications.cgi \
+	  DIR/my_verifications_menu.cgi \
 	  DIR/mylanguages.cgi \
 	  DIR/mypreferences.cgi \
 	  DIR/mywebsites.cgi \
@@ -62,8 +64,10 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/pubseries.cgi \
 	  DIR/pubs_not_in_series.cgi \
 	  DIR/recent.cgi \
+	  DIR/recent_activity_menu.cgi \
 	  DIR/recent_primary_ver.cgi \
 	  DIR/recentver.cgi \
+	  DIR/removed_secondary_verifications.cgi \
 	  DIR/se.cgi \
 	  DIR/seriesgrid.cgi \
 	  DIR/seriestags.cgi \

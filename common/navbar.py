@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2009-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2020   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,6 +10,7 @@
 
 from isfdb import *
 from SQLparsing import *
+from library import ISFDBLink
 
 ################################################################
 # The routines found here are used across all ISFDB directories
@@ -73,7 +74,6 @@ def PrintSearchBox(page, search_value = '', search_type = ''):
 
 #Display the Other Pages section in the navigation bar
 def PrintOtherPages(choice):
-        from library import ISFDBLink
 	print '<div class="divider">'
 	print 'Other Pages:'
 	print '</div>'
@@ -90,9 +90,7 @@ def PrintOtherPages(choice):
         print '<li><a href="http:/%s/directory.cgi?publisher">Publisher Directory</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/directory.cgi?magazine">Magazine Directory</a>' % (HTFAKE)
         print '<li><a href="http:/%s/stats-and-tops.cgi">Statistics/Top Lists</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/recent.cgi">Recent Edits</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/recent_primary_ver.cgi">Primary Verifications</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/recentver.cgi">Secondary Verifications</a>' % (HTFAKE)
+        print '<li>%s' % ISFDBLink('recent_activity_menu.cgi', '', 'Recent Activity')
         print '<li><a href="http:/%s/edit/cleanup.cgi">Cleanup Reports</a>' % (HTFAKE)
 	print '</ul>'
         return
@@ -113,8 +111,7 @@ def PrintLoggedIn(userid,username):
         print '<li><a href="http:/%s/myrecent.cgi?0+P">My Errored Out Edits</a>' % (HTFAKE)
         print '<li><a href="http:/%s/myvotes.cgi">My Votes</a>' % (HTFAKE)
         print '<li><a href="http:/%s/usertag.cgi?%d">My Tags</a>' % (HTFAKE, int(userid))
-        print '<li><a href="http:/%s/userver.cgi">My Primary Verifications</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/changed_verified_pubs.cgi">My Changed Primary Verifications</a>' % (HTFAKE)
+        print '<li>%s' % ISFDBLink('my_verifications_menu.cgi', '', 'My Verifications')
         # Display a "New" message if this user has new changes to primary-verified publications
         if SQLChangedVerifications(userid):
                 print ' <span class="inverted">New!</span>'

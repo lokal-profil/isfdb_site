@@ -311,6 +311,15 @@ IDSITE_POSITION      = 2
 IDSITE_URL           = 3
 IDSITE_NAME          = 4
 
+# Field offsets for Deleted Secondary Verification
+DEL_VER_ID            = 0
+DEL_VER_PUB_ID        = 1
+DEL_VER_REFERENCE_ID  = 2
+DEL_VER_VERIFIER_ID   = 3
+DEL_VER_VERIFICATION_TIME = 4
+DEL_VER_DELETER_ID    = 5
+DEL_VER_DELETION_TIME = 6
+
 # Recognized submission types
 MOD_AUTHOR_MERGE     = 1
 MOD_AUTHOR_UPDATE    = 2
