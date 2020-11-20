@@ -206,6 +206,6 @@ if __name__ == '__main__':
                                 record = result.fetch_row()
                         print '</table><p>'
 		else:
-			print '<h3>No %s names found starting with: %s</h3>' % (dir_type, section)
+			print '<h3>No %s names found starting with: %s</h3>' % (dir_type, ISFDBText(section))
 
 	PrintTrailer('directory', 0, 0)
