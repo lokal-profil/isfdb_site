@@ -46,6 +46,7 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/most_reviewed.cgi \
 	  DIR/most_reviewed_table.cgi \
 	  DIR/my_removed_secondary_verifications.cgi \
+	  DIR/my_secondary_verifications.cgi \
 	  DIR/my_verifications_menu.cgi \
 	  DIR/mylanguages.cgi \
 	  DIR/mypreferences.cgi \

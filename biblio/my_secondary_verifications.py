@@ -1,13 +1,13 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2020   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
 #     intended publication of such source code.
 #
-#     Version: $Revision$
-#     Date: $Date$
+#     Version: $Revision: 571 $
+#     Date: $Date: 2020-11-19 15:53:08 -0500 (Thu, 19 Nov 2020) $
 
 
 import string
@@ -21,18 +21,29 @@ from SQLparsing import *
 
 if __name__ == '__main__':
 
-	PrintHeader('Recently Added Secondary Verifications')
-	PrintNavbar('recentver', 0, 0, 'recentver.cgi', 0)
+	PrintHeader('My Secondary Verifications')
+	PrintNavbar('my_secondary_verifications', 0, 0, 'my_secondary_verifications.cgi', 0)
 
 	try:
 		start = int(sys.argv[1])
 	except:
 		start = 0
 
+        user = User()
+        user.load()
+        if not user.id:
+		print '<h3>You must be logged in to view your secondary verifications</h3>'
+		PrintTrailer('my_secondary_verifications', 0, 0)
+		sys.exit(0)
+
         per_page = 200
         # First select 200 verification IDs -- needs to be done as a separate query since the SQL optimizer
         # in MySQL 5.0 is not always smart enough to use all available indices for multi-table queries
-        query = "select verification.* from verification where ver_status = 1 order by ver_time desc limit %d, %d" % (start, per_page)
+        query = """select verification.* from verification
+                where ver_status = 1
+                and user_id = %d
+                order by ver_time desc
+                limit %d, %d""" % (int(user.id), start, per_page)
 
 	db.query(query)
 	result0 = db.store_result()
@@ -51,7 +62,6 @@ if __name__ == '__main__':
         print '<th>#</th>'
         print '<th>Publication Title</th>'
         print '<th>Reference</th>'
-        print '<th>User</th>'
         print '<th>Time</th>'
         print '</tr>'
 
@@ -62,11 +72,10 @@ if __name__ == '__main__':
                 verifier_id = ver[VERIF_USER_ID]
                 verification_id = ver[VERIF_REF_ID]
                 verification_time = ver[VERIF_TIME]
-                query = """select r.reference_label, mu.user_name, p.pub_title
-                           from reference r, mw_user mu, pubs p
+                query = """select r.reference_label, p.pub_title
+                           from reference r, pubs p
                            where r.reference_id = %d
-                           and mu.user_id = %d
-                           and p.pub_id = %d""" % (verification_id, verifier_id, pub_id)
+                           and p.pub_id = %d""" % (verification_id, pub_id)
                 db.query(query)
                 result = db.store_result()
                 record = result.fetch_row()
@@ -74,8 +83,7 @@ if __name__ == '__main__':
                 while record:
                         count += 1
                         reference_name = record[0][0]
-                        user_name = record[0][1]
-                        pub_title = record[0][2]
+                        pub_title = record[0][1]
                         if color:
                                 print '<tr align=left class="table1">'
                         else:
@@ -83,14 +91,13 @@ if __name__ == '__main__':
                         print '<td>%d</td>' % count
                         print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
                         print '<td>%s</td>' % reference_name
-                        print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
                         print '<td>%s</td>' % verification_time
                         print '</tr>'
                         record = result.fetch_row()
 
 	print '</table>'
 	if result0.num_rows() > (per_page - 1):
-                print '<p> [%s]' % ISFDBLink('recentver.cgi', start + per_page, 'MORE')
+                print '<p> [%s]' % ISFDBLink('my_secondary_verifications.cgi', start + per_page, 'MORE')
 
-	PrintTrailer('recentver', 0, 0)
+	PrintTrailer('my_secondary_verifications', 0, 0)
 
