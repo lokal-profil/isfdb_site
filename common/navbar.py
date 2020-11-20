@@ -41,7 +41,7 @@ def PrintWikiPointer(submitter):
 
 # Display the Search box in the navigation bar
 def PrintSearchBox(page, search_value = '', search_type = ''):
-        from library import ISFDBLink
+        from library import ISFDBLink, ISFDBText
         print '<div id="search">'
        	print '<a href="http:/%s/index.cgi">' % (HTFAKE)
 	if page == 'frontpage':
@@ -52,7 +52,7 @@ def PrintSearchBox(page, search_value = '', search_type = ''):
 	print 'Search the database'
         print '<form method="get" action="http:/%s/se.cgi" name="searchform" id="searchform">' % (HTFAKE)
 	print '<p>'
-	print '<input name="arg" id="searchform_arg" class="search" value="%s">' % search_value
+	print '<input name="arg" id="searchform_arg" class="search" value="%s">' % ISFDBText(search_value)
 	print '<select name="type" class="search">'
 	options = ('Name', 'Fiction Titles', 'All Titles', 'Year of Title',
                    'Month of Title', 'Month of Publication', 'Series',

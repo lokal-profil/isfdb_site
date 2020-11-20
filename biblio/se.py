@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -18,7 +18,7 @@ from isfdb import *
 from SQLparsing import *
 from common import *
 from biblio import *
-from library import validateMonth, normalizeInput, ServerSideRedirect
+from library import validateMonth, normalizeInput, ISFDBText, ServerSideRedirect
 from isbn import *
 
 ##########################################################################################
@@ -41,7 +41,7 @@ def validateYear(string):
                 return (0, error)
 
 def PrintSummary(arg, count, limit, search_type, search_abbreviation):
-        print "<p><b>A search for '%s' found %d matches" % (arg, count)
+        print "<p><b>A search for '%s' found %d matches" % (ISFDBText(arg), count)
         if count >= limit:
 		print "<br>The first %d matches are displayed below. " % (limit)
 		print 'Use <a class="inverted" href="http:/%s/adv_search_selection.cgi?%s">Advanced %s Search</a>' % (HTFAKE, search_abbreviation, search_type)
@@ -57,7 +57,7 @@ def PrintGoogleSearch(arg, search_type):
         print '<option VALUE="exact">exact %s search' % search_type
         print '<option SELECTED VALUE="approximate">approximate %s search' % search_type
 	print '</select>'
-        print ' on <input NAME="SEARCH_VALUE" SIZE="50" VALUE="%s">' % arg
+        print ' on <input NAME="SEARCH_VALUE" SIZE="50" VALUE="%s">' % ISFDBText(arg)
 	print '<input NAME="PAGE_TYPE" VALUE="%s" TYPE="HIDDEN">' % search_type
 	print '<input TYPE="SUBMIT" VALUE="using Google">'
 	print '</form>'
@@ -68,7 +68,7 @@ def PrintReplaceScript(script, value):
 def DoError(error, search_value, search_type):
         PrintHeader('ISFDB Search Error')
         PrintNavbar('search', '', 0, 'se.cgi', '', search_value, search_type)
-        print '<h2>%s</h2>' % error
+        print '<h2>%s</h2>' % ISFDBText(error)
         PrintTrailer('search', '', 0)
         sys.exit(0)
 
@@ -454,6 +454,5 @@ if __name__ == '__main__':
         else:
                 DoError('No search value specified', search_value, type)
 
-	print '<p>'
 	PrintTrailer('search', 0, 0)
 
