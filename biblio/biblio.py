@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2020   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -741,9 +741,9 @@ class Bibliography:
 
         def printCommonError(self, author, message, noheader = 0):
                 if noheader:
-                        PrintHeader(message)
+                        PrintHeader(ISFDBText(message))
                 PrintNavbar('author', author, 0, self.cgi_script, author)
-                print '<h2>%s</h2>' % message
+                print '<h2>%s</h2>' % ISFDBText(message)
                 PrintTrailer('author', author, 0)
                 sys.exit(0)
 
