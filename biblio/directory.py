@@ -15,6 +15,7 @@ import os
 import string
 from SQLparsing import *
 from biblio import *
+from library import ISFDBText
 
 
 def PrintPublisherTableColumns():
@@ -76,7 +77,7 @@ if __name__ == '__main__':
 
         try:
                 section = unescapeLink(sys.argv[2])
-		title = "%s Directory: %s" % (dir_type.title(), section.title())
+		title = "%s Directory: %s" % (dir_type.title(), ISFDBText(section.title()))
 	except:
 		section = ''
 		title = "%s Directory" % (dir_type.title())
@@ -160,10 +161,11 @@ if __name__ == '__main__':
                 # Magazine Directory
                 if dir_type == 'magazine':
                         (results, count) = SQLFindMagazine(search_string, 1)
+                        print '<br><br>'
                         if count:
-                                print """<h3>Note: Matching magazines whose series titles do not match the
-                                entered value have asterisks next to their titles.<p>
-                                Number of %s names starting with "%s": %d </h3>""" % (dir_type, section, count)
+                                print """<b>Note: Matching magazines whose series titles do not match the
+                                entered value have asterisks next to their titles.<br><br>
+                                Number of %s names starting with "%s": %d </b>""" % (dir_type, ISFDBText(section), count)
                                 PrintMagazineTableColumns()
                                 bgcolor = 1
                                 for title in sorted(results.keys(), key=lambda x: x.lower()):
@@ -172,9 +174,9 @@ if __name__ == '__main__':
                                                 series_name = results[title][series_id][1]
                                                 PrintMagazineRecord(title, series_id, parent_id, series_name, bgcolor)
                                                 bgcolor ^= 1
-                                print '</table><p>'
+                                print '</table>'
                         else:
-                                print '<h3>No %s names found starting with: %s</h3>' % (dir_type, section)
+                                print '<b>No %s names found starting with: %s</b>' % (dir_type, ISFDBText(section))
                         PrintTrailer('directory', 0, 0)
                         sys.exit(0)
 
