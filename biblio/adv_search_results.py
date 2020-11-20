@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2020   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -49,7 +49,7 @@ class AdvancedSearchResults(AdvancedSearch):
 
         def results(self):
                 self.parse_parameters()
-                PrintHeader("Advanced %s Search" % self.search_type)
+                PrintHeader("Advanced %s Search" % ISFDBText(self.search_type))
                 PrintNavbar('adv_search_results', 0, 0, 0, 0)
                 self.set_search_type()
                 self.process_terms()
@@ -71,7 +71,7 @@ class AdvancedSearchResults(AdvancedSearch):
                 self.display_message('Error: %s' % message)
 
         def display_message(self, message):
-                print '<h2>%s</h2>' % message
+                print '<h2>%s</h2>' % ISFDBText(message)
                 PrintTrailer('adv_search_results', 0, 0)
                 sys.exit(0)
 
@@ -348,19 +348,19 @@ class AdvancedSearchResults(AdvancedSearch):
                         self.display_message('Count of matching records: %d' % self.records[0])
 
         def print_selection_criteria(self):
-                print '<b>Selection Criteria (joined using %s):</b>' % self.conjunction
+                print '<b>Selection Criteria (joined using %s):</b>' % ISFDBText(self.conjunction)
                 for selection in sorted(self.selection_criteria):
                         print '<br>'
                         for term_tuple in self.selection[self.search_type]:
                                 if term_tuple[0] == selection[0]:
-                                        print term_tuple[1]
+                                        print ISFDBText(term_tuple[1])
                                         break
                         for operator_tuple in self.operators:
                                 if operator_tuple[0] == selection[1]:
-                                        print operator_tuple[1]
+                                        print ISFDBText(operator_tuple[1])
                                         break
-                        print selection[2]
-                print '<br>Sort by %s' % self.sort_name
+                        print ISFDBText(selection[2])
+                print '<br>Sort by %s' % ISFDBText(self.sort_name)
 
         def print_pub_results(self):
                 PrintPubsTable(self.records, 'adv_search', self.user, 100)
@@ -461,7 +461,7 @@ class AdvancedSearchResults(AdvancedSearch):
                 print '<input NAME="START" value="%s" type="HIDDEN">' % new_start
                 for key in self.form.keys():
                         if key != 'START':
-                                key_value = cgi.escape(self.form[key], True)
+                                key_value = ISFDBText(self.form[key], True)
                                 print '<input NAME="%s" value="%s" type="HIDDEN">' % (key, key_value)
                 if direction == 'Previous':
                         start = self.start-99
