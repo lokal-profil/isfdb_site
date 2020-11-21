@@ -646,7 +646,8 @@ if __name__ == '__main__':
 
 	print '[<a href="http:/%s/edit/editpub.cgi?%d">Edit This Pub</a>]' % (HTFAKE, int(Record))
 	print '[<a href="http:/%s/pl.cgi?%d">View This Pub</a>]' % (HTFAKE, int(Record))
+	print '[<a href="http:/%s/edit/verify.cgi?%d">Verify this Pub</a>]' % (HTFAKE, int(Record))
 	print '[<a href="http:/%s/edit/find_pub_dups.cgi?%d">Check for Duplicate Titles</a>]' % (HTFAKE, int(Record))
-	print "<p>"
+	print '<p>'
 
 	PrintPostMod(0)
