@@ -1840,9 +1840,9 @@ class isfdbUI:
                         return 'Mismatched HTML tags'
                 return ''
 
-        def mismatchedTemplateBraces(self, value):
-                if (value.count('{{') != value.count('}}')) or ('{{{' in value) or ('}}}' in value):
-                        return 'Mismatched template braces'
+        def mismatchedBraces(self, value):
+                if value.count('{') != value.count('}'):
+                        return 'Mismatched braces'
                 return ''
 
         def unrecognizedTemplate(self, value):

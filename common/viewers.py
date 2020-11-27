@@ -239,7 +239,7 @@ def PrintField1XML(Label, XmlData, title = 0):
                 elif Label in ('TitleNote', 'Note', 'Synopsis'):
                         warnings = []
                         warnings.append(ui.invalidHtmlInNotes(value))
-                        warnings.append(ui.mismatchedTemplateBraces(value))
+                        warnings.append(ui.mismatchedBraces(value))
                         warnings.append(ui.unrecognizedTemplate(value))
                         for match in warnings:
                                 if not match:

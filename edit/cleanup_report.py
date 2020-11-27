@@ -6581,13 +6581,13 @@ def function272():
 
 def function273():
         query = """select cleanup.record_id, notes.note_id,
-                LENGTH(notes.note_note) - LENGTH(REPLACE(notes.note_note, '{{', '')) openquote, 
-                LENGTH(notes.note_note) - LENGTH(REPLACE(notes.note_note, '}}', '')) closequote 
+                LENGTH(notes.note_note) - LENGTH(REPLACE(notes.note_note, '{', '')) openquote, 
+                LENGTH(notes.note_note) - LENGTH(REPLACE(notes.note_note, '}', '')) closequote 
                 from cleanup, notes
                 where cleanup.record_id=notes.note_id
                 and cleanup.report_type=273
                 having openquote != closequote"""
-        MismatchesInNotes(query, 'Mismatched Template Braces')
+        MismatchesInNotes(query, 'Mismatched Braces')
 
 def function274():
         query = """select cleanup.record_id, notes.note_id

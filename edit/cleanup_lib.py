@@ -283,7 +283,7 @@ def reportsDict():
         reports[270] = ("Spanish Translations without Notes (first 1000)")
         reports[271] = ("Japanese Translations without Notes (first 1000)")
         reports[272] = ("Publications with incomplete contents and no Incomplete template")
-        reports[273] = ("Mismatched Template Braces")
+        reports[273] = ("Mismatched Braces")
         reports[274] = ("References to Non-Existent Templates")
         reports[275] = ("Title Dates Before First Publication Date (first 1000)")
         reports[276] = ("Variant Title Dates Before Canonical Title Dates")
