@@ -573,7 +573,7 @@ def PrintNavbar(page_type, arg1, arg2, executable, argument, search_value = '', 
                                 print 'Other Links:'
                                 print '</div>'
                                 print '<ul class="navbar">'
-                                print '<li><a href="http://www.gutenberg.org/etext/%s" target="_blank">Project Gutenberg</a>' % arg1[PUB_CATALOG]
+                                print '<li><a href="http://www.gutenberg.org/ebooks/%s" target="_blank">Project Gutenberg</a>' % arg1[PUB_CATALOG]
                                 print '</ul>'
 
 	PrintEditTools(page_type, userid, arg1, arg2)
