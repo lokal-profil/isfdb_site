@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2019   Ahasuerus
+#     (C) COPYRIGHT 2019-2020   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -21,10 +21,10 @@ from isfdblib import *
 class ExternalIdRanges:
         def __init__(self):
                 self.types_with_ranges = {}
+                self.ranges = {}
                 self.load_types_with_ranges()
                 self.in_clause = dict_to_in_clause(self.types_with_ranges)
                 self.id_values = {}
-                self.ranges = {}
 
         def load_types_with_ranges(self):
                 # Create a disctionary of External ID Type Names/IDs for types that have meaningful ranges
@@ -34,6 +34,7 @@ class ExternalIdRanges:
                         type_name = all_types[type_number][0]
                         if 'Reginald' in type_name or 'Bleiler' in type_name:
                                 self.types_with_ranges[type_number] = type_name
+                                self.ranges[type_name] = []
 
         def load_ids(self):
                 query = """select distinct identifier_type_id, CAST(identifier_value as UNSIGNED)
@@ -63,12 +64,13 @@ class ExternalIdRanges:
                                 # If this value continues the current range, reset the range end point
                                 if (id_value - 1) == range_end:
                                         range_end = id_value
+                                # If this is the start of a new ID range, save the old range
                                 else:
-                                        if type_name not in self.ranges:
-                                                self.ranges[type_name] = []
                                         self.ranges[type_name].append((range_start, range_end))
                                         range_start = id_value
                                         range_end = id_value
+                        # Save the last found ID range
+                        self.ranges[type_name].append((range_start, range_end))
 
         def display_ranges(self):
                 for type_name in sorted(self.ranges):
