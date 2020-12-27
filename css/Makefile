@@ -34,6 +34,7 @@ TARGETS	= apple-touch-icon.png \
 	  IsfdbBanner9.jpg \
 	  IsfdbBanner10.jpg \
 	  IsfdbBanner11.jpg \
+	  IsfdbBanner12.jpg \
 	  question_mark_icon.gif \
 	  adv_search.js \
 	  edit_js.js \

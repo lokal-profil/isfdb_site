@@ -68,8 +68,8 @@ def PrintHTMLHeaders(title):
     millenium = date(2000, 1, 1)
     today = date.today()
     elapsed = today - millenium
-    # Calculate the banner number for today; the range is 1-11
-    banner_number = (elapsed.days % 11) + 1
+    # Calculate the banner number for today; the range is 1-12
+    banner_number = (elapsed.days % 12) + 1
     print '<img src="http://%s/IsfdbBanner%d.jpg" alt="ISFDB banner">' % (HTMLHOST, banner_number)
     print '</span>'
     print '</a>'
