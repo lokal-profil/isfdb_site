@@ -164,16 +164,22 @@ if __name__ == '__main__':
         except:
                 DoError('Bad Argument')
 
+        user = User()
+        user.load()
+
         # Determine the variant display option:
         # 0 means display all variants
         # 1 means do not display translations, but display same-language variants
         # 2 means do not display any variants
         try:
                 variant_display = int(sys.argv[2])
-                if variant_display not in (1,2):
+                if variant_display not in (0, 1, 2):
                         raise
         except:
-                variant_display = 0
+                if user.display_title_translations:
+                        variant_display = 0
+                else:
+                        variant_display = 1
 
 	########################################
 	# STEP 1 - Get the title record
@@ -191,8 +197,6 @@ if __name__ == '__main__':
 
 	SQLupdateTitleViews(title_id)
 
-        user = User()
-        user.load()
         # Retrieve this title's variants
 	titles = SQLgetTitleVariants(title_id)
 

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2016   Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2009-2020   Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -41,8 +41,8 @@ if __name__ == '__main__':
 	concise_checked = ''
 	if user.concise_display:
                 concise_checked = 'checked'
-        print '<li><input type="checkbox" name="concise_display" value="on"'
-        print ' %s>%s</li>' % (concise_checked, "Use concise Publication listing by default")
+        print '<li><input type="checkbox" name="concise_display" value="on" %s>%s</li>' % (concise_checked,
+                                                                                           "Use concise Publication listing by default")
         print '<br>'
 
         print '<b>Title Pages</b><br>'
@@ -50,32 +50,32 @@ if __name__ == '__main__':
 	covers_checked = ''
 	if user.covers_display:
                 covers_checked = 'checked'
-        print '<li><input type="checkbox" name="covers_display" value="on"'
-        print ' %s>%s</li>' % (covers_checked, "Display cover images on Title pages")
+        print '<li><input type="checkbox" name="covers_display" value="on" %s>%s</li>' % (covers_checked,
+                                                                                          "Display cover images on Title pages")
 
 	suppress_bibliographic_warnings = ''
 	if user.suppress_bibliographic_warnings:
                 suppress_bibliographic_warnings = 'checked'
-        print '<li><input type="checkbox" name="suppress_bibliographic_warnings" value="on"'
-        print ' %s>%s</li>' % (suppress_bibliographic_warnings, "Do not display bibliographic warnings on Title pages")
+        print '<li><input type="checkbox" name="suppress_bibliographic_warnings" value="on" %s>%s</li>' % (suppress_bibliographic_warnings,
+                                                                                                           "Do not display bibliographic warnings on Title pages")
 
 	suppress_awards = ''
 	if user.suppress_awards:
                 suppress_awards = 'checked'
-        print '<li><input type="checkbox" name="suppress_awards" value="on"'
-        print ' %s>%s</li>' % (suppress_awards, "Do not display awards on Title pages")
+        print '<li><input type="checkbox" name="suppress_awards" value="on" %s>%s</li>' % (suppress_awards,
+                                                                                           "Do not display awards on Title pages")
 
 	suppress_reviews = ''
 	if user.suppress_reviews:
                 suppress_reviews = 'checked'
-        print '<li><input type="checkbox" name="suppress_reviews" value="on"'
-        print ' %s>%s</li>' % (suppress_reviews, "Do not display reviews on Title pages")
+        print '<li><input type="checkbox" name="suppress_reviews" value="on" %s>%s</li>' % (suppress_reviews,
+                                                                                            "Do not display reviews on Title pages")
 
 	cover_links_display = ''
 	if user.cover_links_display:
                 cover_links_display = 'checked'
-        print '<li><input type="checkbox" name="cover_links_display" value="on"'
-        print ' %s>%s</li>' % (cover_links_display, "Display cover scan indicators on Title and search pages")
+        print '<li><input type="checkbox" name="cover_links_display" value="on" %s>%s</li>' % (cover_links_display,
+                                                                                               "Display cover scan indicators on Title and search pages")
         print '<br>'
 
         print '<b>Searching</b><br>'
@@ -83,8 +83,8 @@ if __name__ == '__main__':
 	keep_spaces_in_searches = ''
 	if user.keep_spaces_in_searches:
                 keep_spaces_in_searches = 'checked'
-        print '<li><input type="checkbox" name="keep_spaces_in_searches" value="on"'
-        print ' %s>%s</li>' % (keep_spaces_in_searches, "Keep leading and trailing spaces when searching")
+        print '<li><input type="checkbox" name="keep_spaces_in_searches" value="on" %s>%s</li>' % (keep_spaces_in_searches,
+                                                                                                   "Keep leading and trailing spaces when searching")
         print '<br>'
 
         print '<b>Editing</b><br>'
@@ -92,15 +92,15 @@ if __name__ == '__main__':
         suppress_help_bubbles = ''
 	if user.suppress_help_bubbles:
                 suppress_help_bubbles = 'checked'
-        print '<li><input type="checkbox" name="suppress_help_bubbles" value="on"'
-        print ' %s>%s</li>' % (suppress_help_bubbles, "Do not display mouseover help on Edit pages")
+        print '<li><input type="checkbox" name="suppress_help_bubbles" value="on" %s>%s</li>' % (suppress_help_bubbles,
+                                                                                                 "Do not display mouseover help on Edit pages")
 
         if SQLisUserModerator(user.id):
                 display_post_submission = ''
                 if user.display_post_submission:
                         display_post_submission = 'checked'
-                print '<li><input type="checkbox" name="display_post_submission" value="on"'
-                print ' %s>%s</li>' % (display_post_submission, "Display post-submission review pages")
+                print '<li><input type="checkbox" name="display_post_submission" value="on" %s>%s</li>' % (display_post_submission,
+                                                                                                           "Display post-submission review pages")
 
         print "<li>Default author/title language when editing records: "
         print '<select name="default_language">'
@@ -115,13 +115,13 @@ if __name__ == '__main__':
                 # Otherwise this language is displayed, but is not "selected"
                 else:
                         print '<option value="%s">%s</option>' % (language_id, language_name)
-        print "</select>"
+        print '</select>'
 
         print '<br>'
         print '<br>'
         print '<b>Translations</b><br>'
 
-        print '<li>Display translations: '
+        print '<li>Display translations on Author and Series pages: '
         print '<select name="display_all_languages">'
         for value in ('All', 'None', 'Selected'):
                 if value == user.display_all_languages:
@@ -130,11 +130,18 @@ if __name__ == '__main__':
                         print '<option>%s</option>' % value
         print '</select>'
         print ' (if you chose "Selected", you should also set up <a href="http:/%s/mylanguages.cgi">Translation Preferences</a>)' % (HTFAKE)
+
+	display_title_translations = ''
+	if user.display_title_translations:
+                display_title_translations = 'checked'
+        print '<li><input type="checkbox" name="display_title_translations" value="on" %s>%s</li>' % (display_title_translations,
+                                                                                                      "Display translations on Title pages")
+
 	suppress_translation_warnings = ''
 	if user.suppress_translation_warnings:
                 suppress_translation_warnings = 'checked'
-        print '<li><input type="checkbox" name="suppress_translation_warnings" value="on"'
-        print ' %s>%s</li>' % (suppress_translation_warnings, "Do not display translation warnings on Author and Series pages")
+        print '<li><input type="checkbox" name="suppress_translation_warnings" value="on" %s>%s</li>' % (suppress_translation_warnings,
+                                                                                                         "Do not display translation warnings on Author and Series pages")
         print '<br>'
 
         print '</ul>'

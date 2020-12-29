@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2017   Al von Ruff, Ahasuerus and Uzume
+#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus and Uzume
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -122,6 +122,7 @@ class User:
 		# The default language is English (17) if none is specified
 		self.default_language = 17
 		self.display_all_languages = 'All'
+		self.display_title_translations = 1
 		self.covers_display = ''
 		self.preferences_id = ''
 		self.suppress_translation_warnings = ''
@@ -154,7 +155,7 @@ class User:
                  self.suppress_bibliographic_warnings, self.cover_links_display,
                  self.keep_spaces_in_searches, self.suppress_help_bubbles,
                  self.suppress_awards, self.suppress_reviews,
-                 self.display_post_submission) = SQLLoadUserPreferences(self.id)
+                 self.display_post_submission, self.display_title_translations) = SQLLoadUserPreferences(self.id)
                 self.languages = SQLLoadUserLanguages(self.id)
                 self.preferences_id = SQLUserPreferencesId(int(self.id))
 

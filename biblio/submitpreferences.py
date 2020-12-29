@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2016   Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2009-2020   Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -88,6 +88,11 @@ if __name__ == '__main__':
         if form.has_key("display_post_submission"):
                 display_post_submission = 1
 
+        #Initialize the value of the "Display translations on Title pages" user preference
+        display_title_translations = 0
+        if form.has_key("display_title_translations"):
+                display_title_translations = 1
+
         #Retrieve the value of the "Display translations" drop-down list
         try:
                 display_all_languages = form["display_all_languages"].value
@@ -102,12 +107,14 @@ if __name__ == '__main__':
                 update = """insert into user_preferences(user_id, concise_disp, display_all_languages,
                         default_language, covers_display, suppress_translation_warnings,
                         suppress_bibliographic_warnings, cover_links_display, keep_spaces_in_searches,
-                        suppress_help_bubbles, suppress_awards, suppress_reviews, display_post_submission)
-                        values(%d, %d, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %d, %d
+                        suppress_help_bubbles, suppress_awards, suppress_reviews, display_post_submission,
+                        display_title_translations)
+                        values(%d, %d, '%s', %d, %d, %d, %d, %d, %d, %d, %d, %d, %d, %d
                         )""" % (user_id, concise_display, display_all_languages, default_language, covers_display,
-                                  suppress_translation_warnings, suppress_bibliographic_warnings,
-                                  cover_links_display, keep_spaces_in_searches, suppress_help_bubbles,
-                                  suppress_awards, suppress_reviews, display_post_submission)
+                                suppress_translation_warnings, suppress_bibliographic_warnings,
+                                cover_links_display, keep_spaces_in_searches, suppress_help_bubbles,
+                                suppress_awards, suppress_reviews, display_post_submission,
+                                display_title_translations)
 
         #If this user's preferences are currently defined, update them
         else:
@@ -122,7 +129,8 @@ if __name__ == '__main__':
                 update += "suppress_help_bubbles = %d, " % suppress_help_bubbles
                 update += "suppress_awards = %d, " % suppress_awards
                 update += "suppress_reviews = %d, " % suppress_reviews
-                update += "display_post_submission = %d " % display_post_submission
+                update += "display_post_submission = %d, " % display_post_submission
+                update += "display_title_translations = %d " % display_title_translations
                 update += "where user_pref_id =%d" % user.preferences_id
         db.query(update)
         

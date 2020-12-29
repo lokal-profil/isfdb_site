@@ -2573,12 +2573,12 @@ def SQLLoadUserPreferences(user_id):
 	query = """select concise_disp, default_language, display_all_languages,
                 covers_display, suppress_translation_warnings, suppress_bibliographic_warnings,
                 cover_links_display, keep_spaces_in_searches, suppress_help_bubbles,
-                suppress_awards, suppress_reviews, display_post_submission
-                from user_preferences where user_id=%d""" % (int(user_id))
+                suppress_awards, suppress_reviews, display_post_submission, display_title_translations
+                from user_preferences where user_id=%d""" % int(user_id)
 	db.query(query)
 	result = db.store_result()
-	# Set the default values to 0; set the default language to 17, i.e. "English"
-	preferences = (0, 17, 'All', 0, 0, 0, 0, 0, 0, 0, 0, 0)
+	# Set the default values; the default language is 17, i.e. "English"
+	preferences = (0, 17, 'All', 0, 0, 0, 0, 0, 0, 0, 0, 0, 1)
 	if result.num_rows() > 0:
         	row = result.fetch_row()
         	# Temporarily convert the tuple returned by the query to a list
