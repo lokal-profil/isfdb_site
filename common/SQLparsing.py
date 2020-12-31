@@ -3089,6 +3089,15 @@ def SQLDeletedTitle(title_id):
 	else:
 		return 0
 
+def SQLDeletedAward(award_id):
+        query = "select 1 from submissions where sub_type = %d and affected_record_id = %d" % (MOD_AWARD_DELETE, award_id)
+        db.query(query)
+        result = db.store_result()
+	if result.num_rows() > 0:
+		return 1
+	else:
+		return 0
+
 def SQLDuplicateImageURL(value):
         query = "select * from pubs where pub_frontimage = '%s'" % db.escape_string(value)
 	return StandardQuery(query)

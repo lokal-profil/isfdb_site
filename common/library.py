@@ -1756,8 +1756,10 @@ def buildRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
                                 output += ' [<a href="http:/%s/edit/%s.cgi?%d">Edit</a>]' % (HTFAKE, cgi_script, int(record_id))
                                 if record_type == 'Publication':
                                         output += ' [<a href="http:/%s/pub_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
-                                if record_type == 'Title':
+                                elif record_type == 'Title':
                                         output += ' [<a href="http:/%s/title_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
+                                elif record_type == 'Award':
+                                        output += ' [<a href="http:/%s/award_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
         output += '</span>'
         return output
 
