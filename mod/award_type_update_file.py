@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2013-2019   Ahasuerus
+#     (C) COPYRIGHT 2013-2020   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -166,7 +166,7 @@ if __name__ == '__main__':
                                 print "<li> ", update
                                 db.query(update)
 
-        markIntegrated(db, submission)
+        markIntegrated(db, submission, current.award_type_id)
 
 	print '[<a href="http:/%s/edit/editawardtype.cgi?%s">Edit This Award Type</a>]' % (HTFAKE, current.award_type_id)
 	print '[<a href="http:/%s/awardtype.cgi?%s">View This Award Type</a>]' % (HTFAKE, current.award_type_id)

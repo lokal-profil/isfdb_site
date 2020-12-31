@@ -349,11 +349,11 @@ MOD_REVIEW_LINK      = 25
 MOD_DELETE_SERIES    = 26
 MOD_REMOVE_PSEUDO    = 27
 MOD_PUB_SERIES_UPDATE= 28
-MOD_AWARD_TYPE_UPDATE= 29
+MOD_AWARD_TYPE_UPDATE= 29 # Edit History supported
 MOD_AWARD_LINK       = 30
-MOD_AWARD_TYPE_NEW   = 31 # Edit History supported
-MOD_AWARD_TYPE_DELETE= 32
-MOD_AWARD_CAT_NEW    = 33 # Edit History supported
+MOD_AWARD_TYPE_NEW   = 31 # Edit History supported for submisisons created after 2016-10-24
+MOD_AWARD_TYPE_DELETE= 32 # Edit History supported
+MOD_AWARD_CAT_NEW    = 33 # Edit History supported for submisisons created after 2016-10-24
 MOD_AWARD_CAT_DELETE = 34
 MOD_AWARD_CAT_UPDATE = 35
 

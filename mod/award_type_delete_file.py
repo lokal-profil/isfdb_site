@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2019   Ahasuerus
+#     (C) COPYRIGHT 2014-2020   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -73,6 +73,6 @@ if __name__ == '__main__':
         print "<li> ", delete
         db.query(delete)
 
-        markIntegrated(db, submission)
+        markIntegrated(db, submission, current.award_type_id)
 
 	PrintPostMod(0)

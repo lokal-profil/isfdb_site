@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2013-2015   Ahasuerus
+#     (C) COPYRIGHT 2013-2020   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,23 +17,29 @@ from awardtypeClass import *
 from SQLparsing import SQLloadAwardTypeWebpages, SQLgetNotes
 from common import *
 
+def DoError(message):
+        PrintHeader('Unknown Award Type Record')
+        PrintNavbar('award_type', '', 0, 'awardtype.cgi', '')
+        print """<h3>%s</h3>""" % message
+        PrintTrailer('award_type', '', 0)
+        sys.exit(0)
+
 
 if __name__ == '__main__':
 
         try:
-                award_type_id = str(sys.argv[1])
-		if int(award_type_id) < 1:
-			raise
-                award_type = award_type()
-                award_type.award_type_id = award_type_id
-                award_type.load()
-                if not award_type.award_type_name:
-                        raise
+                award_type_id = int(sys.argv[1])
 	except:
-		PrintHeader('Award Type - Argument Error')
-		PrintNavbar('award_type', '', 0, 'awardtype.cgi', '')
-		PrintTrailer('award_type', '', 0)
-		sys.exit(0)
+		DoError('Unknown Award Type Record')
+
+        award_type = award_type()
+        award_type.award_type_id = award_type_id
+        award_type.load()
+        if not award_type.award_type_name:
+		if SQLDeletedAwardType(award_type_id):
+                        DoError('This award type has been deleted. See %s for details.' % ISFDBLink('awardtype_history.cgi', award_type_id, 'Edit History'))
+                else:
+                        DoError('Unknown Award Type Record')
 
 	title = 'Overview of %s' % award_type.award_type_name
 	PrintHeader(title)
