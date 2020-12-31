@@ -20,6 +20,7 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/authors_by_debut_year_table.cgi \
 	  DIR/authortags.cgi \
 	  DIR/award_category.cgi \
+	  DIR/award_category_history.cgi \
 	  DIR/award_category_year.cgi \
 	  DIR/award_details.cgi \
 	  DIR/award_directory.cgi \

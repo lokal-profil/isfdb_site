@@ -354,8 +354,8 @@ MOD_AWARD_LINK       = 30
 MOD_AWARD_TYPE_NEW   = 31 # Edit History supported for submisisons created after 2016-10-24
 MOD_AWARD_TYPE_DELETE= 32 # Edit History supported
 MOD_AWARD_CAT_NEW    = 33 # Edit History supported for submisisons created after 2016-10-24
-MOD_AWARD_CAT_DELETE = 34
-MOD_AWARD_CAT_UPDATE = 35
+MOD_AWARD_CAT_DELETE = 34 # Edit History supported
+MOD_AWARD_CAT_UPDATE = 35 # Edit History supported
 
 # SUBMAP is a dictionary used to store information about submission types
 # [0] - Name of the moderator review script
