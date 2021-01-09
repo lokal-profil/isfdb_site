@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -343,7 +343,7 @@ MOD_AUTHOR_PSEUDO    = 19
 MOD_AWARD_NEW        = 20 # Edit History supported for submisisons created after 2016-10-24
 MOD_AWARD_UPDATE     = 21 # Edit History supported
 MOD_AWARD_DELETE     = 22 # Edit History supported
-MOD_PUBLISHER_UPDATE = 23
+MOD_PUBLISHER_UPDATE = 23 # Edit History supported
 MOD_PUBLISHER_MERGE  = 24
 MOD_REVIEW_LINK      = 25
 MOD_DELETE_SERIES    = 26
