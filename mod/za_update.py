@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2010-2019   Ahasuerus
+#     (C) COPYRIGHT 2010-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -157,7 +157,7 @@ if __name__ == '__main__':
 					print "<li> ", update
 					db.query(update)
 
-		markIntegrated(db, submission)
+		markIntegrated(db, submission, Record)
 
 	print '[<a href="http:/' +HTFAKE+ '/edit/editpubseries.cgi?%d">Edit This Publication Series</a>]' % (int(Record))
 	print '[<a href="http:/' +HTFAKE+ '/pubseries.cgi?%d">View This Publication Series</a>]' % (int(Record))

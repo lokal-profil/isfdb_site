@@ -67,6 +67,7 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/publisher_history.cgi \
 	  DIR/publisheryear.cgi \
 	  DIR/pubseries.cgi \
+	  DIR/pubseries_history.cgi \
 	  DIR/pubs_not_in_series.cgi \
 	  DIR/recent.cgi \
 	  DIR/recent_activity_menu.cgi \

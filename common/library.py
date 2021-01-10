@@ -1766,6 +1766,8 @@ def buildRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
                                         output += ' [<a href="http:/%s/award_category_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
                                 elif record_type == 'Publisher':
                                         output += ' [<a href="http:/%s/publisher_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
+                                elif record_type == 'Pub. Series':
+                                        output += ' [<a href="http:/%s/pubseries_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
         output += '</span>'
         return output
 
