@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -199,7 +199,7 @@ if __name__ == '__main__':
 		if GetElementValue(merge, 'Webpages'):
                         UpdateMultiple(Record, 'url', 'webpages', 'author_id', 'Webpage', 'author_webpages')
 
-		markIntegrated(db, submission)
+		markIntegrated(db, submission, Record)
 
 	print '[<a href="http:/' +HTFAKE+ '/edit/editauth.cgi?%d">Edit This Author</a>]' % (int(Record))
 	print '[<a href="http:/' +HTFAKE+ '/ea.cgi?%s">View This Author</a>]' % (Record)

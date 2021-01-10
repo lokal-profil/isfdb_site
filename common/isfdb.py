@@ -322,7 +322,7 @@ DEL_VER_DELETION_TIME = 6
 
 # Recognized submission types
 MOD_AUTHOR_MERGE     = 1
-MOD_AUTHOR_UPDATE    = 2
+MOD_AUTHOR_UPDATE    = 2 # Edit History supported
 MOD_AUTHOR_DELETE    = 3 # Never used
 MOD_PUB_UPDATE       = 4 # Edit History supported
 MOD_PUB_MERGE        = 5 # No longer used

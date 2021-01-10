@@ -1734,11 +1734,12 @@ def printRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
         print buildRecordID(record_type, record_id, user_id, user, edit_mode)
 
 def buildRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
+        from login import User
 	output = '<span class="recordID"><b>%s Record # </b>%d' % (record_type, int(record_id))
 	if user_id:
                 cgi_scripts = {'Publication': ('editpub', 'pub_history'),
                                'Title': ('edittitle', 'title_history'),
-                               'Author': ('editauth', ''),
+                               'Author': ('editauth', 'author_history'),
                                'Series': ('editseries', 'series_history'),
                                'Publisher': ('editpublisher', 'publisher_history'),
                                'Pub. Series': ('editpubseries', 'pubseries_history'),
@@ -1747,15 +1748,20 @@ def buildRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
                                'Award Type': ('editawardtype', 'awardtype_history')
                                }
                 if record_type in cgi_scripts:
-                        cgi_script = cgi_scripts[record_type][0]
-                        if record_type in ('Award Category', 'Award Type'):
+                        if not user:
+                                user = User()
+                                user.load()
                                 user.load_moderator_flag()
-                                if not user.moderator:
-                                        edit_mode = 0
+                        cgi_script = cgi_scripts[record_type][0]
+                        if record_type in ('Award Category', 'Award Type') and not user.moderator:
+                                edit_mode = 0
                         if edit_mode:
                                 output += ' [<a href="http:/%s/edit/%s.cgi?%d">Edit</a>]' % (HTFAKE, cgi_script, int(record_id))
                                 history_script = cgi_scripts[record_type][1]
-                                if history_script:
+                                # Only moderators can view Author Edit History at this time
+                                if record_type == 'Author' and not user.moderator:
+                                        pass
+                                else:
                                         output += ' [<a href="http:/%s/%s.cgi?%d">Edit History</a>]' % (HTFAKE, history_script, int(record_id))
         output += '</span>'
         return output
