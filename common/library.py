@@ -1736,38 +1736,27 @@ def printRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
 def buildRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
 	output = '<span class="recordID"><b>%s Record # </b>%d' % (record_type, int(record_id))
 	if user_id:
-                cgi_scripts = {'Publication': 'editpub',
-                               'Title': 'edittitle',
-                               'Author': 'editauth',
-                               'Series': 'editseries',
-                               'Publisher': 'editpublisher',
-                               'Pub. Series': 'editpubseries',
-                               'Award': 'editaward',
-                               'Award Category': 'editawardcat',
-                               'Award Type': 'editawardtype'
+                cgi_scripts = {'Publication': ('editpub', 'pub_history'),
+                               'Title': ('edittitle', 'title_history'),
+                               'Author': ('editauth', ''),
+                               'Series': ('editseries', 'series_history'),
+                               'Publisher': ('editpublisher', 'publisher_history'),
+                               'Pub. Series': ('editpubseries', 'pubseries_history'),
+                               'Award': ('editaward', 'award_history'),
+                               'Award Category': ('editawardcat', 'award_category_history'),
+                               'Award Type': ('editawardtype', 'awardtype_history')
                                }
                 if record_type in cgi_scripts:
-                        cgi_script = cgi_scripts[record_type]
+                        cgi_script = cgi_scripts[record_type][0]
                         if record_type in ('Award Category', 'Award Type'):
                                 user.load_moderator_flag()
                                 if not user.moderator:
                                         edit_mode = 0
                         if edit_mode:
                                 output += ' [<a href="http:/%s/edit/%s.cgi?%d">Edit</a>]' % (HTFAKE, cgi_script, int(record_id))
-                                if record_type == 'Publication':
-                                        output += ' [<a href="http:/%s/pub_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
-                                elif record_type == 'Title':
-                                        output += ' [<a href="http:/%s/title_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
-                                elif record_type == 'Award':
-                                        output += ' [<a href="http:/%s/award_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
-                                elif record_type == 'Award Type':
-                                        output += ' [<a href="http:/%s/awardtype_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
-                                elif record_type == 'Award Category':
-                                        output += ' [<a href="http:/%s/award_category_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
-                                elif record_type == 'Publisher':
-                                        output += ' [<a href="http:/%s/publisher_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
-                                elif record_type == 'Pub. Series':
-                                        output += ' [<a href="http:/%s/pubseries_history.cgi?%d">Edit History</a>]' % (HTFAKE, int(record_id))
+                                history_script = cgi_scripts[record_type][1]
+                                if history_script:
+                                        output += ' [<a href="http:/%s/%s.cgi?%d">Edit History</a>]' % (HTFAKE, history_script, int(record_id))
         output += '</span>'
         return output
 

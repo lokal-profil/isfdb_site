@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -20,7 +20,7 @@ from seriesClass import *
 
 
 def DoError(text):
-        PrintHeader("Series Error")
+        PrintHeader('Invalid Series')
         PrintNavbar('seriesName', 0, 0, 'pe.cgi', 0)
         print '<h2>Error: %s.</h2>' % text
         PrintTrailer('series', 0, 0)
@@ -80,34 +80,32 @@ def printSeries(seriesData, seriesTitles, seriesTree, parentAuthors,
 
 if __name__ == '__main__':
 
-	#############################################
-	# Get the series argument. May be a series 
-	# name or a record number
-	#############################################
+	# Get the series argument. May be a series name or a series record number
 	try:
 		argument = unescapeLink(sys.argv[1])
 	except:
                 DoError('No series specified')
 
-	################################################
-	# Translate name to a series number if necessary
-	################################################
+	# Translate the series name to its series number if necessary
 	try:
-		seriesId = int(argument)
-		seriesName = SQLFindSeriesName(seriesId)
-		if not seriesName:
-                        raise
+		series_id = int(argument)
 	except:
-		try:
-			seriesName = argument
-			seriesId = SQLFindSeriesId(argument)
-			if not seriesId:
-                                raise
-		except:
-                        DoError('Series not found')
+                series_id = 0
+        
+        if series_id:
+                if not SQLFindSeriesName(series_id):
+                        if SQLDeletedSeries(series_id):
+                                DoError('This series has been deleted. See %s for details' % ISFDBLink('series_history.cgi', series_id, 'Edit History'))
+                        else:
+                                DoError('Specified series does not exist')
+	else:
+		series_id = SQLFindSeriesId(argument)
+
+	if not series_id:
+                DoError('Specified series does not exist')
 
         ser = series(db)
-        ser.load(seriesId)
+        ser.load(series_id)
 
         user = User()
         user.load()
@@ -119,8 +117,8 @@ if __name__ == '__main__':
         except:
                 pass
 
-	PrintHeader("Series: %s" % seriesName)
-	PrintNavbar('series', seriesId, 0, 'pe.cgi', ser.series_id)
+	PrintHeader("Series: %s" % ser.series_name)
+	PrintNavbar('series', series_id, 0, 'pe.cgi', ser.series_id)
 
         (seriesData, seriesTitles, seriesTree, parentAuthors,
          seriesTags, variantTitles, variantSerials, parentsWithPubs,

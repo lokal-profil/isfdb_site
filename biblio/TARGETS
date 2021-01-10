@@ -75,6 +75,7 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/recentver.cgi \
 	  DIR/removed_secondary_verifications.cgi \
 	  DIR/se.cgi \
+	  DIR/series_history.cgi \
 	  DIR/seriesgrid.cgi \
 	  DIR/seriestags.cgi \
 	  DIR/stats.cgi \

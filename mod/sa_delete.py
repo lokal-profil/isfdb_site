@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2019   Ahasuerus
+#     (C) COPYRIGHT 2009-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -96,7 +96,7 @@ if __name__ == '__main__':
                         db.query(update)
                         
 		submitter = GetElementValue(merge, 'Submitter')
-		markIntegrated(db, submission)
+		markIntegrated(db, submission, Record)
 
 	print "<p>"
 

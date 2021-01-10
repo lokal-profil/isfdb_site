@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2004-2020   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1133,11 +1133,14 @@ def SQLFindSeriesId(target):
                 return ''
 
 def SQLFindSeriesName(target):
-	query = "select series_title from series where series_id='%d'" % int(target)
+	query = "select series_title from series where series_id=%d" % int(target)
 	db.query(query)
 	result = db.store_result()
 	id = result.fetch_row()
-	return id[0][0]
+	if result.num_rows() > 0:
+                return id[0][0]
+        else:
+                return ''
 
 def SQLFindSeriesParent(target):
 	query = "select series_parent from series where series_id='%d'" % int(target)
@@ -3109,6 +3112,15 @@ def SQLDeletedAwardType(award_type_id):
 
 def SQLDeletedAwardCategory(award_cat_id):
         query = "select 1 from submissions where sub_type = %d and affected_record_id = %d" % (MOD_AWARD_CAT_DELETE, award_cat_id)
+        db.query(query)
+        result = db.store_result()
+	if result.num_rows() > 0:
+		return 1
+	else:
+		return 0
+
+def SQLDeletedSeries(series_id):
+        query = "select 1 from submissions where sub_type = %d and affected_record_id = %d" % (MOD_DELETE_SERIES, series_id)
         db.query(query)
         result = db.store_result()
 	if result.num_rows() > 0:
