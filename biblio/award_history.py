@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2020   Ahasuerus
+#     (C) COPYRIGHT 2020-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -39,11 +39,15 @@ if __name__ == '__main__':
 	PrintHeader('Award Edit History')
 	PrintNavbar('award_history', 0, 0, 'award_history.cgi', award_id)
 
+        print """<h3>The list below displays the following types of submissions: Add Award,
+                Edit Award, Delete Award, Link Award. The submission which created this
+                award is displayed if the award was created after 2016-10-24.</h3>"""
+
         query = """select * from submissions
                 where affected_record_id = %d
-                and sub_type in (%d, %d, %d)
+                and sub_type in (%d, %d, %d, %d)
                 order by sub_reviewed desc
-                """ % (award_id, MOD_AWARD_NEW, MOD_AWARD_UPDATE, MOD_AWARD_DELETE)
+                """ % (award_id, MOD_AWARD_NEW, MOD_AWARD_UPDATE, MOD_AWARD_DELETE, MOD_AWARD_LINK)
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
@@ -51,9 +55,6 @@ if __name__ == '__main__':
 		PrintTrailer('award_history', 0, 0)
 		sys.exit(0)
 
-        print """<h3>The list below displays the following types of submissions: Add Award,
-                Edit Award, Delete Award. The submission which created this award is displayed
-                if the award was created after 2016-10-24.</h3>"""
         ISFDBprintSubmissionTable(result, 'I')
 
 	PrintTrailer('award_history', 0, 0)

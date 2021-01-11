@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Ahasuerus
+#     (C) COPYRIGHT 2004-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -64,7 +64,7 @@ def DoSubmission(db, submission):
 
 		submitter = GetElementValue(merge, 'Submitter')
 		if debug == 0:
-			markIntegrated(db, submission)
+			markIntegrated(db, submission, award_id)
 	return (title_id, award_id)
 
 
