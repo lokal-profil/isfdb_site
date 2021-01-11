@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -179,7 +179,7 @@ if __name__ == '__main__':
 				addAuthor(data, TitleRecord)
 
 		submitter = GetElementValue(merge, 'Submitter')
-		markIntegrated(db, submission)
+		markIntegrated(db, submission, TitleRecord)
 
 	print '[<a href="http:/' + HTFAKE + '/title.cgi?%d">View Original Title</a>]' % int(Parent)
 	print '[<a href="http:/' + HTFAKE + '/title.cgi?%d">View New Title</a>]' % int(TitleRecord)
