@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley and Ahasuerus
 #	 ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -167,7 +167,7 @@ if __name__ == '__main__':
 	(merge, Record, unmergedTitles) = doUnmerge(doc)
 
 	submitter = GetElementValue(merge, 'Submitter')
-	markIntegrated(db, submission)
+	markIntegrated(db, submission, Record)
 
 	if Record:
                 print '[<a href="http:/%s/title.cgi?%d">View Original Title</a>]' % (HTFAKE, int(Record))
