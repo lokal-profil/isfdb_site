@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -65,7 +65,7 @@ def DoSubmission(db, submission):
 
 		submitter = GetElementValue(merge, 'Submitter')
 		if debug == 0:
-			markIntegrated(db, submission)
+			markIntegrated(db, submission, ChildRecord)
 	return (ParentRecord, ChildRecord)
 
 

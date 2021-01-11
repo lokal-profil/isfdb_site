@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2020   Ahasuerus
+#     (C) COPYRIGHT 2020-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -39,21 +39,23 @@ if __name__ == '__main__':
 	PrintHeader('Title Edit History')
 	PrintNavbar('title_history', 0, 0, 'title_history.cgi', title_id)
 
+        print """<h3>The list below displays Edit Title, Make Variant, 
+                Delete Title and Link Review submissions for this title record.
+                Note that title records are created automatically when
+                publications are created/edited; related
+                submissions are not displayed on this page</h3>"""
+
         query = """select * from submissions
                 where affected_record_id = %d
-                and sub_type in (%d, %d, %d)
+                and sub_type in (%d, %d, %d, %d)
                 order by sub_reviewed desc
-                """ % (title_id, MOD_TITLE_UPDATE, MOD_TITLE_DELETE, MOD_TITLE_MKVARIANT)
+                """ % (title_id, MOD_TITLE_UPDATE, MOD_TITLE_DELETE, MOD_TITLE_MKVARIANT, MOD_REVIEW_LINK)
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
-		print '<h3>No submission data on file for this title</h3>'
-		PrintTrailer('title_history', 0, 0)
-		sys.exit(0)
-
-        print """<h3>The list below displays Edit Title, Make Variant and
-                Delete Title submissions for this title record.</h3>"""
-        ISFDBprintSubmissionTable(result, 'I')
+		print '<h3>No submission data on file for this title.</h3>'
+        else:
+                ISFDBprintSubmissionTable(result, 'I')
 
 	PrintTrailer('title_history', 0, 0)
 
