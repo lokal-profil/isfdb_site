@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -56,7 +56,7 @@ if __name__ == '__main__':
                                 if debug == 0:
                                         db.query(insert)
                 submitter = GetElementValue(merge, 'Submitter')
-                markIntegrated(db, submission)
+                markIntegrated(db, submission, Record)
 	except:
 		submitter = 'unknown'
 

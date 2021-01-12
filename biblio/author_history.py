@@ -47,23 +47,22 @@ if __name__ == '__main__':
 	PrintHeader('Author Edit History')
 	PrintNavbar('author_history', 0, 0, 'author_history.cgi', author_id)
 
+        print """<h3>The list below displays Edit Author and Make Alternate Name submissions.
+                Note that author records are created and deleted automatically when
+                publications and titles are created/edited/deleted; related
+                submissions are not displayed on this page.</h3>"""
+
         query = """select * from submissions
                 where affected_record_id = %d
-                and sub_type in (%d)
+                and sub_type in (%d, %d)
                 order by sub_reviewed desc
-                """ % (author_id, MOD_AUTHOR_UPDATE)
+                """ % (author_id, MOD_AUTHOR_UPDATE, MOD_AUTHOR_PSEUDO)
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
 		print '<h3>No submission data on file for this author</h3>'
-		PrintTrailer('author_history', 0, 0)
-		sys.exit(0)
-
-        print """<h3>The list below displays Edit Author submissions only.
-                Note that author records are created and deleted automatically when
-                publications and titles are created/edited/deleted; related
-                submissions are not displayed on this page.</h3>"""
-        ISFDBprintSubmissionTable(result, 'I')
+        else:
+                ISFDBprintSubmissionTable(result, 'I')
 
 	PrintTrailer('author_history', 0, 0)
 
