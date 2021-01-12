@@ -47,16 +47,16 @@ if __name__ == '__main__':
 	PrintHeader('Author Edit History')
 	PrintNavbar('author_history', 0, 0, 'author_history.cgi', author_id)
 
-        print """<h3>The list below displays Edit Author and Make Alternate Name submissions.
+        print """<h3>The list below displays Edit Author and Make/Remove Alternate Name submissions.
                 Note that author records are created and deleted automatically when
                 publications and titles are created/edited/deleted; related
                 submissions are not displayed on this page.</h3>"""
 
         query = """select * from submissions
                 where affected_record_id = %d
-                and sub_type in (%d, %d)
+                and sub_type in (%d, %d, %d)
                 order by sub_reviewed desc
-                """ % (author_id, MOD_AUTHOR_UPDATE, MOD_AUTHOR_PSEUDO)
+                """ % (author_id, MOD_AUTHOR_UPDATE, MOD_AUTHOR_PSEUDO, MOD_REMOVE_PSEUDO)
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
