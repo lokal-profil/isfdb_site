@@ -2929,8 +2929,9 @@ def SQLLastUserActivity(user_id):
                 sec_ver = ''
         
         query = """select sub_time from submissions
-                   where sub_submitter = %d and sub_state = 'I'
-                   order by sub_reviewed desc limit 1""" % int(user_id)
+                   where sub_submitter = %d
+                   and sub_state = 'I'
+                   order by sub_id desc limit 1""" % int(user_id)
         results = StandardQuery(query)
         if results:
                 last_submission = results[0][0]
