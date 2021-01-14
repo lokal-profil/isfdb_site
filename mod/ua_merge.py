@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2008-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -148,7 +148,7 @@ if __name__ == '__main__':
 		if merge:
 			KeepId = PublisherMerge(doc, merge)
 			submitter = GetElementValue(merge, 'Submitter')
-                        markIntegrated(db, submission)
+                        markIntegrated(db, submission, KeepId)
         if not KeepId:
                 print '<div id="ErrorBox">'
                 print '<h3>Error: Publisher ID not specified</h3>'
