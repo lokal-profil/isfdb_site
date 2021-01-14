@@ -51,11 +51,9 @@ if __name__ == '__main__':
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
-		print '<h3>No submission data on file for this award</h3>'
-		PrintTrailer('award_history', 0, 0)
-		sys.exit(0)
-
-        ISFDBprintSubmissionTable(result, 'I')
+		print '<h3>No submission data on file for this award.</h3>'
+        else:
+                ISFDBprintSubmissionTable(result, 'I')
 
 	PrintTrailer('award_history', 0, 0)
 

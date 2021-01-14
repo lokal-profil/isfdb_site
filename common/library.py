@@ -1751,7 +1751,7 @@ def buildRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
                         if not user:
                                 user = User()
                                 user.load()
-                                user.load_moderator_flag()
+                        user.load_moderator_flag()
                         cgi_script = cgi_scripts[record_type][0]
                         if record_type in ('Award Category', 'Award Type') and not user.moderator:
                                 edit_mode = 0

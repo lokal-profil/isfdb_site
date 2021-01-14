@@ -39,6 +39,11 @@ if __name__ == '__main__':
 	PrintHeader('Series Edit History')
 	PrintNavbar('series_history', 0, 0, 'series_history.cgi', series_id)
 
+        print """<h3>The list below displays the following types of submissions:
+                Edit Series, Delete Series. Note that series records are created
+                automatically when title records are created/edited; related
+                submissions are not displayed on this page.</h3>"""
+
         query = """select * from submissions
                 where affected_record_id = %d
                 and sub_type in (%d, %d)
@@ -48,14 +53,8 @@ if __name__ == '__main__':
 	result = db.store_result()
 	if not result.num_rows():
 		print '<h3>No submission data on file for this series</h3>'
-		PrintTrailer('series_history', 0, 0)
-		sys.exit(0)
-
-        print """<h3>The list below displays the following types of submissions:
-                Edit Series, Delete Series. Note that series records are created
-                automatically when title records are created/edited; related
-                submissions are not displayed on this page.</h3>"""
-        ISFDBprintSubmissionTable(result, 'I')
+        else:
+                ISFDBprintSubmissionTable(result, 'I')
 
 	PrintTrailer('series_history', 0, 0)
 
