@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -127,11 +127,10 @@ def AuthorMerge(db, recno, doc):
                 res = db.store_result()
                 record = res.fetch_row()
                 if record[0][0]:
-                        return
+                        return KeepId
 
-	#deleteAuthor(db, DropId)
 	deleteFromAuthorTable(DropId)
-
+        return KeepId
 
 if __name__ == '__main__':
 
@@ -158,9 +157,6 @@ if __name__ == '__main__':
 	doc = minidom.parseString(XMLunescape2(xml))
 	merge = doc.getElementsByTagName('AuthorMerge')
 	if merge:
-		AuthorMerge(db, submission, doc)
-
-	submitter = GetElementValue(merge, 'Submitter')
-	markIntegrated(db, submission)
-
+		KeepId = AuthorMerge(db, submission, doc)
+                markIntegrated(db, submission, KeepId)
 	PrintPostMod(0)
