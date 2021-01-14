@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -373,7 +373,7 @@ if __name__ == '__main__':
 			MergedTitle = TitleMerge(db, doc)
 			submitter = GetElementValue(merge, 'Submitter')
 			if debug == 0:
-        			markIntegrated(db, submission)
+        			markIntegrated(db, submission, MergedTitle)
 
 	print '[<a href="http:/' +HTFAKE+ '/edit/edittitle.cgi?%d">Edit This Title</a>]' % (int(MergedTitle))
 	print '[<a href="http:/' +HTFAKE+ '/title.cgi?%d">View This Title</a>]' % (int(MergedTitle))

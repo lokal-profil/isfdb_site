@@ -40,19 +40,19 @@ if __name__ == '__main__':
 	PrintNavbar('title_history', 0, 0, 'title_history.cgi', title_id)
 
         print """<h3>The list below displays all Edit Title, Make Variant, 
-                Delete Title, Title Unmerge and Link Review submissions for this title record.
-                Add Variant Title submissions are listed if approved after 2021-01-11.
-                Note that title records are created automatically when
-                publications are created/edited; related
+                Delete Title, Title Merge, Title Unmerge, and Link Review submissions
+                for this title record. Add Variant Title submissions are listed if
+                approved after 2021-01-11. Note that title records are created
+                automatically when publications are created/edited; related
                 submissions are not displayed on this page.</h3>"""
 
         query = """select * from submissions
                 where affected_record_id = %d
-                and sub_type in (%d, %d, %d, %d, %d, %d)
+                and sub_type in (%d, %d, %d, %d, %d, %d, %d)
                 order by sub_reviewed desc
                 """ % (title_id, MOD_TITLE_UPDATE, MOD_TITLE_DELETE,
                        MOD_TITLE_MKVARIANT, MOD_REVIEW_LINK,
-                       MOD_VARIANT_TITLE, MOD_TITLE_UNMERGE)
+                       MOD_VARIANT_TITLE, MOD_TITLE_UNMERGE, MOD_TITLE_MERGE)
 	db.query(query)
 	result = db.store_result()
 	if not result.num_rows():
