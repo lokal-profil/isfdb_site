@@ -974,7 +974,7 @@ def RecognizedDomains():
                 ('aozora.gr.jp', 'Aozora Bunko', 'www.aozora.gr.jp', 0),
                 ('argee.net', 'Dr. Robert G. Williscroft', 'argee.net/', 1),
                 ('armchairfiction.com', 'Armchair Fiction', 'www.armchairfiction.com', 1),
-                ('asahi-net.or.jp', 'A. E. van Vogt Cover Art Gallery', 'www.asahi-net.or.jp/~we8y-mrt/vanvogt/', 1),
+                ('asahi-net.or.jp', 'A. E. van Vogt Cover Art Gallery', 'www.asahi-net.or.jp/~we8y-mrt/vanvogt/', 1, '~we8y-mrt/vanvogt'),
                 ('bestsf.net', 'Best SF', 'www.bestsf.net', 0),
                 ('blogspot.com', 'Blogspot', 'www.blogger.com', 0),
                 ('bnf.fr', 'National Library of France', 'www.bnf.fr', 0),
