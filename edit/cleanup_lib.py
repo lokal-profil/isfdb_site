@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2012-2020 Ahasuerus
+#     (C) COPYRIGHT 2012-2021 Ahasuerus
 #     ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -305,6 +305,7 @@ def reportsDict():
         reports[292] = ("Audio Books without the Narrator Template")
         reports[293] = ("Titles with Suspect English Capitalization (first 1000)")
         reports[294] = ("Publications with Suspect English Capitalization (first 1000)")
+        reports[295] = ("Publications with the WatchDate Template in Notes")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -316,7 +317,7 @@ def reportsDict():
                                           244, 245, 246, 247, 248, 249, 250, 251,
                                           252, 253, 272, 277, 278, 279, 280, 281,
                                           282, 283, 284, 285, 287, 288, 291, 292,
-                                          294)), )
+                                          294, 295)), )
         sections.append(('Series', (16, 17, 48, 64, 67, 76, 81, 90, 144)), )
         sections.append(('Titles', (19, 1, 3, 18, 47, 55, 62, 63, 69, 74, 80, 87,
                                     91, 96, 194, 195, 196, 197, 227, 275, 276, 290,
@@ -372,6 +373,6 @@ def reportsDict():
                          252, 253, 254, 255, 256, 257, 264, 265, 266, 267,
                          268, 269, 270, 271, 272, 273, 274, 275, 276, 277,
                          278, 279, 280, 281, 282, 283, 284, 285, 286, 287,
-                         288, 289, 291, 292, 293, 294, 9999)
+                         288, 289, 291, 292, 293, 294, 295, 9999)
         
         return (reports, sections, non_moderator)

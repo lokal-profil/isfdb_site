@@ -815,7 +815,8 @@ def ISFDBTemplates():
                          'Third Edition of the Encyclopedia of Science Fiction'),
                 'Tr': ('%s', 'Translated by'),
                 'Tuck': ('http:/%s/pe.cgi?10230' % HTFAKE, 'Tuck',
-                                   'The Encyclopedia of Science Fiction and Fantasy through 1968 by Donald H. Tuck, 1974-1982')
+                                   'The Encyclopedia of Science Fiction and Fantasy through 1968 by Donald H. Tuck, 1974-1982'),
+                'WatchDate': ('', 'Publication date is based on questionable pre-publication information and may be incorrect.', )
                 }
         return templates
 

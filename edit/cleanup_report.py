@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2011-2020   Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2011-2021   Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -81,6 +81,37 @@ class Cleanup():
                 excluded.excluded_title_types = excluded_title_types
                 excluded.retrieve_data()
                 excluded.print_data()
+
+        def print_pub_with_date_table(self):
+                db.query(self.query)
+                result = db.store_result()
+                num = result.num_rows()
+                if num > 0:
+                        if self.note:
+                                print '<h3>%s</h3>' % self.note
+                        record = result.fetch_row()
+                        bgcolor = 1
+                        count = 1
+                        PrintTableColumns(('', 'Publication', 'Date'))
+                        while record:
+                                pub_id = record[0][0]
+                                pub_title = record[0][1]
+                                pub_date = record[0][2]
+                                if bgcolor:
+                                        print '<tr align=left class="table1">'
+                                else:
+                                        print '<tr align=left class="table2">'
+
+                                print '<td>%d</td>' % int(count)
+                                print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
+                                print '<td>%s</td>' % pub_date
+                                print '</tr>'
+                                bgcolor ^= 1
+                                count += 1
+                                record = result.fetch_row()
+                        print '</table>'
+                else:
+                        print '<h2>%s</h2>' % self.none
 
 class ExcludedTitleTypes():
         def __init__(self):
@@ -2781,41 +2812,16 @@ def function71():
 	return
 
 def function72():
-        print """<h3>This report lists all 9999-00-00 publications and publications
-                     expected to be published more than 3 months in the future.</h3>"""
-        query = """select pub_id, pub_title, p.pub_year from pubs p, cleanup c
+        cleanup.note = """This report lists all 9999-00-00 publications and publications
+                     expected to be published more than 3 months in the future."""
+        cleanup.query = """select pub_id, pub_title, p.pub_year
+                from pubs p, cleanup c
                 where p.pub_year > DATE_ADD(NOW(), INTERVAL 3 MONTH)
                 and p.pub_year != '8888-00-00'
                 and p.pub_id=c.record_id and c.report_type=72
                 order by p.pub_title"""
-	db.query(query)
-	result = db.store_result()
-
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Publication', 'Date'))
-		while record:
-                        pub_id = record[0][0]
-                        pub_title = record[0][1]
-                        pub_date = record[0][2]
-                        if bgcolor:
-                                print '<tr align=left class="table1">'
-                        else:
-                                print '<tr align=left class="table2">'
-
-                        print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
-                        print '<td>%s</td>' % pub_date
-                        print '</tr>'
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No Forthcoming Publications Found</h2>"
-	return
+        cleanup.none = 'No Forthcoming Publications Found'
+        cleanup.print_pub_with_date_table()
 
 def function73():
         pattern_match = suspectUnicodePatternMatch('publisher_name')
@@ -6829,6 +6835,17 @@ def function294():
                         The words are: %s""" % ", ".join(ENGLISH_LOWER_CASE)
         cleanup.ignore = 1
         cleanup.print_pub_table()
+
+def function295():
+        cleanup.query = """select distinct p.pub_id, p.pub_title, p.pub_year
+                from pubs p, notes n, cleanup c
+                where p.note_id = n.note_id
+                and n.note_note like '%{{WatchDate}}'
+                and c.record_id = p.pub_id
+                and c.report_type = 295
+                order by p.pub_year, p.pub_title"""
+        cleanup.none = 'No publications with the WatchDate template'
+        cleanup.print_pub_with_date_table()
 
 def requiredLowerCase():
         clause = ''

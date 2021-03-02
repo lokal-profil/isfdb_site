@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1873,6 +1873,14 @@ def nightly_cleanup_reports():
                         )
                 limit 1000""" % requiredLowerCase()
         standardReport(query, 294)
+
+        #   Report 295: Publications with the 'WatchDate' Template in Notes
+        query = """select p.pub_id
+                from pubs p, notes n
+                where p.note_id = n.note_id
+                and n.note_note like '%{{WatchDate}}%'
+                """
+        standardReport(query, 295)
 
 def requiredLowerCase():
         clause = ''
