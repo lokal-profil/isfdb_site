@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2007-2020   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2007-2021   Al von Ruff, Ahasuerus and Bill Longley
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -131,7 +131,8 @@ def CheckImage(value, XmlData):
 
         if not warning and WIKILOC in value:
                 pub_id = GetElementValue(XmlData, 'Record')
-                if pub_id:
+                cloned = GetElementValue(XmlData, 'ClonedTo')
+                if pub_id and not cloned:
                         current = pubs(db)
                         current.load(int(pub_id))
                         if current.pub_tag not in value:
