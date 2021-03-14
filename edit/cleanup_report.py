@@ -69,6 +69,11 @@ class Cleanup():
                 self.record_name = 'Title'
                 self.print_generic_table()
 
+        def print_author_table(self):
+                self.print_record_function = PrintAuthorRecord
+                self.record_name = 'Author'
+                self.print_generic_table()
+
         def print_award_table(self):
                 self.print_record_function = PrintAwardRecord
                 self.record_name = 'Award'
@@ -5631,38 +5636,22 @@ def function197():
 
 def function198():
         # Author/alternate name language mismatches
-        query = """select distinct a2.author_id, a2.author_canonical, c.cleanup_id
+        cleanup.query = """select distinct a2.author_id, a2.author_canonical, c.cleanup_id
                 from authors a1, authors a2, pseudonyms p, cleanup c
                 where a1.author_id = p.author_id
                 and p.pseudonym = a2.author_id
-                and a2.author_language is not null
-                and a1.author_language is not null
-		and a1.author_language != a2.author_language
+                and (
+        		(a1.author_language != a2.author_language)
+        		or (a1.author_language is NULL and a2.author_language is not null)
+        		or (a1.author_language is not NULL and a2.author_language is null)
+                )
 		and c.record_id = a2.author_id
 		and c.report_type = 198
 		and c.resolved IS NULL
-		order by a2.author_canonical"""
-        
-	db.query(query)
-	result = db.store_result()
-
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Author', 'Ignore'))
-		while record:
-                        author_id = record[0][0]
-                        author_name = record[0][1]
-                        cleanup_id = record[0][2]
-			PrintAuthorRecord(author_id, author_name, bgcolor, count, cleanup_id, 198)
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No author/alternate name language mismatches found.</h2>"
-	return
+		order by a2.author_lastname, a2.author_canonical"""
+        cleanup.none = 'No author/alternate name language mismatches found'
+        cleanup.ignore = 1
+        cleanup.print_author_table()
 
 def function199():
         # Author Notes to be Migrated from ISFDB 1.0"
@@ -7165,7 +7154,7 @@ def PrintAuthorRecord(author_id, author_name, bgcolor, count, cleanup_id = 0, re
 
         print '<td>%d</td>' % int(count)
         print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_name)
-        if cleanup_id:
+        if cleanup_id and user.moderator:
                 message = {0: 'Resolve', 1: 'Ignore'}
                 print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
                         %s this author</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])

@@ -1289,9 +1289,11 @@ def nightly_cleanup_reports():
                 from authors a1, authors a2, pseudonyms p
                 where a1.author_id = p.author_id
                 and p.pseudonym = a2.author_id
-                and a2.author_language is not null
-                and a1.author_language is not null
-		and a1.author_language != a2.author_language
+                and (
+        		(a1.author_language != a2.author_language)
+        		or (a1.author_language is NULL and a2.author_language is not null)
+        		or (a1.author_language is not NULL and a2.author_language is null)
+                )
                 """
         standardReport(query, 198)
 
