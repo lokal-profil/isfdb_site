@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2006-2020   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -53,6 +53,7 @@ def ApproveOrReject(app, submission_id):
         sub_time = submission[SUB_TIME]
         sub_reviewed = submission[SUB_REVIEWED]
         sub_reviewer = submission[SUB_REVIEWER]
+        submitting_user = SQLgetUserName(submitter_id)
 
         if sub_state in ('I', 'R'):
                 print '<h3>This submission was created on %s and ' % sub_time
@@ -66,22 +67,25 @@ def ApproveOrReject(app, submission_id):
 
         # Check if the submission was created by another moderator; if so, disallow approving
         if (int(submitter_id) != int(reviewer_id)) and SQLisUserModerator(submitter_id):
-                submitting_user = SQLgetUserName(submitter_id)
                 print '<h3>Submission created by <a href="http://%s/index.php/User:%s">%s</a></h3>' % (WIKILOC, submitting_user, submitting_user)
                 return
+
+        wiki_edits = SQLWikiEditCount(submitting_user)
+        if wiki_edits < 20:
+                print '<h3>New editor with %d Wiki edits.</h3><p>' % wiki_edits
 
         # Check if the submission is currently on hold by another moderator
         if hold_id:
                 #If the submission is currently on hold by another moderator, don't allow moderation
                 if int(hold_id) != int(reviewer_id):
                         holding_user = SQLgetUserName(hold_id)
-                        print "<h3>Submission is currently on hold by %s</h3>" % WikiLink(holding_user)
+                        print '<h3>Submission is currently on hold by %s</h3>' % WikiLink(holding_user)
                         # Let bureaucrats unhold submissions held by other moderators
                         if SQLisUserBureaucrat(reviewer_id):
                                 print '<a class="hold" href="http:/'+HTFAKE+'/mod/unhold.cgi?%s">UNHOLD</a><p>' % submission_id
                         return
                 #If the submission is currently on hold by the reviewing moderator, allow to remove from hold
-                print "<h3>Submission is currently on hold by you.</h3><p>"
+                print '<h3>Submission is currently on hold by you.</h3><p>'
                 print '<a class="hold" href="http:/'+HTFAKE+'/mod/unhold.cgi?%s">UNHOLD</a>  ' % submission_id
 
         #If the submission is not currently on hold, allow to put it on hold
