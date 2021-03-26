@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2018   Ahasuerus
+#     (C) COPYRIGHT 2018-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -87,7 +87,8 @@ if __name__ == '__main__':
         db.query(query)
         result = db.store_result()
         if not result.num_rows():
-                print 'No eligible publications for the specified date range'
+                print 'No eligible publications for the specified date range.'
+                print ISFDBLink('edit/cleanup_report.cgi', report_id, 'Return to the main report')
                 sys.exit(0)
 
         user = User()
@@ -140,7 +141,7 @@ if __name__ == '__main__':
                         print '<td>&nbsp;</td>'
                 print '<td>%s</td>' % FormatNote(note_note)
                 if user.moderator:
-                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+%d">Ignore</a></td>' % (HTFAKE, cleanup_id, report_id)
+                        print '<td><a href="http:/%s/mod/resolve_empty_containers.cgi?%d+%s+%d+%d">Ignore</a></td>' % (HTFAKE, cleanup_id, report_type, date_range, report_id)
                 print '</tr>'
                 count += 1
                 bgcolor ^= 1

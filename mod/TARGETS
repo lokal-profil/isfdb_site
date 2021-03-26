@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2020   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -53,6 +53,7 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/remove_tag.cgi \
 	  DIR/resolve_bad_url.cgi \
 	  DIR/resolve_cleanup.cgi \
+	  DIR/resolve_empty_containers.cgi \
 	  DIR/resolve_sfe3_url.cgi \
 	  DIR/rv_link.cgi \
 	  DIR/sa_delete.cgi \
