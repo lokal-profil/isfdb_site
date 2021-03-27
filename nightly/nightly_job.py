@@ -1884,6 +1884,38 @@ def nightly_cleanup_reports():
                 """
         standardReport(query, 295)
 
+        #   Report 296: Stonecreek's EditPub submissions with 'first printing' in notes
+        query = """select user_id from mw_user where user_name='Stonecreek'"""
+        db.query(query)
+        result = db.store_result()
+        record = result.fetch_row()
+        user_id = record[0][0]
+
+        query = """select affected_record_id from submissions
+                where sub_submitter=%d
+                and sub_data like "%%first printing%%"
+                and sub_data not like "%%apparent first printing%%"
+                and sub_data not like "%%assumed first printing%%"
+                and affected_record_id is not null
+                and sub_type = 4""" % user_id
+        db.query(query)
+        result = db.store_result()
+        count = result.num_rows()
+        pubs = []
+        record = result.fetch_row()
+        while record:
+                pub_id = record[0][0]
+                pubs.append(pub_id)
+                record = result.fetch_row()
+
+        in_clause = list_to_in_clause(pubs)
+        query = """select p.pub_id
+                from pubs p
+                where p.pub_id in (%s)
+                and not exists(select 1 from primary_verifications pv
+                                where pv.pub_id = p.pub_id)""" % in_clause
+        standardReport(query, 296)
+
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:

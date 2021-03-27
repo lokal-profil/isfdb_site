@@ -6836,6 +6836,21 @@ def function295():
         cleanup.none = 'No publications with the WatchDate template'
         cleanup.print_pub_with_date_table()
 
+def function296():
+        cleanup.query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, notes n, cleanup c
+                where p.note_id = n.note_id
+                and n.note_note like '%first printing%'
+                and n.note_note not like '%apparent first printing%'
+                and n.note_note not like '%assumed first printing%'
+                and c.record_id = p.pub_id
+                and c.report_type = 296
+                and c.resolved IS NULL
+                order by p.pub_title"""
+        cleanup.none = 'No suspect publications with "First printing" in Notes'
+        cleanup.ignore = 1
+        cleanup.print_pub_table()
+
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:
