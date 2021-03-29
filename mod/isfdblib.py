@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -65,6 +65,9 @@ def PrintNavBar():
         # Print the search box from module navbar
         PrintSearchBox('')
 	
+        (userid, username, usertoken) = GetUserData()
+        bureaucrat = SQLisUserBureaucrat(userid)
+
 	username = PrintUserInfo()
 
         # Print the Other Pages section from module navbar
@@ -74,7 +77,9 @@ def PrintNavBar():
 	print 'Moderator Links:'
 	print '</div>'
 	print '<ul class="navbar">'
-	print '<li><a href="http:/%s/mod/list.cgi?N">Moderator</a>' % (HTFAKE)
+	print '<li>%s' % ISFDBLink('mod/list.cgi', 'N', 'Moderator')
+	if bureaucrat:
+                print '<li>%s' % ISFDBLink('mod/bureaucrat.cgi', 'N', 'Bureaucrat')
 	print '<li><a href="http:/%s/mod/recent.cgi?0+R">Recent Rejections</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/mod/recent.cgi?0+I">Recent Approvals</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/mod/recent.cgi?0+P">Errored Out Submissions</a>' % (HTFAKE)
@@ -92,7 +97,6 @@ def PrintNavBar():
                 PrintPostMod()
                 sys.exit(0)
 
-        (userid, username, usertoken) = GetUserData()
 	if not SQLisUserModerator(userid):
                 print '<h2>Moderator privileges are required for this option</h2>'
                 PrintPostMod()

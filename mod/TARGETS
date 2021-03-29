@@ -27,6 +27,7 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/award_type_update_display.cgi \
 	  DIR/award_type_update_file.cgi \
 	  DIR/bad_images.cgi \
+	  DIR/bureaucrat.cgi \
 	  DIR/ca_new.cgi \
 	  DIR/change_tag_status.cgi \
 	  DIR/cv_new.cgi \

@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2020 	Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2021 	Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Bill Longley and Dirk Stoecker
 #		ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -39,9 +39,6 @@ def PrintNewPubs(userid):
 	for pub_type in PUB_TYPES:
                 print '<li><a href="http:/%s/edit/newpub.cgi?%s">Add New %s</a>' % (HTFAKE, pub_type.title(), pub_type.title())
         print '<li><a href="http:/%s/edit/select_award_type.cgi?0">Add Untitled Award</a>' % (HTFAKE)
-        # New award types can only be added by bureaucrats at this time
-        if (SQLisUserBureaucrat(userid) > 0):
-                print '<li><a href="http:/%s/edit/newawardtype.cgi?0">Add New Award Type</a>' % (HTFAKE)
 	print '</ul>'
 	return
 
@@ -665,10 +662,13 @@ def PrintEditTools(page_type, userid, arg1, arg2):
 	#############################################################
 	# EDITING - navbar items relevant to editing this page
 	#############################################################
-	output = []
 	moderator = SQLisUserModerator(userid)
+        bureaucrat = SQLisUserBureaucrat(userid)
+	output = []
 	if moderator:
-                output.append('<a href="http:/%s/mod/list.cgi?N">Moderator</a>' % HTFAKE)
+                output.append(ISFDBLink('mod/list.cgi', 'N', 'Moderator'))
+	if bureaucrat:
+                output.append(ISFDBLink('mod/bureaucrat.cgi', 'N', 'Bureaucrat'))
 	if (page_type == 'author') and (int(arg2) > 0):
 		output.append('<a href="http:/%s/edit/editauth.cgi?%s">Edit Author Data</a>' % (HTFAKE, arg2))
 		output.append('<a href="http:/%s/edit/mkpseudo.cgi?%s">Make/Remove Alternate Name</a>' % (HTFAKE, arg2))
