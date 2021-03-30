@@ -663,12 +663,9 @@ def PrintEditTools(page_type, userid, arg1, arg2):
 	# EDITING - navbar items relevant to editing this page
 	#############################################################
 	moderator = SQLisUserModerator(userid)
-        bureaucrat = SQLisUserBureaucrat(userid)
 	output = []
 	if moderator:
                 output.append(ISFDBLink('mod/list.cgi', 'N', 'Moderator'))
-	if bureaucrat:
-                output.append(ISFDBLink('mod/bureaucrat.cgi', 'N', 'Bureaucrat'))
 	if (page_type == 'author') and (int(arg2) > 0):
 		output.append('<a href="http:/%s/edit/editauth.cgi?%s">Edit Author Data</a>' % (HTFAKE, arg2))
 		output.append('<a href="http:/%s/edit/mkpseudo.cgi?%s">Make/Remove Alternate Name</a>' % (HTFAKE, arg2))
