@@ -1061,7 +1061,7 @@ def RecognizedDomains():
                 ('wikipedia.org', 'Wikipedia', 'www.wikipedia.org', 0),
                 ('wordpress.com', 'WordPress', 'www.wordpress.com', 0),
                 ('worldcat.org', 'WorldCat', 'www.worldcat.org', 0),
-                ('wp.com', 'Nitchevo Factory', 'nitchevo.net/', 1),
+                ('wp.com', 'Nitchevo Factory', 'nitchevo.net', 1, 'nitchevo.net'),
                 ('youtube.com', 'YouTube', 'www.youtube.com', 0),
                 ('yunchtime.net', 'Diamond Bay Research', 'yunchtime.net', 1),
          )

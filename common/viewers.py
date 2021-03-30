@@ -108,6 +108,9 @@ def CheckImage(value, XmlData):
         valid_domain = 0
         for domain in domains:
                 if (domain[0] in value) and (domain[3] == 1):
+                        # If a required URL segment is not in this URL, it's not valid
+                        if len(domain) > 4 and domain[4] and domain[4] not in value:
+                                continue
                         valid_domain = 1
                         if len(domain) > 5 and domain[5] and '|' not in value:
                                 warning = "For images hosted by this site, the URL of the associated Web page must be entered after a '|'."
