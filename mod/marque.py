@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -36,12 +36,16 @@ if __name__ == '__main__':
 	update = 'update authors set author_marque = 0'
 	db.query(update)
 
+        authors = []
+        for author in SPECIAL_AUTHORS_TO_IGNORE:
+                authors.append(db.escape_string(author))
+        authors_to_ignore = list_to_in_clause(authors)
 	query = """select author_id, author_views, author_canonical
                 from authors
                 where author_views > 0
-                and author_canonical != 'unknown'
+                and author_canonical NOT IN (%s)
                 order by author_views
-                desc limit %d""" % maxauthors
+                desc limit %d""" % (authors_to_ignore, maxauthors)
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()

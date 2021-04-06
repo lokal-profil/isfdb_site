@@ -532,3 +532,21 @@ INFO_SIGN = '&#x24d8;'
 ENGLISH_LOWER_CASE = ['and', 'or', 'the', 'a', 'an', 'for', 'of', 'in', 'on', 'by', 'at', 'from', 'with', 'to']
 
 MAX_FUTURE_DAYS = 90
+
+# Irregular author names that should be ignored for cases like:
+# * Setting author_marque to 1 to appear on the forthcoming books section
+# * Cleanup report 11: Prolific Authors Without a Defined Language
+# * Cleanup report 19: Interviews of Pseudonyms
+# * Cleanup reports 58-61: Suspected X Authors without a Language Code
+# * others...?
+# If some of them need different sets of values, define them as separate
+# lists here, then concatenate them all into SPECIAL_AUTHORS_TO_IGNORE
+SPECIAL_AUTHORS_TO_IGNORE = [
+    'unknown', # 2862
+    'uncredited', # 20754
+    'various', # 7311
+    'The Readers', # 25179
+    'Anonymous', # 6677
+    'Traditional', # 17640
+    'The Editors' # 38941
+]
