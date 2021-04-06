@@ -20,23 +20,19 @@ from login import *
 
 class Bureaucrat:
         def __init__(self):
-                self.user = User()
-                self.user.load()
+                pass
         
         def display_options(self):
         	PrintPreMod('Bureaucrat Menu')
-                PrintNavBar()
-                if not SQLisUserBureaucrat(self.user.id):
-                        print '<h3>Only ISFDB Bureaucrats Can Access This Menu</h3>'
-                	PrintPostMod(0)
-                        sys.exit(0)
+                PrintNavBar('Bureaucrat Menu')
                 print '<ul>'
                 print '<li>%s' % ISFDBLink('edit/newawardtype.cgi', '', 'Add New Award Type')
+                print '<li>%s' % ISFDBLink('mod/self_approvers.cgi', '', 'Manage Self-Approvers')
                 print '</ul>'
                 print '<p>'
-        	PrintPostMod(0)
 
         
 if __name__ == '__main__':
         bureaucrat = Bureaucrat()
         bureaucrat.display_options()
+        PrintPostMod(0)

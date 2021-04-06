@@ -9,6 +9,7 @@
 #     Date: $Date$
 
 import cgitb; cgitb.enable()
+import sys
 from localdefs import *
 
 def Date_or_None(s):
@@ -76,12 +77,34 @@ def PrintHTMLHeaders(title):
     print '<div id="statusbar">'
     print '<h2>%s</h2>' % (title)
 
+class Session:
+    def __init__(self):
+        self.cgi_script = ''
+        self.arguments = []
+
+    def ParseArguments(self):
+        counter = 0
+        for argument in sys.argv:
+            if counter == 0:
+                script = sys.argv[0]
+                # Some OSes put the full path name in sys.argv[0], so we extract the last "/" chunk
+                file_name = script.split('/')[-1]
+                if file_name.endswith('.cgi'):
+                    file_name = file_name[0:-4]
+                self.cgi_script = file_name
+            else:
+                self.arguments.append(sys.argv[counter])
+            counter += 1
+
 SCHEMA_VER = "0.02"
 ENGINE     = "<b>ISFDB Engine</b> - Version 4.00 (2006-04-24)"
 COPYRIGHT  = "Copyright &copy; 1995-2021 Al von Ruff and the ISFDB team"
 # NONCE should be uncommented if and when we need it to create CSP nonces
 # import uuid
 # NONCE = uuid.uuid4().hex
+
+SESSION = Session()
+SESSION.ParseArguments()
 
 # History Actions (obsolete)
 AUTHOR_UPDATE  = 1
@@ -364,41 +387,42 @@ MOD_AWARD_CAT_UPDATE = 35
 # [3] - Full name of the submission type, used in stats-and-tops.py
 # [4] - Name of the XML element containing the record number in the submission -- used to link from the list of recent entries
 # [5] - Name of the "viewers" function used to display the body of this submission type
+# [6] - Name of the filing script
 SUBMAP = {
-  MOD_AUTHOR_MERGE :	 ('av_merge',  'AuthorMerge', 'ea.cgi', 'Author Merge', 'Record', 'DisplayAuthorMerge'),
-  MOD_AUTHOR_UPDATE :	 ('av_update', 'AuthorUpdate', 'ea.cgi', 'Author Update', 'Record', 'DisplayAuthorChanges'),
+  MOD_AUTHOR_MERGE :	 ('av_merge',  'AuthorMerge', 'ea.cgi', 'Author Merge', 'Record', 'DisplayAuthorMerge', 'aa_merge'),
+  MOD_AUTHOR_UPDATE :	 ('av_update', 'AuthorUpdate', 'ea.cgi', 'Author Update', 'Record', 'DisplayAuthorChanges', 'aa_update'),
   MOD_AUTHOR_DELETE :	 ('av_delete', 'AuthorDelete', None, None, 'Record'), # currently unused
-  MOD_PUB_UPDATE :	 ('pv_update', 'PubUpdate', 'pl.cgi', 'Publication Update', 'Record', 'DisplayEditPub'),
-  MOD_PUB_DELETE :	 ('pv_delete', 'PubDelete', 'pl.cgi', 'Publication Delete', 'Record', 'DisplayDeletePub'),
-  MOD_PUB_NEW :		 ('pv_new',    'NewPub', 'pl.cgi', 'New Publication', 'Record', 'DisplayNewPub'),
-  MOD_TITLE_UPDATE :	 ('tv_update', 'TitleUpdate', 'title.cgi', 'Title Update', 'Record', 'DisplayTitleEdit'),
-  MOD_TITLE_MERGE :	 ('tv_merge',  'TitleMerge', 'title.cgi', 'Title Merge', 'Record', 'DisplayMergeTitles'),
-  MOD_TITLE_DELETE :	 ('tv_delete', 'TitleDelete', 'title.cgi', 'Title Delete', 'Record', 'DisplayTitleDelete'),
+  MOD_PUB_UPDATE :	 ('pv_update', 'PubUpdate', 'pl.cgi', 'Publication Update', 'Record', 'DisplayEditPub', 'pa_update'),
+  MOD_PUB_DELETE :	 ('pv_delete', 'PubDelete', 'pl.cgi', 'Publication Delete', 'Record', 'DisplayDeletePub', 'pa_delete'),
+  MOD_PUB_NEW :		 ('pv_new',    'NewPub', 'pl.cgi', 'New Publication', 'Record', 'DisplayNewPub', 'pa_new'),
+  MOD_TITLE_UPDATE :	 ('tv_update', 'TitleUpdate', 'title.cgi', 'Title Update', 'Record', 'DisplayTitleEdit', 'ta_update'),
+  MOD_TITLE_MERGE :	 ('tv_merge',  'TitleMerge', 'title.cgi', 'Title Merge', 'Record', 'DisplayMergeTitles', 'ta_merge'),
+  MOD_TITLE_DELETE :	 ('tv_delete', 'TitleDelete', 'title.cgi', 'Title Delete', 'Record', 'DisplayTitleDelete', 'ta_delete'),
   MOD_TITLE_NEW :	 ('tv_new',    'TitleNew', None, None, 'Record'), #currently unused, but referenced in submittitle
-  MOD_TITLE_UNMERGE :	 ('tv_unmerge','TitleUnmerge', 'title.cgi', 'Title Unmerge', 'Record', 'DisplayUnmergeTitle'),
-  MOD_SERIES_UPDATE :	 ('sv_update', 'SeriesUpdate', 'pe.cgi', 'Series Update', 'Record', 'DisplaySeriesChanges'),
+  MOD_TITLE_UNMERGE :	 ('tv_unmerge','TitleUnmerge', 'title.cgi', 'Title Unmerge', 'Record', 'DisplayUnmergeTitle', 'ta_unmerge'),
+  MOD_SERIES_UPDATE :	 ('sv_update', 'SeriesUpdate', 'pe.cgi', 'Series Update', 'Record', 'DisplaySeriesChanges', 'sa_update'),
   MOD_CONTENT_UPDATE :	 ('cv_update', 'ContentUpdate', None, None, 'Record'), #currently unused
-  MOD_VARIANT_TITLE:	 ('vv_new',    'VariantTitle', 'title.cgi', 'Add Variant Title', 'Record', 'DisplayAddVariant'),
-  MOD_TITLE_MKVARIANT:	 ('kv_new',    'MakeVariant', 'title.cgi', 'Make Variant Title', 'Record', 'DisplayMakeVariant'),
-  MOD_RMTITLE:		 ('tv_remove', 'TitleRemove', 'pl.cgi', 'Remove Title', 'Record', 'DisplayRemoveTitle'),
-  MOD_PUB_CLONE :	 ('cv_new',    'NewPub', 'pl.cgi', 'Clone Publication', 'Record', 'DisplayClonePublication'),
-  MOD_AUTHOR_PSEUDO :	 ('yv_new',    'MakePseudonym', 'ea.cgi', 'Create Alternate Name', 'Record', 'DisplayMakePseudonym'),
-  MOD_AWARD_NEW :	 ('wv_new',    'NewAward', 'award_details.cgi', 'New Award', 'Record', 'DisplayNewAward'),
-  MOD_AWARD_UPDATE :	 ('wv_update', 'AwardUpdate', 'award_details.cgi', 'Award Update', 'Record', 'DisplayAwardEdit'),
-  MOD_AWARD_DELETE :	 ('wv_delete', 'AwardDelete', None, 'Award Delete', 'Record', 'DisplayAwardDelete'),
-  MOD_PUBLISHER_UPDATE : ('xv_update', 'PublisherUpdate', 'publisher.cgi', 'Publisher Update', 'Record', 'DisplayPublisherChanges'),
-  MOD_PUBLISHER_MERGE :	 ('uv_merge',  'PublisherMerge', 'publisher.cgi', 'Publisher Merge', 'Record', 'DisplayPublisherMerge'),
-  MOD_REVIEW_LINK :	 ('rv_link',   'LinkReview', 'title.cgi', 'Link Review', 'Record', 'DisplayLinkReview'),
-  MOD_DELETE_SERIES :	 ('sv_delete', 'SeriesDelete', None, 'Delete Series', 'Record', 'DisplaySeriesDelete'),
-  MOD_REMOVE_PSEUDO :    ('yv_remove', 'RemovePseud', 'ea.cgi', 'Remove Alternate Name', 'Record', 'DisplayRemovePseudonym'),
-  MOD_PUB_SERIES_UPDATE: ('zv_update', 'PubSeriesUpdate', 'pubseries.cgi', 'Publication Series Update', 'Record', 'DisplayPubSeriesChanges'),
-  MOD_AWARD_TYPE_UPDATE: ('award_type_update_display', 'AwardTypeUpdate', 'awardtype.cgi', 'Award Type Update', 'Record', 'DisplayAwardTypeChanges'),
-  MOD_AWARD_LINK:        ('award_link_display', 'LinkAward', 'award_details.cgi', 'Link Award', 'Award', 'DisplayAwardLink'),
-  MOD_AWARD_TYPE_NEW:    ('award_type_new_display', 'NewAwardType', 'awardtype.cgi', 'Add New Award Type', 'Record', 'DisplayNewAwardType'),
-  MOD_AWARD_TYPE_DELETE: ('award_type_delete_display', 'AwardTypeDelete', None, 'Delete Award Type', 'AwardTypeId', 'DisplayAwardTypeDelete'),
-  MOD_AWARD_CAT_NEW:     ('award_cat_new_display', 'NewAwardCat', 'award_category.cgi', 'Add New Award Category', 'Record', 'DisplayNewAwardCat'),
-  MOD_AWARD_CAT_DELETE:  ('award_cat_delete_display', 'AwardCategoryDelete', None, 'Delete Award Category', 'Record', 'DisplayAwardCatDelete'),
-  MOD_AWARD_CAT_UPDATE:  ('award_cat_update_display', 'AwardCategoryUpdate', 'award_category.cgi', 'Award Category Update', 'AwardCategoryId', 'DisplayAwardCatChanges')
+  MOD_VARIANT_TITLE:	 ('vv_new',    'VariantTitle', 'title.cgi', 'Add Variant Title', 'Record', 'DisplayAddVariant', 'va_new'),
+  MOD_TITLE_MKVARIANT:	 ('kv_new',    'MakeVariant', 'title.cgi', 'Make Variant Title', 'Record', 'DisplayMakeVariant', 'ka_new'),
+  MOD_RMTITLE:		 ('tv_remove', 'TitleRemove', 'pl.cgi', 'Remove Title', 'Record', 'DisplayRemoveTitle', 'ta_remove'),
+  MOD_PUB_CLONE :	 ('cv_new',    'NewPub', 'pl.cgi', 'Clone Publication', 'Record', 'DisplayClonePublication', 'ca_new'),
+  MOD_AUTHOR_PSEUDO :	 ('yv_new',    'MakePseudonym', 'ea.cgi', 'Create Alternate Name', 'Record', 'DisplayMakePseudonym', 'ya_new'),
+  MOD_AWARD_NEW :	 ('wv_new',    'NewAward', 'award_details.cgi', 'New Award', 'Record', 'DisplayNewAward', 'wa_new'),
+  MOD_AWARD_UPDATE :	 ('wv_update', 'AwardUpdate', 'award_details.cgi', 'Award Update', 'Record', 'DisplayAwardEdit', 'wa_update'),
+  MOD_AWARD_DELETE :	 ('wv_delete', 'AwardDelete', None, 'Award Delete', 'Record', 'DisplayAwardDelete', 'wa_delete'),
+  MOD_PUBLISHER_UPDATE : ('xv_update', 'PublisherUpdate', 'publisher.cgi', 'Publisher Update', 'Record', 'DisplayPublisherChanges', 'xa_update'),
+  MOD_PUBLISHER_MERGE :	 ('uv_merge',  'PublisherMerge', 'publisher.cgi', 'Publisher Merge', 'Record', 'DisplayPublisherMerge', 'ua_merge'),
+  MOD_REVIEW_LINK :	 ('rv_link',   'LinkReview', 'title.cgi', 'Link Review', 'Record', 'DisplayLinkReview', 'ra_link'),
+  MOD_DELETE_SERIES :	 ('sv_delete', 'SeriesDelete', None, 'Delete Series', 'Record', 'DisplaySeriesDelete', 'sa_delete'),
+  MOD_REMOVE_PSEUDO :    ('yv_remove', 'RemovePseud', 'ea.cgi', 'Remove Alternate Name', 'Record', 'DisplayRemovePseudonym', 'ya_remove'),
+  MOD_PUB_SERIES_UPDATE: ('zv_update', 'PubSeriesUpdate', 'pubseries.cgi', 'Publication Series Update', 'Record', 'DisplayPubSeriesChanges', 'za_update'),
+  MOD_AWARD_TYPE_UPDATE: ('award_type_update_display', 'AwardTypeUpdate', 'awardtype.cgi', 'Award Type Update', 'Record', 'DisplayAwardTypeChanges', 'award_type_update_file'),
+  MOD_AWARD_LINK:        ('award_link_display', 'LinkAward', 'award_details.cgi', 'Link Award', 'Award', 'DisplayAwardLink', 'award_link_file'),
+  MOD_AWARD_TYPE_NEW:    ('award_type_new_display', 'NewAwardType', 'awardtype.cgi', 'Add New Award Type', 'Record', 'DisplayNewAwardType', 'award_type_new_file'),
+  MOD_AWARD_TYPE_DELETE: ('award_type_delete_display', 'AwardTypeDelete', None, 'Delete Award Type', 'AwardTypeId', 'DisplayAwardTypeDelete', 'award_type_delete_file'),
+  MOD_AWARD_CAT_NEW:     ('award_cat_new_display', 'NewAwardCat', 'award_category.cgi', 'Add New Award Category', 'Record', 'DisplayNewAwardCat', 'award_cat_new_file'),
+  MOD_AWARD_CAT_DELETE:  ('award_cat_delete_display', 'AwardCategoryDelete', None, 'Delete Award Category', 'Record', 'DisplayAwardCatDelete', 'award_cat_delete_file'),
+  MOD_AWARD_CAT_UPDATE:  ('award_cat_update_display', 'AwardCategoryUpdate', 'award_category.cgi', 'Award Category Update', 'AwardCategoryId', 'DisplayAwardCatChanges', 'award_cat_update_file')
 }
 
 # This list of supported languages MUST be kept in sync with the "languages" table in MySQL

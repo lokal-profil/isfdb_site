@@ -59,14 +59,16 @@ def PrintUserInfo():
 #	see /biblio/common.py for Regular NavBar function
 #
 #######################################################
-def PrintNavBar():
+def PrintNavBar(page_title = ''):
 	print '<div id="nav">'
 
         # Print the search box from module navbar
         PrintSearchBox('')
 	
         (userid, username, usertoken) = GetUserData()
+        moderator = SQLisUserModerator(userid)
         bureaucrat = SQLisUserBureaucrat(userid)
+        self_approver = SQLisUserSelfApprover(userid)
 
 	username = PrintUserInfo()
 
@@ -92,70 +94,115 @@ def PrintNavBar():
         if onlineVersion != SCHEMA_VER:
                 print "<h3>Warning: database schema mismatch (%s vs %s)</h3>" % (onlineVersion, SCHEMA_VER)
         if username == 0:
-                print '<h2>Login required to moderate changes</h2>'
-                print 'You have to <a href="http:/%s/dologin.cgi?mod/list.cgi+N">login</a> to edit data.' % (HTFAKE)
-                PrintPostMod()
-                sys.exit(0)
+                PrintError('Login required to moderate changes',
+                       'You have to <a href="http:/%s/dologin.cgi?mod/list.cgi+N">login</a> to edit data.' % (HTFAKE))
 
-	if not SQLisUserModerator(userid):
-                print '<h2>Moderator privileges are required for this option</h2>'
-                PrintPostMod()
-                sys.exit(0)
+	if not moderator:
+                if self_approver and SelfApprovalAllowed(userid):
+                        pass
+                else:
+                        PrintError('Moderator privileges are required for this option')
 
+        bureaucrat_only = ('Bureaucrat Menu', 'Manage Self-Approvers', 'Manage Self-Approvers - SQL Statements')
+        if page_title in bureaucrat_only and not bureaucrat:
+                PrintError('Bureaucrats privileges are required for this option')
+
+def SelfApprovalAllowed(userid):
+        # Special case -- rejection permissions are handled by reject.cgi because the submission ID is in the form
+        if SESSION.cgi_script == 'reject':
+                return 1
+
+        self_approval_supported = 0
+        # Only submission review and submission approval scripts can be accessed by self-approvers
+        for option_number in SUBMAP:
+                option_tuple = SUBMAP[option_number]
+                if option_tuple[0] == SESSION.cgi_script:
+                        self_approval_supported = 1
+                        break
+                if len(option_tuple) > 6 and option_tuple[6] == SESSION.cgi_script:
+                        self_approval_supported = 1
+                        break
+        if not self_approval_supported:
+                return 0
+
+        try:
+                submission_id = int(SESSION.arguments[0])
+        except:
+                return 0
+
+        if SelfCreated(submission_id, userid):
+                return 1
+        else:
+                return 0
+
+
+def SelfCreated(submission_id, reviewer_id):
+        # Check if this submission was created by this reviewer
+        sub_data = SQLloadSubmission(submission_id)
+        submitter_id = sub_data[SUB_SUBMITTER]
+        if int(submitter_id) == int(reviewer_id):
+                return 1
+        return 0
+
+def PrintError(line1, line2 = ''):
+        print '<h2>%s</h2>' % line1
+        if line2:
+                print line2
+        PrintPostMod()
+        sys.exit(0)
 
 def PrintPostMod(closetable = 1):
-    if closetable:
-        print '</table>'
-
-    print '</div>'
-    print '<div id="bottom">'
-    print COPYRIGHT
-    print '<br>'
-    print ENGINE
-    print '</div>'
-    print '</div>'
-    print '</body>'
-    print '</html>'
-    db.close()
+        if closetable:
+                print '</table>'
+        print '</div>'
+        print '<div id="bottom">'
+        print COPYRIGHT
+        print '<br>'
+        print ENGINE
+        print '</div>'
+        print '</div>'
+        print '</body>'
+        print '</html>'
+        db.close()
 
 def markIntegrated(db, sub_id, affected_record_id = None, pub_id = None):
-    from common import PrintSubmissionLinks
-    (reviewerid, username, usertoken) = GetUserData()
-    update = """update submissions
-        set sub_state='I', sub_reviewer=%d, sub_reviewed=NOW(), sub_holdid=0
-        where sub_id=%d""" %  (int(reviewerid), int(sub_id))
-    print '<li> ', update
-    db.query(update)
-
-    # For submissions that created a new record or affected an existing record
-    # of a supported type, update the "affected record ID" field in the submission record
-    if affected_record_id:
-        update = "update submissions set affected_record_id=%d where sub_id=%d" %  (int(affected_record_id), int(sub_id))
-        print "<li> ", update
+        from common import PrintSubmissionLinks
+        (reviewerid, username, usertoken) = GetUserData()
+        update = """update submissions
+                    set sub_state='I', sub_reviewer=%d, sub_reviewed=NOW(), sub_holdid=0
+                    where sub_id=%d""" %  (int(reviewerid), int(sub_id))
+        print '<li> ', update
         db.query(update)
 
-    # For changed publications, update the Changed Verified Pubs table and the user_status table
-    if pub_id:
-        # Get the ID of the submitter
-        user_id = SQLGetSubmitterId(sub_id)
-        # Retrieve the list of primary verifiers for this publication
-        VerificationList = SQLPrimaryVerifiers(pub_id)
-        for verifier in VerificationList:
-            verifier_id = verifier[0]
-            # If this primary verifier is the user who created the submission,
-            # do not update the "changed verified pubs" table
-            if verifier_id == user_id:
-                continue
-            update = """insert into changed_verified_pubs(pub_id, sub_id, verifier_id, change_time)
-                       values(%d, %d, %d, NOW())""" % (int(pub_id), int(sub_id), int(verifier_id))
-            print "<li> ", update
-            db.query(update)
-            SQLUpdate_last_changed_verified_pubs_DTS(verifier_id)
+        # For submissions that created a new record or affected an existing record
+        # of a supported type, update the "affected record ID" field in the submission record
+        if affected_record_id:
+                update = "update submissions set affected_record_id=%d where sub_id=%d" %  (int(affected_record_id), int(sub_id))
+                print "<li> ", update
+                db.query(update)
 
-    print '</ul>'
-    print '<hr><br>'
-    PrintSubmissionLinks(sub_id, reviewerid)
-    print '<p>'
+        # For changed publications, update the Changed Verified Pubs table and the user_status table
+        if pub_id:
+                # Get the ID of the submitter
+                user_id = SQLGetSubmitterId(sub_id)
+                # Retrieve the list of primary verifiers for this publication
+                VerificationList = SQLPrimaryVerifiers(pub_id)
+                for verifier in VerificationList:
+                        verifier_id = verifier[0]
+                        # If this primary verifier is the user who created the submission,
+                        # do not update the "changed verified pubs" table
+                        if verifier_id == user_id:
+                                continue
+                        update = """insert into changed_verified_pubs(pub_id, sub_id, verifier_id, change_time)
+                               values(%d, %d, %d, NOW())""" % (int(pub_id), int(sub_id), int(verifier_id))
+                        print "<li> ", update
+                        db.query(update)
+                        SQLUpdate_last_changed_verified_pubs_DTS(verifier_id)
+
+        print '</ul>'
+        print '<hr><br>'
+        PrintSubmissionLinks(sub_id, reviewerid)
+        print '<p>'
 
 def NotApprovable(submission):
     if SQLloadState(submission) != 'N':

@@ -725,11 +725,12 @@ class Submission:
                 db.query(update)
                 submission_id = db.insert_id()
 
-                # If the user is a moderator and there is no override preference,
-                # redirect him to the review/approval page
-                if not self.user.display_post_submission and SQLisUserModerator(self.user.id):
-                        location = "http:/%s/mod/%s.cgi?%s" % (HTFAKE, SUBMAP[self.type][0], submission_id)
-                        ServerSideRedirect(location)
+                # If the user is a moderator or a self-approver and there is no override preference,
+                # redirect to the review/approval page
+                if not self.user.display_post_submission:
+                        if SQLisUserModerator(self.user.id) or SQLisUserSelfApprover(self.user.id):
+                                location = "http:/%s/mod/%s.cgi?%s" % (HTFAKE, SUBMAP[self.type][0], submission_id)
+                                ServerSideRedirect(location)
                 
                 ##################################################################
                 # Output the leading HTML stuff
@@ -741,8 +742,8 @@ class Submission:
                 print "<h1>Submitting the following changes:</h1>"
                 self.viewer(submission_id)
                 
-                # If the user is a moderator, let him go straight to the approval page
-                if SQLisUserModerator(self.user.id):
+                # If the user is a moderator or a self-approver, allow going to the approval page
+                if SQLisUserModerator(self.user.id) or SQLisUserSelfApprover(self.user.id):
                         print '<br>Moderate <a href="http:/%s/mod/%s.cgi?%s">submission</a>' % (HTFAKE, SUBMAP[self.type][0], submission_id)
         
         def error(self, error = '', record_id = 0):

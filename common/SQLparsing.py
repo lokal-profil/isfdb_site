@@ -33,6 +33,14 @@ def StandardQuery(query):
 		record = result.fetch_row()
 	return results
 
+def BinaryQuery(query):
+        db.query(query)
+        result = db.store_result()
+	if result.num_rows():
+		return 1
+	else:
+		return 0
+
 def OneField(query):
 	db.query(query)
 	result = db.store_result()
@@ -1896,32 +1904,21 @@ def SQLTitlesWithPubs(title_list):
 		title = result.fetch_row()
 	return results
 
+def SQLisUserSelfApprover(userId):
+        query = "select * from self_approvers where user_id=%d" % int(userId)
+        return BinaryQuery(query)
+
 def SQLisUserModerator(userId):
         query = "select * from mw_user_groups where ug_user='%d' and ug_group='sysop'" % (int(userId))
-        db.query(query)
-        result = db.store_result()
-	if result.num_rows():
-		return 1
-	else:
-		return 0
+        return BinaryQuery(query)
 
 def SQLisUserBureaucrat(userId):
         query = "select * from mw_user_groups where ug_user=%d and ug_group='bureaucrat'" % int(userId)
-        db.query(query)
-        result = db.store_result()
-	if result.num_rows():
-		return 1
-	else:
-		return 0
+        return BinaryQuery(query)
 
 def SQLisUserBot(userId):
         query = "select ug_group from mw_user_groups where ug_user=%d and ug_group='bot'" % int(userId)
-        db.query(query)
-        result = db.store_result()
-	if result.num_rows():
-		return 1
-	else:
-		return 0
+        return BinaryQuery(query)
 
 def SQLWikiEditCount(submitter):
         # Retrieve the count of Wiki edits by the current submitter
@@ -1931,6 +1928,8 @@ def SQLWikiEditCount(submitter):
 	record = result.fetch_row()
 	if record:
 		editcount = record[0][0]
+		if not editcount:
+                        editcount = 0
 	else:
 		editcount = 0
 	return editcount
@@ -3137,3 +3136,8 @@ def SQLGetSecondaryVerificationByVerID(ver_id):
         query = "select * from verification where verification_id = %d" % int(ver_id)
 	return StandardQuery(query)
         
+def SQLGetSelfApprovers():
+        query = """select u.user_id, u.user_name
+                from self_approvers sa, mw_user u
+                where sa.user_id = u.user_id"""
+	return StandardQuery(query)

@@ -38,6 +38,9 @@ def findReferralLang(pub_id):
                 referral_lang = None
         return referral_lang
 
+def UserNameLink(user_name):
+        return '<a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, user_name, user_name)
+        
 def ApproveOrReject(app, submission_id):
 
         print '<p>'
@@ -55,6 +58,8 @@ def ApproveOrReject(app, submission_id):
         sub_reviewer = submission[SUB_REVIEWER]
         submitting_user = SQLgetUserName(submitter_id)
 
+        reviewer_is_moderator = SQLisUserModerator(reviewer_id)
+
         if sub_state in ('I', 'R'):
                 print '<h3>This submission was created on %s and ' % sub_time
                 if sub_state == 'R':
@@ -67,7 +72,7 @@ def ApproveOrReject(app, submission_id):
 
         # Check if the submission was created by another moderator; if so, disallow approving
         if (int(submitter_id) != int(reviewer_id)) and SQLisUserModerator(submitter_id):
-                print '<h3>Submission created by <a href="http://%s/index.php/User:%s">%s</a></h3>' % (WIKILOC, submitting_user, submitting_user)
+                print '<h3>Submission created by %s</h3>' % UserNameLink(submitting_user)
                 return
 
         wiki_edits = SQLWikiEditCount(submitting_user)
@@ -88,8 +93,8 @@ def ApproveOrReject(app, submission_id):
                 print '<h3>Submission is currently on hold by you.</h3><p>'
                 print '<a class="hold" href="http:/'+HTFAKE+'/mod/unhold.cgi?%s">UNHOLD</a>  ' % submission_id
 
-        #If the submission is not currently on hold, allow to put it on hold
-        else:
+        # If the submission is not currently on hold and the reviewer is a moderator as opposed to a self-approver, allow putting it on hold
+        elif reviewer_is_moderator:
                 print '<a class="hold" href="http:/'+HTFAKE+'/mod/hold.cgi?%s">HOLD</a>  ' % submission_id
 
         print '<a class="approval" href="http:/'+HTFAKE+'/mod/%s?%s">Approve</a>' % (app, submission_id)
@@ -108,6 +113,9 @@ def ApproveOrReject(app, submission_id):
         print '</form>'
 
 def PrintSubmissionLinks(submission_id, reviewer_id):
+        # If the reviewer is a self-approver and not a moderator, do not display submission links
+        if not SQLisUserModerator(reviewer_id):
+                return
         next_sub = SQLloadNextSubmission(submission_id, reviewer_id)
         if next_sub:
                 subtype = next_sub[SUB_TYPE]

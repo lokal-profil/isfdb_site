@@ -60,6 +60,8 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/sa_delete.cgi \
 	  DIR/sa_update.cgi \
 	  DIR/select_secondary_verification.cgi \
+	  DIR/self_approvers.cgi \
+	  DIR/self_approver_file.cgi \
 	  DIR/submitcpanel.cgi \
 	  DIR/submitref.cgi \
 	  DIR/sv_delete.cgi \
