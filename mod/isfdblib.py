@@ -59,7 +59,7 @@ def PrintUserInfo():
 #	see /biblio/common.py for Regular NavBar function
 #
 #######################################################
-def PrintNavBar(page_title = ''):
+def PrintNavBar():
 	print '<div id="nav">'
 
         # Print the search box from module navbar
@@ -103,8 +103,8 @@ def PrintNavBar(page_title = ''):
                 else:
                         PrintError('Moderator privileges are required for this option')
 
-        bureaucrat_only = ('Bureaucrat Menu', 'Manage Self-Approvers', 'Manage Self-Approvers - SQL Statements')
-        if page_title in bureaucrat_only and not bureaucrat:
+        bureaucrat_only = ('bureaucrat', 'self_approvers', 'self_approver_file', 'marque')
+        if SESSION.cgi_script in bureaucrat_only and not bureaucrat:
                 PrintError('Bureaucrats privileges are required for this option')
 
 def SelfApprovalAllowed(userid):

@@ -24,9 +24,8 @@ class SelfApprovers:
                 self.user.load()
         
         def display_current_self_approvers(self):
-                title = 'Manage Self-Approvers'
-        	PrintPreMod(title)
-                PrintNavBar(title)
+        	PrintPreMod('Manage Self-Approvers')
+                PrintNavBar()
 
                 current_self_approvers = SQLGetSelfApprovers()
                 print 'Users who can currently approve their own submissions:'

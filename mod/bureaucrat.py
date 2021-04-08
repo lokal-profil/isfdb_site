@@ -24,10 +24,11 @@ class Bureaucrat:
         
         def display_options(self):
         	PrintPreMod('Bureaucrat Menu')
-                PrintNavBar('Bureaucrat Menu')
+                PrintNavBar()
                 print '<ul>'
                 print '<li>%s' % ISFDBLink('edit/newawardtype.cgi', '', 'Add New Award Type')
                 print '<li>%s' % ISFDBLink('mod/self_approvers.cgi', '', 'Manage Self-Approvers')
+                print '<li>%s' % ISFDBLink('mod/marque.cgi', '', 'Re-calculate Marque (most viewed) Authors')
                 print '</ul>'
                 print '<p>'
 

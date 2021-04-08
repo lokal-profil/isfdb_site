@@ -28,7 +28,7 @@ def PrintError(message):
         
 if __name__ == '__main__':
 	PrintPreMod('Manage Self-Approvers - SQL Statements')
-        PrintNavBar('Manage Self-Approvers - SQL Statements')
+        PrintNavBar()
         
         sys.stderr = sys.stdout
         form = cgi.FieldStorage()
