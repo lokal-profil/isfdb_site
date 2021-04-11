@@ -1909,12 +1909,13 @@ def nightly_cleanup_reports():
                 record = result.fetch_row()
 
         in_clause = list_to_in_clause(pubs)
-        query = """select p.pub_id
-                from pubs p
-                where p.pub_id in (%s)
-                and not exists(select 1 from primary_verifications pv
-                                where pv.pub_id = p.pub_id)""" % in_clause
-        standardReport(query, 296)
+        if in_clause:
+                query = """select p.pub_id
+                        from pubs p
+                        where p.pub_id in (%s)
+                        and not exists(select 1 from primary_verifications pv
+                                        where pv.pub_id = p.pub_id)""" % in_clause
+                standardReport(query, 296)
 
 def requiredLowerCase():
         clause = ''
