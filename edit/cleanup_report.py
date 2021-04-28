@@ -6829,7 +6829,7 @@ def function295():
         cleanup.query = """select distinct p.pub_id, p.pub_title, p.pub_year
                 from pubs p, notes n, cleanup c
                 where p.note_id = n.note_id
-                and n.note_note like '%{{WatchDate}}'
+                and n.note_note like '%{{WatchDate}}%'
                 and c.record_id = p.pub_id
                 and c.report_type = 295
                 order by p.pub_year, p.pub_title"""
