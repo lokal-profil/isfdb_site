@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -24,7 +24,7 @@ class AdvancedSearch:
                 self.define_criteria()
 
         def define_criteria(self):
-                self.max_term = 6
+                self.max_term = 10
                 self.selection = {}
                 self.operators = (('exact', 'is exactly'),
                                   ('notexact', 'is not exactly'),

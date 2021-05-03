@@ -161,6 +161,18 @@ function createOnchange()	{
 		document.getElementById('author_6').onchange = function(event){
 			Selectors(6, this.value, 'author');
 		};
+		document.getElementById('author_7').onchange = function(event){
+			Selectors(7, this.value, 'author');
+		};
+		document.getElementById('author_8').onchange = function(event){
+			Selectors(8, this.value, 'author');
+		};
+		document.getElementById('author_9').onchange = function(event){
+			Selectors(9, this.value, 'author');
+		};
+		document.getElementById('author_10').onchange = function(event){
+			Selectors(10, this.value, 'author');
+		};
 	}
 	if (document.getElementById('title_1')) {
 		document.getElementById('title_1').onchange = function(event){
@@ -180,6 +192,18 @@ function createOnchange()	{
 		};
 		document.getElementById('title_6').onchange = function(event){
 			Selectors(6, this.value, 'title');
+		};
+		document.getElementById('title_7').onchange = function(event){
+			Selectors(7, this.value, 'title');
+		};
+		document.getElementById('title_8').onchange = function(event){
+			Selectors(8, this.value, 'title');
+		};
+		document.getElementById('title_9').onchange = function(event){
+			Selectors(9, this.value, 'title');
+		};
+		document.getElementById('title_10').onchange = function(event){
+			Selectors(10, this.value, 'title');
 		};
 	}
 	if (document.getElementById('pub_1')) {
@@ -201,6 +225,18 @@ function createOnchange()	{
 		document.getElementById('pub_6').onchange = function(event){
 			Selectors(6, this.value, 'pub');
 		};
+		document.getElementById('pub_7').onchange = function(event){
+			Selectors(7, this.value, 'pub');
+		};
+		document.getElementById('pub_8').onchange = function(event){
+			Selectors(8, this.value, 'pub');
+		};
+		document.getElementById('pub_9').onchange = function(event){
+			Selectors(9, this.value, 'pub');
+		};
+		document.getElementById('pub_10').onchange = function(event){
+			Selectors(10, this.value, 'pub');
+		};
 	}
 	if (document.getElementById('award_type_1')) {
 		document.getElementById('award_type_1').onchange = function(event){
@@ -221,6 +257,18 @@ function createOnchange()	{
 		document.getElementById('award_type_6').onchange = function(event){
 			Selectors(6, this.value, 'award_type');
 		};
+		document.getElementById('award_type_7').onchange = function(event){
+			Selectors(7, this.value, 'award_type');
+		};
+		document.getElementById('award_type_8').onchange = function(event){
+			Selectors(8, this.value, 'award_type');
+		};
+		document.getElementById('award_type_9').onchange = function(event){
+			Selectors(9, this.value, 'award_type');
+		};
+		document.getElementById('award_type_10').onchange = function(event){
+			Selectors(10, this.value, 'award_type');
+		};
 	}
 	if (document.getElementById('award_1')) {
 		document.getElementById('award_1').onchange = function(event){
@@ -240,6 +288,18 @@ function createOnchange()	{
 		};
 		document.getElementById('award_6').onchange = function(event){
 			Selectors(6, this.value, 'award');
+		};
+		document.getElementById('award_7').onchange = function(event){
+			Selectors(7, this.value, 'award');
+		};
+		document.getElementById('award_8').onchange = function(event){
+			Selectors(8, this.value, 'award');
+		};
+		document.getElementById('award_9').onchange = function(event){
+			Selectors(9, this.value, 'award');
+		};
+		document.getElementById('award_10').onchange = function(event){
+			Selectors(10, this.value, 'award');
 		};
 	}
 }
