@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus, Uzume and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus, Uzume and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -116,16 +116,7 @@ if __name__ == '__main__':
                                         outstr += ", %spp" % result[PUB_PAGES]
 
 				if result[PUB_PTYPE]:
-					if result[PUB_PTYPE] == 'hc':
-						outstr += ", hardcover"
-					elif result[PUB_PTYPE] == 'tp':
-						outstr += ", trade paperback"
-					elif result[PUB_PTYPE] == 'pb':
-						outstr += ", mass market paperback"
-					elif result[PUB_PTYPE] == 'audio':
-						outstr += ", audio"
-					else:
-						outstr += ", " + result[PUB_PTYPE]
+                                        outstr += ", " + ISFDBPubFormat(result[PUB_PTYPE], 'left')
 
 				if result[PUB_CTYPE]:
 						outstr += ', %s' % result[PUB_CTYPE].lower()

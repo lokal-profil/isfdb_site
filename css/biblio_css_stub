@@ -1,4 +1,4 @@
-/* (C) COPYRIGHT 2008-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
+/* (C) COPYRIGHT 2008-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
          ALL RIGHTS RESERVED
 
      The copyright notice above does not evidence any actual or
@@ -1148,8 +1148,13 @@ div.nongenre {
   text-align: center;
 }
 
-/* Tooltip container div */
+/* Tooltip container divs */
 div.tooltip {
+    position: relative;
+    display: inline;
+}
+
+div.tooltipleft {
     position: relative;
     display: inline;
 }
@@ -1169,6 +1174,24 @@ div.tooltip span.tooltiptext {
     border-radius: 6px;
     border: 1px solid black;
     z-index: 1;
+    left: 105%;
+}
+
+div.tooltipleft span.tooltiptextleft {
+    /* Position the tooltip text */
+    position: absolute;
+    pointer-events: none;
+    background: transparent;
+    visibility: hidden;
+    background-color: white;
+    color: black;
+    text-align: left;
+    padding: 5px 0;
+    padding-left: 3px;
+    border-radius: 6px;
+    border: 1px solid black;
+    z-index: 1;
+    right: 105%;
 }
 
 span.tooltipnarrow {
@@ -1181,6 +1204,10 @@ span.tooltipwide {
 
 /* Show the tooltip text when you mouse over the tooltip container */
 div.tooltip:hover span.tooltiptext {
+    visibility: visible;
+}
+
+div.tooltipleft:hover span.tooltiptextleft {
     visibility: visible;
 }
 

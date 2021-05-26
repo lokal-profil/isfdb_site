@@ -545,7 +545,7 @@ def ISFDBText(text, escape_quotes = False):
                 text = text.replace("&amp;#","&#")
         return text
 
-def ISFDBPubFormat(format_code):
+def ISFDBPubFormat(format_code, position = 'right'):
         formats = {'pb': """Paperback. Typically 7" by 4.25" (18 cm by 11 cm) or smaller, 
                             though trimming errors can cause them to sometimes be slightly
                             (less than 1/4 extra inch) taller or wider/deeper.""",
@@ -593,7 +593,7 @@ def ISFDBPubFormat(format_code):
         mouseover_text = normalizeInput(mouseover_text)
        
         if mouseover_text:
-                display_value = ISFDBMouseover((mouseover_text,), format_code, '')
+                display_value = ISFDBMouseover((mouseover_text,), format_code, '', QUESTION_MARK, position)
         else:
                 display_value = format_code
         return display_value
@@ -1428,7 +1428,7 @@ def list_to_in_clause(id_list):
                         in_clause += ",'%s'" % id_string
         return in_clause
 
-def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUESTION_MARK):
+def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUESTION_MARK, position = 'right'):
         # Adds a mouseover bubble with the specified list of values to
         # the displayed text/link and returns the composite string.
         # Supports different opening and closing HTML tags, typically <td>.
@@ -1446,7 +1446,13 @@ def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUES
                 tooltipwidth = 'tooltipnarrow'
         else:
                 tooltipwidth = 'tooltipwide'
-        display += '<div class="tooltip">%s<sup class="mouseover">%s</sup><span class="tooltiptext %s">' % (display_value, indicator, tooltipwidth)
+        if position == 'right':
+                tooltipclass = 'tooltip'
+                tooltiptextclass = 'tooltiptext'
+        else:
+                tooltipclass = 'tooltipleft'
+                tooltiptextclass = 'tooltiptextleft'
+        display += '<div class="%s">%s<sup class="mouseover">%s</sup><span class="%s %s">' % (tooltipclass, display_value, indicator, tooltiptextclass, tooltipwidth)
         count = 0
         for mouseover_value in mouseover_values:
                 if count:

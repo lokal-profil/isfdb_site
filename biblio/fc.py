@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -447,7 +447,7 @@ class PublicationMonth:
 
                 print '<td>'
                 if pub[PUB_PTYPE]:
-                        print pub[PUB_PTYPE]
+                        print ISFDBPubFormat(pub[PUB_PTYPE], 'left')
                 print '</td>'
                 print '</tr>'
                 return
