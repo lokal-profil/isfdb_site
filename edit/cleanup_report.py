@@ -6851,6 +6851,19 @@ def function296():
         cleanup.ignore = 1
         cleanup.print_pub_table()
 
+def function297():
+        cleanup.query = """select distinct t.title_id, t.title_title, c.cleanup_id
+                from titles t, cleanup c
+                where title_title like '%(Part %'
+                and title_ttype = 'SHORTFICTION'
+                and c.record_id = t.title_id
+                and c.report_type = 297
+                and c.resolved IS NULL
+                order by t.title_title"""
+        cleanup.none = 'No suspect SHORTFICTION title records with "(Part " in the title field'
+        cleanup.ignore = 1
+        cleanup.print_title_table()
+
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:

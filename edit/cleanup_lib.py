@@ -307,6 +307,7 @@ def reportsDict():
         reports[294] = ("Publications with Suspect English Capitalization (first 1000)")
         reports[295] = ("Publications with the WatchDate Template in Notes")
         reports[296] = ("Select Unverified Publications with 'First Printing' in Notes")
+        reports[297] = ("Short Fiction Title Records with '(Part' in the Title field")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -322,7 +323,7 @@ def reportsDict():
         sections.append(('Series', (16, 17, 48, 64, 67, 76, 81, 90, 144)), )
         sections.append(('Titles', (19, 1, 3, 18, 47, 55, 62, 63, 69, 74, 80, 87,
                                     91, 96, 194, 195, 196, 197, 227, 275, 276, 290,
-                                    293)), )
+                                    293, 297)), )
         sections.append(('Variant Titles', (20, 21, 9, 2, 45, 286)), )
         sections.append(('Translations', (239, 238, 264, 265, 266, 267, 268, 269, 270,
                                           271)), )
@@ -374,6 +375,6 @@ def reportsDict():
                          252, 253, 254, 255, 256, 257, 264, 265, 266, 267,
                          268, 269, 270, 271, 272, 273, 274, 275, 276, 277,
                          278, 279, 280, 281, 282, 283, 284, 285, 286, 287,
-                         288, 289, 291, 292, 293, 294, 295, 296, 9999)
+                         288, 289, 291, 292, 293, 294, 295, 296, 297, 9999)
         
         return (reports, sections, non_moderator)

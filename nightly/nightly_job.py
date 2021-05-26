@@ -1858,7 +1858,7 @@ def nightly_cleanup_reports():
                 limit 1000""" % requiredLowerCase()
         standardReport(query, 293)
 
-        #   Report 294: Titles with Suspect English Capitalization
+        #   Report 294: Publications with Suspect English Capitalization
         query = """select distinct p.pub_id from pubs p
                 where binary p.pub_title REGEXP "[^\:\.\!\;\/](%s)"
                 and exists (
@@ -1916,6 +1916,13 @@ def nightly_cleanup_reports():
                         and not exists(select 1 from primary_verifications pv
                                         where pv.pub_id = p.pub_id)""" % in_clause
                 standardReport(query, 296)
+
+        #   Report 297: Short Fiction Title Records with '(Part' in the Title field
+        query = """select title_id, title_title, title_ttype from titles
+                where title_title like '%(Part %'
+                and title_ttype = 'SHORTFICTION'"""
+        standardReport(query, 297)
+
 
 def requiredLowerCase():
         clause = ''
