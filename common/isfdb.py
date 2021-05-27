@@ -550,3 +550,8 @@ SPECIAL_AUTHORS_TO_IGNORE = [
     'Traditional', # 17640
     'The Editors' # 38941
 ]
+
+EURO_SIGN = chr(128)
+POUND_SIGN = chr(163)
+YEN_SIGN = chr(165)
+

@@ -1,3 +1,4 @@
+# -*- coding: cp1252 -*-
 #
 #     (C) COPYRIGHT 2007-2021   Al von Ruff, Ahasuerus and Bill Longley
 #       ALL RIGHTS RESERVED
@@ -47,6 +48,30 @@ def CheckPublisher(value):
         else:
                 if len(publisher) == 1:
                         value = '<a href="http:/%s/publisher.cgi?%s">%s</a>' % (HTFAKE, publisher[0][PUBLISHER_ID], value)
+        return (value, warning)
+
+def CheckPrice(value):
+        warning = ''
+        if 'CDN' in value.upper():
+                warning = 'CDN is invalid. Use leading C$ for prices in Canadian dollars.'
+        if 'EUR' in value.upper():
+                warning = 'EUR is invalid. Use %s for prices in euros.' % EURO_SIGN
+        for currency_sign in ('$', POUND_SIGN, YEN_SIGN, EURO_SIGN):
+                if (currency_sign + ' ') in value:
+                        warning = 'Spaces after the %s sign are not allowed.' % currency_sign
+                        break
+        if EURO_SIGN in value and not value.startswith(EURO_SIGN):
+                warning = 'Euro sign must be at the beginning of the price value.'
+        if EURO_SIGN in value and ',' in value:
+                warning = 'Euro prices must not include commas.'
+        for currency_sign in ('$', POUND_SIGN):
+                if currency_sign in value and ',' in value and '.' not in value:
+                        warning = 'For %s prices, a period must be used as the decimal separator.' % currency_sign
+                        break
+        if value.lower().startswith('http'):
+                warning = 'Prices must not start with http.'
+        if value.replace('.','').replace(',','').isdigit():
+                warning = 'Prices should contain a currency symbol or abbreviation.'
         return (value, warning)
 
 def CheckISBN(value, XmlData):
@@ -207,6 +232,9 @@ def PrintField1XML(Label, XmlData, title = 0):
                 
                 elif Label == 'Publisher':
                         (value, warning) = CheckPublisher(value)
+
+                elif Label == 'Price':
+                        (value, warning) = CheckPrice(value)
 
                 elif Label == 'PubSeries':
                         (value, warning) = CheckPubSeries(value)
@@ -378,6 +406,12 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
                         (value2, warning) = CheckPublisher(value2)
                 if value:
                         (value, warning) = CheckPublisher(value)
+
+        elif Label == 'Price':
+                if value2:
+                        (value2, warning) = CheckPrice(value2)
+                if value:
+                        (value, warning) = CheckPrice(value)
 
         elif Label == 'Isbn':
                 if value:
