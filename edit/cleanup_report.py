@@ -4722,8 +4722,14 @@ def function144():
                     from series s1, series s2
                     where s1.series_id != s2.series_id
                     and s1.series_title = substring(s2.series_title, 1, LOCATE(' (', s2.series_title)-1)
+                    and (
+                           (s1.series_parent is not null and s1.series_parent != s2.series_id)
+                           or (s2.series_parent is not null and s2.series_parent != s1.series_id)
+                           or (s1.series_parent is null and s2.series_parent is null)
+                        )
 		    ) as x
-                   where c.report_type=144 and c.resolved IS NULL
+                   where c.report_type=144
+                   and c.resolved IS NULL
                    and c.record_id = x.series_id
                    order by x.series_title"""
 

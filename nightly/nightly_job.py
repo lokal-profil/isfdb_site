@@ -1208,9 +1208,15 @@ def nightly_cleanup_reports():
         standardReport(query, 100)
 
         #   Report 144: Series names potentially in need of disambiguation
-        query = """select distinct s1.series_id from series s1, series s2
+        query = """select distinct s1.series_id
+                   from series s1, series s2
                    where s1.series_id != s2.series_id
                    and s1.series_title = substring(s2.series_title, 1, LOCATE(' (', s2.series_title)-1)
+                   and (
+                           (s1.series_parent is not null and s1.series_parent != s2.series_id)
+                           or (s2.series_parent is not null and s2.series_parent != s1.series_id)
+                           or (s1.series_parent is null and s2.series_parent is null)
+                        )
                    """
         standardReport(query, 144)
 
