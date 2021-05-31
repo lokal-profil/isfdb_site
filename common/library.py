@@ -1446,13 +1446,15 @@ def ISFDBMouseover(mouseover_values, display_value, tag = 'td', indicator = QUES
                 tooltipwidth = 'tooltipnarrow'
         else:
                 tooltipwidth = 'tooltipwide'
+        tooltipclass = 'tooltip'
+        tooltiptextclass = 'tooltiptext'
         if position == 'right':
-                tooltipclass = 'tooltip'
-                tooltiptextclass = 'tooltiptext'
+                tooltipposition = 'tooltipright'
         else:
-                tooltipclass = 'tooltipleft'
-                tooltiptextclass = 'tooltiptextleft'
-        display += '<div class="%s">%s<sup class="mouseover">%s</sup><span class="%s %s">' % (tooltipclass, display_value, indicator, tooltiptextclass, tooltipwidth)
+                tooltipposition = 'tooltipleft'
+        display += '<div class="%s %s">' % (tooltipclass, tooltipposition)
+        display += '%s<sup class="mouseover">%s</sup>' % (display_value, indicator)
+        display += '<span class="%s %s %s">' % (tooltiptextclass, tooltipwidth, tooltipposition)
         count = 0
         for mouseover_value in mouseover_values:
                 if count:
