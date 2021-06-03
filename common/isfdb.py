@@ -95,6 +95,18 @@ class Session:
             else:
                 self.arguments.append(sys.argv[counter])
             counter += 1
+    
+    def DisplayError(self, message):
+        from common import PrintHeader, PrintNavbar, PrintTrailer
+        PrintHeader('Page Does Not Exist')
+        try:
+            record_id = int(self.argument[0])
+        except:
+            record_id = 0
+        PrintNavbar(self.cgi_script, record_id, 0, '%s.cgi' % self.cgi_script, 0)
+        print """<h3>%s</h3>""" % message
+        PrintTrailer(self.cgi_script, record_id, 0)
+        sys.exit(0)
 
 SCHEMA_VER = "0.02"
 ENGINE     = "<b>ISFDB Engine</b> - Version 4.00 (2006-04-24)"

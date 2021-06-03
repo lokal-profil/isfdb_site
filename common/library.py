@@ -598,6 +598,37 @@ def ISFDBPubFormat(format_code, position = 'right'):
                 display_value = format_code
         return display_value
 
+class ISFDBTable():
+        def __init__(self):
+                self.headers = ['#']
+                self.rows = []
+                self.table_css = 'generic_table'
+                self.header_css = 'generic_table_header'
+
+        def PrintTable(self):
+                print '<table class="%s">' % self.table_css
+                print '<tr align="left" class="%s">' % self.header_css
+                self.PrintHeaders()
+                print '</tr>'
+                self.PrintBody()
+                print '</table>'
+
+        def PrintHeaders(self):
+                for header in self.headers:
+                        print '<td><b>%s</b></td>' % header
+
+        def PrintBody(self):
+                for index, row in enumerate(self.rows):
+                        if index % 2 == 0:
+                                row_css = 'table1'
+                        else:
+                                row_css = 'table2'
+                        print '<tr align="left" class="%s">' % row_css
+                        print '<td>%d</td>' % (index + 1)
+                        for cell in row:
+                                print '<td>%s</td>' % cell
+                        print '</tr>'
+
 class AutoVivification(dict):
         """Emulate Perl's autovivification feature"""
         def __getitem__(self, item):

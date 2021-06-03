@@ -149,4 +149,12 @@ if __name__ == '__main__':
 	print '</table>'
         print '</div>'
 
+        print '<div class="ContentBox">'
+        print '<b>Publication Breakdown by Author:</b>'
+        print '<ul>'
+        print '<li>%s' % ISFDBLink('publisher_authors.cgi', '%s+name' % publisher_id, 'Sort by Author Name')
+        print '<li>%s' % ISFDBLink('publisher_authors.cgi', '%s+count' % publisher_id, 'Sort by Publication Count')
+        print '</ul>'
+        print '</div>'
+
 	PrintTrailer('publisher', publisher_id, publisher_id)
