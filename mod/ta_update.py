@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -117,7 +117,7 @@ if __name__ == '__main__':
 		if TagPresent(merge, 'Language'):
 			value = GetElementValue(merge, 'Language')
 			if value:
-                                lang_id = SQLGetLangByName(XMLunescape(value))
+                                lang_id = SQLGetLangIdByName(XMLunescape(value))
                                 if lang_id:
         				update = "update titles set title_language='%d' where title_id=%s" % (int(lang_id), Record)
         				print "<li> ", update

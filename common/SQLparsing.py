@@ -2612,16 +2612,6 @@ def SQLGetLangIdByName(lang_name):
                 lang_id = record[0][0]
         return lang_id
 
-def SQLGetLangByName(lang_name):
-        query = "select lang_id from languages where lang_name ='%s'" % (db.escape_string(lang_name))
-        db.query(query)
-        res = db.store_result()
-        lang_id = 0
-        if res.num_rows():
-                record = res.fetch_row()
-                lang_id = record[0][0]
-        return lang_id
-
 def SQLUserPreferencesId(user_id):
         query = "select user_pref_id from user_preferences where user_id='%d'" % (int(user_id))
         db.query(query)

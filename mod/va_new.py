@@ -136,7 +136,7 @@ if __name__ == '__main__':
 		if TagPresent(merge, 'Language'):
 			value = GetElementValue(merge, 'Language')
 			if value:
-                                lang_id = SQLGetLangByName(XMLunescape(value))
+                                lang_id = SQLGetLangIdByName(XMLunescape(value))
                                 if lang_id:
         				update = "update titles set title_language='%d' where title_id=%s" % (int(lang_id), TitleRecord)
         				print "<li> ", update

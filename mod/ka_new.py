@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2020   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -30,7 +30,7 @@ def UpdateTitleColumn(doc, tag, column, id):
 		value = XMLunescape(value)
 		# For languages, get the language ID from its display name
 		if tag == 'Language':
-                        value = str(SQLGetLangByName(value))
+                        value = str(SQLGetLangIdByName(value))
 		update = "update titles set %s='%s' where title_id=%d" % (db.escape_string(column), db.escape_string(value), int(id))
 		print "<li> ", update
 		if debug == 0:
