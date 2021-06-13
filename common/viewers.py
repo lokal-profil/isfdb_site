@@ -1498,6 +1498,7 @@ def DisplayTitleDelete(submission_id):
 
 		PrintMultField1('Webpages', 'Web page', '<br>', current.used_webpages, current.title_webpages)
 		PrintMultField1('Authors',  'Author',   '+', current.num_authors,   current.title_authors)
+		PrintField1('Language',   current.used_language,  current.title_language)
 		PrintField1('Note',       current.used_note,      current.title_note)
 
         print '</table>'
