@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2020   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -36,8 +36,7 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
         # PAGES
         ##################################################
         if page:
-                output += page
-                output += " &#8226; "
+                output += "%s %s " % (page, BULLET)
 
         ##################################################
         # TITLE
@@ -68,23 +67,23 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
                         output += ' [%s]' % LANGUAGES[language_id]
 
         if title[TITLE_JVN] == 'Yes':
-                output += " &#8226; juvenile"
+                output += " %s juvenile" % BULLET
 
         if title[TITLE_NVZ] == 'Yes':
-                output += " &#8226; novelization"
+                output += " %s novelization" % BULLET
 
         if title[TITLE_NON_GENRE] == 'Yes':
-                output += " &#8226; non-genre"
+                output += " %s non-genre" % BULLET
         
         if title[TITLE_GRAPHIC] == 'Yes':
-                output += " &#8226; graphic format"
+                output += " %s graphic format" % BULLET
 
         if title[TITLE_SERIES]:
-                output += " &#8226; "
+                output += " %s " % BULLET
                 seriesname = SQLgetSeriesName(title[TITLE_SERIES])
                 output += '[%s' % ISFDBLink('pe.cgi', title[TITLE_SERIES], seriesname)
                 if title[TITLE_SERIESNUM] is not None:
-                        output += " &#8226; %d" % title[TITLE_SERIESNUM]
+                        output += " %s %d" % (BULLET, title[TITLE_SERIESNUM])
                         if title[TITLE_SERIESNUM_2] is not None:
                                 output += ".%s" % title[TITLE_SERIESNUM_2]
                 output += ']'
@@ -95,21 +94,21 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
                                 if parent_title[TITLE_SERIES]:
                                         seriesname = SQLgetSeriesName(parent_title[TITLE_SERIES])
                                         if seriesname:
-                                                output += ' &#8226; [%s' % ISFDBLink('pe.cgi', parent_title[TITLE_SERIES], seriesname)
+                                                output += ' %s [%s' % (BULLET, ISFDBLink('pe.cgi', parent_title[TITLE_SERIES], seriesname))
                                                 if parent_title[TITLE_SERIESNUM] is not None:
-                                                        output += " &#8226; %d" % parent_title[TITLE_SERIESNUM]
+                                                        output += " %s %d" % (BULLET, parent_title[TITLE_SERIESNUM])
                                                         if parent_title[TITLE_SERIESNUM_2] is not None:
                                                                 output += ".%s" % parent_title[TITLE_SERIESNUM_2]
                                                 output += ']'
 
         if title[TITLE_TTYPE] != 'COVERART':
-                output += " &#8226; "
+                output += " %s " % BULLET
         else:
                 output += ' '
 
         if title[TITLE_YEAR] != pub.pub_year:
                 output += '(%s)' % (convertYear(title[TITLE_YEAR][:4]))
-                output += " &#8226; "
+                output += " %s " % BULLET
 
         ##################################################
         # TTYPE
@@ -145,7 +144,7 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
                 output += ' interview of '
                 authors = SQLInterviewBriefAuthorRecords(title[TITLE_PUBID])
                 output += FormatAuthors(authors)
-                output += " &#8226; "
+                output += " %s " % BULLET
                 output += 'interview'
         elif title[TITLE_TTYPE] == 'EDITOR':
                 output += 'edited'

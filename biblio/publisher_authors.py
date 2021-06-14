@@ -44,7 +44,7 @@ if __name__ == '__main__':
 	else:
                 print ISFDBLink('publisher_authors.cgi', '%s+name' % publisher_id, 'Sort by Author Name')
 
-        print ' &#8226; '
+        print ' %s ' % BULLET
         print ISFDBLink('publisher.cgi', publisher_id, 'Return to the publisher page')
         print """<p>Note that the statistics below count the number of publications associated
                 with publication-level authors and editors. They do not count the authors of

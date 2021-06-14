@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2010-2018   Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2010-2021   Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -88,7 +88,7 @@ if __name__ == '__main__':
 	for message_number in sorted(messages.keys()):
                 if message_number != display_order:
                         if output:
-                                output += ' &#8226; '
+                                output += ' %s ' % BULLET
                         output += '<a href="http:/%s/pubseries.cgi?%d+%d">%s</a>' % (HTFAKE,
                                                                                      int(pub_series_id),
                                                                                      message_number,

@@ -320,11 +320,11 @@ class PublicationMonth:
                         print "<td></td>"
                 if self.sorting == 'author':
                         print "<td><b>Author(s)</b></td>"
-                        print "<td><b>Title &#8226; Series</b></td>"
+                        print "<td><b>Title %s Series</b></td>" % BULLET
                 print "<td><b>Date</b></td>"
                 if self.sorting == 'date':
                         print "<td><b>Author(s)</b></td>"
-                        print "<td><b>Title &#8226; Series</b></td>"
+                        print "<td><b>Title %s Series</b></td>" % BULLET
                 print "<td><b>Reprint?</b></td>"
                 print "<td><b>Genre/Tags</b></td>"
                 print "<td><b>Type</b></td>"
@@ -479,7 +479,7 @@ class PublicationMonth:
                         series_id = title[TITLE_SERIES]
                         if series_id:
                                 series = self.series[series_id]
-                                output += ' &#8226; %s' % ISFDBLink('pe.cgi', series[SERIES_PUBID], '<i>%s</i>' % series[SERIES_NAME])
+                                output += ' %s %s' % (BULLET, ISFDBLink('pe.cgi', series[SERIES_PUBID], '<i>%s</i>' % series[SERIES_NAME]))
                                 if title[TITLE_SERIESNUM] is not None:
                                         output += ' #%s' % (title[TITLE_SERIESNUM])
                                         if title[TITLE_SERIESNUM_2] is not None:

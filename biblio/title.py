@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff, Bill Longley, Uzume, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley, Uzume, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -574,7 +574,7 @@ if __name__ == '__main__':
                 retrieval_function = options[variant_display][2]
                 for option_number in sorted(options.keys()):
                         if option_number != variant_display:
-                                output += ' &#8226; '
+                                output += ' %s ' % BULLET
                                 output += '<a href="http:/%s/title.cgi?%d+%d">%s</a>' % (HTFAKE,
                                                                                              int(title_id),
                                                                                              option_number,

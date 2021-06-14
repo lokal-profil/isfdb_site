@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -45,7 +45,7 @@ if __name__ == '__main__':
 	PrintNavbar('publisheryear', publisher_id, publisher_id, 'publisheryear.cgi', 0)
 	pubs = SQLGetPubsByPublisherYear(publisher_id, year)
 	if show_covers:
-                print '<a href="http:/%s/publisheryear.cgi?%d+%d">View publication list for this year</a> &#8226; ' % (HTFAKE, publisher_id, year)
+                print '<a href="http:/%s/publisheryear.cgi?%d+%d">View publication list for this year</a> %s ' % (HTFAKE, publisher_id, year, BULLET)
                 print '<a href="http:/%s/publisher.cgi?%d">Return to the publisher page</a><p>' % (HTFAKE, publisher_id)
                 count = 0
                 for pub in pubs:
@@ -58,7 +58,7 @@ if __name__ == '__main__':
                 sys.exit(0)
 	if len(pubs):
 		print "<p>"
-                print '<a href="http:/%s/publisheryear.cgi?%d+%d+1">View covers for this year</a> &#8226; ' % (HTFAKE, publisher_id, year)
+                print '<a href="http:/%s/publisheryear.cgi?%d+%d+1">View covers for this year</a> %s ' % (HTFAKE, publisher_id, year, BULLET)
                 print '<a href="http:/%s/publisher.cgi?%d">Return to the publisher page</a><p>' % (HTFAKE, publisher_id)
 		PrintPubsTable(pubs, "publisher")
 
