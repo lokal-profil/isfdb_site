@@ -10,46 +10,24 @@
 #     Date: $Date$
 
 
-import sys
-import os
-import string
 from SQLparsing import *
 from common import *
 from login import *
 
 
-def DisplayError(message):
-        PrintHeader('Publication Series Error')
-        PrintNavbar('pub_series', '', 0, 'ea.cgi', '')
-        print '<h2>Error: %s.</h2>' % message
-        PrintTrailer('pub_series', '', 0)
-        sys.exit(0)
-
-
 if __name__ == '__main__':
 
-        try:
-                pub_series_id = str(int(sys.argv[1]))
-                pub_series = SQLGetPubSeries(pub_series_id)
-                if not pub_series:
-                        raise
-	except:
-                DisplayError('Publication series not found')
+        pub_series_id = SESSION.Parameter(0, 'int')
+        pub_series = SQLGetPubSeries(pub_series_id)
+        if not pub_series:
+                SESSION.DisplayError('Publication series not found')
 
-	messages = {}
-	messages[0] = 'Show earliest year first'
-	messages[1] = 'Show last year first'
-	messages[2] = 'Sort by series number'
-	messages[3] = 'Show covers'
-	try:
-                # Get the display order
-                display_order = int(sys.argv[2])
-        except:
-                # The default is descending
-                display_order=0
-
-        if display_order not in messages:
-                DisplayError('Invalid argument')
+	messages = {0: 'Show earliest year first',
+                    1: 'Show last year first',
+                    2: 'Sort by series number',
+                    3: 'Show covers'
+                    }
+	display_order = SESSION.Parameter(1, 'int', 0, (0, 1, 2, 3))
 
         user = User()
         user.load()
