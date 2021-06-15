@@ -10,6 +10,7 @@
 
 import cgitb; cgitb.enable()
 import sys
+import os
 from localdefs import *
 
 def Date_or_None(s):
@@ -80,27 +81,70 @@ def PrintHTMLHeaders(title):
 class Session:
     def __init__(self):
         self.cgi_script = ''
-        self.arguments = []
+        self.parameters = []
 
-    def ParseArguments(self):
-        counter = 0
-        for argument in sys.argv:
-            if counter == 0:
-                script = sys.argv[0]
-                # Some OSes put the full path name in sys.argv[0], so we extract the last "/" chunk
-                file_name = script.split('/')[-1]
-                if file_name.endswith('.cgi'):
-                    file_name = file_name[0:-4]
-                self.cgi_script = file_name
-            else:
-                self.arguments.append(sys.argv[counter])
-            counter += 1
+    def ParseParameters(self):
+        script = sys.argv[0]
+        # Some OSes put the full path name in sys.argv[0], so we extract the last "/" chunk
+        file_name = script.split('/')[-1]
+        if file_name.endswith('.cgi'):
+            file_name = file_name[0:-4]
+        self.cgi_script = file_name
+
+        # We get the query string from os.environ.get('QUERY_STRING') as opposed to sys.argv
+        # because some third party sites like Facebook add '&key=value' data to ISFDB URLs
+        self.query_string = os.environ.get('QUERY_STRING')
+        for parameter in self.query_string.split('+'):
+                parameter = parameter.split('&fbclid=')[0] # Strip trailing Facebook IDs
+                self.parameters.append(parameter)
+
+    def Parameter(self, param_number, param_type = 'str', default_value = None, allowed_values = []):
+        param_display_values = {0: 'First',
+                                1: 'Second',
+                                2: 'Third',
+                                3: 'Fourth',
+                                4: 'Fifth',
+                                5: 'Sixth',
+                                6: 'Seventh',
+                                7: 'Eight',
+                                8: 'Nineth',
+                                9: 'Tenth'
+                                }
+        if param_number not in param_display_values:
+            self.DisplayError('Too many parameters. Only %d parameters are allowed.' % len(param_display_values))
+        param_order = param_display_values[param_number]
+        
+        try:
+            value = self.parameters[param_number]
+            if not value:
+                raise
+        except:
+            value = ''
+        if not value and default_value is not None:
+            value = default_value
+        if not value:
+            self.DisplayError('%s parameter not specified' % param_order)
+        
+        if param_type == 'int':
+            try:
+                value = int(value)
+            except:
+                self.DisplayError('%s parameter must be numeric' % param_order)
+        
+        if allowed_values and value not in allowed_values:
+            output = '%s parameter must be one of the following values: ' % param_order
+            for count, allowed_value in enumerate(allowed_values):
+                if count:
+                    output += ', '
+                output += allowed_value
+            self.DisplayError(output)
+        return value
     
     def DisplayError(self, message):
         from common import PrintHeader, PrintNavbar, PrintTrailer
         PrintHeader('Page Does Not Exist')
         try:
-            record_id = int(self.argument[0])
+            record_id = int(self.parameter[0])
         except:
             record_id = 0
         PrintNavbar(self.cgi_script, record_id, 0, '%s.cgi' % self.cgi_script, 0)
@@ -116,7 +160,7 @@ COPYRIGHT  = "Copyright &copy; 1995-2021 Al von Ruff and the ISFDB team"
 # NONCE = uuid.uuid4().hex
 
 SESSION = Session()
-SESSION.ParseArguments()
+SESSION.ParseParameters()
 
 # History Actions (obsolete)
 AUTHOR_UPDATE  = 1

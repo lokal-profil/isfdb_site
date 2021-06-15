@@ -17,24 +17,12 @@ from login import *
 
 if __name__ == '__main__':
 
-        try:
-                publisher_id = int(SESSION.arguments[0])
-        except:
-                SESSION.DisplayError('Invalid Argument')
-
-        try:
-                publisher_name = SQLgetPublisherName(publisher_id)
-                if not publisher_name:
-                        raise
-        except:
+        publisher_id = SESSION.Parameter(0, 'int')
+        publisher_name = SQLgetPublisherName(publisher_id)
+        if not publisher_name:
                 SESSION.DisplayError('Specified Publisher Does Not Exist')
 
-        try:
-                sort_by = SESSION.arguments[1]
-                if sort_by not in ('name', 'count'):
-                        raise
-        except:
-                sort_by = 'count'
+        sort_by = SESSION.Parameter(1, 'str', None, ('name', 'count'))
 
         PrintHeader('Authors for Publisher %s, Sorted by %s' % (publisher_name, sort_by.capitalize()))
 	PrintNavbar('publisher_authors', publisher_id, publisher_id, 'publisher_authors.cgi', 0)
