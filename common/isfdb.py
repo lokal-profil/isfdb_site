@@ -122,7 +122,7 @@ class Session:
             value = ''
         if not value and default_value is not None:
             value = default_value
-        if not value:
+        if value == '':
             self.DisplayError('%s parameter not specified' % param_order)
         
         if param_type == 'int':
@@ -136,7 +136,7 @@ class Session:
             for count, allowed_value in enumerate(allowed_values):
                 if count:
                     output += ', '
-                output += allowed_value
+                output += '%s' % allowed_value
             self.DisplayError(output)
         return value
     

@@ -18,22 +18,12 @@ from login import *
 
 if __name__ == '__main__':
 
-        try:
-                publisher_id = int(sys.argv[1])
-                publisher = SQLgetPublisherName(publisher_id)
-                if not publisher:
-                        raise
-                year = int(sys.argv[2])
-        except:
-        	PrintHeader("Bad Argument")
-		PrintNavbar('publisheryear', 0, 0, 'publisheryear.cgi', 0)
-		PrintTrailer('publisheryear', 0, 0)
-                sys.exit(0)
-
-        try:
-                show_covers = int(sys.argv[3])
-        except:
-                show_covers = 0
+        publisher_id = SESSION.Parameter(0, 'int')
+        publisher = SQLgetPublisherName(publisher_id)
+        if not publisher:
+                SESSION.DisplayError('Specified Publisher Does Not Exist')
+        year = SESSION.Parameter(1, 'int')
+        show_covers = SESSION.Parameter(2, 'int', 0, (0, 1))
 
         display_year = year
         if year == 0:

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -20,17 +20,10 @@ from login import *
 
 if __name__ == '__main__':
 
-        try:
-                publisher_id = str(int(sys.argv[1]))
-                publisher = SQLGetPublisher(publisher_id)
-                if not publisher:
-                        raise
-	except:
-		PrintHeader('Publisher error')
-		PrintNavbar('publisher', '', 0, 'ea.cgi', '')
-                print '<h2>Error: Publisher not found.</h2>'
-		PrintTrailer('publisher', '', 0)
-		sys.exit(0)
+        publisher_id = SESSION.Parameter(0, 'int')
+        publisher = SQLGetPublisher(publisher_id)
+        if not publisher:
+                SESSION.DisplayError('Specified Publisher Does Not Exist')
 
         user = User()
         user.load()
@@ -52,7 +45,7 @@ if __name__ == '__main__':
         printRecordID('Publisher', publisher_id, user.id)
 
 	# Webpages
-	webpages = SQLloadPublisherWebpages(int(publisher_id))
+	webpages = SQLloadPublisherWebpages(publisher_id)
 	PrintWebPages(webpages)
 
 	# Local Wiki Link
@@ -83,7 +76,7 @@ if __name__ == '__main__':
                 if pubs_not_in_series > 500:
                         display += ' (too many to display on one page)'
                 else:
-                        display = '<a href="http:/%s/pubs_not_in_series.cgi?%d">%s</a>' % (HTFAKE, int(publisher_id), display)
+                        display = '<a href="http:/%s/pubs_not_in_series.cgi?%d">%s</a>' % (HTFAKE, publisher_id, display)
                 print '<li><b>%s</b>' % display
 
         # Retrieve all Publication Series IDs used by this publisher
@@ -124,7 +117,7 @@ if __name__ == '__main__':
 
                 if exception:
 			print '<tr>'
-			print '<td colspan="10">%s</td>' % ISFDBLink("publisheryear.cgi", "%s+%s" % (publisher_id, year), exception)
+			print '<td colspan="10">%s</td>' % ISFDBLink("publisheryear.cgi", "%d+%s" % (publisher_id, year), exception)
 			print '</tr>'
 
 		if (year != 0) and (year < 2100):
@@ -140,7 +133,7 @@ if __name__ == '__main__':
 		print '<tr>'
 		while year < decade+10:
 			if year in years:
-				print '<td>%s</td>' % ISFDBLink("publisheryear.cgi", "%s+%s" % (publisher_id, year), year)
+				print '<td>%s</td>' % ISFDBLink("publisheryear.cgi", "%d+%s" % (publisher_id, year), year)
 			else:
 				print "<td>------</td>"
 			year += 1
@@ -152,8 +145,8 @@ if __name__ == '__main__':
         print '<div class="ContentBox">'
         print '<b>Publication Breakdown by Author:</b>'
         print '<ul>'
-        print '<li>%s' % ISFDBLink('publisher_authors.cgi', '%s+name' % publisher_id, 'Sort by Author Name')
-        print '<li>%s' % ISFDBLink('publisher_authors.cgi', '%s+count' % publisher_id, 'Sort by Publication Count')
+        print '<li>%s' % ISFDBLink('publisher_authors.cgi', '%d+name' % publisher_id, 'Sort by Author Name')
+        print '<li>%s' % ISFDBLink('publisher_authors.cgi', '%d+count' % publisher_id, 'Sort by Publication Count')
         print '</ul>'
         print '</div>'
 

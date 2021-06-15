@@ -126,7 +126,7 @@ def SelfApprovalAllowed(userid):
                 return 0
 
         try:
-                submission_id = int(SESSION.arguments[0])
+                submission_id = int(SESSION.parameters[0])
         except:
                 return 0
 
