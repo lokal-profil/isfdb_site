@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2018   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,20 +10,12 @@
 #     Date: $Date$
 
 
-import string
-import sys
 from SQLparsing import *
 from biblio import *
 from common import PrintAllAuthors
 from library import convertYear
 import operator
 
-def doError():
-	PrintHeader("Highest Ranked Titles by Awards and Nominations")
-	PrintNavbar('top', 0, 0, 'most_popular.cgi', 0)
-        print '<h3>Bad argument</h3>'
-	PrintTrailer('top', 0, 0)
-        sys.exit(0)
 
 if __name__ == '__main__':
 
@@ -36,30 +28,22 @@ if __name__ == '__main__':
                        ('Anthologies', 'ANTHOLOGY'),
                        ('Non-Fiction', 'NONFICTION'),
                        ('Other Title Types', ''))
-        try:
-                type_id = int(sys.argv[1])
-                type_tuple = title_types[type_id]
-                displayed_type = type_tuple[0]
-                title_type = type_tuple[1]
-        except:
-                doError()
+        type_id = SESSION.Parameter(0, 'int', None, (0, 1, 2, 3, 4, 5, 6))
+        type_tuple = title_types[type_id]
+        displayed_type = type_tuple[0]
+        title_type = type_tuple[1]
 
-        try:
-                span = sys.argv[2]
-                if span == 'all':
-                        header = 'Highest Ranked %s of All Time' % displayed_type
-                elif span == 'decade':
-                        decade = int(sys.argv[3])
-                        header = 'Highest Ranked %s of the %ds' % (displayed_type, decade)
-                elif span == 'year':
-                        display_year = int(sys.argv[3])
-                        header = 'Highest Ranked %s published in %s' % (displayed_type, display_year)
-                elif span == 'pre1950':
-                        header = 'Highest Ranked %s Prior to 1950' % displayed_type
-                else:
-                        raise
-        except:
-                doError()
+        span = SESSION.Parameter(1, 'str', None, ('all', 'decade', 'year', 'pre1950'))
+        if span == 'all':
+                header = 'Highest Ranked %s of All Time' % displayed_type
+        elif span == 'decade':
+                decade = SESSION.Parameter(2, 'int')
+                header = 'Highest Ranked %s of the %ds' % (displayed_type, decade)
+        elif span == 'year':
+                display_year = SESSION.Parameter(2, 'int')
+                header = 'Highest Ranked %s published in %s' % (displayed_type, display_year)
+        elif span == 'pre1950':
+                header = 'Highest Ranked %s Prior to 1950' % displayed_type
 
 	PrintHeader(header)
 	PrintNavbar('top', 0, 0, 'most_popular.cgi', 0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2018   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,19 +10,10 @@
 #     Date: $Date$
 
 
-import string
-import sys
 from SQLparsing import *
 from biblio import *
 from common import PrintAllAuthors
 import operator
-
-def doError():
-	PrintHeader("Highest Ranked Authors by Awards and Nominations")
-	PrintNavbar('top', 0, 0, 'popular_authors.cgi', 0)
-        print '<h3>Bad argument</h3>'
-	PrintTrailer('top', 0, 0)
-        sys.exit(0)
 
 
 def printTableBody(author_dict):
@@ -54,27 +45,20 @@ if __name__ == '__main__':
                        ('Anthology Editors', 'ANTHOLOGY'),
                        ('Non-Fiction Authors', 'NONFICTION'),
                        ('Other Title Types Authors', ''))
-        try:
-		type_id = int(sys.argv[1])
-                type_tuple = title_types[type_id]
-                displayed_type = type_tuple[0]
-                title_type = type_tuple[1]
-        except:
-                doError()
 
-        try:
-                span = sys.argv[2]
-                if span == 'all':
-                        header = 'Highest Ranked %s of All Time' % displayed_type
-                elif span == 'decade':
-                        decade = int(sys.argv[3])
-                        header = 'Highest Ranked %s of the %ds' % (displayed_type, decade)
-                elif span == 'pre1950':
-                        header = 'Highest Ranked %s Prior to 1950' % displayed_type
-                else:
-                        raise
-        except:
-                doError()
+        type_id = SESSION.Parameter(0, 'int', None, (0, 1, 2, 3, 4, 5, 6))
+        type_tuple = title_types[type_id]
+        displayed_type = type_tuple[0]
+        title_type = type_tuple[1]
+
+        span = SESSION.Parameter(1, 'str', None, ('all', 'decade', 'pre1950'))
+        if span == 'all':
+                header = 'Highest Ranked %s of All Time' % displayed_type
+        elif span == 'decade':
+                decade = SESSION.Parameter(2, 'int')
+                header = 'Highest Ranked %s of the %ds' % (displayed_type, decade)
+        elif span == 'pre1950':
+                header = 'Highest Ranked %s Prior to 1950' % displayed_type
 
 	PrintHeader(header)
 	PrintNavbar('top', 0, 0, 'popular_authors.cgi', 0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,46 +10,29 @@
 #     Date: $Date$
 
 
-import string
-import sys
 from SQLparsing import *
 from biblio import *
 
 
-def ErrorBox(message):
-	PrintHeader("Authors/Editors Ranked by Awards and Nominations")
-	PrintNavbar('top', 0, 0, 'popular_authors_table.cgi', 0)
-        print '<div id="ErrorBox">'
-        print "<h3>%s.</h3>" % (message)
-        print '</div>'
-        PrintTrailer('popular_authors_table', 0, 0)
-        sys.exit(0)
-
-
 if __name__ == '__main__':
 
-	try:
-		type = int(sys.argv[1])
-		if type == 0:
-                        author_type = 'Authors and Editors'
-		elif type == 1:
-                        author_type = 'Novel Authors'
-                elif type == 2:
-                        author_type = 'Short Fiction Authors'
-                elif type == 3:
-                        author_type = 'Collection Authors'
-                elif type == 4:
-                        author_type = 'Anthology Editors'
-                elif type == 5:
-                        author_type = 'Non-Fiction Authors'
-                elif type == 6:
-                        author_type = 'Other Title Types Authors'
-                else:
-                        raise
-	except:
-                ErrorBox("Invalid author/editor type")
+        type = SESSION.Parameter(0, 'int', None, (0, 1, 2, 3, 4, 5, 6))
+        if type == 0:
+                author_type = 'Authors and Editors'
+        elif type == 1:
+                author_type = 'Novel Authors'
+        elif type == 2:
+                author_type = 'Short Fiction Authors'
+        elif type == 3:
+                author_type = 'Collection Authors'
+        elif type == 4:
+                author_type = 'Anthology Editors'
+        elif type == 5:
+                author_type = 'Non-Fiction Authors'
+        elif type == 6:
+                author_type = 'Other Title Types Authors'
 
-	PrintHeader("%s Ranked by Awards and Nominations" % author_type)
+	PrintHeader('%s Ranked by Awards and Nominations' % author_type)
 	PrintNavbar('top', 0, 0, 'popular_authors_table.cgi', 0)
 
         print '<h3><a href="http:/%s/popular_authors.cgi?%d+all">Highest Ranked %s of All Time</a></h3>' % (HTFAKE, type, author_type)

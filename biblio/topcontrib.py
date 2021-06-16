@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2006-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -31,13 +31,10 @@ def output_data(sub_type):
 
 if __name__ == '__main__':
 
+        sub_type = SESSION.Parameter(0, 'int', 0)
+
 	PrintHeader('Top Contributors')
 	PrintNavbar('top', 0, 0, 'topcontrib.cgi', 0)
-
-	try:
-		sub_type = int(sys.argv[1])
-	except:
-		sub_type = 0
 
 	if sub_type == 0:
 		print '<h2>Top ISFDB contributors (All Submission Types)</h2>'

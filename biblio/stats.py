@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -46,15 +46,10 @@ class Stats:
                                 }
 
         def params(self):
-                try:
-                        self.report_id = int(sys.argv[1])
-                        self.header = self.headers[self.report_id]
-                except:
-                        PrintHeader('Invalid Argument')
-                        PrintNavbar('stats', 0, 0, 'stats.cgi', 0)
-                        print '<h3>Invalid Argument</h3>'
-                        PrintTrailer('frontpage', 0, 0)
-                        sys.exit(0)
+                self.report_id = SESSION.Parameter(0, 'int')
+                self.header = self.headers.get(self.report_id, '')
+                if not self.header:
+                        SESSION.DisplayError('Invalid Report Number')
 
         def output(self):
                 query = 'select report_data from reports where report_id = %d' % stats.report_id

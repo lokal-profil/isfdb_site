@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2011-2018   Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2011-2021   Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -15,15 +15,13 @@ from common import *
 if __name__ == '__main__':
 
         header = 'Authors By Debut Year'
-        try:
-                year = int(sys.argv[1])
-                if year > 1899:
-                        header += ' - %d' % year
-                else:
-                        header += ' - Prior to 1900'
-                        year = 0
-        except:
+        year = SESSION.Parameter(0, 'int', 0)
+        if year > 1899:
+                header += ' - %d' % year
+        else:
+                header += ' - Prior to 1900'
                 year = 0
+
 	PrintHeader(header)
 	PrintNavbar('authors_by_debut_year', 0, 0, 'authors_by_debut_year.cgi', 0)
 

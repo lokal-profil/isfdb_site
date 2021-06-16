@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2013-2018   Ahasuerus
+#     (C) COPYRIGHT 2013-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,60 +10,39 @@
 #     Date: $Date$
 
 
-import string
-import sys
 from SQLparsing import *
 from biblio import *
 from common import PrintAllAuthors
 from library import convertYear
 
-def doError():
-        print '<h3>Bad argument</h3>'
-        sys.exit(0)
 
 if __name__ == '__main__':
 
-	PrintHeader("Most-Reviewed Titles Details")
-	PrintNavbar('top', 0, 0, 'most_reviewed.cgi', 0)
-
+        query = 'select title_id, year, reviews from most_reviewed'
         display_year = ''
         decade = ''
-        # If the module was called with no arguments, then it's an error
-        if len(sys.argv) == 1:
-                doError()
-        elif sys.argv[1] == 'all':
-                report_type = 'all'
-                print '<h3>Most-Reviewed Titles of All Time</h3>'
-        elif sys.argv[1] == 'decade':
-                try:
-                        report_type = 'decade'
-                        decade = int(sys.argv[2])
-                except:
-                        doError()
-                print '<h3>Most-Reviewed Titles of the %ss</h3>' % decade
-        elif sys.argv[1] == 'year':
-                try:
-                        report_type = 'year'
-                        display_year = int(sys.argv[2])
-                except:
-                        doError()
-                print '<h3>Most-Reviewed Titles of %s</h3>' % display_year
-        elif sys.argv[1] == 'pre1900':
-                report_type = 'pre1900'
-                print '<h3>Most-Reviewed Titles Prior to 1900</h3>'
-        else:
-                doError()
-
-        print '<h3>This report is generated once a day</h3>'
-
-        query = 'select title_id, year, reviews from most_reviewed'
-        if report_type == 'year':
-                query += ' where year=%d' % display_year
+        report_type = SESSION.Parameter(0, 'str', None, ('all', 'decade', 'year', 'pre1900'))
+        if report_type == 'all':
+                header = 'Most-Reviewed Titles of All Time'
         elif report_type == 'decade':
+                decade = SESSION.Parameter(1, 'int')
                 query += ' where decade=%d' % decade
+                header = 'Most-Reviewed Titles of the %ss' % decade
+        elif report_type == 'year':
+                display_year = SESSION.Parameter(1, 'int')
+                query += ' where year=%d' % display_year
+                header = 'Most-Reviewed Titles of %s' % display_year
         elif report_type == 'pre1900':
                 query += ' where decade="pre1900"'
+                header = 'Most-Reviewed Titles Prior to 1900'
         query += ' order by reviews desc limit 500'
+
+	PrintHeader('Most-Reviewed Titles Details')
+	PrintNavbar('top', 0, 0, 'most_reviewed.cgi', 0)
+
+	print '<h3>%s</h3>' % header
+
+        print '<h3>This report is generated once a day</h3>'
 
         db.query(query)
         result = db.store_result()
