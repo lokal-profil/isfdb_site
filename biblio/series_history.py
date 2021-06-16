@@ -10,32 +10,14 @@
 #     Date: $Date: 2019-12-01 19:57:53 -0400 (Tue, 31 Oct 2017) $
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
-from login import *
 from SQLparsing import *
-from library import *
-from xml.dom import minidom
-from xml.dom import Node
 
-
-def DoError(message):
-        PrintHeader('Unknown Series Record')
-        PrintNavbar(0, 0, 0, 'series_history.cgi', 0)
-        print '<h3>%s</h3>' % message
-        PrintTrailer('series_history', 0, 0)
-        sys.exit(0)
 
 if __name__ == '__main__':
 
-	try:
-		series_id = int(sys.argv[1])
-	except:
-                DoError('Invalid Series ID specified')
-
+        series_id = SESSION.Parameter(0, 'int')
 	PrintHeader('Series Edit History')
 	PrintNavbar('series_history', 0, 0, 'series_history.cgi', series_id)
 

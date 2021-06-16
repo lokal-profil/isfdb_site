@@ -22,27 +22,17 @@ from xml.dom import minidom
 from xml.dom import Node
 
 
-def DoError(message):
-        PrintHeader('Author Edit History error')
-        PrintNavbar(0, 0, 0, 'author_history.cgi', 0)
-        print '<h3>%s</h3>' % message
-        PrintTrailer('author_history', 0, 0)
-        sys.exit(0)
-
 if __name__ == '__main__':
 
-	try:
-		author_id = int(sys.argv[1])
-	except:
-                DoError('Invalid Author ID specified')
+        author_id = SESSION.Parameter(0, 'int')
 
 	user = User()
 	user.load()
 	if not user:
-                DoError('Only ISFDB moderators can view author edit history at this time')
+                SESSION.DisplayError('Only ISFDB moderators can view author edit history at this time')
         user.load_moderator_flag()
         if not user.moderator:
-                DoError('Only ISFDB moderators can view author edit history at this time')
+                SESSION.DisplayError('Only ISFDB moderators can view author edit history at this time')
 
 	PrintHeader('Author Edit History')
 	PrintNavbar('author_history', 0, 0, 'author_history.cgi', author_id)
