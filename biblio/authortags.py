@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2016   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,18 +17,13 @@ from library import *
 
 if __name__ == '__main__':
 
-	try:
-		author_id = int(sys.argv[1])
-        	author_name = SQLloadAuthorData(author_id)[AUTHOR_CANONICAL]
-	except:
-		PrintHeader("Invalid or non-existing author ID")
-		PrintNavbar('authortags', 0, 0, 'authortags.cgi', 0)
-		PrintTrailer('authortags', 0, 0)
-		sys.exit(0)
+        author_id = SESSION.Parameter(0, 'int')
+        author_data = SQLloadAuthorData(author_id)
+        if not author_data:
+                SESSION.DisplayError('Author Does Not Exist')
+        author_name = author_data[AUTHOR_CANONICAL]
 
-	label = "All Tags for %s" % author_name
-
-	PrintHeader(label)
+	PrintHeader('All Tags for %s' % author_name)
 	PrintNavbar('authortags', 0, 0, 'authortags.cgi', author_id)
 
         # Determine the current user

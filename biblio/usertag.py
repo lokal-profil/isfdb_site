@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2007-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2007-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,15 +17,10 @@ from library import *
 
 if __name__ == '__main__':
 
-	try:
-		user_id = int(sys.argv[1])
-	except:
-		PrintHeader('Bad Argument')
-		PrintNavbar('usertag', 0, 0, 'usertag.cgi', 0)
-		PrintTrailer('usertag', 0, 0)
-		sys.exit(0)
-
+        user_id = SESSION.Parameter(0, 'int')
 	user_name = SQLgetUserName(user_id)
+        if user_name == 'UNKNOWN':
+                SESSION.DisplayError('Unknown User')
 
 	PrintHeader("%s's Tags" % user_name)
 	PrintNavbar('usertag', 0, 0, 'usertag.cgi', user_id)

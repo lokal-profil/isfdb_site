@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2016   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -16,30 +16,17 @@ from library import *
 from login import GetUserData
 
 
-def DisplayError(text):
-        PrintHeader(text)
-        PrintNavbar('tag_author', 0, 0, 'tag_author.cgi', 0)
-        PrintTrailer('tag_author', 0, 0)
-        sys.exit(0)
-
-
 if __name__ == '__main__':
 
-	try:
-		tag_id = int(sys.argv[1])
-                tag = SQLGetTagById(tag_id)
-                if not tag:
-                        raise
-	except:
-                DisplayError('Tag not found')
+        tag_id = SESSION.Parameter(0, 'int')
+        tag = SQLGetTagById(tag_id)
+        if not tag:
+                SESSION.DisplayError('Tag Does Not Exist')
 
-	try:
-		author_id = int(sys.argv[2])
-                author_data = SQLloadAuthorData(author_id)
-                if not author_data:
-                        raise
-	except:
-                DisplayError('Author not found')
+        author_id = SESSION.Parameter(1, 'int')
+        author_data = SQLloadAuthorData(author_id)
+        if not author_data:
+                SESSION.DisplayError('Author Does Not Exist')
 
         PrintHeader('Titles marked with tag %s for author %s' % (tag[TAG_NAME], author_data[AUTHOR_CANONICAL]))
 	PrintNavbar('tag_author', 0, 0, 'tag_author.cgi', tag_id)

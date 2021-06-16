@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2007-2016   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2007-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -9,34 +9,19 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-
 from SQLparsing import *
 from common import *
 from library import *
 
 
-def DisplayError(text):
-        PrintHeader(text)
-        PrintNavbar('tag', 0, 0, 'tag.cgi', 0)
-        PrintTrailer('tag', 0, 0)
-        sys.exit(0)
-
-
 if __name__ == '__main__':
 
-	try:
-		tag_id = int(sys.argv[1])
-	except:
-                DisplayError('Bad Argument')
-
-	try:
-		start = int(sys.argv[2])
-	except:
-                start = 0
+        tag_id = SESSION.Parameter(0, 'int')
+        start = SESSION.Parameter(1, 'int', 0)
 
 	tag = SQLGetTagById(tag_id)
 	if not tag:
-                DisplayError('Bad Tag')
+                SESSION.DisplayError('Tag Does Not Exist')
 
         PrintHeader('Titles marked with tag %s' % (tag[TAG_NAME]))
 	PrintNavbar('tag', 0, 0, 'tag.cgi', tag_id)

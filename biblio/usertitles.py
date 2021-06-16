@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2007-2016   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2007-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -15,33 +15,17 @@ from common import *
 from library import *
 
 
-def DisplayError(text):
-        PrintHeader(text)
-        PrintNavbar('usertitles', 0, 0, 'usertitles.cgi', 0)
-        PrintTrailer('usertitles', 0, 0)
-        sys.exit(0)
-
-
 if __name__ == '__main__':
 
-	try:
-		user_id = int(sys.argv[1])
-		tag_id  = int(sys.argv[2])
-	except:
-                DisplayError('Bad Argument')
-
-	try:
-                start = int(sys.argv[3])
-        except:
-                start = 0
-
+        user_id = SESSION.Parameter(0, 'int')
+        tag_id  = SESSION.Parameter(1, 'int')
+        start = SESSION.Parameter(2, 'int', 0)
         tag = SQLGetTagById(tag_id)
         if not tag:
-                DisplayError('Unknown Tag')
-
+                SESSION.DisplayError('Tag Does Not Exist')
 	user_name = SQLgetUserName(user_id)
         if user_name == 'UNKNOWN':
-                DisplayError('Unknown User')
+                SESSION.DisplayError('Unknown User')
 
         current_user = User()
         current_user.load()
@@ -52,7 +36,7 @@ if __name__ == '__main__':
 
         print """<h3>Titles marked by user <a href="http:/%s/usertag.cgi?%d">%s</a>
                  with tag <a href="http:/%s/tag.cgi?%d">%s</a></h3>
-                 """% (HTFAKE, user_id, user_name, HTFAKE, tag_id, tag[1])
+                 """% (HTFAKE, user_id, user_name, HTFAKE, tag_id, tag[TAG_NAME])
 	titles = SQLgetTitlesForTagForUser(tag_id, user_id, start)
 	PrintTitleTable(titles, 0, 100, current_user)
 

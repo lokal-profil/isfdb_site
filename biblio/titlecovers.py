@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2016   Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2014-2021   Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,20 +17,12 @@ from library import *
 
 if __name__ == '__main__':
 
-	try:
-		title_id = int(sys.argv[1])
-        	title = SQLloadTitle(title_id)[TITLE_TITLE]
-        	if not title:
-                        raise
-	except:
-		PrintHeader("Invalid or non-existing title ID")
-		PrintNavbar('titlecovers', 0, 0, 'titlecovers.cgi', 0)
-		PrintTrailer('titlecovers', 0, 0)
-		sys.exit(0)
+        title_id = SESSION.Parameter(0, 'int')
+        title = SQLgetTitle(title_id)
+        if not title:
+		SESSION.DisplayError('Title Does Not Exist')
 
-	label = "All Covers for %s" % title
-
-	PrintHeader(label)
+	PrintHeader('All Covers for %s' % title)
 	PrintNavbar('titlecovers', 0, 0, 'titlecovers.cgi', title_id)
 
         pubs = SQLGetPubsByTitle(title_id)
@@ -42,6 +34,6 @@ if __name__ == '__main__':
         if not count:
                 print '<h3>No covers for %s</h3>' % title
 
-        print '<p>%s' % ISFDBLink("title.cgi", title_id, "<b>Back to the Title page for %s</b>" % title, True)
+        print '<p>%s' % ISFDBLink('title.cgi', title_id, '<b>Back to the Title page for %s</b>' % title, True)
 
 	PrintTrailer('titlecovers', title_id, title_id)

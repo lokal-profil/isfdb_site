@@ -17,13 +17,6 @@ from library import *
 from login import *
 
 
-def DoError(message):
-        PrintHeader('Unknown Title Record')
-        PrintNavbar(0, 0, 0, 'title.cgi', 0)
-        print """<h3>%s</h3>""" % message
-        PrintTrailer('title', 0, 0)
-        sys.exit(0)
-
 def displayCommon(title, user):
         printRecordID('Title', title[TITLE_PUBID], user.id)
 
@@ -159,27 +152,20 @@ def PrintReviews(reviews, title_language):
 
 if __name__ == '__main__':
 
-        try:
-                title_id = int(sys.argv[1])
-        except:
-                DoError('Bad Argument')
+        title_id = SESSION.Parameter(0, 'int')
 
         user = User()
         user.load()
 
-        # Determine the variant display option:
+        # Get the variant display option:
         # 0 means display all variants
         # 1 means do not display translations, but display same-language variants
-        # 2 means do not display any variants
-        try:
-                variant_display = int(sys.argv[2])
-                if variant_display not in (0, 1, 2):
-                        raise
-        except:
-                if user.display_title_translations:
-                        variant_display = 0
-                else:
-                        variant_display = 1
+        # 2 means do not display any variants, either translated or same-language
+        if user.display_title_translations:
+                default_variant_display = 0
+        else:
+                default_variant_display = 1
+        variant_display = SESSION.Parameter(1, 'int', default_variant_display, (0, 1, 2))
 
 	########################################
 	# STEP 1 - Get the title record
@@ -187,9 +173,9 @@ if __name__ == '__main__':
 	title = SQLloadTitle(title_id)
 	if not title:
 		if SQLDeletedTitle(title_id):
-                        DoError('This title has been deleted. See %s for details.' % ISFDBLink('title_history.cgi', title_id, 'Edit History'))
+                        SESSION.DisplayError('This title has been deleted. See %s for details.' % ISFDBLink('title_history.cgi', title_id, 'Edit History'))
                 else:
-                        DoError('Unknown Title Record')
+                        SESSION.DisplayError('Unknown Title Record')
 
         browser_title = "Title: " + title[TITLE_TITLE]
         PrintHeader(browser_title)
