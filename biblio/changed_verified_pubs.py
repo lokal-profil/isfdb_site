@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2016-2018  Ahasuerus
+#     (C) COPYRIGHT 2016-2021  Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -98,10 +98,7 @@ def PrintTableColumns():
 
 if __name__ == '__main__':
 
-        try:
-                start = int(sys.argv[1])
-        except:
-                start = 0
+        start = SESSION.Parameter(0, 'int', 0)
 
 	PrintHeader("My Recently Changed Primary Verifications")
 	PrintNavbar('changed_verified_pubs', 0, 0, 'changed_verified_pubs.cgi', 0)

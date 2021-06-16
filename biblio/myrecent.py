@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,57 +10,43 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
 from login import *
 from SQLparsing import *
 from library import *
-from xml.dom import minidom
-from xml.dom import Node
 
 results_per_page=200
 
 
 if __name__ == '__main__':
 
-	try:
-		start = int(sys.argv[1])
-	except:
-		start = 0
+        start = SESSION.Parameter(0, 'int', 0)
+        sub_type = SESSION.Parameter(1, 'str', 'I', ('I', 'N', 'R', 'P'))
 
-	try:
-		type = sys.argv[2]
-		if type not in ('I', 'N', 'R', 'P'):
-			type = 'I'
-	except:
-		type = 'I'
-
-	if type == 'I':
+	if sub_type == 'I':
 		PrintHeader("My Recent Edits")
-	elif type == 'N':
+	elif sub_type == 'N':
 		PrintHeader("My Pending Edits")
-	elif type == 'R':
+	elif sub_type == 'R':
 		PrintHeader("My Rejected Edits")
-	elif type == 'P':
+	elif sub_type == 'P':
 		PrintHeader("My Errored Out Edits")
 
 	PrintNavbar('recent', 0, 0, 'recent.cgi', 0)
 
         if start:
-                print '<p> [<a href="http:/%s/myrecent.cgi?%d+%s">NEWER</a>]<p>' % (HTFAKE, start-results_per_page, type)
+                print '<p> [<a href="http:/%s/myrecent.cgi?%d+%s">NEWER</a>]<p>' % (HTFAKE, start-results_per_page, sub_type)
 
 	(myID, username, usertoken) = GetUserData()
 
-	if type == 'N':
+	if sub_type == 'N':
                 queuesize = SQLQueueSize()
                 print "The current number of pending edits by all editors (not held by a moderator) is %d." % queuesize
 
         query = """select * from submissions where sub_state='%s'
                 and sub_submitter='%d' order by sub_reviewed desc
-                limit %d,%d""" % (db.escape_string(type), int(myID), start, results_per_page+1)
+                limit %d,%d""" % (db.escape_string(sub_type), int(myID), start, results_per_page+1)
 	db.query(query)
 	result = db.store_result()
         numRows = result.num_rows()
@@ -68,21 +54,21 @@ if __name__ == '__main__':
 		print '<h3>No submissions present</h3>'
 		PrintTrailer('recent', 0, 0)
 		sys.exit(0)
-	elif type == 'N':
+	elif sub_type == 'N':
 		wikipointer = """<br>If your edits seem to be taking a long time to be approved,
                 please check your <a href="http://%s/index.php/User_talk:%s">Talk page</a>
                 for comments or questions.""" % (WIKILOC, username)
 		print wikipointer
-	elif type == 'R':
+	elif sub_type == 'R':
 		wikipointer = """The moderator may have left additional comments on your 
 		<a href="http://%s/index.php/User_talk:%s">Talk page</a>.<br>
 		Please check your wiki Talk page frequently for comments or questions.""" % (WIKILOC, username)
 		print wikipointer
 
-        ISFDBprintSubmissionTable(result, type)
+        ISFDBprintSubmissionTable(result, sub_type)
         
         # Check if there is more since "results_per_page+1" was requested from the database
         if numRows > results_per_page:
-                print '<p> [<a href="http:/%s/myrecent.cgi?%d+%s">OLDER</a>]' % (HTFAKE, start+results_per_page, type)
+                print '<p> [<a href="http:/%s/myrecent.cgi?%d+%s">OLDER</a>]' % (HTFAKE, start+results_per_page, sub_type)
 	PrintTrailer('recent', 0, 0)
 

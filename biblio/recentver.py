@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -21,13 +21,10 @@ from SQLparsing import *
 
 if __name__ == '__main__':
 
+        start = SESSION.Parameter(0, 'int', 0)
+
 	PrintHeader('Recently Added Secondary Verifications')
 	PrintNavbar('recentver', 0, 0, 'recentver.cgi', 0)
-
-	try:
-		start = int(sys.argv[1])
-	except:
-		start = 0
 
         per_page = 200
         # First select 200 verification IDs -- needs to be done as a separate query since the SQL optimizer

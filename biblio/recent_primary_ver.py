@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2017   Ahasuerus
+#     (C) COPYRIGHT 2017-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,26 +10,17 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
-from login import *
 from SQLparsing import *
-from xml.dom import minidom
-from xml.dom import Node
 
 
 if __name__ == '__main__':
 
-	PrintHeader("Recent Primary Verifications")
-	PrintNavbar('recent', 0, 0, 'recent_primary_ver.cgi', 0)
+        start = SESSION.Parameter(0, 'int', 0)
 
-	try:
-		start = int(sys.argv[1])
-	except:
-		start = 0
+	PrintHeader('Recent Primary Verifications')
+	PrintNavbar('recent', 0, 0, 'recent_primary_ver.cgi', 0)
 
         # First select 200 verification IDs -- needs to be done as a separate query since the SQL optimizer
         # in MySQL 5.0 is not always smart enough to use all available indices for multi-table queries

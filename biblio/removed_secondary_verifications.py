@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2020   Ahasuerus
+#     (C) COPYRIGHT 2020-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,24 +10,17 @@
 #     Date: $Date: 2017-10-31 19:57:53 -0400 (Tue, 31 Oct 2017) $
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
-from login import *
 from SQLparsing import *
 
 
 if __name__ == '__main__':
 
+        start = SESSION.Parameter(0, 'int', 0)
+
 	PrintHeader('Recently Removed Secondary Verifications')
 	PrintNavbar('removed_secondary_verifications', 0, 0, 'removed_secondary_verifications.cgi', 0)
-
-	try:
-		start = int(sys.argv[1])
-	except:
-		start = 0
 
         per_page = 200
         # First select 200 deleted verification IDs -- needs to be done as a separate query since the SQL optimizer

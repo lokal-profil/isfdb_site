@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2020   Ahasuerus
+#     (C) COPYRIGHT 2020-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date: 2020-11-19 15:53:08 -0500 (Thu, 19 Nov 2020) $
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
 from login import *
@@ -21,13 +18,10 @@ from SQLparsing import *
 
 if __name__ == '__main__':
 
+        start = SESSION.Parameter(0, 'int', 0)
+
 	PrintHeader('My Secondary Verifications')
 	PrintNavbar('my_secondary_verifications', 0, 0, 'my_secondary_verifications.cgi', 0)
-
-	try:
-		start = int(sys.argv[1])
-	except:
-		start = 0
 
         user = User()
         user.load()

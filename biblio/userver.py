@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2011-2017  Bill Longley, Ahasuerus and Dirk Stoeker
+#     (C) COPYRIGHT 2011-2021  Bill Longley, Ahasuerus and Dirk Stoeker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -84,10 +84,7 @@ def PrintTableColumns():
 
 if __name__ == '__main__':
 
-        try:
-                start = int(sys.argv[1])
-        except:
-                start = 0
+        start = SESSION.Parameter(0, 'int', 0)
 
 	PrintHeader('My Primary Verifications')
 	PrintNavbar('userver', 0, 0, 'userver.cgi', 0)
