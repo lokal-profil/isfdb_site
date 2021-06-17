@@ -71,11 +71,11 @@ def printSeries(seriesData, seriesTitles, seriesTree, parentAuthors,
 if __name__ == '__main__':
 
 	# Get the series parameter. May be a series name or a series record number.
-        argument = SESSION.Parameter(0, 'str')
+        parameter = SESSION.Parameter(0, 'str')
 
 	# Translate the series name to its series number if necessary
 	try:
-		series_id = int(argument)
+		series_id = int(parameter)
 	except:
                 series_id = 0
         
@@ -86,7 +86,7 @@ if __name__ == '__main__':
                         else:
                                 SESSION.DisplayError('Specified Series Does Not Exist')
 	else:
-		series_id = SQLFindSeriesId(argument)
+		series_id = SQLFindSeriesId(parameter)
 
 	if not series_id:
                 SESSION.DisplayError('Specified Series Does Not Exist')
@@ -97,10 +97,12 @@ if __name__ == '__main__':
         user = User()
         user.load()
 
-        # Check if the user is trying to change the default settings for translations
-        translations = SESSION.Parameter(1, 'str', user.display_all_languages, ('All', 'None'))
-        if translations:
-                user.translation_cookies(translations)
+        # Check if the user is not logged in and trying to change the default settings for translations
+        if not user.id:
+                default_value = user.display_all_languages
+                translations = SESSION.Parameter(1, 'str', default_value, ('All', 'None'))
+                if translations:
+                        user.translation_cookies(translations)
 
 	PrintHeader('Series: %s' % ser.series_name)
 	PrintNavbar('series', series_id, 0, 'pe.cgi', ser.series_id)
