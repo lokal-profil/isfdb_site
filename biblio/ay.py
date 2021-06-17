@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2004-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -22,29 +22,26 @@ from awardtypeClass import award_type
 if __name__ == '__main__':
 
         award_Type = award_type()
-	try:
-                # If there were 2 arguments passed, then it's Award Type ID+YYYY
-                if len(sys.argv) == 3:
-                        year = int(sys.argv[2])
-                        award_Type.award_type_id = int(sys.argv[1])
-                        award_Type.load()
-                        if not award_Type.award_type_name:
-                                raise
-                # If there was only one argument passed, then it must be ZzYYYY where 'Zz' is the award code
-                elif len(sys.argv) == 2:
-                        year = int(sys.argv[1][2:])
-                        award_Type.award_type_code = sys.argv[1][:2]
-                        award_Type.load()
-                        if not award_Type.award_type_id:
-                                raise
-                else:
-                        raise
-	except:
-		PrintHeader('Award Error')
-        	PrintNavbar('award', 0, 0, 'ay.cgi', 0)
-		print "<h3>Specified award type does not exist</h3>"
-        	PrintTrailer('award', 0, 0)
-		sys.exit(0)
+        # If there were 2 parameters passed in, then they are "Award Type ID"+"YYYY"
+        if len(SESSION.parameters) == 2:
+                award_Type.award_type_id = SESSION.Parameter(0, 'int')
+                award_Type.load()
+                if not award_Type.award_type_name:
+                        SESSION.DisplayError('Award Type Does Not Exist')
+                year = SESSION.Parameter(1, 'int')
+        # If there was one parameter passed in, then it must be "ZzYYYY" where 'Zz' is the award code
+        elif len(SESSION.parameters) == 1:
+                composite_value = SESSION.Parameter(0, 'str')
+                try:
+                        year = int(composite_value[2:])
+                except:
+                        SESSION.DisplayError('Invalid Award Year')
+                award_Type.award_type_code = composite_value[:2]
+                award_Type.load()
+                if not award_Type.award_type_id:
+                        SESSION.DisplayError('Award Type Does Not Exist')
+        else:
+                SESSION.DisplayError('This Web Page requires one or two parameters')
 
         title = '%s %s' % (year, award_Type.award_type_name)
         PrintHeader(title)
