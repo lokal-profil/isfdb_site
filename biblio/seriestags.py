@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2017   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -18,18 +18,12 @@ from seriesClass import *
 
 if __name__ == '__main__':
 
-	try:
-		series_id = int(sys.argv[1])
-        	series_name = SQLFindSeriesName(series_id)
-        	if not series_name:
-                        raise
-	except:
-		PrintHeader("Invalid or non-existing series ID")
-		PrintNavbar('seriestags', 0, 0, 'seriestags.cgi', 0)
-		PrintTrailer('seriestags', 0, 0)
-		sys.exit(0)
+        series_id = SESSION.Parameter(0, 'int')
+        series_name = SQLFindSeriesName(series_id)
+        if not series_name:
+                SESSION.DisplayError('Series Does Not Exist')
 
-	PrintHeader("All Tags for Series %s" % series_name)
+	PrintHeader('All Tags for Series %s' % series_name)
 	PrintNavbar('seriestags', 0, 0, 'seriestags.cgi', series_id)
 
         ser = series(db)

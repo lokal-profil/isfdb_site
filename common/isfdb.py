@@ -99,6 +99,7 @@ class Session:
                 self.parameters.append(parameter)
 
     def Parameter(self, param_number, param_type = 'str', default_value = None, allowed_values = []):
+        from common import unescapeLink
         param_display_values = {0: 'First',
                                 1: 'Second',
                                 2: 'Third',
@@ -111,7 +112,7 @@ class Session:
                                 9: 'Tenth'
                                 }
         if param_number not in param_display_values:
-            self.DisplayError('Too many parameters. Only %d parameters are allowed.' % len(param_display_values))
+            self.DisplayError('Invalid parameter. Only %d parameters are allowed.' % len(param_display_values))
         param_order = param_display_values[param_number]
         
         try:
@@ -130,6 +131,8 @@ class Session:
                 value = int(value)
             except:
                 self.DisplayError('%s parameter must be numeric' % param_order)
+        elif param_type == 'str':
+            value = unescapeLink(value)
         
         if allowed_values and value not in allowed_values:
             output = '%s parameter must be one of the following values: ' % param_order

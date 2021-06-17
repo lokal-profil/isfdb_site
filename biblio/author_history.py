@@ -10,16 +10,11 @@
 #     Date: $Date: 2019-12-01 19:57:53 -0400 (Tue, 31 Oct 2017) $
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
 from login import *
 from SQLparsing import *
 from library import *
-from xml.dom import minidom
-from xml.dom import Node
 
 
 if __name__ == '__main__':

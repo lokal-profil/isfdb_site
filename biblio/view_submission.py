@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2020   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,36 +10,19 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 import viewers
 from isfdb import *
 from common import *
 from SQLparsing import *
 from library import *
-from xml.dom import minidom
-from xml.dom import Node
-
-
-def DoError(reason):
-        PrintHeader("View Submission")
-        PrintNavbar('recent', 0, 0, 'view_submission.cgi', 0)
-        print '<h2>%s.</h2>' % reason
-        PrintTrailer('recent', 0, 0)
-        sys.exit(0)
 
 
 if __name__ == '__main__':
 
-	try:
-		submission_id = int(sys.argv[1])
-	except:
-                DoError('Invalid submission ID specified')
-
+        submission_id = SESSION.Parameter(0, 'int')
         submission = SQLloadSubmission(submission_id)
 	if not submission:
-                DoError('Specified submission ID does not exist')
+                SESSION.DisplayError('Specified submission ID does not exist')
 
         sub_type = submission[SUB_TYPE]
         sub_user = submission[SUB_SUBMITTER]
@@ -57,13 +40,13 @@ if __name__ == '__main__':
         try:
                 doc = minidom.parseString(XMLunescape2(sub_data))
         except:
-                DoError('Submission contains invalid XML and cannot be displayed')
+                SESSION.DisplayError('Submission contains invalid XML and cannot be displayed')
 
         try:
                 doc2 = doc.getElementsByTagName(xml_tag)
                 subject = GetElementValue(doc2, 'Subject')
         except:
-                DoError('Submission contains invalid XML and cannot be displayed')
+                SESSION.DisplayError('Submission contains invalid XML and cannot be displayed')
 
         display_tag = DetermineRecordType(xml_tag, sub_type, doc2)
         # If the "corrected" display type is not the same as the XML tag, then display the former

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2020   Ahasuerus
+#     (C) COPYRIGHT 2009-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,64 +10,44 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import cgi
-import MySQLdb
 from isfdb import *
 from common import *
 from library import *
 from SQLparsing import *
 
 
-def ErrorBox(message):
-        print '<div id="ErrorBox">'
-        print "<h3>%s.</h3>" % (message)
-        print '</div>'
-        PrintTrailer('cancelsubmission', 0, 0)
-        sys.exit(0)
-
-
 if __name__ == '__main__':
 
-	PrintHeader("Submission Cancellation")
-	PrintNavbar('cancelsubmission', 0, 0, 'cancelsubmission.cgi', 0)
+        submission_id = SESSION.Parameter(0, 'int')
+        submission_body = SQLloadSubmission(submission_id)
+	if not submission_body:
+                SESSION.DisplayError('Submission ID %d is not present' % submission_id)
 
-	try:
-		submission = int(sys.argv[1])
-	except:
-                ErrorBox("Can't get submission ID")
-
-        query = "select * from submissions where sub_id = '%d';" % (submission)
-	db.query(query)
-	result = db.store_result()
-	if result.num_rows() == 0:
-                ErrorBox("Submission ID %d is not present" % submission)
-
-        record = result.fetch_row()
-	if record[0][SUB_STATE] != 'N':
-                ErrorBox("Submission %d is not in NEW state" % submission)
+	if submission_body[SUB_STATE] != 'N':
+                SESSION.DisplayError('Submission %d is not in NEW state' % submission_id)
 
 	(myID, username, usertoken) = GetUserData()
 
-	if int(record[0][SUB_SUBMITTER]) != int(myID):
-                ErrorBox("Submissions created by other users can't be cancelled!")
+	if int(submission_body[SUB_SUBMITTER]) != int(myID):
+                SESSION.DisplayError("Submissions created by other users can't be cancelled!")
 
-        print "<ul>"
+	PrintHeader('Submission Cancellation')
+	PrintNavbar('cancelsubmission', 0, 0, 'cancelsubmission.cgi', 0)
+
+        print '<ul>'
 
 	reason = 'Cancelled by the submitter'
 	update = """update submissions
                 set sub_state='R', sub_reason='%s', sub_reviewer=%d, sub_reviewed=NOW(), sub_holdid=0
-                where sub_id=%d""" % (db.escape_string(reason), int(myID), submission)
-        print "<li> ", update
+                where sub_id=%d""" % (db.escape_string(reason), int(myID), submission_id)
+        print '<li> ', update
 	db.query(update)
 
-        print "</ul><p><hr>"
+        print '</ul><p><hr>'
 
-	print "Record %d has been moved to the Rejected state.<br>" % submission
-	print "<b>Reason:</b> ", reason
+	print 'Record %d has been moved to the Rejected state.<br>' % submission_id
+	print '<b>Reason:</b> ', reason
 
-	print "<p>"
-	print "<hr>"
+	print '<p><hr>'
 
 	PrintTrailer('cancelsubmission', 0, 0)

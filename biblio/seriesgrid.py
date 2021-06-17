@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import sys
-import os
-import string
 from SQLparsing import *
 from common import *
 from seriesClass import *
@@ -37,29 +34,30 @@ class SeriesGrid:
                 self.default_format = ''
 
         def GetParameters(self):
-                #############################################
-                # The first argument may be the series 
-                # name or the series record number
-                #############################################
+                # Get the series parameter. May be a series name or a series record number.
+                argument = SESSION.Parameter(0, 'str')
+
+                # Translate the series name to its series number if necessary
                 try:
-                        self.seriesId = int(sys.argv[1])
-                        self.seriesName = SQLFindSeriesName(self.seriesId)
+                        self.seriesId = int(argument)
                 except:
-                        try:
-                                self.seriesName = unescapeLink(sys.argv[1])
-                                self.seriesId = SQLFindSeriesId(self.seriesName)
-                        except:
-                                PrintHeader("Series Error")
-                                PrintNavbar('seriesgrid', 0, 0, 'seriesgrid.cgi', sys.argv[1])
-                                print '<h2>Error: Series not found.</h2>'
-                                PrintTrailer('series', 0, 0)
-                                sys.exit(1)
+                        self.seriesId = 0
+                
+                if self.seriesId:
+                        if not SQLFindSeriesName(self.seriesId):
+                                if SQLDeletedSeries(self.seriesId):
+                                        SESSION.DisplayError('This series has been deleted. See %s for details' % ISFDBLink('series_history.cgi', self.seriesId, 'Edit History'))
+                                else:
+                                        SESSION.DisplayError('Specified Series Does Not Exist')
+                else:
+                        self.seriesId = SQLFindSeriesId(argument)
+
+                if not self.seriesId:
+                        SESSION.DisplayError('Specified Series Does Not Exist')
+                self.seriesName = SQLFindSeriesName(self.seriesId)
 
                 # Get the Display Order.
-                try:
-                        self.displayOrder = int(unescapeLink(sys.argv[2]))
-                except:
-                        pass
+                self.displayOrder = SESSION.Parameter(1, 'int', 1, (0, 1))
 
         def LoadAllSeries(self):
                 # Add all EDITOR titles for this magazine series to the array

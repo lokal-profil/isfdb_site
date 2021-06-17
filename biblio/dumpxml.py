@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
 from SQLparsing import *
@@ -21,24 +18,15 @@ from library import *
 
 if __name__ == '__main__':
 
+        submission_id = SESSION.Parameter(0, 'int')
+        submission_body = SQLloadSubmission(submission_id)
+        if not submission_body:
+                SESSION.DisplayError('Submission number %d not found in the submission queue</h2>' % submission_id)
+
 	PrintHeader('Raw XML View')
         PrintNavbar('dumpxml', 0, 0, 0, 0)
 
-	try:
-		submission = int(sys.argv[1])
-	except:
-                print '<h2>Invalid submission specified</h2>'
-		sys.exit(0)
-
-        query = "select * from submissions where sub_id=%d" % submission
-        db.query(query)
-        result = db.store_result()
-        if result.num_rows() == 0:
-                print '<h2>Submission number %d not found in the submission queue</h2>' % submission
-                sys.exit(0)
-	
-        record = result.fetch_row()[0]
-	outstr = record[SUB_DATA]
+	outstr = submission_body[SUB_DATA]
         outstr = string.replace(outstr, '<', '&lt;')
         outstr = string.replace(outstr, '>', '&gt;')
         outstr = string.replace(outstr, '\n', '<br>')
@@ -46,12 +34,12 @@ if __name__ == '__main__':
         print outstr
 
         print '<p>'
-        print '<a class="approval" href="http:/%s/view_submission.cgi?%s">Public View</a>' % (HTFAKE, submission)
+        print '<a class="approval" href="http:/%s/view_submission.cgi?%s">Public View</a>' % (HTFAKE, submission_id)
 	(userid, username, usertoken) = GetUserData()
 	# If the user is a moderator
         if SQLisUserModerator(userid):
-                subtype = record[SUB_TYPE]
+                subtype = submission_body[SUB_TYPE]
                 approval_script = SUBMAP[subtype][0]
-                print ' <a class="approval" href="http:/%s/mod/%s.cgi?%s">Moderator View</a>' % (HTFAKE, approval_script, record[SUB_ID])
+                print ' <a class="approval" href="http:/%s/mod/%s.cgi?%s">Moderator View</a>' % (HTFAKE, approval_script, submission_id)
 
 	PrintTrailer('dumpxml', 0, 0)

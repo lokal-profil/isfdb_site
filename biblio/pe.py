@@ -10,21 +10,11 @@
 #     Date: $Date$
 
 
-import sys
-import os
-import string
 from SQLparsing import *
 from common import *
 from login import *
 from seriesClass import *
 
-
-def DoError(text):
-        PrintHeader('Invalid Series')
-        PrintNavbar('seriesName', 0, 0, 'pe.cgi', 0)
-        print '<h2>Error: %s.</h2>' % text
-        PrintTrailer('series', 0, 0)
-        sys.exit(0)
 
 #########################################################
 # printSeries is a recursive function that outputs the
@@ -80,11 +70,8 @@ def printSeries(seriesData, seriesTitles, seriesTree, parentAuthors,
 
 if __name__ == '__main__':
 
-	# Get the series argument. May be a series name or a series record number
-	try:
-		argument = unescapeLink(sys.argv[1])
-	except:
-                DoError('No series specified')
+	# Get the series parameter. May be a series name or a series record number.
+        argument = SESSION.Parameter(0, 'str')
 
 	# Translate the series name to its series number if necessary
 	try:
@@ -95,14 +82,14 @@ if __name__ == '__main__':
         if series_id:
                 if not SQLFindSeriesName(series_id):
                         if SQLDeletedSeries(series_id):
-                                DoError('This series has been deleted. See %s for details' % ISFDBLink('series_history.cgi', series_id, 'Edit History'))
+                                SESSION.DisplayError('This series has been deleted. See %s for details' % ISFDBLink('series_history.cgi', series_id, 'Edit History'))
                         else:
-                                DoError('Specified series does not exist')
+                                SESSION.DisplayError('Specified Series Does Not Exist')
 	else:
 		series_id = SQLFindSeriesId(argument)
 
 	if not series_id:
-                DoError('Specified series does not exist')
+                SESSION.DisplayError('Specified Series Does Not Exist')
 
         ser = series(db)
         ser.load(series_id)
@@ -111,13 +98,11 @@ if __name__ == '__main__':
         user.load()
 
         # Check if the user is trying to change the default settings for translations
-        try:
-                translations = sys.argv[2]
+        translations = SESSION.Parameter(1, 'str', user.display_all_languages, ('All', 'None'))
+        if translations:
                 user.translation_cookies(translations)
-        except:
-                pass
 
-	PrintHeader("Series: %s" % ser.series_name)
+	PrintHeader('Series: %s' % ser.series_name)
 	PrintNavbar('series', series_id, 0, 'pe.cgi', ser.series_id)
 
         (seriesData, seriesTitles, seriesTree, parentAuthors,
