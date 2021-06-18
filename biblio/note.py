@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2015-2017   Ahasuerus
+#     (C) COPYRIGHT 2015-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -131,19 +131,15 @@ class notes:
 
 if __name__ == '__main__':
 
-        try:
-                record_type = sys.argv[1]
-                record_id = int(sys.argv[2])
-                note = notes()
-                methodToCall = getattr(notes, record_type)
-                methodToCall(note, record_id)
-                if not note.note_body:
-                        raise
-        except:
-        	PrintHeader("Record does not exist")
-		PrintNavbar('note', 0, 0, 'note.cgi', 0)
-		PrintTrailer('note', 0, 0)
-                sys.exit(0)
+        record_type = SESSION.Parameter(0, 'str')
+        record_id = SESSION.Parameter(1, 'int')
+        note = notes()
+        methodToCall = getattr(notes, record_type, None)
+        if methodToCall is None:
+                SESSION.DisplayError('Record Type Does Not Exist')
+        methodToCall(note, record_id)
+        if not note.note_body:
+                SESSION.DisplayError('Record Does Not Exist')
 
         PrintHeader('Full %s for %s: %s' % (note.note_type, note.record_name, note.record_title))
 	PrintNavbar('note', 0, 0, 'note.cgi', 0)

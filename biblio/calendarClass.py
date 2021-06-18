@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -98,21 +98,10 @@ class CalendarDay:
                 PrintTrailer('calendar_day', 0, 0)
 
         def parse_parameters(self):
-                try:
-                        self.month = int(sys.argv[1])
-                        if self.month < 1 or self.month > 12:
-                                raise
-                        self.day = int(sys.argv[2])
-                        if self.day < 1:
-                                raise
-                        if self.day > calendar.monthrange(2000, self.month)[1]:
-                                raise
-                except:
-                        PrintHeader('On This Day in SF')
-                        PrintNavbar('calendar_day', 0, 0, 'calendar_day.cgi', 0)
-                        print '<h2>Invalid Day</h2>'
-                        PrintTrailer('calendar_day', 0, 0)
-                        sys.exit(0)
+                self.month = SESSION.Parameter(0, 'int', None, range(1, 13))
+                self.day = SESSION.Parameter(1, 'int')
+                if self.day < 1 or self.day > calendar.monthrange(2000, self.month)[1]:
+                        SESSION.DisplayError('Invalid day for this month')
 
         def print_authors_section(self):
                 print '<table class="mainauthors">'
