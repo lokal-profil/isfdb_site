@@ -80,19 +80,19 @@ def PrintHTMLHeaders(title):
 
 class Session:
     def __init__(self):
+        self.cgi_dir = ''
         self.cgi_script = ''
         self.parameters = []
 
     def ParseParameters(self):
-        script = sys.argv[0]
-        # Some OSes put the full path name in sys.argv[0], so we extract the last "/" chunk
-        file_name = script.split('/')[-1]
-        if file_name.endswith('.cgi'):
-            file_name = file_name[0:-4]
-        self.cgi_script = file_name
+        cgi_path = os.environ.get('SCRIPT_NAME')
+        # CGI script name is in the last "/" chunk
+        self.cgi_script = cgi_path.split('/')[-1]
+        if self.cgi_script.endswith('.cgi'):
+            self.cgi_script = self.cgi_script[0:-4] # Strip the trailing ".cgi" string
 
-        # We get the query string from os.environ.get('QUERY_STRING') as opposed to from sys.argv
-        # because some third party sites like Facebook add '&key=value' data to ISFDB URLs
+        self.cgi_dir = cgi_path.split('/')[-2]
+
         self.query_string = os.environ.get('QUERY_STRING')
         if self.query_string:
             for parameter in self.query_string.split('+'):
