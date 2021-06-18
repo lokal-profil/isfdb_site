@@ -91,12 +91,13 @@ class Session:
             file_name = file_name[0:-4]
         self.cgi_script = file_name
 
-        # We get the query string from os.environ.get('QUERY_STRING') as opposed to sys.argv
+        # We get the query string from os.environ.get('QUERY_STRING') as opposed to from sys.argv
         # because some third party sites like Facebook add '&key=value' data to ISFDB URLs
         self.query_string = os.environ.get('QUERY_STRING')
-        for parameter in self.query_string.split('+'):
-                parameter = parameter.split('&fbclid=')[0] # Strip trailing Facebook IDs
-                self.parameters.append(parameter)
+        if self.query_string:
+            for parameter in self.query_string.split('+'):
+                    parameter = parameter.split('&fbclid=')[0] # Strip trailing Facebook IDs
+                    self.parameters.append(parameter)
 
     def Parameter(self, param_number, param_type = 'str', default_value = None, allowed_values = []):
         from common import unescapeLink
