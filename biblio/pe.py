@@ -71,7 +71,7 @@ def printSeries(seriesData, seriesTitles, seriesTree, parentAuthors,
 if __name__ == '__main__':
 
 	# Get the series parameter. May be a series name or a series record number.
-        parameter = SESSION.Parameter(0, 'str')
+        parameter = SESSION.Parameter(0, 'unescape')
 
 	# Translate the series name to its series number if necessary
 	try:

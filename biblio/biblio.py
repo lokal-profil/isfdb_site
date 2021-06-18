@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -705,47 +705,35 @@ class Bibliography:
         def printHeaders(self):
                 self.cgi_script = '%s.cgi' % self.page_types[self.page_type]
 
-                try:
-                        author = unescapeLink(sys.argv[1])
-                except:
-                        self.printCommonError('', 'Invalid Author', 1)
+                author = SESSION.Parameter(0, 'unescape')
 
-                # Check if the passed in value is the row number in the author table.
-                # If so, use it to retrieve the author record from the database
+                # if the first parameter is an author ID
                 if author.isdigit():
                         self.au_data = SQLloadAuthorData(int(author))
                 # Otherwise use the author name to retrieve the author record
                 else:
                         self.au_data = SQLgetAuthorData(author)
 
-                # If the requested author doesn't exist, display an error message
                 if not self.au_data:
-                        self.printCommonError(author, "Author not found: %s" % author, 1)
+                        SESSION.DisplayError('Author not found: %s' % author)
 
-                # Check if the user is trying to change the default settings for translations
-                try:
-                        translations = sys.argv[2]
+                # Check if the user not logged in and is trying to change the default settings for translations
+                if not self.user.id and len(SESSION.parameters) > 1:
+                        translations = SESSION.Parameter(1, 'str', None, ('All', 'None'))
                         self.user.translation_cookies(translations)
-                except:
-                        pass
 
 		self.author_name = self.au_data[AUTHOR_CANONICAL]
                 PrintHeader("%s Bibliography: %s" % (self.page_type, self.author_name))
 
                 if self.author_name == 'uncredited' and self.page_type != 'Award':
-                        self.printCommonError(author, 'Only <a href="http:/%s/eaw.cgi?uncredited">Award Bibliography</a> is available for "uncredited"' % HTFAKE)
+                        PrintNavbar('author', author, 0, self.cgi_script, author)
+                        print '<h2>%s</h2>' % 'Only %s is available for "uncredited"' % ISFDBLink('eaw.cgi', 'uncredited', 'Award Bibliography')
+                        PrintTrailer('author', author, 0)
+                        sys.exit(0)
 
                 self.loadAuthorData()
 
-                PrintNavbar('author', self.author_name, self.au_id, self.cgi_script, self.author_name)
-
-        def printCommonError(self, author, message, noheader = 0):
-                if noheader:
-                        PrintHeader(ISFDBText(message))
-                PrintNavbar('author', author, 0, self.cgi_script, author)
-                print '<h2>%s</h2>' % ISFDBText(message)
-                PrintTrailer('author', author, 0)
-                sys.exit(0)
+                PrintNavbar('author', self.author_name, self.au_id, self.cgi_script, self.au_id)
 
         def printAwards(self):
                 print '<p>'

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -64,26 +64,19 @@ def PrintMagazineRecord(title_title, series_id, parent_id, series_title, bgcolor
 
 if __name__ == '__main__':
 
-        try:
-                dir_type = unescapeLink(sys.argv[1])
-                if dir_type not in ('author','publisher','magazine'):
-                        raise
-        except:
-                PrintHeader('Directory')
-                PrintNavbar('directory', 0, 0, 'directory.cgi', 0)
-                print '<h3>Directories are currently available for authors, magazines and publishers</h3>'
-                PrintTrailer('directory', 0, 0)
-                sys.exit(0)
+        dir_type = SESSION.Parameter(0, 'str', None, ('author','publisher','magazine'))
 
-        try:
-                section = unescapeLink(sys.argv[2])
-		title = "%s Directory: %s" % (dir_type.title(), ISFDBText(section.title()))
-	except:
-		section = ''
-		title = "%s Directory" % (dir_type.title())
+        title = "%s Directory" % dir_type.title()
+        if len(SESSION.parameters) == 1:
+                section= ''
+	else:
+                section = SESSION.Parameter(1, 'str')
+                title += ": %s" % ISFDBText(section.title())
+        if dir_type == 'author' and section:
+                SESSION.DisplayError('Second Parameter Not Allowed for Author Directory')
 
 	PrintHeader(title)
-	PrintNavbar('directory', 0, 0, 'directory.cgi', 0)
+	PrintNavbar('directory', 0, 0, 'directory.cgi', dir_type)
 
         if dir_type == 'publisher':
                 records_map = SQLGetPublisherDirectory()

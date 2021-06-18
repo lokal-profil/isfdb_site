@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,29 +17,19 @@ from library import *
 
 if __name__ == '__main__':
 
-        try:
-                title_id = int(sys.argv[1])
-        except:
-        	PrintHeader("Bad Argument")
-		PrintNavbar('title', 0, 0, 'title.cgi', 0)
-		PrintTrailer('title', 0, 0)
-                sys.exit(0)
+        title_id = SESSION.Parameter(0, 'int')
 
 	########################################
 	# STEP 1 - Get the title record
 	########################################
 	title = SQLloadTitle(title_id)
 	if not title:
-        	PrintHeader("Unknown Title Record")
-		PrintNavbar('title', 0, title_id, 'title.cgi', title_id)
-		PrintTrailer('title', title_id, title_id)
-		sys.exit(0)
+        	SESSION.DisplayError('Title Record Does Not Exist')
 
 	SQLupdateTitleViews(title_id)
 
-        browser_title = "Compare Publications for %s" % title[TITLE_TITLE]
-        PrintHeader(browser_title)
-	PrintNavbar('title', 0, title_id, 'title.cgi', sys.argv[1])
+        PrintHeader('Compare Publications for %s' % title[TITLE_TITLE])
+	PrintNavbar('title', 0, title_id, 'title.cgi', title_id)
 	if title[TITLE_TTYPE] == 'REVIEW':
 		print "<b>Review of:</b>", title[TITLE_TITLE]
 		authors = SQLReviewBriefAuthorRecords(title_id)
@@ -97,7 +87,7 @@ if __name__ == '__main__':
 	print '<form METHOD="POST" ACTION="/cgi-bin/submitdiff.cgi">'
 
 	########################################
-	# STEP 6 - Get the title's pub data
+	# STEP 3 - Get the title's pub data
 	########################################
 	pubs = SQLGetPubsByTitle(title_id)
 	PrintPubsTable(pubs, 'diffselect')

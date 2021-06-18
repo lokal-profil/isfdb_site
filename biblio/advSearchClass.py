@@ -211,15 +211,8 @@ class AdvancedSearch:
                                       )
 
         def parseArguments(self):
-                try:
-                        self.selector_id = sys.argv[1]
-                        self.search_type = self.search_types[self.selector_id]
-                except:
-                        PrintHeader('Advanced Search - Selection Criteria')
-                        PrintNavbar('adv_search_selection', 0, 0, 0, 0)
-                        print '<h2>Error: Invalid Search Type</h2>'
-                        PrintTrailer('adv_search_selection', 0, 0)
-                        sys.exit(0)
+                self.selector_id = SESSION.Parameter(0, 'str', None, self.search_types.keys())
+                self.search_type = self.search_types[self.selector_id]
 
         def display_selection(self):
                 self.parseArguments()

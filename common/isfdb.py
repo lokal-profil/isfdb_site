@@ -134,7 +134,7 @@ class Session:
                     raise
             except:
                 self.DisplayError('%s parameter must be a valid integer number' % param_order)
-        elif param_type == 'str':
+        elif param_type == 'unescape':
             value = unescapeLink(value)
         
         if allowed_values and value not in allowed_values:

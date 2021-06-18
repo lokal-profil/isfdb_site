@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import sys
-import string
-import urllib
 from isfdb import *
 from common import *
 from SQLparsing import *
@@ -20,12 +17,6 @@ from library import *
 from isbn import convertISBN
 from pubClass import pubs, pubBody
 
-def DoError(message):
-        PrintHeader('Unknown Publication Record')
-        PrintNavbar(0, 0, 0, 'pl.cgi', 0)
-        print """<h3>%s</h3>""" % message
-        PrintTrailer('publication', 0, 0)
-        sys.exit(0)
 
 def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
         if not reference:
@@ -305,16 +296,11 @@ def PrintContents(titles, pub, concise):
 
 if __name__ == '__main__':
 
-	try:
-		tag = unescapeLink(sys.argv[1])
-	except:
-                DoError('Invalid Publication ID specified')
+        tag = SESSION.Parameter(0, 'str')
 
         arg2 = ''
-	try:
-		arg2 = sys.argv[2]
-	except:
-		pass
+	if len(SESSION.parameters) > 1:
+		arg2 = SESSION.Parameter(1, 'str', None, ('c', 'f'))
 
         #Retrieve this user's data
         (userid, username, usertoken) = GetUserData()
@@ -338,18 +324,18 @@ if __name__ == '__main__':
         if numeric_record:
 		publication = SQLGetPubById(numeric_record)
                 if not publication and SQLDeletedPub(numeric_record):
-                        DoError('This publication has been deleted. See %s for details.' % ISFDBLink('pub_history.cgi', numeric_record, 'Edit History'))
+                        SESSION.DisplayError('This publication has been deleted. See %s for details.' % ISFDBLink('pub_history.cgi', numeric_record, 'Edit History'))
 	else:
 		publication = SQLGetPubByTag(tag)
 
 	if not publication:
-                DoError('Specified publication does not exist')
+                SESSION.DisplayError('Specified publication does not exist')
 
 	pub = pubs(db)
 	pub.load(publication[PUB_PUBID])
 
 	PrintHeader('Publication: %s' % pub.pub_title)
-	PrintNavbar('publication', publication, concise, 'pl.cgi', sys.argv[1])
+	PrintNavbar('publication', publication, concise, 'pl.cgi', publication[PUB_PUBID])
 
         pub_body = pubBody()
         pub_body.pub = pub

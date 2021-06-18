@@ -35,7 +35,7 @@ class SeriesGrid:
 
         def GetParameters(self):
                 # Get the series parameter. May be a series name or a series record number.
-                argument = SESSION.Parameter(0, 'str')
+                argument = SESSION.Parameter(0, 'unescape')
 
                 # Translate the series name to its series number if necessary
                 try:
