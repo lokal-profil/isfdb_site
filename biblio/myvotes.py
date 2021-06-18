@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
 from login import *
@@ -21,7 +18,7 @@ from SQLparsing import *
 
 def PrintRecord(record, eccolor):
 
-	if not record[0]:
+	if not record:
 		return
 
 	if eccolor:
@@ -30,7 +27,7 @@ def PrintRecord(record, eccolor):
 		print '<tr align=left class="table2">'
 
 	# Watch out for votes for no-longer-existing titles
-	title_id = record[0][1]
+	title_id = record[1]
 	title = SQLloadTitle(title_id)
 	if title:
 		title_link = ISFDBLink('title.cgi', title_id, title[TITLE_TITLE])
@@ -41,7 +38,7 @@ def PrintRecord(record, eccolor):
 		title_type = "-"
 		title_year = "-"
 
-	print '<td>%d</td>' % (record[0][3])
+	print '<td>%d</td>' % (record[3])
 	print '<td>%s</td>' % (title_link)
 	print '<td>%s</td>' % (title_type)
 	print '<td>%s</td>' % (title_year)
@@ -66,23 +63,32 @@ def PrintRecord(record, eccolor):
 
 if __name__ == '__main__':
 
-	try:
-		start = int(sys.argv[1])
-	except:
-		start = 0
+        start = SESSION.Parameter(0, 'int', 0)
 
 	PrintHeader('My Votes')
 	PrintNavbar('myvotes', 0, 0, 'myvotes.cgi', 0)
 
 	(myID, username, usertoken) = GetUserData()
 	myID = int(myID)
+	if not myID:
+		print '<h3>You have to be logged in to view your votes</h3>'
+		PrintTrailer('votes', 0, 0)
+		sys.exit(0)
 
 	# Get the (next) set of votes.  We join over the titles table to avoid picking
 	# up any votes for titles that have been deleted.
 	if start:
-		query = "select v.* from votes v, titles t where v.user_id='%d' and t.title_id = v.title_id order by rating desc limit %d,50;" % (myID, start)
+		query = """select v.* from votes v, titles t
+                        where v.user_id=%d
+                        and t.title_id = v.title_id
+                        order by v.rating desc, t.title_title
+                        limit %d,50""" % (myID, start)
 	else:
-		query = "select v.* from votes v, titles t where v.user_id='%d' and t.title_id = v.title_id order by rating desc limit 50;" % (myID)
+		query = """select v.* from votes v, titles t
+                        where v.user_id=%d
+                        and t.title_id = v.title_id
+                        order by v.rating desc, t.title_title
+                        limit 50""" % (myID)
 	db.query(query)
 	result = db.store_result()
 	if result.num_rows() == 0:
@@ -102,7 +108,7 @@ if __name__ == '__main__':
         record = result.fetch_row()
 	color = 0
 	while record:
-		PrintRecord(record, color)
+		PrintRecord(record[0], color)
 		color = color ^ 1
         	record = result.fetch_row()
 

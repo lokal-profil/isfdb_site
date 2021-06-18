@@ -130,8 +130,10 @@ class Session:
         if param_type == 'int':
             try:
                 value = int(value)
+                if value < 0:
+                    raise
             except:
-                self.DisplayError('%s parameter must be numeric' % param_order)
+                self.DisplayError('%s parameter must be a valid integer number' % param_order)
         elif param_type == 'str':
             value = unescapeLink(value)
         

@@ -60,9 +60,6 @@ class PublicationMonth:
                 self.target_month = self.current_month
                 self.target_day = self.current_day
                 
-                self.do_marque = 0
-                self.option = 0
-
                 self.sorting = 'date'
                 
                 self.adult = []
@@ -72,10 +69,19 @@ class PublicationMonth:
                 self.bgcolor = 1
 
                 self.user = User()
-
-        def load(self):
                 self.user.load()
-                self.parseArguments()
+
+        def parseArguments(self):
+                self.sorting = SESSION.Parameter(0, 'str', 'date', ('date','author'))
+                self.target_month = SESSION.Parameter(1, 'int', self.target_month)
+                self.target_year  = SESSION.Parameter(2, 'int', self.target_year)
+                if len(SESSION.parameters) > 1:
+                        default_start_day = 0
+                else:
+                        default_start_day = self.target_day
+                self.target_day   = SESSION.Parameter(3, 'int', default_start_day)
+
+        def load_data(self):
                 self.loadPubs()
                 if not self.pub_list:
                         return
@@ -85,27 +91,6 @@ class PublicationMonth:
                 self.loadTitles()
                 self.loadSeries()
                 self.loadTags()
-
-        def parseArguments(self):
-                try:
-                        self.sorting = sys.argv[1]
-                        if self.sorting not in ('date','author'):
-                                self.sorting = 'date'
-                except:
-                        pass
-
-                try:
-                        self.target_month = int(sys.argv[2])
-                        self.target_year  = int(sys.argv[3])
-                        self.target_day   = 0
-                except:
-                        pass
-
-                try:
-                        self.option = sys.argv[4]
-                        self.do_marque = 1
-                except:
-                        pass
 
         def loadPubs(self):
                 # Retrieve a list of all pubs published during the requested time period
@@ -316,8 +301,6 @@ class PublicationMonth:
         def PrintTableHeader(self):
                 print '<table class="generic_table">'
                 print '<tr class="generic_centered_header">'
-                if self.do_marque:
-                        print "<td></td>"
                 if self.sorting == 'author':
                         print "<td><b>Author(s)</b></td>"
                         print "<td><b>Title %s Series</b></td>" % BULLET
@@ -351,27 +334,11 @@ class PublicationMonth:
                         pub_series_name = self.pub_series[pub_series_id]
                 self.title_data = self.referral_titles.get(self.pub_id, None)
 
-                if self.do_marque:
-                        if SQLMarqueAuthors(pub[PUB_PUBID]) == 0:
-                                return
-
                 if self.bgcolor:
                         print '<tr align=left class="table1">'
                 else:
                         print '<tr align=left class="table2">'
                 self.bgcolor ^= 1
-
-                if self.do_marque:
-                        if self.option == 'y':
-                                if pub[PUB_IMAGE]:
-                                        return
-                                else:
-                                        print '<td>./getcover.py %s</td>' % pub[PUB_ISBN]
-                                return
-                        elif pub[PUB_IMAGE]:
-                                print '<td><img src="%s" width="90" alt="Book Image"></td>' % (pub[PUB_IMAGE])
-                        else:
-                                print '<td class="generic_black_cell"></td>'
 
                 # If sorting by author, print the authors and title first
                 if self.sorting == 'author':
@@ -557,10 +524,9 @@ class PublicationMonth:
 
 if __name__ == '__main__':
 
-	title = 'Monthly Bibliography'
-	PrintHeader(title)
-	PrintNavbar('forthcoming', 0, 0, 0, 0)
-
         pub_month = PublicationMonth()
-        pub_month.load()
+        pub_month.parseArguments()
+	PrintHeader('Monthly Bibliography')
+	PrintNavbar('forthcoming', 0, 0, 0, 0)
+        pub_month.load_data()
         pub_month.PrintPage()
