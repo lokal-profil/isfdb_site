@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2013-2018   Ahasuerus
+#     (C) COPYRIGHT 2013-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from awardtypeClass import *
 from isfdblib import *
 from isfdblib_help import *
@@ -23,29 +20,20 @@ from isfdblib_print import *
 
 if __name__ == '__main__':
 
-	try:
-		award_type_id = str(sys.argv[1])
-		if int(award_type_id) < 1:
-			raise
-	except:
-		PrintPreSearch("Award Type Editor - Argument Error")
-		PrintNavBar("edit/editawardtype.cgi", 0)
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
-		
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-	PrintPreSearch("Award Type Editor")
-	PrintNavBar("edit/editawardtype.cgi", award_type_id)
-
-        help = HelpAwardType()
-
-        printHelpBox('Award Type', 'AwardType')
+        award_type_id = SESSION.Parameter(0, 'int')
 
 	award_type = award_type()
 	award_type.award_type_id = award_type_id
 	award_type.load()
+	if not award_type.award_type_short_name:
+                SESSION.DisplayError('Award Type Does Not Exist')
+
+	PrintPreSearch('Award Type Editor')
+	PrintNavBar('edit/editawardtype.cgi', award_type_id)
+
+        help = HelpAwardType()
+
+        printHelpBox('Award Type', 'AwardType')
 
 	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitawardtype.cgi">'
 

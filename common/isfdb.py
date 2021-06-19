@@ -100,7 +100,6 @@ class Session:
                     self.parameters.append(parameter)
 
     def Parameter(self, param_number, param_type = 'str', default_value = None, allowed_values = []):
-        from common import unescapeLink
         param_display_values = {0: 'First',
                                 1: 'Second',
                                 2: 'Third',
@@ -135,7 +134,7 @@ class Session:
             except:
                 self.DisplayError('%s parameter must be a valid integer number' % param_order)
         elif param_type == 'unescape':
-            value = unescapeLink(value)
+            value = self._Unescape(value)
         
         if allowed_values and value not in allowed_values:
             output = '%s parameter must be one of the following values: ' % param_order
@@ -145,8 +144,19 @@ class Session:
                 output += '%s' % allowed_value
             self.DisplayError(output)
         return value
-    
+
+    def _Unescape(self, value):
+        from common import unescapeLink # Only works for Web pages in the main cgi-bin directory
+        return unescapeLink(value)
+            
     def DisplayError(self, message):
+        if self.cgi_dir == 'cgi-bin':
+            self._DisplayBiblioError(message)
+        elif self.cgi_dir == 'edit':
+            self._DisplayEditError(message)
+        sys.exit(0)
+
+    def _DisplayBiblioError(self, message):
         from common import PrintHeader, PrintNavbar, PrintTrailer
         PrintHeader('Page Does Not Exist')
         try:
@@ -156,7 +166,13 @@ class Session:
         PrintNavbar(self.cgi_script, record_id, 0, '%s.cgi' % self.cgi_script, 0)
         print """<h3>%s</h3>""" % message
         PrintTrailer(self.cgi_script, record_id, 0)
-        sys.exit(0)
+
+    def _DisplayEditError(self, message):
+        from isfdblib import PrintPreSearch, PrintNavBar, PrintPostSearch
+        PrintPreSearch('Page Does Not Exist')
+        PrintNavBar('%s/%s' % (self.cgi_dir, self.cgi_script), 0)
+        print """<h3>%s</h3>""" % message
+        PrintPostSearch(0, 0, 0)
 
 SCHEMA_VER = "0.02"
 ENGINE     = "<b>ISFDB Engine</b> - Version 4.00 (2006-04-24)"
