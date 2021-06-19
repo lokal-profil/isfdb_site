@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2016   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -68,58 +68,45 @@ def CheckContainer(title, pubtype):
         else:
                 return 0
 
-def displayError():
-        PrintPreSearch("Removal Editor")
-        PrintNavBar("edit/rmtitles.cgi", 0)
-        print '<h3>Missing or non-existing publication record</h3>'
-        PrintPostSearch(0, 0, 0, 0, 0)
-        sys.exit(0)
-
 if __name__ == '__main__':
 
-	try:
-                # First extract the argument as a number to check that it is numeric
-		pub_id = int(sys.argv[1])
-		# Next convert it to a string since it will be used as a string in this script
-		pub_id = str(pub_id)
-        	publication = SQLGetPubById(pub_id)
-        	if not publication:
-                        raise
-	except:
-		displayError()
+        pub_id = SESSION.Parameter(0, 'int')
+        publication = SQLGetPubById(pub_id)
+        if not publication:
+                SESSION.DisplayError('Record Does Not Exist')
         
 	##################################################################
 	# Output the leading HTML stuff
 	##################################################################
-	PrintPreSearch("Removal Editor")
+	PrintPreSearch('Removal Editor')
 	PrintNavBar('edit/rmtitles.cgi', pub_id)
 
 	print '<div id="HelpBox">'
-        print "<b>Help on removing titles: </b>"
+        print '<b>Help on removing titles: </b>'
         print '<a href="http://%s/index.php/Help:Screen:RemoveTitles">Help:Screen:RemoveTitles</a><p>' % (WIKILOC)
 	print '</div>'
 
         help = HelpGeneral()
         
-	print "<form id='data' METHOD=\"POST\" ACTION=\"/cgi-bin/edit/submitrm.cgi\">"
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitrm.cgi">'
 	print '<p>'
-	print '<b>Select items to remove from:</b> <i><a href="http:/%s/pl.cgi?%s">%s</a></i>\n' % (HTFAKE, publication[PUB_PUBID], publication[PUB_TITLE])
+	print '<b>Select items to remove from:</b> <i><a href="http:/%s/pl.cgi?%d">%s</a></i>\n' % (HTFAKE, pub_id, publication[PUB_TITLE])
 	print '<p>'
 	print '<hr>'
 
 	pubtype = publication[PUB_CTYPE]
 	# Get the "reference" Title record for this publication, including EDITORs for MAGAZINEs/FANZINEs
-	reference_id = SQLgetTitleReferral(publication[PUB_PUBID], pubtype, 1)
+	reference_id = SQLgetTitleReferral(pub_id, pubtype, 1)
 	if int(reference_id) == 0:
 		print '<div id="WarningBox">'
-		print "<h3>WARNING: Unable to locate the title reference for this publication.</h3>"
-		print "Removing titles while in this state is dangerous. Check to make sure the publication"
-		print "type is correct (collection, novel, anthology, etc.). Then come back and remove"
-		print "the title in question."
+		print """<h3>WARNING: Unable to locate the title reference for this publication.</h3>
+                        Removing titles while in this state is dangerous. Check to make sure the publication
+                        type is correct (collection, novel, anthology, etc.). Then come back and remove
+                        the title in question."""
 		print '</div>'
 
 	# Get the list of titles in this pub and sort them by page number
-	pages = getPubContentList(publication[PUB_PUBID])
+	pages = getPubContentList(pub_id)
 
 	missing_contents = []
 	container_contents = []
@@ -210,9 +197,9 @@ if __name__ == '__main__':
         print '</tbody>'
         print '</table>'
 	print '<p>'
-	print "<input name=\"pub_id\" value=\""+pub_id+"\" type=\"HIDDEN\">"
-	print "<input type=\"SUBMIT\" value=\"Submit Data\">"
-	print "</form>"
-	print "<p>"
+	print '<input name="pub_id" value="%d" type="HIDDEN">' % pub_id
+	print '<input type="SUBMIT" value="Submit Data">'
+	print '</form>'
+	print '<p>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, False)
