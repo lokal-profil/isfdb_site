@@ -15,7 +15,7 @@ from isfdblib_help import *
 from isfdblib_print import printtextarea
 from titleClass import *
 from isbn import convertISBN
-	
+
 
 if __name__ == '__main__':
         title_id = SESSION.Parameter(0, 'int')
@@ -36,37 +36,16 @@ if __name__ == '__main__':
 
         help = HelpGeneral()
 
-	print "<form id='data' METHOD=\"POST\" ACTION=\"/cgi-bin/edit/ts_unmerge.cgi\">"
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/ts_unmerge.cgi">'
         index = 1
         print '<ul>'
         for pub in pubs:
                 output = '<li>'
                 output += '<input type="checkbox" value="%d" name="pub%d"> ' % (pub[PUB_PUBID], index)
 
-                #####################################
-                # TITLE
-                #####################################
                 output += pub[PUB_TITLE]
+                output += ' (%s' % convertDate(pub[PUB_YEAR], 1)
 
-                #####################################
-                # DATE
-                #####################################
-                if pub[PUB_YEAR] == '0000-00-00':
-                        output += " (date unknown "
-                else:
-                        month = string.split(pub[PUB_YEAR], "-")[1]
-                        if month:
-                                try:
-                                        strmonth = monthmap[int(month)]
-                                        output += " (%s %s " % (strmonth, pub[PUB_YEAR][:4])
-                                except:
-                                        output += " (%s " % (pub[PUB_YEAR][:4])
-                        else:
-                                output += " (%s " % (pub[PUB_YEAR][:4])
-
-                #####################################
-                # AUTHORS
-                #####################################
                 output += ', '
                 authors = SQLPubAuthors(pub[PUB_PUBID])
                 counter = 0
