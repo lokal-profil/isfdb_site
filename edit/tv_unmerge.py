@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2016   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Bill Longley
 #	 ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -9,10 +9,6 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-	
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from isfdblib_help import *
@@ -20,41 +16,18 @@ from isfdblib_print import printtextarea
 from titleClass import *
 from isbn import convertISBN
 	
-monthmap = {
-	 1 : 'Jan',
-	 2 : 'Feb',
-	 3 : 'Mar',
-	 4 : 'Apr',
-	 5 : 'May',
-	 6 : 'Jun',
-	 7 : 'Jul',
-	 8 : 'Aug',
-	 9 : 'Sep',
-	10 : 'Oct',
-	11 : 'Nov',
-	12 : 'Dec'
-}
 
 if __name__ == '__main__':
-	try:
-		title_id = int(sys.argv[1])
-	except:
-		PrintNavBar(0, 0)
-		print "tv_unmerge: record argument required"
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
-	
-	PrintPreSearch("Title Unmerge Request")
-	PrintNavBar("edit/tv_unmerge.cgi", title_id)
-
+        title_id = SESSION.Parameter(0, 'int')
 	pubs = SQLGetPubsByTitleNoParent(title_id)
 	if not pubs:
-                print '<h2>No publications to unmerge.</h2>'
-                PrintPostSearch(0, 0, 0, 0, 0)
-                sys.exit(0)
+                SESSION.DisplayError('No Publications to Unmerge')
+	
+	PrintPreSearch('Title Unmerge Request')
+	PrintNavBar('edit/tv_unmerge.cgi', title_id)
 
 	print '<div id="HelpBox">'
-	print "<b>Help on unmerging titles: </b>"
+	print '<b>Help on unmerging titles: </b>'
 	print '<a href="http://%s/index.php/Help:Screen:UnmergeTitles">Help:Screen:UnmergeTitles</a><p>' % (WIKILOC)
 	print '</div>'
 	print '<b>Select titles to unmerge:</b>'
@@ -145,6 +118,6 @@ if __name__ == '__main__':
 
 	print '<input NAME="record" VALUE="%d" TYPE="HIDDEN">' % (title_id)
 	print '<input TYPE="SUBMIT" VALUE="Submit Unmerge" tabindex="1">'
-	print "</form>"
+	print '</form>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, False)
