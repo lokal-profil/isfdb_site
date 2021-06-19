@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2020   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,26 +10,18 @@
 #     Date: $Date$
 
 
-import sys
 from isfdb import *
 from isfdblib import *
 from SQLparsing import *
 from login import *
 
 if __name__ == '__main__':
-        try:
-                pub_id = int(sys.argv[1])
-                # Get information for the current publication
-                publication = SQLGetPubById(pub_id)
-                if not publication:
-                        raise
-        except:
-		PrintPreSearch("Verify Publication - Argument Error")
-                PrintNavBar(0, 0)
-		PrintPostSearch(0, 0, 0, 0, 0)
-                sys.exit(0)
+        pub_id = SESSION.Parameter(0, 'int')
+        publication = SQLGetPubById(pub_id)
+        if not publication:
+                SESSION.DisplayError('Record Does Not Exist')
 
-        PrintPreSearch("Verify Publication")
+        PrintPreSearch('Verify Publication')
         PrintNavBar(0, 0)
 
 	print '<div id="HelpBox">'

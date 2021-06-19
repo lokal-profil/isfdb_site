@@ -83,15 +83,16 @@ class Session:
         self.cgi_dir = ''
         self.cgi_script = ''
         self.parameters = []
+        self.query_string = ''
 
     def ParseParameters(self):
         cgi_path = os.environ.get('SCRIPT_NAME')
         # CGI script name is in the last "/" chunk
-        self.cgi_script = cgi_path.split('/')[-1]
-        if self.cgi_script.endswith('.cgi'):
-            self.cgi_script = self.cgi_script[0:-4] # Strip the trailing ".cgi" string
-
-        self.cgi_dir = cgi_path.split('/')[-2]
+        if cgi_path:
+            self.cgi_script = cgi_path.split('/')[-1]
+            if self.cgi_script.endswith('.cgi'):
+                self.cgi_script = self.cgi_script[0:-4] # Strip the trailing ".cgi" string
+            self.cgi_dir = cgi_path.split('/')[-2]
 
         self.query_string = os.environ.get('QUERY_STRING')
         if self.query_string:

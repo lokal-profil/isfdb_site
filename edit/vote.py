@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2006-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,7 +10,6 @@
 #     Date: $Date$
 
 
-import sys
 from isfdb import *
 from isfdblib import *
 from library import *
@@ -18,17 +17,10 @@ from SQLparsing import *
 from login import *
 
 if __name__ == '__main__':
-        try:
-                title_id = int(sys.argv[1])
-		title_title = SQLgetTitle(title_id)
-		if not title_title:
-                        raise
-        except:
-                PrintPreSearch("Vote Error")
-                PrintNavBar(0, 0)
-                print "<h3>Invalid or non-existent title ID.</h3>"
-                PrintPostSearch(0, 0, 0, 0, 0, 0)
-                sys.exit(0)
+        title_id = SESSION.Parameter(0, 'int')
+        title_title = SQLgetTitle(title_id)
+        if not title_title:
+                SESSION.DisplayError('Record Does Not Exist')
 
         PrintPreSearch("Title Vote")
         PrintNavBar(0, 0)
