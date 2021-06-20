@@ -38,13 +38,11 @@ if __name__ == '__main__':
 	parents = SQLgetActualFromPseudo(author_id)
 	if parents:
 		print 'This name is currently labeled as an alternate name for the following author(s):'
-		print '<table border="1">'
-                for parent in parents:
-        		print '<tr>'
-                        print '<form id="data"'
-                        print 'METHOD="POST" ACTION="/cgi-bin/edit/submitrempseudo.cgi">'
-                        #Retrieve author details for this parent canonical author
+                for count, parent in enumerate(parents):
                         parent_data = SQLgetAuthorData(parent[0])
+                        print '<form id="data%d" METHOD="POST" ACTION="/cgi-bin/edit/submitrempseudo.cgi">' % count
+        		print '<table border="1">'
+        		print '<tr>'
                         print '<td>'
                         print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, parent_data[AUTHOR_ID], parent[0])
                         print '</td>'
@@ -59,9 +57,9 @@ if __name__ == '__main__':
                 	print '<b>Note to Moderator: </b>'
                 	print '<br><TEXTAREA name="mod_note" ROWS=1 COLS=45></TEXTAREA>'
                         print '</td>'
-                        print '</form>'
 		        print '</tr>'
-                print '</table>'
+                        print '</table>'
+                        print '</form>'
 
 	print '<p><hr class="divider">'
 
