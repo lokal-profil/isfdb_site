@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2014   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,7 +10,6 @@
 #     Date: $Date$
 
 
-import sys
 import md5
 import random
 from isfdb import *
@@ -24,19 +23,14 @@ def GenerateKey(plain):
 
 if __name__ == '__main__':
 
-        try:
-                mode = sys.argv[1]
-        except:
-		mode = 'view_key'
-
-        PrintPreSearch("Key Maintenance")
-        PrintNavBar(0, 0)
+        mode = SESSION.Parameter(0, 'str', 'view_key', ('view_key', 'new_key'))
 
 	(userid, username, usertoken) = GetUserData()
 	if userid == 0:
-		print "<h2>Must be logged in to perform key maintenance</h2>"
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+		SESSION.DisplayError('You must be logged in to perform key maintenance')
+
+        PrintPreSearch('Key Maintenance')
+        PrintNavBar(0, 0)
 
 	print 'A license key is only required to submit data programmatically.'
 	print 'It is not needed for manual editing.<p>'
@@ -69,4 +63,4 @@ if __name__ == '__main__':
         	db.query(query)
 
 	print '<br><p>[<a href="http:/%s/edit/keygen.cgi?new_key">Generate New Key</a>]' % (HTFAKE)
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)
