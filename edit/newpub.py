@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2020   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,8 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
 from isfdb import *
 from isfdblib import *
 from isfdblib_help import *
@@ -20,27 +18,15 @@ from isfdblib_print import *
 
 if __name__ == '__main__':
 
-	try:
-		pub_type = sys.argv[1]
-                pub_ctype = pub_type.upper()
-		if pub_ctype not in PUB_TYPES:
-                        raise
-	except:
-		PrintPreSearch("Publication Editor")
-		PrintNavBar('edit/newpub.cgi', 0)
-                print '<h3>Invalid Publication Type</h3>'
-                PrintPostSearch(0, 0, 0, 0, 0)
-                sys.exit(0)
+        pub_type = SESSION.Parameter(0, 'str')
+        pub_ctype = pub_type.upper()
+        if pub_ctype not in PUB_TYPES:
+                SESSION.DisplayError('Invalid Publication Type')
 
-        PrintPreSearch("New %s" % pub_type)
-
+        PrintPreSearch('New %s' % pub_type)
 	PrintNavBar('edit/newpub.cgi', pub_type)
 
         printHelpBox('publication', 'NewPub', 1)
-
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
 
 	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitnewpub.cgi">'
 

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2016   Ahasuerus
+#     (C) COPYRIGHT 2016-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,8 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
 from SQLparsing import *
 from isfdb import *
 from library import *
@@ -20,23 +18,15 @@ from isfdblib import *
 
 if __name__ == '__main__':
 
-        try:
-                publisher_id = str(int(sys.argv[1]))
-                publisher = SQLGetPublisher(publisher_id)
-                if not publisher:
-                        raise
-	except:
-		PrintPreSearch('Publisher error')
-		PrintNavbar('edit/publisher_exceptions.cgi', 0)
-                print '<h2>Error: Publisher not found.</h2>'
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+        publisher_id = SESSION.Parameter(0, 'int')
+        publisher = SQLGetPublisher(publisher_id)
+        if not publisher:
+                SESSION.DisplayError('Record Does Not Exist')
 
-	title = 'Non-Latin Titles for Publisher: %s' % publisher[PUBLISHER_NAME]
-	PrintPreSearch(title)
+	PrintPreSearch('Non-Latin Titles for Publisher: %s' % publisher[PUBLISHER_NAME])
 	PrintNavBar('edit/publisher_exceptions.cgi', publisher_id)
 
-        query = "select pub_id, pub_title from pubs where publisher_id = %d" % int(publisher_id)
+        query = "select pub_id, pub_title from pubs where publisher_id = %d" % publisher_id
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()
@@ -96,4 +86,4 @@ if __name__ == '__main__':
                         print '</tr>'
                 print '</table>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2018   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from isfdblib_help import *
@@ -22,32 +19,22 @@ from library import *
 
 if __name__ == '__main__':
 
-	try:
-		title_id = int(sys.argv[1])
-                title = SQLloadTitle(title_id)
-                if not title:
-                        raise
-	except:
-		PrintPreSearch("Make Variant Title")
-		PrintNavBar("edit/mkvariant.cgi", 0)
-		print '<h3>Missing or non-existent title</h3>'
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+        title_id = SESSION.Parameter(0, 'int')
+        title = SQLloadTitle(title_id)
+        if not title:
+                SESSION.DisplayError('Record Does Not Exist')
 
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-	PrintPreSearch("Make Variant Title")
-	PrintNavBar("edit/mkvariant.cgi", title_id)
+	PrintPreSearch('Make Variant Title')
+	PrintNavBar('edit/mkvariant.cgi', title_id)
 
         help = HelpMakeVariant()
 
 	print '<div id="HelpBox">'
-        print "<b>Help on making variant titles: </b>"
+        print '<b>Help on making variant titles: </b>'
         print '<a href="http://%s/index.php/Help:Screen:MakeVariant">Help:Screen:MakeVariant</a><p>' % (WIKILOC)
 	print '</div>'
 
-	print "Current Title:<br>"
+	print 'Current Title:<br>'
 
 	print "<b>Title:</b>", escape_string(title[TITLE_TITLE])
 	print "<br>"
