@@ -12,6 +12,7 @@ import cgitb; cgitb.enable()
 import sys
 import os
 from localdefs import *
+import urllib
 
 def Date_or_None(s):
     return s
@@ -147,8 +148,9 @@ class Session:
         return value
 
     def _Unescape(self, value):
-        from common import unescapeLink # Only works for Web pages in the main cgi-bin directory
-        return unescapeLink(value)
+        return urllib.unquote(os.environ.get('QUERY_STRING')).decode('utf-8').encode('iso-8859-1', 'xmlcharrefreplace')
+##        from common import unescapeLink # Only works for Web pages in the main cgi-bin directory
+##        return unescapeLink(value)
             
     def DisplayError(self, message):
         if self.cgi_dir == 'cgi-bin':
