@@ -9,6 +9,7 @@
 #     Date: $Date$
 
 import cgitb; cgitb.enable()
+import string
 import sys
 import os
 from localdefs import *
@@ -136,6 +137,12 @@ class Session:
             except:
                 self.DisplayError('%s parameter must be a valid integer number' % param_order)
         elif param_type == 'unescape':
+            value = string.replace(value, '%20', ' ')
+            value = string.replace(value, '&rsquo;', "'")
+            value = string.replace(value, '%E2%80%99', "'")
+            value = string.replace(value, '_', ' ')
+            value = string.replace(value, '\\', '')
+            value = string.replace(value, '=', '')
             value = urllib.unquote(value).decode('utf-8').encode('iso-8859-1', 'xmlcharrefreplace')
         
         if allowed_values and value not in allowed_values:
