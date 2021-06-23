@@ -757,16 +757,6 @@ def escapeLink(input):
 	retval = string.replace(retval, '"', '&quot;')
 	return retval
 
-def unescapeLink(input):
-        retval = string.replace(input, '%20', ' ')
-	retval = string.replace(retval, '&rsquo;', "'")
-        retval = string.replace(retval, '%E2%80%99', "'")
-        retval = string.replace(retval, '_', ' ')
-        retval = string.replace(retval, '=', '')
-	# This one was added 03/02/2008
-        retval = string.replace(retval, '\\', '')
-        return retval
-
 def displayAuthorList(authors):
         displayRecordList('author', authors)
 

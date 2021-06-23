@@ -136,7 +136,7 @@ class Session:
             except:
                 self.DisplayError('%s parameter must be a valid integer number' % param_order)
         elif param_type == 'unescape':
-            value = self._Unescape(value)
+            value = urllib.unquote(value).decode('utf-8').encode('iso-8859-1', 'xmlcharrefreplace')
         
         if allowed_values and value not in allowed_values:
             output = '%s parameter must be one of the following values: ' % param_order
@@ -147,11 +147,6 @@ class Session:
             self.DisplayError(output)
         return value
 
-    def _Unescape(self, value):
-        return urllib.unquote(os.environ.get('QUERY_STRING')).decode('utf-8').encode('iso-8859-1', 'xmlcharrefreplace')
-##        from common import unescapeLink # Only works for Web pages in the main cgi-bin directory
-##        return unescapeLink(value)
-            
     def DisplayError(self, message):
         if self.cgi_dir == 'cgi-bin':
             self._DisplayBiblioError(message)
