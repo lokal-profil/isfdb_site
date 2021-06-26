@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2007-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2007-2021   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -55,38 +55,20 @@ def CheckOneList(titles, mode):
 			print '<p>'
 	return found
 
-def displayError(error_text):
-        PrintPreSearch('Duplicate Finder')
-	PrintNavBar('edit/find_dups.cgi', 0)
-        print '<h3>%s.</h3>' % error_text
-        PrintPostSearch(0, 0, 0, 0, 0, 0)
-        sys.exit(0)
-
         
 if __name__ == '__main__':
 
-	try:
-		author_id = int(sys.argv[1])
-		author_data = SQLloadAuthorData(author_id)
-                titles = SQLloadAnyTitles(author_id)
-                if not titles:
-                        raise
-	except:
-		displayError("Missing or non-existing author ID")
+        author_id = SESSION.Parameter(0, 'int')
+        author_data = SQLloadAuthorData(author_id)
+        titles = SQLloadAnyTitles(author_id)
+        if not titles:
+                SESSION.DisplayError('Record Does Not Exist')
 
-	try:
-		mode = int(sys.argv[2])
-	except:
-		mode = 0
+        mode = SESSION.Parameter(1, 'int', 0, (0, 1, 2))
 
         if (mode == 2) and (len(titles) > 1000):
-                displayError("Aggressive mode disabled for authors with more than 1,000 titles for performance reasons")
-        if mode > 2 or mode < 0:
-                displayError("Invalid mode")
+                SESSION.DisplayError('Aggressive mode disabled for authors with more than 1,000 titles for performance reasons')
 
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
 	PrintPreSearch('Duplicate Finder for %s' % author_data[AUTHOR_CANONICAL])
 	PrintNavBar('edit/find_dups.cgi', author_id)
 

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2015-2019   Ahasuerus
+#     (C) COPYRIGHT 2015-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,39 +10,22 @@
 #     Date: $Date$
 
 
-import sys
-import string
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 
 
-def displayError(error_text):
-        PrintPreSearch('Duplicate Finder for one or more Titles')
-	PrintNavBar('edit/find_title_dups.cgi', 0)
-        print '<h3>%s.</h3>' % error_text
-        PrintPostSearch(0, 0, 0, 0, 0, 0)
-        sys.exit(0)
-
-        
 if __name__ == '__main__':
 
-	try:
-                # Parse the list of arguments that was passed in
-                arguments = sys.argv[1:]
-                titles = []
-                for argument in arguments:
-                        title_id = int(argument)
-                        title = SQLloadTitle(title_id)
-                        if not title:
-                                raise
-                        titles.append(title_id)
-	except:
-		displayError("Missing or non-existing title ID")
+        if not SESSION.parameters:
+                SESSION.DisplayError('Record Does Not Exist')
+        titles = []
+        for counter, parameter in enumerate(SESSION.parameters):
+                title_id = SESSION.Parameter(counter, 'int')
+                title = SQLloadTitle(title_id)
+                if not title:
+                        SESSION.DisplayError('Record Does Not Exist')
+                titles.append(title_id)
 
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
 	PrintPreSearch('Duplicate Finder for one or more Titles')
 	PrintNavBar('edit/find_title_dups.cgi', 0)
 

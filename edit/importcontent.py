@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2008-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from isfdblib_print import *
@@ -21,17 +18,10 @@ from library import *
 
 if __name__ == '__main__':
 
-	try:
-		pub_id = int(sys.argv[1])
-		pub_data = SQLGetPubById(pub_id)
-		if not pub_data:
-                        raise
-	except:
-		PrintPreSearch("Import Content")
-		PrintNavBar("edit/importcontent.cgi", 0)
-		print '<h3>Missing or invalid publication ID</h3>'
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+        pub_id = SESSION.Parameter(0, 'int')
+        pub_data = SQLGetPubById(pub_id)
+        if not pub_data:
+                SESSION.DisplayError('Record Does Not Exist')
 
 	PrintPreSearch("Import Content - %s" % pub_data[PUB_TITLE])
 	PrintNavBar("edit/importcontent.cgi", pub_id)

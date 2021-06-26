@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2015-2018   Ahasuerus
+#     (C) COPYRIGHT 2015-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,30 +10,17 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from library import *
 
-def DisplayError(error):
-        PrintPreSearch("Clone Publication")
-        PrintNavBar("edit/clonecover.cgi", 0)
-        print '<h3>Error: %s</h3>' % error
-        PrintPostSearch(0, 0, 0, 0, 0)
-        sys.exit(0)
-
 
 if __name__ == '__main__':
 
-	try:
-		pub_id = int(sys.argv[1])
-		pub_data = SQLGetPubById(pub_id)
-		if not pub_data:
-                        raise
-	except:
-                DisplayError("Missing or invalid publication ID")
+        pub_id = SESSION.Parameter(0, 'int')
+        pub_data = SQLGetPubById(pub_id)
+        if not pub_data:
+                SESSION.DisplayError('Record Does Not Exist')
 
 	PrintPreSearch("Clone Publication - %s" % pub_data[PUB_TITLE])
 	PrintNavBar("edit/clonecover.cgi", pub_id)

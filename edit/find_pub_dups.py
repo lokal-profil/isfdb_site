@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2019   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,31 +10,19 @@
 #     Date: $Date$
 
 
-import sys
-import string
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 
 
-def displayError(error_text):
-        PrintPreSearch('Duplicate Finder for a Publication')
-	PrintNavBar('edit/find_pub_dups.cgi', 0)
-        print '<h3>%s.</h3>' % error_text
-        PrintPostSearch(0, 0, 0, 0, 0, 0)
-        sys.exit(0)
-
-        
 if __name__ == '__main__':
 
-	try:
-		pub_id = int(sys.argv[1])
-		pub_data = SQLGetPubById(pub_id)
-                titles = SQLloadTitlesXBT(pub_id)
-                if not titles:
-                        raise
-	except:
-		displayError("Missing or non-existing publication ID")
+        pub_id = SESSION.Parameter(0, 'int')
+        pub_data = SQLGetPubById(pub_id)
+        if not pub_data:
+                SESSION.DisplayError('Record Does Not Exist')
+        titles = SQLloadTitlesXBT(pub_id)
+        if not titles:
+                SESSION.DisplayError('Publication Record Contains No Titles')
 
 	##################################################################
 	# Output the leading HTML stuff
