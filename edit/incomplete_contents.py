@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2020   Ahasuerus
+#     (C) COPYRIGHT 2020-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,19 +10,11 @@
 #     Date: $Date: 2019-05-15 10:54:53 -0400 (Wed, 15 May 2019) $
 
 
-import string
-import sys
 from isfdb import *
 from isfdblib import *
 from library import *
 from SQLparsing import *
 
-def doError():
-	PrintPreSearch('Publications with Incomplete Contents')
-	PrintNavBar('edit/incomplete_contents.cgi', 0)
-        print '<h3>Bad argument</h3>'
-        PrintPostSearch(0, 0, 0, 0, 0)
-        sys.exit(0)
 
 def PrintTableColumns(columns, user):
 	print '<table class="generic_table">'
@@ -37,27 +29,23 @@ def PrintTableColumns(columns, user):
 
 if __name__ == '__main__':
 
-        # If the script was called with no arguments, then it's an error
-        if len(sys.argv) == 1:
-                doError()
-        try:
-                report_type = sys.argv[1]
-                date_range = int(sys.argv[2])
-                if report_type == 'decade':
-                        display_range = '%s0s' % date_range
-                elif report_type == 'year':
-                        display_range = date_range
-                elif report_type == 'month':
-                        display_range = '%s-%s' % (str(date_range)[:4], str(date_range)[4:6])
-                elif report_type == 'unknown':
-                        display_range = '0000-00'
-                else:
-                        raise
-                report_id = int(sys.argv[3])
-                if report_id not in (277, ):
-                        raise
-        except:
-                doError()
+        report_type = SESSION.Parameter(0, 'str', None, ('decade', 'year', 'month', 'unknown'))
+        date_range = SESSION.Parameter (1, 'int')
+        if report_type == 'decade':
+                if len(str(date_range)) != 3:
+                        SESSION.DisplayError('Decade Must be a 3-Digit Number')
+                display_range = '%s0s' % date_range
+        elif report_type == 'year':
+                if len(str(date_range)) != 4:
+                        SESSION.DisplayError('Year Must be a 4-Digit Number')
+                display_range = date_range
+        elif report_type == 'month':
+                if len(str(date_range)) != 6:
+                        SESSION.DisplayError('Month Must Be a YYYYMM value')
+                display_range = '%s-%s' % (str(date_range)[:4], str(date_range)[4:6])
+        elif report_type == 'unknown':
+                display_range = '0000-00'
+        report_id = SESSION.Parameter(2, 'int', None, (277, ))
 
 	PrintPreSearch('Publications with Incomplete Contents')
 	PrintNavBar('edit/incomplete_contents.cgi', 0)
@@ -75,6 +63,7 @@ if __name__ == '__main__':
         result = db.store_result()
         if not result.num_rows():
                 print 'No eligible publications for the specified date range'
+                PrintPostSearch(0, 0, 0, 0, 0, 0)
                 sys.exit(0)
 
         user = User()
