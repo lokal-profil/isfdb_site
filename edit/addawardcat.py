@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2018   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,38 +10,26 @@
 #     Date: $Date$
 
 
-import sys
 from awardtypeClass import *
 from isfdb import *
 from isfdblib import *
 from isfdblib_help import *
 from SQLparsing import *
-from login import *
 from library import *
 from isfdblib_print import printtextarea, printfield, printWebPages
 
 
 if __name__ == '__main__':
         
-        try:
-                award_type_id = int(sys.argv[1])
-                # If the passed in ID is not 0, i.e. this is a title-based award, load the associated title data
-                if not award_type_id:
-                        raise
-                awardType = award_type()
-                awardType.award_type_id = award_type_id
-                awardType.load()
-                if not awardType.award_type_name:
-                        raise
-        except:
-                PrintPreSearch("New Award Category Error")
-		PrintNavBar("edit/addawardcat.cgi", 0)
-		print '<h3>Missing or invalid Award Type ID</h3>'
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+        award_type_id = SESSION.Parameter(0, 'int')
+        awardType = award_type()
+        awardType.award_type_id = award_type_id
+        awardType.load()
+        if not awardType.award_type_name:
+		SESSION.DisplayError('Specified Award Type ID Does Not Exist')
 
-        PrintPreSearch("New Award Category for %s Award" % awardType.award_type_short_name)
-        PrintNavBar("edit/addawardcat.cgi", sys.argv[1])
+        PrintPreSearch('New Award Category for %s Award' % awardType.award_type_short_name)
+        PrintNavBar('edit/addawardcat.cgi', award_type_id)
 
 	print '<div id="HelpBox">'
         print '<b>Help on adding an award category: </b>'
@@ -72,4 +60,4 @@ if __name__ == '__main__':
 	print '<input type="SUBMIT" value="Submit New Award Category" tabindex="1">'
 	print '</form>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)

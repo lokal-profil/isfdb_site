@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2013-2019   Ahasuerus
+#     (C) COPYRIGHT 2013-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -49,8 +49,8 @@ class award_type(awardShared):
 
 	def load(self):
                 if not self.award_type_id and not self.award_type_code:
-                        print "ERROR: Award type not provided"
-                        sys.exit(0)
+                        self.error = "Award type not specified"
+                        return
                 if self.award_type_id:
                 	award_type = SQLGetAwardTypeById(self.award_type_id)
         		if not award_type:

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2014   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2004-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -9,48 +9,31 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-	
-import cgi
-import sys
-import MySQLdb
+
 from isfdb import *
 from isfdblib import *
 from awardClass import *
-from login import *
 from SQLparsing import *
 	
 
 if __name__ == '__main__':
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-	PrintPreSearch("Delete Award Submission")
 
-	try:
-		record = int(sys.argv[1])
-	except:
-                PrintNavBar(0, 0)
-                print "<h3>Missing or invalid argument</h3>"
-                PrintPostSearch(0, 0, 0, 0, 0)
-                sys.exit(0)
-	
-	PrintNavBar("edit/deleteaward.cgi", record)
-	
-	award = SQLloadAwards(record)
+        award_id = SESSION.Parameter(0, 'int')
+	award = SQLloadAwards(award_id)
 	if not award:
-		print "<h3>Error: Award record does not exist</h3>"
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+                SESSION.DisplayError('Record Does Not Exist')
 
-	print "<b>Request to Delete:</b> <i>%s</i>" % award[0][AWARD_TITLE]
-	print "<p />"
+	PrintPreSearch('Delete Award Submission')
+	PrintNavBar('edit/deleteaward.cgi', award_id)
 
-        print "<form METHOD=\"POST\" ACTION=\"/cgi-bin/edit/submitdelaward.cgi\">"
-        print "<b>Deletion Reason</b><br />"
+	print '<b>Request to Delete:</b> <i>%s</i>' % award[0][AWARD_TITLE]
+        print '<form METHOD="POST" ACTION="/cgi-bin/edit/submitdelaward.cgi">'
+	print '<p>'
+        print '<b>Deletion Reason</b><br>'
         print '<textarea name="reason" rows="4" cols="45"></textarea>'
-        print '<p />'
-        print '<input name="award_id" value="%d" type="HIDDEN">' % record
+        print '<p>'
+        print '<input name="award_id" value="%d" type="HIDDEN">' % award_id
         print '<input type="SUBMIT" value="Delete">'
-        print "</form>"
+        print '</form>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)
