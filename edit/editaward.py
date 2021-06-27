@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,8 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
 from awardClass import *
 from awardtypeClass import *
 from isfdb import *
@@ -24,25 +22,15 @@ from isfdblib_print import *
 
 if __name__ == '__main__':
 
-	try:
-                award_id = int(sys.argv[1])
-                award = awards(db)
-                award.load(int(award_id))
-                if not award.award_id:
-                        raise
-                awardType = award_type()
-                awardType.award_type_id = award.award_type_id
-                awardType.load()
-	except:
-        	PrintPreSearch("Award Editor")
-		PrintNavBar("edit/editaward.cgi", 0)
-		print '<h3>Bad or non-existing award ID</h3>'
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+        award_id = SESSION.Parameter(0, 'int')
+        award = awards(db)
+        award.load(award_id)
+        if not award.award_id:
+                SESSION.DisplayError('Record Does Not Exist')
+        awardType = award_type()
+        awardType.award_type_id = award.award_type_id
+        awardType.load()
 
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
         if award.title_id:
         	PrintPreSearch("Award Editor for a Title")
         else:
