@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2012-2019 Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2012-2021 Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 from cleanup_lib import reportsDict
 from isfdb import *
 from isfdblib import *
@@ -23,25 +20,20 @@ from sfe3 import Sfe3
 
 if __name__ == '__main__':
 
-	PrintPreSearch("ISFDB Data Cleanup Reports")
-	PrintNavBar('edit/cleanup.cgi', 0)
-
         user = User()
         user.load()
         user.load_moderator_flag()
 
-        try:
-                all_reports = int(sys.argv[1])
-                if all_reports > 1:
-                        raise
-                if all_reports == 1 and not user.moderator:
-                        raise
-	except:
+        all_reports = SESSION.Parameter(0, 'int', 0, (0, 1))
+        if all_reports == 1 and not user.moderator:
                 all_reports = 0
+
+	PrintPreSearch('ISFDB Data Cleanup Reports')
+	PrintNavBar('edit/cleanup.cgi', 0)
 
         print '<b>Legend:</b>'
         print '<ul>'
-        print """<li>The numbers in parentheses show how many problem records were found when each report
+        print """<li>The numbers in parentheses show how many potentially problematic records were found when each report
                 was last regenerated; the current numbers may be lower."""
 
         if user.moderator:

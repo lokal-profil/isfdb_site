@@ -7308,41 +7308,23 @@ def PrintTitlesWithoutLanguage(result):
                 record = result.fetch_row()
         print "</table>"
 
-def printError():
-        PrintPreSearch('Non-Existent Cleanup Report')
-        PrintNavBar(0, 0)
-        print '<div id="ErrorBox">'
-        print '<h3>Error: Non-Existent Cleanup Report</h3>'
-        print '</div>'
-        PrintPostSearch(0, 0, 0, 0, 0)
-        sys.exit(0)
-
 	
 if __name__ == '__main__':
 
         # Retrieve all supported reports
         (reports, sections, non_moderator) = reportsDict()
 
-	try:
-		type_id = int(sys.argv[1])
-		if type_id not in reports:
-                        raise
-                # Determine the name of the function to be called for this report
-                function = getattr(sys.modules[__name__], 'function' + str(type_id))
-	except:
-                printError()
+        type_id = SESSION.Parameter(0, 'int')
+        if type_id not in reports:
+                SESSION.DisplayError('Cleanup Report Does Not Exist')
+        # Determine the name of the function to be called for this report
+        function = getattr(sys.modules[__name__], 'function' + str(type_id))
 
         user = User()
         user.load()
         user.load_moderator_flag()
         if not user.moderator and (type_id not in non_moderator):
-                PrintPreSearch('Inaccessible Cleanup Report')
-                PrintNavBar(0, 0)
-                print '<div id="ErrorBox">'
-                print '<h3>Error: Only moderators can access the specified cleanup report</h3>'
-                print '</div>'
-                PrintPostSearch(0, 0, 0, 0, 0)
-                sys.exit(0)
+                SESSION.DisplayError('Only moderators can access the specified cleanup report')
 
 	PrintPreSearch(reports[type_id])
         PrintNavBar('edit/cleanup_report.cgi', type_id)
