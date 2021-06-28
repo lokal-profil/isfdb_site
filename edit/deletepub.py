@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2020   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2004-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,38 +10,21 @@
 #     Date: $Date$
 
 	
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from pubClass import *
-from login import *
 from SQLparsing import *
-
-def displayError(value):
-        print "<h3>%s.</h3>" % (value)
-        PrintPostSearch(0, 0, 0, 0, 0)
-        sys.exit(0)
 
 
 if __name__ == '__main__':
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-	PrintPreSearch("Delete Publication")
 
-	try:
-		record = int(sys.argv[1])
-                pub = pubs(db)
-                pub.load(record)
-                if not pub.pub_title:
-                        raise
-	except:
-		PrintNavBar(0, 0)
-		displayError('Publication does not exist')
+        pub = pubs(db)
+        pub.load(SESSION.Parameter(0, 'int'))
+        if not pub.pub_title:
+                SESSION.DisplayError('Record Does Not Exist')
 	
-	PrintNavBar('edit/deletepub.cgi', record)
+	PrintPreSearch('Delete Publication')
+	PrintNavBar('edit/deletepub.cgi', pub.pub_id)
 	
 	print '<b>Publication to Delete:</b> <i>%s</i>' % pub.pub_title
 	print '<p>'
@@ -50,7 +33,7 @@ if __name__ == '__main__':
         print '<b>Note to Moderator:</b><br>'
         print '<textarea tabindex="1" name="mod_note" rows="4" cols="60"></textarea>'
         print '<p>'
-        print '<input name="pub_id" value="%d" type="HIDDEN">' % (record)
+        print '<input name="pub_id" value="%d" type="HIDDEN">' % pub.pub_id
         print '<input type="SUBMIT" value="Delete">'
         pub.printModNoteRequired()
         print '</form>'
