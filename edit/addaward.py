@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2007-2018   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2007-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,7 +10,6 @@
 #     Date: $Date$
 
 
-import sys
 from awardClass import *
 from awardtypeClass import *
 from isfdb import *
@@ -22,31 +21,22 @@ from library import *
 from isfdblib_print import *
 
 
-def DoError(message):
-        PrintPreSearch("Award Editor")
-        PrintNavBar("edit/addaward.cgi", 0)
-        print '<h3>%s.</h3>' % message
-        print sys.argv
-        print len(sys.argv)
-        print form
-        PrintPostSearch(0, 0, 0, 0, 0)
-        sys.exit(0)
-
 if __name__ == '__main__':
 
-        # If this script was accessed via the Award Type Selector, then the title ID and the Award Type ID are in the posted form values
-        if len(sys.argv) == 1:
+        # If this script was accessed via the Award Type Selector, there are no CGI parameters;
+        # the title ID and the Award Type ID are in the posted form values instead
+        if not SESSION.parameters:
 		sys.stderr = sys.stdout
 		form = cgi.FieldStorage()
 		try:
 			title_id = int(form['title_id'].value)
-                        # If the passed in ID is not 0, i.e. this is a title-based award, load the associated title data
+                        # If the passed in title ID is not 0, i.e. this is a title-based award, so load the associated title data
                         if title_id:
                                 title = SQLloadTitle(title_id)
                                 if not title:
                                         raise
 		except:
-                        DoError('Missing or invalid Title ID') 
+                        SESSION.DisplayError('Missing or invalid Title ID') 
 
 		try:
 			award_type_id = int(form['award_type_id'].value)
@@ -56,38 +46,32 @@ if __name__ == '__main__':
                         if not awardType.award_type_name:
                                 raise
                 except:
-                        DoError('Missing or invalid Award Type')
+                        SESSION.DisplayError('Missing or invalid Award Type ID')
 
         else:
-                try:
-                        title_id = int(sys.argv[1])
-                        # If the passed in ID is not 0, i.e. this is a title-based award, load the associated title data
-                        if title_id:
-                                title = SQLloadTitle(title_id)
-                                if not title:
-                                        raise
-                except:
-                        DoError('Missing or invalid Title ID')
+                title_id = SESSION.Parameter(0, 'int')
+                # If the passed in ID is not 0, i.e. this is a title-based award, load the associated title data
+                if title_id:
+                        title = SQLloadTitle(title_id)
+                        if not title:
+                                SESSION.DisplayError('Missing or invalid Title ID')
 
-                try:
-                        awardType = award_type()
-                        awardType.award_type_id = int(sys.argv[2])
-                        awardType.load()
-                        if not awardType.award_type_name:
-                                raise
-                except:
-                        DoError('Missing or invalid Award Type ID')
+                awardType = award_type()
+                awardType.award_type_id = SESSION.Parameter(1, 'int')
+                awardType.load()
+                if not awardType.award_type_name:
+                        SESSION.DisplayError('Missing or invalid Award Type ID')
 
         if title_id:
-                PrintPreSearch("Award Editor for a Title")
+                PrintPreSearch('Award Editor for a Title')
         else:
-                PrintPreSearch("Award Editor")
-        PrintNavBar("edit/addaward.cgi", title_id)
+                PrintPreSearch('Award Editor')
+        PrintNavBar('edit/addaward.cgi', title_id)
 
         help = HelpAward(awardType.award_type_poll)
 
 	print '<div id="HelpBox">'
-        print "<b>Help on adding an award: </b>"
+        print '<b>Help on adding an award: </b>'
         print '<a href="http://%s/index.php/Help:Screen:AddAward">Help:Screen:AddAward</a><p>' % (WIKILOC)
 	print '</div>'
 

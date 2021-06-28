@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2018   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from library import *
 from isfdblib import *
@@ -50,25 +47,17 @@ def printtitlerecord(record):
         print '</table>'
 
 if __name__ == '__main__':
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
 
-        try:
-                title_id = int(sys.argv[1])
-        except:
-                displayError('Missing title ID', 'Add Variant Title', 'addvariant')
-
+        title_id = SESSION.Parameter(0, 'int')
         title_data = SQLloadTitle(title_id)
         if not title_data:
-                displayError('Non-existent parent title ID specified', 'Add Variant Title', 'addvariant')
-
-	PrintPreSearch("Add Variant Title")
-	PrintNavBar("edit/addvariant.cgi", title_id)
-
+                SESSION.DisplayError('Record Does Not Exist')
         if title_data[TITLE_PARENT]:
-                displayError('This title is currently a variant of another title. Variants of variants are not allowed')
+                SESSION.DisplayError('This title is currently a variant of another title. Variants of variants are not allowed')
 
+	PrintPreSearch('Add Variant Title')
+	PrintNavBar('edit/addvariant.cgi', title_id)
+	
 	print '<div id="HelpBox">'
 	print '<b>Help on adding variant titles: </b>'
 	print '<a href="http://%s/index.php/Help:Screen:AddVariant">Help:Screen:AddVariant</a><p>' % (WIKILOC)
@@ -77,12 +66,12 @@ if __name__ == '__main__':
 	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitvariant.cgi">'
 	printtitlerecord(title_data)
 
-	print "<p>"
-	print "<hr>"
-	print "<p>"
-	print "<input NAME=\"title_id\" VALUE=\""+sys.argv[1]+"\" TYPE=\"HIDDEN\">"
-	print "<input TYPE=\"SUBMIT\" VALUE=\"Submit Data\">"
-	print "</form>"
-	print "<p>"
+	print '<p>'
+	print '<hr>'
+	print '<p>'
+	print '<input NAME="title_id" VALUE="%d" TYPE="HIDDEN">' % title_id
+	print '<input TYPE="SUBMIT" VALUE="Submit Data">'
+	print '</form>'
+	print '<p>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)

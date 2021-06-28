@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2021   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from SQLparsing import *
 from isfdb import *
 from isfdblib import *
@@ -22,30 +19,18 @@ from isfdblib_print import *
 
 if __name__ == '__main__':
 
-	try:
-		title = int(sys.argv[1])
-                record = SQLloadTitle(title)
-        	pub_type = record[TITLE_TTYPE]
-                if not record:
-                        raise
-		pub = 0
-	except:
-		PrintPreSearch("Specified Title record not found")
-		PrintNavBar("edit/addpub.cgi", 0)
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+        title = SESSION.Parameter(0, 'int')
+        record = SQLloadTitle(title)
+        if not record:
+                SESSION.DisplayError('Record Does Not Exist')
+        pub = 0
 
+        pub_type = record[TITLE_TTYPE]
 	if pub_type not in ('NOVEL', 'COLLECTION', 'OMNIBUS', 'ANTHOLOGY', 'CHAPBOOK', 'NONFICTION'):
-		PrintPreSearch("Adding a publication to a " + pub_type + " record is not supported")
-		PrintNavBar("edit/addpub.cgi", 0)
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+		SESSION.DisplayError('Adding a publication to a %s record is not supported' % pub_type)
 
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-	PrintPreSearch("Add Publication")
-	PrintNavBar("edit/addpub.cgi", sys.argv[1])
+	PrintPreSearch('Add Publication')
+	PrintNavBar('edit/addpub.cgi', title)
 
         print '<div id="HelpBox">'
         print '<b>Help on adding new publication records: </b>'

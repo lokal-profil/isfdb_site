@@ -22,9 +22,10 @@ from isfdblib_print import printAwardName
 if __name__ == '__main__':
         
         title_id = SESSION.Parameter(0, 'int')
-        title = SQLloadTitle(title_id)
-        if not title:
-                SESSION.DisplayError('Record Does Not Exist')
+        if title_id:
+                title = SQLloadTitle(title_id)
+                if not title:
+                        SESSION.DisplayError('Record Does Not Exist')
 
         PrintPreSearch('Award Type Selector')
         PrintNavBar('edit/select_award_type.cgi', title_id)

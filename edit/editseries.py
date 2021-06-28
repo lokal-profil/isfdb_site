@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from isfdblib_help import *
@@ -21,30 +18,16 @@ from library import *
 from SQLparsing import *
 
 
-def displayError():
-        PrintNavBar("edit/editseries.cgi", 0)
-        print '<h3>Missing or non-existing series</h3>'
-        PrintPostSearch(0, 0, 0, 0, 0)
-        sys.exit(0)
-
-
 if __name__ == '__main__':
 
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-	PrintPreSearch("Series Editor")
 
-        try:
-                series_number = int(sys.argv[1])
-                series = SQLget1Series(series_number)
-        except:
-                displayError()
-
+        series_number = SESSION.Parameter(0, 'int')
+        series = SQLget1Series(series_number)
         if not series:
-                displayError()
+                SESSION.DisplayError('Record Does Not Exist')
         
-	PrintNavBar("edit/editseries.cgi", series_number)
+	PrintPreSearch('Series Editor')
+	PrintNavBar('edit/editseries.cgi', series_number)
 
         help = HelpSeries()
 
@@ -99,5 +82,4 @@ if __name__ == '__main__':
 	print '<p>'
 	print '<hr>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
-	sys.exit(0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2009-2021   Al von Ruff and Ahasuerus
 #	 ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from isfdblib_help import *
@@ -21,35 +18,25 @@ from isfdblib_print import *
 
 if __name__ == '__main__':
 
-	try:
-		title_id = int(sys.argv[1])
-		title_title = SQLgetTitle(title_id)
-		if not title_title:
-                        raise
-	except:
-                PrintPreSearch("Tag Editor")
-                PrintNavBar("edit/edittags.cgi", 0)
-                print "<h3>Missing or invalid title</h3>"
-                PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+        title_id = SESSION.Parameter(0, 'int')
+        title_title = SQLgetTitle(title_id)
+        if not title_title:
+                SESSION.DisplayError('Record Does Not Exist')
 
-	try:
-		showall = int(sys.argv[2])
-	except:
-		showall = 0
+        showall = SESSION.Parameter(1, 'int', 0, (0, 1))
 
-	PrintPreSearch("Tag Editor")
-	PrintNavBar("edit/edittags.cgi", title_id)
+	PrintPreSearch('Tag Editor')
+	PrintNavBar('edit/edittags.cgi', title_id)
 
 	print '<div id="HelpBox">'
-	print "<b>Help on editing tags: </b>"
+	print '<b>Help on editing tags: </b>'
 	print '<a href="http://%s/index.php/Help:Screen:TagEditor">Help:Screen:TagEditor</a><p>' % (WIKILOC)
 	print '</div>'
 
 	(user_id, username, usertoken) = GetUserData()
 
         help = HelpTag()
-	print "<form id='data' METHOD=\"POST\" ACTION=\"/cgi-bin/edit/submittags.cgi\">"
+	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submittags.cgi">'
 
 	print '<table border="0">'
 	print '<tbody id="tagBody">'
@@ -59,20 +46,20 @@ if __name__ == '__main__':
 	
         printmultiple(tags, "Tag", "tag_name", help)
 
-	print "</tbody>"
-	print "</table>"
+	print '</tbody>'
+	print '</table>'
 
-	print "<p>"
-	print "<hr>"
-	print "<p>"
+	print '<p>'
+	print '<hr>'
+	print '<p>'
 	print '<input NAME="title_id" VALUE="%d" TYPE="HIDDEN">' % title_id
 	print '<input NAME="user_id" VALUE="%d" TYPE="HIDDEN">' % int(user_id)
 	print '<input TYPE="SUBMIT" VALUE="Submit Data">'
-	print "</form>"
-	print "<p>"
-	print "<hr>"
+	print '</form>'
+	print '<p>'
+	print '<hr>'
 
-	print "<b>Existing Tags Associated With This Work:</b>"
+	print '<b>Existing Tags Associated With This Work:</b>'
 	tags = SQLgetTitleTags(title_id)
 	if tags == []:
 		print 'None'

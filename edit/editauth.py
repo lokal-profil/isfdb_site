@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2018   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdblib import *
 from isfdb import *
 from SQLparsing import *
@@ -22,26 +19,13 @@ from isfdblib_print import *
 
 if __name__ == '__main__':
 
-	try:
-		authorID = int(sys.argv[1])
-		# If the argument is non-numeric, raise an error
-		if authorID < 1:
-			raise
-                record = SQLloadAuthorData(authorID)
-                # If there is no author record with this ID on file, raise an error
-                if not record:
-                        raise
-	except:
-		PrintPreSearch("Author Editor - Non-Existing Author")
-		PrintNavBar("edit/editauth.cgi", 0)
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+        author_id = SESSION.Parameter(0, 'int')
+        record = SQLloadAuthorData(author_id)
+        if not record:
+                SESSION.DisplayError('Record Does Not Exist')
 	
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-	PrintPreSearch("Author Editor")
-	PrintNavBar("edit/editauth.cgi", str(authorID))
+	PrintPreSearch('Author Editor')
+	PrintNavBar('edit/editauth.cgi', author_id)
         help = HelpAuthor()
 
         printHelpBox('author', 'AuthorData')
@@ -88,7 +72,7 @@ if __name__ == '__main__':
 	print '</table>'
 
 	print '<p>'
-	print '<input NAME="author_id" VALUE="%d" TYPE="HIDDEN">' % authorID
+	print '<input NAME="author_id" VALUE="%d" TYPE="HIDDEN">' % author_id
 	print '<input TYPE="SUBMIT" VALUE="Submit Data" tabindex="1">'
 	print '</form>'
 	print '<p>'

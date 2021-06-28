@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2020   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,13 +10,9 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from SQLparsing import *
 from pubClass import pubs
 from isfdb import *
-from login import User
 from library import *
 from isfdblib import *
 from isfdblib_help import *
@@ -66,22 +62,13 @@ def printpubrecord(pub):
 
 if __name__ == '__main__':
 
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-	PrintPreSearch("Publication Editor")
-	try:
-		pub_id = int(sys.argv[1])
-                pub = pubs(db)
-                pub.load(pub_id)
-                if pub.error:
-                        raise
-	except:
-        	PrintNavBar('edit/editpub.cgi', 0)
-        	print "<h3>Missing or Invalid publication ID</h3>"
-        	PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+        pub_id = SESSION.Parameter(0, 'int')
+        pub = pubs(db)
+        pub.load(pub_id)
+        if pub.error:
+                SESSION.DisplayError('Record Does Not Exist')
 
+	PrintPreSearch('Publication Editor')
 	PrintNavBar('edit/editpub.cgi', pub_id)
 
         titles = getSortedTitlesInPub(pub_id)
@@ -106,7 +93,7 @@ if __name__ == '__main__':
         print '<hr class="topspace">'
         # Retrieve the Help text for covers
         help = HelpCoverArt()
-        print "<h2>Cover Art</h2>"
+        print '<h2>Cover Art</h2>'
         print '<table class="coveredit">'
         print '<tbody id="coverBody">'
 
@@ -131,8 +118,8 @@ if __name__ == '__main__':
                                 printfullcoverart(cover, index, help, 0)
                         index += 1
                 printNewFullCoverButton()
-        print "</tbody>"
-        print "</table>"
+        print '</tbody>'
+        print '</table>'
 
         # Retrieve the Help text for publication content
         help = HelpTitleContent()
@@ -189,8 +176,8 @@ if __name__ == '__main__':
                 printblanktitlerecord(index, help, pub.pub_ctype)
                 index += 1
         printNewTitleButton()
-        print "</tbody>"
-        print "</table>"
+        print '</tbody>'
+        print '</table>'
 
         print '<hr class="topspace">'
         # Retrieve the Help text for reviews
@@ -212,8 +199,8 @@ if __name__ == '__main__':
                 printblankreviewrecord(index, help)
                 index += 1
         printNewReviewButton()
-        print "</tbody>"
-        print "</table>"
+        print '</tbody>'
+        print '</table>'
 
         print '<hr class="topspace">'
         # Retrieve the Help text for interviews
@@ -235,8 +222,8 @@ if __name__ == '__main__':
                 printblankinterviewrecord(index, help)
                 index += 1
         printNewInterviewButton()
-        print "</tbody>"
-        print "</table>"
+        print '</tbody>'
+        print '</table>'
 
         print '<hr class="topspace">'
 	print '<p>'

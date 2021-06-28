@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2004-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdblib import *
 from isfdblib_help import *
 from isfdblib_print import *
@@ -23,23 +20,13 @@ from login import User
 
 if __name__ == '__main__':
 
-	try:
-		publisherID = int(sys.argv[1])
-		record = SQLGetPublisher(publisherID)
-		if not record:
-			raise
-	except:
-		PrintPreSearch("Publisher Editor")
-		PrintNavBar("edit/editpublisher.cgi", 0)
-		print "<h3>Missing or invalid publisher ID</h3>"
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
+        publisherID = SESSION.Parameter(0, 'int')
+        record = SQLGetPublisher(publisherID)
+        if not record:
+                SESSION.DisplayError('Record Does Not Exist')
 		
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-	PrintPreSearch("Publisher Editor")
-	PrintNavBar("edit/editpublisher.cgi", sys.argv[1])
+	PrintPreSearch('Publisher Editor')
+	PrintNavBar('edit/editpublisher.cgi', publisherID)
 
         help = HelpPublisher()
 

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2010-2018   Ahasuerus
+#     (C) COPYRIGHT 2010-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdblib import *
 from isfdblib_help import *
 from isfdblib_print import *
@@ -22,23 +19,13 @@ from SQLparsing import *
 
 if __name__ == '__main__':
 
-	try:
-		pub_series_id = int(sys.argv[1])
-                record = SQLGetPubSeries(pub_series_id)
-		if not record:
-			raise
-	except:
-		PrintPreSearch("Publication Series Editor")
-		PrintNavBar("edit/editpubseries.cgi", 0)
-		print "<h3>Missing or invalid publication series ID</h3>"
-		PrintPostSearch(0, 0, 0, 0, 0)
-		sys.exit(0)
-		
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-	PrintPreSearch("Publication Series Editor")
-	PrintNavBar("edit/editpubseries.cgi", sys.argv[1])
+        pub_series_id = SESSION.Parameter(0, 'int')
+        record = SQLGetPubSeries(pub_series_id)
+        if not record:
+                SESSION.DisplayError('Record Does Not Exist')
+
+	PrintPreSearch('Publication Series Editor')
+	PrintNavBar('edit/editpubseries.cgi', pub_series_id)
 
         help = HelpPubSeries()
 
@@ -68,5 +55,5 @@ if __name__ == '__main__':
 	print '</form>'
 	print '<p>'
 
-	PrintPostSearch(0, 0, 0, 0, 0)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)
 

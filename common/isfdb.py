@@ -177,11 +177,11 @@ class Session:
         PrintPreSearch('Page Does Not Exist')
         PrintNavBar('%s/%s' % (self.cgi_dir, self.cgi_script), 0)
         print """<h3>%s</h3>""" % message
-        PrintPostSearch(0, 0, 0)
+        PrintPostSearch(0, 0, 0, 0, 0, 0)
 
-SCHEMA_VER = "0.02"
-ENGINE     = "<b>ISFDB Engine</b> - Version 4.00 (2006-04-24)"
-COPYRIGHT  = "Copyright &copy; 1995-2021 Al von Ruff and the ISFDB team"
+SCHEMA_VER = '0.02'
+ENGINE     = '<b>ISFDB Engine</b> - Version 4.00 (2006-04-24)'
+COPYRIGHT  = 'Copyright &copy; 1995-2021 Al von Ruff and the ISFDB team'
 # NONCE should be uncommented if and when we need it to create CSP nonces
 # import uuid
 # NONCE = uuid.uuid4().hex

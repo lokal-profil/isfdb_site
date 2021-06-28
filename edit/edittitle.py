@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2020   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Bill Longley, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from isfdblib_help import *
@@ -104,31 +101,17 @@ def printinterviewrecord(record, series_number, help):
         printReadOnlyTitleType('INTERVIEW')
 
 
-def displayError():
-        PrintPreSearch("Title Editor")
-        PrintNavBar("edit/edittitle.cgi", 0)
-        print '<h3>Missing or non-existing title</h3>'
-        PrintPostSearch(0, 0, 0, 0, 0)
-        sys.exit(0)
-
-
 if __name__ == '__main__':
 
-	try:
-                title_id = int(sys.argv[1])
-                title_data = SQLloadTitle(title_id)
-                if not title_data:
-                        raise
-        except:
-                displayError()
+        title_id = SESSION.Parameter(0, 'int')
+        title_data = SQLloadTitle(title_id)
+        if not title_data:
+                SESSION.DisplayError('Record Does Not Exist')
 
         help = HelpTitle(title_data[TITLE_TTYPE])
 
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
-	PrintPreSearch("Title Editor")
-	PrintNavBar("edit/edittitle.cgi", title_id)
+	PrintPreSearch('Title Editor')
+	PrintNavBar('edit/edittitle.cgi', title_id)
 
         printHelpBox('title', 'EditTitle')
 
