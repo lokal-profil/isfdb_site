@@ -22,7 +22,6 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/award_link_display.cgi \
 	  DIR/award_type_delete_display.cgi \
 	  DIR/award_type_delete_file.cgi \
-	  DIR/award_type_new_display.cgi \
 	  DIR/award_type_new_file.cgi \
 	  DIR/award_type_update_display.cgi \
 	  DIR/award_type_update_file.cgi \
@@ -62,6 +61,7 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/select_secondary_verification.cgi \
 	  DIR/self_approvers.cgi \
 	  DIR/self_approver_file.cgi \
+	  DIR/submission_review.cgi \
 	  DIR/submitcpanel.cgi \
 	  DIR/submitref.cgi \
 	  DIR/sv_delete.cgi \

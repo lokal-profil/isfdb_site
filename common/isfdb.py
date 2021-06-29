@@ -159,6 +159,8 @@ class Session:
             self._DisplayBiblioError(message)
         elif self.cgi_dir == 'edit':
             self._DisplayEditError(message)
+        elif self.cgi_dir == 'mod':
+            self._DisplayModError(message)
         sys.exit(0)
 
     def _DisplayBiblioError(self, message):
@@ -178,6 +180,13 @@ class Session:
         PrintNavBar('%s/%s' % (self.cgi_dir, self.cgi_script), 0)
         print """<h3>%s</h3>""" % message
         PrintPostSearch(0, 0, 0, 0, 0, 0)
+
+    def _DisplayModError(self, message):
+        from isfdblib import PrintPreMod, PrintNavBar, PrintPostMod
+        PrintPreMod('Page Does Not Exist')
+        PrintNavBar()
+        print """<h3>%s</h3>""" % message
+        PrintPostMod(0)
 
 SCHEMA_VER = '0.02'
 ENGINE     = '<b>ISFDB Engine</b> - Version 4.00 (2006-04-24)'
@@ -467,7 +476,7 @@ MOD_AWARD_CAT_UPDATE = 35
 # [0] - Name of the moderator review script
 # [1] - Short name of the submission type and the first XML tag in the submission; displayed on submission list pages
 # [2] - Name of the script used to link to the record from the list of recent entries
-# [3] - Full name of the submission type, used in stats-and-tops.py
+# [3] - Full name of the submission type
 # [4] - Name of the XML element containing the record number in the submission -- used to link from the list of recent entries
 # [5] - Name of the "viewers" function used to display the body of this submission type
 # [6] - Name of the filing script
@@ -501,7 +510,7 @@ SUBMAP = {
   MOD_PUB_SERIES_UPDATE: ('zv_update', 'PubSeriesUpdate', 'pubseries.cgi', 'Publication Series Update', 'Record', 'DisplayPubSeriesChanges', 'za_update'),
   MOD_AWARD_TYPE_UPDATE: ('award_type_update_display', 'AwardTypeUpdate', 'awardtype.cgi', 'Award Type Update', 'Record', 'DisplayAwardTypeChanges', 'award_type_update_file'),
   MOD_AWARD_LINK:        ('award_link_display', 'LinkAward', 'award_details.cgi', 'Link Award', 'Award', 'DisplayAwardLink', 'award_link_file'),
-  MOD_AWARD_TYPE_NEW:    ('award_type_new_display', 'NewAwardType', 'awardtype.cgi', 'Add New Award Type', 'Record', 'DisplayNewAwardType', 'award_type_new_file'),
+  MOD_AWARD_TYPE_NEW:    ('submission_review', 'NewAwardType', 'awardtype.cgi', 'Add New Award Type', 'Record', 'DisplayNewAwardType', 'award_type_new_file'),
   MOD_AWARD_TYPE_DELETE: ('award_type_delete_display', 'AwardTypeDelete', None, 'Delete Award Type', 'AwardTypeId', 'DisplayAwardTypeDelete', 'award_type_delete_file'),
   MOD_AWARD_CAT_NEW:     ('award_cat_new_display', 'NewAwardCat', 'award_category.cgi', 'Add New Award Category', 'Record', 'DisplayNewAwardCat', 'award_cat_new_file'),
   MOD_AWARD_CAT_DELETE:  ('award_cat_delete_display', 'AwardCategoryDelete', None, 'Delete Award Category', 'Record', 'DisplayAwardCatDelete', 'award_cat_delete_file'),
