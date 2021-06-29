@@ -23,44 +23,18 @@ from isfdblib_print import *
 
 if __name__ == '__main__':
 
-        # If this script was accessed via the Award Type Selector, there are no CGI parameters;
-        # the title ID and the Award Type ID are in the posted form values instead
-        if not SESSION.parameters:
-		sys.stderr = sys.stdout
-		form = cgi.FieldStorage()
-		try:
-			title_id = int(form['title_id'].value)
-                        # If the passed in title ID is not 0, i.e. this is a title-based award, so load the associated title data
-                        if title_id:
-                                title = SQLloadTitle(title_id)
-                                if not title:
-                                        raise
-		except:
-                        SESSION.DisplayError('Missing or invalid Title ID') 
+        title_id = SESSION.Parameter(0, 'int')
+        # If the passed in ID is not 0, i.e. this is a title-based award, load the associated title data
+        if title_id:
+                title = SQLloadTitle(title_id)
+                if not title:
+                        SESSION.DisplayError('Title ID Does Not Exist')
 
-		try:
-			award_type_id = int(form['award_type_id'].value)
-                        awardType = award_type()
-                        awardType.award_type_id = award_type_id
-                        awardType.load()
-                        if not awardType.award_type_name:
-                                raise
-                except:
-                        SESSION.DisplayError('Missing or invalid Award Type ID')
-
-        else:
-                title_id = SESSION.Parameter(0, 'int')
-                # If the passed in ID is not 0, i.e. this is a title-based award, load the associated title data
-                if title_id:
-                        title = SQLloadTitle(title_id)
-                        if not title:
-                                SESSION.DisplayError('Missing or invalid Title ID')
-
-                awardType = award_type()
-                awardType.award_type_id = SESSION.Parameter(1, 'int')
-                awardType.load()
-                if not awardType.award_type_name:
-                        SESSION.DisplayError('Missing or invalid Award Type ID')
+        awardType = award_type()
+        awardType.award_type_id = SESSION.Parameter(1, 'int')
+        awardType.load()
+        if not awardType.award_type_name:
+                SESSION.DisplayError('Award Type ID Does Not Exist')
 
         if title_id:
                 PrintPreSearch('Award Editor for a Title')

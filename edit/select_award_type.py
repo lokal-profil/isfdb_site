@@ -10,7 +10,6 @@
 #     Date: $Date$
 
 
-from awardtypeClass import *
 from isfdb import *
 from isfdblib import *
 from isfdblib_help import *
@@ -34,10 +33,10 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
         print '<b>Help on adding an award: </b>'
-        print '<a href="http://%s/index.php/Help:Screen:AddAward">Help:Screen:AddAward</a><p>' % (WIKILOC)
+        print '<a href="http://%s/index.php/Help:Screen:AddAward">Help:Screen:AddAward</a><p>' % WIKILOC
 	print '</div>'
 
-	print '<form method="POST" action="/cgi-bin/edit/addaward.cgi">'
+	print '<form method="POST" action="/cgi-bin/edit/submit_select_award_type.cgi">'
         print '<table border="0">'
         print '<tbody id="titleBody">'
 
@@ -47,8 +46,8 @@ if __name__ == '__main__':
 	print '</table>'
 	print '<p>'
 
-	print '<input name="title_id" value="%d" type="HIDDEN">' % (title_id)
+	print '<input name="title_id" value="%d" type="HIDDEN">' % title_id
 	print '<input type="SUBMIT" value="Proceed to the Next Page" tabindex="1">'
 	print '</form>'
 
-	PrintPostSearch(0, 0, 0, 0, 0, False)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)

@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2020   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -84,6 +84,7 @@ TARGETS = DIR/addaward.cgi \
 	  DIR/submitpubseries.cgi \
 	  DIR/submitrempseudo.cgi \
 	  DIR/submitrm.cgi \
+	  DIR/submit_select_award_type.cgi \
 	  DIR/submitseries.cgi \
 	  DIR/submittags.cgi \
 	  DIR/submittitle.cgi \
