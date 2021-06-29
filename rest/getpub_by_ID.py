@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2018   Ahasuerus
+#     (C) COPYRIGHT 2018-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -9,10 +9,7 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-import sys
-import string
 from isfdb import *
-from isbn import *
 from SQLparsing import *
 from pub_output import pubOutput
 
@@ -21,10 +18,9 @@ if __name__ == '__main__':
 
 	print 'Content-type: text/html\n'
 
-	try:
-                ext_id_name = sys.argv[1]
-                ext_id_value = sys.argv[2]
-	except:
+        ext_id_name = SESSION.Parameter(0, 'str')
+        ext_id_value = SESSION.Parameter(1, 'str')
+	if not ext_id_name or not ext_id_value:
 		print """getpub_by_ID.cgi: Bad query.
                         The first parameter should be the External ID type name
                         (see Advanced Publication Search by External Identifier for a list.)
