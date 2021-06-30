@@ -507,14 +507,14 @@ SUBMAP = {
   MOD_REVIEW_LINK :	 ('rv_link',   'LinkReview', 'title.cgi', 'Link Review', 'Record', 'DisplayLinkReview', 'ra_link'),
   MOD_DELETE_SERIES :	 ('sv_delete', 'SeriesDelete', None, 'Delete Series', 'Record', 'DisplaySeriesDelete', 'sa_delete'),
   MOD_REMOVE_PSEUDO :    ('yv_remove', 'RemovePseud', 'ea.cgi', 'Remove Alternate Name', 'Record', 'DisplayRemovePseudonym', 'ya_remove'),
-  MOD_PUB_SERIES_UPDATE: ('zv_update', 'PubSeriesUpdate', 'pubseries.cgi', 'Publication Series Update', 'Record', 'DisplayPubSeriesChanges', 'za_update'),
-  MOD_AWARD_TYPE_UPDATE: ('award_type_update_display', 'AwardTypeUpdate', 'awardtype.cgi', 'Award Type Update', 'Record', 'DisplayAwardTypeChanges', 'award_type_update_file'),
-  MOD_AWARD_LINK:        ('award_link_display', 'LinkAward', 'award_details.cgi', 'Link Award', 'Award', 'DisplayAwardLink', 'award_link_file'),
+  MOD_PUB_SERIES_UPDATE: ('submission_review', 'PubSeriesUpdate', 'pubseries.cgi', 'Publication Series Update', 'Record', 'DisplayPubSeriesChanges', 'za_update'),
+  MOD_AWARD_TYPE_UPDATE: ('submission_review', 'AwardTypeUpdate', 'awardtype.cgi', 'Award Type Update', 'Record', 'DisplayAwardTypeChanges', 'award_type_update_file'),
+  MOD_AWARD_LINK:        ('submission_review', 'LinkAward', 'award_details.cgi', 'Link Award', 'Award', 'DisplayAwardLink', 'award_link_file'),
   MOD_AWARD_TYPE_NEW:    ('submission_review', 'NewAwardType', 'awardtype.cgi', 'Add New Award Type', 'Record', 'DisplayNewAwardType', 'award_type_new_file'),
-  MOD_AWARD_TYPE_DELETE: ('award_type_delete_display', 'AwardTypeDelete', None, 'Delete Award Type', 'AwardTypeId', 'DisplayAwardTypeDelete', 'award_type_delete_file'),
-  MOD_AWARD_CAT_NEW:     ('award_cat_new_display', 'NewAwardCat', 'award_category.cgi', 'Add New Award Category', 'Record', 'DisplayNewAwardCat', 'award_cat_new_file'),
-  MOD_AWARD_CAT_DELETE:  ('award_cat_delete_display', 'AwardCategoryDelete', None, 'Delete Award Category', 'Record', 'DisplayAwardCatDelete', 'award_cat_delete_file'),
-  MOD_AWARD_CAT_UPDATE:  ('award_cat_update_display', 'AwardCategoryUpdate', 'award_category.cgi', 'Award Category Update', 'AwardCategoryId', 'DisplayAwardCatChanges', 'award_cat_update_file')
+  MOD_AWARD_TYPE_DELETE: ('submission_review', 'AwardTypeDelete', None, 'Delete Award Type', 'AwardTypeId', 'DisplayAwardTypeDelete', 'award_type_delete_file'),
+  MOD_AWARD_CAT_NEW:     ('submission_review', 'NewAwardCat', 'award_category.cgi', 'Add New Award Category', 'Record', 'DisplayNewAwardCat', 'award_cat_new_file'),
+  MOD_AWARD_CAT_DELETE:  ('submission_review', 'AwardCategoryDelete', None, 'Delete Award Category', 'Record', 'DisplayAwardCatDelete', 'award_cat_delete_file'),
+  MOD_AWARD_CAT_UPDATE:  ('submission_review', 'AwardCategoryUpdate', 'award_category.cgi', 'Award Category Update', 'AwardCategoryId', 'DisplayAwardCatChanges', 'award_cat_update_file')
 }
 
 # This list of supported languages MUST be kept in sync with the "languages" table in MySQL

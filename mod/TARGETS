@@ -12,18 +12,12 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/aa_update.cgi \
 	  DIR/av_merge.cgi \
 	  DIR/av_update.cgi \
-	  DIR/award_cat_delete_display.cgi \
 	  DIR/award_cat_delete_file.cgi \
-	  DIR/award_cat_new_display.cgi \
 	  DIR/award_cat_new_file.cgi \
-	  DIR/award_cat_update_display.cgi \
 	  DIR/award_cat_update_file.cgi \
 	  DIR/award_link_file.cgi \
-	  DIR/award_link_display.cgi \
-	  DIR/award_type_delete_display.cgi \
 	  DIR/award_type_delete_file.cgi \
 	  DIR/award_type_new_file.cgi \
-	  DIR/award_type_update_display.cgi \
 	  DIR/award_type_update_file.cgi \
 	  DIR/bad_images.cgi \
 	  DIR/bureaucrat.cgi \
@@ -95,6 +89,5 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/wv_delete.cgi \
 	  DIR/wv_new.cgi \
 	  DIR/wv_update.cgi \
-	  DIR/zv_update.cgi \
 	  DIR/za_update.cgi
 	 
