@@ -37,4 +37,6 @@ if __name__ == '__main__':
 	print '<b>Submitted by:</b> %s' % WikiLink(submitter)
 
 	ApproveOrReject('%s.cgi' % submission_filer, submission_id)
+	if submission_filer in ('ca_new', 'pa_new'):
+                display_sources(submission_id)
 	PrintPostMod(0)
