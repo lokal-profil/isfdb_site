@@ -345,7 +345,7 @@ def SQLloadAllAuthorTitles(aurec, page_type, languages_all, languages):
                                 records.append(list(record[0]))
                         record = result.fetch_row()
                 # Re-sort the list by title
-                records.sort(key=lambda tup:tup[1])
+                records.sort(key=lambda tup: (tup[TITLE_TITLE].lower(), tup[TITLE_YEAR]))
 	return records
 
 
