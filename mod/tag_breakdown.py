@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2020   Ahasuerus
+#     (C) COPYRIGHT 2020-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,20 +10,10 @@
 #     Date: $Date: 2017-10-31 18:57:31 -0400 (Tue, 31 Oct 2017) $
 
 
-import sys
-import os
-import string
 from SQLparsing import *
 from isfdblib import *
 from library import *
 from login import *
-
-def DoError(message):
-        print '<div id="ErrorBox">'
-        print '<h3>%s</h3>' % message
-        print '</div>'
-        PrintPostMod(0)
-        sys.exit(0)
 
 def PrintTable(tags, user):
         print '<table>'
@@ -55,17 +45,13 @@ def PrintTable(tags, user):
 
 if __name__ == '__main__':
 
-        PrintPreMod('Tag Breakdown by User')
-        PrintNavBar()
-
-        try:
-                title_id = int(sys.argv[1])
-        except:
-                DoError('Invalid Title Specified')
-
+        title_id = SESSION.Parameter(0, 'int')
         title = SQLloadTitle(title_id)
         if not title:
-                DoError('Invalid Title Specified')
+                SESSION.DisplayError('Invalid Title Specified')
+
+        PrintPreMod('Tag Breakdown by User')
+        PrintNavBar()
 
         user = User()
         user.load()

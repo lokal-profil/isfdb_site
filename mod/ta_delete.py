@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from common import *
@@ -23,24 +20,17 @@ from library import *
 
 if __name__ == '__main__':
 
+        submission = SESSION.Parameter(0, 'int')
+
         PrintPreMod('Title Delete - SQL Statements')
         PrintNavBar()
-
-	try:
-		submission = sys.argv[1]
-	except:
-		print '<div id="ErrorBox">'
-		print '<h3>Error: Bad argument</h3>'
-		print '</div>'
-		PrintPostMod()
-		sys.exit(0)
 
         if NotApprovable(submission):
                 sys.exit(0)
 
-	print "<h1>SQL Updates:</h1>"
-	print "<hr>"
-	print "<ul>"
+	print '<h1>SQL Updates:</h1>'
+	print '<hr>'
+	print '<ul>'
 
 	xml = SQLloadXML(submission)
 	doc = minidom.parseString(XMLunescape2(xml))
@@ -58,6 +48,6 @@ if __name__ == '__main__':
                         submitter = GetElementValue(merge, 'Submitter')
                         markIntegrated(db, submission, Record)
 
-	print "<p>"
+	print '<p>'
 
 	PrintPostMod(0)
