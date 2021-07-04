@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from common import *
@@ -46,17 +43,10 @@ def UpdateColumn(doc, tag, column, id):
 
 if __name__ == '__main__':
 
+        submission = SESSION.Parameter(0, 'int')
+
 	PrintPreMod('Publication Series Update - SQL Statements')
         PrintNavBar()
-
-	try:
-		submission = sys.argv[1]
-	except:
-		print '<div id="ErrorBox">'
-		print '<h3>Error: Bad argument</h3>'
-		print '</div>'
-		PrintPostMod()
-		sys.exit(0)
 
         if NotApprovable(submission):
                 sys.exit(0)

@@ -2555,12 +2555,14 @@ def LoadWebSites(isbn, user_id = None, format = None):
 	return results 
 
 def SQLGetSubmissionHoldId(submission):
-	query = "select sub_holdid from submissions where sub_id='%d';" % (int(submission))
+	query = "select sub_holdid from submissions where sub_id=%d" % int(submission)
 	db.query(query)
 	result = db.store_result()
         record = result.fetch_row()
-        hold_id = record[0][0]
-        return hold_id
+        if record:
+                return record[0][0]
+        else:
+                return ''
 
 def SQLGetSubmitterId(submission):
 	query = "select sub_submitter from submissions where sub_id='%d';" % (int(submission))

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2020   Ahasuerus
+#     (C) COPYRIGHT 2009-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -9,9 +9,6 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from library import *
@@ -19,28 +16,24 @@ from common import *
 
 if __name__ == '__main__':
 
+        submission = SESSION.Parameter(0, 'int')
+
         PrintPreMod('Remove Submission Hold')
         PrintNavBar()
 
-	try:
-		submission = sys.argv[1]
-	except:
-		sys.exit(0)
-
 	(reviewerid, username, usertoken) = GetUserData()
-
-	hold_id = SQLGetSubmissionHoldId(submission)
 
         #Check that the submission is new
 	if SQLloadState(submission) != 'N':
 		print '<div id="ErrorBox">'
-		print "<h3>Submission %d not in NEW state</h3>" % (int(submission))
+		print '<h3>Submission %d not in NEW state</h3>' % (int(submission))
 		print '</div>'
 
         else:
+                hold_id = SQLGetSubmissionHoldId(submission)
                 if not hold_id:
-                        print "<h3>Submission is not on hold.</h3>"
-                # Only holding moderators and bureaucrats can un hold submissions
+                        print '<h3>Submission is not on hold.</h3>'
+                # Only holding moderators and bureaucrats can unhold submissions
                 elif (int(hold_id) != int(reviewerid)) and not SQLisUserBureaucrat(reviewerid):
                         holding_user = SQLgetUserName(hold_id)
                         print '<h3>Submission is currently on hold by '
@@ -49,8 +42,7 @@ if __name__ == '__main__':
                 else:
                         update = "update submissions set sub_holdid=0 where sub_id=%d" % int(submission)
                         db.query(update)
-                        print "<h3>Submission %d is no longer on hold.</h3>" % int(submission)
+                        print '<h3>Submission %d is no longer on hold.</h3>' % int(submission)
 
         print ISFDBLink('mod/list.cgi', 'N', 'Submission List', 1)
-
 	PrintPostMod(0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,10 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
-import traceback
 from isfdb import *
 from isfdblib import *
 from common import *
@@ -41,17 +37,10 @@ def UpdateColumn(doc, tag, column, id):
 
 if __name__ == '__main__':
 
+        submission = SESSION.Parameter(0, 'int')
+
 	PrintPreMod('Award Update - SQL Statements')
 	PrintNavBar()
-
-	try:
-		submission = sys.argv[1]
-	except:
-		print '<div id="ErrorBox">'
-		print '<h3>Error: Bad argument</h3>'
-		print '</div>'
-		PrintPostMod()
-		sys.exit(0)
 
         if NotApprovable(submission):
                 sys.exit(0)
