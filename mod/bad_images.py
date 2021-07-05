@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2019   Ahasuerus 
+#     (C) COPYRIGHT 2014-2021   Ahasuerus 
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -9,9 +9,6 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
 from isfdblib import *
@@ -38,9 +35,6 @@ def PrintPubRecord(count, pub_id, url, pub_title, bgcolor):
 	print '</tr>'
 
 if __name__ == '__main__':
-	##################################################################
-	# Output the leading HTML stuff
-	##################################################################
 
 	PrintPreMod('Publications with Suspect Images')
         PrintNavBar()

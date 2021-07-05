@@ -70,13 +70,10 @@ def DoSubmission(db, submission):
 
 if __name__ == '__main__':
 
+        submission = SESSION.Parameter(0, 'int')
+
         PrintPreMod('Link Award - SQL Statements')
         PrintNavBar()
-
-	try:
-		submission = int(sys.argv[1])
-	except:
-                DoError('Error: Bad argument')
 
         if NotApprovable(submission):
                 sys.exit(0)

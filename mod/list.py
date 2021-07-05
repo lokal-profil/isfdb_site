@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus and Dirk Stoeker
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Dirk Stoeker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from login import *
@@ -98,13 +95,7 @@ def PrintRecord(record, eccolor, approving_moderator):
 
 if __name__ == '__main__':
 
-	try:
-		arg = sys.argv[1]
-	except:
-		PrintPreMod("Bad Argument")
-		PrintNavBar()
-		PrintPostMod()
-		sys.exit(0)
+        arg = SESSION.Parameter(0, 'str', None, ('N', 'I', 'R'))
 
 	if arg == 'N':
 		title = 'New Submissions'
@@ -112,11 +103,6 @@ if __name__ == '__main__':
 		title = 'Approved Submissions'
 	elif arg == 'R':
 		title = 'Rejected Submissions'
-	else:
-		PrintPreMod("Bad Argument")
-		PrintNavBar()
-		PrintPostMod()
-		sys.exit(0)
 
 	PrintPreMod(title)
 	PrintNavBar()

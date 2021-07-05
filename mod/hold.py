@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2019   Al von Ruff
+#     (C) COPYRIGHT 2006-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -19,13 +19,10 @@ from common import *
 
 if __name__ == '__main__':
 
+        submission = SESSION.Parameter(0, 'int')
+
         PrintPreMod('Place Submission on Hold')
         PrintNavBar()
-
-	try:
-		submission = sys.argv[1]
-	except:
-		sys.exit(0)
 
 	(reviewerid, username, usertoken) = GetUserData()
 

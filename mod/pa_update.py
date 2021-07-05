@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from common import *
@@ -296,17 +293,10 @@ def mergeInterview(record, title, interviewees, interviewers, date, page, doInte
 
 if __name__ == '__main__':
 
+        submission = SESSION.Parameter(0, 'int')
+
         PrintPreMod('Publication Update - SQL Statements')
         PrintNavBar()
-
-	try:
-		submission = sys.argv[1]
-	except:
-		print '<div id="ErrorBox">'
-		print '<h3>Error: Bad argument</h3>'
-		print '</div>'
-		PrintPostMod()
-		sys.exit(0)
 
         if NotApprovable(submission):
                 sys.exit(0)

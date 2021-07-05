@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from common import *
@@ -25,12 +22,8 @@ from xml.dom import Node
 
 if __name__ == '__main__':
 
-	try:
-		start = int(sys.argv[1])
-		status = sys.argv[2]
-	except:
-		start = 0
-		status = 'I'
+        start = SESSION.Parameter(0, 'int', 0)
+        status = SESSION.Parameter(1, 'str', 'I', ('I', 'R', 'N', 'P'))
 
 	if status == 'I':
         	PrintPreMod('Recent Approvals')
@@ -51,12 +44,6 @@ if __name__ == '__main__':
                         "In Progress" and is displayed on this page. If a new submission
                         appears on this list, check again in a few seconds to make sure that you
                         didn't catch it while it was in the process of being approved.</h3>"""
-        else:
-                PrintPreMod('Invalid Submissions Status Specified')
-                PrintNavBar()
-		print '<h3>Bad argument</h3>'
-		PrintPostMod()
-		sys.exit(0)
 
 	if start:
 		query = "select * from submissions use index (state_reviewed) where sub_state='%s' order by sub_reviewed desc limit %d,200;" % (status, start)

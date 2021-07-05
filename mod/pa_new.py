@@ -1,7 +1,6 @@
 #!_PYTHONLOC
-
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -11,10 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
-import string
 import random
 from isfdb import *
 from isfdblib import *
@@ -671,17 +666,10 @@ def DoSubmission(db, submission):
 
 if __name__ == '__main__':
 
+        submission = SESSION.Parameter(0, 'int')
+
         PrintPreMod('New Publication - SQL Statements')
         PrintNavBar()
-
-	try:
-		submission = int(sys.argv[1])
-	except:
-		print '<div id="ErrorBox">'
-		print '<h3>Error: Bad argument</h3>'
-		print '</div>'
-		PrintPostMod()
-		sys.exit(0)
 
         if NotApprovable(submission):
                 sys.exit(0)
