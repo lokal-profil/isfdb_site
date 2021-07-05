@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from common import *
@@ -22,17 +19,10 @@ from library import *
 
 if __name__ == '__main__':
 
+        submission = SESSION.Parameter(0, 'int')
+
         PrintPreMod('Series Delete - SQL Statements')
         PrintNavBar()
-
-	try:
-		submission = sys.argv[1]
-	except:
-		print '<div id="ErrorBox">'
-		print '<h3>Error: Bad argument</h3>'
-		print '</div>'
-		PrintPostMod()
-		sys.exit(0)
 
         if NotApprovable(submission):
                 sys.exit(0)
@@ -48,7 +38,7 @@ if __name__ == '__main__':
                 if seriesRecord == 0:
                         print '<div id="ErrorBox">'
                         print "<h3>Error: This series no longer exists.</h3>"
-                        print '<h3>Please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject it.</h3>' % (HTFAKE, sys.argv[1])
+                        print '<h3>Please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject it.</h3>' % (HTFAKE, submission)
                         print '</div>'
                         PrintPostMod()
                         sys.exit(0)
@@ -59,7 +49,7 @@ if __name__ == '__main__':
                         print '<div id="ErrorBox">'
                         print "<h2>Error: At least one sub-series has been added to this Series since the time this submission was created.</h2>"
                         print "<h2>This series can't be deleted until all sub-series are removed.</h2>"
-                        print '<h3>If you do not want to remove the sub-series, please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject the submission.</h3>' % (HTFAKE, sys.argv[1])
+                        print '<h3>If you do not want to remove the sub-series, please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject the submission.</h3>' % (HTFAKE, submission)
                         print '</div>'
                         PrintPostMod()
                         sys.exit(0)
@@ -70,7 +60,7 @@ if __name__ == '__main__':
                         print '<div id="ErrorBox">'
                         print "<h2>Error: At least one title has been added to this series since the time this submission was created.</h2>"
                         print "<h2>This series can't be deleted until all titles are removed.</h2>"
-                        print '<h3>If you do not want to remove the titles, please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject the submission.</h3>' % (HTFAKE, sys.argv[1])
+                        print '<h3>If you do not want to remove the titles, please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject the submission.</h3>' % (HTFAKE, submission)
                         print '</div>'
                         PrintPostMod()
                         sys.exit(0)
@@ -98,6 +88,6 @@ if __name__ == '__main__':
 		submitter = GetElementValue(merge, 'Submitter')
 		markIntegrated(db, submission, Record)
 
-	print "<p>"
+	print '<p>'
 
 	PrintPostMod(0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2020   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from common import *
@@ -47,24 +44,22 @@ def UpdateColumn(doc, tag, column, id):
 
 if __name__ == '__main__':
 
+        submission = SESSION.Parameter(0, 'int')
+
 	PrintPreMod('Award Category Update - SQL Statements')
         PrintNavBar()
 
-	try:
-		submission = sys.argv[1]
-        	xml = SQLloadXML(submission)
-                doc = minidom.parseString(XMLunescape2(xml))
-                if not doc.getElementsByTagName('AwardCategoryUpdate'):
-                        raise
-	except:
+        if NotApprovable(submission):
+                sys.exit(0)
+
+        xml = SQLloadXML(submission)
+        doc = minidom.parseString(XMLunescape2(xml))
+        if not doc.getElementsByTagName('AwardCategoryUpdate'):
 		print '<div id="ErrorBox">'
 		print '<h3>Error: Bad argument</h3>'
 		print '</div>'
 		PrintPostMod()
 		sys.exit(0)
-
-        if NotApprovable(submission):
-                sys.exit(0)
 
 	print "<h1>SQL Updates:</h1>"
 	print "<hr>"

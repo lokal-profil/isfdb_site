@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,10 +10,6 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import cgi
-import MySQLdb
 from isfdb import *
 from common import *
 from isfdblib import *
@@ -23,15 +19,10 @@ from SQLparsing import *
 
 if __name__ == '__main__':
 
+        sub_id = SESSION.Parameter(0, 'int')
+
         PrintPreMod('Reject Submission')
         PrintNavBar()
-
-        try:
-                sub_id = int(sys.argv[1])
-        except:
-		print '<h3>Invalid or unspecified submission ID.</h3>'
-		PrintPostMod()
-		sys.exit(0)
 
         # Retrieve user information for the moderator tring to reject this submission
 	(reviewerid, username, usertoken) = GetUserData()
