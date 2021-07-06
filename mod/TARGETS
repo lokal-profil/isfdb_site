@@ -32,7 +32,6 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/pa_new.cgi \
 	  DIR/pa_delete.cgi \
 	  DIR/pa_update.cgi \
-	  DIR/pa_merge.cgi \
 	  DIR/ra_link.cgi \
 	  DIR/recent.cgi \
 	  DIR/reject.cgi \
