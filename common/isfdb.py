@@ -545,7 +545,7 @@ LANGUAGES = ('None','Afrikaans','Albanian','Ancient Greek','Arabic','Armenian',
              'Oriya', 'Pedi/Sepedi/Northern Sotho', 'South Ndebele', 'Southern Sotho',
              'Standard Moroccan Tamazight', 'Wolof', 'North Ndebele', 'Montenegrin',
              'Mirandese', 'Lao', 'South American Indian language', 'Interlingua',
-             'Guarani', 'Maithili', 'Romance language', 'Klingon')
+             'Guarani', 'Maithili', 'Romance language', 'Klingon', 'Nahuatl language')
 
 # List of all supported format codes
 FORMATS = ('unknown','hc','tp','pb','ph','digest','dos','ebook','webzine','pulp',
