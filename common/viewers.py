@@ -2398,6 +2398,7 @@ def DisplayMergeTitles(submission_id):
         if doc.getElementsByTagName('TitleMerge'):
                 KeepId    = 0
                 Records   = {}
+                Parent    = 0
                 print '<table border="2" class="generic_table">'
 		try:
 			Document = doc.getElementsByTagName('TitleMerge')
@@ -2427,24 +2428,24 @@ def DisplayMergeTitles(submission_id):
                                 print '<td class="label"><b><a href="http:/%s/title.cgi?%d">DropId [%d]</a></b></td>' % (HTFAKE, title_id, title_id)
 		print '</tr>'
 
-		PrintMergeField('Title',     Document, KeepId, Records)
-		PrintMergeField('TranslitTitles',  Document, KeepId, Records)
-		PrintMergeField('Author',    Document, KeepId, Records)
-		PrintMergeField('Year',	     Document, KeepId, Records)
-		PrintMergeField('TitleType', Document, KeepId, Records)
-		PrintMergeField('Series',    Document, KeepId, Records)
-		PrintMergeField('Seriesnum', Document, KeepId, Records)
-		PrintMergeField('Storylen',  Document, KeepId, Records)
-		PrintMergeField('ContentIndicator',  Document, KeepId, Records)
-		PrintMergeField('NonGenre',  Document, KeepId, Records)
-		PrintMergeField('Juvenile',  Document, KeepId, Records)
-		PrintMergeField('Novelization',  Document, KeepId, Records)
-		PrintMergeField('Graphic',   Document, KeepId, Records)
-		PrintMergeField('Language',  Document, KeepId, Records)
-		PrintMergeField('Webpages',  Document, KeepId, Records)
-		PrintMergeField('Synopsis',  Document, KeepId, Records)
-		PrintMergeField('Note',      Document, KeepId, Records)
-		PrintMergeField('Parent',    Document, KeepId, Records)
+		PrintMergeField('Title',     Document, KeepId, Records, submission_id)
+		PrintMergeField('TranslitTitles',  Document, KeepId, Records, submission_id)
+		PrintMergeField('Author',    Document, KeepId, Records, submission_id)
+		PrintMergeField('Year',	     Document, KeepId, Records, submission_id)
+		PrintMergeField('TitleType', Document, KeepId, Records, submission_id)
+		PrintMergeField('Series',    Document, KeepId, Records, submission_id)
+		PrintMergeField('Seriesnum', Document, KeepId, Records, submission_id)
+		PrintMergeField('Storylen',  Document, KeepId, Records, submission_id)
+		PrintMergeField('ContentIndicator',  Document, KeepId, Records, submission_id)
+		PrintMergeField('NonGenre',  Document, KeepId, Records, submission_id)
+		PrintMergeField('Juvenile',  Document, KeepId, Records, submission_id)
+		PrintMergeField('Novelization',  Document, KeepId, Records, submission_id)
+		PrintMergeField('Graphic',   Document, KeepId, Records, submission_id)
+		PrintMergeField('Language',  Document, KeepId, Records, submission_id)
+		PrintMergeField('Webpages',  Document, KeepId, Records, submission_id)
+		PrintMergeField('Synopsis',  Document, KeepId, Records, submission_id)
+		PrintMergeField('Note',      Document, KeepId, Records, submission_id)
+		PrintMergeField('Parent',    Document, KeepId, Records, submission_id)
                 print '</table>'
 
                 mod_note = GetElementValue(Document, 'ModNote')
@@ -2453,7 +2454,7 @@ def DisplayMergeTitles(submission_id):
 
         return submitter
 
-def PrintMergeField(Label, XmlData, KeepId, Records):
+def PrintMergeField(Label, XmlData, KeepId, Records, submission_id):
 	print '<tr>'
 	print '<td class="label"><b>%s</b></td>' % Label
 	# Try to retrieve the title ID whose data we will keep for this field
@@ -2565,6 +2566,8 @@ def PrintMergeField(Label, XmlData, KeepId, Records):
 				output = Records[title_id].title_parent
 			if Records[keep_id].used_parent:
 				kept = Records[keep_id].title_parent
+				if kept == KeepId:
+                                        InvalidSubmission(submission_id, 'The proposed parent title is the title record which will be kept after the merge')
 		if Label in ('Webpages', 'TranslitTitles'):
                         css_class = 'keep'
 		elif Label == 'TitleType' and Records[title_id].title_ttype == 'COVERART':
