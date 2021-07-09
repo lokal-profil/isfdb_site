@@ -230,20 +230,20 @@ def DoSubmission(db, submission):
 			if debug == 0:
 				db.query(insert)
 
-		###################################################################
-		# Relink any grandchildren variants from the child to the parent
-		###################################################################
-		query = "select title_id from titles where title_parent=%d" % (int(ChildRecord))
-        	db.query(query)
-        	res2 = db.store_result()
-        	rec2 = res2.fetch_row()
-		while rec2:
-			grandchild_id = int(rec2[0][0])
-			update = "update titles set title_parent=%d where title_id=%d" % (int(ParentRecord), grandchild_id)
-			print "<li> ", update
-			if debug == 0:
-				db.query(update)
-        		rec2 = res2.fetch_row()
+		# If the new parent is a valid title ID and not 0
+		if int(ParentRecord):
+                        # Relink any grandchildren variants from the child to the parent
+                        query = "select title_id from titles where title_parent=%d" % int(ChildRecord)
+                        db.query(query)
+                        res2 = db.store_result()
+                        rec2 = res2.fetch_row()
+                        while rec2:
+                                grandchild_id = int(rec2[0][0])
+                                update = "update titles set title_parent=%d where title_id=%d" % (int(ParentRecord), grandchild_id)
+                                print "<li> ", update
+                                if debug == 0:
+                                        db.query(update)
+                                rec2 = res2.fetch_row()
 
 		submitter = GetElementValue(merge, 'Submitter')
 		if debug == 0:
