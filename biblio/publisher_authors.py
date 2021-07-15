@@ -40,14 +40,14 @@ if __name__ == '__main__':
                 of a book increments its author's count. Different forms of an author's name, e.g.
                 'Mary Shelley' vs. 'Mary W. Shelley', are counted separately."""
 
-	authors = SQLGetAuthorsForPublisher(publisher_id, sort_by)
+	authors = SQLGetAllAuthorsForPublisher(publisher_id, sort_by)
 	table = ISFDBTable()
 	table.headers.extend(['Author/Editor', 'Publication Count'])
 	for author in authors:
                 author_id = author[0]
                 author_name = author[1]
                 author_count = author[2]
-                table.rows.append((ISFDBLink('ea.cgi', author_id, author_name), author_count))
+                table.rows.append((ISFDBLink('ea.cgi', author_id, author_name), ISFDBLink('publisher_one_author.cgi', '%d+%d' % (publisher_id, author_id), author_count)))
         table.PrintTable()
 
 	PrintTrailer('publisher_authors', publisher_id, publisher_id)

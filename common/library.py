@@ -601,6 +601,8 @@ def ISFDBPubFormat(format_code, position = 'right'):
 class ISFDBTable():
         def __init__(self):
                 self.headers = ['#']
+                self.headers_colspan = [1]
+                self.display_count = 1
                 self.rows = []
                 self.table_css = 'generic_table'
                 self.header_css = 'generic_table_header'
@@ -614,8 +616,13 @@ class ISFDBTable():
                 print '</table>'
 
         def PrintHeaders(self):
-                for header in self.headers:
-                        print '<td><b>%s</b></td>' % header
+                for count, header in enumerate(self.headers):
+                        colspan = 1
+                        try:
+                                colspan = self.headers_colspan[count]
+                        except:
+                                pass
+                        print '<th colspan="%d">%s</th>' % (colspan, header)
 
         def PrintBody(self):
                 for index, row in enumerate(self.rows):
@@ -623,10 +630,14 @@ class ISFDBTable():
                                 row_css = 'table1'
                         else:
                                 row_css = 'table2'
-                        print '<tr align="left" class="%s">' % row_css
-                        print '<td>%d</td>' % (index + 1)
+                        print '<tr align="center" class="%s">' % row_css
+                        if self.display_count:
+                                print '<td>%d</td>' % (index + 1)
                         for cell in row:
-                                print '<td>%s</td>' % cell
+                                if cell:
+                                        print '<td>%s</td>' % cell
+                                else:
+                                        print '<td>&nbsp;</td>'
                         print '</tr>'
 
 class AutoVivification(dict):

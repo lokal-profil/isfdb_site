@@ -3134,7 +3134,7 @@ def SQLGetSelfApprovers():
                 where sa.user_id = u.user_id"""
 	return StandardQuery(query)
 
-def SQLGetAuthorsForPublisher(publisher_id, sort_by):
+def SQLGetAllAuthorsForPublisher(publisher_id, sort_by):
         query = """select a.author_id aid, a.author_canonical, count(a.author_canonical) as cnt
         from authors a, pub_authors pa, pubs p
         where a.author_id = pa.author_id
@@ -3145,4 +3145,13 @@ def SQLGetAuthorsForPublisher(publisher_id, sort_by):
                 query += 'cnt desc, a.author_lastname'
         else:
                 query += 'a.author_lastname, cnt desc'
+	return StandardQuery(query)
+
+def SQLGetPubsForAuthorPublisher(publisher_id, author_id):
+        query = """select p.*
+        from pub_authors pa, pubs p
+        where pa.pub_id = p.pub_id
+        and p.publisher_id = %d
+        and pa.author_id = %d
+        order by p.pub_year, p.pub_title"""  % (publisher_id, author_id)
 	return StandardQuery(query)

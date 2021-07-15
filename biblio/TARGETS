@@ -65,6 +65,7 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/popular_authors_table.cgi \
 	  DIR/pub_history.cgi \
 	  DIR/publisher.cgi \
+	  DIR/publisher_one_author.cgi \
 	  DIR/publisher_authors.cgi \
 	  DIR/publisher_history.cgi \
 	  DIR/publisheryear.cgi \
