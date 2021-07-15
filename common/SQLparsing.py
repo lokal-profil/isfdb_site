@@ -15,13 +15,6 @@ import traceback
 from isfdb import *
 from time import *
 
-################################################################
-# This section is executed when the file is imported by another
-# file. The try section below is executed. If a successful
-# connection to the database is made, the query count is updated
-# via a call to SQLUpdateQueries(). If an exception occurs, html
-# error code is emitted, and the application exits.
-################################################################
 
 def StandardQuery(query):
 	db.query(query)
@@ -61,6 +54,21 @@ def SQLUpdateQueries():
 	db.query(update)
 	return retvalue
 
+def SQLLoadAllLanguages():
+        languages = StandardQuery("select lang_name from languages order by lang_id")
+        return_list = ['None']
+        for language in languages:
+                return_list.append(language[0])
+        return tuple(return_list)
+
+#################################################################
+# This section is executed when the file is imported by another
+# file. The try section below is executed. If a successful
+# connection to the database is made, the query count is updated
+# via a call to SQLUpdateQueries(). If an exception occurs, html
+# error code is emitted, and the application exits. Otherwise all
+# supported languages are loaded in the global variable LANGUAGES
+#################################################################
 try:
 	db = MySQLdb.connect(DBASEHOST, USERNAME, PASSWORD, conv=IsfdbConvSetup())
 	db.select_db(DBASE)
@@ -82,6 +90,8 @@ except:
         print '</body>'
         print '</html>'
 	sys.exit(0)
+
+LANGUAGES = SQLLoadAllLanguages()
 
 
 def SQLgetDatabaseStatus():

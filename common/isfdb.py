@@ -517,36 +517,6 @@ SUBMAP = {
   MOD_AWARD_CAT_UPDATE:  ('submission_review', 'AwardCategoryUpdate', 'award_category.cgi', 'Award Category Update', 'AwardCategoryId', 'DisplayAwardCatChanges', 'award_cat_update_file')
 }
 
-# This list of supported languages MUST be kept in sync with the "languages" table in MySQL
-LANGUAGES = ('None','Afrikaans','Albanian','Ancient Greek','Arabic','Armenian',
-             'Azerbaijani','Basque','Belarusian','Bengali','Bulgarian','Burmese',
-             'Catalan','Chinese','Czech','Danish','Dutch','English','Esperanto',
-             'Estonian','Filipino','Finnish','French','Frisian','Galician','Georgian',
-             'German','Greek','Gujarati','Hebrew','Hindi','Croatian','Hungarian',
-             'Icelandic','Indonesian','Irish','Italian','Japanese','Kazakh','Khmer',
-             'Kyrgyz','Korean','Latvian','Latin','Lithuanian','Macedonian','Malay',
-             'Malayalam','Marathi','Mongolian','Norwegian','Persian','Polish','Portuguese',
-             'Romanian','Russian','Scottish Gaelic','Slovak','Slovenian','Spanish',
-             'Serbian','Sinhalese','Swedish','Tajik','Tamil','Thai','Tibetan','Turkish',
-             'Ukrainian','Urdu','Uzbek','Vietnamese','Welsh','Yiddish','Amharic',
-             'Bosnian','Hausa','Hawaiian','Javanese','Judeo-Arabic','Karen','Ladino',
-             'Maltese','Minangkabau','Nyanja','Panjabi','Samoan','Sindhi','Somali',
-             'Sundanese','Swahili','Tagalog','Tatar','Telugu','Uighur','Sanskrit',
-             'Serbo-Croatian Cyrillic','Serbo-Croatian Roman', 'Scots', 'Old English',
-             'Old French', 'Middle English', 'Middle High German', 'Yoruba',
-             'Mayan language', 'Akkadian', 'Sumerian', 'Norwegian (Bokmal)',
-             'Norwegian (Nynorsk)', 'Asturian/Bable', 'Middle French', 'Low German',
-             'Nepali', 'Pashto/Pushto', 'Shona', 'Old Norse', 'Nilo-Saharan language',
-             'Bambara', 'Bantu language', 'Niger-Kordofanian language', 'Ewe', 'Igbo',
-             'Kamba', 'Kannada', 'Kikuyu/Gikuyu', 'Kurdish', 'Lingala',
-             'Creole or pidgin, French-based', 'Central American Indian language',
-             'Nandi', 'Creole or pidgin, English-based', 'Tigre', 'Tigrinya', 'Tsonga',
-             'Tswana', 'Zulu', 'Acoli', 'Fulah', 'Ganda', 'Kinyarwanda', 'Luo', 'Mandingo',
-             'Oriya', 'Pedi/Sepedi/Northern Sotho', 'South Ndebele', 'Southern Sotho',
-             'Standard Moroccan Tamazight', 'Wolof', 'North Ndebele', 'Montenegrin',
-             'Mirandese', 'Lao', 'South American Indian language', 'Interlingua',
-             'Guarani', 'Maithili', 'Romance language', 'Klingon', 'Nahuatl language')
-
 # List of all supported format codes
 FORMATS = ('unknown','hc','tp','pb','ph','digest','dos','ebook','webzine','pulp',
             'bedsheet','tabloid','A4','A5','quarto','octavo','audio CD','audio MP3 CD',
