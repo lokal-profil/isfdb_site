@@ -26,6 +26,7 @@ class Bureaucrat:
         	PrintPreMod('Bureaucrat Menu')
                 PrintNavBar()
                 print '<ul>'
+                print '<li>%s' % ISFDBLink('edit/new_language.cgi', '', 'Add New Language')
                 print '<li>%s' % ISFDBLink('edit/newawardtype.cgi', '', 'Add New Award Type')
                 print '<li>%s' % ISFDBLink('mod/self_approvers.cgi', '', 'Manage Self-Approvers')
                 print '<li>%s' % ISFDBLink('mod/marque.cgi', '', 'Re-calculate Marque (most viewed) Authors')

@@ -471,6 +471,7 @@ MOD_AWARD_TYPE_DELETE= 32
 MOD_AWARD_CAT_NEW    = 33 # Edit History supported for submissions created after 2016-10-24
 MOD_AWARD_CAT_DELETE = 34
 MOD_AWARD_CAT_UPDATE = 35
+MOD_LANGUAGE_NEW     = 36
 
 # SUBMAP is a dictionary used to store information about submission types
 # [0] - Name of the moderator review script
@@ -514,7 +515,8 @@ SUBMAP = {
   MOD_AWARD_TYPE_DELETE: ('submission_review', 'AwardTypeDelete', None, 'Delete Award Type', 'AwardTypeId', 'DisplayAwardTypeDelete', 'award_type_delete_file'),
   MOD_AWARD_CAT_NEW:     ('submission_review', 'NewAwardCat', 'award_category.cgi', 'Add New Award Category', 'Record', 'DisplayNewAwardCat', 'award_cat_new_file'),
   MOD_AWARD_CAT_DELETE:  ('submission_review', 'AwardCategoryDelete', None, 'Delete Award Category', 'Record', 'DisplayAwardCatDelete', 'award_cat_delete_file'),
-  MOD_AWARD_CAT_UPDATE:  ('submission_review', 'AwardCategoryUpdate', 'award_category.cgi', 'Award Category Update', 'AwardCategoryId', 'DisplayAwardCatChanges', 'award_cat_update_file')
+  MOD_AWARD_CAT_UPDATE:  ('submission_review', 'AwardCategoryUpdate', 'award_category.cgi', 'Award Category Update', 'AwardCategoryId', 'DisplayAwardCatChanges', 'award_cat_update_file'),
+  MOD_LANGUAGE_NEW:      ('submission_review', 'NewLanguage', None, 'New Language', 'Record', 'DisplayNewLanguage', 'new_language_file')
 }
 
 # List of all supported format codes

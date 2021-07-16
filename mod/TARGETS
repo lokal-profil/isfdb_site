@@ -29,6 +29,7 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/library.cgi \
 	  DIR/list.cgi \
 	  DIR/marque.cgi \
+	  DIR/new_language_file.cgi \
 	  DIR/pa_new.cgi \
 	  DIR/pa_delete.cgi \
 	  DIR/pa_update.cgi \

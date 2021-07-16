@@ -44,6 +44,15 @@ def OneField(query):
 		record = result.fetch_row()
 	return results
 
+def SingleNumericField(query):
+        db.query(query)
+        res = db.store_result()
+        numeric_value = 0
+        if res.num_rows():
+                record = res.fetch_row()
+                numeric_value = record[0][0]
+        return numeric_value
+
 def SQLUpdateQueries():
 	query = "select metadata_counter from metadata"
 	db.query(query)
@@ -2616,13 +2625,11 @@ def SQLLoadUserLanguages(user_id):
 
 def SQLGetLangIdByName(lang_name):
         query = "select lang_id from languages where lang_name ='%s'" % (db.escape_string(lang_name))
-        db.query(query)
-        res = db.store_result()
-        lang_id = 0
-        if res.num_rows():
-                record = res.fetch_row()
-                lang_id = record[0][0]
-        return lang_id
+        return SingleNumericField(query)
+
+def SQLGetLangIdByCode(lang_code):
+        query = "select lang_id from languages where lang_code ='%s'" % (db.escape_string(lang_code))
+        return SingleNumericField(query)
 
 def SQLUserPreferencesId(user_id):
         query = "select user_pref_id from user_preferences where user_id='%d'" % (int(user_id))

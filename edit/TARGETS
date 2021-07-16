@@ -48,6 +48,7 @@ TARGETS = DIR/addaward.cgi \
 	  DIR/linkreview.cgi \
 	  DIR/mkpseudo.cgi \
 	  DIR/mkvariant.cgi \
+	  DIR/new_language.cgi \
 	  DIR/newawardtype.cgi \
 	  DIR/newpub.cgi \
 	  DIR/numeric_external_id_ranges.cgi \
@@ -74,6 +75,7 @@ TARGETS = DIR/addaward.cgi \
 	  DIR/submitmkpseudo.cgi \
 	  DIR/submitmkvar1.cgi \
 	  DIR/submitmkvar2.cgi \
+	  DIR/submit_new_language.cgi \
 	  DIR/submitnewaward.cgi \
 	  DIR/submitnewawardcat.cgi \
 	  DIR/submitnewawardtype.cgi \

@@ -1171,6 +1171,34 @@ def DisplayAwardTypeDelete(submission_id):
 
         return submitter
 
+def DisplayNewLanguage(submission_id):
+	xmlData = SQLloadXML(submission_id)
+
+        print '<table border="2" class="generic_table">'
+        submitter = ''
+        doc = minidom.parseString(XMLunescape2(xmlData))
+        if doc.getElementsByTagName('NewLanguage'):
+                merge = doc.getElementsByTagName('NewLanguage')
+                submitter = GetElementValue(merge, 'Submitter')
+
+                print '<tr>'
+                print '<td class="label"><b>Language Name</b></td>'
+                print '<td class="keep">%s</td>' % GetElementValue(merge, 'LanguageName')
+                print '</tr>'
+
+                print '<tr>'
+                print '<td class="label"><b>Language Code</b></td>'
+                print '<td class="keep">%s</td>' % GetElementValue(merge, 'LanguageCode')
+                print '</tr>'
+
+                print '<tr>'
+                print '<td class="label"><b>Latin-Derived</b></td>'
+                print '<td class="keep">%s</td>' % GetElementValue(merge, 'Latin')
+                print '</tr>'
+	print '</table>'
+
+	return submitter
+
 def DisplayNewAwardCat(submission_id):
 	from awardcatClass import award_cat
 	from awardtypeClass import award_type

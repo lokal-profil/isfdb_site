@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2014-2020 Ahasuerus
+#     (C) COPYRIGHT 2014-2021 Ahasuerus
 #     ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -202,6 +202,29 @@ def HelpAwardCat():
 
         text = 'A free text note describing this award category. This note will become a part of the permanent record for this award category.'
         help['Note'] = [text, '']
+
+        return help
+
+def HelpLanguage():
+
+        ##################################################################################
+        # This function defines Help text for the New Language data entry form
+        ##################################################################################
+
+        help = HelpGeneral()
+        if not help:
+                return help
+
+        text = 'Full name of the new language according to the ISO 639-2 Standard.'
+        help['Language Name'] = [text, '']
+
+        text = '3-letter language code of the new language assigned by the ISO 639-2 Standard. Not displayed on ISFDB pages at this time.'
+        help['Language Code'] = [text, '']
+
+        text = 'A Yes/No flag indicating whether the language uses a Latin-derived script. If the language supports multiple scripts'
+        text += ' (e.g. Serbian) and one of them is Latin-derived, the flag is set to \'Yes\'. This flag is used by nightly cleanup'
+        text += ' reports to find records that may have been entered using the wrong script.'
+        help['Latin-Derived'] = [text, '']
 
         return help
 
