@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2008-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -11,11 +11,10 @@
 
 
 import cgi
-import sys
-import MySQLdb
 from isfdb import *
+from SQLparsing import *
 from isfdblib import *
-from publisherClass import *
+from publisherClass import publishers
 
 debug        = 0
 MaxRecords   = 0
@@ -44,13 +43,6 @@ def Compare(value1, value2, fieldname):
 def Compare2(fieldname, values):
 
 	checked_entry = 1
-	#recno = 1
-	#while recno < MaxRecords:
-	#	if fieldname == "title_series":
-	#		if values[recno]:
-	#			checked_entry = recno
-	#	recno += 1
-
 	recno = 1
 	while recno < MaxRecords:
         	if values[0] != values[recno]:
@@ -112,7 +104,7 @@ if __name__ == '__main__':
 			except:
 				break
 			MaxRecords += 1
-		rec = 0;
+		rec = 0
 		print '<h2>Merging Records: '
 		while rec < MaxRecords:
 			print RecordNumber[rec]
@@ -124,10 +116,6 @@ if __name__ == '__main__':
 
 	if MaxRecords < 1:
 		SelectionError()
-
-
-        db = dbConnect()
-        db.select_db(DBASE)
 
 	##################################################
 	# Load in all of the data records
@@ -188,7 +176,7 @@ if __name__ == '__main__':
 	print '</table>'
 	print '<p>'
 
-	recno = 0;
+	recno = 0
 	while recno < MaxRecords:
 		print '<input NAME="record%s" VALUE="%s" TYPE="HIDDEN">' % ((recno+1), RecordNumber[recno])
 		recno += 1

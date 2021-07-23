@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2018   Ahasuerus
+#     (C) COPYRIGHT 2018-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,15 +10,8 @@
 #     Date: $Date$
 
 
-import cgi
-import sys
-import string
-import os
-import urllib
 from isfdb import *
-from SQLparsing import *
-from common import *
-from biblio import *
+import cgi
 from library import ServerSideRedirect
 
 class GoogleSearch:
@@ -40,27 +33,20 @@ class GoogleSearch:
                 try:
                         self.page_type = self.page_types[form['PAGE_TYPE'].value]
                 except:
-                        self.display_error('Invalid Page Type')
+                        SESSION.DisplayError('Invalid Page Type')
 
                 try:
                         self.search_value = form['SEARCH_VALUE'].value
                         self.search_value = urllib.quote(string.strip(self.search_value))
                 except:
-                        self.display_error('No search value specified')
+                        SESSION.DisplayError('No search value specified')
 
                 try:
                         self.operator = form['OPERATOR'].value
                         if self.operator not in self.operators:
                                 raise
                 except:
-                        self.display_error('Invalid operator specified')
-
-        def display_error(self, message):
-                PrintHeader("Search ISFDB with Google")
-                PrintNavbar('search', 0, 0, 0, 0)
-                print '<h3>%s</h3>' % message
-                PrintTrailer('search', '', 0)
-                sys.exit(0)
+                        SESSION.DisplayError('Invalid operator specified')
 
         def redirect(self):
                 url = 'https://www.google.com/search?q='

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -11,9 +11,8 @@
 
 
 import cgi
-import sys
-import MySQLdb
 from isfdb import *
+from SQLparsing import *
 from isfdblib import *
 from isfdblib_help import *
 from isfdblib_print import printtextarea
@@ -191,9 +190,6 @@ if __name__ == '__main__':
 	if MaxRecords < 2:
 		SelectionError()
 
-
-        db = dbConnect()
-        db.select_db(DBASE)
 
 	##################################################
 	# Load in all of the data records
@@ -457,7 +453,7 @@ if __name__ == '__main__':
         print '</table>'
         print '<p>'
 
-	recno = 0;
+	recno = 0
 	while recno < MaxRecords:
 		print '<input NAME="record%s" VALUE="%s" TYPE="HIDDEN">' % ((recno+1), RecordNumber[recno])
 		recno += 1

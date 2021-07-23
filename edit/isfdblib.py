@@ -216,19 +216,6 @@ def PrintPostSearch(executable=0, records=0, subsequent=0, printed=0, mergeform=
         print '</body>'
         print '</html>'
 
-def Date_or_None(s):
-    return s
-
-def IsfdbConvSetup():
-	import MySQLdb.converters
-	IsfdbConv = MySQLdb.converters.conversions
-	IsfdbConv[10] = Date_or_None
-	return(IsfdbConv)
-
-def dbConnect():
-	db = MySQLdb.connect(DBASEHOST, USERNAME, PASSWORD, conv=IsfdbConvSetup())
-	return db
-
 def PrintTitle(title):
 	print "Content-type: text/html; charset=%s\n" % (UNICODE)
 	print "<html>\n"
