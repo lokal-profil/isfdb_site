@@ -1779,7 +1779,8 @@ def DisplayLinkReview(submission_id):
                 print '<table border="2" class="generic_table">'
                 print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
-                print '<td class="label"><b>Review [Record #<a href="http:/%s/title.cgi?%d">%d</a>]</b></td>' % (HTFAKE, int(Record), int(Record))
+                print '<td class="label"><b>Review [Record #%s]</b></td>' % ISFDBLink('title.cgi', Record, Record)
+                # <a href="http:/%s/title.cgi?%d">%d</a>
 
                 theReview = titles(db)
                 theReview.load(int(Record))
@@ -1787,8 +1788,7 @@ def DisplayLinkReview(submission_id):
                         InvalidSubmission(submission_id, theReview.error)
                 if TagPresent(merge, 'Parent'):
                         parent = GetElementValue(merge, 'Parent')
-                        print """<td class="label"><b>Link Review to [Title
-                                #<a href="http:/%s/title.cgi?%d">%d</a>]</b></td>""" % (HTFAKE, int(parent), int(parent))
+                        print '<td class="label"><b>Link Review to [Title #%s]</b></td>' % ISFDBLink('title.cgi', parent, parent)
                         print '</tr>'
                         reviewedTitle = titles(db)
                         reviewedTitle.load(int(parent))
@@ -1852,6 +1852,23 @@ def DisplayLinkReview(submission_id):
                         print '<td class="keep">'
                         print ' - '
                         print '</td>'
+
+                        print '<tr>'
+                        print '<td class="label"><b>Language</b></td>'
+                        print '<td class="drop">'
+                        if theReview.title_language:
+                                print theReview.title_language
+                        else:
+                                print ' - '
+                        print '</td>'
+
+                        print '<td class="keep">'
+                        if reviewedTitle.title_language:
+                                print reviewedTitle.title_language
+                        else:
+                                print ' - '
+                        print '</td>'
+                        print '</tr>'
                 else:
                         pass
                 print '</table>'
