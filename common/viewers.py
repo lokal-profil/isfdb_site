@@ -363,7 +363,7 @@ def PrintField2(Label, value, Changed, ExistsNow, Current, warning = '', warning
                         print '<td class="blankwarning">&nbsp;</td>'
         print "</tr>"
 
-def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
+def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None, suppress_diff = 0):
         ui = isfdbUI()
         value = GetElementValue(XmlData, Label)
         value2 = Current
@@ -378,7 +378,7 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None):
                 warning = ui.invalidHtmlInNotes(value)
                 # If an existing note is being modified, display differences in the Warnings column
                 # without using the yellow background reserved for warnings
-                if not warning and value and value2:
+                if not warning and not suppress_diff and value and value2:
                         from difflib import unified_diff
                         diff_generator = unified_diff(value2.splitlines(), value.splitlines(),
                                                       fromfile='before', tofile='after', n=0, lineterm='<br>')
@@ -2744,7 +2744,7 @@ def DisplayMakeVariant(submission_id):
                         PrintField2('Graphic', theVariant.title_graphic, 1, 1, theVariant.title_graphic, warning, 1)
                         PrintField2XML('Language',  merge, theVariant.used_language,  theVariant.title_language)
                         PrintMultField('Authors', 'Author', '+', doc, merge, theVariant.num_authors, theVariant.title_authors)
-                        print '</tr>'
+                        PrintField2XML('Note',  merge, theVariant.used_note,  theVariant.title_note, None, 1)
 
 	print '</table>'
 

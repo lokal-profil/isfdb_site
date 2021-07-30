@@ -113,9 +113,7 @@ def DoSubmission(db, submission):
 			if ParentRecord > 0:
 				UpdateTags(ChildRecord, ParentRecord)
 		else:
-			##########################################################
-			# TITLE
-			##########################################################
+			# Create a new Title record
 			query = "insert into titles(title_title) values('xxx');"
 			print "<li> ", query
 			if debug == 0:
@@ -205,6 +203,19 @@ def DoSubmission(db, submission):
 				for author in authors:
 					data = XMLunescape(author.firstChild.data.encode('iso-8859-1'))
 					addTitleAuthor(data, ParentRecord, 'CANONICAL')
+
+		if TagPresent(merge, 'Note'):
+			value = GetElementValue(merge, 'Note')
+                        insert = "insert into notes(note_note) values('%s')" % db.escape_string(value)
+                        insert2 = "insert into notes(note_note) values('%s')" % value
+                        print "<li> ", insert2
+                        if debug == 0:
+                                db.query(insert)
+                        note_id = db.insert_id()
+                        update = "update titles set note_id=%d where title_id=%d" % (note_id, ParentRecord)
+                        print "<li> ", update
+                        if debug == 0:
+                                db.query(update)
 
 		update = "update titles set title_parent=%d where title_id=%d" % (int(ParentRecord), int(ChildRecord))
 		print "<li> ", update

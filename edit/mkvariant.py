@@ -119,6 +119,8 @@ if __name__ == '__main__':
         print '</tr>'
 
         printlanguage(title[TITLE_LANGUAGE], 'language', 'Language', help)
+
+        printtextarea('Title Note', 'title_note', help)
 	
         printtextarea('Note to Moderator', 'mod_note', help)
 

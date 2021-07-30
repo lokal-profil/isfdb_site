@@ -393,6 +393,10 @@ def HelpMakeVariant():
         text = 'The title of the new work that you want to create.'
         help['Title'] = [text, '']
 
+        text = 'Note associated with the new work that you want to create. Follow this link for more details.'
+        link = 'http://%s/index.php?title=Template:TitleFields:Note' % WIKILOC
+        help['Title Note'] = [text, link]
+
         return help
 
 def HelpTitle(title_type = 'NOVEL'):

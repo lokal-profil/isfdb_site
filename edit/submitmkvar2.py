@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2016   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -55,6 +55,8 @@ if __name__ == '__main__':
 	update_string += "    <Year>%s</Year>\n" % (db.escape_string(new.title_year))
 	update_string += "    <TitleType>%s</TitleType>\n" % (db.escape_string(new.title_ttype))
 	update_string += "    <Language>%s</Language>\n" % (db.escape_string(new.title_language))
+	if new.title_note:
+		update_string += "    <Note>%s</Note>\n" % db.escape_string(new.title_note)
 	if new.form.has_key('mod_note'):
                 # Unlike the attributes of the new object, the form data is not XML-escaped, so we need to escape it here
 		update_string += "    <ModNote>%s</ModNote>\n" % (db.escape_string(XMLescape(new.form['mod_note'].value)))
