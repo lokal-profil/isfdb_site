@@ -505,17 +505,7 @@ def SQLloadTitlesXBS(series):
 	return records
 
 
-###########################################
-#
-# Function: SQLGetForthcoming
-# Arg1:     Target Month
-# Arg2:     Target Year
-#
-# Description: This function creates a 
-# python list of publications to be 
-# published in a specific month/year. 
-#
-###########################################
+# Return a list of publications to be published in a specific month/year
 def SQLGetForthcoming(month, year, day, all):
 	if month == 12:
 		end    = "%d-01-00" % (int(year)+1)
@@ -526,14 +516,7 @@ def SQLGetForthcoming(month, year, day, all):
 		query = "select * from pubs where pub_year>='%s' and pub_year<'%s' order by pub_year,pub_title" % (db.escape_string(target), db.escape_string(end))
 	else:
 		query = "select * from pubs where pub_year>='%s' and pub_year<'%s' and pub_frontimage is not NULL order by pub_year,pub_title" % (db.escape_string(target), db.escape_string(end))
-	db.query(query)
-	result = db.store_result()
-	pub = result.fetch_row()
-	results = []
-	while pub:
-		results.append(pub[0])
-		pub = result.fetch_row()
-	return results
+        return StandardQuery(query)
 	
 def SQLGetTodaysPubs(month, year, day, limit):
 	target = "%s-%02d-%02d" % (year, month, int(day))

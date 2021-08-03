@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import sys
-import os
-import string
 from SQLparsing import *
 from biblio import *
 from time import *
@@ -75,7 +72,7 @@ if __name__ == '__main__':
 				continue
 			if result[PUB_CTYPE] == 'FANZINE':
 				continue
-			if result[PUB_IMAGE] == '':
+			if not result[PUB_IMAGE]:
 				continue
 
 			if SQLMarqueAuthors(result[PUB_PUBID]):
@@ -95,9 +92,6 @@ if __name__ == '__main__':
 				if result[PUB_IMAGE]:
                                         image_source = result[PUB_IMAGE].split("|")[0]
                                         alt_name = 'Book Image'
-                                else:
-                                        image_source = 'http://%s/NoImage.gif' % HTMLLOC
-                                        alt_name = 'No Image'
                                 print '<td><img src="%s" class="covermainpage" alt="%s"></td>' % (image_source, alt_name)
 				outstr = result[PUB_YEAR][5:7] +'/'+ result[PUB_YEAR][8:10] + ' - '
 				outstr += ISFDBLink("pl.cgi", result[PUB_PUBID],
