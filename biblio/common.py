@@ -766,10 +766,6 @@ def displayRecordList(record_type, records):
 def displayAuthorById(id, name, trans_authors = None):
 	print ISFDBLink('ea.cgi', id, name, False, '', trans_authors)
 
-def displayPubAuthors(pub_id):
-        authors = SQLPubBriefAuthorRecords(pub_id)
-        displayAuthorList(authors)
-
 def PrintAllAuthors(title_id, prefix = '', suffix = ''):
 	authors = SQLTitleBriefAuthorRecords(title_id)
 	counter = 0

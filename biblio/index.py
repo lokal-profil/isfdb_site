@@ -11,10 +11,11 @@
 
 
 from SQLparsing import *
-from biblio import *
-from time import *
-from common import *
+from library import ISFDBLink, ISFDBText, ISFDBPubFormat
+from time import gmtime
+from common import displayAuthorList, PrintHeader, PrintNavbar, PrintTrailer
 from calendarClass import CalendarDay
+from isbn import convertISBN
 
 
 def displayLinks():
@@ -76,7 +77,6 @@ if __name__ == '__main__':
 				continue
 
 			if SQLMarqueAuthors(result[PUB_PUBID]):
-                                from isbn import convertISBN
                                 # Retrieve the book's referral title
                                 title_id = SQLgetTitleReferral(result[PUB_PUBID], result[PUB_CTYPE])
                                 # If we have already printed a publication for this title, don't print another one
@@ -89,9 +89,8 @@ if __name__ == '__main__':
 				if leftcolumn:
 					print '<tr>'
 
-				if result[PUB_IMAGE]:
-                                        image_source = result[PUB_IMAGE].split("|")[0]
-                                        alt_name = 'Book Image'
+                                image_source = result[PUB_IMAGE].split("|")[0]
+                                alt_name = 'Book Image'
                                 print '<td><img src="%s" class="covermainpage" alt="%s"></td>' % (image_source, alt_name)
 				outstr = result[PUB_YEAR][5:7] +'/'+ result[PUB_YEAR][8:10] + ' - '
 				outstr += ISFDBLink("pl.cgi", result[PUB_PUBID],
@@ -117,7 +116,8 @@ if __name__ == '__main__':
 				outstr += ') by '
 
 				print '<td>%s' % outstr
-				displayPubAuthors(result[PUB_PUBID])
+                                authors = SQLPubBriefAuthorRecords(result[PUB_PUBID])
+                                displayAuthorList(authors)
 				print '</td>'
 				if leftcolumn:
 					leftcolumn = 0
