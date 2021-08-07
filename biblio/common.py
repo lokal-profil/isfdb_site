@@ -143,7 +143,7 @@ def buildCoreTitleLine(title, original_language, translit_titles):
 	# Convert special years to strings.  Anything unconverted and in
 	# the future is given an alternate-format label.
 	cnvyear = convertTitleYear(title)
-	if cnvyear == year and title[TITLE_YEAR] > todaysDate():
+	if cnvyear == year and title[TITLE_YEAR] > ISFDBDate():
 		output += '[<b>forthcoming: %s</b>]' % convertForthcoming(title[TITLE_YEAR])
 	else:
 		output += '(<b>%s</b>)' % cnvyear
@@ -264,7 +264,7 @@ def displayVariantTitle(title, origTitle, variant_type, parent_authors,
 	# Convert special years to strings.  Anything unconverted and in
 	# the future is given an alternate-format label.
 	cnvyear = convertTitleYear(title)
-	if cnvyear == year and title[TITLE_YEAR] > todaysDate():
+	if cnvyear == year and title[TITLE_YEAR] > ISFDBDate():
 		output += '[<b>forthcoming: %s</b>]' % convertForthcoming(title[TITLE_YEAR])
 	else:
 		output += '(<b>%s</b>)' % cnvyear
@@ -558,7 +558,7 @@ def PrintNavbar(page_type, arg1, arg2, executable, argument, search_value = '', 
 		# Display links to other sites using an embedded ISBN.  Only done for properly formatted isbn values.
 		if arg1[PUB_ISBN] and pseudoISBN(arg1[PUB_ISBN]):
 			#Retrieve the Web sites for this user
-			websites = LoadWebSites(arg1[PUB_ISBN], userid, arg1[PUB_PTYPE])
+			websites = SQLLoadWebSites(arg1[PUB_ISBN], userid, arg1[PUB_PTYPE])
 			if websites:
                                 PrintThirdPartyLinks(websites, 'Amazon')
                                 PrintThirdPartyLinks(websites, 'Other')

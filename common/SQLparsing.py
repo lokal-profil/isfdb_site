@@ -15,8 +15,16 @@ import traceback
 from isfdb import *
 from time import *
 
+def _Date_or_None(s):
+    return s
 
-def StandardQuery(query):
+def _IsfdbConvSetup():
+    import MySQLdb.converters
+    IsfdbConv = MySQLdb.converters.conversions
+    IsfdbConv[10] = _Date_or_None
+    return IsfdbConv
+
+def _StandardQuery(query):
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()
@@ -26,7 +34,7 @@ def StandardQuery(query):
 		record = result.fetch_row()
 	return results
 
-def BinaryQuery(query):
+def _BinaryQuery(query):
         db.query(query)
         result = db.store_result()
 	if result.num_rows():
@@ -34,7 +42,7 @@ def BinaryQuery(query):
 	else:
 		return 0
 
-def OneField(query):
+def _OneField(query):
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()
@@ -44,7 +52,7 @@ def OneField(query):
 		record = result.fetch_row()
 	return results
 
-def SingleNumericField(query):
+def _SingleNumericField(query):
         db.query(query)
         res = db.store_result()
         numeric_value = 0
@@ -64,44 +72,11 @@ def SQLUpdateQueries():
 	return retvalue
 
 def SQLLoadAllLanguages():
-        languages = StandardQuery("select lang_name from languages order by lang_id")
+        languages = _StandardQuery("select lang_name from languages order by lang_id")
         return_list = ['None']
         for language in languages:
                 return_list.append(language[0])
         return tuple(return_list)
-
-#################################################################
-# This section is executed when the file is imported by another
-# file. The try section below is executed. If a successful
-# connection to the database is made, the query count is updated
-# via a call to SQLUpdateQueries(). If an exception occurs, html
-# error code is emitted, and the application exits. Otherwise all
-# supported languages are loaded in the global variable LANGUAGES
-#################################################################
-try:
-	db = MySQLdb.connect(DBASEHOST, USERNAME, PASSWORD, conv=IsfdbConvSetup())
-	db.select_db(DBASE)
-	SQLUpdateQueries()
-except:
-        PrintHTMLHeaders('ISFDB Maintenance')
-        print '</div>'
-        print '<div id="nav">'
-       	print '<a href="http:/%s/index.cgi">' % HTFAKE
-	print '<img src="http://%s/isfdb.gif" width="90%%" alt="ISFDB logo">' % HTMLLOC
-        print '</a>'
-        print '</div>'
-        print '<div id="main2">'
-        print '<div id="ErrorBox">'
-	print 'The ISFDB database is currently undergoing maintenance. Please try again in a few minutes.'
-	print '</div>'
-	print '</div>'
-	print '</div>'
-        print '</body>'
-        print '</html>'
-	sys.exit(0)
-
-LANGUAGES = SQLLoadAllLanguages()
-
 
 def SQLgetDatabaseStatus():
 	query = "select metadata_dbstatus from metadata"
@@ -123,14 +98,6 @@ def SQLgetSchemaVersion():
 	result = db.store_result()
 	version = result.fetch_row()[0][0]
 	return version
-
-def todaysDate():
-	date = gmtime()
-	month = date[1]
-	day = date[2]
-	year  = str(date[0])
-	ISFDBdate = '%s-%02d-%02d' % (year, int(month), int(day))
-	return ISFDBdate
 
 def SQLMultipleAuthors(author):
 	query = "select * from authors where author_canonical like '%s (%%'" % db.escape_string(author)
@@ -207,7 +174,7 @@ def SQLGetSimilarRecords(record_id, name, table, id_field, name_field):
                    or %s like '%s (%%') and %s != %d
                    order by %s
                    """ % (table, name_field, exact_name, name_field, exact_name, id_field, int(record_id), name_field)
-        return StandardQuery(query)
+        return _StandardQuery(query)
 
 def SQLgetActualFromPseudo(au_id):
 	query = "select authors.author_canonical from authors,pseudonyms where pseudonyms.pseudonym=%d and pseudonyms.author_id=authors.author_id;" % int(au_id)
@@ -491,7 +458,7 @@ def SQLloadAwardsForCatYear(award_cat_id, award_year):
                 and a.award_cat_id = c.award_cat_id
                 and YEAR(a.award_year) = %d
                 order by ABS(a.award_level), a.award_title""" % (int(award_cat_id), int(award_year))
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLloadTitlesXBS(series):
 	query = "select * from titles where series_id = '%d';" % (series)
@@ -516,7 +483,7 @@ def SQLGetForthcoming(month, year, day, all):
 		query = "select * from pubs where pub_year>='%s' and pub_year<'%s' order by pub_year,pub_title" % (db.escape_string(target), db.escape_string(end))
 	else:
 		query = "select * from pubs where pub_year>='%s' and pub_year<'%s' and pub_frontimage is not NULL order by pub_year,pub_title" % (db.escape_string(target), db.escape_string(end))
-        return StandardQuery(query)
+        return _StandardQuery(query)
 	
 def SQLGetTodaysPubs(month, year, day, limit):
 	target = "%s-%02d-%02d" % (year, month, int(day))
@@ -581,17 +548,17 @@ def SQLGetCoverPubsByTitle(titlerec):
 	query = "select title_id from titles where title_id=%d and title_ttype='COVERART' \
                 UNION select title_id from titles where title_parent=%d \
                 and title_ttype='COVERART'" % (titlerec, titlerec)
-        results = retrievePubsQuery(query)
+        results = _RetrievePubsQuery(query)
         return results
 
 def SQLGetPubsByTitle(titlerec):
 	query = "select title_id from titles where title_id=%d or title_parent=%d" % (titlerec, titlerec)
-        results = retrievePubsQuery(query)
+        results = _RetrievePubsQuery(query)
         return results
 
 def SQLGetPubsByTitleNoParent(titlerec):
 	query = "select title_id from titles where title_id=%d" % (titlerec)
-        results = retrievePubsQuery(query)
+        results = _RetrievePubsQuery(query)
         return results
 
 def SQLGetPubsByTitleNoTranslations(titlerec):
@@ -603,15 +570,15 @@ def SQLGetPubsByTitleNoTranslations(titlerec):
                    and parent.title_id = %d
                    and variant.title_language = parent.title_language
                 """ % (int(titlerec), int(titlerec), int(titlerec))
-        results = retrievePubsQuery(query)
+        results = _RetrievePubsQuery(query)
         return results
 
 def SQLGetPubsForChildTitles(titlerec):
 	query = "select title_id from titles where title_parent=%d" % (titlerec)
-        results = retrievePubsQuery(query)
+        results = _RetrievePubsQuery(query)
         return results
 
-def retrievePubsQuery(query):
+def _RetrievePubsQuery(query):
         # Internal function, NOT TO BE CALLED DIRECTLY
         # Currently called by SQLGetPubsByTitle, SQLGetPubsByTitleNoParent,
         # SQLGetCoverPubsByTitle and SQLGetPubsForChildTitles
@@ -749,9 +716,9 @@ def SQLGetPublisherDirectory():
         query = """select publisher_name from publishers
                 UNION
                 select trans_publisher_name from trans_publisher"""
-        return ASCIIDirectory(query)
+        return _ASCIIDirectory(query)
 
-def ASCIIDirectory(query):
+def _ASCIIDirectory(query):
         import unicodedata
         db.query(query)
         result = db.store_result()
@@ -786,7 +753,7 @@ def SQLGetMagazineDirectory():
         from trans_titles tt, titles t
         where t.title_ttype = 'EDITOR'
         and t.title_id = tt.title_id"""
-        return ASCIIDirectory(query)
+        return _ASCIIDirectory(query)
 
 def SQLGetAuthorDirectory():
         query = """select lower(substring(author_lastname,1,2)) as xx, count(*)
@@ -925,7 +892,7 @@ def SQLFindAuthors(target, mode = 'contains'):
                            union select distinct a.* from authors a, trans_authors at
                            where %s like '%s' and at.author_id = a.author_id
                            order by author_canonical""" % (name1, target, name2, target)
-        return StandardQuery(query)
+        return _StandardQuery(query)
 
 def SQLFindTitles(target):
         target = db.escape_string('%'+target+'%')
@@ -1001,7 +968,7 @@ def SQLFindPublisher(target, mode = 'contains'):
                            where tp.trans_publisher_name like '%s' and
                            tp.publisher_id = p.publisher_id
                            order by publisher_name""" % (target, target)
-        return StandardQuery(query)
+        return _StandardQuery(query)
 
 def SQLGetPublisherYears(publisher_id):
 	results = []
@@ -1026,7 +993,7 @@ def SQLFindPubSeries(target, mode = 'contains'):
                            where tps.trans_pub_series_name like '%s'
                            and tps.pub_series_id = ps.pub_series_id
                            order by pub_series_name""" % (target, target)
-        return StandardQuery(query)
+        return _StandardQuery(query)
 
 def SQLFindMagazine(arg, directory = 0):
         if directory:
@@ -1111,7 +1078,7 @@ def SQLFindSeries(target, mode = 'contains'):
                            where ts.trans_series_name like '%s'
                            and ts.series_id = s.series_id
                            order by series_title""" % (target, target)
-        return StandardQuery(query)
+        return _StandardQuery(query)
 
 def SQLFindSeriesChildren(id):
 	query = "select series_id,IF(series.series_parent_position IS NULL or series.series_parent_position='', 1, 0) AS isnull from series where series_parent=%d ORDER BY isnull,series_parent_position" % (id)
@@ -1245,7 +1212,7 @@ def SQLFindPubsByIsbn(targets, excluded_pub_id = 0):
 
 def SQLFindPubsByCatalogId(value):
         query = "select * from pubs where pub_catalog ='%s'" % db.escape_string(value)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLFindPubSeriesForPublisher(publisher_id):
         results = []
@@ -1306,7 +1273,7 @@ def SQLTitleBriefAuthorRecords(title_id):
                  and ca.ca_status = 1
                  and ca.title_id=%d
                  order by a.author_lastname, a.author_canonical""" % int(title_id)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLTitleListBriefAuthorRecords(title_list, author_id = 0):
         if not title_list:
@@ -1355,7 +1322,7 @@ def SQLInterviewBriefAuthorRecords(title_id):
                 and ca.ca_status=2
                 and ca.title_id=%d
                 order by a.author_lastname, a.author_canonical""" % int(title_id)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLInterviewAuthors(title_id):
 	query = """select a.author_canonical
@@ -1380,7 +1347,7 @@ def SQLReviewBriefAuthorRecords(title_id):
                 and ca.ca_status=3
                 and ca.title_id=%d
                 order by a.author_lastname, a.author_canonical""" % int(title_id)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLReviewAuthors(title_id):
 	query = """select a.author_canonical
@@ -1404,7 +1371,7 @@ def SQLPubBriefAuthorRecords(pub_id):
                 where a.author_id = pa.author_id
                 and pa.pub_id = %d
                 order by a.author_lastname, a.author_canonical""" % int(pub_id)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLPubListBriefAuthorRecords(pub_list):
         from library import list_to_in_clause
@@ -1484,7 +1451,7 @@ def SQLTitleAwards(title_id):
                 where title_awards.title_id in (%s)
                 and title_awards.award_id=awards.award_id
                 order by awards.award_year, awards.award_level""" % (db.escape_string(title_set))
-        return StandardQuery(query)
+        return _StandardQuery(query)
 
 def SQLloadAwards(award_id):
 	query = "select * from awards where award_id='%d'" % (award_id)
@@ -1786,11 +1753,11 @@ def SQLloadPubSeriesWebpages(publisher_id):
 
 def SQLloadTitleWebpages(title_id):
 	query = "select url from webpages where title_id=%d" % int(title_id)
-	return OneField(query)
+	return _OneField(query)
 
 def SQLloadPubWebpages(pub_id):
 	query = "select url from webpages where pub_id=%d" % int(pub_id)
-	return OneField(query)
+	return _OneField(query)
 
 def SQLloadAwardTypeWebpages(award_type_id):
 	query = "select url from webpages where award_type_id='%d'" % (int(award_type_id))
@@ -1830,14 +1797,14 @@ def SQLAuthorsBorn(date):
                 where MONTH(author_birthdate)=MONTH('%s')
                 and DAYOFMONTH(author_birthdate)=DAYOFMONTH('%s')
                 order by author_birthdate""" % (date, date)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLAuthorsDied(date):
 	query = """select * from authors
                 where MONTH(author_deathdate)=MONTH('%s')
                 and DAYOFMONTH(author_deathdate)=DAYOFMONTH('%s')
                 order by author_birthdate""" % (date, date)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLgetUserName(userId):
 	query = "select user_name from mw_user where user_id=%d" % int(userId)
@@ -1908,19 +1875,19 @@ def SQLTitlesWithPubs(title_list):
 
 def SQLisUserSelfApprover(userId):
         query = "select * from self_approvers where user_id=%d" % int(userId)
-        return BinaryQuery(query)
+        return _BinaryQuery(query)
 
 def SQLisUserModerator(userId):
         query = "select * from mw_user_groups where ug_user='%d' and ug_group='sysop'" % (int(userId))
-        return BinaryQuery(query)
+        return _BinaryQuery(query)
 
 def SQLisUserBureaucrat(userId):
         query = "select * from mw_user_groups where ug_user=%d and ug_group='bureaucrat'" % int(userId)
-        return BinaryQuery(query)
+        return _BinaryQuery(query)
 
 def SQLisUserBot(userId):
         query = "select ug_group from mw_user_groups where ug_user=%d and ug_group='bot'" % int(userId)
-        return BinaryQuery(query)
+        return _BinaryQuery(query)
 
 def SQLWikiEditCount(submitter):
         # Retrieve the count of Wiki edits by the current submitter
@@ -1997,15 +1964,11 @@ def SQLmarkInProgress(submission):
 
 def SQLGetPubContentList(pub_id):
         query = "select * from pub_content where pub_id=%d" % int(pub_id)
-##	query = """select pc.* from pub_content pc, titles t
-##                where pc.pub_id = %d
-##                and pc.title_id = t.title_id
-##                order by t.title_title""" % int(pub_id)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLGetRefDetails():
 	query = "select * from reference order by reference_id"
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLVerificationStatus(pub_id):
         if SQLPrimaryVerifiers(pub_id):
@@ -2018,7 +1981,7 @@ def SQLVerificationStatus(pub_id):
 
 def SQLSecondaryVerifications(pub_id):
 	query = "select * from verification where pub_id=%d" % int(pub_id)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLActiveSecondaryVerifications(pub_id):
 	query = """select v.user_id, v.ver_time, r.reference_label, r.reference_url
@@ -2027,14 +1990,14 @@ def SQLActiveSecondaryVerifications(pub_id):
                    and v.ver_status = 1
                    and v.reference_id = r.reference_id
                    order by r.reference_id""" % int(pub_id)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLPrimaryVerifiers(pub_id):
 	query = """select u.user_id, u.user_name, pv.ver_time, pv.ver_transient
                 from primary_verifications pv, mw_user u
                 where pv.pub_id = %d and pv.user_id = u.user_id
                 order by pv.ver_time""" % int(pub_id)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLPrimaryVerStatus(pub_id, user_id):
         # Returns None if this user hasn't verified this publication;
@@ -2042,7 +2005,7 @@ def SQLPrimaryVerStatus(pub_id, user_id):
 	query = """select ver_transient
                 from primary_verifications pv
                 where pub_id = %d and user_id = %d""" % (int(pub_id), int(user_id))
-	results = StandardQuery(query)
+	results = _StandardQuery(query)
 	if not results:
                 return None
         elif not results[0][0]:
@@ -2290,11 +2253,11 @@ def SQLgetTitleTagsByUser(title_id):
                 where t.tag_id = tm.tag_id
                 and tm.title_id = %d
                 order by t.tag_name""" % int(title_id)
-        return StandardQuery(query)
+        return _StandardQuery(query)
 
 def SQLgetTitleByTagId(tagmap_id):
         query = """select title_id from tag_mapping where tagmap_id = %d""" % int(tagmap_id)
-        return OneField(query)
+        return _OneField(query)
 
 def SQLgetUserTags(title_id, user_id):
         query = "select tags.tag_name from tags,tag_mapping where tag_mapping.title_id='%d' and tag_mapping.user_id='%d' and tag_mapping.tag_id=tags.tag_id;" % (int(title_id), int(user_id))
@@ -2494,7 +2457,7 @@ def SQLGetPseudIdByAuthorAndPseud(parent,pseudonym):
 	else:
                 return []
 
-def LoadWebSites(isbn, user_id = None, format = None):
+def SQLLoadWebSites(isbn, user_id = None, format = None):
         from urlparse import urlparse
         from library import toISBN10, toISBN13
         from isbn import convertISBN
@@ -2608,11 +2571,11 @@ def SQLLoadUserLanguages(user_id):
 
 def SQLGetLangIdByName(lang_name):
         query = "select lang_id from languages where lang_name ='%s'" % (db.escape_string(lang_name))
-        return SingleNumericField(query)
+        return _SingleNumericField(query)
 
 def SQLGetLangIdByCode(lang_code):
         query = "select lang_id from languages where lang_code ='%s'" % (db.escape_string(lang_code))
-        return SingleNumericField(query)
+        return _SingleNumericField(query)
 
 def SQLUserPreferencesId(user_id):
         query = "select user_pref_id from user_preferences where user_id='%d'" % (int(user_id))
@@ -2905,7 +2868,7 @@ def SQLLastUserActivity(user_id):
         from calendar import timegm
         query = """select ver_time from primary_verifications
                 where user_id = %d order by ver_time desc limit 1""" % int(user_id)
-        results = StandardQuery(query)
+        results = _StandardQuery(query)
         if results:
                 primary_ver = results[0][0]
         else:
@@ -2913,7 +2876,7 @@ def SQLLastUserActivity(user_id):
 
         query = """select ver_time from verification
                 where user_id = %d order by ver_time desc limit 1""" % int(user_id)
-        results = StandardQuery(query)
+        results = _StandardQuery(query)
         if results:
                 sec_ver = results[0][0]
         else:
@@ -2923,7 +2886,7 @@ def SQLLastUserActivity(user_id):
                    where sub_submitter = %d
                    and sub_state = 'I'
                    order by sub_id desc limit 1""" % int(user_id)
-        results = StandardQuery(query)
+        results = _StandardQuery(query)
         if results:
                 last_submission = results[0][0]
         else:
@@ -2934,7 +2897,7 @@ def SQLLastUserActivity(user_id):
         last_wiki = ''
 	try:
                 query = "select max(rev_timestamp) from mw_revision where rev_user = %d" % int(user_id)
-                results = StandardQuery(query)
+                results = _StandardQuery(query)
                 if results:
                         timestamp = results[0][0]
                         if timestamp:
@@ -2977,7 +2940,7 @@ def SQLLoadIdentifierTypes():
         # The dictionary structure is:
         #       results[type_number] = (type_name, type_full_name)
         query = "select * from identifier_types"
-        type_list = StandardQuery(query)
+        type_list = _StandardQuery(query)
         results = {}
         for id_type in type_list:
                 type_number = id_type[IDTYPE_ID]
@@ -2988,11 +2951,11 @@ def SQLLoadIdentifierTypes():
 
 def SQLLoadIdentifiers(pub_id):
         query = "select * from identifiers where pub_id = %d" % int(pub_id)
-        return StandardQuery(query)
+        return _StandardQuery(query)
 
 def SQLLoadIdentifierSites():
         query = "select * from identifier_sites order by site_position, site_name"
-        return StandardQuery(query)
+        return _StandardQuery(query)
 
 def SQLFindPubByExternalID(id_type, id_value):
         id_value = id_value.replace('*','%')
@@ -3000,7 +2963,7 @@ def SQLFindPubByExternalID(id_type, id_value):
                    where p.pub_id = id.pub_id
                    and id.identifier_type_id = %d
                    and id.identifier_value like '%s'""" % (int(id_type), db.escape_string(id_value))
-        return StandardQuery(query)
+        return _StandardQuery(query)
 
 def SQLLoadVotes(title_id, variants, user_id):
         from library import list_to_in_clause
@@ -3008,12 +2971,12 @@ def SQLLoadVotes(title_id, variants, user_id):
         average_vote = 0
         user_vote = 0
         query = "select count(vote_id), ROUND(AVG(rating),2) from votes where title_id = %d" % int(title_id)
-        results = StandardQuery(query)
+        results = _StandardQuery(query)
         if results[0][0]:
                 vote_count = int(results[0][0])
                 average_vote = float(results[0][1])
                 query = "select rating from votes where title_id = %d and user_id = %d" % (int(title_id), int(user_id))
-                results = StandardQuery(query)
+                results = _StandardQuery(query)
                 if results:
                         user_vote = int(results[0][0])
 
@@ -3027,7 +2990,7 @@ def SQLLoadVotes(title_id, variants, user_id):
                         variant_ids.append(variant_id)
                 variant_clause = list_to_in_clause(variant_ids)
                 query = "select count(vote_id), ROUND(AVG(rating),2) from votes where title_id in (%s)" % variant_clause
-                results = StandardQuery(query)
+                results = _StandardQuery(query)
                 if results[0][0]:
                         composite_vote_count = int(results[0][0])
                         composite_average_vote = float(results[0][1])
@@ -3042,7 +3005,7 @@ def SQLQueueSize():
         and s.sub_holdid=0
         and not exists
         (select 1 from mw_user_groups g where g.ug_user=s.sub_submitter and g.ug_group='sysop')"""
-        return StandardQuery(query)[0][0]
+        return _StandardQuery(query)[0][0]
 
 def SQLCountPubsForTitle(title_id):
         # Retrieve the number of pubs that this title exists in
@@ -3122,17 +3085,17 @@ def SQLDeletedSeries(series_id):
 
 def SQLDuplicateImageURL(value):
         query = "select * from pubs where pub_frontimage = '%s'" % db.escape_string(value)
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLGetSecondaryVerificationByVerID(ver_id):
         query = "select * from verification where verification_id = %d" % int(ver_id)
-	return StandardQuery(query)
+	return _StandardQuery(query)
         
 def SQLGetSelfApprovers():
         query = """select u.user_id, u.user_name
                 from self_approvers sa, mw_user u
                 where sa.user_id = u.user_id"""
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLGetAllAuthorsForPublisher(publisher_id, sort_by):
         query = """select a.author_id aid, a.author_canonical, count(a.author_canonical) as cnt
@@ -3145,7 +3108,7 @@ def SQLGetAllAuthorsForPublisher(publisher_id, sort_by):
                 query += 'cnt desc, a.author_lastname'
         else:
                 query += 'a.author_lastname, cnt desc'
-	return StandardQuery(query)
+	return _StandardQuery(query)
 
 def SQLGetPubsForAuthorPublisher(publisher_id, author_id):
         query = """select p.*
@@ -3154,4 +3117,36 @@ def SQLGetPubsForAuthorPublisher(publisher_id, author_id):
         and p.publisher_id = %d
         and pa.author_id = %d
         order by p.pub_year, p.pub_title"""  % (publisher_id, author_id)
-	return StandardQuery(query)
+	return _StandardQuery(query)
+
+#################################################################
+# This section is executed when the file is imported by another
+# file. The try section below is executed. If a successful
+# connection to the database is made, the query count is updated
+# via a call to SQLUpdateQueries(). If an exception occurs, html
+# error code is emitted, and the application exits. Otherwise all
+# supported languages are loaded in the global variable LANGUAGES
+#################################################################
+try:
+	db = MySQLdb.connect(DBASEHOST, USERNAME, PASSWORD, conv=_IsfdbConvSetup())
+	db.select_db(DBASE)
+	SQLUpdateQueries()
+except:
+        PrintHTMLHeaders('ISFDB Maintenance')
+        print '</div>'
+        print '<div id="nav">'
+       	print '<a href="http:/%s/index.cgi">' % HTFAKE
+	print '<img src="http://%s/isfdb.gif" width="90%%" alt="ISFDB logo">' % HTMLLOC
+        print '</a>'
+        print '</div>'
+        print '<div id="main2">'
+        print '<div id="ErrorBox">'
+	print 'The ISFDB database is currently undergoing maintenance. Please try again in a few minutes.'
+	print '</div>'
+	print '</div>'
+	print '</div>'
+        print '</body>'
+        print '</html>'
+	sys.exit(0)
+
+LANGUAGES = SQLLoadAllLanguages()

@@ -15,15 +15,6 @@ import os
 from localdefs import *
 import urllib
 
-def Date_or_None(s):
-    return s
-
-def IsfdbConvSetup():
-    import MySQLdb.converters
-    IsfdbConv = MySQLdb.converters.conversions
-    IsfdbConv[10] = Date_or_None
-    return(IsfdbConv)
-
 def PrintHTMLHeaders(title):
     from datetime import date
     # Disallow the <base> directive

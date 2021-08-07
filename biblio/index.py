@@ -11,7 +11,7 @@
 
 
 from SQLparsing import *
-from library import ISFDBLink, ISFDBText, ISFDBPubFormat
+from library import ISFDBLink, ISFDBText, ISFDBPubFormat, ISFDBDate
 from time import gmtime
 from common import displayAuthorList, PrintHeader, PrintNavbar, PrintTrailer
 from calendarClass import CalendarDay
@@ -38,7 +38,7 @@ if __name__ == '__main__':
 
         # Authors who were born and died on this day
         calendar_day = CalendarDay()
-        calendar_day.padded_day = todaysDate()
+        calendar_day.padded_day = ISFDBDate()
         calendar_day.print_authors_section()
 	# Forthcoming Books
 	displayLinks()

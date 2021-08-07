@@ -492,7 +492,7 @@ def display_sources(submission_id):
                 return
 
         # Retrieve all Web sites that ISFDB knows about
-        websites = LoadWebSites(isbn, None, format)
+        websites = SQLLoadWebSites(isbn, None, format)
         print '<b>Additional sources:</b> '
         print '<ul>'
         for website in websites:

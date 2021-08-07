@@ -15,8 +15,16 @@ from xml.dom import minidom
 from xml.dom import Node
 
 ################################################################
-# The routines found here are used across all ISFDB directories.
+# The functions and classes in this module are used across all
+# ISFDB directories
 ################################################################
+
+def ISFDBDate():
+	date = gmtime()
+	month = date[1]
+	day = date[2]
+	year  = str(date[0])
+	return '%s-%02d-%02d' % (year, int(month), int(day))
 
 monthmap = {
         1  : 'Jan',
