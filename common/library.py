@@ -804,7 +804,7 @@ def ISFDBTemplates():
                                    'The Encyclopedia of Fantasy, eds. John Clute and John Grant, 1997'),
                 'Clute/Nicholls': ('http:/%s/title.cgi?102324' % HTFAKE, 'Clute/Nicholls',
                                    'The Encyclopedia of Science Fiction, 2nd edition, eds. John Clute and Peter Nicholls, 1993'),
-                'Contento': ('http://www.philsp.com/homeville/ISFAC/0start.htm', 'Contento',
+                'Contento': ('http://www.philsp.com/resources/isfac/0start.htm', 'Contento',
                                    'Index to Science Fiction Anthologies and Collections, Combined Edition, William G. Contento'),
                 'Currey': ('http:/%s/title.cgi?102939' % HTFAKE, 'Currey',
                                    'Science Fiction and Fantasy Authors: A Bibliography of First Printings of Their Fiction and Selected Nonfiction by L. W. Currey, 1979'),
