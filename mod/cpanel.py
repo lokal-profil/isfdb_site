@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006   Al von Ruff
+#     (C) COPYRIGHT 2006-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,34 +10,32 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
-from isfdblib import *
-from library import *
+from isfdblib import PrintPreMod, PrintNavBar, PrintPostMod
 from SQLparsing import *
 
 
 if __name__ == '__main__':
 
-	PrintPreMod("ISFDB Control Panel")
+	PrintPreMod('ISFDB Control Panel')
 	PrintNavBar()
 
 	query = "select * from metadata"
 	db.query(query)
 	result = db.store_result()
         record = result.fetch_row()
+        isfdb_version = record[0][0]
 	DbOnline = record[0][2]
 	EditOnline = record[0][3]
 
 	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/mod/submitcpanel.cgi">'
+        print '<p>'
 
 	###############################################################
 	# VALUE 1 - ISFDB Version
 	###############################################################
 	print '<b>ISFDB Version:</b>'
-	print '<INPUT NAME="VERSION" SIZE=15 VALUE="%s">' % (record[0][0])
+	print '<INPUT NAME="VERSION" SIZE=15 VALUE="%s">' % isfdb_version
 	print '<hr>'
 
 	###############################################################
@@ -82,12 +80,10 @@ if __name__ == '__main__':
 		print '<INPUT TYPE="radio" NAME="EDITING" VALUE="2" CHECKED>'
 		print '<b>Moderator Editing Only</b><br>'
 
-
 	print '<hr>'
+        print '<p>'
 	print '<input TYPE="SUBMIT" VALUE="Submit Data">'
 	print '</form>'
 
-
-
-	PrintPostMod()
+	PrintPostMod(0)
 

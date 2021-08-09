@@ -85,7 +85,6 @@ def PrintNavBar():
 	print '<li><a href="http:/%s/mod/recent.cgi?0+R">Recent Rejections</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/mod/recent.cgi?0+I">Recent Approvals</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/mod/recent.cgi?0+P">Errored Out Submissions</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/mod/cpanel.cgi">Control Panel</a>' % (HTFAKE)
 	print '<li><a href="http:/%s/mod/editrefs.cgi">Edit Ref List</a>' % (HTFAKE)
 	print '</ul>'
         print '</div>'
@@ -103,7 +102,8 @@ def PrintNavBar():
                 else:
                         PrintError('Moderator privileges are required for this option')
 
-        bureaucrat_only = ('bureaucrat', 'self_approvers', 'self_approver_file', 'marque')
+        bureaucrat_only = ('bureaucrat', 'cpanel', 'marque', 'self_approvers', 'self_approver_file',
+                           'submitcpanel')
         if SESSION.cgi_script in bureaucrat_only and not bureaucrat:
                 PrintError('Bureaucrats privileges are required for this option')
 

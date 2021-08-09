@@ -29,7 +29,8 @@ class Bureaucrat:
                 print '<li>%s' % ISFDBLink('edit/new_language.cgi', '', 'Add New Language')
                 print '<li>%s' % ISFDBLink('edit/newawardtype.cgi', '', 'Add New Award Type')
                 print '<li>%s' % ISFDBLink('mod/self_approvers.cgi', '', 'Manage Self-Approvers')
-                print '<li>%s' % ISFDBLink('mod/marque.cgi', '', 'Re-calculate Marque (most viewed) Authors')
+                print '<li>%s' % ISFDBLink('mod/marque.cgi', '', 'Re-Calculate Marque (most viewed) Authors')
+                print '<li>%s' % ISFDBLink('mod/cpanel.cgi', '', 'Control Panel')
                 print '</ul>'
                 print '<p>'
 
