@@ -77,6 +77,7 @@ class Session:
         self.cgi_script = ''
         self.parameters = []
         self.query_string = ''
+        self.frame = 1 # Flag indicating whether the framing divs need to be displayed
 
     def ParseParameters(self):
         cgi_path = os.environ.get('SCRIPT_NAME')
@@ -145,7 +146,8 @@ class Session:
             self.DisplayError(output)
         return value
 
-    def DisplayError(self, message):
+    def DisplayError(self, message, frame = 1):
+        self.frame = frame
         if self.cgi_dir == 'cgi-bin':
             self._DisplayBiblioError(message)
         elif self.cgi_dir == 'edit':
@@ -156,26 +158,29 @@ class Session:
 
     def _DisplayBiblioError(self, message):
         from common import PrintHeader, PrintNavbar, PrintTrailer
-        PrintHeader('Page Does Not Exist')
-        try:
-            record_id = int(self.parameter[0])
-        except:
-            record_id = 0
-        PrintNavbar(self.cgi_script, record_id, 0, '%s.cgi' % self.cgi_script, 0)
+        if self.frame:
+            PrintHeader('Error')
+            try:
+                record_id = int(self.parameter[0])
+            except:
+                record_id = 0
+            PrintNavbar(self.cgi_script, record_id, 0, '%s.cgi' % self.cgi_script, 0)
         print """<h3>%s</h3>""" % message
         PrintTrailer(self.cgi_script, record_id, 0)
 
     def _DisplayEditError(self, message):
         from isfdblib import PrintPreSearch, PrintNavBar, PrintPostSearch
-        PrintPreSearch('Page Does Not Exist')
-        PrintNavBar('%s/%s' % (self.cgi_dir, self.cgi_script), 0)
+        if self.frame:
+            PrintPreSearch('Error')
+            PrintNavBar('%s/%s' % (self.cgi_dir, self.cgi_script), 0)
         print """<h3>%s</h3>""" % message
         PrintPostSearch(0, 0, 0, 0, 0, 0)
 
     def _DisplayModError(self, message):
         from isfdblib import PrintPreMod, PrintNavBar, PrintPostMod
-        PrintPreMod('Page Does Not Exist')
-        PrintNavBar()
+        if self.frame:
+            PrintPreMod('Error')
+            PrintNavBar()
         print """<h3>%s</h3>""" % message
         PrintPostMod(0)
 

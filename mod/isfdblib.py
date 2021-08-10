@@ -9,26 +9,12 @@
 #     Date: $Date$
 
 
-import MySQLdb
-import string
 from isfdb import *
 from login import *
 from library import *
 from navbar import *
 from SQLparsing import *
 
-
-def Date_or_None(s):
-    return s
-
-def IsfdbConvSetup():
-        import MySQLdb.converters
-        IsfdbConv = MySQLdb.converters.conversions
-        IsfdbConv[10] = Date_or_None
-        return(IsfdbConv)
-
-def isModerator(username):
-	pass
 
 ##################################################################
 # These routines start and end the HTML page
@@ -93,19 +79,18 @@ def PrintNavBar():
         if onlineVersion != SCHEMA_VER:
                 print "<h3>Warning: database schema mismatch (%s vs %s)</h3>" % (onlineVersion, SCHEMA_VER)
         if username == 0:
-                PrintError('Login required to moderate changes',
-                       'You have to <a href="http:/%s/dologin.cgi?mod/list.cgi+N">login</a> to edit data.' % (HTFAKE))
+                SESSION.DisplayError('%s required to moderate submissions.' % ISFDBLink('dologin.cgi', 'mod/list.cgi+N', 'Login'), 0)
 
 	if not moderator:
                 if self_approver and SelfApprovalAllowed(userid):
                         pass
                 else:
-                        PrintError('Moderator privileges are required for this option')
+                        SESSION.DisplayError('Moderator privileges are required for this option', 0)
 
         bureaucrat_only = ('bureaucrat', 'cpanel', 'marque', 'self_approvers', 'self_approver_file',
                            'submitcpanel')
         if SESSION.cgi_script in bureaucrat_only and not bureaucrat:
-                PrintError('Bureaucrats privileges are required for this option')
+                SESSION.DisplayError('Bureaucrat privileges are required for this option', 0)
 
 def SelfApprovalAllowed(userid):
         # Special case -- rejection permissions are handled by reject.cgi because the submission ID is in the form
@@ -143,13 +128,6 @@ def SelfCreated(submission_id, reviewer_id):
         if int(submitter_id) == int(reviewer_id):
                 return 1
         return 0
-
-def PrintError(line1, line2 = ''):
-        print '<h2>%s</h2>' % line1
-        if line2:
-                print line2
-        PrintPostMod()
-        sys.exit(0)
 
 def PrintPostMod(closetable = 1):
         if closetable:
