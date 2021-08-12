@@ -68,10 +68,12 @@ def PrintNavBar():
 	print '<li>%s' % ISFDBLink('mod/list.cgi', 'N', 'Moderator')
 	if bureaucrat:
                 print '<li>%s' % ISFDBLink('mod/bureaucrat.cgi', 'N', 'Bureaucrat')
-	print '<li><a href="http:/%s/mod/recent.cgi?0+R">Recent Rejections</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/mod/recent.cgi?0+I">Recent Approvals</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/mod/recent.cgi?0+P">Errored Out Submissions</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/mod/editrefs.cgi">Edit Ref List</a>' % (HTFAKE)
+	print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+R', 'Recent Rejections')
+	print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+I', 'Recent Approvals')
+	print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+P', 'Errored Out Submissions')
+	print '<li>%s' % ISFDBLink('mod/editrefs.cgi', '', 'Edit Ref List')
+	print '<li>%s' % ISFDBLink('mod/tag_status_changes.cgi', '', 'Tag Status Changes')
+	print '<li>%s' % ISFDBLink('mod/private_tags.cgi', '', 'Private Tags')
 	print '</ul>'
         print '</div>'
         print '<div id="main2">'
@@ -79,7 +81,7 @@ def PrintNavBar():
         if onlineVersion != SCHEMA_VER:
                 print "<h3>Warning: database schema mismatch (%s vs %s)</h3>" % (onlineVersion, SCHEMA_VER)
         if username == 0:
-                SESSION.DisplayError('%s required to moderate submissions.' % ISFDBLink('dologin.cgi', 'mod/list.cgi+N', 'Login'), 0)
+                SESSION.DisplayError('%s required to perform moderator tasks.' % ISFDBLink('dologin.cgi', 'mod/list.cgi+N', 'Login'), 0)
 
 	if not moderator:
                 if self_approver and SelfApprovalAllowed(userid):

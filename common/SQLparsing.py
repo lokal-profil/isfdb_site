@@ -2255,6 +2255,14 @@ def SQLgetTitleTagsByUser(title_id):
                 order by t.tag_name""" % int(title_id)
         return _StandardQuery(query)
 
+def SQLgetTagStatusHistory(tag_id):
+        query = """select u.user_name, sl.new_status, sl.timestamp
+                from tag_status_log sl, mw_user u
+                where sl.tag_id = %d
+                and sl.user_id = u.user_id
+                order by timestamp desc""" % tag_id
+        return _StandardQuery(query)
+
 def SQLgetTitleByTagId(tagmap_id):
         query = """select title_id from tag_mapping where tagmap_id = %d""" % int(tagmap_id)
         return _OneField(query)
@@ -2316,6 +2324,18 @@ def SQLsearchTags(tag):
 		results.append(record[0])
 		record = result.fetch_row()
 	return results
+
+def SQLLoadTagStatusChanges():
+        query = """select tsl.tag_id, t.tag_name, tsl.new_status, tsl.timestamp, u.user_name
+                from tag_status_log tsl, mw_user u, tags t
+                where tsl.user_id = u.user_id
+                and tsl.tag_id = t.tag_id
+                order by tsl.timestamp desc"""
+        return _StandardQuery(query)
+
+def SQLLoadPrivateTags():
+        query = 'select tag_id, tag_name from tags where tag_status = 1 order by tag_name'
+        return _StandardQuery(query)
 
 def SQLaddTagToTitle(tag, title_id, user_id):
         print_string = []

@@ -33,6 +33,7 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/pa_new.cgi \
 	  DIR/pa_delete.cgi \
 	  DIR/pa_update.cgi \
+	  DIR/private_tags.cgi \
 	  DIR/ra_link.cgi \
 	  DIR/recent.cgi \
 	  DIR/reject.cgi \
@@ -56,6 +57,7 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/ta_remove.cgi \
 	  DIR/ta_unmerge.cgi \
 	  DIR/tag_breakdown.cgi \
+	  DIR/tag_status_changes.cgi \
 	  DIR/ua_merge.cgi \
 	  DIR/unhold.cgi \
 	  DIR/unreject.cgi \

@@ -614,6 +614,7 @@ class ISFDBTable():
                 self.rows = []
                 self.table_css = 'generic_table'
                 self.header_css = 'generic_table_header'
+                self.row_align = 'center'
 
         def PrintTable(self):
                 print '<table class="%s">' % self.table_css
@@ -638,11 +639,11 @@ class ISFDBTable():
                                 row_css = 'table1'
                         else:
                                 row_css = 'table2'
-                        print '<tr align="center" class="%s">' % row_css
+                        print '<tr align="%s" class="%s">' % (self.row_align, row_css)
                         if self.display_count:
                                 print '<td>%d</td>' % (index + 1)
                         for cell in row:
-                                if cell:
+                                if cell != '' and cell is not None:
                                         print '<td>%s</td>' % cell
                                 else:
                                         print '<td>&nbsp;</td>'

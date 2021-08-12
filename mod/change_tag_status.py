@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -11,18 +11,19 @@
 
 
 import cgi
-import sys
-import MySQLdb
 from isfdb import *
-from isfdblib import *
-from common import *
+from library import ServerSideRedirect
 from SQLparsing import *
+from login import User
 
 
 if __name__ == '__main__':
 
-	PrintPreMod('Change Tag Status')
-	PrintNavBar()
+	user = User()
+	user.load()
+	user.load_moderator_flag()
+	if not user.moderator:
+                SESSION.DisplayError('Only Moderators Can Change Tag Status')
 
 	try:
                 sys.stderr = sys.stdout
@@ -35,20 +36,14 @@ if __name__ == '__main__':
                 else:
                         raise
                 tag_id = int(form["tag_id"].value)
-                tag_name = form["tag_name"].value
 	except:
-		print '<div id="ErrorBox">'
-		print '<h3>Error: Bad argument</h3>'
-		print '</div>'
-		PrintPostMod()
-		sys.exit(0)
+                SESSION.DisplayError('Bad Argument')
 
-	query = "update tags set tag_status='%d' where tag_id='%d'" % (numeric_status, tag_id)
-	db.query(query)
+	update = 'update tags set tag_status=%d where tag_id=%d' % (numeric_status, tag_id)
+	db.query(update)
 
-	print 'Tag status for <b>%s</b> changed to %s' % (tag_name, new_status)
-	print '<br>'
-	print '<a href="http:/%s/tag.cgi?%d">[<b>Return to the tag</b>]</a>' % (HTFAKE, tag_id)
+	update = 'insert into tag_status_log (tag_id, user_id, new_status, timestamp) values(%d, %d, %d, NOW())' % (tag_id, int(user.id), numeric_status)
+	db.query(update)
 
-	PrintPostMod()
+        ServerSideRedirect("http:/%s/tag.cgi?%d" % (HTFAKE, tag_id))
 
