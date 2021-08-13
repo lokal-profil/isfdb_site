@@ -443,9 +443,6 @@ class Submission:
                                 location = "http:/%s/mod/%s.cgi?%s" % (HTFAKE, SUBMAP[self.type][0], submission_id)
                                 ServerSideRedirect(location)
                 
-                ##################################################################
-                # Output the leading HTML stuff
-                ##################################################################
                 PrintPreSearch(self.header)
                 PrintNavBar(self.cgi_script, 0)
 

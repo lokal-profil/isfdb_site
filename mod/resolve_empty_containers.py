@@ -10,13 +10,18 @@
 #     Date: $Date: 2019-05-15 10:10:07 -0400 (Wed, 15 May 2019) $
 
 from isfdb import *
-from common import *
-from isfdblib import *
 from SQLparsing import *
-from library import *
+from library import ServerSideRedirect
+from login import User
 
 	
 if __name__ == '__main__':
+
+	user = User()
+	user.load()
+	user.load_moderator_flag()
+	if not user.moderator:
+                SESSION.DisplayError('Only Moderators Can Resolve Empty Containers')
 
         cleanup_id = SESSION.Parameter(0, 'int')
         report_type = SESSION.Parameter(1, 'str', None, ('decade','year','month','unknown'))

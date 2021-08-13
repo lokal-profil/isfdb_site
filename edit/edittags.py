@@ -53,7 +53,6 @@ if __name__ == '__main__':
 	print '<hr>'
 	print '<p>'
 	print '<input NAME="title_id" VALUE="%d" TYPE="HIDDEN">' % title_id
-	print '<input NAME="user_id" VALUE="%d" TYPE="HIDDEN">' % int(user_id)
 	print '<input TYPE="SUBMIT" VALUE="Submit Data">'
 	print '</form>'
 	print '<p>'

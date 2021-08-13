@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2017   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2004-2021   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -50,6 +50,8 @@ if __name__ == '__main__':
 
 	(userid, username, usertoken) = GetUserData()
 	userid = int(userid)
+	if not userid:
+                DoError('You must be logged in in order to vote')
 
         # If the submitted vote was 0, then delete this user's vote
         if vote == 0:

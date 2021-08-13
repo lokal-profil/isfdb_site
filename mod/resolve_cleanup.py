@@ -10,13 +10,18 @@
 #     Date: $Date$
 
 from isfdb import *
-from common import *
-from isfdblib import *
 from SQLparsing import *
-from library import *
+from library import ServerSideRedirect
+from login import User
 
 	
 if __name__ == '__main__':
+
+	user = User()
+	user.load()
+	user.load_moderator_flag()
+	if not user.moderator:
+                SESSION.DisplayError('Only Moderators Can Resolve Cleanup Report Records')
 
         cleanup_id = SESSION.Parameter(0, 'int')
         # Mode 0 is "delete from the table"; mode 1 is "set the resolve flag"
