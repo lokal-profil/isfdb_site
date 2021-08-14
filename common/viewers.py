@@ -3038,7 +3038,7 @@ def displayCoverChanged(child, record, submission_id, current):
         PrintComparison2('Artists', artists, oldartists)
         warning = ''
         if Compare2Dates(current.pub_year, date) == 1:
-                warning = 'Title date after the publication date'
+                warning = 'Title date after publication date'
         PrintComparison2('Year', date, titleData[TITLE_YEAR], warning)
 
 def displayCoverAdded(child, submission_id, current):
@@ -3082,7 +3082,7 @@ def displayTitleContentChanged(child, record, submission_id, current):
         PrintComparison2('Authors', authors, oldauthors)
         warning = ''
         if Compare2Dates(current.pub_year, date) == 1:
-                warning = 'Title date after the publication date'
+                warning = 'Title date after publication date'
         PrintComparison2('Year', date, titleData[TITLE_YEAR], warning)
         PrintComparison2('Type', type, titleData[TITLE_TTYPE])
         PrintComparison2('Length', length, titleData[TITLE_STORYLEN])
@@ -3144,7 +3144,7 @@ def displayOtherContentChanged(child, record_type, record, submission_id, curren
 
         warning = ''
         if Compare2Dates(current.pub_year, date) == 1:
-                warning = 'Title date after the publication date'
+                warning = 'Title date after publication date'
         PrintComparison2('Year', date, titleData[TITLE_YEAR], warning)
         oldPage = SQLGetPageNumber(record, current.pub_id)
         PrintComparison2('Page', page, oldPage)
