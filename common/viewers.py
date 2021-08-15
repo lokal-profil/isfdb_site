@@ -3789,3 +3789,35 @@ def DisplayVerifications(pub_id, include_secondary = 1):
         pub.PrintPrimaryVerifications()
         if include_secondary:
                 pub.PrintActiveSecondaryVerifications()
+
+def DisplayVerificationSourceEdit(submission_id):
+	from verificationsourceClass import VerificationSource
+
+	xmlData = SQLloadXML(submission_id)
+
+        print '<table border="2" class="generic_table">'
+        submitter = ''
+        doc = minidom.parseString(XMLunescape2(xmlData))
+        if doc.getElementsByTagName('VerificationSource'):
+                merge = doc.getElementsByTagName('VerificationSource')
+                Record = GetElementValue(merge, 'Record')
+                submitter = GetElementValue(merge, 'Submitter')
+
+                print '<tr>'
+                print '<td class="label"><b>Column</b></td>'
+		print '<td class="label"><b>Current</b></td>'
+                print '<td class="label"><b>Proposed</b></td>'
+                print '<td class="label"><b>Warnings</b></td>'
+                print '</tr>'
+
+                current = VerificationSource()
+                current.load(int(Record))
+                if not current.id:
+                        InvalidSubmission(submission_id, 'This verification source no longer exists')
+
+                PrintField2XML('SourceLabel', merge, 1,  current.label)
+                PrintField2XML('SourceName',  merge, 1,  current.name)
+                PrintField2XML('SourceURL',   merge, 1,  current.url)
+
+        print '</table>'
+	return submitter

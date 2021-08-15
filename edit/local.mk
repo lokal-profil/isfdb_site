@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -28,6 +28,7 @@ LIBS	= authorClass.py \
 	  publisherClass.py \
 	  pubseriesClass.py \
 	  seriesClass.py \
+	  verificationsourceClass.py \
 	  isbn.py \
 	  library.py \
 	  navbar.py \

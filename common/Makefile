@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -27,6 +27,7 @@ CLASS_FILES = authorClass.py \
 	pubseriesClass.py \
 	seriesClass.py \
 	titleClass.py \
+	verificationsourceClass.py \
 	viewers.py
 
 check_dirs:
@@ -89,6 +90,7 @@ diff:
 	diff pubClass.py ../biblio
 	diff publisherClass.py ../biblio
 	diff pubseriesClass.py ../biblio
+	diff verificationsourceClass.py ../biblio
 	diff authorClass.py ../biblio
 	diff awardClass.py ../biblio
 	diff awardcatClass.py ../biblio
@@ -106,6 +108,7 @@ diff:
 	diff pubClass.py ../edit
 	diff publisherClass.py ../edit
 	diff pubseriesClass.py ../edit
+	diff verificationsourceClass.py ../edit
 	diff authorClass.py ../edit
 	diff awardClass.py ../edit
 	diff awardcatClass.py ../edit
@@ -124,6 +127,7 @@ diff:
 	diff pubClass.py ../mod
 	diff publisherClass.py ../mod
 	diff pubseriesClass.py ../mod
+	diff verificationsourceClass.py ../mod
 	diff authorClass.py ../mod
 	diff awardClass.py ../mod
 	diff awardcatClass.py ../mod
@@ -142,6 +146,7 @@ diff:
 	diff pubClass.py ../rest
 	diff publisherClass.py ../rest
 	diff pubseriesClass.py ../rest
+	diff verificationsourceClass.py ../rest
 	diff authorClass.py ../rest
 	diff awardClass.py ../rest
 	diff awardcatClass.py ../rest
@@ -159,6 +164,7 @@ diff:
 	diff pubClass.py ../nightly
 	diff publisherClass.py ../nightly
 	diff pubseriesClass.py ../nightly
+	diff verificationsourceClass.py ../nightly
 	diff authorClass.py ../nightly
 	diff awardClass.py ../nightly
 	diff awardcatClass.py ../nightly

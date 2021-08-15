@@ -26,6 +26,7 @@ TARGETS = DIR/addaward.cgi \
 	  DIR/deletepub.cgi \
 	  DIR/deleteseries.cgi \
 	  DIR/deletetitle.cgi \
+	  DIR/edit_verification_source.cgi \
 	  DIR/editauth.cgi \
 	  DIR/editaward.cgi \
 	  DIR/editawardcat.cgi \
@@ -70,6 +71,7 @@ TARGETS = DIR/addaward.cgi \
 	  DIR/submitdelpub.cgi \
 	  DIR/submitdelseries.cgi \
 	  DIR/submitdeltitle.cgi \
+	  DIR/submit_edit_verification_source.cgi \
 	  DIR/submitlinkaward.cgi \
 	  DIR/submitlinkreview.cgi \
 	  DIR/submitmkpseudo.cgi \

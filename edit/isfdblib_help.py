@@ -228,6 +228,27 @@ def HelpLanguage():
 
         return help
 
+def HelpVerificationSource():
+
+        ###################################################################################
+        # This function defines Help text for the Edit Verification Sources data entry form
+        ###################################################################################
+
+        help = HelpGeneral()
+        if not help:
+                return help
+
+        text = 'Short label describing this secondary verification source.'
+        help['Source Label'] = [text, '']
+
+        text = 'Full name of this secondary verification source.'
+        help['Source Name'] = [text, '']
+
+        text = 'URL of this secondary verification source.'
+        help['Source URL'] = [text, '']
+
+        return help
+        
 def HelpAuthor():
 
         ##################################################################################

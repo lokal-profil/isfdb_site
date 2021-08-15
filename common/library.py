@@ -619,12 +619,12 @@ class ISFDBTable():
         def PrintTable(self):
                 print '<table class="%s">' % self.table_css
                 print '<tr align="left" class="%s">' % self.header_css
-                self.PrintHeaders()
+                self._PrintHeaders()
                 print '</tr>'
-                self.PrintBody()
+                self._PrintBody()
                 print '</table>'
 
-        def PrintHeaders(self):
+        def _PrintHeaders(self):
                 for count, header in enumerate(self.headers):
                         colspan = 1
                         try:
@@ -633,7 +633,7 @@ class ISFDBTable():
                                 pass
                         print '<th colspan="%d">%s</th>' % (colspan, header)
 
-        def PrintBody(self):
+        def _PrintBody(self):
                 for index, row in enumerate(self.rows):
                         if index % 2 == 0:
                                 row_css = 'table1'

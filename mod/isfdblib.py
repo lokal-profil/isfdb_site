@@ -71,7 +71,6 @@ def PrintNavBar():
 	print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+R', 'Recent Rejections')
 	print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+I', 'Recent Approvals')
 	print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+P', 'Errored Out Submissions')
-	print '<li>%s' % ISFDBLink('mod/editrefs.cgi', '', 'Edit Ref List')
 	print '<li>%s' % ISFDBLink('mod/tag_status_changes.cgi', '', 'Tag Status Changes')
 	print '<li>%s' % ISFDBLink('mod/private_tags.cgi', '', 'Private Tags')
 	print '</ul>'
@@ -89,8 +88,8 @@ def PrintNavBar():
                 else:
                         SESSION.DisplayError('Moderator privileges are required for this option', 0)
 
-        bureaucrat_only = ('bureaucrat', 'cpanel', 'marque', 'self_approvers', 'self_approver_file',
-                           'submitcpanel')
+        bureaucrat_only = ('bureaucrat', 'cpanel', 'list_verification_sources', 'marque'
+                           'self_approvers', 'self_approver_file', 'submitcpanel', 'verification_source_file')
         if SESSION.cgi_script in bureaucrat_only and not bureaucrat:
                 SESSION.DisplayError('Bureaucrat privileges are required for this option', 0)
 

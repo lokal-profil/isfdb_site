@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2013-2019   Ahasuerus
+#     (C) COPYRIGHT 2013-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -32,6 +32,7 @@ LIBS	= authorClass.py \
 	  publisherClass.py \
 	  pubseriesClass.py \
 	  seriesClass.py \
+	  verificationsourceClass.py \
 	  install.py \
 	  isbn.py \
 	  library.py \

@@ -42,6 +42,15 @@ def _BinaryQuery(query):
 	else:
 		return 0
 
+def _OneRow(query):
+	db.query(query)
+	result = db.store_result()
+	record = result.fetch_row()
+	if record:
+		return record[0]
+        else:
+        	return None
+
 def _OneField(query):
 	db.query(query)
 	result = db.store_result()
@@ -1969,6 +1978,10 @@ def SQLGetPubContentList(pub_id):
 def SQLGetRefDetails():
 	query = "select * from reference order by reference_id"
 	return _StandardQuery(query)
+
+def SQLGetVerificationSource(reference_id):
+	query = "select * from reference where reference_id = %d" % int(reference_id)
+	return _OneRow(query)
 
 def SQLVerificationStatus(pub_id):
         if SQLPrimaryVerifiers(pub_id):
