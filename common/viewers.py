@@ -3821,3 +3821,31 @@ def DisplayVerificationSourceEdit(submission_id):
 
         print '</table>'
 	return submitter
+
+def DisplayVerificationSourceAdd(submission_id):
+	xmlData = SQLloadXML(submission_id)
+
+        print '<table border="2" class="generic_table">'
+        submitter = ''
+        doc = minidom.parseString(XMLunescape2(xmlData))
+        if doc.getElementsByTagName('VerificationSource'):
+                merge = doc.getElementsByTagName('VerificationSource')
+                submitter = GetElementValue(merge, 'Submitter')
+
+                print '<tr>'
+                print '<td class="label"><b>Source Label</b></td>'
+                print '<td class="keep">%s</td>' % GetElementValue(merge, 'SourceLabel')
+                print '</tr>'
+
+                print '<tr>'
+                print '<td class="label"><b>Source Name</b></td>'
+                print '<td class="keep">%s</td>' % GetElementValue(merge, 'SourceName')
+                print '</tr>'
+
+                print '<tr>'
+                print '<td class="label"><b>Source URL</b></td>'
+                print '<td class="keep">%s</td>' % GetElementValue(merge, 'SourceURL')
+                print '</tr>'
+	print '</table>'
+
+	return submitter

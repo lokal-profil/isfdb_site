@@ -8,7 +8,8 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-TARGETS = DIR/addaward.cgi \
+TARGETS = DIR/add_verification_source.cgi \
+	  DIR/addaward.cgi \
 	  DIR/addawardcat.cgi \
 	  DIR/addpub.cgi \
 	  DIR/addquicktag.cgi \
@@ -71,6 +72,7 @@ TARGETS = DIR/addaward.cgi \
 	  DIR/submitdelpub.cgi \
 	  DIR/submitdelseries.cgi \
 	  DIR/submitdeltitle.cgi \
+	  DIR/submit_add_verification_source.cgi \
 	  DIR/submit_edit_verification_source.cgi \
 	  DIR/submitlinkaward.cgi \
 	  DIR/submitlinkreview.cgi \

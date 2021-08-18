@@ -469,6 +469,7 @@ MOD_AWARD_CAT_DELETE = 34
 MOD_AWARD_CAT_UPDATE = 35
 MOD_LANGUAGE_NEW     = 36
 MOD_VER_SOURCE_EDIT  = 37
+MOD_VER_SOURCE_ADD   = 38
 
 # SUBMAP is a dictionary used to store information about submission types
 # [0] - Name of the moderator review script
@@ -514,7 +515,8 @@ SUBMAP = {
   MOD_AWARD_CAT_DELETE:  ('submission_review', 'AwardCategoryDelete', None, 'Delete Award Category', 'Record', 'DisplayAwardCatDelete', 'award_cat_delete_file'),
   MOD_AWARD_CAT_UPDATE:  ('submission_review', 'AwardCategoryUpdate', 'award_category.cgi', 'Award Category Update', 'AwardCategoryId', 'DisplayAwardCatChanges', 'award_cat_update_file'),
   MOD_LANGUAGE_NEW:      ('submission_review', 'NewLanguage', None, 'New Language', 'Record', 'DisplayNewLanguage', 'new_language_file'),
-  MOD_VER_SOURCE_EDIT:   ('submission_review', 'VerificationSource', None, 'Edit Verification Source', 'Record', 'DisplayVerificationSourceEdit', 'verification_source_file')
+  MOD_VER_SOURCE_EDIT:   ('submission_review', 'VerificationSource', None, 'Edit Verification Source', 'Record', 'DisplayVerificationSourceEdit', 'verification_source_file'),
+  MOD_VER_SOURCE_ADD:    ('submission_review', 'VerificationSource', None, 'Add Verification Source', 'Record', 'DisplayVerificationSourceAdd', 'verification_source_add_file')
 }
 
 # List of all supported format codes

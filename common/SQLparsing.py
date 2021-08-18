@@ -1983,6 +1983,10 @@ def SQLGetVerificationSource(reference_id):
 	query = "select * from reference where reference_id = %d" % int(reference_id)
 	return _OneRow(query)
 
+def SQLGetVerificationSourceByLabel(reference_label):
+	query = "select * from reference where reference_label = '%s'" % db.escape_string(reference_label)
+	return _OneRow(query)
+
 def SQLVerificationStatus(pub_id):
         if SQLPrimaryVerifiers(pub_id):
                 return 1

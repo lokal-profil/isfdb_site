@@ -10,8 +10,8 @@
 
 import cgi
 from isfdb import *
-from library import XMLescape
-from SQLparsing import SQLGetVerificationSource
+from library import XMLescape, XMLunescape
+from SQLparsing import SQLGetVerificationSource, SQLGetVerificationSourceByLabel
 
 
 class VerificationSource():
@@ -49,27 +49,32 @@ class VerificationSource():
         def cgi2obj(self):
 		self.form = cgi.FieldStorage()
 		if self.form.has_key('source_id'):
-			self.id = XMLescape(self.form['source_id'].value)
+			self.id = int(self.form['source_id'].value)
 			self.used_id = 1
-		else:
-                        self.error = 'Verification Source ID is a required field'
-                        return
-                if not SQLGetVerificationSource(self.id):
-                        self.error = 'This Verification Source ID is not on file'
-                        return
+                        if not SQLGetVerificationSource(self.id):
+                                self.error = 'This Verification Source ID is not on file'
+                                return
 
-                if self.form.has_key('source_label'):
+		try:
                         self.label = XMLescape(self.form['source_label'].value)
                         self.used_label = 1
-                else:
-                        self.error = 'Verification Source Label is a required field'
-                        return
+                        if not self.label:
+                                raise
+                        # Unescape the label to ensure that the lookup finds it in the database
+                        current_source = SQLGetVerificationSourceByLabel(XMLunescape(self.label))
+                        if current_source:
+                                if (self.id != int(current_source[REFERENCE_ID])) and (current_source[REFERENCE_LABEL] == XMLunescape(self.label)):
+                                        self.error = "Entered label is aready associated with another Verification Source"
+                                        return
+		except:
+                        self.error = "Verification Source Label is a required field"
+			return
 
                 if self.form.has_key('source_name'):
                         self.name = XMLescape(self.form['source_name'].value)
                         self.used_name = 1
                 else:
-                        self.error = 'Verification Source name is a required field'
+                        self.error = 'Verification Source Name is a required field'
                         return
 
                 if self.form.has_key('source_url'):

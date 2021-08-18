@@ -62,6 +62,7 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/unhold.cgi \
 	  DIR/unreject.cgi \
           DIR/va_new.cgi \
+	  DIR/verification_source_add_file.cgi \
 	  DIR/verification_source_file.cgi \
 	  DIR/wa_new.cgi \
 	  DIR/wa_update.cgi \

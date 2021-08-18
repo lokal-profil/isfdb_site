@@ -31,7 +31,11 @@ class Bureaucrat:
                 print '<li>%s' % ISFDBLink('mod/self_approvers.cgi', '', 'Manage Self-Approvers')
                 print '<li>%s' % ISFDBLink('mod/marque.cgi', '', 'Re-Calculate Marque (most viewed) Authors')
                 print '<li>%s' % ISFDBLink('mod/cpanel.cgi', '', 'Control Panel')
-                print '<li>%s' % ISFDBLink('mod/list_verification_sources.cgi', '', 'Edit Verification Sources')
+                print '<li>Secondary Verification Sources'
+                print '<ul>'
+                print '<li>%s' % ISFDBLink('mod/list_verification_sources.cgi', '', 'List/Edit Verification Sources')
+                print '<li>%s' % ISFDBLink('edit/add_verification_source.cgi', '', 'Add a New Verification Source')
+                print '</ul>'
                 print '</ul>'
                 print '<p>'
 

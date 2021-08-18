@@ -89,7 +89,8 @@ def PrintNavBar():
                         SESSION.DisplayError('Moderator privileges are required for this option', 0)
 
         bureaucrat_only = ('bureaucrat', 'cpanel', 'list_verification_sources', 'marque'
-                           'self_approvers', 'self_approver_file', 'submitcpanel', 'verification_source_file')
+                           'self_approvers', 'self_approver_file', 'submitcpanel',
+                           'verification_source_file', 'verification_source_add_file')
         if SESSION.cgi_script in bureaucrat_only and not bureaucrat:
                 SESSION.DisplayError('Bureaucrat privileges are required for this option', 0)
 
