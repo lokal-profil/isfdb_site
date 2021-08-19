@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2018   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -11,8 +11,6 @@
 
 	
 import cgi
-import sys
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 from SQLparsing import *
@@ -38,7 +36,7 @@ if __name__ == '__main__':
 	elif form.has_key('ParentName'):
 		parent_name = string.strip(form['ParentName'].value)
 	else:
-                submission.error('Parent record or name must be specified')
+                submission.error('Parent record # or name must be specified')
 
 	if form.has_key('author_id'):
 		author_id = string.strip(form['author_id'].value)
@@ -66,17 +64,21 @@ if __name__ == '__main__':
                                 submission.error('Unknown parent author number: %s' % parent_id)
 
                 except:
-                        submission.error('Parent record must be an integer number')
+                        submission.error('Parent # must be an integer number')
 
         if int(author_id) == int(parent_id):
                 submission.error('Author record can not be an alternate name of itself')
 
-	update_string =  '<?xml version="1.0" encoding="' +UNICODE+ '" ?>\n'
-	update_string += "<IsfdbSubmission>\n"
-	update_string += "  <MakePseudonym>\n"
+        other_parents = SQLgetActualFromPseudo(author_id)
+        for other_parent in other_parents:
+                other_parent_data = SQLgetAuthorData(other_parent[0])
+                if int(other_parent_data[AUTHOR_ID]) == int(parent_id):
+                        submission.error('This author record is already set up as an alternate name of %s' % parent_data[AUTHOR_CANONICAL])
 
+	update_string =  '<?xml version="1.0" encoding="%s" ?>\n' % UNICODE
+	update_string += '<IsfdbSubmission>\n'
+	update_string += '  <MakePseudonym>\n'
 	update_string += "    <Submitter>%s</Submitter>\n" % (db.escape_string(XMLescape(submission.user.name)))
-
 	update_string += "    <Subject>%s</Subject>\n" % (db.escape_string(XMLescape(author_data[AUTHOR_CANONICAL])))
 	update_string += "    <Record>%d</Record>\n" % (int(author_id))
 	update_string += "    <Parent>%d</Parent>\n" % (int(parent_id))

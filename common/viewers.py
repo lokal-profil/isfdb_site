@@ -2017,14 +2017,19 @@ def DisplayMakePseudonym(submission_id):
                 if mod_note:
                         print '<h3>Note to Moderator: </h3>' + mod_note + '<p><p>'
 
-	authors = SQLgetActualFromPseudo(int(Record))
-	if authors:
+        duplicate = ''
+	other_authors = SQLgetActualFromPseudo(int(Record))
+	if other_authors:
 		print 'This name is currently labeled as an alternate name for the following authors:'
 		print '<ul>'
-                for author in authors:
-                        author_data = SQLgetAuthorData(author[0])
-			print '<li><a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author_data[AUTHOR_ID], author[0])
+                for other_author in other_authors:
+                        other_author_data = SQLgetAuthorData(other_author[0])
+			print '<li>%s' % ISFDBLink('ea.cgi', other_author_data[AUTHOR_ID], other_author[0])
+			if int(parent) == int(other_author_data[AUTHOR_ID]):
+                                duplicate = other_author_data[AUTHOR_CANONICAL]
 		print '</ul>'
+	if duplicate:
+                InvalidSubmission(submission_id, 'This author record is already set up as an alternate name of %s' % duplicate)
 
         return submitter
 
