@@ -45,6 +45,7 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/fc.cgi \
 	  DIR/google_search_redirect.cgi \
 	  DIR/index.cgi \
+	  DIR/languages.cgi \
 	  DIR/most_popular.cgi \
 	  DIR/most_popular_table.cgi \
 	  DIR/most_reviewed.cgi \
@@ -98,5 +99,6 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/usertag.cgi \
 	  DIR/usertitles.cgi \
 	  DIR/userver.cgi \
+	  DIR/verification_sources.cgi \
 	  DIR/view_submission.cgi \
 	  DIR/webpages_search_results.cgi

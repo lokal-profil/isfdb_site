@@ -431,6 +431,12 @@ DEL_VER_VERIFICATION_TIME = 4
 DEL_VER_DELETER_ID    = 5
 DEL_VER_DELETION_TIME = 6
 
+# Field offsets for Languages
+LANGUAGE_ID           = 0
+LANGUAGE_NAME         = 1
+LANGUAGE_CODE         = 2
+LANGUAGE_LATIN_SCRIPT = 3
+
 # Recognized submission types
 MOD_AUTHOR_MERGE     = 1
 MOD_AUTHOR_UPDATE    = 2

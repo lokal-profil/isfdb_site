@@ -87,6 +87,9 @@ def SQLLoadAllLanguages():
                 return_list.append(language[0])
         return tuple(return_list)
 
+def SQLLoadFullLanguages():
+        return _StandardQuery("select * from languages order by lang_name")
+
 def SQLgetDatabaseStatus():
 	query = "select metadata_dbstatus from metadata"
 	db.query(query)
