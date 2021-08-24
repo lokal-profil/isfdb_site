@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -9,15 +9,16 @@
 #     Date: $Date$
 
 
-HTMLLOC	   	= "www.isfdb.org"
-HTFAKE	   	= "/www.isfdb.org/cgi-bin"
-DBASEHOST  	= "localhost"
-HTMLHOST   	= "www.isfdb.org"
 COOKIEHOST   	= "www.isfdb.org"
-WIKILOC         = "www.isfdb.org/wiki"
-USERNAME   	= "root"
+DBASE      	= "isfdb"
+DBASEHOST  	= "localhost"
+DO_ANALYTICS	= 0
+HTFAKE	   	= "/www.isfdb.org/cgi-bin"
+HTMLHOST   	= "www.isfdb.org"
+HTMLLOC	   	= "www.isfdb.org"
 #PASSWORD   	= "XXXXXX"
 PASSWORD   	= ""
-DBASE      	= "isfdb"
+PROTOCOL        = "http"
+USERNAME   	= "root"
 UNICODE		= "iso-8859-1"
-DO_ANALYTICS	= 0
+WIKILOC         = "www.isfdb.org/wiki"
