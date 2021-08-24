@@ -18,46 +18,48 @@ import urllib
 def PrintHTMLHeaders(title):
     from datetime import date
     # Disallow the <base> directive
-    print """Content-Security-Policy: base-uri 'none';"""
+    policy = "base-uri 'none';"
     # Disallow <a> ping, Fetch, XMLHttpRequest, WebSocket, and EventSource
     #   May need to be re-worked if we implement AJAX
-    print """Content-Security-Policy: connect-src 'none';"""
+    policy += " connect-src 'none';"
     # Disallow @font-face
-    print """Content-Security-Policy: font-src 'none';"""
+    policy += " font-src 'none';"
     # Restrict form submission URLs to the ISFDB server
-    print """Content-Security-Policy: form-action 'self' http://%s https://www.google.com;""" % HTMLHOST
+    policy += " form-action 'self' %s://%s https://www.google.com;" % (PROTOCOL, HTMLHOST)
     # Disable nested browsing contexts
-    print """Content-Security-Policy: frame-src 'none';"""
+    policy += " frame-src 'none';"
     # Disable <frame>, <iframe>, <object>, <embed>, and <applet>
-    print """Content-Security-Policy: frame-ancestors 'none';"""
-    # Restrict sources of images and favicons to HTTP and HTTPS
-    print """Content-Security-Policy: img-src http: https:;"""
+    policy += " frame-ancestors 'none';"
+    # Restrict sources of images and favicons to http and https
+    policy += " img-src http: https:;"
     # Disallow <manifest>
-    print """Content-Security-Policy: manifest-src 'none';"""
+    policy += " manifest-src 'none';"
     # Disallow <audio>, <track> and <video>
-    print """Content-Security-Policy: media-src 'none';"""
+    policy += " media-src 'none';"
     # Disallow <object>, <embed>, and <applet>
-    print """Content-Security-Policy: object-src 'none';"""
+    policy += " object-src 'none';"
     # Limit JS scripts to .js files served by the ISFDB server
-    print """Content-Security-Policy: script-src 'self' http://%s;""" % HTMLHOST
+    policy += " script-src 'self' %s://%s;" % (PROTOCOL, HTMLHOST)
     # Limit stylesheets to .css files served by the ISFDB server
-    print """Content-Security-Policy: style-src 'self' http://%s;""" % HTMLHOST
+    policy += " style-src 'self' %s://%s;" % (PROTOCOL, HTMLHOST)
     # Disable Worker, SharedWorker, or ServiceWorker scripts
     #   May need to be re-worked if we implement workers
-    print """Content-Security-Policy: worker-src 'none';"""
-    # Declare content type and end the HTTP headers section with a \n
+    policy += " worker-src 'none';"
+    print """Content-Security-Policy: %s""" % policy
+    
+    # Declare content type and end the http headers section with a \n
     print 'Content-type: text/html; charset=%s\n' % UNICODE
-    print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
+    print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "https://www.w3.org/TR/html4/strict.dtd">'
     print '<html lang="en-us">'
     print '<head>'
     print '<meta http-equiv="content-type" content="text/html; charset=%s" >' % UNICODE
-    print '<link rel="shortcut icon" href="http://%s/favicon.ico">' % HTMLHOST
+    print '<link rel="shortcut icon" href="%s://%s/favicon.ico">' % (PROTOCOL, HTMLHOST)
     print '<title>%s</title>' % title
-    print '<link href="http://%s/biblio.css" rel="stylesheet" type="text/css" media="screen">' % HTMLHOST
+    print '<link href="%s://%s/biblio.css" rel="stylesheet" type="text/css" media="screen">' % (PROTOCOL, HTMLHOST)
     print '</head>'
     print '<body>'
     print '<div id="wrap">'
-    print '<a class="topbanner" href="http:/%s/index.cgi">' % HTFAKE
+    print '<a class="topbanner" href="%s:/%s/index.cgi">' % (PROTOCOL, HTFAKE)
     print '<span>'
     # Get the number of days since January 1, 2000
     millenium = date(2000, 1, 1)
@@ -65,7 +67,7 @@ def PrintHTMLHeaders(title):
     elapsed = today - millenium
     # Calculate the banner number for today; the range is 1-12
     banner_number = (elapsed.days % 12) + 1
-    print '<img src="http://%s/IsfdbBanner%d.jpg" alt="ISFDB banner">' % (HTMLHOST, banner_number)
+    print '<img src="%s://%s/IsfdbBanner%d.jpg" alt="ISFDB banner">' % (PROTOCOL, HTMLHOST, banner_number)
     print '</span>'
     print '</a>'
     print '<div id="statusbar">'
