@@ -150,7 +150,7 @@ def convertYear(date):
 def unpublishedDate():
         return 'unpublished'
 ##        value = '<span class="hint" title="Announced but never published">unpublished'
-##        value += '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></span>' % (HTMLLOC)
+##        value += '<img src="%s://%s/question_mark_icon.gif" alt="Question mark" class="help"></span>' % (PROTOCOL, HTMLLOC)
 ##        return value
 
 def convertDate(theDate, precise = 0):
@@ -526,7 +526,7 @@ def ISFDBLink(script, record_id, displayed_value, brackets=False, argument='', t
                 separator = ''
         if argument:
                 argument += ' '
-	link = '<a %shref="http:/%s/%s%s%s" dir="ltr">%s</a>' % (argument, HTFAKE, script, separator, record_id, displayed_value)
+	link = '<a %shref="%s:/%s/%s%s%s" dir="ltr">%s</a>' % (argument, PROTOCOL, HTFAKE, script, separator, record_id, displayed_value)
 
         # Transliterated values
 	trans_values = None
@@ -786,28 +786,28 @@ def ISFDBTemplates():
         #   2nd tuple value = displayed name, e.g. the "OCLC" in "OCLC 123456"
         #   3rd tuple value = hover-over display value
         templates = {
-                'A': ('http:/%s/se.cgi?arg=%%s&amp;type=Name&amp;mode=exact' % HTFAKE, ),
+                'A': ('%s:/%s/se.cgi?arg=%%s&amp;type=Name&amp;mode=exact' % (PROTOCOL, HTFAKE), ),
                 'ASIN': ('https://www.amazon.com/dp/%s', 'ASIN',
                          'Amazon Standard Identification Number'),
                 'Audible-ASIN': ('https://www.audible.com/pd/%s', 'Audible-ASIN',
                          'Audible ASIN'),
                 'BL': ('http://explore.bl.uk/primo_library/libweb/action/dlDisplay.do?vid=BLVU1&docId=BLL01%s',
                        'BL', 'British Library'),
-                'Bleiler1': ('http:/%s/title.cgi?102825' % HTFAKE, 'Bleiler1',
+                'Bleiler1': ('%s:/%s/title.cgi?102825' % (PROTOCOL, HTFAKE), 'Bleiler1',
                                    'Science-Fiction: The Gernsback Years by Everett F. Bleiler and Richard J. Bleiler, 1998'),
-                'Bleiler78': ('http:/%s/title.cgi?187785' % HTFAKE, 'Bleiler78',
+                'Bleiler78': ('%s:/%s/title.cgi?187785' % (PROTOCOL, HTFAKE), 'Bleiler78',
                                    'The Checklist of Science-Fiction and Supernatural Fiction by E. F. Bleiler, 1978'),
                 'BNB': ('http://search.bl.uk/primo_library/libweb/action/dlSearch.do?vid=BLBNB&institution=BL&query=any,exact,%s',
                         'BNB', 'British National Bibliography'),
                 'BNF': ('http://catalogue.bnf.fr/ark:/12148/%s', 'BNF',
                         'Biblioth&egrave;que nationale de France'),
-                'Clute/Grant': ('http:/%s/title.cgi?189435' % HTFAKE, 'Clute/Grant',
+                'Clute/Grant': ('%s:/%s/title.cgi?189435' % (PROTOCOL, HTFAKE), 'Clute/Grant',
                                    'The Encyclopedia of Fantasy, eds. John Clute and John Grant, 1997'),
-                'Clute/Nicholls': ('http:/%s/title.cgi?102324' % HTFAKE, 'Clute/Nicholls',
+                'Clute/Nicholls': ('%s:/%s/title.cgi?102324' % (PROTOCOL, HTFAKE), 'Clute/Nicholls',
                                    'The Encyclopedia of Science Fiction, 2nd edition, eds. John Clute and Peter Nicholls, 1993'),
                 'Contento': ('http://www.philsp.com/resources/isfac/0start.htm', 'Contento',
                                    'Index to Science Fiction Anthologies and Collections, Combined Edition, William G. Contento'),
-                'Currey': ('http:/%s/title.cgi?102939' % HTFAKE, 'Currey',
+                'Currey': ('%s:/%s/title.cgi?102939' % (PROTOCOL, HTFAKE), 'Currey',
                                    'Science Fiction and Fantasy Authors: A Bibliography of First Printings of Their Fiction and Selected Nonfiction by L. W. Currey, 1979'),
                 'DNB': ('http://d-nb.info/%s', 'DNB',
                         'Deutsche Nationalbibliothek'),
@@ -827,7 +827,7 @@ def ISFDBTemplates():
                 'LTF-title': ('http://www.tercerafundacion.net/biblioteca/ver/ficha/%s', 'La Tercera Fundaci&#243;n title'),
                 'Locus1': ('http://www.locusmag.com/index', 'Locus1',
                            'The Locus Index to Science Fiction'),
-                'Miller/Contento': ('http:/%s/title.cgi?1088499' % HTFAKE, 'Miller/Contento',
+                'Miller/Contento': ('%s:/%s/title.cgi?1088499' % (PROTOCOL, HTFAKE), 'Miller/Contento',
                                    'Science Fiction, Fantasy, & Weird Fiction Magazine Index (1890-2007) by Stephen T. Miller and William G. Contento'),
                 'MultiS': ('', 'Note that this title belongs to multiple series. Because of software limitations, only one of them currently appears in the Series field.', ),
                 'MultiPubS': ('', 'Note that this publication belongs to multiple publication series. Because of software limitations, only one of them currently appears in the Publication Series field.', ),
@@ -846,13 +846,13 @@ def ISFDBTemplates():
                             'PORBASE', 'Biblioteca Nacional de Portugal'),
                 'PPN': ('http://picarta.pica.nl/xslt/DB=3.9/XMLPRS=Y/PPN?PPN=%s', 'PPN',
                         'De Nederlandse Bibliografie Pica Productie Nummer'),
-                'Publisher': ('http:/%s/se.cgi?arg=%%s&amp;type=Publisher&amp;mode=exact' % HTFAKE, ),
-                'PubS': ('http:/%s/se.cgi?arg=%%s&amp;type=Publication+Series&amp;mode=exact' % HTFAKE, ),
-                'Reginald1': ('http:/%s/title.cgi?102834' % HTFAKE, 'Reginald1',
+                'Publisher': ('%s:/%s/se.cgi?arg=%%s&amp;type=Publisher&amp;mode=exact' % (PROTOCOL, HTFAKE), ),
+                'PubS': ('%s:/%s/se.cgi?arg=%%s&amp;type=Publication+Series&amp;mode=exact' % (PROTOCOL, HTFAKE), ),
+                'Reginald1': ('%s:/%s/title.cgi?102834' % (PROTOCOL, HTFAKE), 'Reginald1',
                                    'Science Fiction and Fantasy Literature: A Checklist, 1700-1974 by Robert Reginald, 1979'),
-                'Reginald3': ('http:/%s/title.cgi?102835' % HTFAKE, 'Reginald3',
+                'Reginald3': ('%s:/%s/title.cgi?102835' % (PROTOCOL, HTFAKE), 'Reginald3',
                                    'Science Fiction and Fantasy Literature 1975 - 1991 by Robert Reginald, 1992'),
-                'S': ('http:/%s/se.cgi?arg=%%s&amp;type=Series&amp;mode=exact' % HTFAKE, ),
+                'S': ('%s:/%s/se.cgi?arg=%%s&amp;type=Series&amp;mode=exact' % (PROTOCOL, HTFAKE), ),
                 'SF-Leihbuch': ('http://www.sf-leihbuch.de/index.cfm?bid=%s', 'SF-Leihbuch', 'Science Fiction-Leihbuch-Datenbank'),
                 'SFBG': ('http://www.sfbg.us', 'SFBG',
                          'Bulgarian SF'),
@@ -865,7 +865,7 @@ def ISFDBTemplates():
                 'SFE3': ('http://www.sf-encyclopedia.com/', 'SFE3',
                          'Third Edition of the Encyclopedia of Science Fiction'),
                 'Tr': ('%s', 'Translated by'),
-                'Tuck': ('http:/%s/pe.cgi?10230' % HTFAKE, 'Tuck',
+                'Tuck': ('%s:/%s/pe.cgi?10230' % (PROTOCOL, HTFAKE), 'Tuck',
                                    'The Encyclopedia of Science Fiction and Fantasy through 1968 by Donald H. Tuck, 1974-1982'),
                 'WatchDate': ('', 'Publication date is based on questionable pre-publication information and may be incorrect.', )
                 }
@@ -876,8 +876,8 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
         import re
         if display_mode == 'short' and '{{BREAK}}' in note:
                 note = note[:note.index('{{BREAK}}')]
-                note += """ ... <big><a class="inverted" href="http:/%s/note.cgi?%s+%d">view
-                        full %s</a></big>""" % (HTFAKE, record_type, int(record_id), note_type)
+                note += """ ... <big><a class="inverted" href="%s:/%s/note.cgi?%s+%d">view
+                        full %s</a></big>""" % (PROTOCOL, HTFAKE, record_type, int(record_id), note_type)
         # Strip {{BREAK}} for full note display mode, but not for edit mode
         if display_mode == 'full' and '{{BREAK}}' in note:
                 # Replace {{BREAK}} and any spaces next to it with a single space
@@ -1000,7 +1000,7 @@ def ServerSideRedirect(location):
         print 'Status: 303 See Other'
         print 'Location: %s' % location
         print 'Content-type: text/html; charset=%s\n' % (UNICODE)
-	print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
+	print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "https://www.w3.org/TR/html4/strict.dtd">'
 	print '<html lang="en-us">'
 	print '<body>'
 	print '</body>'
@@ -1173,7 +1173,7 @@ def FormatImage(value, height = 250):
         if WIKILOC in image:
                 try:
                         wikilink = image.split(WIKILOC)[1].split('/')[-1]
-                        wikilink = 'http://%s/index.php/Image:%s' % (WIKILOC, wikilink)
+                        wikilink = '%s://%s/index.php/Image:%s' % (PROTOCOL, WIKILOC, wikilink)
                         value += '<br><a href="%s" target="_blank">ISFDB Wiki page for this image</a>' % wikilink
                 except:
                         pass
@@ -1563,8 +1563,8 @@ def WikiExists():
                 return 0
 
 def WikiLink(user_name):
-        output = '<a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, user_name, user_name)
-        output += ' <a href="http://%s/index.php/User_Talk:%s">(Talk)</a>' % (WIKILOC, user_name)
+        output = '<a href="%s://%s/index.php/User:%s">%s</a>' % (PROTOCOL, WIKILOC, user_name, user_name)
+        output += ' <a href="%s://%s/index.php/User_Talk:%s">(Talk)</a>' % (PROTOCOL, WIKILOC, user_name)
         return output
 
 def popularNonLatinLanguages(types):
@@ -1706,7 +1706,7 @@ def ISFDBprintSubmissionRecord(record, eccolor, status, unreject):
         subTypeName=SUBMAP[subType][1]
         subId=record[0][SUB_ID]
 
-        print '<td><a href="http:/%s/view_submission.cgi?%s">%s</a></td>' % (HTFAKE, subId, subId)
+        print '<td><a href="%s:/%s/view_submission.cgi?%s">%s</a></td>' % (PROTOCOL, HTFAKE, subId, subId)
 
         try:
                 doc = minidom.parseString(XMLunescape2(record[0][SUB_DATA]))
@@ -1728,17 +1728,17 @@ def ISFDBprintSubmissionRecord(record, eccolor, status, unreject):
 
         print '<td>%s</td>' % record[0][SUB_TIME]
 
-	print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, submitter, submitter)
+	print '<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, submitter, submitter)
 
 	if record[0][SUB_REVIEWED]:
 		print '<td>%s</td>' % record[0][SUB_REVIEWED]
 
 	if record[0][SUB_REVIEWER]:
                 approver = SQLgetUserName(record[0][SUB_REVIEWER])
-                print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, approver, approver)
+                print '<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, approver, approver)
         elif record[0][SUB_HOLDID]:
                 holder = SQLgetUserName(record[0][SUB_HOLDID])
-                print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, holder, holder)
+                print '<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, holder, holder)
         else:
                 print '<td>&nbsp;</td>'
 
@@ -1750,7 +1750,7 @@ def ISFDBprintSubmissionRecord(record, eccolor, status, unreject):
                 else:
                         print '<td>-</td>'
         elif status == 'N':
-                print '<td><a href="http:/%s/cancelsubmission.cgi?%d">Cancel submission</a></td>' % (HTFAKE, subId)
+                print '<td><a href="%s:/%s/cancelsubmission.cgi?%d">Cancel submission</a></td>' % (PROTOCOL, HTFAKE, subId)
 
         if unreject:
                 print '<td>%s</td>' % ISFDBLink('mod/unreject.cgi', subId, 'Unreject')
@@ -1776,11 +1776,11 @@ def getSubjectLink(record, doc2, subType):
         # This value is None for data deletion submissions since there is no record left to link to
         displayPage = SUBMAP[subType][2]
         if recordNum and displayPage: 
-                subjectLink='<a href="http:/%s/%s?%s">%s</a>' % (HTFAKE, displayPage, recordNum, subjectLink)
+                subjectLink='<a href="%s:/%s/%s?%s">%s</a>' % (PROTOCOL, HTFAKE, displayPage, recordNum, subjectLink)
         return (subjectLink, new_record)
 
 def AdvSearchLink(params):
-        link = '<a href="http:/%s/adv_search_results.cgi?START=0%s">' % (HTFAKE, EscapeParams(params))
+        link = '<a href="%s:/%s/adv_search_results.cgi?START=0%s">' % (PROTOCOL, HTFAKE, EscapeParams(params))
         return link
 
 def EscapeParams(params):
@@ -1816,13 +1816,13 @@ def buildRecordID(record_type, record_id, user_id, user = None, edit_mode = 1):
                         if record_type in ('Award Category', 'Award Type') and not user.moderator:
                                 edit_mode = 0
                         if edit_mode:
-                                output += ' [<a href="http:/%s/edit/%s.cgi?%d">Edit</a>]' % (HTFAKE, cgi_script, int(record_id))
+                                output += ' [<a href="%s:/%s/edit/%s.cgi?%d">Edit</a>]' % (PROTOCOL, HTFAKE, cgi_script, int(record_id))
                                 history_script = cgi_scripts[record_type][1]
                                 # Only moderators can view Author Edit History at this time
                                 if record_type == 'Author' and not user.moderator:
                                         pass
                                 else:
-                                        output += ' [<a href="http:/%s/%s.cgi?%d">Edit History</a>]' % (HTFAKE, history_script, int(record_id))
+                                        output += ' [<a href="%s:/%s/%s.cgi?%d">Edit History</a>]' % (PROTOCOL, HTFAKE, history_script, int(record_id))
         output += '</span>'
         return output
 

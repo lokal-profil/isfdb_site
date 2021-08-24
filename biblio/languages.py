@@ -12,7 +12,7 @@
 
 from isfdb import *
 from common import PrintHeader, PrintNavbar, PrintTrailer
-from library import ISFDBLink, ISFDBTable
+from library import ISFDBTable
 from SQLparsing import SQLLoadFullLanguages
 
 PrintHeader('ISFDB-Supported Languages')
