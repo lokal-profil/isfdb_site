@@ -509,6 +509,9 @@ def XMLescape(input, compliant = 0):
 	retval = string.rstrip(retval)
 	return retval
 
+def IMDBLink(title_code, displayed_link = 'IMDB'):
+        return '<a href="https://www.imdb.com/title/%s/" target="_blank">%s</a>' % (title_code, displayed_link)
+
 def ISFDBLink(script, record_id, displayed_value, brackets=False, argument='', transliterations = None):
         # Special case: author "uncredited" is displayed without a link for performance reasons
         if script == 'ea.cgi' and displayed_value == 'uncredited':

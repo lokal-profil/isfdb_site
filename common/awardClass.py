@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -80,7 +80,7 @@ class awardShared:
                         else:
                                 award_link = 'Nomination'
 
-                print '<td><a href="http:/%s/award_details.cgi?%s">%s</a>' % (HTFAKE, award.award_id, award_link)
+                print '<td>%s' % ISFDBLink('award_details.cgi', award.award_id, award_link)
                 if bold:
                         print '</b>'
                 print '</td>'
@@ -107,7 +107,7 @@ class awardShared:
                                 print award.award_title
 
                 if award.award_movie:
-                        print '(<a href="http://www.imdb.com/title/%s/" target="_blank">IMDB</a>)' % award.award_movie
+                        print '(%s)' %IMDBLink(award.award_movie)
 
                 if bold:
                         bold = 0
@@ -391,14 +391,13 @@ class awards(awardShared):
                         self.PrintAwardAuthors()
                         print '</td>'
                 # Link to all awards for this category for this year
-                year = self.award_year[:4]
-                print '<td><a href="http:/%s/award_category_year.cgi?%s+%s">%s</a></td>' % (HTFAKE, self.award_cat_id, year, self.award_cat_name)
+                print '<td>%s</td>' % ISFDBLink('award_category_year.cgi', '%s+%s' % (self.award_cat_id, self.award_year[:4]), self.award_cat_name)
                 print '</tr>'
 
         def PrintYear(self):
                 print '<td>'
                 year = self.award_year[:4]
-                print '<a href="http:/%s/ay.cgi?%s+%s">%s %s</a>' % (HTFAKE, self.award_type_id, year, year, self.award_type_short_name)
+                print ISFDBLink('ay.cgi', '%s+%s' % (self.award_type_id, year), '%s %s' % (year, self.award_type_short_name))
                 print '</td>'
 
         def PrintLevel(self, print_title):
@@ -414,7 +413,7 @@ class awards(awardShared):
                                 level = '<b>Win</b>'
                         else:
                                 level = 'Nomination'
-                print '<a href="http:/%s/award_details.cgi?%s">%s</a>' % (HTFAKE, self.award_id, level)
+                print ISFDBLink('award_details.cgi', self.award_id, level)
                 # For title-based awards given to VTs, display the VT
                 if not print_title and self.title_id:
                         title = SQLloadTitle(self.title_id)
@@ -462,9 +461,9 @@ class awards(awardShared):
                                 print '<li><b>Author: </b> '
                         self.PrintAwardAuthors()
 
-                print '<li><b>Award Name: </b> <a href="http:/%s/awardtype.cgi?%s">%s</a>' % (HTFAKE, self.award_type_id, self.award_type_name)
-                print '<li><b>Year: </b> <a href="http:/%s/ay.cgi?%s+%s">%s</a>' % (HTFAKE, self.award_type_id, self.award_year[:4], self.award_year[:4])
-                print '<li><b>Category: </b> <a href="http:/%s/award_category.cgi?%s+0">%s</a>' % (HTFAKE, self.award_cat_id, self.award_cat_name)
+                print '<li><b>Award Name: </b> %s' % ISFDBLink('awardtype.cgi', self.award_type_id, self.award_type_name)
+                print '<li><b>Year: </b> %s' % ISFDBLink('ay.cgi', '%s+%s' % (self.award_type_id, self.award_year[:4]), self.award_year[:4])
+                print '<li><b>Category: </b> %s' % ISFDBLink('award_category.cgi', '%s+0' % self.award_cat_id, self.award_cat_name)
 
                 print '<li><b>Award Level: </b> '
                 if int(self.award_level) > 70:
@@ -478,8 +477,7 @@ class awards(awardShared):
                                 print " Nomination"
 
                 if self.award_movie:
-                        print """<li><b>IMDB record: </b> <a href="http://www.imdb.com/title/%s/"
-                                 target="_blank">%s</a>""" % (self.award_movie, self.award_movie)
+                        print '<li><b>IMDB record: </b> %s' % IMDBLink(self.award_movie, self.award_movie)
 
                 if self.award_note:
                         print '<li>'

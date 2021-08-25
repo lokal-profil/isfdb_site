@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2009-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2021   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -25,7 +25,8 @@ class Sfe3:
                 self.urls_to_delete_from_sfe3_authors = []
                 #
                 self.host = 'sf-encyclopedia.com'
-                self.base_category_url = 'http://www.' + self.host + '/category/authors/'
+                self.protocol = 'http'
+                self.base_category_url = '%s://www.%s/category/authors/' % (self.protocol, self.host)
                 self.categories = ['art', 'author', 'critic', 'editor', 'house-name', 'people']
                 self.sleep_seconds = 1
                 self.user = None
@@ -47,7 +48,7 @@ class Sfe3:
                 query = """select distinct url
                         from webpages
                         where author_id is not null
-                        and url like '%%%s/%%'""" % self.host
+                        and url like '%%%s/%%'""" % db.escape_string(self.host)
                 db.query(query)
                 result = db.store_result()
                 record = result.fetch_row()
@@ -165,11 +166,12 @@ class Sfe3:
 
         def print_header(self):
                 print """<h3>This cleanup report lists all  
-                        <a href="http://sf-encyclopedia.com/category/authors">SFE3 author/editor/etc articles</a>
+                        <a href="%s://sf-encyclopedia.com/category/authors">SFE3 author/editor/etc articles</a>
                         without a matching author URL in the ISFDB database. Note that some SFE3 authors may not
                         be eligible on the ISFDB side, e.g. if their only SF works are comics.
                         Also, the SFE3 spelling or canonical name may not match what's used in
-                        the ISFDB database. For these reasons, this report lets moderators ignore SFE3 author URLs.</h3>"""
+                        the ISFDB database. For these reasons, this report lets moderators ignore SFE3 author
+                        URLs.</h3>""" % self.protocol
 
         def print_table_columns(self, columns):
                 print '<table class="generic_table">'
@@ -191,7 +193,7 @@ class Sfe3:
                 else:
                         print '<tr align=left class="table2">'
 
-                url = 'http://www.%s/entry/%s' % (self.host, unresolved_url)
+                url = '%s://www.%s/entry/%s' % (self.protocol, self.host, unresolved_url)
                 sf3_author_name = self.unresolved_URLs[unresolved_url]
                 isfdb_author_name = self.normalize_author_name(sf3_author_name)
                 author_link = AdvSearchLink((('TYPE', 'Author'),
@@ -206,7 +208,7 @@ class Sfe3:
                 print '<td>%s</td>' % sf3_author_name
                 print '<td>%s%s</a></td>' % (author_link, isfdb_author_name)
                 if self.user.moderator:
-                        print '<td><a href="http:/%s/mod/resolve_sfe3_url.cgi?%s">Ignore</a></td>' % (HTFAKE, unresolved_url)
+                        print '<td>%s</a></td>' % ISFDBLink('mod/resolve_sfe3_url.cgi', unresolved_url, 'Ignore')
                 print '</tr>'
 
         def normalize_author_name(self, sf3_author_name):

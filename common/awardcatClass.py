@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2013-2019   Ahasuerus
+#     (C) COPYRIGHT 2013-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,7 +10,6 @@
 
 import cgi
 import sys
-import os
 import re
 from isfdb import *
 from library import *
@@ -131,7 +130,9 @@ class award_cat(awardShared):
         def PrintAwardCatYear(self, year):
                 self.PrintAwardCatPageHeader()
                 print 'Displaying awards and nominations for this category for %d.' % year
-                print 'You can also <a href="http:/%s/award_category.cgi?%d+1">view all awards and nominations</a> for this category for all years.' % (HTFAKE, self.award_cat_id)
+                print 'You can also %s for this category for all years.' % ISFDBLink('award_category.cgi',
+                                                                                     '%d+1' % self.award_cat_id,
+                                                                                     'view all awards and nominations')
                 years = {}
                 padded_year = '%d-00-00' % year
                 years[padded_year] = SQLloadAwardsForCatYear(self.award_cat_id, year)
@@ -144,7 +145,7 @@ class award_cat(awardShared):
                         print '<td colspan=3> </td>'
                         print '</tr>'
                         print '<tr>'
-                        print '<th colspan=3><a href="http:/%s/award_category_year.cgi?%d+%s">%s</a></th>' % (HTFAKE, self.award_cat_id, year[:4], year[:4])
+                        print '<th colspan=3>%s</th>' % ISFDBLink('award_category_year.cgi', '%d+%s' % (self.award_cat_id, year[:4]), year[:4])
                         print '</tr>'
                         self.PrintOneAwardList(years[year])
         	print '</table>'
@@ -154,17 +155,17 @@ class award_cat(awardShared):
                 years = SQLloadAwardsForCat(self.award_cat_id, win_nom)
                 if win_nom == 0:
                         if years:
-                                print 'Displaying '
+                                print 'Displaying the'
                         else:
-                                print 'No '
-                        print 'wins for this category. '
-                        print 'You can also <a href="http:/%s/award_category.cgi?%d+%d">view all awards and nominations</a> in this category.' % (HTFAKE, self.award_cat_id, 1)
+                                print 'No'
+                        print ' wins for this category. '
+                        print 'You can also %s in this category.' % ISFDBLink('award_category.cgi', '%d+1' % self.award_cat_id, 'view all awards and nominations')
                 else:
                         if not years:
                                 print 'No wins or nominations for this category.'
                                 return
                         print 'Displaying all wins and nominations for this category. '
-                        print 'You can also limit the list to <a href="http:/%s/award_category.cgi?%d+%d">wins</a> in this category.' % (HTFAKE, self.award_cat_id, 0)
+                        print 'You can also limit the list to the %s in this category.' % ISFDBLink('award_category.cgi', '%d+0' % self.award_cat_id, 'wins')
                 print '<p>'
                 self.PrintAwardCatTable(years)
 
