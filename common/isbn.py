@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2007-2016   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2007-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -12,14 +12,10 @@ import string
 from library import validISBN, toISBN10, toISBN13
 
 
-################################################################
-# Format an ISBN with hyphen separators.  For information about
-# the ranges, see:
-#
-#     http://www.isbn-international.org/agency?rmxml=1
-#     http://www.isbn-international.org/agency?rmpdf=1
-#
-################################################################
+######################################################################
+# Format an ISBN with hyphen separators.  For information about the
+# ranges, see https://www.isbn-international.org/range_file_generation
+######################################################################
 def convertISBN(isbn):
 
 	if validISBN(isbn) == 0:
