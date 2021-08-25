@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2009-2020   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2021   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,20 +10,20 @@
 
 from isfdb import *
 from SQLparsing import *
-from library import ISFDBLink
+from library import ISFDBLink, WikiLink
 
 ################################################################
-# The routines found here are used across all ISFDB directories
-# to display navigation-related menu functions.
+# The functions found here are used across all ISFDB directories
+# to display navigation-related messages and menu sections
 ################################################################
 
 def PrintMessagesLink(userid, username):
 	if SQLhasNewTalk(userid):
 		# diff=cur causes the page to display in "diff" mode, with the
 		# most recent change highlighted in a diff region at the top.
-		print '<li><div class="newtalk"><a href="http://%s/index.php/User_talk:%s">My Messages</a> (new)</div>' % (WIKILOC, username)
+		print '<li><div class="newtalk"><a href="%s://%s/index.php/User_talk:%s">My Messages</a> (new)</div>' % (PROTOCOL, WIKILOC, username)
 	else:
-		print '<li><a href="http://%s/index.php/User_talk:%s">My Messages</a>' % (WIKILOC, username)
+		print '<li><a href="%s://%s/index.php/User_talk:%s">My Messages</a>' % (PROTOCOL, WIKILOC, username)
 
 def PrintWikiPointer(submitter):
 	#If the count of Wiki edits is greater than X, then do not display the Wiki pointer
@@ -32,8 +32,8 @@ def PrintWikiPointer(submitter):
 	wikipointer = """<h1>Your submission must be approved by a moderator before it enters the database.</h1>
                         If the moderator has questions or comments about your submission,
                         they will be posted on your Wiki Talk page: """
-	wikipointer += '<a href="http://%s/index.php/User_talk:%s">' % (WIKILOC, submitter)
-	wikipointer += 'http://%s/index.php/User_talk:%s</a>.' % (WIKILOC, submitter)
+	wikipointer += '<a href="%s://%s/index.php/User_talk:%s">' % (PROTOCOL, WIKILOC, submitter)
+	wikipointer += '%s://%s/index.php/User_talk:%s</a>.' % (PROTOCOL, WIKILOC, submitter)
 	wikipointer += " Please check this page frequently for comments or questions."
 	print wikipointer
         return
@@ -43,14 +43,14 @@ def PrintWikiPointer(submitter):
 def PrintSearchBox(page, search_value = '', search_type = ''):
         from library import ISFDBLink, ISFDBText
         print '<div id="search">'
-       	print '<a href="http:/%s/index.cgi">' % (HTFAKE)
+       	print '<a href="%s:/%s/index.cgi">' % (PROTOCOL, HTFAKE)
 	if page == 'frontpage':
-		print '<img src="http://%s/isfdb_logo.jpg" width="129" height="85" alt="ISFDB logo">' % (HTMLHOST)
+		print '<img src="%s://%s/isfdb_logo.jpg" width="129" height="85" alt="ISFDB logo">' % (PROTOCOL, HTMLHOST)
 	else:
-		print '<img src="http://%s/isfdb.gif" width="130" height="77" alt="ISFDB logo">' % (HTMLLOC)
+		print '<img src="%s://%s/isfdb.gif" width="130" height="77" alt="ISFDB logo">' % (PROTOCOL, HTMLLOC)
         print '</a>'
 	print 'Search the database'
-        print '<form method="get" action="http:/%s/se.cgi" name="searchform" id="searchform">' % (HTFAKE)
+        print '<form method="get" action="%s:/%s/se.cgi" name="searchform" id="searchform">' % (PROTOCOL, HTFAKE)
 	print '<p>'
 	print '<input name="arg" id="searchform_arg" class="search" value="%s">' % ISFDBText(search_value)
 	print '<select name="type" class="search">'
@@ -79,19 +79,19 @@ def PrintOtherPages(choice):
 	print '</div>'
 	print '<ul class="navbar">'
 	if choice != 'frontpage':
-        	print '<li><a href="http:/%s/index.cgi">Home Page</a>' % (HTFAKE)
+        	print '<li>%s' % ISFDBLink('index.cgi', '', 'Home Page')
 	if choice == 'Moderator':
-        	print '<li><a href="http:/%s/mod/list.cgi?N">Moderator</a>' % (HTFAKE)
-	print '<li><a href="http://%s/index.php/Main_Page">ISFDB Wiki</a>' % (WIKILOC)
-	print '<li><a href="http://%s/index.php/ISFDB:FAQ">ISFDB FAQ</a>' % (WIKILOC)
+        	print '<li>%s' % ISFDBLink('list.cgi', 'N', 'Moderator')
+	print '<li><a href="%s://%s/index.php/Main_Page">ISFDB Wiki</a>' % (PROTOCOL, WIKILOC)
+	print '<li><a href="%s://%s/index.php/ISFDB:FAQ">ISFDB FAQ</a>' % (PROTOCOL, WIKILOC)
         print '<li>%s' % ISFDBLink("calendar_menu.cgi","","SF Calendar")
-        print '<li><a href="http:/%s/directory.cgi?author">Author Directory</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/award_directory.cgi">Award Directory</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/directory.cgi?publisher">Publisher Directory</a>' % (HTFAKE)
-	print '<li><a href="http:/%s/directory.cgi?magazine">Magazine Directory</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/stats-and-tops.cgi">Statistics/Top Lists</a>' % (HTFAKE)
+        print '<li>%s' % ISFDBLink('directory.cgi', 'author', 'Author Directory')
+	print '<li>%s' % ISFDBLink('award_directory.cgi', '', 'Award Directory')
+        print '<li>%s' % ISFDBLink('directory.cgi', 'publisher', 'Publisher Directory')
+	print '<li>%s' % ISFDBLink('directory.cgi', 'magazine', 'Magazine Directory')
+        print '<li>%s' % ISFDBLink('stats-and-tops.cgi', '', 'Statistics/Top Lists')
         print '<li>%s' % ISFDBLink('recent_activity_menu.cgi', '', 'Recent Activity')
-        print '<li><a href="http:/%s/edit/cleanup.cgi">Cleanup Reports</a>' % (HTFAKE)
+        print '<li>%s' % ISFDBLink('edit/cleanup.cgi', '', 'Cleanup Reports')
 	print '</ul>'
         return
 
@@ -101,16 +101,16 @@ def PrintLoggedIn(userid,username):
 	print '</div>'
 	print '<ul class="navbar">'
 	print '<li>', username
-	print '<li><a href="http:/%s/dologout.cgi">Log Out</a>' % (HTFAKE)
-	print '<li><a href="http://%s/index.php/Help:Navigation_Bar">Help Navigating</a>' % (WIKILOC)
+	print '<li>%s' % ISFDBLink('dologout.cgi', '', 'Log Out')
+	print '<li><a href="%s://%s/index.php/Help:Navigation_Bar">Help Navigating</a>' % (PROTOCOL, WIKILOC)
 	PrintMessagesLink( userid, username )
-        print '<li><a href="http:/%s/mypreferences.cgi">My Preferences</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/myrecent.cgi?0+I">My Recent Edits</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/myrecent.cgi?0+N">My Pending Edits</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/myrecent.cgi?0+R">My Rejected Edits</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/myrecent.cgi?0+P">My Errored Out Edits</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/myvotes.cgi">My Votes</a>' % (HTFAKE)
-        print '<li><a href="http:/%s/usertag.cgi?%d">My Tags</a>' % (HTFAKE, int(userid))
+        print '<li>%s' % ISFDBLink('mypreferences.cgi', '', 'My Preferences')
+        print '<li>%s' % ISFDBLink('myrecent.cgi', '0+I', 'My Recent Edits')
+        print '<li>%s' % ISFDBLink('myrecent.cgi', '0+N', 'My Pending Edits')
+        print '<li>%s' % ISFDBLink('myrecent.cgi', '0+R', 'My Rejected Edits')
+        print '<li>%s' % ISFDBLink('myrecent.cgi', '0+P', 'My Errored Out Edits')
+        print '<li>%s' % ISFDBLink('myvotes.cgi', '', 'My Votes')
+        print '<li>%s' % ISFDBLink('usertag.cgi', userid, 'My Tags')
         print '<li>%s' % ISFDBLink('my_verifications_menu.cgi', '', 'My Verifications')
         # Display a "New" message if this user has new changes to primary-verified publications
         if SQLChangedVerifications(userid):
@@ -123,7 +123,7 @@ def PrintNotLoggedIn(executable,argument):
 	print 'Not Logged In'
 	print '</div>'
 	print '<ul class="navbar">'
-	print '<li><a href="http:/%s/dologin.cgi?%s+%s">Log In</a>' % (HTFAKE, str(executable), str(argument))
-	print '<li><a href="http://%s/index.php/Help:Navigation_Bar">Help Navigating</a>' % (WIKILOC)
+	print '<li>%s' % ISFDBLink('dologin.cgi', '%s+%s' % (str(executable), str(argument)), 'Log In')
+	print '<li><a href="%s://%s/index.php/Help:Navigation_Bar">Help Navigating</a>' % (PROTOCOL, WIKILOC)
 	print '</ul>'
         return

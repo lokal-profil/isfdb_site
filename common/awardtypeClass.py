@@ -9,14 +9,10 @@
 #     Date: $Date$
 
 import cgi
-import sys
-import os
 from SQLparsing import SQLGetAwardTypeById, SQLgetNotes, SQLloadAwardTypeWebpages
 from awardClass import awardShared
 from isfdb import *
 from library import *
-from xml.dom import minidom
-from xml.dom import Node
 
 
 class award_type(awardShared):
@@ -185,7 +181,7 @@ class award_type(awardShared):
                 if award_years:
                         print '<div class="generic_centered_div">'
                         if current_year:
-                                print '<h3>Award Years for <a href="http:/%s/awardtype.cgi?%s">%s</a></h3>' % (HTFAKE, self.award_type_id, self.award_type_name)
+                                print '<h3>Award Years for %s</h3>' % ISFDBLink('awardtype.cgi', self.award_type_id, self.award_type_name)
                         else:
                                 print '<h3>Award Years</h3>'
                         print '<table class="generic_centered_table">'
@@ -202,11 +198,11 @@ class award_type(awardShared):
                                         award_year = decade+str(i)
                                         print '<td>'
                                         if award_year in decades[decade]:
-                                                if award_year == current_year:
+                                                if int(award_year) == int(current_year):
                                                         # If this is the year being displayed, don't hyperlink it
                                                         print '<b>%s</b>' % award_year
                                                 else:
-                                                        print '<a href="http:/%s/ay.cgi?%s+%s">%s</a>' % (HTFAKE, self.award_type_id, award_year, award_year)
+                                                        print ISFDBLink('ay.cgi', '%s+%s' % (self.award_type_id, award_year), award_year)
                                         else:
                                                 print '&nbsp;-&nbsp;'
                                         print '</td>'
@@ -233,9 +229,9 @@ class award_type(awardShared):
                                 else:
                                         display_order = ''
                                 print '<td>%s</td>' % display_order
-                                print '<td><a href="http:/%s/award_category.cgi?%s+0">%s</a></td>' % (HTFAKE, category[1], category[0])
-                                print '<td><a href="http:/%s/award_category.cgi?%s+0">%s</a></td>' % (HTFAKE, category[1], category[3])
-                                print '<td><a href="http:/%s/award_category.cgi?%s+1">%s</a></td>' % (HTFAKE, category[1], category[4])
+                                print '<td>%s</td>' % ISFDBLink('award_category.cgi', '%s+0' % category[1], category[0])
+                                print '<td>%s</td>' % ISFDBLink('award_category.cgi', '%s+0' % category[1], category[3])
+                                print '<td>%s</td>' % ISFDBLink('award_category.cgi', '%s+1' % category[1], category[4])
                                 print '</tr>'
                         print '</table>'
                         print '</div>'
@@ -252,7 +248,7 @@ class award_type(awardShared):
                         for category in empty_categories:
                                 print '<tr class="generic_table_header">'
                                 print '<td>%s</td>' % category[AWARD_CAT_ORDER]
-                                print '<td><a href="http:/%s/award_category.cgi?%s+1">%s</a></td>' % (HTFAKE, category[AWARD_CAT_ID], category[AWARD_CAT_NAME])
+                                print '<td>%s</td>' % ISFDBLink('award_category.cgi', '%s+1' % category[AWARD_CAT_ID], category[AWARD_CAT_NAME])
                                 print '</tr>'
                         print '</table>'
                         print '</div>'
@@ -287,8 +283,9 @@ class award_type(awardShared):
                                 print '<td colspan=3> </td>'
                                 print '</tr>'
                                 print '<tr>'
-                                print '<td colspan=3><b><a href="http:/%s/award_category.cgi?%s+0">%s</a></b></td>' \
-                                      % (HTFAKE, awards_for_category[0][AWARD_CATID], awards_for_category[0][AWARD_NOTEID+1])
+                                print '<td colspan=3><b>%s</b></td>' % ISFDBLink('award_category.cgi',
+                                                                               '%s+0' % awards_for_category[0][AWARD_CATID],
+                                                                               awards_for_category[0][AWARD_NOTEID+1])
                                 print '</tr>'
                                 self.PrintOneAwardList(awards_for_category)
                 print '</table>'
