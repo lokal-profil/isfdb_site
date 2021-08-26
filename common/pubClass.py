@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -846,7 +846,7 @@ class pubs:
                                 self.error = invalidURL(value)
                                 if self.error:
                                         return
-                                if value[0:41] == 'http://www.isfdb.org/wiki/index.php/Image':
+                                if value[0:41] == '%s://%s/index.php/Image' % (PROTOCOL, WIKILOC):
                                         self.error = "URL for covers should be for the image, not the Wiki page the image is on"
                                         return
         			self.pub_image = value
@@ -1616,7 +1616,7 @@ class pubs:
                         ver_time = verification[2]
                         ver_transient = verification[3]
                         print '<tr class="table2">'
-                        print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
+                        print '<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, user_name, user_name)
                         print '<td class="keep">%s</td>' % ver_time
                         if ver_transient:
                                 print '<td class="keep">Transient</td>'
@@ -1646,11 +1646,11 @@ class pubs:
                                                 print '<td class="drop">&nbsp;</td>'
                                         elif verification[VERIF_STATUS] == 1:
                                                 print '<td class="keep">Verified</td>'
-                                                print '<td class="keep"><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, name, name)
+                                                print '<td class="keep"><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, name, name)
                                                 print '<td class="keep">%s</td>' % verification[VERIF_TIME]
                                         elif verification[VERIF_STATUS] == 2:
                                                 print '<td class="label">N/A</td>'
-                                                print '<td class="label"><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, name, name)
+                                                print '<td class="label"><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, name, name)
                                                 print '<td class="label">%s</td>' % verification[VERIF_TIME]
                                         found = 1
                                         break
@@ -1673,7 +1673,7 @@ class pubs:
                         print '<td class="label"><a href="%s">%s</a></td>' % (verification[3], verification[2])
                         print '<td class="keep">Verified</td>'
                         name = SQLgetUserName(verification[0])
-                        print '<td class="keep"><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, name, name)
+                        print '<td class="keep"><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, name, name)
                         print '<td class="keep">%s</td>' % verification[1]
                         print '</tr>'
                 print '</table>'

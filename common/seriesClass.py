@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley nad Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley nad Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -191,7 +191,7 @@ class series:
                 if self.series_parent:
                         print '<li><b>Sub-series of:</b> %s' % ISFDBLink("pe.cgi", self.series_parent_id, self.series_parent)
                         if display_type == 'grid':
-                                print '<a href=http:/%s/seriesgrid.cgi?%s>(View Issue Grid)</a>' % (HTFAKE, self.series_parent_id)
+                                print ISFDBLink('seriesgrid.cgi', self.series_parent_id, '(View Issue Grid)')
 
                 PrintWebPages(self.series_webpages, '<li>')
 
@@ -218,12 +218,13 @@ class series:
                 for tag in seriesTags:
                         if count:
                                 print_string += ', '
-                        print_string += '<a href="http:/%s/tag.cgi?%d">%s</a> (%d)' % (HTFAKE, tag[0], tag[1], tag[2])
+                        print_string += '%s (%d)' % (ISFDBLink('tag.cgi', tag[0], tag[1]), tag[2])
                         count += 1
                         if count == 20 and total_tags > 20:
-                                print_string += ' and %d additional tags. <a class="inverted" ' % (total_tags-20)
-                                print_string += 'href="http:/%s/seriestags.cgi?%d">' % (HTFAKE, self.series_id)
-                                print_string += '<b>View all tags for %s</b></a>' % self.series_name
+                                print_string += ' and %d additional tags. ' % (total_tags-20)
+                                print_string += ISFDBLink('seriestags.cgi', self.series_id,
+                                                          '<b>View all tags for %s</b>' % self.series_name,
+                                                          False, 'class="inverted"')
                                 break
                 print print_string
 
@@ -237,7 +238,7 @@ class series:
                         for tag in seriesTags:
                                 if count:
                                         print_string += ', '
-                                print_string += '<a href="http:/%s/tag.cgi?%d">%s</a> (%d)' % (HTFAKE, tag[0], tag[1], tag[2])
+                                print_string += '%s (%d)' % (ISFDBLink('tag.cgi', tag[0], tag[1]), tag[2])
                                 count += 1
                         print print_string
                 print '<p>%s' % ISFDBLink("pe.cgi", self.series_id, '<b>Back to the series page for %s</b>' % self.series_name)
