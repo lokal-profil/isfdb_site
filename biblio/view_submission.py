@@ -86,14 +86,14 @@ if __name__ == '__main__':
                 if new_record:
                         print '<p><b>New record:</b> %s' % subjectLink
 
-        print '<p>View <a href="http:/%s/dumpxml.cgi?%d">the submission as raw XML</a>.' % (HTFAKE, int(submission_id))
+        print '<p>%s' % ISFDBLink('dumpxml.cgi', submission_id, 'View the submission as raw XML')
         
         print '<p><b>Submitted by</b> %s on %s' % (WikiLink(submitter), sub_time)
 
         (userID, username, usertoken) = GetUserData()
         # If the viewing user is the submitter and the submission is "N"ew, allow the user to cancel
         if int(userID) == int(sub_user) and sub_state == 'N':
-                print ' [<a href="http:/%s/cancelsubmission.cgi?%d">Cancel submission</a>]' % (HTFAKE, submission_id)
+                print ' %s' % ISFDBLink('cancelsubmission.cgi', submission_id, 'Cancel submission', True)
         # If the submission has been reviewed, display the reviewer's name
         elif sub_reviewer:
                 moderator_name = SQLgetUserName(sub_reviewer)
