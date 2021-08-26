@@ -81,10 +81,10 @@ def PrintOtherPages(choice):
 	if choice != 'frontpage':
         	print '<li>%s' % ISFDBLink('index.cgi', '', 'Home Page')
 	if choice == 'Moderator':
-        	print '<li>%s' % ISFDBLink('list.cgi', 'N', 'Moderator')
+        	print '<li>%s' % ISFDBLink('mod/list.cgi', 'N', 'Moderator')
 	print '<li><a href="%s://%s/index.php/Main_Page">ISFDB Wiki</a>' % (PROTOCOL, WIKILOC)
 	print '<li><a href="%s://%s/index.php/ISFDB:FAQ">ISFDB FAQ</a>' % (PROTOCOL, WIKILOC)
-        print '<li>%s' % ISFDBLink("calendar_menu.cgi","","SF Calendar")
+        print '<li>%s' % ISFDBLink('calendar_menu.cgi', '', 'SF Calendar')
         print '<li>%s' % ISFDBLink('directory.cgi', 'author', 'Author Directory')
 	print '<li>%s' % ISFDBLink('award_directory.cgi', '', 'Award Directory')
         print '<li>%s' % ISFDBLink('directory.cgi', 'publisher', 'Publisher Directory')
