@@ -49,7 +49,9 @@ def PrintHTMLHeaders(title):
     
     # Declare content type and end the http headers section with a \n
     print 'Content-type: text/html; charset=%s\n' % UNICODE
-    print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "https://www.w3.org/TR/html4/strict.dtd">'
+    # The DTD Web page for the HTML standard redirects to https, but the standard
+    # and HTML validators still uses http in the page name, so that's what we use
+    print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
     print '<html lang="en-us">'
     print '<head>'
     print '<meta http-equiv="content-type" content="text/html; charset=%s" >' % UNICODE

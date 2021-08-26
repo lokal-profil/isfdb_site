@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus and Uzume
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Uzume
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,6 +17,7 @@ from localdefs import *
 from isfdb import *
 from Cookie import SimpleCookie
 from SQLparsing import *
+from library import ISFDBLink
 
 ####################################################################
 # setCookies() sets the user_id, user_name, and user_token
@@ -89,7 +90,8 @@ def GetUserData():
 ####################################################################
 def LoginPage(executable, argument):
 	print '<h2>Login Page</h2>'
-	print 'If you do not have an ISFDB account, you can create a free one <a href="http://%s/index.php?title=Special:Userlogin&amp;type=signup">here</a>.' % (WIKILOC)
+	print """If you do not have an ISFDB account, you can create a free one
+                <a href="%s://%s/index.php?title=Special:Userlogin&amp;type=signup">here</a>.""" % (PROTOCOL, WIKILOC)
 	print '<br>Note that the user name and password for editing the ISFDB are the same as those for the ISFDB wiki.'
 	print '<p>'
 	print '<h3>Note: The first letter of your user name should be always capitalized.</h3>'
@@ -178,12 +180,14 @@ class User:
                                 record_id = record_object.au_id
                         if self.display_all_languages == 'All':
                                 output += 'Showing all translations. '
-                                output += '<a href="http:/%s/%s.cgi?%d+None"> ' % (HTFAKE, cgi_script, record_id)
-                                output += '<button type="button">Never display translations</button></a>'
+                                output += ISFDBLink('%s.cgi' % cgi_script, '%d+None' % record_id,
+                                                    '<button type="button">Never display translations</button>',
+                                                    False, '', {})
                         else:
                                 output += 'Not showing translations. '
-                                output += '<a href="http:/%s/%s.cgi?%d+All"> ' % (HTFAKE, cgi_script, record_id)
-                                output += '<button type="button">Always display translations</button></a>'
+                                output += ISFDBLink('%s.cgi' % cgi_script, '%d+All' % record_id,
+                                                    '<button type="button">Always display translations</button>',
+                                                    False, '', {})
                         output += ' Registered users can choose which translations are shown.'
                 elif not self.suppress_translation_warnings:
                         if self.display_all_languages == 'All':
@@ -204,7 +208,7 @@ class User:
                                                         output += ', '
                                                 output += language
                                                 first = 0
-                        output += ' (can be changed in <a href="http:/%s/mypreferences.cgi">My Preferences</a>)' % (HTFAKE)
+                        output += ' (can be changed in %s)' % ISFDBLink('mypreferences.cgi', '', 'My Preferences')
                 if not output:
                         return output
                 output = '<div class="translationmessage"><b>%s</b></div>' % output
