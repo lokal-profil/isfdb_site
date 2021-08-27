@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -18,7 +18,7 @@ from isfdb import *
 from SQLparsing import *
 from common import *
 from biblio import *
-from library import validateMonth, normalizeInput, ISFDBText, ServerSideRedirect
+from library import validateMonth, normalizeInput, ISFDBText, ISFDBLocalRedirect
 from isbn import *
 
 ##########################################################################################
@@ -51,7 +51,7 @@ def PrintSummary(arg, count, limit, search_type, search_abbreviation):
 
 def PrintGoogleSearch(arg, search_type):
         print 'You can also try:'
-	print '<form METHOD="GET" action="http:/%s/google_search_redirect.cgi" accept-charset="utf-8">' % (HTFAKE)
+	print '<form METHOD="GET" action="%s:/%s/google_search_redirect.cgi" accept-charset="utf-8">' % (PROTOCOL, HTFAKE)
 	print '<p>'
 	print '<select NAME="OPERATOR">'
         print '<option VALUE="exact">exact %s search' % search_type
@@ -63,7 +63,7 @@ def PrintGoogleSearch(arg, search_type):
 	print '</form>'
 
 def PrintReplaceScript(script, value):
-        ServerSideRedirect('http:/%s/%s.cgi?%s' % (HTFAKE, script, value))
+        ISFDBLocalRedirect('%s.cgi?%s' % (script, value))
 
 def DoError(error, search_value, search_type):
         PrintHeader('ISFDB Search Error')

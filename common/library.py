@@ -999,11 +999,18 @@ def FormatNote(note, note_type = '', display_mode = 'short', record_id = 0, reco
                         retval = '<div class="notes">%s</div>' % (retval)
 	return retval
 
-def ServerSideRedirect(location):
+def ISFDBLocalRedirect(script):
+        location = '%s:/%s/%s' % (PROTOCOL, HTFAKE, script)
+        _ServerSideRedirect(location)
+
+def ISFDBExternalRedirect(location):
+        _ServerSideRedirect(location)
+
+def _ServerSideRedirect(location):
         print 'Status: 303 See Other'
         print 'Location: %s' % location
         print 'Content-type: text/html; charset=%s\n' % (UNICODE)
-	print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "https://www.w3.org/TR/html4/strict.dtd">'
+	print '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">'
 	print '<html lang="en-us">'
 	print '<body>'
 	print '</body>'

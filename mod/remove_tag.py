@@ -12,8 +12,8 @@
 from isfdb import *
 from common import *
 from isfdblib import *
-from SQLparsing import *
-from library import *
+from SQLparsing import SQLgetTitleByTagId, SQLDeleteTagMapping
+from library import ISFDBLocalRedirect
 from login import User
 
 	
@@ -34,4 +34,4 @@ if __name__ == '__main__':
 
         SQLDeleteTagMapping(tagmap_id)
 	
-	ServerSideRedirect("http:/%s/mod/tag_breakdown.cgi?%d" % (HTFAKE, int(title_id)))
+	ISFDBLocalRedirect('mod/tag_breakdown.cgi?%d' % int(title_id))

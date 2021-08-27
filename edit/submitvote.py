@@ -18,7 +18,7 @@ from isfdblib import *
 from seriesClass import *
 from SQLparsing import *
 from login import *
-from library import *
+from library import ISFDBLocalRedirect
 
 def DoError(message):
 	PrintPreSearch("Vote Submission")
@@ -58,9 +58,7 @@ if __name__ == '__main__':
                 delete = "delete from votes where title_id=%d and user_id=%d" % (title_id, userid)
                 db.query(delete)
         else:
-                ############################################################
-                # Check to see if this user already voted for this title
-                ############################################################
+                # Check to see if this user has already voted for this title
                 query = "select * from votes where title_id=%d and user_id=%d" % (title_id, userid)
                 db.query(query)
                 result = db.store_result()
@@ -73,4 +71,4 @@ if __name__ == '__main__':
                         insert = "insert into votes(title_id, user_id, rating) values(%d, %d, %d)" % (title_id, userid, vote)
                         db.query(insert)
 
-        ServerSideRedirect('http:/%s/title.cgi?%d' % (HTFAKE, int(title_id)))
+        ISFDBLocalRedirect('title.cgi?%d' % int(title_id))

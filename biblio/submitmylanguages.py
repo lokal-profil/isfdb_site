@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2015   Ahasuerus
+#     (C) COPYRIGHT 2009-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -99,5 +99,5 @@ if __name__ == '__main__':
 		if debug == 0:
 			db.query(update)
 
-        ServerSideRedirect('http:/%s/mypreferences.cgi' % HTFAKE)
+        ISFDBLocalRedirect('mypreferences.cgi')
 

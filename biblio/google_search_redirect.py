@@ -12,7 +12,7 @@
 
 from isfdb import *
 import cgi
-from library import ServerSideRedirect
+from library import ISFDBExternalRedirect
 
 class GoogleSearch:
         def __init__(self):
@@ -58,7 +58,7 @@ class GoogleSearch:
                 url += '+-intitle:"Publications not in a Publication Series"'
                 url += '+-intitle:"Publisher Directory"'
                 url += '&filter=0'
-                ServerSideRedirect(url)
+                ISFDBExternalRedirect(url)
 
 if __name__ == '__main__':
 

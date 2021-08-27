@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2020   Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2009-2021   Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -134,4 +134,4 @@ if __name__ == '__main__':
                 update += "where user_pref_id =%d" % user.preferences_id
         db.query(update)
         
-        ServerSideRedirect('http:/%s/index.cgi' % HTFAKE)
+        ISFDBLocalRedirect('index.cgi')

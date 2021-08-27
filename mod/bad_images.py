@@ -29,9 +29,9 @@ def PrintPubRecord(count, pub_id, url, pub_title, bgcolor):
                 print '<tr align=left class="table2">'
 
         print '<td>%d</td>' % (count)
-        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
         print '<td>%s</td>' % (url)
-        print '<td><a href="http:/%s/mod/resolve_bad_url.cgi?%s">Click Once Resolved</a></td>' % (HTFAKE, pub_id)
+        print '<td>%s</td>' % ISFDBLink('mod/resolve_bad_url.cgi', pub_id, 'Click Once Resolved')
 	print '</tr>'
 
 if __name__ == '__main__':

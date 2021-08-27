@@ -11,7 +11,7 @@
 
 from isfdb import *
 from SQLparsing import *
-from library import ServerSideRedirect
+from library import ISFDBLocalRedirect
 from login import User
 
 	
@@ -31,5 +31,5 @@ if __name__ == '__main__':
 
         update = 'update cleanup set resolved=1 where cleanup_id=%d' % cleanup_id
 	db.query(update)
-        ServerSideRedirect("http:/%s/edit/%s" % (HTFAKE, return_location))
+        ISFDBLocalRedirect('edit/%s' % return_location)
         

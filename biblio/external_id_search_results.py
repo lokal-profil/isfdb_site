@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2017-2019   Ahasuerus
+#     (C) COPYRIGHT 2017-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -18,7 +18,7 @@ from isfdb import *
 from SQLparsing import *
 from common import *
 from biblio import *
-from library import ServerSideRedirect
+from library import ISFDBLocalRedirect
 
 class ExtIDSearch:
         def __init__(self):
@@ -102,7 +102,7 @@ class ExtIDSearch:
         def print_pubs(self):
                 matches = len(self.pubs)
                 if matches == 1:
-                        ServerSideRedirect('http:/%s/pl.cgi?%d' % (HTFAKE, self.pubs[0][PUB_PUBID]))
+                        ISFDBLocalRedirect('pl.cgi?%d' % self.pubs[0][PUB_PUBID])
                 self.print_headers()
                 if not matches:
                         print '<h2>No matching records found.</h2>'

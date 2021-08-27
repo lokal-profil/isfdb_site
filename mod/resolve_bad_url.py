@@ -11,7 +11,7 @@
 
 from isfdb import *
 from SQLparsing import *
-from library import ServerSideRedirect
+from library import ISFDBLocalRedirect
 from login import User
 
 	
@@ -27,4 +27,4 @@ if __name__ == '__main__':
 
         update = 'delete from bad_images where pub_id=%d' % pub_id
 	db.query(update)
-	ServerSideRedirect('http:/%s/mod/bad_images.cgi' % HTFAKE)
+	ISFDBLocalRedirect('mod/bad_images.cgi')

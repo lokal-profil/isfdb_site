@@ -440,8 +440,8 @@ class Submission:
                 # redirect to the review/approval page
                 if not self.user.display_post_submission:
                         if SQLisUserModerator(self.user.id) or SQLisUserSelfApprover(self.user.id):
-                                location = "http:/%s/mod/%s.cgi?%s" % (HTFAKE, SUBMAP[self.type][0], submission_id)
-                                ServerSideRedirect(location)
+                                location = "mod/%s.cgi?%s" % (SUBMAP[self.type][0], submission_id)
+                                ISFDBLocalRedirect(location)
                 
                 PrintPreSearch(self.header)
                 PrintNavBar(self.cgi_script, 0)

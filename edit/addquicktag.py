@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2014   Ahasuerus
+#     (C) COPYRIGHT 2009-2021   Ahasuerus
 #	 ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -16,7 +16,7 @@ import MySQLdb
 from SQLparsing import *
 from isfdb import *
 from isfdblib import *
-from library import ServerSideRedirect
+from library import ISFDBLocalRedirect
 
 
 def DoError(error, title_id):
@@ -60,4 +60,4 @@ if __name__ == '__main__':
         result = SQLaddTagToTitle(new_tag, title_id, user_id)
 
         # Redirect the user back to the Title page
-        ServerSideRedirect("http:/%s/title.cgi?%d" % (HTFAKE, int(title_id)))
+        ISFDBLocalRedirect('title.cgi?%d' % int(title_id))

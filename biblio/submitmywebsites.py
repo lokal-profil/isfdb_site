@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2014   Ahasuerus
+#     (C) COPYRIGHT 2009-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -86,4 +86,4 @@ if __name__ == '__main__':
         		update = "update user_sites set user_choice = %d where user_site_id = %d" % (status, user_site_id)
                 db.query(update)
 
-        ServerSideRedirect('http:/%s/mypreferences.cgi' % HTFAKE)
+        ISFDBLocalRedirect('mypreferences.cgi')

@@ -15,9 +15,9 @@ import sys
 from isfdb import *
 from isfdblib import *
 from seriesClass import *
-from SQLparsing import *
+from SQLparsing import SQLaddTagToTitle, SQLDeteleOrphanTags
 from login import *
-from library import *
+from library import ISFDBLocalRedirect
 
 
 if __name__ == '__main__':
@@ -55,7 +55,7 @@ if __name__ == '__main__':
 		counter += 1
 
 	# Delete the old tags
-	update = 'delete from tag_mapping where title_id=%d and user_id=%d' % ( int(title_id), int(user.id))
+	update = 'delete from tag_mapping where title_id=%d and user_id=%d' % (int(title_id), int(user.id))
         db.query(update)
 
 	# Insert the new tags
@@ -65,4 +65,4 @@ if __name__ == '__main__':
 	# Delete all old tags that are now without an associated entry in the tag_mapping table
 	SQLDeteleOrphanTags()
 
-        ServerSideRedirect('http:/%s/title.cgi?%d' % (HTFAKE, int(title_id)))
+        ISFDBLocalRedirect('title.cgi?%d' % int(title_id))

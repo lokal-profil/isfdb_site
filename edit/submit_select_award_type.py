@@ -14,7 +14,7 @@ from awardtypeClass import *
 from isfdb import *
 from isfdblib import *
 from SQLparsing import *
-from library import *
+from library import ISFDBLocalRedirect
 
 
 if __name__ == '__main__':
@@ -41,4 +41,4 @@ if __name__ == '__main__':
         except:
                 SESSION.DisplayError('Missing or Invalid Award Type ID')
 
-	ServerSideRedirect('http:/%s/edit/addaward.cgi?%d+%d' % (HTFAKE, title_id, award_type_id))
+	ISFDBLocalRedirect('edit/addaward.cgi?%d+%d' % (title_id, award_type_id))

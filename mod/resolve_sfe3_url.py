@@ -11,7 +11,7 @@
 
 from isfdb import *
 from SQLparsing import *
-from library import ServerSideRedirect
+from library import ISFDBLocalRedirect
 from login import User
 
 	
@@ -27,4 +27,4 @@ if __name__ == '__main__':
 
         update = "update sfe3_authors set resolved=1 where url='%s'" % db.escape_string(url)
 	db.query(update)
-	ServerSideRedirect("http:/%s/edit/sfe3_authors.cgi" % HTFAKE )
+	ISFDBLocalRedirect('edit/sfe3_authors.cgi')

@@ -12,7 +12,7 @@
 
 import cgi
 from isfdb import *
-from library import ServerSideRedirect
+from library import ISFDBLocalRedirect
 from SQLparsing import *
 from login import User
 
@@ -45,5 +45,4 @@ if __name__ == '__main__':
 	update = 'insert into tag_status_log (tag_id, user_id, new_status, timestamp) values(%d, %d, %d, NOW())' % (tag_id, int(user.id), numeric_status)
 	db.query(update)
 
-        ServerSideRedirect("http:/%s/tag.cgi?%d" % (HTFAKE, tag_id))
-
+        ISFDBLocalRedirect('tag.cgi?%d' % tag_id)
