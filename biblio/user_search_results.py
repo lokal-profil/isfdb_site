@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2017-2019   Ahasuerus
+#     (C) COPYRIGHT 2017-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -53,7 +53,7 @@ if __name__ == '__main__':
         print '<th>Last User Activity Date</th>'
         print '</tr>'
         print '<tr class="table2">'
-        print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
+        print '<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, user_name, user_name)
         print '<td>%s</td>' % moderator
         print '<td>%s</td>' % SQLLastUserActivity(user_id)
         print '</tr>'

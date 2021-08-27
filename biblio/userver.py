@@ -42,7 +42,7 @@ def PrintPubRecord(record, bgcolor, count):
         print '<td>%d</td>' % count
         print '<td>%s</td>' % record[2]
         print '<td>%s</td>' % record[3]
-        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, record[1])
+        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, record[1])
 	output = '' 
         if record[2] in ('MAGAZINE', 'ANTHOLOGY', 'FANZINE', 'NONFICTION'):
                 output = "Ed. "
@@ -123,7 +123,7 @@ if __name__ == '__main__':
 			record = result.fetch_row()
 		print '</table>'
 		if num > (per_page - 1):
-                        print '[%s]' % ISFDBLink('userver.cgi', start + per_page, '%d - %d' % (start + per_page + 1, start + (2*per_page)))
+                        print ISFDBLink('userver.cgi', start + per_page, '%d - %d' % (start + per_page + 1, start + (2*per_page)), True)
 	else:
 		print '<h2>No primary verifications found</h2>'
 

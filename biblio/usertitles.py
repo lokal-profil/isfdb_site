@@ -34,13 +34,12 @@ if __name__ == '__main__':
         PrintHeader("%s's Tags" % user_name)
 	PrintNavbar('usertitles', 0, 0, 'usertitles.cgi', 0)
 
-        print """<h3>Titles marked by user <a href="http:/%s/usertag.cgi?%d">%s</a>
-                 with tag <a href="http:/%s/tag.cgi?%d">%s</a></h3>
-                 """% (HTFAKE, user_id, user_name, HTFAKE, tag_id, tag[TAG_NAME])
+        print """<h3>Titles marked by user %s with tag %s</h3>""" % (ISFDBLink('usertag.cgi', user_id, user_name),
+                                                                ISFDBLink('tag.cgi', tag_id, tag[TAG_NAME]))
 	titles = SQLgetTitlesForTagForUser(tag_id, user_id, start)
 	PrintTitleTable(titles, 0, 100, current_user)
 
 	if len(titles) > 100:
-                print '<a href="http:/%s/usertitles.cgi?%d+%d+%d">Next page (%d - %d)</a>' % (HTFAKE, user_id, tag_id, start+100, start+101, start+200)
+                print ISFDBLink('usertitles.cgi', '%d+%d+%d' % (user_id, tag_id, start+100), 'Next page (%d - %d)' % (start+101, start+200))
 
 	PrintTrailer('usertitles', user_id, user_id)
