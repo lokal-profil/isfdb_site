@@ -13,7 +13,6 @@
 from SQLparsing import *
 from common import *
 from library import *
-from login import GetUserData
 
 
 if __name__ == '__main__':
@@ -31,7 +30,7 @@ if __name__ == '__main__':
         PrintHeader('Titles marked with tag %s for author %s' % (tag[TAG_NAME], author_data[AUTHOR_CANONICAL]))
 	PrintNavbar('tag_author', 0, 0, 'tag_author.cgi', tag_id)
 
-        print '<a class="inverted" href="http:/%s/tag.cgi?%d"><b>View all users and titles for this tag</b></a>' % (HTFAKE, tag_id)
+        print ISFDBLink('tag.cgi', tag_id, '<b>View all users and titles for this tag</b>', False, 'class="inverted"')
 	print '<h3>Titles by %s marked with tag: <i>%s</i></h3>' % (author_data[AUTHOR_CANONICAL], tag[TAG_NAME])
 	print '<ul>'
         title_list = SQLgetTitlesForAuthorAndTag(tag_id, author_id)

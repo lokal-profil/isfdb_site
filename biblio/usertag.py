@@ -50,10 +50,8 @@ if __name__ == '__main__':
                         print '<tr align=left class="table1">'
                 else:
                         print '<tr align=left class="table2">'
-                print '<td>'
-                print '<a href="http:/%s/tag.cgi?%s">%s</a>' % (HTFAKE, record[0][0], record[0][2])
-                print '</td>'
-                print '<td><a href="http:/%s/usertitles.cgi?%d+%d">%s</a></td>' % (HTFAKE, user_id, record[0][0], record[0][1])
+                print '<td>%s</td>' % ISFDBLink('tag.cgi', record[0][0], record[0][2])
+                print '<td>%s</td>' % ISFDBLink('usertitles.cgi', '%d+%d' % (user_id, record[0][0]), record[0][1])
                 print '<td>'
                 if record[0][3]:
                         print '<b>Private</b>'

@@ -77,8 +77,8 @@ if __name__ == '__main__':
 			output += ', '
 		else:
 			need_comma = 1
-                output += '<a href="http:/%s/usertag.cgi?%d">%s</a>' % (HTFAKE, tag_user[0], tag_user[2])
-                output += ' (<a href="http:/%s/usertitles.cgi?%d+%d">%d</a>)' % (HTFAKE, tag_user[0], tag_id, tag_user[1])
+                output += ISFDBLink('usertag.cgi', tag_user[0], tag_user[2])
+                output += ' (%s)' % ISFDBLink('usertitles.cgi', '%d+%d' % (tag_user[0], tag_id), tag_user[1])
 		print output
 
 	print '<h3>Titles Marked With This Tag:</h3>'
@@ -86,6 +86,6 @@ if __name__ == '__main__':
 	PrintTitleTable(titles, 0, 100, current_user)
 
 	if len(titles) > 100:
-                print '<a href="http:/%s/tag.cgi?%d+%d">Next page (%d - %d)</a>' % (HTFAKE, tag_id, start+100, start+101, start+200)
+                print ISFDBLink('tag.cgi', '%d+%d' % (tag_id, start+100), 'Next page (%d - %d)' % (start+101, start+200))
 
 	PrintTrailer('tag', tag_id, tag_id)

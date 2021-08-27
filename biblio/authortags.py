@@ -38,7 +38,7 @@ if __name__ == '__main__':
                 for tag in tags:
                         if count:
                                 print_string += ', '
-                        print_string += '<a href="http:/%s/tag_author.cgi?%d+%d">%s</a> (%d)' % (HTFAKE, tag[0], author_id, tag[1], tag[2])
+                        print_string += '%s (%d)' % (ISFDBLink('tag_author.cgi', '%d+%d' % (tag[0], author_id), tag[1]), tag[2])
                         count += 1
                 print print_string
 
