@@ -126,7 +126,7 @@ def PrintReviews(reviews, title_language):
                                         #
                                         pub_counter += 1
                                         if pub_counter == 1:
-                                                print '<li><a href="http:/%s/title.cgi?%s">Review</a> ' % (HTFAKE, review_id)
+                                                print '<li>%s ' % ISFDBLink('title.cgi', review_id, 'Review')
                                                 review_language = review[TITLE_LANGUAGE]
                                                 # Only display the review language if both titles' languages are defined and are different
                                                 if review_language and title_language and (review_language != title_language):
@@ -360,7 +360,7 @@ if __name__ == '__main__':
                         print 'Not cast'
 	else:
 		print 'This title has no votes.'
-	print '<a class="inverted" href="http:/%s/edit/vote.cgi?%d"><b>VOTE</b></a>' % (HTFAKE, title[TITLE_PUBID])
+	print ISFDBLink('edit/vote.cgi', title[TITLE_PUBID], '<b>VOTE</b>', False, 'class="inverted"')
 
         # Retrieve all tags for this title and its parent (if present)
 	tags = SQLgetAllTitleTags(title[TITLE_PUBID], title[TITLE_PARENT], int(user.id))
@@ -373,10 +373,10 @@ if __name__ == '__main__':
 		output = ''
 		for tag in tags:
 			if first:
-				output = '<a href="http:/%s/tag.cgi?%d">%s</a> (%d)' % (HTFAKE, tag[0], tag[1], tag[2])
+				output = '%s (%d)' % (ISFDBLink('tag.cgi', tag[0], tag[1]), tag[2])
 				first = 0
 			else:
-				output += ', <a href="http:/%s/tag.cgi?%d">%s</a> (%d)' % (HTFAKE, tag[0], tag[1], tag[2])
+				output += ', %s (%d)' % (ISFDBLink('tag.cgi', tag[0], tag[1]), tag[2])
 		print output
 		if SQLisUserModerator(user.id):
                         print ISFDBLink('mod/tag_breakdown.cgi', title[TITLE_PUBID], 'View Tag Breakdown', False, 'class="inverted" ')
@@ -386,7 +386,7 @@ if __name__ == '__main__':
                 if user.id:
                         my_tags = SQLgetUserTags(title_id, user.id)
                         print '<br>'
-                        print '<form method="post" action="http:/%s/edit/addquicktag.cgi" name="quicktag">' % (HTFAKE)
+                        print '<form method="post" action="%s:/%s/edit/addquicktag.cgi" name="quicktag">' % (PROTOCOL, HTFAKE)
                         # We need a div here because "strict" HTML rules only allow block level elements in forms
                         print '<div class="quicktag">'
                         print '<b>Add quick tag:</b> '
@@ -425,11 +425,11 @@ if __name__ == '__main__':
                         print '</select>'
                         print '<input NAME="title_id" VALUE="%d" TYPE="HIDDEN">' % int(title_id)
                         print '<input type="Submit" VALUE="Submit Tag">'
-                        print ' <a class="inverted" href="http:/%s/edit/edittags.cgi?%d"><b>or manage Tags</b></a>' % (HTFAKE, title[TITLE_PUBID])
+                        print '%s ' % ISFDBLink('edit/edittags.cgi', title[TITLE_PUBID], '<b>or manage Tags</b>', False, 'class="inverted"')
                         print '</div>'
                         print '</form>'
                 else:
-                        print ' <a class="inverted" href="http:/%s/edit/edittags.cgi?%d"><b>Add Tags</b></a>' % (HTFAKE, title[TITLE_PUBID])
+                        print '%s ' % ISFDBLink('edit/edittags.cgi', title[TITLE_PUBID], '<b>Add Tags</b>', False, 'class="inverted"')
        	print '</div>'
 
 	########################################
@@ -561,10 +561,12 @@ if __name__ == '__main__':
                 for option_number in sorted(options.keys()):
                         if option_number != variant_display:
                                 output += ' %s ' % BULLET
-                                output += '<a href="http:/%s/title.cgi?%d+%d">%s</a>' % (HTFAKE,
-                                                                                             int(title_id),
-                                                                                             option_number,
-                                                                                             options[option_number][1])
+                                output += ISFDBLink('title.cgi',
+                                                    '%d+%d' % (int(title_id), option_number),
+                                                    options[option_number][1],
+                                                    False,
+                                                    '',
+                                                    {})
                 print output
                 print '<p>'
 	pubs = retrieval_function(title_id)
@@ -599,9 +601,9 @@ if __name__ == '__main__':
                                 if user.covers_display:
                                         print ISFDBLink("pl.cgi", pub[PUB_PUBID], '<img src="%s" alt="Coverart" class="scans">' % pub[PUB_IMAGE].split("|")[0])
                                 else:
-                                        print '<a class="inverted" href="http:/%s/titlecovers.cgi?%d"><b>View all covers for %s</b></a>' % (HTFAKE, title[TITLE_PUBID], title[TITLE_TITLE])
+                                        print ISFDBLink('titlecovers.cgi', title[TITLE_PUBID], '<b>View all covers for %s</b>' % title[TITLE_TITLE])
                                         if user.id:
-                                                print ' (or change <a href="http:/%s/mypreferences.cgi">User Preferences</a> to always display covers on this page)' % (HTFAKE)
+                                                print ' (or change %s to always display covers on this page)' % ISFDBLink('mypreferences.cgi', '', 'User Preferences')
                                         else:
                                                 print ' (logged in users can change User Preferences to always display covers on this page)'
                                         break
