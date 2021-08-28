@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -161,7 +161,7 @@ if __name__ == '__main__':
                 pub_id = int(pub[PUB_PUBID])
                 pub_title = pub[PUB_TITLE]
                 print '<td>'
-                print '[<a href="http:/%s/edit/editpub.cgi?%d">Edit %s</a>]' % (HTFAKE, pub_id, pub_title)
+                print ISFDBLink('edit/editpub.cgi', pub_id, 'Edit %s' % pub_title, True)
                 print '</td>'
 	print '</tr>'
 	print '</table>'

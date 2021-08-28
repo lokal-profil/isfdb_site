@@ -18,7 +18,7 @@ from isfdb import *
 from SQLparsing import *
 from common import *
 from biblio import *
-from library import validateMonth, normalizeInput, ISFDBText, ISFDBLocalRedirect
+from library import validateMonth, normalizeInput, ISFDBLink, ISFDBText, ISFDBLocalRedirect
 from isbn import *
 
 ##########################################################################################
@@ -44,7 +44,7 @@ def PrintSummary(arg, count, limit, search_type, search_abbreviation):
         print "<p><b>A search for '%s' found %d matches" % (ISFDBText(arg), count)
         if count >= limit:
 		print "<br>The first %d matches are displayed below. " % (limit)
-		print 'Use <a class="inverted" href="http:/%s/adv_search_selection.cgi?%s">Advanced %s Search</a>' % (HTFAKE, search_abbreviation, search_type)
+		print ISFDBLink('adv_search_selection.cgi', search_abbreviation, 'Advanced %s Search' % search_type, False, 'class="inverted"')
 		print " to see more matches."
 	print '</b>'
 	print '<p>'
@@ -113,13 +113,13 @@ def PrintMagazineRecord(title, series_id, parent_id, series_title, bgcolor, arg)
         print ISFDBLink('pe.cgi', series_id, title)
         if title != series_title:
                 print '*'
-        print '<a href="http:/%s/seriesgrid.cgi?%s"> (issue grid)</a>' % (HTFAKE, series_id)
+        print ISFDBLink('seriesgrid.cgi', series_id, ' (issue grid)')
         print '</td>'
 	if parent_id:
 		parent_title = SQLgetSeriesName(int(parent_id))
         	print '<td>'
         	print ISFDBLink('pe.cgi', parent_id, parent_title)
-                print '<a href="http:/%s/seriesgrid.cgi?%s"> (issue grid)</a>' % (HTFAKE, parent_id)
+        	print ISFDBLink('seriesgrid.cgi', parent_id, ' (issue grid)')
         	print '</td>'
 	else:
 		print '<td>-</td>'
@@ -221,9 +221,9 @@ def PrintTagRecord(tag, bgcolor):
                 status = '<b>Private</b>'
         else:
                 status = ''
-        print '<td><a href="http:/%s/tag.cgi?%s">%s</a></td>' % (HTFAKE, tag[TAG_ID], tag[TAG_NAME])
+        print '<td>%s</td>' % ISFDBLink('tag.cgi', tag[TAG_ID], tag[TAG_NAME])
         print '<td>%s</td>' % (status)
-        print "</tr>"
+        print '</tr>'
 
 def LengthCheck(arg, record_name, search_type):
         # Check that the search string contains at least 2 non-wildcard characters

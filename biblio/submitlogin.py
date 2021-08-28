@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley, Uzume and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley, Uzume and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -74,7 +74,7 @@ if __name__ == '__main__':
 			uri = '%s?%s' % (executable, argument)
 		else:
 			uri = executable
-		location = 'http:/%s/%s' % (HTFAKE, uri)
+		location = '%s:/%s/%s' % (PROTOCOL, HTFAKE, uri)
 	else:
 		uri = None
 
