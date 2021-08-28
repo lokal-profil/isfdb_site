@@ -52,7 +52,7 @@ if __name__ == '__main__':
 	if SQLwikiLinkExists('Publisher', publisher[PUBLISHER_NAME]):
                 print "<li><b>Publisher Comments:</b>"
                 publisher_name = 'Publisher:%s' % publisher[PUBLISHER_NAME]
-		print '<a href="http://%s/index.php/%s">%s</a>' % (WIKILOC, publisher_name, publisher_name)
+		print '<a href="%s://%s/index.php/%s">%s</a>' % (PROTOCOL, WIKILOC, publisher_name, publisher_name)
 
 	# Publisher Note
 	if publisher[PUBLISHER_NOTE]:
@@ -76,7 +76,7 @@ if __name__ == '__main__':
                 if pubs_not_in_series > 500:
                         display += ' (too many to display on one page)'
                 else:
-                        display = '<a href="http:/%s/pubs_not_in_series.cgi?%d">%s</a>' % (HTFAKE, publisher_id, display)
+                        display = ISFDBLink('pubs_not_in_series.cgi', publisher_id, display)
                 print '<li><b>%s</b>' % display
 
         # Retrieve all Publication Series IDs used by this publisher
@@ -90,8 +90,7 @@ if __name__ == '__main__':
                 all_pub_series = SQLLoadPubSeries(list_of_series_as_string)
                 for pub_series in all_pub_series:
                         trans_names = SQLloadTransPubSeriesNames(pub_series[PUB_SERIES_ID])
-                        display_line = '<a href="http:/%s/pubseries.cgi?%s" dir="ltr">%s</a>' % (HTFAKE,
-                                        pub_series[PUB_SERIES_ID], pub_series[PUB_SERIES_NAME])
+                        display_line = ISFDBLink('pubseries.cgi', pub_series[PUB_SERIES_ID], pub_series[PUB_SERIES_NAME])
                         print '<li>%s</li>' % ISFDBMouseover(trans_names, display_line, '')
         print '</ul>'
         print '</div>'

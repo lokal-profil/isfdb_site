@@ -115,7 +115,7 @@ class SeriesGrid:
                 print '<br>'
                 print '<b>Legend:</b> Unverified issues are gold, secondary verifications are light blue.'
 
-                print '<p class="textindent"> <a href="http:/%s/pe.cgi?%d">View this magazine as a series</a> %s ' % (HTFAKE, self.seriesId, BULLET)
+                print '<p class="textindent"> %s %s ' % (ISFDBLink('pe.cgi', self.seriesId, 'View this magazine as a series'), BULLET)
 
                 if self.displayOrder:
                         print ISFDBLink("seriesgrid.cgi", "%s+0" % self.seriesId, "Show earliest year first")

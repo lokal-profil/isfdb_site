@@ -35,7 +35,7 @@ def printSeries(seriesData, seriesTitles, seriesTree, parentAuthors,
                 # an EDITOR title, display a link to the magazine's issue grid
                 for title in seriesTitles[ser_id]:
                         if title[TITLE_TTYPE] == 'EDITOR':
-                                print '<a href="http:/%s/seriesgrid.cgi?%s" dir="ltr"> (View Issue Grid)</a>' % (HTFAKE, ser.series_id)
+                                print ISFDBLink('seriesgrid.cgi', ser.series_id, ' (View Issue Grid)')
                                 magazine_found = 1
                                 break
                 if magazine_found:
