@@ -14,14 +14,18 @@ from isfdb import *
 from common import PrintHeader, PrintNavbar, PrintTrailer
 from library import ISFDBLink
 
+def print_line(script, query_string, display_name):
+        print '<li>%s' % ISFDBLink(script, query_string, display_name)
+        
+
 PrintHeader('ISFDB Statistics and Top Lists')
 PrintNavbar('stats', 0, 0, 'stats-and-tops.cgi', 0)
 
 print '<h4>Database Tables</h4>'
 print '<ul>'
 
-print '<li>%s' % ISFDBLink('languages.cgi', '', 'Supported Languages')
-print '<li>%s' % ISFDBLink('verification_sources.cgi', '', 'Secondary Verification Sources')
+print_line('languages.cgi', '', 'Supported Languages')
+print_line('verification_sources.cgi', '', 'Secondary Verification Sources')
 print '</ul>'
 print '<hr>'
 
@@ -29,86 +33,86 @@ print 'The following lists are regenerated nightly'
 print '<h4>Database Statistics</h4>'
 print '<ul>'
 
-print '<li><a href="http:/%s/stats.cgi?4">Summary Database Statistics</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?11">Submissions per Year</a>' % (HTFAKE)
+print_line('stats.cgi', '4', 'Summary Database Statistics')
+print_line('stats.cgi', '11', 'Submissions per Year')
 print '</ul>'
 print '<h4>Author Statistics</h4>'
 print '<ul>'
-print '<li><a href="http:/%s/authors_by_debut_year_table.cgi">Authors By Debut Year</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?13">Most-Viewed Authors</a>' % (HTFAKE)
+print_line('authors_by_debut_year_table.cgi', '', 'Authors By Debut Year')
+print_line('stats.cgi', '13', 'Most-Viewed Authors')
 print '<li>Authors by Age:'
 print '<ul>'
-print '<li><a href="http:/%s/stats.cgi?16">Oldest Living Authors</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?17">Oldest Non-Living Authors</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?18">Youngest Living Authors</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?19">Youngest Non-Living Authors</a>' % (HTFAKE)
+print_line('stats.cgi', '16', 'Oldest Living Authors')
+print_line('stats.cgi', '17', 'Oldest Non-Living Authors')
+print_line('stats.cgi', '18', 'Youngest Living Authors')
+print_line('stats.cgi', '19', 'Youngest Non-Living Authors')
 print '</ul>'
 print '<li>Authors/Editors Ranked by Awards and Nominations:'
 print '<ul>'
-print '<li><a href="http:/%s/popular_authors_table.cgi?0">All Authors and Editors</a>' % (HTFAKE)
-print '<li><a href="http:/%s/popular_authors_table.cgi?1">Novel Authors</a>' % (HTFAKE)
-print '<li><a href="http:/%s/popular_authors_table.cgi?2">Short Fiction Authors</a>' % (HTFAKE)
-print '<li><a href="http:/%s/popular_authors_table.cgi?3">Collection Authors</a>' % (HTFAKE)
-print '<li><a href="http:/%s/popular_authors_table.cgi?4">Anthology Editors</a>' % (HTFAKE)
-print '<li><a href="http:/%s/popular_authors_table.cgi?5">Non-Fiction Authors</a>' % (HTFAKE)
-print '<li><a href="http:/%s/popular_authors_table.cgi?6">Other Types Authors and Editors</a>' % (HTFAKE)
+print_line('popular_authors_table.cgi', '0', 'All Authors and Editors')
+print_line('popular_authors_table.cgi', '1', 'Novel Authors')
+print_line('popular_authors_table.cgi', '2', 'Short Fiction Authors')
+print_line('popular_authors_table.cgi', '3', 'Collection Authors')
+print_line('popular_authors_table.cgi', '4', 'Anthology Editors')
+print_line('popular_authors_table.cgi', '5', 'Non-Fiction Authors')
+print_line('popular_authors_table.cgi', '6', 'Other Types Authors and Editors')
 print '</ul>'
 print '</ul>'
 
 print '<h4>Language Statistics</h4>'
 print '<ul>'
-print '<li><a href="http:/%s/stats.cgi?20">Authors by Working Language</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?21">Titles by Language</a>' % (HTFAKE)
+print_line('stats.cgi', '20', 'Authors by Working Language')
+print_line('stats.cgi', '21', 'Titles by Language')
 print '</ul>'
 
 print '<h4>Title Statistics</h4>'
 print '<ul>'
-print '<li><a href="http:/%s/stats.cgi?5">Titles by Year of First Publication</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?7">Titles by Author Age</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?8">Percent of Titles in Series by Year</a>' % (HTFAKE)
-print '<li><a href="http:/%s/most_reviewed_table.cgi">Most-Reviewed Titles (in genre publications)</a>' % (HTFAKE)
+print_line('stats.cgi', '5', 'Titles by Year of First Publication')
+print_line('stats.cgi', '7', 'Titles by Author Age')
+print_line('stats.cgi', '8', 'Percent of Titles in Series by Year')
+print_line('most_reviewed_table.cgi', '', 'Most-Reviewed Titles (in genre publications)')
 print '<li>Titles Ranked by Awards and Nominations:'
 print '<ul>'
-print '<li><a href="http:/%s/most_popular_table.cgi?0">All Titles</a>' % (HTFAKE)
-print '<li><a href="http:/%s/most_popular_table.cgi?1">Novels</a>' % (HTFAKE)
-print '<li><a href="http:/%s/most_popular_table.cgi?2">Short Fiction</a>' % (HTFAKE)
-print '<li><a href="http:/%s/most_popular_table.cgi?3">Collections</a>' % (HTFAKE)
-print '<li><a href="http:/%s/most_popular_table.cgi?4">Anthologies</a>' % (HTFAKE)
-print '<li><a href="http:/%s/most_popular_table.cgi?5">Non-Fiction</a>' % (HTFAKE)
-print '<li><a href="http:/%s/most_popular_table.cgi?6">Other Types</a>' % (HTFAKE)
+print_line('most_popular_table.cgi', '0', 'All Titles')
+print_line('most_popular_table.cgi', '1', 'Novels')
+print_line('most_popular_table.cgi', '2', 'Short Fiction')
+print_line('most_popular_table.cgi', '3', 'Collections')
+print_line('most_popular_table.cgi', '4', 'Anthologies')
+print_line('most_popular_table.cgi', '5', 'Non-Fiction')
+print_line('most_popular_table.cgi', '6', 'Other Types')
 print '</ul>'
-print '<li><a href="http:/%s/stats.cgi?12">Top Novels as Voted by ISFDB Users</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?25">Top Short Fiction Titles as Voted by ISFDB Users</a>' % (HTFAKE)
+print_line('stats.cgi', '12', 'Top Novels as Voted by ISFDB Users')
+print_line('stats.cgi', '25', 'Top Short Fiction Titles as Voted by ISFDB Users')
 print '<li>Most-Viewed Titles:'
 print '<ul>'
-print '<li><a href="http:/%s/stats.cgi?14">Most-Viewed Novels</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?15">Most-Viewed Short Fiction</a>' % (HTFAKE)
+print_line('stats.cgi', '14', 'Most-Viewed Novels')
+print_line('stats.cgi', '15', 'Most-Viewed Short Fiction')
 print '</ul>'
 print '</ul>'
 
 print '<h4>Publication Statistics</h4>'
 print '<ul>'
-print '<li><a href="http:/%s/stats.cgi?6">Publications by Year</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?9">Percent of Books by Type by Year</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?10">Percent of Publications by Format by Year</a>' % (HTFAKE)
+print_line('stats.cgi', '6', 'Publications by Year')
+print_line('stats.cgi', '9', 'Percent of Books by Type by Year')
+print_line('stats.cgi', '10', 'Percent of Publications by Format by Year')
 print '</ul>'
 print '<h4>Top ISFDB Editors</h4>'
 print '<ul>'
-print '<li><a href="http:/%s/stats.cgi?2">Top Verifiers</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?1">Top Moderators</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?22">Top Taggers</a>' % (HTFAKE)
-print '<li><a href="http:/%s/stats.cgi?23">Top Voters</a>' % (HTFAKE)
-print '<li><a href="http:/%s/topcontrib.cgi">Top Contributors (All Submission Types)</a>' % (HTFAKE)
+print_line('stats.cgi', '2', 'Top Verifiers')
+print_line('stats.cgi', '1', 'Top Moderators')
+print_line('stats.cgi', '22', 'Top Taggers')
+print_line('stats.cgi', '23', 'Top Voters')
+print_line('topcontrib.cgi', '', 'Top Contributors (All Submission Types)')
 print '<ul>'
-for type in sorted(SUBMAP.keys()):
-        if SUBMAP[type][3]:
-                print '<li><a href="http:/%s/topcontrib.cgi?%d">Top Contributors (%s)</a>' % (HTFAKE, type, SUBMAP[type][3])
+for sub_type in sorted(SUBMAP.keys()):
+        if SUBMAP[sub_type][3]:
+                print_line('topcontrib.cgi', sub_type, 'Top Contributors (%s)' % SUBMAP[sub_type][3])
 print '</ul>'
 print '</ul>'
 print '<h4>Historical snapshots (not up to date)</h4>'
 print '<ul>'
-print '<li><a href="http://%s/degrees.html">Author Communities</a> [as of 2005]' % (HTMLHOST)
-print '<li><a href="http://%s/agestuff.html">Award-Winning Titles by Author Age</a> [as of 2005]' % (HTMLHOST)
-print '<li><a href="http://%s/index.php/Annual_Page_Views_and_Database_Growth">Database Growth and Annual Page Views</a>' % (WIKILOC)
+print '<li><a href="%s://%s/degrees.html">Author Communities</a> [as of 2005]' % (PROTOCOL, HTMLHOST)
+print '<li><a href="%s://%s/agestuff.html">Award-Winning Titles by Author Age</a> [as of 2005]' % (PROTOCOL, HTMLHOST)
+print '<li><a href="%s://%s/index.php/Annual_Page_Views_and_Database_Growth">Database Growth and Annual Page Views</a>' % (PROTOCOL, WIKILOC)
 print '</ul>'
 PrintTrailer('frontpage', 0, 0)
