@@ -512,6 +512,9 @@ def XMLescape(input, compliant = 0):
 def IMDBLink(title_code, displayed_link = 'IMDB'):
         return '<a href="https://www.imdb.com/title/%s/" target="_blank">%s</a>' % (title_code, displayed_link)
 
+def ISFDBLinkNoName(script, record_id, displayed_value, brackets=False, argument=''):
+        return ISFDBLink(script, record_id, displayed_value, brackets, argument, {})
+
 def ISFDBLink(script, record_id, displayed_value, brackets=False, argument='', transliterations = None):
         # Special case: author "uncredited" is displayed without a link for performance reasons
         if script == 'ea.cgi' and displayed_value == 'uncredited':
@@ -537,9 +540,10 @@ def ISFDBLink(script, record_id, displayed_value, brackets=False, argument='', t
 	# transliterated values for this record ID, display them
 	if transliterations is not None:
                 trans_values = transliterations.get(record_id, None)
-        # If no transliterations  were passed in, but the CGI script is associated with
-        # a data retrieval function, use that function to retrieve transliterations
-	elif trans_function:
+        # If no transliterations were passed in, the record ID is numeric,
+        # and the CGI script is associated with a data retrieval function,
+        # use that function to retrieve transliterations
+	elif trans_function and str(record_id).isdigit():
                 trans_values = trans_function(record_id)
         # If transliterated values have been found, add them to the link
         if trans_values:

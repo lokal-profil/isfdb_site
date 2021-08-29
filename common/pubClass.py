@@ -1787,11 +1787,11 @@ class pubBody():
                         editor = SQLloadTitle(editor[TITLE_PARENT])
                 # If this EDITOR record is in a Series, link to that Series
                 if editor[TITLE_SERIES]:
-                        self.body += ' (%s)' % ISFDBLink('pe.cgi', editor[TITLE_SERIES], 'View All Issues', False, '', {})
-                        self.body += ' (%s)' % ISFDBLink('seriesgrid.cgi', editor[TITLE_SERIES], 'View Issue Grid')
+                        self.body += ' (%s)' % ISFDBLinkNoName('pe.cgi', editor[TITLE_SERIES], 'View All Issues')
+                        self.body += ' (%s)' % ISFDBLinkNoName('seriesgrid.cgi', editor[TITLE_SERIES], 'View Issue Grid')
                 # If the EDITOR record is not in a Series, check the number of magazine pubs for the record
                 else:
                         pubs_for_editor = SQLGetPubsByTitle(editor[TITLE_PUBID])
                         # Link the EDITOR record directly if it has more than 1 issue
                         if len(pubs_for_editor) > 1:
-                                self.body += ' (%s)' % ISFDBLink('title.cgi', editor[TITLE_PUBID], 'View All Issues', False, '', {})
+                                self.body += ' (%s)' % ISFDBLinkNoName('title.cgi', editor[TITLE_PUBID], 'View All Issues')

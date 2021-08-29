@@ -35,8 +35,10 @@ if __name__ == '__main__':
 	PrintNavbar('publisheryear', publisher_id, publisher_id, 'publisheryear.cgi', 0)
 	pubs = SQLGetPubsByPublisherYear(publisher_id, year)
 	if show_covers:
-                print '<a href="http:/%s/publisheryear.cgi?%d+%d">View publication list for this year</a> %s ' % (HTFAKE, publisher_id, year, BULLET)
-                print '<a href="http:/%s/publisher.cgi?%d">Return to the publisher page</a><p>' % (HTFAKE, publisher_id)
+                print ISFDBLinkNoName('publisheryear.cgi', '%d+%d' % (publisher_id, year), 'View publication list for this year')
+                print BULLET
+                print ISFDBLinkNoName('publisher.cgi', publisher_id, 'Return to the publisher page')
+                print '<p>'
                 count = 0
                 for pub in pubs:
                         if pub[PUB_IMAGE]:
@@ -47,9 +49,11 @@ if __name__ == '__main__':
                 PrintTrailer('publisheryear', publisher_id, publisher_id)
                 sys.exit(0)
 	if len(pubs):
-		print "<p>"
-                print '<a href="http:/%s/publisheryear.cgi?%d+%d+1">View covers for this year</a> %s ' % (HTFAKE, publisher_id, year, BULLET)
-                print '<a href="http:/%s/publisher.cgi?%d">Return to the publisher page</a><p>' % (HTFAKE, publisher_id)
-		PrintPubsTable(pubs, "publisher")
+		print '<p>'
+		print ISFDBLinkNoName('publisheryear.cgi', '%d+%d+1' % (publisher_id, year), 'View covers for this year')
+		print BULLET
+		print ISFDBLinkNoName('publisher.cgi', publisher_id, 'Return to the publisher page')
+                print '<p>'
+		PrintPubsTable(pubs, 'publisher')
 
 	PrintTrailer('publisheryear', publisher_id, publisher_id)

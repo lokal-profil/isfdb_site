@@ -67,10 +67,7 @@ if __name__ == '__main__':
                 if message_number != display_order:
                         if output:
                                 output += ' %s ' % BULLET
-                        output += '<a href="http:/%s/pubseries.cgi?%d+%d">%s</a>' % (HTFAKE,
-                                                                                     int(pub_series_id),
-                                                                                     message_number,
-                                                                                     messages[message_number])
+                        output += ISFDBLinkNoName('pubseries.cgi', '%d+%d' % (int(pub_series_id), message_number), messages[message_number])
         print output,'<p>'
         if display_order == 3:
                 pubs = SQLGetPubSeriesPubs(pub_series_id, 2)
