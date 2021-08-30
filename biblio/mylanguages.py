@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2015   Ahasuerus
+#     (C) COPYRIGHT 2009-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,50 +10,35 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
 from login import *
 from SQLparsing import *
 
-if __name__ == '__main__':
+user = User()
+user.load()
 
-	PrintHeader("My Translation Preferences")
-	PrintNavbar('mylanguages', 0, 0, 'mylanguages.cgi', 0)
+if not user.id:
+        SESSION.DisplayError('You must be logged in to modify your translation preferences')
 
-        user = User()
-        user.load()
+PrintHeader('My Translation Preferences')
+PrintNavbar('mylanguages', 0, 0, 'mylanguages.cgi', 0)
 
-	if not user.id:
-                print 'You must be logged in to modify your translation preferences'
-                sys.exit(0)
-        	PrintTrailer('mylanguages', 0, 0)
+langs = SQLLoadFullLanguages()
+print '<p>'
+print '<form id="data" METHOD="POST" ACTION="/cgi-bin/submitmylanguages.cgi">'
+print '<ul>'
+for lang in langs:
+        if lang[0] in user.languages:
+                checked = 'checked'
+        else:
+                checked = ''
+        print '<li><input type="checkbox" name="lang_choice.%s" value="on" %s>%s' % (lang[0], checked, lang[1])
+        print '<input name="lang_id.%d" value="%s" type="HIDDEN"></li>' % (lang[0], lang[1])
 
-	# Get a list of currently defined languages
-        query = "select lang_id, lang_name from languages order by lang_name"
-	db.query(query)
-	result = db.store_result()
-	row = result.fetch_row()
-	langs = []
-	while row:
-                langs.append(row[0])
-		row = result.fetch_row()
-	
-        print '<form id="data" METHOD="POST" ACTION="/cgi-bin/submitmylanguages.cgi">'
-        print '<ul>'
-        for lang in langs:
-                if lang[0] in user.languages:
-                        checked = 'checked'
-                else:
-                        checked = ''
-        	print '<li><input type="checkbox" name="lang_choice.%s" value="on" %s>%s</li>' % (lang[0], checked, lang[1])
-        	print '<input name="lang_id.%d" value="%s" type="HIDDEN">' % (lang[0], lang[1])
+print '</ul>'
+print '<p>'
+print '<input type="SUBMIT" value="Update Translation Preferences">'
+print '</form>'
 
-        print '</ul>'
-	print '<input type="SUBMIT" value="Update Translation Preferences">'
-        print '</form>'
-
-	PrintTrailer('mylanguages', 0, 0)
-
+PrintTrailer('mylanguages', 0, 0)

@@ -113,7 +113,8 @@ if __name__ == '__main__':
         	record = result.fetch_row()
 
 	print '</table>'
-	print '<p> [<a href="http:/%s/myvotes.cgi?%d">MORE</a>]' % (HTFAKE, start+50)
+	print '<p>'
+	print ISFDBLinkNoName('myvotes.cgi', start+50, 'MORE', True)
 
 	PrintTrailer('votes', 0, 0)
 

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2020   Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2009-2021   Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,9 +10,6 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
 from login import *
@@ -20,32 +17,32 @@ from login import *
 
 if __name__ == '__main__':
 
-	PrintHeader("User Preferences")
-	PrintNavbar('mypreferences', 0, 0, 'mypreferences.cgi', 0)
-
         user = User()
         user.load()
 	if not user.id:
-                print 'You must be logged in to modify your user preferences'
-        	PrintTrailer('mypreferences', 0, 0)
-                sys.exit(0)
+                SESSION.DisplayError('You must be logged in to modify your user preferences')
 
+	PrintHeader("User Preferences")
+	PrintNavbar('mypreferences', 0, 0, 'mypreferences.cgi', 0)
        
+        print '<p>'
         print '<form id="data" METHOD="POST" ACTION="/cgi-bin/submitpreferences.cgi">'
         print '<ul>'
-        print '<li><a href="http:/%s/edit/keygen.cgi">Key Maintenance</a></li><br>' % (HTFAKE)
-        print '<li><a href="http:/%s/mywebsites.cgi">My Web Sites</a></li><br>' % (HTFAKE)
+        print '<li>%s</li>' % ISFDBLink('edit/keygen.cgi', '', 'Key Maintenance')
+        print '<li>%s</li>' % ISFDBLink('mywebsites.cgi', '', 'My Web Sites')
 
-        print '<b>Publication Pages</b><br>'
+        print '<li><b>Publication Pages</b>'
         
+        print '<ul>'
 	concise_checked = ''
 	if user.concise_display:
                 concise_checked = 'checked'
         print '<li><input type="checkbox" name="concise_display" value="on" %s>%s</li>' % (concise_checked,
                                                                                            "Use concise Publication listing by default")
-        print '<br>'
+        print '</ul>'
 
-        print '<b>Title Pages</b><br>'
+        print '<li><b>Title Pages</b>'
+        print '<ul>'
         
 	covers_checked = ''
 	if user.covers_display:
@@ -76,18 +73,20 @@ if __name__ == '__main__':
                 cover_links_display = 'checked'
         print '<li><input type="checkbox" name="cover_links_display" value="on" %s>%s</li>' % (cover_links_display,
                                                                                                "Display cover scan indicators on Title and search pages")
-        print '<br>'
+        print '</ul>'
 
-        print '<b>Searching</b><br>'
+        print '<ul>'
+        print '<li><b>Searching</b></li>'
         
 	keep_spaces_in_searches = ''
 	if user.keep_spaces_in_searches:
                 keep_spaces_in_searches = 'checked'
         print '<li><input type="checkbox" name="keep_spaces_in_searches" value="on" %s>%s</li>' % (keep_spaces_in_searches,
                                                                                                    "Keep leading and trailing spaces when searching")
-        print '<br>'
+        print '</ul>'
 
-        print '<b>Editing</b><br>'
+        print '<ul>'
+        print '<li><b>Editing</b></li>'
         
         suppress_help_bubbles = ''
 	if user.suppress_help_bubbles:
@@ -102,7 +101,7 @@ if __name__ == '__main__':
                 print '<li><input type="checkbox" name="display_post_submission" value="on" %s>%s</li>' % (display_post_submission,
                                                                                                            "Display post-submission review pages")
 
-        print "<li>Default author/title language when editing records: "
+        print '<li>Default author/title language when editing records: '
         print '<select name="default_language">'
 
         # Iterate over an alphabetized list of language names (excluding 'None' in the 0th position)
@@ -117,9 +116,10 @@ if __name__ == '__main__':
                         print '<option value="%s">%s</option>' % (language_id, language_name)
         print '</select>'
 
-        print '<br>'
-        print '<br>'
-        print '<b>Translations</b><br>'
+        print '</ul>'
+
+        print '<li><b>Translations</b>'
+        print '<ul>'
 
         print '<li>Display translations on Author and Series pages: '
         print '<select name="display_all_languages">'
@@ -129,7 +129,7 @@ if __name__ == '__main__':
                 else:
                         print '<option>%s</option>' % value
         print '</select>'
-        print ' (if you chose "Selected", you should also set up <a href="http:/%s/mylanguages.cgi">Translation Preferences</a>)' % (HTFAKE)
+        print ' (if you chose "Selected", you should also set up %s)' % ISFDBLink('mylanguages.cgi', '', 'Translation Preferences')
 
 	display_title_translations = ''
 	if user.display_title_translations:
@@ -142,9 +142,11 @@ if __name__ == '__main__':
                 suppress_translation_warnings = 'checked'
         print '<li><input type="checkbox" name="suppress_translation_warnings" value="on" %s>%s</li>' % (suppress_translation_warnings,
                                                                                                          "Do not display translation warnings on Author and Series pages")
-        print '<br>'
 
         print '</ul>'
+
+        print '</ul>'
+        print '<p>'
 	print '<input type="SUBMIT" value="Update Preferences">'
         print '</form>'
 

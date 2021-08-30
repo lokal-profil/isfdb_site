@@ -34,12 +34,12 @@ if __name__ == '__main__':
         print outstr
 
         print '<p>'
-        print '<a class="approval" href="http:/%s/view_submission.cgi?%s">Public View</a>' % (HTFAKE, submission_id)
+        print ISFDBLinkNoName('view_submission.cgi', submission_id, 'Public View', False, 'class="approval"')
 	(userid, username, usertoken) = GetUserData()
 	# If the user is a moderator
         if SQLisUserModerator(userid):
                 subtype = submission_body[SUB_TYPE]
                 approval_script = SUBMAP[subtype][0]
-                print ' <a class="approval" href="http:/%s/mod/%s.cgi?%s">Moderator View</a>' % (HTFAKE, approval_script, submission_id)
+                print ' %s' % ISFDBLink('mod/%s.cgi' % approval_script, submission_id, 'Moderator View', False, 'class="approval"')
 
 	PrintTrailer('dumpxml', 0, 0)

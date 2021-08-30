@@ -36,7 +36,7 @@ if __name__ == '__main__':
 	PrintNavbar('recent', 0, 0, 'recent.cgi', 0)
 
         if start:
-                print '<p> [<a href="http:/%s/myrecent.cgi?%d+%s">NEWER</a>]<p>' % (HTFAKE, start-results_per_page, sub_type)
+                print '<p> %s<p>' % ISFDBLinkNoName('myrecent.cgi', '%d+%s' % (start-results_per_page, sub_type), 'NEWER', True)
 
 	(myID, username, usertoken) = GetUserData()
 
@@ -56,19 +56,20 @@ if __name__ == '__main__':
 		sys.exit(0)
 	elif sub_type == 'N':
 		wikipointer = """<br>If your edits seem to be taking a long time to be approved,
-                please check your <a href="http://%s/index.php/User_talk:%s">Talk page</a>
-                for comments or questions.""" % (WIKILOC, username)
+                please check your <a href="%s://%s/index.php/User_talk:%s">Talk page</a>
+                for comments or questions.""" % (PROTOCOL, WIKILOC, username)
 		print wikipointer
 	elif sub_type == 'R':
 		wikipointer = """The moderator may have left additional comments on your 
-		<a href="http://%s/index.php/User_talk:%s">Talk page</a>.<br>
-		Please check your wiki Talk page frequently for comments or questions.""" % (WIKILOC, username)
+		<a href="%s://%s/index.php/User_talk:%s">Talk page</a>.<br>
+		Please check your wiki Talk page frequently for comments or questions.""" % (PROTOCOL, WIKILOC, username)
 		print wikipointer
 
         ISFDBprintSubmissionTable(result, sub_type)
         
         # Check if there is more since "results_per_page+1" was requested from the database
         if numRows > results_per_page:
-                print '<p> [<a href="http:/%s/myrecent.cgi?%d+%s">OLDER</a>]' % (HTFAKE, start+results_per_page, sub_type)
+                print '<p>'
+                print ISFDBLinkNoName('myrecent.cgi', '%d+%s' % (start+results_per_page, sub_type), 'OLDER', True)
 	PrintTrailer('recent', 0, 0)
 
