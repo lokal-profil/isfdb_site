@@ -225,7 +225,7 @@ class AdvancedSearch:
 
         def print_search_table(self):
                 print '<h2>Selection Criteria</h2>'
-                print '<form METHOD="GET" action="http:/%s/adv_search_results.cgi">' % (HTFAKE)
+                print '<form METHOD="GET" action="%s:/%s/adv_search_results.cgi">' % (PROTOCOL, HTFAKE)
                 print '<p>'
                 if self.search_type in self.message:
                         print '<ul>'
@@ -283,7 +283,7 @@ class AdvancedSearch:
 
         def print_full_header(self):
                 print '<ul>'
-                print '<li>A downloadable version of the ISFDB database is available <a href="http://%s/index.php/ISFDB_Downloads">here</a>' % WIKILOC
+                print '<li>A downloadable version of the ISFDB database is available <a href="%s://%s/index.php/ISFDB_Downloads">here</a>' % (PROTOCOL, WIKILOC)
                 print '<li>Supported wildcards: * and % match any number of characters, _ matches one character'
                 print '</ul>'
                 print '<hr>'

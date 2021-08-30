@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Ahasuerus and Bill Longley
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,8 +10,6 @@
 #     Date: $Date$
 
 
-import sys
-import string
 from isfdb import *
 from SQLparsing import *
 from common import *
@@ -28,7 +26,7 @@ class AdvancedNotesSearch(AdvancedSearch):
 
         def print_notes_search(self):
                 print '<h2>Notes Search</h2>'
-                print '<form METHOD="GET" action="http:/%s/note_search_results.cgi">' % (HTFAKE)
+                print '<form METHOD="GET" action="%s:/%s/note_search_results.cgi">' % (PROTOCOL, HTFAKE)
                 print '<p>'
                 print 'Note/Synopsis '
                 print '<select NAME="OPERATOR">'

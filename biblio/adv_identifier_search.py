@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Ahasuerus and Bill Longley
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -28,7 +28,7 @@ class AdvancedIDSearch(AdvancedSearch):
 
         def print_identifier_search(self):
                 print '<h2>Publication Search by External Identifier</h2>'
-                print '<form METHOD="GET" action="http:/%s/external_id_search_results.cgi">' % (HTFAKE)
+                print '<form METHOD="GET" action="%s:/%s/external_id_search_results.cgi">' % (PROTOCOL, HTFAKE)
                 print '<p>'
                 id_types = SQLLoadIdentifierTypes()
                 print '<select NAME="ID_TYPE">'

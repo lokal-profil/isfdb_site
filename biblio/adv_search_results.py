@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2020   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -439,7 +439,7 @@ class AdvancedSearchResults(AdvancedSearch):
         def print_help_merge(self, record_type, script):
                 print '<div id="HelpBox">'
                 print '<b>Help:How to merge %s: </b>' % record_type
-                print '<a href="http://%s/index.php/Help:How_to_merge_%s">Help:How to merge %s</a><p>' % (WIKILOC, record_type, record_type)
+                print '<a href="%s://%s/index.php/Help:How_to_merge_%s">Help:How to merge %s</a><p>' % (PROTOCOL, WIKILOC, record_type, record_type)
                 print '</div>'
                 print '<form METHOD="POST" ACTION="/cgi-bin/edit/%s.cgi">' % script
 
@@ -452,7 +452,7 @@ class AdvancedSearchResults(AdvancedSearch):
                 print '</div>'
 
         def print_page_button(self, direction):
-                print '<form METHOD="GET" action="http:/%s/adv_search_results.cgi">' % HTFAKE
+                print '<form METHOD="GET" action="%s:/%s/adv_search_results.cgi">' % (PROTOCOL, HTFAKE)
                 print '<div>'
                 if direction == 'Previous':
                         new_start = self.start - 100

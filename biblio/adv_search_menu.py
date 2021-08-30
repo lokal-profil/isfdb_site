@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Ahasuerus and Bill Longley
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,8 +10,6 @@
 #     Date: $Date$
 
 
-import sys
-import string
 from isfdb import *
 from SQLparsing import *
 from common import *
@@ -24,28 +22,28 @@ class AdvancedSearchMenu:
                 PrintHeader('Advanced Search')
                 PrintNavbar('adv_search_menu', 0, 0, 0, 0)
                 print '<ul>'
-                print '<li>A downloadable version of the ISFDB database is available <a href="http://%s/index.php/ISFDB_Downloads">here</a>' % WIKILOC
+                print '<li>A downloadable version of the ISFDB database is available <a href="%s://%s/index.php/ISFDB_Downloads">here</a>' % (PROTOCOL, WIKILOC)
                 print '</ul>'
                 print '<hr>'
                 print '<ul>'
                 print '<li><b>Custom Searches of Individual Record Types:</b>'
                 print '<ul>'
-                print '<li><a href="http:/%s/adv_search_selection.cgi?author">Authors</a>' % HTFAKE
-                print '<li><a href="http:/%s/adv_search_selection.cgi?title">Titles</a>' % HTFAKE
-                print '<li><a href="http:/%s/adv_search_selection.cgi?series">Series</a>' % HTFAKE
-                print '<li><a href="http:/%s/adv_search_selection.cgi?pub">Publications</a>' % HTFAKE
-                print '<li><a href="http:/%s/adv_search_selection.cgi?publisher">Publishers</a>' % HTFAKE
-                print '<li><a href="http:/%s/adv_search_selection.cgi?pub_series">Publication Series</a>' % HTFAKE
-                print '<li><a href="http:/%s/adv_search_selection.cgi?award_type">Award Types</a>' % HTFAKE
-                print '<li><a href="http:/%s/adv_search_selection.cgi?award_cat">Award Categories</a>' % HTFAKE
-                print '<li><a href="http:/%s/adv_search_selection.cgi?award">Awards</a>' % HTFAKE
+                print '<li>%s' % ISFDBLink('adv_search_selection.cgi', 'author', 'Authors')
+                print '<li>%s' % ISFDBLink('adv_search_selection.cgi', 'title', 'Titles')
+                print '<li>%s' % ISFDBLink('adv_search_selection.cgi', 'series', 'Series')
+                print '<li>%s' % ISFDBLink('adv_search_selection.cgi', 'pub', 'Publications')
+                print '<li>%s' % ISFDBLink('adv_search_selection.cgi', 'publisher', 'Publishers')
+                print '<li>%s' % ISFDBLink('adv_search_selection.cgi', 'pub_series', 'Publication Series')
+                print '<li>%s' % ISFDBLink('adv_search_selection.cgi', 'award_type', 'Award Types')
+                print '<li>%s' % ISFDBLink('adv_search_selection.cgi', 'award_cat', 'Award Categories')
+                print '<li>%s' % ISFDBLink('adv_search_selection.cgi', 'award', 'Awards')
                 print '</ul>'
                 print '<li><b>Other Searches:</b>'
                 print '<ul>'
-                print '<li><a href="http:/%s/adv_identifier_search.cgi">Publication Search by External Identifier</a>' % HTFAKE
-                print '<li><a href="http:/%s/adv_notes_search.cgi">Notes Search</a>' % HTFAKE
-                print '<li><a href="http:/%s/adv_web_page_search.cgi">Web Page Search</a>' % HTFAKE
-                print '<li><a href="http:/%s/adv_user_search.cgi">User Search</a>' % HTFAKE
+                print '<li>%s' % ISFDBLink('adv_identifier_search.cgi', '', 'Publication Search by External Identifier')
+                print '<li>%s' % ISFDBLink('adv_notes_search.cgi', '', 'Notes Search')
+                print '<li>%s' % ISFDBLink('adv_web_page_search.cgi', '', 'Web Page Search')
+                print '<li>%s' % ISFDBLink('adv_user_search.cgi', '', 'User Search')
                 print '</ul>'
                 print '</ul>'
                 print '<p><hr><p>'
@@ -54,7 +52,7 @@ class AdvancedSearchMenu:
 
         def print_google_search(self):
                 print '<h2>Or Search ISFDB Using Google</h2>'
-                print '<form METHOD="GET" action="http:/%s/google_search_redirect.cgi" accept-charset="utf-8">' % (HTFAKE)
+                print '<form METHOD="GET" action="%s:/%s/google_search_redirect.cgi" accept-charset="utf-8">' % (PROTOCOL, HTFAKE)
                 print '<p>'
                 print '<select NAME="PAGE_TYPE">'
                 print '<option VALUE="name">Name'
