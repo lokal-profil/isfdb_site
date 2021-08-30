@@ -16,27 +16,27 @@ from biblio import *
 
 if __name__ == '__main__':
 
-        type = SESSION.Parameter(0, 'int', None, (0, 1, 2, 3, 4, 5, 6))
-        if type == 0:
+        report_type = SESSION.Parameter(0, 'int', None, (0, 1, 2, 3, 4, 5, 6))
+        if report_type == 0:
                 author_type = 'Authors and Editors'
-        elif type == 1:
+        elif report_type == 1:
                 author_type = 'Novel Authors'
-        elif type == 2:
+        elif report_type == 2:
                 author_type = 'Short Fiction Authors'
-        elif type == 3:
+        elif report_type == 3:
                 author_type = 'Collection Authors'
-        elif type == 4:
+        elif report_type == 4:
                 author_type = 'Anthology Editors'
-        elif type == 5:
+        elif report_type == 5:
                 author_type = 'Non-Fiction Authors'
-        elif type == 6:
+        elif report_type == 6:
                 author_type = 'Other Title Types Authors'
 
 	PrintHeader('%s Ranked by Awards and Nominations' % author_type)
 	PrintNavbar('top', 0, 0, 'popular_authors_table.cgi', 0)
 
-        print '<h3><a href="http:/%s/popular_authors.cgi?%d+all">Highest Ranked %s of All Time</a></h3>' % (HTFAKE, type, author_type)
-        print '<h3><a href="http:/%s/popular_authors.cgi?%d+pre1950">Highest Ranked %s Prior to 1950</a></h3>' % (HTFAKE, type, author_type)
+        print '<h3>%s</h3>' % ISFDBLinkNoName('popular_authors.cgi', '%d+all' % report_type, 'Highest Ranked %s of All Time' % author_type)
+        print '<h3>%s</h3>' % ISFDBLinkNoName('popular_authors.cgi', '%d+pre1950' % report_type, 'Highest Ranked %s Prior to 1950' % author_type)
 
         print '<h3>Highest Ranked %s Since 1950 by Decade:</h3>' % author_type
         # Set the end decade to the decade of the current year
@@ -44,7 +44,7 @@ if __name__ == '__main__':
         enddecade = endyear/10
         print '<ul>'
         for decade in range(195, enddecade+1):
-                print '<li><a href="http:/%s/popular_authors.cgi?%d+decade+%d0">%d0s</a>' % (HTFAKE, type, decade, decade)
+                print '<li>%s' % ISFDBLinkNoName('popular_authors.cgi', '%d+decade+%d0' % (report_type, decade), '%d0s' % decade)
+        print '</ul>'
 	
 	PrintTrailer('top', 0, 0)
-
