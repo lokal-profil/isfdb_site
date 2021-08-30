@@ -45,8 +45,8 @@ def PrintPubRecord(count, record, previous_last_viewed, bgcolor):
         if change_date and previous_last_viewed and change_date < previous_last_viewed:
                 new = '&nbsp;'
         print '<td>%s</td>' % new
-        print '<td><a href="http:/%s/view_submission.cgi?%d">%s</a></td>' % (HTFAKE, sub_id, change_date)
-	print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, submitter_name, submitter_name)
+        print '<td>%s</td>' % ISFDBLinkNoName('view_submission.cgi', sub_id, change_date)
+	print '<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, submitter_name, submitter_name)
 	xml = SQLloadXML(sub_id)
 	doc = minidom.parseString(XMLunescape2(xml))
 	fields = ''
@@ -142,7 +142,7 @@ if __name__ == '__main__':
 			record = result.fetch_row()
 		print '</table>'
 		if num > 199:
-                        print '[<a href="http:/%s/changed_verified_pubs.cgi?%d">%d-%d</a>]' % (HTFAKE, start+200, start+201, start+400)
+                        print ISFDBLinkNoName('changed_verified_pubs.cgi', start+200, '%d-%d' % (start+201, start+400), True)
 	else:
 		print '<h2>No changed primary verifications found</h2>'
 

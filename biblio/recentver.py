@@ -10,9 +10,7 @@
 #     Date: $Date$
 
 
-import string
 import sys
-import MySQLdb
 from isfdb import *
 from common import *
 from login import *
@@ -80,7 +78,7 @@ if __name__ == '__main__':
                         print '<td>%d</td>' % count
                         print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
                         print '<td>%s</td>' % reference_name
-                        print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
+                        print '<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, user_name, user_name)
                         print '<td>%s</td>' % verification_time
                         print '</tr>'
                         record = result.fetch_row()

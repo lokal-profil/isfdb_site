@@ -35,7 +35,7 @@ if __name__ == '__main__':
 		sys.exit(0)
 
         ISFDBprintSubmissionTable(result, 'I')
-	print '<p> [<a href="http:/%s/recent.cgi?%d">MORE</a>]' % (HTFAKE, start+200)
+	print '<p> %s' % ISFDBLink('recent.cgi', start+200, 'MORE', True)
 
 	PrintTrailer('recent', 0, 0)
 

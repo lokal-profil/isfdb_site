@@ -64,8 +64,8 @@ if __name__ == '__main__':
                                 print '<tr align=left class="table1">'
                         else:
                                 print '<tr align=left class="table2">'
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
-                        print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name)
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
+                        print '<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, user_name, user_name)
                         print '<td>%s</td>' % ver[PRIM_VERIF_TIME]
                         if ver[PRIM_VERIF_TRANSIENT]:
                                 print '<td>Yes</td>'
@@ -75,7 +75,7 @@ if __name__ == '__main__':
                         record = result.fetch_row()
 
 	print '</table>'
-	print '<p> [<a href="http:/%s/recent_primary_ver.cgi?%d">MORE</a>]' % (HTFAKE, start+200)
+	print '<p> %s' % ISFDBLinkNoName('recent_primary_ver.cgi', start+200, 'MORE', True)
 
 	PrintTrailer('recent', 0, 0)
 
