@@ -50,13 +50,12 @@ def PrintMagazineRecord(title_title, series_id, parent_id, series_title, bgcolor
         print '<td>%s' % ISFDBLink('pe.cgi', series_id, title)
         if title_title != series_title:
                 print '*'
-        print ' <a href="http:/%s/seriesgrid.cgi?%s"> (issue grid)</a></td>' % (HTFAKE, series_id)
+        print ' %s</td>' % ISFDBLinkNoName('seriesgrid.cgi', series_id, '(issue grid)')
 	if parent_id:
 		parent_title = SQLgetSeriesName(int(parent_id))
         	print '<td>'
         	print ISFDBLink('pe.cgi', parent_id, parent_title)
-                print '<a href="http:/%s/seriesgrid.cgi?%s"> (issue grid)</a>' % (HTFAKE, parent_id)
-        	print '</td>'
+                print ' %s</td>' % ISFDBLinkNoName('seriesgrid.cgi', parent_id, '(issue grid)')
 	else:
 		print '<td>-</td>'
         print '</tr>'
@@ -94,9 +93,12 @@ if __name__ == '__main__':
         
 	if section == '':
                 if dir_type == 'publisher':
-                        print 'Also see the ISFDB Wiki <a href="http://%s/index.php/Category:Publishers">category</a> for publishers' % (WIKILOC)
+                        print """Also see the ISFDB Wiki
+                                <a href="%s://%s/index.php/Category:Publishers">category</a> for publishers""" % (PROTOCOL, WIKILOC)
                 elif dir_type == 'magazine':
-                        print 'Also see the ISFDB Wiki pages for <a href="http://%s/index.php/Magazines">magazines</a> and <a href="http://%s/index.php/Fanzines">fanzines</a>' % (WIKILOC, WIKILOC)
+                        print """Also see the ISFDB Wiki pages for
+                                <a href="%s://%s/index.php/Magazines">magazines</a>
+                                and <a href="%s://%s/index.php/Fanzines">fanzines</a>""" % (PROTOCOL, WIKILOC, PROTOCOL, WIKILOC)
 		if dir_type != 'magazine':
                         print '<h2>Directory of %s names starting with:</h2><p>' % (dir_type)
                 else:
@@ -117,7 +119,7 @@ if __name__ == '__main__':
                                                 output += '<b>%s%s</b></a></td>' % (x.upper(), y)
                                                 print output
                                         else:
-                                                print '<td><a href="http:/%s/directory.cgi?%s+%s%s"><b>%s%s</b></a></td>' % (HTFAKE, dir_type, x, y, x.upper(), y)
+                                                print '<td>%s</td>' % ISFDBLinkNoName('directory.cgi', '%s+%s%s' % (dir_type, x, y), '<b>%s%s</b>' % (x.upper(), y))
 				else:
 					print '<td class="authordirectorynolink">%s%s</td>' % (x.upper(), y)
 			print '</tr>'
@@ -135,10 +137,12 @@ if __name__ == '__main__':
                         if key in records_map:
                                 first = key[0]
                                 second = key[1]
-                                print '<small><a href="http:/%s/directory.cgi?%s+%s%s"><b>Back to %s%s</b></a></small>' % (HTFAKE, dir_type, first, second, first.upper(), second)
+                                print '<small>%s</small>' % ISFDBLinkNoName('directory.cgi',
+                                                                            '%s+%s%s' % (dir_type, first, second),
+                                                                            '<b>Back to %s%s</b>' % (first.upper(), second))
                                 break
 
-                print '<a href="http:/%s/directory.cgi?%s"><b>Up to %s Directory</b></a>' % (HTFAKE, dir_type, dir_type.title())
+                print ISFDBLink('directory.cgi', dir_type, '<b>Up to %s Directory</b>' % dir_type.title())
 
                 # Display a link to the next sub-directory if available
                 for char in range(second_characters.find(section[1])+1, len(second_characters)):
@@ -146,7 +150,9 @@ if __name__ == '__main__':
                         if key in records_map:
                                 first = key[0]
                                 second = key[1]
-                                print '<small><a href="http:/%s/directory.cgi?%s+%s%s"><b>Forward to %s%s</b></a></small>' % (HTFAKE, dir_type, first, second, first.upper(), second)
+                                print '<small>%s</small>' % ISFDBLinkNoName('directory.cgi',
+                                                                            '%s+%s%s' % (dir_type, first, second),
+                                                                            '<b>Forward to %s%s</b>' % (first.upper(), second))
                                 break
 
                 search_string = db.escape_string(section[0] + section[1] + '%')
