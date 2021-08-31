@@ -201,9 +201,10 @@ class PublicationMonth:
                 TmpYear = int(self.current_year)
                 while count < 12:
                         if self.current_month == TmpMonth:
-                                print '<td><a href="http:/%s/fc.cgi?date+%s+%d"><b>%s %d (Full)</b></a></td>' % (HTFAKE, TmpMonth, TmpYear, monthmap[TmpMonth], TmpYear)
+                                full = ' (Full)'
                         else:
-                                print '<td><a href="http:/%s/fc.cgi?date+%s+%d"><b>%s %d</b></a></td>' % (HTFAKE, TmpMonth, TmpYear, monthmap[TmpMonth], TmpYear)
+                                full = ''
+                        print '<td>%s</td>' % ISFDBLinkNoName('fc.cgi', 'date+%s+%d' % (TmpMonth, TmpYear), '<b>%s %d%s</b>' % (monthmap[TmpMonth], TmpYear, full))
                         TmpMonth += 1
                         if TmpMonth > 12:
                                 TmpMonth = 1
@@ -235,10 +236,11 @@ class PublicationMonth:
 
                 if self.target_day == 0:
                         print '<h1 class="centered"> All Books for %s %s by Author</h1>' % (monthmap[self.target_month], self.target_year)
-                        print '<a href="http:/%s/fc.cgi?date+%d+%s">Sort by Genre and Date</a><br>' % (HTFAKE, self.target_month, self.target_year)
+                        print ISFDBLinkNoName('fc.cgi', 'date+%d+%s' % (self.target_month, self.target_year), 'Sort by Genre and Date')
                 else:
                         print '<h1 class="centered"> Future Books for %s %s by Author (may be delayed due to the Coronavirus pandemic)</h1>' % (monthmap[self.target_month], self.target_year)
-                        print '<a href="http:/%s/fc.cgi?date">Sort by Genre and Date</a><br>' % (HTFAKE)
+                        print ISFDBLinkNoName('fc.cgi', 'date', 'Sort by Genre and Date')
+                print '<br>'
                 self.PrintTableHeader()
 
                 # Now that the dictionary has been populated, traverse it alphabetically
@@ -268,11 +270,11 @@ class PublicationMonth:
                 # Print out the target month
                 if self.target_day == 0:
                         print '<h1 class="centered"> All Books for %s %s by Genre and Date</h1>' % (monthmap[self.target_month], self.target_year)
-                        print '<a href="http:/%s/fc.cgi?author+%d+%s">Sort by Author</a><br>' % (HTFAKE, self.target_month, self.target_year)
+                        print ISFDBLinkNoName('fc.cgi', 'author+%d+%s' % (self.target_month, self.target_year), 'Sort by Author')
                 else:
                         print '<h1 class="centered"> Future Books for %s %s by Genre and Date (may be delayed due to the Coronavirus pandemic)</h1>' % (monthmap[self.target_month], self.target_year)
-                        print '<a href="http:/%s/fc.cgi?author">Sort by Author</a><br>' % (HTFAKE)
-                print 'Or jump to:'
+                        print ISFDBLinkNoName('fc.cgi', 'author', 'Sort by Author')
+                print '<br>Or jump to:'
                 print '<ul>'
                 if self.adult:
                         print '<li><a href="#adult">Adult</a>'

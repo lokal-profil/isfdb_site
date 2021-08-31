@@ -568,13 +568,13 @@ class Bibliography:
 		if has_bio:
                         print "<li><b>Additional Biographical Data:</b>"
                         bio_title = 'Bio:%s' % self.au_data[AUTHOR_CANONICAL]
-			print '<a href="http://%s/index.php/%s">%s</a>' % (WIKILOC, bio_title, bio_title)
+			print '<a href="%s://%s/index.php/%s">%s</a>' % (PROTOCOL, WIKILOC, bio_title, bio_title)
 
 		has_biblio = SQLwikiLinkExists('Author', self.au_data[AUTHOR_CANONICAL])
 		if has_biblio:
                         print "<li><b>Additional Bibliographic Comments:</b>"
                         biblio_title = 'Author:%s' % self.au_data[AUTHOR_CANONICAL]
-			print '<a href="http://%s/index.php/%s">%s</a>' % (WIKILOC, biblio_title, biblio_title)
+			print '<a href="%s://%s/index.php/%s">%s</a>' % (PROTOCOL, WIKILOC, biblio_title, biblio_title)
 
 		if self.au_tags:
 			print "<li><b>Author Tags:</b>"
@@ -584,11 +584,16 @@ class Bibliography:
 			for tag in self.au_tags:
 				if count:
 					print_string += ', '
-				print_string += '<a href="http:/%s/tag_author.cgi?%d+%d">%s</a> (%d)' % (HTFAKE, tag[0], self.au_id, tag[1], tag[2])
+				print_string += ISFDBLinkNoName('tag_author.cgi', '%d+%d' % (tag[0], self.au_id), tag[1])
+				print_string += ' (%d)' % tag[2]
 				count += 1
 				if count == 20 and total_tags > 20:
-                                        print_string += ' and %d additional tags. <a class="inverted" ' % (total_tags-20)
-                                        print_string += 'href="http:/%s/authortags.cgi?%d"><b>View all tags for %s</b></a>' % (HTFAKE, self.au_id, self.au_data[AUTHOR_CANONICAL])
+                                        print_string += ' and %d additional tags. ' % (total_tags-20)
+                                        print_string += ISFDBLinkNoName('authortags.cgi',
+                                                                        self.au_id,
+                                                                        '<b>View all tags for %s</b>' % self.au_data[AUTHOR_CANONICAL],
+                                                                        False,
+                                                                        'class="inverted"')
                                         break
 			print print_string
 		
@@ -689,14 +694,16 @@ class Bibliography:
                 print '<table class=bibliolinks>'
                 print '<tr>'
                 print '<td><b>Other views:</b></td>'
+                print_string = '<td class="authorbiblios"><b>'
                 if self.page_type != 'Summary':
-                        print '<td class="authorbiblios"><b><a href="http:/%s/ea.cgi?%d">Summary</a></b></td>' % (HTFAKE, self.au_id)
+                        print_string += ' %s' % ISFDBLinkNoName('ea.cgi', self.au_id, 'Summary')
                 if self.page_type != 'Award':
-                        print '<td class="authorbiblios"><b><a href="http:/%s/eaw.cgi?%d">Awards</a></b></td>' % (HTFAKE, self.au_id)
+                        print_string += ' %s' % ISFDBLinkNoName('eaw.cgi', self.au_id, 'Awards')
                 if self.page_type != 'Alphabetical':
-                        print '<td class="authorbiblios"><b><a href="http:/%s/ae.cgi?%d">Alphabetical</a></b></td>' % (HTFAKE, self.au_id)
+                        print_string += ' %s' % ISFDBLinkNoName('ae.cgi', self.au_id, 'Alphabetical')
                 if self.page_type != 'Chronological':
-                        print '<td class="authorbiblios"><b><a href="http:/%s/ch.cgi?%d">Chronological</a></b></td>' % (HTFAKE, self.au_id)
+                        print_string += ' %s' % ISFDBLinkNoName('ch.cgi', self.au_id, 'Chronological')
+                print '%s</b></td>' % print_string
                 print '</tr>'
                 print '</table>'
                 print '<br>'
