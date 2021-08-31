@@ -854,7 +854,7 @@ def BuildDisplayedURL(webpage):
                         display += '-%s' % language.upper()
                 # If the image is hosted by ISFDB, also link to the Wiki-based image description page
                 if display == 'ISFDB':
-                        linked_page = "http://%s/index.php/Image:%s" % (WIKILOC, parsed_url[2].rpartition('/')[-1])
+                        linked_page = "%s://%s/index.php/Image:%s" % (PROTOCOL, WIKILOC, parsed_url[2].rpartition('/')[-1])
                 break
         # If this is not a "recognized" Web site, then display the raw domain name padded with "http://"
         if not display:

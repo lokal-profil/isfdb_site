@@ -145,6 +145,6 @@ if __name__ == '__main__':
 	PrintNavbar('note', 0, 0, 'note.cgi', 0)
 
         print FormatNote(note.note_body, note.note_type, 'full', record_id, record_type)
-        print '<big>Back to <a class="inverted" href="http:/%s/%s.cgi?%d" dir="ltr">%s</a></big>' % (HTFAKE, note.cgi_script, record_id, note.record_title)
+        print '<big>Back to %s</big>' % ISFDBLink('%s.cgi' % note.cgi_script, record_id, note.record_title, False, 'class="inverted"')
         
 	PrintTrailer('note', 0, 0)

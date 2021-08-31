@@ -35,7 +35,7 @@ def PrintTitleLine(title, pub, page, reference_lang, reference = 0):
         if title[TITLE_TTYPE] == 'REVIEW':
                 output += " &#8194; "
                 parent_id = SQLfindReviewedTitle(title[TITLE_PUBID])
-                output += '<a href="http:/%s/title.cgi?%d" dir="ltr">Review</a>: ' % (HTFAKE, title[TITLE_PUBID])
+                output += '%s: ' % ISFDBLinkNoName('title.cgi', title[TITLE_PUBID], 'Review')
                 if parent_id:
                         trans_titles = SQLloadTransTitles(title[TITLE_PUBID])
                         trans_titles_dict = {parent_id: trans_titles}
@@ -250,8 +250,11 @@ def PrintContents(titles, pub, concise):
                         mode_word = 'Concise'
                         mode_letter = 'c'
                         label = 'Contents'
-                output = '<h2>%s <a href="http:/%s/pl.cgi?%d+%s">' % (label, HTFAKE, pub.pub_id, mode_letter)
-                output += '<span class="listingtext">(view %s Listing)</span></a></h2>' % mode_word
+                output = '<h2>%s ' % label
+                output += ISFDBLinkNoName('pl.cgi',
+                                          '%d+%s' % (pub.pub_id, mode_letter),
+                                          '<span class="listingtext">(view %s Listing)</span>' % mode_word)
+                output += '</h2>'
                 print output
                 print '<ul>'
                 printed = []
@@ -438,7 +441,7 @@ if __name__ == '__main__':
 
 	if pub.pub_tag and SQLwikiLinkExists('Publication', pub.pub_tag):
                 print "<li><b>Bibliographic Comments:</b>"
-                print '<a href="http://%s/index.php/Publication:%s" dir="ltr"> View Publication comment</a> (%s)' % (WIKILOC, pub.pub_tag, pub.pub_tag)
+                print '<a href="%s://%s/index.php/Publication:%s" dir="ltr"> View Publication comment</a> (%s)' % (PROTOCOL, WIKILOC, pub.pub_tag, pub.pub_tag)
 
         #Only display the image upload link if the user is logged in
         if userid:
@@ -502,7 +505,7 @@ if __name__ == '__main__':
                         message = 'Upload cover scan'
                 else:
                         message = 'Upload new cover scan'
-                print '<a href="http://%s/index.php/Special:Upload?%s" target="_blank">%s</a>' % (WIKILOC, upload, message)
+                print '<a href="%s://%s/index.php/Special:Upload?%s" target="_blank">%s</a>' % (PROTOCOL, WIKILOC, upload, message)
 
 	print '</ul>'
 	if pub.pub_image:
