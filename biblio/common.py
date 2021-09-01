@@ -37,8 +37,8 @@ def PrintNewPubs(userid):
 	print '</div>'
 	print '<ul class="navbar">'
 	for pub_type in PUB_TYPES:
-                print '<li><a href="http:/%s/edit/newpub.cgi?%s">Add New %s</a>' % (HTFAKE, pub_type.title(), pub_type.title())
-        print '<li><a href="http:/%s/edit/select_award_type.cgi?0">Add Untitled Award</a>' % (HTFAKE)
+                print '<li>%s' % ISFDBLinkNoName('edit/newpub.cgi', pub_type.title(), 'Add New %s' % pub_type.title())
+        print '<li>%s' % ISFDBLinkNoName('edit/select_award_type.cgi', '0', 'Add Untitled Award')
 	print '</ul>'
 	return
 
@@ -491,15 +491,15 @@ def PrintUserInfo(executable, argument):
 def PrintHeader(title):
         PrintHTMLHeaders(title)
 
-        print '<script type="text/javascript" src="http://%s/isfdb_main.js"></script>' % HTMLLOC
+        print '<script type="text/javascript" src="%s://%s/isfdb_main.js"></script>' % (PROTOCOL, HTMLLOC)
         # Advanced Search pages only:
         if title.startswith('Advanced'):
                 # Import functions to change drop-down values dynamically
-                print '<script type="text/javascript" src="http://%s/adv_search.js"></script>' % HTMLLOC
+                print '<script type="text/javascript" src="%s://%s/adv_search.js"></script>' % (PROTOCOL, HTMLLOC)
 
 	# GOOGLE Analytics - will need to be rewritten to work with CSP before it can be activated
 	if DO_ANALYTICS:
-		print '<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">'
+		print '<script src="https://www.google-analytics.com/urchin.js" type="text/javascript">'
 		print '</script>'
 		print '<script type="text/javascript">'
 		print '_uacct = "UA-253096-1";'
@@ -509,12 +509,12 @@ def PrintHeader(title):
 	(userid, username, usertoken) = GetUserData()
 	if not userid:
                 print '<h3>You are not logged in. If you'
-                print ' <a href="http://%s/index.php?title=Special:Userlogin&amp;type=signup">' % (WIKILOC)
+                print ' <a href="%s://%s/index.php?title=Special:Userlogin&amp;type=signup">' % (PROTOCOL, WIKILOC)
                 print '<span class="newuser">create a free account</span></a>'
                 print ' and sign in, you will be able to customize what is displayed.</h3>'
         elif SQLhasNewTalk(userid):
                 print '<div class="newtalk"><h3>There are new messages on your Talk page. Please follow '
-                print '<a href="http://%s/index.php/User_talk:%s">this link</a> and respond.</h3></div>' % (WIKILOC, username)
+                print '<a href="%s://%s/index.php/User_talk:%s">this link</a> and respond.</h3></div>' % (PROTOCOL, WIKILOC, username)
 	print '</div>'
 
 ########################################################################
@@ -570,7 +570,7 @@ def PrintNavbar(page_type, arg1, arg2, executable, argument, search_value = '', 
                                 print 'Other Links:'
                                 print '</div>'
                                 print '<ul class="navbar">'
-                                print '<li><a href="http://www.gutenberg.org/ebooks/%s" target="_blank">Project Gutenberg</a>' % arg1[PUB_CATALOG]
+                                print '<li><a href="https://www.gutenberg.org/ebooks/%s" target="_blank">Project Gutenberg</a>' % arg1[PUB_CATALOG]
                                 print '</ul>'
 
 	PrintEditTools(page_type, userid, arg1, arg2)
@@ -582,29 +582,29 @@ def PrintNavbar(page_type, arg1, arg2, executable, argument, search_value = '', 
 		print 'Tools Used to Create This Site:'
 		print '</div>'
 		print '<ul class="navbar">'
-		print '<li><a href="http://www.fabforce.net/dbdesigner4/">DBDesigner 4</a>'
-		print '<li><a href="http://www.mysql.com">MySQL</a>'
-		print '<li><a href="http://www.python.org">Python</a>'
-		print '<li><a href="http://www.mozilla.org/projects/venkman/">Venkman</a>'
-		print '<li><a href="http://www.vim.org">Vim</a>'
+		print '<li><a href="https://www.fabforce.net/dbdesigner4/">DBDesigner 4</a>'
+		print '<li><a href="https://www.mysql.com">MySQL</a>'
+		print '<li><a href="https://www.python.org">Python</a>'
+		print '<li><a href="https://wiki.mozilla.org/Venkman">Venkman</a>'
+		print '<li><a href="https://www.vim.org">Vim</a>'
 		print '</ul>'
 
 	print '<div class="divider">'
 	print 'Policies:'
 	print '</div>'
 	print '<ul class="navbar">'
-	print '<li><a href="http://%s/index.php/ISFDB:General_disclaimer">Disclaimer</a>' % (WIKILOC)
-	print '<li><a href="http://%s/index.php/Privacy_Policy">Privacy Policy</a>' % (WIKILOC)
-	print '<li><a href="http://%s/index.php/Banner_Art_Credits">Banner Art Credits</a>' % (WIKILOC)
+	print '<li><a href="%s://%s/index.php/ISFDB:General_disclaimer">Disclaimer</a>' % (PROTOCOL, WIKILOC)
+	print '<li><a href="%s://%s/index.php/ISFDB:Privacy_policy">Privacy Policy</a>' % (PROTOCOL, WIKILOC)
+	print '<li><a href="%s://%s/index.php/Banner_Art_Credits">Banner Art Credits</a>' % (PROTOCOL, WIKILOC)
 	print '</ul>'
 
 	print '<div class="divider">'
 	print 'License:'
 	print '</div>'
 	print '<div id="cclicense">'
-	print '<a rel="license" href="http://creativecommons.org/licenses/by/2.0/">'
-	print '<img alt="Creative Commons License" src="http://creativecommons.org/images/public/somerights20.gif"></a><br>'
-	print 'This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/2.0/">Creative Commons License</a>.'
+	print '<a rel="license" href="https://creativecommons.org/licenses/by/2.0/">'
+	print '<img alt="Creative Commons License" src="https://creativecommons.org/images/public/somerights20.gif"></a><br>'
+	print 'This work is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/2.0/">Creative Commons License</a>.'
 	print '</div>'
 
         # nav div
@@ -667,58 +667,58 @@ def PrintEditTools(page_type, userid, arg1, arg2):
 	if moderator:
                 output.append(ISFDBLink('mod/list.cgi', 'N', 'Moderator'))
 	if (page_type == 'author') and (int(arg2) > 0):
-		output.append('<a href="http:/%s/edit/editauth.cgi?%s">Edit Author Data</a>' % (HTFAKE, arg2))
-		output.append('<a href="http:/%s/edit/mkpseudo.cgi?%s">Make/Remove Alternate Name</a>' % (HTFAKE, arg2))
+		output.append(ISFDBLink('edit/editauth.cgi', arg2, 'Edit Author Data'))
+		output.append(ISFDBLink('edit/mkpseudo.cgi', arg2, 'Make/Remove Alternate Name'))
                 output.append('%s%s</a>' % (AuthorSearchLink(arg1), 'Show All Titles'))
-		output.append('<a href="http:/%s/edit/find_dups.cgi?%s">Check for Duplicate Titles</a>' % (HTFAKE, arg2))
+		output.append(ISFDBLink('edit/find_dups.cgi', arg2, 'Check for Duplicate Titles'))
 	elif page_type == 'title':
-		output.append('<a href="http:/%s/edit/edittitle.cgi?%s">Edit Title Data</a>' % (HTFAKE, arg2))
-		output.append('<a href="http:/%s/diffselect.cgi?%s">Compare Publications</a>' % (HTFAKE, arg2))
-		output.append('<a href="http:/%s/edit/deletetitle.cgi?%s">Delete This Title</a>' % (HTFAKE, arg2))
-		output.append('<a href="http:/%s/edit/mkvariant.cgi?%s">Make This Title a Variant</a>' % (HTFAKE, arg2))
+		output.append(ISFDBLink('edit/edittitle.cgi', arg2, 'Edit Title Data'))
+		output.append(ISFDBLink('diffselect.cgi', arg2, 'Compare Publications'))
+		output.append(ISFDBLink('edit/deletetitle.cgi', arg2, 'Delete This Title'))
+		output.append(ISFDBLink('edit/mkvariant.cgi', arg2, 'Make This Title a Variant'))
 		if arg1 in ('NOVEL', 'COLLECTION', 'OMNIBUS', 'ANTHOLOGY', 'CHAPBOOK', 'NONFICTION'):
-                        output.append('<a href="http:/%s/edit/addpub.cgi?%s">Add Publication to This Title</a>' % (HTFAKE, arg2))
+                        output.append(ISFDBLink('edit/addpub.cgi', arg2, 'Add Publication to This Title'))
 		if (arg1 != 'REVIEW') and (arg1 != 'INTERVIEW'):
-                        output.append('<a href="http:/%s/edit/addvariant.cgi?%s">Add a Variant to This Title</a>' % (HTFAKE, arg2))
+                        output.append(ISFDBLink('edit/addvariant.cgi', arg2, 'Add a Variant to This Title'))
 		if arg1 == 'REVIEW':
-			output.append('<a href="http:/%s/edit/linkreview.cgi?%s">Link Review to Title</a>' % (HTFAKE, arg2))
-                output.append('<a href="http:/%s/edit/select_award_type.cgi?%s">Add an Award to This Title</a>' % (HTFAKE, arg2))
-		output.append('<a href="http:/%s/edit/tv_unmerge.cgi?%s">Unmerge Titles</a>' % (HTFAKE, arg2))
-		output.append('<a href="http:/%s/edit/find_title_dups.cgi?%s">Check for Duplicate Titles</a>' % (HTFAKE, arg2))
+			output.append(ISFDBLink('edit/linkreview.cgi', arg2, 'Link Review to Title'))
+                output.append(ISFDBLink('edit/select_award_type.cgi', arg2, 'Add an Award to This Title'))
+		output.append(ISFDBLink('edit/tv_unmerge.cgi', arg2, 'Unmerge Titles'))
+		output.append(ISFDBLink('edit/find_title_dups.cgi', arg2, 'Check for Duplicate Titles'))
 	elif page_type == 'series':
-		output.append('<a href="http:/%s/edit/editseries.cgi?%s">Edit Series</a>' % (HTFAKE, arg1))
-		output.append('<a href="http:/%s/edit/deleteseries.cgi?%s">Delete Series</a>' % (HTFAKE, arg1))
+		output.append(ISFDBLink('edit/editseries.cgi', arg1, 'Edit Series'))
+		output.append(ISFDBLink('edit/deleteseries.cgi', arg1, 'Delete Series'))
 	elif page_type == 'award':
-                output.append('<a href="http:/%s/edit/addaward.cgi?0+%s">Add Untitled Award of This Type</a>' % (HTFAKE, arg2))
+                output.append(ISFDBLink('edit/addaward.cgi', '0+%s' % arg2, 'Add Untitled Award of This Type'))
                 if arg1:
-                        output.append('<a href="http:/%s/edit/editaward.cgi?%s">Edit Award</a>' % (HTFAKE, arg1))
-                        output.append('<a href="http:/%s/edit/linkaward.cgi?%s">Link Award</a>' % (HTFAKE, arg1))
-                        output.append('<a href="http:/%s/edit/deleteaward.cgi?%s">Delete Award</a>' % (HTFAKE, arg1))
+                        output.append(ISFDBLink('edit/editaward.cgi', arg1, 'Edit Award'))
+                        output.append(ISFDBLink('edit/linkaward.cgi', arg1, 'Link Award'))
+                        output.append(ISFDBLink('edit/deleteaward.cgi', arg1, 'Delete Award'))
 	elif page_type == 'award_type':
-                output.append('<a href="http:/%s/edit/addaward.cgi?0+%s">Add Untitled Award of This Type</a>' % (HTFAKE, arg1))
+                output.append(ISFDBLink('edit/addaward.cgi', '0+%s' % arg1, 'Add Untitled Award of This Type'))
 		# Award Types can only be edited by moderators at this time
 		if moderator:
-                        output.append('<a href="http:/%s/edit/addawardcat.cgi?%s">Add New Award Category to This Award Type</a>' % (HTFAKE, arg1))
-			output.append('<a href="http:/%s/edit/deleteawardtype.cgi?%s">Delete This Award Type</a>' % (HTFAKE, arg1))
-			output.append('<a href="http:/%s/edit/editawardtype.cgi?%s">Edit This Award Type</a>' % (HTFAKE, arg1))
+                        output.append(ISFDBLink('edit/addawardcat.cgi', arg1, 'Add New Award Category to This Award Type'))
+			output.append(ISFDBLink('edit/deleteawardtype.cgi', arg1, 'Delete This Award Type'))
+			output.append(ISFDBLink('edit/editawardtype.cgi', arg1, 'Edit This Award Type'))
 	elif page_type == 'award_cat':
+                output.append(ISFDBLink('edit/editawardcat.cgi', arg1, 'Edit This Award Category'))
 		# Award Types can only be deleted by moderators at this time
-                output.append('<a href="http:/%s/edit/editawardcat.cgi?%s">Edit This Award Category</a>' % (HTFAKE, arg1))
 		if moderator:
-			output.append('<a href="http:/%s/edit/deleteawardcat.cgi?%s">Delete This Award Category</a>' % (HTFAKE, arg1))
+			output.append(ISFDBLink('edit/deleteawardcat.cgi', arg1, 'Delete This Award Category'))
 	elif page_type == 'publication':
-		output.append('<a href="http:/%s/edit/find_pub_dups.cgi?%s">Check for Duplicate Titles</a>' % (HTFAKE, arg1[PUB_PUBID]))
-		output.append('<a href="http:/%s/edit/editpub.cgi?%s">Edit This Pub</a>' % (HTFAKE, arg1[PUB_PUBID]))
-		output.append('<a href="http:/%s/edit/clone_intermediate.cgi?%s">Clone This Pub</a>' % (HTFAKE, arg1[PUB_PUBID]))
-		output.append('<a href="http:/%s/edit/exportcontent.cgi?%s">Export Content</a>' % (HTFAKE, arg1[PUB_PUBID]))
-		output.append('<a href="http:/%s/edit/importcontent.cgi?%s">Import Content</a>' % (HTFAKE, arg1[PUB_PUBID]))
-		output.append('<a href="http:/%s/edit/rmtitles.cgi?%s">Remove Titles From This Pub</a>' % (HTFAKE, arg1[PUB_PUBID]))
-		output.append('<a href="http:/%s/edit/deletepub.cgi?%s">Delete This Pub</a>' % (HTFAKE, arg1[PUB_PUBID]))
-		output.append('<a href="http:/%s/edit/verify.cgi?%s">Verify This Pub</a>' % (HTFAKE, arg1[PUB_PUBID]))
+		output.append(ISFDBLink('edit/find_pub_dups.cgi', arg1[PUB_PUBID], 'Check for Duplicate Titles'))
+		output.append(ISFDBLink('edit/editpub.cgi', arg1[PUB_PUBID], 'Edit This Pub'))
+		output.append(ISFDBLink('edit/clone_intermediate.cgi', arg1[PUB_PUBID], 'Clone This Pub'))
+		output.append(ISFDBLink('edit/exportcontent.cgi', arg1[PUB_PUBID], 'Export Content'))
+		output.append(ISFDBLink('edit/importcontent.cgi', arg1[PUB_PUBID], 'Import Content'))
+		output.append(ISFDBLink('edit/rmtitles.cgi', arg1[PUB_PUBID], 'Remove Titles From This Pub'))
+		output.append(ISFDBLink('edit/deletepub.cgi', arg1[PUB_PUBID], 'Delete This Pub'))
+		output.append(ISFDBLink('edit/verify.cgi', arg1[PUB_PUBID], 'Verify This Pub'))
 	elif page_type == 'publisher':
-                output.append('<a href="http:/%s/edit/editpublisher.cgi?%s">Edit This Publisher</a>' % (HTFAKE, arg2))
+                output.append(ISFDBLink('edit/editpublisher.cgi', arg2, 'Edit This Publisher'))
 	elif page_type == 'pub_series':
-                output.append('<a href="http:/%s/edit/editpubseries.cgi?%s">Edit This Publication Series</a>' % (HTFAKE, arg2))
+                output.append(ISFDBLink('edit/editpubseries.cgi', arg2, 'Edit This Publication Series'))
 	if output:
                 print '<div class="divider">'
                 print 'Editing Tools:'
@@ -945,7 +945,7 @@ def CoverInfo(link, preview=False, direct=False):
         if credit == 'ISFDB':
                 site_name = 'ISFDB'
                 if not direct:
-                        finallink = "http://%s" % home_page
+                        finallink = "%s://%s" % (PROTOCOL, home_page)
         elif 'Amazon' in credit:
                 site_name = 'Amazon'
         else:
@@ -1149,7 +1149,7 @@ def PrintOnePub(pub, pub_authors, pub_publishers, pub_series, cover_artists, bgc
 
         # Verification status
         if SQLPrimaryVerifiers(pub[PUB_PUBID]):
-                print '<td class="checkmark"><img src="http://%s/checkmark.png" alt="Checkmark" height="15" width="15"></td>' % HTMLLOC
+                print '<td class="checkmark"><img src="%s://%s/checkmark.png" alt="Checkmark" height="15" width="15"></td>' % (PROTOCOL, HTMLLOC)
         else:
                 print '<td>&nbsp;</td>'
 
@@ -1179,9 +1179,7 @@ def FormatPubSeries(pub, pub_series):
         if pub[PUB_SERIES] or pub[PUB_SERIES_NUM]:
                 if pub[PUB_SERIES]:
                         pub_series_name = pub_series[pub[PUB_SERIES]]
-                        trans_names = SQLloadTransPubSeriesNames(pub[PUB_SERIES])
-                        display_line = '<a href="http:/%s/pubseries.cgi?%s">%s</a>' % (HTFAKE, pub[PUB_SERIES], pub_series_name)
-                        displayed_pub_series += ISFDBMouseover(trans_names, display_line, '')
+                        displayed_pub_series = ISFDBLink('pubseries.cgi', pub[PUB_SERIES], pub_series_name)
                 if pub[PUB_SERIES_NUM]:
                         displayed_pub_series += ' #%s' % pub[PUB_SERIES_NUM]
         return displayed_pub_series
@@ -1190,9 +1188,7 @@ def FormatPublisher(pub, pub_publishers):
         displayed_publisher = ''
         if pub[PUB_PUBLISHER]:
                 publisher_name = pub_publishers[pub[PUB_PUBLISHER]]
-                trans_names = SQLloadTransPublisherNames(pub[PUB_PUBLISHER])
-                display_line = '<a href="http:/%s/publisher.cgi?%s">%s</a>' % (HTFAKE, pub[PUB_PUBLISHER], publisher_name)
-                displayed_publisher = ISFDBMouseover(trans_names, display_line, '')
+                displayed_publisher = ISFDBLink('publisher.cgi', pub[PUB_PUBLISHER], publisher_name)
         return displayed_publisher
 
 def PrintTitleTable(titles, merge, limit = 100, user = None):
@@ -1263,16 +1259,16 @@ def PrintTitleRecord(title, merge, limit, bgcolor, user):
                 output = ''
                 for tag in tags:
                         if first_tag:
-                                output = '<a href="http:/%s/tag.cgi?%d">%s</a> (%d)' % (HTFAKE, tag[0], tag[1], tag[2])
+                                output = '%s (%d)' % (ISFDBLink('tag.cgi', tag[0], tag[1]), tag[2])
                                 first_tag = 0
                         else:
-                                output += ', <a href="http:/%s/tag.cgi?%d">%s</a> (%d)' % (HTFAKE, tag[0], tag[1], tag[2])
+                                output += ', %s (%d)' % (ISFDBLink('tag.cgi', tag[0], tag[1]), tag[2])
                 print output
         else:
                 print '&nbsp;'
-	print "</td>"
+	print '</td>'
 
-        print "</tr>"
+        print '</tr>'
 
 def PrintPublisherTable(publishers, merge, limit = 100, user = None):
 	print '<table class="generic_table">'
@@ -1455,13 +1451,13 @@ def PrintAnnualGrid(starting_decade, link, year_parameter, display_decade, decad
         for decade in range(current_decade, starting_decade-10, -10):
                 print '<tr class="table%d">' % (bgcolor+1)
                 if display_decade:
-                        print '<td><a href="http:/%s/%s.cgi?%s%d">%ds</a></td>' % (HTFAKE, link, decade_parameter, decade, decade)
+                        print '<td>%s</td>' % ISFDBLinkNoName('%s.cgi' % link, '%s%d' % (decade_parameter, decade), '%ds' % decade)
                 for year in range(decade, decade+10):
                         # Skip future years
                         if year > current_year:
                                 print '<td>&nbsp;</td>'
                                 continue
-                        print '<td><a href="http:/%s/%s.cgi?%s%d">%d</a></td>' % (HTFAKE, link, year_parameter, year, year)
+                        print '<td>%s</td>' % ISFDBLinkNoName('%s.cgi' % link, '%s%d' % (year_parameter, year), '%d' % year)
                 print '</tr>'
                 bgcolor ^= 1
         print '</table>'

@@ -89,9 +89,7 @@ if __name__ == '__main__':
                 list_of_series_as_string = ",".join(list_of_series)
                 all_pub_series = SQLLoadPubSeries(list_of_series_as_string)
                 for pub_series in all_pub_series:
-                        trans_names = SQLloadTransPubSeriesNames(pub_series[PUB_SERIES_ID])
-                        display_line = ISFDBLink('pubseries.cgi', pub_series[PUB_SERIES_ID], pub_series[PUB_SERIES_NAME])
-                        print '<li>%s</li>' % ISFDBMouseover(trans_names, display_line, '')
+                        print '<li>%s</li>' % ISFDBLink('pubseries.cgi', pub_series[PUB_SERIES_ID], pub_series[PUB_SERIES_NAME])
         print '</ul>'
         print '</div>'
 
