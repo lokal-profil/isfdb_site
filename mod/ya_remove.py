@@ -15,53 +15,48 @@ from isfdblib import *
 from library import *
 from SQLparsing import *
 
-debug = 0
 
+submission = SESSION.Parameter(0, 'int')
 
-if __name__ == '__main__':
+PrintPreMod('Remove Alternate Name - SQL Statements')
+PrintNavBar()
 
-        submission = SESSION.Parameter(0, 'int')
+if NotApprovable(submission):
+        sys.exit(0)
 
-        PrintPreMod('Remove Alternate Name - SQL Statements')
-        PrintNavBar()
+print '<h1>SQL Updates:</h1>'
+print '<hr>'
+print '<ul>'
 
-        if NotApprovable(submission):
-                sys.exit(0)
-
-	print '<h1>SQL Updates:</h1>'
-	print '<hr>'
-	print '<ul>'
-
-	submitter = ''
-	try:
-		xml = SQLloadXML(submission)
-		doc = minidom.parseString(XMLunescape2(xml))
-        	if doc.getElementsByTagName('RemovePseud'):
-			merge = doc.getElementsByTagName('RemovePseud')
-        		Record = GetElementValue(merge, 'Record')
-        		submitter = GetElementValue(merge, 'Submitter')
-       			if TagPresent(merge, 'Parent'):
-        			parent = GetElementValue(merge, 'Parent')
-        			#Retrieve the last pseudonym row id that matches this canonical/alternate pair
-                                pseud_id = SQLGetPseudIdByAuthorAndPseud(parent,Record)
-                                if not pseud_id:
-                        		print '<div id="ErrorBox">'
-                        		print '<h3>Error: This alternate name association no longer exists.</h3>'
-                                	print '<h3>Please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject this submission.</h3>' % (HTFAKE, submission)
-                        		print '</div>'
-                        		PrintPostMod()
-                        		sys.exit(0)
-                                insert = "delete from pseudonyms where pseudo_id = %d" % int(pseud_id)
-                                print '<li> ', insert
-                                if debug == 0:
-                                        db.query(insert)
+submitter = ''
+try:
+        xml = SQLloadXML(submission)
+        doc = minidom.parseString(XMLunescape2(xml))
+        if doc.getElementsByTagName('RemovePseud'):
+                merge = doc.getElementsByTagName('RemovePseud')
+                Record = GetElementValue(merge, 'Record')
                 submitter = GetElementValue(merge, 'Submitter')
-                markIntegrated(db, submission, Record)
-	except:
-		submitter = 'unknown'
+                if TagPresent(merge, 'Parent'):
+                        parent = GetElementValue(merge, 'Parent')
+                        #Retrieve the last pseudonym row id that matches this canonical/alternate pair
+                        pseud_id = SQLGetPseudIdByAuthorAndPseud(parent,Record)
+                        if not pseud_id:
+                                print '<div id="ErrorBox">'
+                                print '<h3>Error: This alternate name association no longer exists.</h3>'
+                                print '<h3>Please use %s to reject this submission.</h3>' % (ISFDBLink('mod/hardreject.cgi', submission, 'Hard Reject'))
+                                print '</div>'
+                                PrintPostMod()
+                                sys.exit(0)
+                        insert = "delete from pseudonyms where pseudo_id = %d" % int(pseud_id)
+                        print '<li> ', insert
+                        db.query(insert)
+        submitter = GetElementValue(merge, 'Submitter')
+        markIntegrated(db, submission, Record)
+except:
+        submitter = 'unknown'
 
-        print '[<a href="http:/%s/ea.cgi?%d">View Former Canonical Name</a>]' % (HTFAKE, int(parent))
-        print '[<a href="http:/%s/ea.cgi?%d">View Former Alternate Name</a>]' % (HTFAKE, int(Record))
-        print '<p>'
+print ISFDBLinkNoName('ea.cgi', parent, 'View Former Canonical Name', True)
+print ISFDBLinkNoName('ea.cgi', Record, 'View Former Alternate Name', True)
+print '<p>'
 
-        PrintPostMod(0)
+PrintPostMod(0)

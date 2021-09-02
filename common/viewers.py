@@ -27,7 +27,7 @@ def CheckSeries(value):
         if not series_id:
                 warning = 'Unknown Series'
         else:
-                value = '<a href="http:/%s/pe.cgi?%d">%s</a>' % (HTFAKE, int(series_id), value)
+                value = ISFDBLink('pe.cgi', series_id, value)
         return (value, warning)
 
 def CheckPubSeries(value):
@@ -37,7 +37,7 @@ def CheckPubSeries(value):
                 warning = 'Unknown Publication Series'
         else:
                 if len(pubseries) == 1:
-                        value = '<a href="http:/%s/pubseries.cgi?%s">%s</a>' % (HTFAKE, pubseries[0][PUB_SERIES_ID], value)
+                        value = ISFDBLink('pubseries.cgi', pubseries[0][PUB_SERIES_ID], value)
         return (value, warning)
 
 def CheckPublisher(value):
@@ -47,7 +47,7 @@ def CheckPublisher(value):
                 warning = 'Unknown Publisher'
         else:
                 if len(publisher) == 1:
-                        value = '<a href="http:/%s/publisher.cgi?%s">%s</a>' % (HTFAKE, publisher[0][PUBLISHER_ID], value)
+                        value = ISFDBLink('publisher.cgi', publisher[0][PUBLISHER_ID], value)
         return (value, warning)
 
 def CheckPrice(value):
@@ -569,7 +569,7 @@ def PrintAuthorNames(names, Separator):
                 author = SQLgetAuthorData(name)
                 if author:
                         # If the author is already on file, change the plain text name to an HTML link to the author record
-                        name = '<a href="http:/%s/ea.cgi?%d">%s</a>' % (HTFAKE, author[AUTHOR_ID], author[AUTHOR_CANONICAL])
+                        name = ISFDBLink('ea.cgi', author[AUTHOR_ID], author[AUTHOR_CANONICAL])
                         if SQLauthorIsPseudo(author[AUTHOR_ID]):
                                 pseudonym += 1
                 else:
@@ -775,12 +775,12 @@ def DisplayPubSeriesChanges(submission_id):
                 Record = GetElementValue(merge, 'Record')
                 submitter = GetElementValue(merge, 'Submitter')
 
-                print "<tr>"
+                print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Current [Record #<a href="http:/%s/pubseries.cgi?%s">%s</a>]</b></td>' % (HTFAKE, Record, Record)
+		print '<td class="label"><b>Current [Record #%s]</b></td>' % ISFDBLinkNoName('pubseries.cgi', Record, Record)
                 print '<td class="label"><b>Proposed</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
-                print "</tr>"
+                print '</tr>'
 
                 current = pub_series(db)
                 current.load(int(Record))
@@ -2045,11 +2045,11 @@ def DisplayRemovePseudonym(submission_id):
         		submitter = GetElementValue(merge, 'Submitter')
 	
 			print '<tr>'
-			print '<td class="label"><b>Alternate Name [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE, Record, Record)
+			print '<td class="label"><b>Alternate Name %s</b></td>' % ISFDBLinkNoName('ea.cgi', Record, 'Record #%s' % Record, True)
 	
        			if TagPresent(merge, 'Parent'):
         			parent = GetElementValue(merge, 'Parent')
-				print '<td class="label"><b>Parent Author [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE, parent, parent)
+                                print '<td class="label"><b>Parent Author %s</b></td>' % ISFDBLinkNoName('ea.cgi', parent, 'Record #%s' % parent, True)
 				print '</tr>'
 
 				print '<tr>'
@@ -2085,7 +2085,7 @@ def DisplayRemovePseudonym(submission_id):
 		print '<ul>'
                 for author in authors:
                         author_data = SQLgetAuthorData(author[0])
-			print '<li><a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author_data[AUTHOR_ID], author[0])
+			print '<li>%s' % ISFDBLink('ea.cgi', author_data[AUTHOR_ID], author[0])
 		print '</ul>'
 
         return submitter
