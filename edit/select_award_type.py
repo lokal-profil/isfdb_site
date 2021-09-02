@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
         print '<b>Help on adding an award: </b>'
-        print '<a href="http://%s/index.php/Help:Screen:AddAward">Help:Screen:AddAward</a><p>' % WIKILOC
+        print '<a href="%s://%s/index.php/Help:Screen:AddAward">Help:Screen:AddAward</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
 	print '<form method="POST" action="/cgi-bin/edit/submit_select_award_type.cgi">'

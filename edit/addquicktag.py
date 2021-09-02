@@ -16,15 +16,15 @@ import MySQLdb
 from SQLparsing import *
 from isfdb import *
 from isfdblib import *
-from library import ISFDBLocalRedirect
+from library import ISFDBLinkNoName, ISFDBLocalRedirect
 
 
 def DoError(error, title_id):
-	PrintPreSearch("Add Quick Tag")
-	PrintNavBar("edit/addquicktag.cgi", 0)
-        print "<h2>ERROR: %s</h2>" % error
+	PrintPreSearch('Add Quick Tag')
+	PrintNavBar('edit/addquicktag.cgi', 0)
+        print '<h2>ERROR: %s</h2>' % error
         if title_id:
-                print '<br>[<a href="http:/%s/title.cgi?%d">View This Title</a>]' % (HTFAKE, int(title_id))
+                print '<br>%s' % ISFDBLinkNoName('title.cgi', title_id, 'View This Title', True)
         PrintPostSearch(0, 0, 0, 0, 0)
         sys.exit(0)
 

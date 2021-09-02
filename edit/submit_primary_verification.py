@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2017   Ahasuerus
+#     (C) COPYRIGHT 2017-2021   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -95,8 +95,8 @@ if __name__ == '__main__':
                 sys.exit(0)
 	print '</ul>'
 
-	print '[<a href="http:/%s/pl.cgi?%d">View This Pub</a>]' % (HTFAKE, ver.pub_id)
-	print '[<a href="http:/%s/edit/editpub.cgi?%d">Edit This Pub</a>]' % (HTFAKE, ver.pub_id)
-	print '[<a href="http:/%s/edit/verify.cgi?%d">View/Add Verifications</a>]' % (HTFAKE, ver.pub_id)
+	print ISFDBLinkNoName('pl.cgi', ver.pub_id, 'View This Pub', True)
+	print ISFDBLinkNoName('edit/editpub.cgi', ver.pub_id, 'Edit This Pub', True)
+	print ISFDBLinkNoName('edit/verify.cgi', ver.pub_id, 'View/Add Verifications', True)
 
 	PrintPostSearch(0, 0, 0, 0, 0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2017   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -75,8 +75,8 @@ if __name__ == '__main__':
 
 	print '</ul>'
 
-	print '[<a href="http:/%s/pl.cgi?%d">View This Pub</a>]' % (HTFAKE, pub_id)
-	print '[<a href="http:/%s/edit/editpub.cgi?%d">Edit This Pub</a>]' % (HTFAKE, pub_id)
-	print '[<a href="http:/%s/edit/verify.cgi?%d">View/Add Verifications</a>]' % (HTFAKE, pub_id)
+	print ISFDBLinkNoName('pl.cgi', pub_id, 'View This Pub', True)
+	print ISFDBLinkNoName('edit/editpub.cgi', pub_id, 'Edit This Pub', True)
+	print ISFDBLinkNoName('edit/verify.cgi', pub_id, 'View/Add Verifications', True)
 
 	PrintPostSearch(0, 0, 0, 0, 0)

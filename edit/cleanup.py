@@ -40,18 +40,18 @@ if __name__ == '__main__':
                 print """<li>Reports that can be viewed by non-moderators have asterisks next to their names.
                         <li>Note that non-moderators can't mark records as "ignored".
                         <li>For an explanation of the "ignore" functionality see
-                        <a href="http://%s/index.php/Help:Screen:IgnoreCleanupRecords">this Help page.</a>""" % WIKILOC
+                        <a href="%s://%s/index.php/Help:Screen:IgnoreCleanupRecords">this Help page.</a>""" % (PROTOCOL, WIKILOC)
         else:
                 print """<li>Some cleanup reports allow moderators to mark records as "ignored".
                          Note that moderators have access to additional reports. """
 
         if all_reports:
-                print """<li>Displaying all reports. You can also limit the list to 
-                <a href="http:/%s/edit/cleanup.cgi?0">reports with identified potential problems</a>.""" % HTFAKE
+                print """<li>Displaying all reports. You can also limit the list to
+                        %s.""" % ISFDBLink('edit/cleanup.cgi', '0', 'reports with identified potential problems')
         else:
                 if user.moderator:
                         print """<li>Only reports with identified potential problems are displayed. You can 
-                        also view a <a href="http:/%s/edit/cleanup.cgi?1">full list of reports</a>.""" % HTFAKE
+                        also view a %s""" % ISFDBLink('edit/cleanup.cgi', '1', 'full list of reports')
         print '</ul>'
 
         (reports, sections, non_moderator) = reportsDict()
@@ -93,16 +93,15 @@ if __name__ == '__main__':
                                 non_mod_flag = ' *'
                         else:
                                 non_mod_flag = ''
-                        print """<a href="http:/%s/edit/cleanup_report.cgi?%d">
-                                <button type="button">%s (%d)%s</button>
-                                </a>""" % (HTFAKE, report_id, reports[report_id], counts[report_id], non_mod_flag)
+                        print ISFDBLink('edit/cleanup_report.cgi', report_id,
+                                        '<button type="button">%s (%d)%s</button>' % (reports[report_id], counts[report_id], non_mod_flag))
                         print '<p>'
                 print '<hr>'
 
         print '<h3 class="centered">Reconciliation with Other Sources</h3>'
         sfe3 = Sfe3()
-        print """<a href="http:/%s/edit/sfe3_authors.cgi"><button type="button">
-                SFE3 Author Articles without Matching ISFDB Author Records (%d)</button></a>""" % (HTFAKE, sfe3.count_of_unresolved())
+        print ISFDBLink('edit/sfe3_authors.cgi', '',
+                        '<button type="button">SFE3 Author Articles without Matching ISFDB Author Records (%d)</button>' % sfe3.count_of_unresolved())
         print '<p>'
         print '<hr>'
 
@@ -116,10 +115,12 @@ if __name__ == '__main__':
                 record = result.fetch_row()
 
                 if int(record[0][0]) or all_reports:
-                        print '<a href="http:/%s/mod/bad_images.cgi"><button type="button">Publications with Suspect Images (%d)</button></a>' % (HTFAKE, int(record[0][0]))
+                        print ISFDBLink('mod/bad_images.cgi', '',
+                                        '<button type="button">Publications with Suspect Images (%d)</button>' % int(record[0][0]))
                         print '<p>'
 
-        print '<a href="http:/%s/edit/numeric_external_id_ranges.cgi"><button type="button">View Ranges of Numeric External Identifiers</button></a>' % HTFAKE
+        print ISFDBLink('edit/numeric_external_id_ranges.cgi', '',
+                        '<button type="button">View Ranges of Numeric External Identifiers</button>')
         print '<p>'
 
 	PrintPostSearch(0, 0, 0, 0, 0, 0)

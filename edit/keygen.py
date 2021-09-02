@@ -15,6 +15,7 @@ import random
 from isfdb import *
 from isfdblib import *
 from SQLparsing import *
+from library import ISFDBLink
 
 def GenerateKey(plain):
 	hash = md5.new()
@@ -35,7 +36,7 @@ if __name__ == '__main__':
 	print 'A license key is only required to submit data programmatically.'
 	print 'It is not needed for manual editing.<p>'
 
-	print '<b>License Key info for</b>: [<a href="http://%s/index.php/User:%s">%s</a>]<br>' % (WIKILOC, username, username)
+	print '<b>License Key info for</b>: [<a href="%s://%s/index.php/User:%s">%s</a>]<br>' % (PROTOCOL, WIKILOC, username, username)
 	if mode == 'view_key':
         	query = "select * from license_keys where user_id=%d" % int(userid)
         	db.query(query)
@@ -62,5 +63,6 @@ if __name__ == '__main__':
 			query = "insert into license_keys(license_key, user_id) values('%s', %d)" % (license_key, int(userid))
         	db.query(query)
 
-	print '<br><p>[<a href="http:/%s/edit/keygen.cgi?new_key">Generate New Key</a>]' % (HTFAKE)
+	print '<br><p>'
+	print ISFDBLink('edit/keygen.cgi', 'new_key', 'Generate New Key', True)
 	PrintPostSearch(0, 0, 0, 0, 0, 0)
