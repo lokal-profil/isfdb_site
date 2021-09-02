@@ -129,7 +129,7 @@ if __name__ == '__main__':
                         print '<td>&nbsp;</td>'
                 print '<td>%s</td>' % FormatNote(note_note)
                 if user.moderator:
-                        print '<td><a href="http:/%s/mod/resolve_empty_containers.cgi?%d+%s+%d+%d">Ignore</a></td>' % (HTFAKE, cleanup_id, report_type, date_range, report_id)
+                        print '<td>%s</td>' % ISFDBLink('mod/resolve_empty_containers.cgi', '%d+%s+%d+%d' % (cleanup_id, report_type, date_range, report_id), 'Ignore')
                 print '</tr>'
                 count += 1
                 bgcolor ^= 1

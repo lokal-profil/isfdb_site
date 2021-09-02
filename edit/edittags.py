@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
 	print '<b>Help on editing tags: </b>'
-	print '<a href="http://%s/index.php/Help:Screen:TagEditor">Help:Screen:TagEditor</a><p>' % (WIKILOC)
+	print '<a href="%s://%s/index.php/Help:Screen:TagEditor">Help:Screen:TagEditor</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
 	(user_id, username, usertoken) = GetUserData()
@@ -66,10 +66,10 @@ if __name__ == '__main__':
 		first = 1
 		for tag in tags:
 			if first:
-				print '<a href="http:/%s/tag.cgi?%d">%s</a>' % (HTFAKE, tag[0], tag[1])
+				print ISFDBLink('tag.cgi', tag[0], tag[1])
 				first = 0
 			else:
-				print ', <a href="http:/%s/tag.cgi?%d">%s</a>' % (HTFAKE, tag[0], tag[1])
+				print ', %s' % ISFDBLink('tag.cgi', tag[0], tag[1])
 	print '<p>'
 
 
@@ -113,10 +113,11 @@ if __name__ == '__main__':
                         first = 0
                 else:
                         output += ", "
-                output += '<a href="http:/%s/tag.cgi?%d">%s</a> (%d)' % (HTFAKE, tag_id, tag_name, tag_count)
+                output += '%s (%d)' % (ISFDBLink('tag.cgi', tag_id, tag_name), tag_count)
         print output
 	
 	if not showall:
-		print '<br><p><a href="http:/%s/edit/edittags.cgi?%d+1"><b>Show All Tags</b></a>' % (HTFAKE, title_id)
+		print '<br><p>'
+		print ISFDBLink('edit/edittags.cgi', '%d+1' % title_id, '<b>Show All Tags</b>')
 
 	PrintPostSearch(tableclose=False)

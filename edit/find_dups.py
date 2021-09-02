@@ -10,9 +10,7 @@
 #     Date: $Date$
 
 
-import sys
 import string
-import MySQLdb
 from isfdb import *
 from isfdblib import *
 
@@ -74,25 +72,35 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
 	print '<b>Help on merging titles: </b>'
-	print '<a href="http://%s/index.php/Editing:Merging_Titles">Editing:Merging_Titles</a><p>' % (WIKILOC)
+	print '<a href="%s://%s/index.php/Editing:Merging_Titles">Editing:Merging_Titles</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
 	if mode == 2:
 		print '<h2>Mode: Aggressive Title Match</h2>'
 		print 'Note that this mode will generate the most false positives.'
-		print 'You can also try stricter <a href="http:/%s/edit/find_dups.cgi?%d+1">Similar Title Mode</a> or even stricter <a href="http:/%s/edit/find_dups.cgi?%d">Exact Title Mode</a>.' % (HTFAKE, author_id, HTFAKE, author_id)
+		print """You can also try stricter %s or even stricter
+                        %s.""" % (ISFDBLink('edit/find_dups.cgi', '%d+1' % author_id, 'Similar Title Mode'),
+                                  ISFDBLink('edit/find_dups.cgi', author_id, 'Exact Title Mode'))
 	elif mode == 1:
 		print '<h2>Mode: Similar Title Match</h2>'
 		if len(titles) <= 1000:
-                        print 'You can also try <a href="http:/%s/edit/find_dups.cgi?%d">Exact Title Mode</a> or the most comprehensive <a href="http:/%s/edit/find_dups.cgi?%d+2">Aggressive Title Mode</a>' % (HTFAKE, author_id, HTFAKE, author_id)
+                        print """You can also try %s or the most comprehensive
+                                %s""" % (ISFDBLink('edit/find_dups.cgi', author_id, 'Exact Title Mode'),
+                                         ISFDBLink('edit/find_dups.cgi', '%d+2' % author_id, 'Aggressive Title Mode'))
                 else:
-                        print 'You can also try <a href="http:/%s/edit/find_dups.cgi?%d">Exact Title Mode</a>. Aggressive mode is disabled for authors with more than 1,000 titles for performance reasons.' % (HTFAKE, author_id)
+                        print """You can also try %s. Aggressive mode is disabled for authors
+                                with more than 1,000 titles for performance
+                                reasons.""" % ISFDBLink('edit/find_dups.cgi', author_id, 'Exact Title Mode')
 	else:
 		print '<h2>Mode: Exact Title Match</h2>'
 		if len(titles) <= 1000:
-                        print 'You can also try the more comprehensive <a href="http:/%s/edit/find_dups.cgi?%d+1">Similar Title Mode</a> or the most comprehensive <a href="http:/%s/edit/find_dups.cgi?%d+2">Aggressive Title Mode</a>' % (HTFAKE, author_id, HTFAKE, author_id)
+                        print """You can also try the more comprehensive %s or the most comprehensive 
+                                 %s""" % (ISFDBLink('edit/find_dups.cgi', '%d+1' % author_id, 'Similar Title Mode'),
+                                          ISFDBLink('edit/find_dups.cgi', '%d+2' % author_id, 'Aggressive Title Mode'))
                 else:
-                        print 'You can also try the more comprehensive <a href="http:/%s/edit/find_dups.cgi?%d+1">Similar Title Mode</a>. Aggressive mode is disabled for authors with more than 1,000 titles for performance reasons.' % (HTFAKE, author_id)
+                        print """You can also try the more comprehensive %s. Aggressive mode is disabled for
+                                 authors with more than 1,000 titles for performance
+                                 reasons.""" % ISFDBLink('edit/find_dups.cgi', '%d+1' % author_id, 'Similar Title Mode')
 	print '<p>Be sure to check the title types and languages carefully before merging.'
 	print '<p><hr>'
 

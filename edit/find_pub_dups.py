@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
 	print '<b>Help on merging titles: </b>'
-	print '<a href="http://%s/index.php/Editing:Merging_Titles">Editing:Merging_Titles</a><p>' % (WIKILOC)
+	print '<a href="%s://%s/index.php/Help:How to merge titles">Help:How to merge titles</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
 	print '<h3>Note: Unlike the Duplicate Finder for author records, the Duplicate Finder for \
