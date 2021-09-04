@@ -1581,6 +1581,12 @@ def WikiLink(user_name):
         output += ' <a href="%s://%s/index.php/User_Talk:%s">(Talk)</a>' % (PROTOCOL, WIKILOC, user_name)
         return output
 
+def ISFDBWikiTemplate(template):
+        return '%s://%s/index.php?title=Template:%s' % (PROTOCOL, WIKILOC, template)
+
+def ISFDBWikiPage(page):
+        return '%s://%s/index.php/%s' % (PROTOCOL, WIKILOC, page)
+
 def popularNonLatinLanguages(types):
         # Each language is associated with a tuple of report IDs.
         # The numbers in the tuple are the report ID of the
