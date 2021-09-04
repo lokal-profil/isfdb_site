@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2010   Al von Ruff
+#     (C) COPYRIGHT 2008-2021   Al von Ruff, Ahasuerus and Klaus Elsbernd
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -13,18 +13,20 @@ import sys
 import os
 import string
 
-def fillIn(in_filename, out_filename, varname, var):
+def fillIn(in_filename, out_filename, replacement_dictionary):
 	fd = open(in_filename)
 	image = fd.read()
 	fd.close()
 
-	image = string.replace(image, varname, var)
+        for key in replacement_dictionary:
+                image = string.replace(image, key, replacement_dictionary[key])
 	fd = open(out_filename, 'w+')
 	fd.write(image)
 	fd.close()
         
 if __name__ == '__main__':
-        fillIn('index_stub', 'index.html', 'HTMLHOST', HTMLHOST)
-        
-        fillIn('biblio_css_stub', 'biblio.css', 'HTMLHOST', HTMLHOST)
+        replacement_dictionary = {'HTMLHOST': HTMLHOST,
+                                  'PROTOCOL': PROTOCOL}
 
+        fillIn('index_stub', 'index.html', replacement_dictionary)
+        fillIn('biblio_css_stub', 'biblio.css', replacement_dictionary)
