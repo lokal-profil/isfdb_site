@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
 	print '<b>Help on unmerging titles: </b>'
-	print '<a href="http://%s/index.php/Help:Screen:UnmergeTitles">Help:Screen:UnmergeTitles</a><p>' % (WIKILOC)
+	print '<a href="%s://%s/index.php/Help:Screen:UnmergeTitles">Help:Screen:UnmergeTitles</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 	print '<b>Select titles to unmerge:</b>'
 	print '<p>'

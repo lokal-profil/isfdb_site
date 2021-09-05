@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
         print '<b>Help on making variant titles: </b>'
-        print '<a href="http://%s/index.php/Help:Screen:MakeVariant">Help:Screen:MakeVariant</a><p>' % (WIKILOC)
+        print '<a href="%s://%s/index.php/Help:Screen:MakeVariant">Help:Screen:MakeVariant</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
 	print 'Current Title:<br>'

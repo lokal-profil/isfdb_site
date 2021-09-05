@@ -431,13 +431,14 @@ if __name__ == '__main__':
                                 print '<table border="1">'
                                 images_found = 1
                         print '<tr>'
-                        print '<td>Images for record <a href="http:/%s/title.cgi?%d">%d</a>:</td>' \
-                                % (HTFAKE, Records[recno].title_id, Records[recno].title_id)
+                        print '<td>Images for record %s:</td>' % ISFDBLinkNoName('title.cgi', Records[recno].title_id, Records[recno].title_id)
                         cover_pubs = SQLGetCoverPubsByTitle(int(Records[recno].title_id))
                         print '<td>'
                         for cover_pub in cover_pubs:
                                 if cover_pub[PUB_IMAGE]:
-                                        print '<br><a href="http:/%s/pl.cgi?%s">%s</a><br>' % (HTFAKE, cover_pub[PUB_PUBID], FormatImage(cover_pub[PUB_IMAGE]))
+                                        print '<br>'
+                                        print ISFDBLinkNoName('pl.cgi', cover_pub[PUB_PUBID], FormatImage(cover_pub[PUB_IMAGE]))
+                                        print '<br>'
                         print '</td>'
                         print '</tr>'
                 recno += 1

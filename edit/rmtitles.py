@@ -47,9 +47,9 @@ def printtitlerecord(content_item, index):
 	if page:
 		print '%s - ' % (str(page))
 	
-	line = '<b><i><a href="http:/%s/title.cgi?%d">%s</a></i></b>, %s' % (HTFAKE, title[TITLE_PUBID], title[TITLE_TITLE], title[TITLE_TTYPE])
+	line = '%s, %s' % (ISFDBLink('title.cgi', title[TITLE_PUBID], title[TITLE_TITLE]), title[TITLE_TTYPE])
 	for author in authors:
-		line += ', <a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+		line += ', %s' % ISFDBLink('ea.cgi', author[0], author[1])
 	print line
 
 def CheckContainer(title, pubtype):
@@ -83,15 +83,14 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
         print '<b>Help on removing titles: </b>'
-        print '<a href="http://%s/index.php/Help:Screen:RemoveTitles">Help:Screen:RemoveTitles</a><p>' % (WIKILOC)
+        print '<a href="%s://%s/index.php/Help:Screen:RemoveTitles">Help:Screen:RemoveTitles</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
         help = HelpGeneral()
         
 	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitrm.cgi">'
 	print '<p>'
-	print '<b>Select items to remove from:</b> <i><a href="http:/%s/pl.cgi?%d">%s</a></i>\n' % (HTFAKE, pub_id, publication[PUB_TITLE])
-	print '<p>'
+	print '<div class="bolded_line">Select items to remove from %s:</div>' % ISFDBLink('pl.cgi', pub_id, publication[PUB_TITLE])
 	print '<hr>'
 
 	pubtype = publication[PUB_CTYPE]

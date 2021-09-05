@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
         print '<b>Help on linking awards: </b>'
-        print '<a href="http://%s/index.php/Help:Screen:LinkAward">Help:Screen:LinkAward</a><p>' % (WIKILOC)
+        print '<a href="%s://%s/index.php/Help:Screen:LinkAward">Help:Screen:LinkAward</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
 	print 'Linking the following award to a title:<p>'

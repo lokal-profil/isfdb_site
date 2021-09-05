@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
         print '<b>Help on creating alternate names: </b>'
-        print '<a href="http://%s/index.php/Help:Screen:MakeAlternateName">Help:Screen:MakeAlternateName</a><p>' % (WIKILOC)
+        print '<a href="%s://%s/index.php/Help:Screen:MakeAlternateName">Help:Screen:MakeAlternateName</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
 	print 'Making/removing alternate name for <b>%s</b>' % author[AUTHOR_CANONICAL]
@@ -44,7 +44,7 @@ if __name__ == '__main__':
         		print '<table border="1">'
         		print '<tr>'
                         print '<td>'
-                        print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, parent_data[AUTHOR_ID], parent[0])
+                        print ISFDBLink('ea.cgi', parent_data[AUTHOR_ID], parent[0])
                         print '</td>'
                         print '<td>'
                 	print '<input NAME="author_id" VALUE="%d" TYPE="HIDDEN">' % (author_id)

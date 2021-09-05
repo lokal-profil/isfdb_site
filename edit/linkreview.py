@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
         print '<b>Help on linking reviews: </b>'
-        print '<a href="http://%s/index.php/Help:Screen:LinkReview">Help:Screen:LinkReview</a><p>' % (WIKILOC)
+        print '<a href="%s://%s/index.php/Help:Screen:LinkReview">Help:Screen:LinkReview</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
         help = HelpGeneral()

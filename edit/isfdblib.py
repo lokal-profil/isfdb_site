@@ -12,7 +12,6 @@
 import cgi
 import string
 import sys
-import MySQLdb
 from isfdb import *
 from login import *
 from library import *
@@ -95,9 +94,9 @@ def makequery(entry, use):
 def PrintPreSearch(title):
         PrintHTMLHeaders(title)
 
-        print '<script type="text/javascript" src="http://%s/isfdb_main.js"></script>' % HTMLLOC
+        print '<script type="text/javascript" src="%s://%s/isfdb_main.js"></script>' % (PROTOCOL, HTMLLOC)
         # Include the JavaScript file with the general purpose JS functions that support editing
-        print '<script type="text/javascript" src="http://%s/edit_js.js"></script>' % HTMLLOC
+        print '<script type="text/javascript" src="%s://%s/edit_js.js"></script>' % (PROTOCOL, HTMLLOC)
 
 	if title in ('Publication Editor', 'Add Publication', 'New Novel', 'New Magazine',
                      'New Anthology', 'New Collection', 'New Omnibus', 'New Nonfiction',
@@ -124,10 +123,10 @@ def PrintPreSearch(title):
         print '</div>'
         # The "<noscript>" part will only be executed if Javascript is not enabled on the browser side
         print '<noscript><h1>Your browser does not support JavaScript. Javascript is required to edit ISFDB.'
-        print '<a href="http:/%s/index.cgi">Click here</a> to return to browsing ISFDB.</h1></noscript>' % (HTFAKE)
+        print '%s to return to browsing ISFDB.</h1></noscript>' % ISFDBLink('index.cgi', '', 'Click here')
 
 def JSscript(script_name):
-        print '<script type="text/javascript" src="http://%s/%s.js"></script>' % (HTMLLOC, script_name)
+        print '<script type="text/javascript" src="%s://%s/%s.js"></script>' % (PROTOCOL, HTMLLOC, script_name)
 
 def getSubmitter():
         (userid, username, usertoken) = GetUserData()
@@ -179,19 +178,19 @@ def PrintNavBar(executable, arg):
                 print "<h3>Warning: database schema mismatch (%s vs %s)</h3>" % (onlineVersion, SCHEMA_VER)
 	if username == 0:
 		print '<h2>Login required to edit</h2>'
-		print 'You have to <a href="http:/%s/dologin.cgi?%s+%s">login</a> to edit data.' % (HTFAKE, executable, arg)
-		PrintPostSearch(0, 0, 0, 0, 0)
+		print 'You have to %s to edit data.' % ISFDBLink('dologin.cgi', '%s+%s' % (executable, arg), 'login')
+		PrintPostSearch(0, 0, 0, 0, 0, 0)
 		sys.exit(0)
 	editStatus = SQLgetEditingStatus()
 	if editStatus == 0:
 		print '<h2>Editing facilities are currently offline</h2>'
-		PrintPostSearch(0, 0, 0, 0, 0)
+		PrintPostSearch(0, 0, 0, 0, 0, 0)
 		sys.exit(0)
 	elif editStatus == 2:
 		(userid, username, usertoken) = GetUserData()
 		if SQLisUserModerator(userid) == 0:
-			print '<h2>Editing facilities have temporarily been restricted to moderators only.</h2>'
-			PrintPostSearch(0, 0, 0, 0, 0)
+			print '<h2>Editing facilities have been temporarily restricted to moderators only.</h2>'
+			PrintPostSearch(0, 0, 0, 0, 0, 0)
 			sys.exit(0)
 
 def PrintPostSearch(executable=0, records=0, subsequent=0, printed=0, mergeform=0, tableclose=True):
@@ -204,7 +203,7 @@ def PrintPostSearch(executable=0, records=0, subsequent=0, printed=0, mergeform=
 		print '</form>'
 	if printed == 100:
 		print '<hr>'
-		print '<a href="http:/%s/edit/%s.cgi?%s">[Records: %s]</a>' % (HTFAKE, executable, subsequent, records)
+		print ISFDBLink('edit/%s.cgi' % executable, subsequent, '[Records: %s]' % records)
 
         print '</div>'
         print '<div id="bottom">'
@@ -262,11 +261,11 @@ def PrintDuplicateTitleRecord(record, bgcolor, authors):
 	else:
 		print "<td> </td>"
 
-        print "<td><a href=\"http:/"+HTFAKE+"/title.cgi?%s\">%s</a></td>" % (record[TITLE_PUBID], record[TITLE_TITLE])
+        print "<td>%s</td>" % ISFDBLink('title.cgi', record[TITLE_PUBID], record[TITLE_TITLE])
 
 	print "<td>"
 	for author in authors:
-        	print "<a href=\"http:/"+HTFAKE+"/ea.cgi?%s\">%s</a>" % (author[0], author[1])
+        	print ISFDBLink('ea.cgi', author[0], author[1])
 	print "</td>"
 
 	print "<td>"
@@ -447,12 +446,13 @@ class Submission:
                 PrintNavBar(self.cgi_script, 0)
 
                 PrintWikiPointer(self.user.name)
-                print "<h1>Submitting the following changes:</h1>"
+                print '<h1>Submitting the following changes:</h1>'
                 self.viewer(submission_id)
                 
                 # If the user is a moderator or a self-approver, allow going to the approval page
                 if SQLisUserModerator(self.user.id) or SQLisUserSelfApprover(self.user.id):
-                        print '<br>Moderate <a href="http:/%s/mod/%s.cgi?%s">submission</a>' % (HTFAKE, SUBMAP[self.type][0], submission_id)
+                        print '<br>Moderate %s' % ISFDBLink('mod/%s.cgi' % SUBMAP[self.type][0], submission_id, 'submission')
+                PrintPostSearch(0, 0, 0, 0, 0, 0)
         
         def error(self, error = '', record_id = 0):
                 displayError(error, self.header, self.cgi_script, record_id)

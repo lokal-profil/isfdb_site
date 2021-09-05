@@ -18,6 +18,8 @@ from isfdb import *
 from library import *
 from isfdblib import *
 
+def _question_mark():
+        return '<img src="%s://%s/question_mark_icon.gif" alt="Question mark" class="help">' % (PROTOCOL, HTMLLOC)
 
 def printtitletype(current_value, help):
 	print '<tr>'
@@ -169,7 +171,7 @@ def printOneExternalID(identifier_types, type_list, type_id, id_value, id_count,
                 button = createaddbutton('external_id')
         image = ''
         if counter == 1:
-                image = '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">' % HTMLLOC
+                image = _question_mark()
         print '%s%s' % (image, button)
         print '</td>'
         print '<td>'
@@ -685,7 +687,8 @@ def printsource(help):
 	print '<tr>'
 	if help.get("Source"):
                 print '<td class="hint" title="%s"><b>Source of the data: </b>' % (help['Source'][0])
-                print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></td>' % (HTMLLOC)
+                print _question_mark()
+                print '</td>'
         else:
                 print '<td><b>Source of the data: </b></td>'
 	print '<td>'
@@ -717,7 +720,8 @@ def printAddContentAuthor(type, help, index):
         if help.get(('Add '+label)) and int(index) < 2:
         	print '<td class="hint" title="%s">' % help[('Add '+label)][0]
         	print '<input id="%s.button.%d" type="button" tabindex="1" value="Add %s">' % (button_id, int(index), label)
-        	print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></td>' % HTMLLOC
+        	print _question_mark()
+        	print '</td>'
         else:
                 print '<td><input id="%s.button.%d" type="button" tabindex="1" value="Add %s"></td>' % (button_id, int(index), label)
 	print '</tr>'
@@ -728,7 +732,8 @@ def printAddSecondaryAuthor(type, help, index):
 	if help.get(('Add '+type)) and int(index) < 2:
         	print '<td class="hint" title="%s">' % help[('Add '+type)][0]
         	print '<input id="add%s.button.%d" type="button" tabindex="1" value="Add %s">' % (type, int(index), type)
-        	print '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help"></td>' % HTMLLOC
+        	print _question_mark()
+        	print '</td>'
         else:
                 print '<td><input id="add%s.button.%d" type="button" tabindex="1" value="Add %s"></td>' % (type, int(index), type)
 	print '</tr>'
@@ -764,7 +769,7 @@ def printfieldlabel(label, help, index = 1, colon = ':', addbutton = None):
        	if help and help.get(label) and (int(index) < 2):
                 text = escape_string(help[label][0])
                	display = '<td class="hint" title="%s"><b>%s%s </b>' % (text, label, colon)
-                image = '<img src="http://%s/question_mark_icon.gif" alt="Question mark" class="help">' % HTMLLOC
+                image = _question_mark()
                 if help[label][1]:
                         display += '<a tabindex="0" href="%s">%s</a>' % (help[label][1], image)
                 else:
@@ -894,8 +899,8 @@ def printHelpBox(record_type, helplink, new_flag = 0):
         else:
                 print '<b>Help on editing %s records:</b>' % record_type
 	print '<ul>'
-	print '<li><a href="http://%s/index.php/Help:Screen:%s">Help:Screen:%s</a>' % (WIKILOC, helplink, helplink)
-	print '<li><a href="http://%s/index.php/Help:Using_Templates_and_HTML_in_Note_Fields">List of supported templates and HTML tags in notes</a>' % WIKILOC
+	print '<li><a href="%s://%s/index.php/Help:Screen:%s">Help:Screen:%s</a>' % (PROTOCOL, WIKILOC, helplink, helplink)
+	print '<li><a href="%s://%s/index.php/Help:Using_Templates_and_HTML_in_Note_Fields">List of supported templates and HTML tags in notes</a>' % (PROTOCOL, WIKILOC)
 	print '</ul>'
 	print '</div>'
 
