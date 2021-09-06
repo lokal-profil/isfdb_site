@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
         print '<div id="HelpBox">'
         print '<b>Help on adding new publication records: </b>'
-        print '<a href="http://%s/index.php/Help:Screen:AddPublication">Help:Screen:AddPublication</a><p>' % (WIKILOC)
+        print '<a href="%s://%s/index.php/Help:Screen:AddPublication">Help:Screen:AddPublication</a><p>' % (PROTOCOL, WIKILOC)
         print '</div>'
 
 	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitaddpub.cgi">'

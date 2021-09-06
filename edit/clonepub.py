@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2019   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2021   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -134,8 +134,8 @@ if __name__ == '__main__':
 	PrintNavBar('edit/clonepub.cgi', pub_id)
 
         print '<div id="HelpBox">'
-        print "<b>Help on cloning publications: </b>"
-        print '<a href="http://%s/index.php/Help:Screen:ClonePub">Help:Screen:ClonePub</a><p>' % (WIKILOC)
+        print '<b>Help on cloning publications: </b>'
+        print '<a href="%s://%s/index.php/Help:Screen:ClonePub">Help:Screen:ClonePub</a><p>' % (PROTOCOL, WIKILOC)
         print '</div>'
 
 	title_id = SQLgetTitleReferral(pub_id, pub.pub_ctype, 1)

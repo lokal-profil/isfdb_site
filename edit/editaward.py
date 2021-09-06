@@ -43,7 +43,7 @@ if __name__ == '__main__':
 
         # Print appropriate message depending on whether this is a title-based award
         if award.title_id:
-		print '<h3>You are editing an award for Title record <a href="http:/%s/title.cgi?%s">%s</a></h3>' % (HTFAKE, award.title_id, award.title_id)
+		print '<h3>You are editing an award for Title record %s</h3>' % ISFDBLinkNoName('title.cgi', award.title_id, award.title_id)
 	else:
                 print '<h3>You are editing an award not associated with an ISFDB title</h3>'
 	print '<p>'

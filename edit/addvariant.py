@@ -60,7 +60,7 @@ if __name__ == '__main__':
 	
 	print '<div id="HelpBox">'
 	print '<b>Help on adding variant titles: </b>'
-	print '<a href="http://%s/index.php/Help:Screen:AddVariant">Help:Screen:AddVariant</a><p>' % (WIKILOC)
+	print '<a href="%s://%s/index.php/Help:Screen:AddVariant">Help:Screen:AddVariant</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
 	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitvariant.cgi">'

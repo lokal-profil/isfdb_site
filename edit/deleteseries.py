@@ -40,7 +40,7 @@ if __name__ == '__main__':
 		print '<ul>'
 		for title in titles:
 			print '<li>'
-                        print '<a href="http:/%s/title.cgi?%d">%s</a> (%s)' % (HTFAKE, title[TITLE_PUBID], title[TITLE_TITLE], title[TITLE_YEAR])
+                        print '%s (%s)' % (ISFDBLink('title.cgi', title[TITLE_PUBID], title[TITLE_TITLE]), title[TITLE_YEAR])
 		print '</ul>'
         else:
                 print '<b>Request to Delete:</b> <i>%s</i>' % seriesname

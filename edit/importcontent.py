@@ -23,11 +23,11 @@ if __name__ == '__main__':
         if not pub_data:
                 SESSION.DisplayError('Record Does Not Exist')
 
-	PrintPreSearch("Import Content - %s" % pub_data[PUB_TITLE])
-	PrintNavBar("edit/importcontent.cgi", pub_id)
+	PrintPreSearch('Import Content - %s' % pub_data[PUB_TITLE])
+	PrintNavBar('edit/importcontent.cgi', pub_id)
 
 	print '<div id="HelpBox">'
-        print '<a href="http://%s/index.php/Help:Screen:ImportContent">Help on importing content</a><p>' % (WIKILOC)
+        print '<a href="%s://%s/index.php/Help:Screen:ImportContent">Help on importing content</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
 	print '<hr class="divider">'

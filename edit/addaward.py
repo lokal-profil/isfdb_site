@@ -46,12 +46,11 @@ if __name__ == '__main__':
 
 	print '<div id="HelpBox">'
         print '<b>Help on adding an award: </b>'
-        print '<a href="http://%s/index.php/Help:Screen:AddAward">Help:Screen:AddAward</a><p>' % (WIKILOC)
+        print '<a href="%s://%s/index.php/Help:Screen:AddAward">Help:Screen:AddAward</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
         if title_id:
-		print '<h3>You are entering an award for Title record <a href="http:/%s/title.cgi?%s">%s</a></h3>' % (HTFAKE, title[TITLE_PUBID], title[TITLE_PUBID])
-
+		print '<h3>You are entering an award for Title record %s</h3>' % ISFDBLinkNoName('title.cgi', title[TITLE_PUBID], title[TITLE_PUBID])
 	else:
 		print '<h3>This data entry form is for awards that are given to people (for instance, Best Artist)'
 		print 'or works not eligible for inclusion in ISFDB (for instance, Best Dramatic Presentation).'

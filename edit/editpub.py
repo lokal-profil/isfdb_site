@@ -85,9 +85,9 @@ if __name__ == '__main__':
                 <li>White: non-container titles appearing only in this publication; can be edited
                 <li>Yellow: container titles appearing only in this publication; can be edited except for page numbers and OMNIBUS length
                 <li>Gray: titles appearing in multiple publications; cannot be edited here
-                <li>See <a href="http://%s/index.php/Help:How to change a story in a collection">Help:How
+                <li>See <a href="%s://%s/index.php/Help:How to change a story in a collection">Help:How
                 to change a story in a collection</a> for details.
-                </ul>"""  % (WIKILOC)
+                </ul>"""  % (PROTOCOL, WIKILOC)
         print '<p>'
 
         print '<hr class="topspace">'

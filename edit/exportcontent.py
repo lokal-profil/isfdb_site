@@ -23,11 +23,11 @@ if __name__ == '__main__':
         if not pub_data:
                 SESSION.DisplayError('Record Does Not Exist')
 
-	PrintPreSearch("Export Content - %s" % pub_data[PUB_TITLE])
-	PrintNavBar("edit/exportcontent.cgi", pub_id)
+	PrintPreSearch('Export Content - %s' % pub_data[PUB_TITLE])
+	PrintNavBar('edit/exportcontent.cgi', pub_id)
 
 	print '<div id="HelpBox">'
-        print '<a href="http://%s/index.php/Help:Screen:ExportContent">Help on exporting content</a><p>' % (WIKILOC)
+        print '<a href="%s://%s/index.php/Help:Screen:ExportContent">Help on exporting content</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
 	print 'Enter the publication ID/record number you would like to export into:'

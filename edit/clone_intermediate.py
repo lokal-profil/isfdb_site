@@ -22,11 +22,11 @@ if __name__ == '__main__':
         if not pub_data:
                 SESSION.DisplayError('Record Does Not Exist')
 
-	PrintPreSearch("Clone Publication - %s" % pub_data[PUB_TITLE])
-	PrintNavBar("edit/clonecover.cgi", pub_id)
+	PrintPreSearch('Clone Publication - %s' % pub_data[PUB_TITLE])
+	PrintNavBar('edit/clonecover.cgi', pub_id)
 
 	print '<div id="HelpBox">'
-        print '<a href="http://%s/index.php/Help:Screen:ClonePub">Help on cloning publications</a><p>' % (WIKILOC)
+        print '<a href="%s://%s/index.php/Help:Screen:ClonePub">Help on cloning publications</a><p>' % (PROTOCOL, WIKILOC)
 	print '</div>'
 
 	print '<form class="topspace" id="data" METHOD="POST" ACTION="/cgi-bin/edit/clonepub.cgi">'

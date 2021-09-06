@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2008-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2008-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -76,7 +76,7 @@ if __name__ == '__main__':
 	PrintNavBar('edit/editpub.cgi', 0)
 
         print '<div id="HelpBox">'
-        print '<a href="http://%s/index.php/Help:Screen:EditPub">Help on entering additional contents</a><p>' % (WIKILOC)
+        print '<a href="%s://%s/index.php/Help:Screen:EditPub">Help on entering additional contents</a><p>' % (PROTOCOL, WIKILOC)
         print '</div>'
 
         form = cgi.FieldStorage()
