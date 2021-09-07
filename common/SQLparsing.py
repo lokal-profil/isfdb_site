@@ -403,30 +403,29 @@ def SQLloadAwardsXBA(author, titles, pseudonyms):
                         in_clause = title_id
                 else:
                         in_clause += ",%s" % title_id
-        # Step 3: Create a query to retrieve awards whose author name matches the canonical author name
-        # or one of his pseudonyms AND all awards associated with this author's titles and VTs
+        # Step 3: Create a query to retrieve:
+        # untitled awards whose author name matches the canonical author name or an alternate name
+        # AND all awards associated with this author's titles and VTs
         first = 1
-        query = "select * from awards where "
+        query = """select a.* from awards a
+                   where not exists(select 1 from title_awards ta where ta.award_id = a.award_id)
+                   and ("""
         for name in names:
                 value = db.escape_string(name)
                 if not first:
                         query += "or "
-                query += "(award_author = '%s') or " % value
-                query += "(award_author like '%s+%%') or " % value
-                query += "(award_author like '%%+%s') or " % value
-                query += "(award_author like '%%+%s+%%') " % value
+                query += "(a.award_author = '%s') or " % value
+                query += "(a.award_author like '%s+%%') or " % value
+                query += "(a.award_author like '%%+%s') or " % value
+                query += "(a.award_author like '%%+%s+%%') " % value
                 first = 0
+        query += ')'
         if in_clause:
-                query += "UNION select a.* from awards as a, title_awards as t where a.award_id=t.award_id and t.title_id in (%s) " % in_clause
-        query += "order by award_year"
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	records = [] 
-	while record:
-		records.append(record[0])
-		record = result.fetch_row()
-	return records
+                query += """UNION select a.* from awards as a, title_awards as t
+                                  where a.award_id=t.award_id
+                                  and t.title_id in (%s) """ % in_clause
+        query += "order by award_year, award_title, award_level"
+        return _StandardQuery(query)
 
 def SQLloadAwardsForYearType(award_type_id, year):
 	query = """select a.*, c.award_cat_name

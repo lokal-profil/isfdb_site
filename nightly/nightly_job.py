@@ -1929,6 +1929,24 @@ def nightly_cleanup_reports():
                 and title_ttype = 'SHORTFICTION'"""
         standardReport(query, 297)
 
+        #   Report 298: Title-Based Awards with a Different Stored Author Name
+        query = """select a.award_id, a.award_author from awards a 
+                where exists(select 1 from title_awards ta1 where ta1.award_id = a.award_id) 
+                and not exists( 
+                select 1 from title_awards ta2, titles t, canonical_author ca, authors au 
+                where ta2.award_id = a.award_id 
+                and ta2.title_id = t.title_id 
+                and t.title_id = ca.title_id 
+                and ca.ca_status = 1 
+                and ca.author_id = au.author_id 
+                and ( 
+                (au.author_canonical = a.award_author) 
+                or (a.award_author like concat(au.author_canonical, '+%'))
+                or (a.award_author like concat('%+', au.author_canonical))
+                or (a.award_author like concat('%+', au.author_canonical, '+%'))
+                )) """
+        standardReport(query, 298)
+
 
 def requiredLowerCase():
         clause = ''

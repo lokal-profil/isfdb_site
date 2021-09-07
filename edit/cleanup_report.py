@@ -6870,6 +6870,40 @@ def function297():
         cleanup.ignore = 1
         cleanup.print_title_table()
 
+def function298():
+        cleanup.note = """Title-based awards capture the title and the name of the title's
+                        author(s) when a new award is created. However, the captured information
+                        stored in the award record is never used: the software always uses the
+                        current title and the current author(s) of the linked title record for
+                        display and sorting purposes.<br>
+                        In the past, some ISFDB Web pages used the captured title/author(s) data
+                        instead, which allowed title-based awards to be adjusted to point to
+                        other authors/titles. This cleanup report exists to help make sure that
+                        all title-based awards are linked to the intended title."""
+        cleanup.query = """select a.award_id, a.award_title, c.cleanup_id
+                from awards a, cleanup c
+                where exists(select 1 from title_awards ta1 where ta1.award_id = a.award_id) 
+                and not exists( 
+                select 1 from title_awards ta2, titles t, canonical_author ca, authors au 
+                where ta2.award_id = a.award_id 
+                and ta2.title_id = t.title_id 
+                and t.title_id = ca.title_id 
+                and ca.ca_status = 1 
+                and ca.author_id = au.author_id 
+                and ( 
+                (au.author_canonical = a.award_author) 
+                or (a.award_author like concat(au.author_canonical, '+%'))
+                or (a.award_author like concat('%+', au.author_canonical))
+                or (a.award_author like concat('%+', au.author_canonical, '+%'))
+                ))
+                and c.record_id = a.award_id
+                and c.report_type = 298
+                and c.resolved IS NULL
+                order by a.award_title"""
+        cleanup.none = 'No Suspect Title-Based Awards with a Different Stored Author Name'
+        cleanup.ignore = 1
+        cleanup.print_award_table()
+
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:
@@ -7274,7 +7308,7 @@ def PrintAwardRecord(award_id, award_title, bgcolor, count, cleanup_id = 0, repo
 
         print '<td>%d</td>' % count
         print '<td><a href="http:/%s/award_details.cgi?%s">%s</a></td>' % (HTFAKE, award_id, award_title)
-        if cleanup_id:
+        if cleanup_id and user.moderator:
                 message = {0: 'Resolve', 1: 'Ignore'}
                 print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
                         %s this award</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
