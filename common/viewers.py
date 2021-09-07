@@ -700,14 +700,14 @@ def InvalidSubmission(submission_id, message = ''):
         submission = SQLloadSubmission(submission_id)
         submitter_id = submission[SUB_SUBMITTER]
         submitter = SQLgetUserName(submitter_id)
-        print '<b>Submitted by:</b> <a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, submitter, submitter)
-        print '<a href="http://%s/index.php/User_Talk:%s">(Talk)</a>' % (WIKILOC, submitter)
+        print '<b>Submitted by:</b> <a href="%s://%s/index.php/User:%s">%s</a>' % (PROTOCOL, WIKILOC, submitter, submitter)
+        print '<a href="%s://%s/index.php/User_Talk:%s">(Talk)</a>' % (PROTOCOL, WIKILOC, submitter)
         print '<h3>Error: %s</h3>' % error_text
-        print '<h3>You can <a href="http:/%s/dumpxml.cgi?%d">view the submission as raw XML</a>.' % (HTFAKE, int(submission_id))
+        print '<h3>You can %s.' % ISFDBLink('dumpxml.cgi', submission_id, 'view the submission as raw XML')
 	(userid, username, usertoken) = GetUserData()
 	# If the user is a moderator and the submission is "N"ew, allow the user to hard reject it
         if SQLisUserModerator(userid) and submission[SUB_STATE] == 'N':
-        	print '<br>Use <a href="http:/%s/mod/hardreject.cgi?%d">Hard Reject</a> to reject it.' % (HTFAKE, int(submission_id))
+        	print '<br>Use %s to reject it.' % ISFDBLink('mod/hardreject.cgi', submission_id, 'Hard Reject')
         print '</h3>'
         print '</div>'
         print '</div>'
@@ -737,7 +737,7 @@ def DisplayPublisherChanges(submission_id):
 
                 print "<tr>"
                 print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Current [Record #<a href="http:/%s/publisher.cgi?%s">%s</a>]</b></td>' % (HTFAKE, Record, Record)
+		print '<td class="label"><b>Current [Record #%s]</b></td>' % ISFDBLinkNoName('publisher.cgi', Record, Record)
                 print '<td class="label"><b>Proposed</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
                 print "</tr>"
@@ -818,7 +818,7 @@ def DisplayAuthorChanges(submission_id):
 
                 print "<tr>"
                 print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Current [Record #<a href="http:/%s/ea.cgi?%s">%s</a>]</b></td>' % (HTFAKE, Record, Record)
+		print '<td class="label"><b>Current [Record #%s]</b></td>' % ISFDBLinkNoName('ea.cgi', Record, Record)
                 print '<td class="label"><b>Proposed</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
                 print "</tr>"
@@ -867,8 +867,8 @@ def DisplayAuthorMerge(submission_id):
 
 		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Keepid [Record #<a href="http:/%s/ea.cgi?%s">%s</a>]</b></td>' % (HTFAKE, KeepId, KeepId)
-		print '<td class="label"><b>Dropid [Record #<a href="http:/%s/ea.cgi?%s">%s</a>]</b></td>' % (HTFAKE, DropId, DropId)
+		print '<td class="label"><b>Keepid [Record #%s]</b></td>' % ISFDBLinkNoName('ea.cgi', KeepId, KeepId)
+		print '<td class="label"><b>Dropid [Record #%s]</b></td>' % ISFDBLinkNoName('ea.cgi', DropId, DropId)
                 print '</tr>'
 
 		keep = authors(db)
@@ -924,7 +924,7 @@ def DisplaySeriesChanges(submission_id):
 
                 print "<tr>"
                 print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Current [Record #<a href="http:/%s/pe.cgi?%s">%s</a>]</b></td>' % (HTFAKE, Record, Record)
+		print '<td class="label"><b>Current [Record #%s</b></td>' % ISFDBLinkNoName('pe.cgi', Record, Record)
                 print '<td class="label"><b>Proposed</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
                 print "</tr>"
@@ -964,7 +964,7 @@ def DisplayAwardLink(submission_id):
 
                 print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
-                print '<td class="label"><b><a href="http:/%s/award_details.cgi?%s">Award</a></b></td>' % (HTFAKE, award_id)
+                print '<td class="label"><b>%s</b></td>' % ISFDBLinkNoName('award_details.cgi', award_id, 'Award')
 
                 award = awards(db)
                 award.load(award_id)
@@ -974,7 +974,7 @@ def DisplayAwardLink(submission_id):
                         title_id = int(GetElementValue(merge, 'Title'))
                         print '<td class="label">'
                         if title_id:
-                                print '<b>Link Award to Title #<a href="http:/%s/title.cgi?%d">%d</a></b>' % (HTFAKE, title_id, title_id)
+                                print '<b>Link Award to Title #%s</b>' % ISFDBLinkNoName('title.cgi', title_id, title_id)
                         else:
                                 print '<b>Unlink Award</b>'
                         print '</td>'
@@ -1112,7 +1112,7 @@ def DisplayAwardTypeChanges(submission_id):
 
                 print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Current [Record #<a href="http:/%s/awardtype.cgi?%s">%s</a>]</b></td>' % (HTFAKE, current.award_type_id, current.award_type_id)
+		print '<td class="label"><b>Current [Record #%s]</b></td>' % ISFDBLinkNoName('awardtype.cgi', current.award_type_id, current.award_type_id)
                 print '<td class="label"><b>Proposed</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
                 print '</tr>'
@@ -1154,7 +1154,7 @@ def DisplayAwardTypeDelete(submission_id):
                 print '<table border="2" class="generic_table">'
 		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Record to Delete: <a href="http:/%s/awardtype.cgi?%d">%d</a></b></td>' % (HTFAKE, AwardTypeId, AwardTypeId)
+		print '<td class="label"><b>Record to Delete: %s</b></td>' % ISFDBLinkNoName('awardtype.cgi', AwardTypeId, AwardTypeId)
 		print '</tr>'
 
 		PrintField1('Short Name',    current.used_short_name, current.award_type_short_name)
@@ -1279,7 +1279,7 @@ def DisplayAwardCatDelete(submission_id):
                 print '<table border="2" class="generic_table">'
 		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Record to Delete: <a href="http:/%s/award_category.cgi?%d+1">%d</a></b></td>' % (HTFAKE, AwardCatId, AwardCatId)
+		print '<td class="label"><b>Record to Delete: %s</b></td>' % ISFDBLinkNoName('award_category.cgi', '%d+1' % AwardCatId, AwardCatId)
 		print '</tr>'
 
 		PrintField1('Category Name', current.used_cat_name, current.award_cat_name)
@@ -1320,7 +1320,7 @@ def DisplayAwardCatChanges(submission_id):
 
                 print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Current [Record #<a href="http:/%s/award_category.cgi?%s">%s</a>]</b></td>' % (HTFAKE, current.award_cat_id, current.award_cat_id)
+		print '<td class="label"><b>Current [Record #%s]</b></td>' % ISFDBLinkNoName('award_category.cgi', current.award_cat_id, current.award_cat_id)
                 print '<td class="label"><b>Proposed</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
                 print '</tr>'
@@ -1398,7 +1398,7 @@ def DisplayTitleEdit(submission_id):
         
                 print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
-                print '<td class="label"><b>Current [Record #<a href="http:/%s/title.cgi?%s">%s</a>]</b></td>' % (HTFAKE, Record, Record)	
+                print '<td class="label"><b>Current [Record #%s]</b></td>' % ISFDBLinkNoName('title.cgi', Record, Record)	
                 print '<td class="label"><b>Proposed Changes</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
                 print '</tr>'
@@ -1465,14 +1465,14 @@ def DisplayPubsForTitle(pub_list):
         print '</tr>'
         for pub in pub_list:
                 print '<tr>'
-                print '<td><a href="http:/%s/pl.cgi?%s">%s (%s)</a></td>' % (HTFAKE, pub[PUB_PUBID], pub[PUB_TITLE], pub[PUB_YEAR])
+                print '<td>%s (%s)</td>' % (ISFDBLink('pl.cgi', pub[PUB_PUBID], pub[PUB_TITLE]), pub[PUB_YEAR])
                 verificationstatus = SQLVerificationStatus(pub[PUB_PUBID])
                 if verificationstatus == 1:
                         print '<td class="warn">Primary</td>'
                         print '<td>'
                         verifiers = SQLPrimaryVerifiers(pub[PUB_PUBID])
                         for verifier in verifiers:
-                                print '<a href="http://%s/index.php/User:%s">%s</a><br>' % (WIKILOC, verifier[1], verifier[1])
+                                print '<a href="%s://%s/index.php/User:%s">%s</a><br>' % (PROTOCOL, WIKILOC, verifier[1], verifier[1])
                         print '</td>'                                
                 elif verificationstatus == 2:
                         print '<td>Secondary</td>'
@@ -1502,7 +1502,7 @@ def DisplayTitleDelete(submission_id):
 
 		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Record to Delete: <a href="http:/%s/title.cgi?%s">%s</a></b></td>'  % (HTFAKE, Record, Record)	
+		print '<td class="label"><b>Record to Delete: %s</b></td>'  % ISFDBLinkNoName('title.cgi', Record, Record)	
 		print '</tr>'
 
 		current = titles(db)
@@ -1537,7 +1537,7 @@ def DisplayTitleDelete(submission_id):
                 print '<br><b>Reviews of this title:</b>'
                 print '<ul>'
                 for review in reviews:
-                        print '<li><a href="http:/%s/title.cgi?%d">%d</a>' % (HTFAKE, review[0], review[0])
+                        print '<li>%s' % ISFDBLinkNoName('title.cgi', review[0], review[0])
                 print '</ul>'
                 print '</div>'
         print '<p>'

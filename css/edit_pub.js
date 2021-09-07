@@ -1,5 +1,5 @@
 /*     Version: $Revision$
-      (C) COPYRIGHT 2015-2020   Ahasuerus
+      (C) COPYRIGHT 2015-2021   Ahasuerus
          ALL RIGHTS RESERVED
       Date: $Date$ */
 
@@ -17,8 +17,8 @@ function validatePubURL(field_name) {
 	// Retrieve the value of the field
 	var element_value = element_name.value;
 	// Check if the resulting string contains a Wiki page URL and generate an alert error
-	if (element_value.indexOf("http://www.isfdb.org/wiki/index.php/Image") !== -1) {
-		alert("URL for the cover image should be for the image, not the Wiki page that the image is on");
+	if (element_value.indexOf("://www.isfdb.org/wiki/index.php/Image") !== -1) {
+		alert("URL for the cover image should be for the image, not the Wiki page that the image is on.");
 		element_name.focus();
 		return false;
 	}
