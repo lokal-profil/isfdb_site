@@ -407,7 +407,10 @@ def SQLloadAwardsXBA(author, titles, pseudonyms):
         # untitled awards whose author name matches the canonical author name or an alternate name
         # AND all awards associated with this author's titles and VTs
         first = 1
-        query = """select a.* from awards a
+        query = """(select a.award_id, a.award_title as title, a.award_author, a.award_year as year,
+                   a.award_ttype, a.award_atype, a.award_level as level, a.award_movie,
+                   a.award_type_id, a.award_cat_id, a.award_note_id
+                   from awards a
                    where not exists(select 1 from title_awards ta where ta.award_id = a.award_id)
                    and ("""
         for name in names:
@@ -421,36 +424,70 @@ def SQLloadAwardsXBA(author, titles, pseudonyms):
                 first = 0
         query += ')'
         if in_clause:
-                query += """UNION select a.* from awards as a, title_awards as t
-                                  where a.award_id=t.award_id
-                                  and t.title_id in (%s) """ % in_clause
-        query += "order by award_year, award_title, cast(award_level as unsigned)"
+                query += """) UNION (select a.award_id, t.title_title as title, a.award_author,
+                              a.award_year as year, a.award_ttype, a.award_atype, a.award_level as level,
+                              a.award_movie, a.award_type_id, a.award_cat_id, a.award_note_id
+                              from awards as a, title_awards as ta, titles t
+                              where t.title_id in (%s)
+                              and a.award_id = ta.award_id
+                              and ta.title_id = t.title_id)""" % in_clause
+        query += " order by year, title, ABS(level)"
         return _StandardQuery(query)
 
 def SQLloadAwardsForYearType(award_type_id, year):
-	query = """select a.*, c.award_cat_name
+        query = """(select a.award_id, a.award_title as title, a.award_author, a.award_year,
+                   a.award_ttype, a.award_atype, a.award_level as level, a.award_movie,
+                   a.award_type_id, a.award_cat_id, a.award_note_id, c.award_cat_name as cat_name,
+		   c.award_cat_order as cat_order
                    from awards a, award_cats c
-                   where a.award_type_id=%d
-                   and YEAR(a.award_year)=%d
-                   and a.award_cat_id=c.award_cat_id
-                   order by ISNULL(c.award_cat_order), c.award_cat_order,
-                   c.award_cat_name, ABS(a.award_level),
-                   a.award_title""" % (int(award_type_id), int(year))
-	db.query(query)
-	result = db.store_result()
-	record = result.fetch_row()
-	records = [] 
-	while record:
-		records.append(record[0])
-		record = result.fetch_row()
-	return records
+                   where a.award_type_id = %d
+                   and YEAR(a.award_year) = %d
+                   and a.award_cat_id = c.award_cat_id
+		   and not exists(select 1 from title_awards ta where ta.award_id = a.award_id)
+                )
+                UNION
+                   (select a.award_id, t.title_title as title, a.award_author, a.award_year,
+                   a.award_ttype, a.award_atype, a.award_level as level, a.award_movie,
+                   a.award_type_id, a.award_cat_id, a.award_note_id, c.award_cat_name as cat_name,
+		   c.award_cat_order as cat_order
+                   from awards a, award_cats c, title_awards ta, titles t
+                   where a.award_type_id = %d
+                   and YEAR(a.award_year) = %d
+                   and a.award_cat_id = c.award_cat_id
+		   and ta.award_id = a.award_id
+		   and t.title_id = ta.title_id
+                )
+                   order by ISNULL(cat_order), cat_order, cat_name, ABS(level), title
+                   """ % (int(award_type_id), int(year), int(award_type_id), int(year))
+        return _StandardQuery(query)
 
 def SQLloadAwardsForCat(award_cat_id, win_nom):
-	query = "select a.*,c.award_cat_name from awards a, award_cats c where a.award_cat_id=%d " % int(award_cat_id)
-	# If the requested award list is limited to wins, then add another limiting clause to the query
+	query = """(select a.award_id, a.award_title as title, a.award_author, a.award_year as year,
+                   a.award_ttype, a.award_atype, a.award_level as level, a.award_movie,
+                   a.award_type_id, a.award_cat_id, a.award_note_id, c.award_cat_name
+                   from awards a, award_cats c
+                   where a.award_cat_id = %d
+                   and a.award_cat_id = c.award_cat_id
+                   and not exists(select 1 from title_awards ta where ta.award_id = a.award_id) """ % int(award_cat_id)
+	# If the requested award list is limited to wins
 	if not win_nom:
                 query += "and a.award_level = '1'"
-        query += "and a.award_cat_id=c.award_cat_id order by a.award_year, ABS(a.award_level), a.award_title"
+        query += """
+                )
+                UNION
+                    (select a.award_id, t.title_title as title, a.award_author, a.award_year as year,
+                    a.award_ttype, a.award_atype, a.award_level as level, a.award_movie,
+                    a.award_type_id, a.award_cat_id, a.award_note_id, c.award_cat_name
+                    from awards a, award_cats c, title_awards ta, titles t
+                    where a.award_cat_id = %d
+                    and a.award_cat_id = c.award_cat_id
+                    and ta.award_id = a.award_id
+		    and t.title_id = ta.title_id """ % int(award_cat_id)
+	# If the requested award list is limited to wins
+	if not win_nom:
+                query += "and a.award_level = '1'"
+        query += ') order by year, ABS(level), title'
+
 	db.query(query)
 	result = db.store_result()
 	record = result.fetch_row()
@@ -464,11 +501,26 @@ def SQLloadAwardsForCat(award_cat_id, win_nom):
 	return records
 
 def SQLloadAwardsForCatYear(award_cat_id, award_year):
-	query = """select a.* from awards a, award_cats c
+	query = """(select a.award_id, a.award_title as title, a.award_author, a.award_year,
+                a.award_ttype, a.award_atype, a.award_level as level, a.award_movie,
+                a.award_type_id, a.award_cat_id, a.award_note_id
+                from awards a, award_cats c
+                where a.award_cat_id = %d
+                and a.award_cat_id = c.award_cat_id
+                and not exists(select 1 from title_awards ta where ta.award_id = a.award_id)
+                and YEAR(a.award_year) = %d""" % (int(award_cat_id), int(award_year))
+	query += """)
+                UNION
+                (select a.award_id, t.title_title as title, a.award_author, a.award_year,
+                a.award_ttype, a.award_atype, a.award_level as level, a.award_movie,
+                a.award_type_id, a.award_cat_id, a.award_note_id
+                from awards a, award_cats c, title_awards ta, titles t
                 where a.award_cat_id = %d
                 and a.award_cat_id = c.award_cat_id
                 and YEAR(a.award_year) = %d
-                order by ABS(a.award_level), a.award_title""" % (int(award_cat_id), int(award_year))
+                and ta.award_id = a.award_id
+                and t.title_id = ta.title_id""" % (int(award_cat_id), int(award_year))
+	query += ') order by ABS(level), title'
 	return _StandardQuery(query)
 
 def SQLloadTitlesXBS(series):
