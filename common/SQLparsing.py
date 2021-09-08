@@ -424,7 +424,7 @@ def SQLloadAwardsXBA(author, titles, pseudonyms):
                 query += """UNION select a.* from awards as a, title_awards as t
                                   where a.award_id=t.award_id
                                   and t.title_id in (%s) """ % in_clause
-        query += "order by award_year, award_title, award_level"
+        query += "order by award_year, award_title, cast(award_level as unsigned)"
         return _StandardQuery(query)
 
 def SQLloadAwardsForYearType(award_type_id, year):
