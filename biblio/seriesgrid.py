@@ -98,7 +98,7 @@ class SeriesGrid:
                 user = User()
                 user.load()
 
-                title = "Issue Grid: %s" % self.seriesName
+                title = "Issue Grid: %s" % self.ser.series_name
                 PrintHeader(title)
                 PrintNavbar('seriesgrid', self.seriesId, 0, 'seriesgrid.cgi', self.seriesId)
 
