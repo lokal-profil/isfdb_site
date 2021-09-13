@@ -430,7 +430,8 @@ class awards(awardShared):
                         if title[TITLE_PARENT]:
                                 parent = SQLloadTitle(title[TITLE_PARENT])
                                 if title[TITLE_LANGUAGE] and parent[TITLE_LANGUAGE] and title[TITLE_LANGUAGE] != parent[TITLE_LANGUAGE]:
-                                        print ' (translation of %s)' % ISFDBLink('title.cgi', parent[TITLE_PUBID], parent[TITLE_TITLE])
+                                        print ' (%s translation of %s)' % (LANGUAGES[title[TITLE_LANGUAGE]],
+                                                                           ISFDBLink('title.cgi', parent[TITLE_PUBID], parent[TITLE_TITLE]))
                                 elif parent[TITLE_TITLE] != title[TITLE_TITLE]:
                                         print ' (variant of %s)' % ISFDBLink('title.cgi', parent[TITLE_PUBID], parent[TITLE_TITLE])
                 else:
