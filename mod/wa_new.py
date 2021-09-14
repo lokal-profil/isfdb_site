@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley, Ahasuerus and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -114,12 +114,11 @@ if __name__ == '__main__':
         try:
                 # Only display title links if this award was entered for a Title record
                 if TagPresent(merge, 'Record'):
-                        print '[<a href="http:/' +HTFAKE+ '/edit/edittitle.cgi?%d">Edit This Title</a>]' % (int(Record))
-                        print '[<a href="http:/' +HTFAKE+ '/title.cgi?%d">View This Title</a>]' % (int(Record))
-
-                print '[<a href="http:/%s/award_details.cgi?%d">View This Award</a>]' % (HTFAKE, int(award_id))
-                print '[<a href="http:/' +HTFAKE+ '/edit/editaward.cgi?%d">Edit This Award</a>]' % (int(award_id))
-                print '[<a href="http:/' +HTFAKE+ '/ay.cgi?%s+%s">View Award Year</a>]' % (AwardType, AwardYear[:4])
+                        print ISFDBLinkNoName('edit/edittitle.cgi', Record, 'Edit This Title', True)
+                        print ISFDBLinkNoName('title.cgi', Record, 'View This Title', True)
+                print ISFDBLinkNoName('award_details.cgi', award_id, 'View This Award', True)
+                print ISFDBLinkNoName('edit/editaward.cgi', award_id, 'Edit This Award', True)
+                print ISFDBLinkNoName('ay.cgi','%s+%s' % (AwardType, AwardYear[:4]), 'View Award Year', True)
         except:
                 pass
         print "<p>"

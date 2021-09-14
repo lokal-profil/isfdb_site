@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus, Bill Longley and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -50,8 +50,8 @@ if __name__ == '__main__':
 	except:
 		submitter = 'unknown'
 
-	print '[<a href="http:/' +HTFAKE+ '/ea.cgi?%d">View Canonical Name</a>]' % int(parent)
-	print '[<a href="http:/' +HTFAKE+ '/ea.cgi?%d">View Alternate Name</a>]' % int(Record)
+	print ISFDBLinkNoName('ea.cgi', parent, 'View Cannonical Name', True)
+	print ISFDBLinkNoName('ea.cgi', Record, 'View Alternate Name', True)
         print '<p>'
 
         PrintPostMod(0)

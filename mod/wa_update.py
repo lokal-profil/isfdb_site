@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -132,11 +132,11 @@ if __name__ == '__main__':
 
         # Only display title links if this award was entered for a Title record
         if award.title_id:
-                print '[<a href="http:/' +HTFAKE+ '/edit/edittitle.cgi?%d">Edit This Title</a>]' % (award.title_id)
-                print '[<a href="http:/' +HTFAKE+ '/title.cgi?%d">View This Title</a>]' % (award.title_id)
-        print '[<a href="http:/' +HTFAKE+ '/award_details.cgi?%d">View This Award</a>]' % (int(award.award_id))
-        print '[<a href="http:/' +HTFAKE+ '/edit/editaward.cgi?%d">Edit This Award</a>]' % (int(award.award_id))
-        print '[<a href="http:/' +HTFAKE+ '/ay.cgi?%s+%s">View Award Year</a>]' % (award.award_type_id, award.award_year[:4])
+                print ISFDBLinkNoName('edit/edittitle.cgi', award.title_id, 'Edit This Title', True)
+                print ISFDBLinkNoName('title.cgi', award.title_id, 'View This Title', True)
+        print ISFDBLinkNoName('award_details.cgi', award.award_id, 'View This Award', True)
+        print ISFDBLinkNoName('edit/editaward.cgi', award.award_id, 'Edit This Award', True)
+        print ISFDBLinkNoName('ay.cgi', '%s+%s' % (award.award_type_id, award.award_year[:4]), 'View Award Year', True)
 	print '<p>'
 
 	PrintPostMod(0)
