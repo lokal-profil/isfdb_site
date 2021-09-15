@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2021   Ahasuerus
+#     (C) COPYRIGHT 2009-2021   Ahasuerus and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -37,8 +37,8 @@ if __name__ == '__main__':
                 elif (int(hold_id) != int(reviewerid)) and not SQLisUserBureaucrat(reviewerid):
                         holding_user = SQLgetUserName(hold_id)
                         print '<h3>Submission is currently on hold by '
-                        print '<a href=http://%s/index.php/User:%s>%s</a> ' % (WIKILOC, holding_user, holding_user)
-                        print '<a href=http://%s/index.php/User_talk:%s>(Talk)</a></h3>' % (WIKILOC, holding_user)
+                        print '<a href=%s://%s/index.php/User:%s>%s</a> ' % (PROTOCOL, WIKILOC, holding_user, holding_user)
+                        print '<a href=%s://%s/index.php/User_talk:%s>(Talk)</a></h3>' % (PROTOCOL, WIKILOC, holding_user)
                 else:
                         update = "update submissions set sub_holdid=0 where sub_id=%d" % int(submission)
                         db.query(update)

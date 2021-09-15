@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2020-2021   Ahasuerus
+#     (C) COPYRIGHT 2020-2021   Ahasuerus and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -60,7 +60,7 @@ if __name__ == '__main__':
 		if ver_status == 1:
                         # Retrieve the name of the user who verified this pub/source combination
                         verifier_name = SQLgetUserName(verification[VERIF_USER_ID])
-			print '<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, verifier_name, verifier_name)
+			print '<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, verifier_name, verifier_name)
 			print '<td>%s</td>' % ISFDBLink('mod/remove_secondary_verification.cgi', ver_id, 'Remove Verification')
 		else:
                         print '<td>&nbsp;</td>'

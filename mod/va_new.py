@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus, Bill Longley and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -170,8 +170,8 @@ if __name__ == '__main__':
 		submitter = GetElementValue(merge, 'Submitter')
 		markIntegrated(db, submission, TitleRecord)
 
-	print '[<a href="http:/' + HTFAKE + '/title.cgi?%d">View Original Title</a>]' % int(Parent)
-	print '[<a href="http:/' + HTFAKE + '/title.cgi?%d">View New Title</a>]' % int(TitleRecord)
+        print ISFDBLinkNoName('title.cgi', Parent, 'View Original Title', True)
+        print ISFDBLinkNoName('title.cgi', TitleRecord, 'View New Title', True)
 
 	print "<p>"
 
