@@ -1947,6 +1947,20 @@ def nightly_cleanup_reports():
                 )) """
         standardReport(query, 298)
 
+        #   Report 299: Publications with Swedish Titles with no Libris XL ID
+        query = """select distinct p.pub_id
+            from pubs p, titles t, pub_content pc, languages l
+            where p.pub_id = pc.pub_id
+            and pc.title_id = t.title_id
+            and t.title_language = l.lang_id
+            and l.lang_name = 'Swedish'
+            and not exists
+            (select 1 from identifiers i, identifier_types it
+            where p.pub_id = i.pub_id
+            and i.identifier_type_id = it.identifier_type_id
+            and it.identifier_type_name = 'Libris XL')"""
+        standardReport(query, 299)
+
 
 def requiredLowerCase():
         clause = ''
