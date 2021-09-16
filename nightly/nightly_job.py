@@ -1523,7 +1523,7 @@ def nightly_cleanup_reports():
                 and i.identifier_type_id = it.identifier_type_id
                 and
                 (
-                ((it.identifier_type_name in ('BL', 'COPAC', 'FantLab', 'Goodreads',
+                ((it.identifier_type_name in ('BL', 'COPAC (defunct)', 'FantLab', 'Goodreads',
                 'JNB/JPNO', 'KBR', 'LTF', 'NILF', 'OCLC/WorldCat')
                 or it.identifier_type_name like '%Bleiler%')
                 and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
