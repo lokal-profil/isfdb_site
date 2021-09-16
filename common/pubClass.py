@@ -715,6 +715,7 @@ class pubs:
 	# into a pubs class object.
 	###########################################
 	def cgi2obj(self, reference_title = 'explicit'):
+                import re
 		sys.stderr = sys.stdout
 		self.form = cgi.FieldStorage()
 		if self.form.has_key('pub_id'):
@@ -923,6 +924,9 @@ class pubs:
 		if self.form.has_key('pub_price'):
                         value = XMLescape(self.form['pub_price'].value)
                         if value:
+                                # A leading L followed by a digit is assumed to be the pound sign
+                                if re.match('^L[0-9]{1}', value):
+                                        value = chr(163) + value[1:]
         			self.pub_price = value
         			self.used_price = 1
 
