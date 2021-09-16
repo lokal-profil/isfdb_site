@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2021   Ahasuerus
+#     (C) COPYRIGHT 2009-2021   Ahasuerus and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -37,32 +37,32 @@ if __name__ == '__main__':
                 seriesRecord = SQLget1Series(int(Record))
                 if seriesRecord == 0:
                         print '<div id="ErrorBox">'
-                        print "<h3>Error: This series no longer exists.</h3>"
-                        print '<h3>Please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject it.</h3>' % (HTFAKE, submission)
+                        print '<h3>Error: This series no longer exists.</h3>'
+                        print '<h3>Please %s to reject it.</h3>' % ISFDBLinkNoName('mod/hardreject.cgi', submission, 'use Hard Reject')
                         print '</div>'
-                        PrintPostMod()
+                        PrintPostMod(0)
                         sys.exit(0)
 
                 # Check if sub-series have been added to this series since the time the submission was created
                 subseries = SQLFindSeriesChildren(int(Record))
                 if len(subseries) > 0:
                         print '<div id="ErrorBox">'
-                        print "<h2>Error: At least one sub-series has been added to this Series since the time this submission was created.</h2>"
+                        print '<h2>Error: At least one sub-series has been added to this Series since the time this submission was created.</h2>'
                         print "<h2>This series can't be deleted until all sub-series are removed.</h2>"
-                        print '<h3>If you do not want to remove the sub-series, please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject the submission.</h3>' % (HTFAKE, submission)
+                        print '<h3>If you do not want to remove the sub-series, please %s to reject the submission.</h3>' % ISFDBLinkNoName('mod/hardreject.cgi', submission, 'use Hard Reject')
                         print '</div>'
-                        PrintPostMod()
+                        PrintPostMod(0)
                         sys.exit(0)
 
                 # Check if titles have been added to this series since the time the submission was created
                 titles = SQLloadTitlesXBS(int(Record))
                 if len(titles) > 0:
                         print '<div id="ErrorBox">'
-                        print "<h2>Error: At least one title has been added to this series since the time this submission was created.</h2>"
+                        print '<h2>Error: At least one title has been added to this series since the time this submission was created.</h2>'
                         print "<h2>This series can't be deleted until all titles are removed.</h2>"
-                        print '<h3>If you do not want to remove the titles, please <a href="http:/%s/mod/hardreject.cgi?%s">use Hard Reject</a> to reject the submission.</h3>' % (HTFAKE, submission)
+                        print '<h3>If you do not want to remove the titles, please %s to reject the submission.</h3>' % ISFDBLinkNoName('mod/hardreject.cgi', submission, 'use Hard Reject')
                         print '</div>'
-                        PrintPostMod()
+                        PrintPostMod(0)
                         sys.exit(0)
 
 		##########################################################
