@@ -38,9 +38,7 @@ if __name__ == '__main__':
                         print "<h3>Submission is already on hold by you.</h3>"
                 elif hold_id:
                         holding_user = SQLgetUserName(hold_id)
-                        print '<h3>Submission is already on hold by '
-                        print '<a href=http://%s/index.php/User:%s>%s</a> ' % (WIKILOC, holding_user, holding_user)
-                        print '<a href=http://%s/index.php/User_talk:%s>(Talk)</a></h3>' % (WIKILOC, holding_user)
+                        print '<h3>Submission is already on hold by %s</h3>' % WikiLink(holding_user)
                 else:
                         update = "update submissions set sub_holdid=%d where sub_id='%d';" % (int(reviewerid), int(submission))
                         db.query(update)

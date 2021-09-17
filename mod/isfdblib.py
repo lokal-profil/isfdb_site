@@ -197,9 +197,7 @@ def NotApprovable(submission):
             if int(hold_id) != int(reviewerid):
                     holding_user = SQLgetUserName(hold_id)
                     print '<div id="ErrorBox">'
-                    print "<h3>Submission can't be moderated because it is on hold by "
-                    print '<a href="http://%s/index.php/User:%s">%s</a> ' % (WIKILOC, holding_user, holding_user)
-                    print '<a href="http://%s/index.php/User_talk:%s">(Talk)</a></h3>' % (WIKILOC, holding_user)
+                    print "<h3>Submission can't be moderated because it is on hold by %s</h3>" % WikiLink(holding_user)
                     print '</div>'
                     PrintPostMod(0)
                     return 1

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -44,11 +44,11 @@ if __name__ == '__main__':
                 # display a message explaining what needs to be done and abort
                 if (int(holder_id) != int(reviewerid)) and (SQLisUserBureaucrat(reviewerid) == 0):
                         holder_name = SQLgetUserName(holder_id)
-                        print '''<h3> This submission is currently held by <a href="http://%s/index.php/User:%s">%s</a>.
+                        print '''<h3> This submission is currently held by <a href="%s://%s/index.php/User:%s">%s</a>.
                         Please contact the holding moderator to discuss the submission. If the holding moderator is
                         inactive, please post on the Moderator Noticeboard and a bureaucrat will hard reject the
-                        submission.''' % (WIKILOC, holder_name, holder_name)
-                        PrintPostMod()
+                        submission.</h3>''' % (PROTOCOL, WIKILOC, holder_name, holder_name)
+                        PrintPostMod(0)
                         sys.exit(0)
 
         # If the submission was created by another moderator, do not allow rejection unless the current
@@ -58,11 +58,11 @@ if __name__ == '__main__':
             and (SQLisUserModerator(submitter_id) == 1)
             and not SQLisUserBureaucrat(reviewerid)):
                 submitter_name = SQLgetUserName(submitter_id)
-                print '''<h3> This submission was created by <a href="http://%s/index.php/User:%s">%s</a>, another moderator.
+                print '''<h3> This submission was created by <a href="%s://%s/index.php/User:%s">%s</a>, another moderator.
                 Please contact the submitter to discuss the submission. If the submitting moderator is
                 inactive, please post on the Moderator Noticeboard and a bureaucrat will hard reject the
-                submission.''' % (WIKILOC, submitter_name, submitter_name)
-                PrintPostMod()
+                submission.</h3>''' % (PROTOCOL, WIKILOC, submitter_name, submitter_name)
+                PrintPostMod(0)
                 sys.exit(0)
 
 	update = """update submissions
