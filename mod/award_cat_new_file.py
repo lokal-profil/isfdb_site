@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2021   Ahasuerus
+#     (C) COPYRIGHT 2014-2021   Ahasuerus and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
         markIntegrated(db, submission, award_cat_id)
 
-	print '[<a href="http:/%s/award_category.cgi?%d+1">View This Category</a>]' % (HTFAKE, award_cat_id)
-	print '[<a href="http:/%s/awardtype.cgi?%d">View This Category\'s Award Type</a>]' % (HTFAKE, int(AwardTypeId))
+        print ISFDBLinkNoName('award_category.cgi', '%d+1' % award_cat_id, 'View This Category', True)
+        print ISFDBLinkNoName('awardtype.cgi', AwardTypeId, 'View This Category\'s Award Type', True)
 
 	PrintPostMod(0)

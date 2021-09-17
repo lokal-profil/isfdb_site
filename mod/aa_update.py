@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus, Bill Longley and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -194,8 +194,8 @@ if __name__ == '__main__':
 
 		markIntegrated(db, submission, Record)
 
-	print '[<a href="http:/' +HTFAKE+ '/edit/editauth.cgi?%d">Edit This Author</a>]' % (int(Record))
-	print '[<a href="http:/' +HTFAKE+ '/ea.cgi?%s">View This Author</a>]' % (Record)
-	print "<p>"
+        print ISFDBLinkNoName('edit/editauth.cgi', Record, 'Edit This Author', True)
+        print ISFDBLinkNoName('ea.cgi', Record, 'View This Author', True)
+	print '<p>'
 
 	PrintPostMod(0)

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2021   Ahasuerus
+#     (C) COPYRIGHT 2004-2021   Ahasuerus and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -84,11 +84,11 @@ if __name__ == '__main__':
 	(title_id, award_id) = DoSubmission(db, submission)
 
 	if title_id > 0:
-		print '[<a href="http:/%s/title.cgi?%d">View Title record</a>]' % (HTFAKE, title_id)
+                print ISFDBLinkNoName('title.cgi', title_id, 'View Title record', True)
 	if award_id > 0:
-		print '[<a href="http:/%s/award_details.cgi?%d">View Award record</a>]' % (HTFAKE, award_id)
+                print ISFDBLinkNoName('award_details.cgi', award_id, 'View Award record', True)
 
-	print "<p>"
+	print '<p>'
 
 	PrintPostMod(0)
 	
