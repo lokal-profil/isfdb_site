@@ -6920,7 +6920,32 @@ def function299():
                 and c.report_type = 299
                 and c.resolved IS NULL
                 order by p.pub_title"""
-        cleanup.none = 'No Publications with Swedish Titles without a Libris XL ID'
+        cleanup.none = 'No Publications with Swedish Titles with no Libris XL ID'
+        cleanup.ignore = 1
+        cleanup.print_pub_table()
+
+def function300():
+        cleanup.query = """select distinct p.pub_id, p.pub_title, c.cleanup_id
+                from pubs p, titles t, pub_content pc, languages l, cleanup c
+                where p.pub_id = pc.pub_id
+                and pc.title_id = t.title_id
+                and t.title_language = l.lang_id
+                and l.lang_name = 'Swedish'
+                and exists
+                (select 1 from identifiers i, identifier_types it
+                where p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'Libris')
+                and not exists
+                (select 1 from identifiers i, identifier_types it
+                where p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'Libris XL')
+                and c.record_id = p.pub_id
+                and c.report_type = 300
+                and c.resolved IS NULL
+                order by p.pub_title"""
+        cleanup.none = 'No Publications with Swedish Titles with a Libris ID and no Libris XL ID'
         cleanup.ignore = 1
         cleanup.print_pub_table()
 
