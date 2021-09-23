@@ -926,9 +926,15 @@ class pubs:
                         if value:
                                 # A leading L followed by a digit is assumed to be the pound sign
                                 if re.match('^L[0-9]{1}', value):
-                                        value = chr(163) + value[1:]
-        			self.pub_price = value
+                                        value = POUND_SIGN + value[1:]
+                                # A leading Y followed by a digit is assumed to be the yen sign
+                                elif re.match('^Y[0-9]{1}', value):
+                                        value = YEN_SIGN + value[1:]
+                                # A leading E followed by a digit is assumed to be the euro sign
+                                elif re.match('^E[0-9]{1}', value):
+                                        value = EURO_SIGN + value[1:]
         			self.used_price = 1
+        			self.pub_price = value
 
 		if self.form.has_key('pub_note'):
                         value = XMLescape(self.form['pub_note'].value)
