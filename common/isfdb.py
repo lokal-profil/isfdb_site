@@ -158,6 +158,8 @@ class Session:
             self._DisplayEditError(message)
         elif self.cgi_dir == 'mod':
             self._DisplayModError(message)
+        elif self.cgi_dir == 'rest':
+            print '%s.cgi: Bad query. %s' % (self.cgi_script, message)
         sys.exit(0)
 
     def _DisplayBiblioError(self, message):
