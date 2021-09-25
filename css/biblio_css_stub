@@ -996,6 +996,11 @@ span.listingtext {
    font-size: 65%;
 }
 
+/* moderator review span warning */
+span.warn {
+   background: yellow;
+}
+
 /* scan images displayed on other pages */
 img.scans {
    height: 200px;

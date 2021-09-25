@@ -3333,6 +3333,18 @@ def DisplayClonePublication(submission_id):
                                 displayOtherContentClone(pub_date, child, submission_id, 'interview')
                         print '</table>'
 
+        DisplaySource(merge)
+
+        if cloningContent:
+                DisplayVerifications(pub[PUB_PUBID])
+
+        mod_note = GetElementValue(merge, 'ModNote')
+        if mod_note:
+                print '<h3>Note to Moderator: </h3>' + mod_note + '<p><p>'
+        
+        return submitter
+
+def DisplaySource(merge):
         source = GetElementValue(merge, 'Source')
         if source:
                 print '<h3>Source used:</h3>'
@@ -3346,17 +3358,10 @@ def DisplayClonePublication(submission_id):
                         print 'Data from author\'s website (Note will be updated accordingly)'
                 elif source == 'Other':
                         print 'Data from another source (details should be provided in the submitted Note)'
+                        if not GetElementValue(merge, 'Note'):
+                                print ' <span class="warn">- No Note data</span>'
                 print '<p>'
-
-        if cloningContent:
-                DisplayVerifications(pub[PUB_PUBID])
-
-        mod_note = GetElementValue(merge, 'ModNote')
-        if mod_note:
-                print '<h3>Note to Moderator: </h3>' + mod_note + '<p><p>'
         
-        return submitter
-
 def checkTitleExistence(title_id, submission_id):
         # Check that each about-to-be-merged title is still in the database
         # If the title ID is not specified, skip this check
@@ -3634,21 +3639,7 @@ def DisplayNewPub(submission_id):
         if mod_note: 
                 print '<h3>Note to Moderator: </h3>' + mod_note	+ '<p><p>'
 
-        source = GetElementValue(merge, 'Source')
-        if source:
-                print '<h3>Source used:</h3>'
-                if source == 'Primary': 
-                        print 'Data from an owned primary source (will be auto-verified)'
-                elif source == 'Transient': 
-                        print 'Data from a transient primary source (will be auto-verified)'
-                elif source == 'PublisherWebsite': 
-                        print 'Data from publisher\'s website (Note will be updated accordingly)'
-                elif source == 'AuthorWebsite': 
-                        print 'Data from author\'s website (Note will be updated accordingly)'
-                elif source == 'Other':
-                        print 'Data from another source (details should be provided in the submitted Note)'
-                print '<p>'
-
+        DisplaySource(merge)
         return submitter
 
 def PrintNewExternalIDs(merge, doc, submission_id):
