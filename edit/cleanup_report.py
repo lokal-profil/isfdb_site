@@ -4201,6 +4201,8 @@ def function100():
                 or (p.pub_price like concat('%',CHAR(0xA3),'%',',','%') and p.pub_price not like concat('%',CHAR(0xA3),'%',".",'%'))
                 or p.pub_price regexp '^[[:digit:]]{1,20}[.]*[[:digit:]]{1,20}$'
                 or p.pub_price like 'http%'
+                or pub_price like '%&#20870;%'
+                or pub_price like '%JP%'
             )
                 order by p.pub_title
                 """
