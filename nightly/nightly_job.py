@@ -1203,6 +1203,7 @@ def nightly_cleanup_reports():
                 or (pub_price like '%$%,%' and pub_price not like '%$%.%')
                 or (pub_price like concat('%',CHAR(0xA3),'%',',','%') and pub_price not like concat('%',CHAR(0xA3),'%',".",'%'))
                 or pub_price regexp '^[[:digit:]]{1,}[,.]{0,}[[:digit:]]{0,}$'
+                or (pub_price regexp '^[[:digit:]]{1,}' and pub_price not like '%/%' and pub_price not like '%Lit')
                 or pub_price like 'http%'
                 or pub_price like '%&#20870;%'
                 or pub_price like '%JP%'
