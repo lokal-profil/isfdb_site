@@ -1190,7 +1190,7 @@ def nightly_cleanup_reports():
                 group by ps1.pub_series_name"""
         standardReport(query, 98)
 
-        #   Report 100: Finds invalid prices
+        #   Report 100: Invalid prices
         query = """select pub_id from pubs
                 where pub_price like '%$ %'
                 or pub_price like concat('%',CHAR(0xA3),' ','%')
@@ -1203,7 +1203,9 @@ def nightly_cleanup_reports():
                 or (pub_price like '%$%,%' and pub_price not like '%$%.%')
                 or (pub_price like concat('%',CHAR(0xA3),'%',',','%') and pub_price not like concat('%',CHAR(0xA3),'%',".",'%'))
                 or pub_price regexp '^[[:digit:]]{1,}[,.]{0,}[[:digit:]]{0,}$'
-                or (pub_price regexp '^[[:digit:]]{1,}' and pub_price not like '%/%' and pub_price not like '%Lit')
+                or pub_price regexp '[.]{1}[[:digit:]]{3,}'
+                or (pub_price regexp '^[[:digit:]]{1,}' and pub_price not like '%/%')
+                or pub_price regexp '[[:digit:]]{4,}$'
                 or pub_price like 'http%'
                 or pub_price like '%&#20870;%'
                 or pub_price like '%JP%'

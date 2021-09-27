@@ -4200,10 +4200,12 @@ def function100():
                 or (p.pub_price like '%$%,%' and p.pub_price not like '%$%.%')
                 or (p.pub_price like concat('%',CHAR(0xA3),'%',',','%') and p.pub_price not like concat('%',CHAR(0xA3),'%',".",'%'))
                 or p.pub_price regexp '^[[:digit:]]{1,}[,.]{0,}[[:digit:]]{0,}$'
-                or (pub_price regexp '^[[:digit:]]{1,}' and pub_price not like '%/%' and pub_price not like '%Lit')
+                or p.pub_price regexp '[.]{1}[[:digit:]]{3,}'
+                or (p.pub_price regexp '^[[:digit:]]{1,}' and p.pub_price not like '%/%')
+                or p.pub_price regexp '[[:digit:]]{4,}$'
                 or p.pub_price like 'http%'
-                or pub_price like '%&#20870;%'
-                or pub_price like '%JP%'
+                or p.pub_price like '%&#20870;%'
+                or p.pub_price like '%JP%'
             )
                 order by p.pub_title
                 """
@@ -4212,6 +4214,10 @@ def function100():
 	result = db.store_result()
 
 	if result.num_rows() > 0:
+                print """<h2>See <a href="%s">this Help template</a> and
+                         <a href="%s">this Help page</a> for valid price
+                         formats</h2>""" % (ISFDBWikiTemplate('PublicationFields:Price'),
+                                            ISFDBWikiPage('Help:List of currency symbols'))
 		record = result.fetch_row()
                 bgcolor = 1
                 count = 1
@@ -4232,9 +4238,9 @@ def function100():
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No Publication Records with Invalid Prices Found</h2>"
+		print '<h2>No Publication Records with Invalid Prices Found</h2>'
 	return
 
 def function101():
