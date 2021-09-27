@@ -627,7 +627,10 @@ SPECIAL_AUTHORS_TO_IGNORE = [
     'The Editors' # 38941
 ]
 
+BHAT_SIGN = '&#3647;'
 EURO_SIGN = chr(128)
+PESO_SIGN = '&#8369;'
 POUND_SIGN = chr(163)
 YEN_SIGN = chr(165)
+
 BULLET = '&#8226;'
