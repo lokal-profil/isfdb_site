@@ -56,7 +56,7 @@ def CheckPrice(value):
                 warning = 'CDN is invalid. Use leading C$ for prices in Canadian dollars.'
         if 'EUR' in value.upper():
                 warning = 'EUR is invalid. Use %s for prices in euros.' % EURO_SIGN
-        for currency_sign in ('$', BHAT_SIGN, EURO_SIGN, PESO_SIGN, POUND_SIGN, YEN_SIGN):
+        for currency_sign in ('$', BAHT_SIGN, EURO_SIGN, PESO_SIGN, POUND_SIGN, YEN_SIGN):
                 if (currency_sign + ' ') in value:
                         warning = 'Spaces after the %s sign are not allowed.' % currency_sign
                         break

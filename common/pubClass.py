@@ -924,7 +924,7 @@ class pubs:
 		if self.form.has_key('pub_price'):
                         value = XMLescape(self.form['pub_price'].value)
                         if value:
-                                currency_map = {'B' : BHAT_SIGN,
+                                currency_map = {'B' : BAHT_SIGN,
                                               'E' : EURO_SIGN,
                                               'L' : POUND_SIGN,
                                               'P' : PESO_SIGN,
