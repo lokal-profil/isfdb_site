@@ -72,6 +72,16 @@ def CheckPrice(value):
                 warning = 'Prices must not start with http.'
         if value.replace('.','').replace(',','').isdigit():
                 warning = 'Prices should contain a currency symbol or abbreviation.'
+        if re.search('^[0-9]{1,}', value) and '/' not in value:
+                warning = 'Prices cannot start with a digit. The only exception is pre-decimilisation UK prices which must contain a slash.'
+        if re.search('\.[0-9]{3,}$', value):
+                warning = '4 or more consecutive digits must be separated with a comma, not a period.'
+        if re.search('[0-9]{4,}$', value):
+                warning = '4 or more consecutive digits must be separated with a comma.'
+        if 'jp' in value.lower():
+                warning = 'JP is not a valid currency code. Use the Yen sign instead.'
+        if '&#20870;' in value:
+                warning = '&#20870; is not a valid currency code. Use the Yen sign instead.'
         return (value, warning)
 
 def CheckISBN(value, XmlData):
