@@ -1059,7 +1059,7 @@ def RecognizedDomains():
                 ('dwtr67e3ikfml.cloudfront.net', 'Smashwords', 'www.smashwords.com', 1, '', 1),
                 ('encyklopediafantastyki.pl', 'Encyklopedia Fantastyki', 'www.encyklopediafantastyki.pl', 0),
                 ('ericflint.net', '1632, Inc.', 'www.1632.org', 1),
-                ('facebook.com', 'Facebook', 'www.facebook.com', 1),
+                ('facebook.com', 'Facebook', 'www.facebook.com', 0),
                 ('fancyclopedia.org', 'Fancyclopedia 3', 'www.fancyclopedia.org', 0),
                 ('fantascienza.com', 'Fantascienza', 'fantascienza.com', 1),
                 ('fantasticfiction.co.uk', 'Fantastic Fiction', 'fantasticfiction.com', 1),
