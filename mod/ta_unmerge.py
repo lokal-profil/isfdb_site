@@ -163,7 +163,7 @@ if __name__ == '__main__':
 	markIntegrated(db, submission, Record)
 
 	if Record:
-                print '[<a href="http:/%s/title.cgi?%d">View Original Title</a>]' % (HTFAKE, int(Record))
+                print ISFDBLinkNoName('title.cgi', Record, 'View Original Title')
         count_unmerged = 1
         duplicates_check = []
         for unmergedTitle in unmergedTitles:
@@ -172,11 +172,11 @@ if __name__ == '__main__':
                         title_display = 'Title %d' % count_unmerged
                 else:
                         title_display = 'Title'
-                print '[<a href="http:/%s/title.cgi?%d">View New %s</a>]' % (HTFAKE, int(unmergedTitle), title_display)
+                print ISFDBLinkNoName('title.cgi', unmergedTitle, 'View New %s' % title_display)
                 count_unmerged += 1
                 duplicates_check.append(str(unmergedTitle))
         duplicates_check_string = "+".join(duplicates_check)
-        print '[<a href="http:/%s/edit/find_title_dups.cgi?%s">Check for Duplicate Titles</a>]' % (HTFAKE, duplicates_check_string)
+        print ISFDBLinkNoName('edit/find_title_dups.cgi', duplicates_check_string, 'Check for Duplicate Titles')
 	print '<p>'
 
 	PrintPostMod(0)

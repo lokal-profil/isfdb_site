@@ -88,7 +88,7 @@ if __name__ == '__main__':
 	if debug == 0:
 		markIntegrated(db, submission, pub_id)
 
-	print '[<a href="http:/' +HTFAKE+ '/edit/editpub.cgi?%d">Edit This Pub</a>]' % (int(Record))
-	print '[<a href="http:/' +HTFAKE+ '/pl.cgi?%d">View This Pub</a>]' % (int(Record))
+        print ISFDBLinkNoName('edit/editpub.cgi', Record, 'Edit This Pub')
+        print ISFDBLinkNoName('pl.cgi', Record, 'View This Pub')
 
 	PrintPostMod(0)

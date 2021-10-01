@@ -373,10 +373,10 @@ if __name__ == '__main__':
 		submitter = GetElementValue(merge, 'Submitter')
 		markIntegrated(db, submission, Record)
 
-	print '[<a href="http:/%s/edit/edittitle.cgi?%d">Edit This Title</a>]' % (HTFAKE, int(Record))
-	print '[<a href="http:/%s/title.cgi?%d">View This Title</a>]' % (HTFAKE, int(Record))
-        print '[<a href="http:/%s/edit/find_title_dups.cgi?%s">Check for Duplicate Titles</a>]' % (HTFAKE, int(Record))
+	print ISFDBLinkNoName('edit/edittitle.cgi', Record, 'Edit This Title')
+	print ISFDBLinkNoName('title.cgi', Record, 'View This Title')
+	print ISFDBLinkNoName('edit/find_title_dups.cgi', Record, 'Check for Duplicate Titles')
 
-	print "<p>"
+	print '<p>'
 
 	PrintPostMod(0)
