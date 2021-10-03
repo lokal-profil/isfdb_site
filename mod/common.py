@@ -39,7 +39,7 @@ def findReferralLang(pub_id):
         return referral_lang
 
 def UserNameLink(user_name):
-        return '<a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, user_name, user_name)
+        return '<a href="%s://%s/index.php/User:%s">%s</a>' % (PROTOCOL, WIKILOC, user_name, user_name)
         
 def ApproveOrReject(app, submission_id):
 
@@ -87,20 +87,20 @@ def ApproveOrReject(app, submission_id):
                         print '<h3>Submission is currently on hold by %s</h3>' % WikiLink(holding_user)
                         # Let bureaucrats unhold submissions held by other moderators
                         if SQLisUserBureaucrat(reviewer_id):
-                                print '<a class="hold" href="http:/'+HTFAKE+'/mod/unhold.cgi?%s">UNHOLD</a><p>' % submission_id
+                                print '%s <p>' % ISFDBLinkNoName('mod/unhold.cgi', submission_id, 'UNHOLD', False, 'class="hold" ')
                         return
                 #If the submission is currently on hold by the reviewing moderator, allow to remove from hold
                 print '<h3>Submission is currently on hold by you.</h3><p>'
-                print '<a class="hold" href="http:/'+HTFAKE+'/mod/unhold.cgi?%s">UNHOLD</a>  ' % submission_id
+                print '%s  ' % ISFDBLinkNoName('mod/unhold.cgi', submission_id, 'UNHOLD', False, 'class="hold" ')
 
         # If the submission is not currently on hold and the reviewer is a moderator as opposed to a self-approver, allow putting it on hold
         elif reviewer_is_moderator:
-                print '<a class="hold" href="http:/'+HTFAKE+'/mod/hold.cgi?%s">HOLD</a>  ' % submission_id
+                print '%s  ' % ISFDBLinkNoName('mod/hold.cgi', submission_id, 'HOLD', False, 'class="hold" ')
 
-        print '<a class="approval" href="http:/'+HTFAKE+'/mod/%s?%s">Approve</a>' % (app, submission_id)
+        print ISFDBLinkNoName('mod/%s' % app, submission_id, 'Approve', False, 'class="approval" ')
         print '<span class="approval"><small>'
-        print '<a class="approval" href="http:/%s/view_submission.cgi?%s">Public View</a>' % (HTFAKE, submission_id)
-        print '<a class="approval" href="http:/%s/dumpxml.cgi?%s">View Raw XML</a>' % (HTFAKE, submission_id)
+        print ISFDBLinkNoName('view_submission.cgi', submission_id, 'Public View', False, 'class="approval" ')
+        print ISFDBLinkNoName('dumpxml.cgi', submission_id, 'View Raw XML', False, 'class="approval" ')
         print '</small></span>'
         print '<p><br>'
         PrintSubmissionLinks(submission_id, reviewer_id)

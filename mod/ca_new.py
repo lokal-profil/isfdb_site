@@ -632,15 +632,15 @@ if __name__ == '__main__':
 		print '<h3>Warning: This app is in debug mode. No writes actually occured to the database.</h3>'
 		print '</div>'
 
-	print "<h1>SQL Updates:</h1>"
-	print "<hr>"
+	print '<h1>SQL Updates:</h1>'
+	print '<hr>'
 
 	Record = DoSubmission(db, submission)
 
-	print '[<a href="http:/%s/edit/editpub.cgi?%d">Edit This Pub</a>]' % (HTFAKE, int(Record))
-	print '[<a href="http:/%s/pl.cgi?%d">View This Pub</a>]' % (HTFAKE, int(Record))
-	print '[<a href="http:/%s/edit/verify.cgi?%d">Verify this Pub</a>]' % (HTFAKE, int(Record))
-	print '[<a href="http:/%s/edit/find_pub_dups.cgi?%d">Check for Duplicate Titles</a>]' % (HTFAKE, int(Record))
+        print ISFDBLinkNoName('edit/editpub.cgi', Record, 'Edit This Pub', True)
+        print ISFDBLinkNoName('pl.cgi', Record, 'View This Pub', True)
+        print ISFDBLinkNoName('edit/verify.cgi', Record, 'Verify This Pub', True)
+        print ISFDBLinkNoName('edit/find_pub_dups.cgi', Record, 'Check for Duplicate Titles', True)
 	print '<p>'
 
 	PrintPostMod(0)

@@ -35,10 +35,8 @@ def PrintRecord(record, eccolor, approving_moderator):
 		recordType = SUBMAP[subtype][1]
 		
         	# Determine the current status of the submission, including whether it's on hold
-		if (record[SUB_HOLDID]):
-			holder = SQLgetUserName(record[SUB_HOLDID])
-			status = '<td>ON HOLD (<a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, holder, holder)
-			status += ' <a href="http://%s/index.php/User_talk:%s">(Talk)</a>)</td>' % (WIKILOC, holder)
+		if record[SUB_HOLDID]:
+			status = '<td>ON HOLD (%s)</td>' % WikiLink(SQLgetUserName(record[SUB_HOLDID]))
 		else:
 			status = "<td>%s</td>" % (record[SUB_STATE])
 
@@ -79,17 +77,15 @@ def PrintRecord(record, eccolor, approving_moderator):
                 display_string += '</td>'
                 print display_string
                 print status
-        	print "<td>%s</td>" % (recordType)
+        	print '<td>%s</td>' % (recordType)
 
 	try:
-		print "<td>%s</td>" % (record[SUB_TIME])
+		print '<td>%s</td>' % (record[SUB_TIME])
 	except:
-		print "<td>unknown</td>"
-	submitterlink  = '<td><a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, submitter, submitter)
-	submitterlink += ' <a href="http://%s/index.php/User_talk:%s">(Talk)</a></td>' % (WIKILOC, submitter)
-	print submitterlink
-	print "<td>%s</td>" % (XMLunescape(subject))
-        print "</tr>"
+		print '<td>unknown</td>'
+	print '<td>%s</td>' % WikiLink(submitter)
+	print '<td>%s</td>' % XMLunescape(subject)
+        print '</tr>'
 
 
 
@@ -109,7 +105,7 @@ if __name__ == '__main__':
 
         print '<div id="HelpBox">'
         print '<b>Help on moderating: </b>'
-        print '<a href="http://%s/index.php/Help:Screen:Moderator">Help:Screen:Moderator</a><p>' % WIKILOC
+        print '<a href="%s://%s/index.php/Help:Screen:Moderator">Help:Screen:Moderator</a><p>' % (PROTOCOL, WIKILOC)
         print '</div>'
 
         ISFDBprintTime()

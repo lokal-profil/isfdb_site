@@ -39,7 +39,7 @@ class SelfApprovers:
                 print '<hr>'
 
         def display_entry_form(self):
-                print '<form METHOD="GET" action="http:/%s/mod/self_approver_file.cgi">' % HTFAKE
+                print '<form METHOD="GET" action="/cgi-bin/mod/self_approver_file.cgi">'
                 print '<p>'
                 print 'User Name (case sensitive): <input NAME="user_name" SIZE="50">'
                 print '<select NAME="self_approver">'

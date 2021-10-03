@@ -75,17 +75,17 @@ if __name__ == '__main__':
         if NotApprovable(submission):
                 sys.exit(0)
 
-	print "<h1>SQL Updates:</h1>"
-	print "<hr>"
+	print '<h1>SQL Updates:</h1>'
+	print '<hr>'
 
 	(ParentRecord, ChildRecord) = DoSubmission(db, submission)
 
 	if ParentRecord > 0:
-		print '[<a href="http:/' +HTFAKE+ '/title.cgi?%d">View Reviewed Title</a>]' % ParentRecord
+		print ISFDBLinkNoName('title.cgi', ParentRecord, 'View Reviewed Title', True)
 	if ChildRecord > 0:
-		print '[<a href="http:/' +HTFAKE+ '/title.cgi?%d">View Review Title</a>]' % ChildRecord
+		print ISFDBLinkNoName('title.cgi', ChildRecord, 'View Review Title', True)
 
-	print "<p>"
+	print '<p>'
 
 	PrintPostMod(0)
 	
