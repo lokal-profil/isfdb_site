@@ -1,6 +1,6 @@
 # -*- coding: cp1252 -*-
 #
-#     (C) COPYRIGHT 2007-2021   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2007-2021   Al von Ruff, Ahasuerus, Bill Longley and Klaus Elsbernd
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1572,7 +1572,7 @@ def DisplayNewAward(submission_id):
                         if not title:
                                 InvalidSubmission(submission_id, 'Title no longer exists')
                         print '<tr>'
-                        print '<td class="label"><b>Add Award to <a href="http:/%s/title.cgi?%s">[Title #%s]</a></b></td>' % (HTFAKE, Record, Record)
+                        print '<td class="label"><b>Add Award to %s</a></b></td>' % ISFDBLinkNoName('title.cgi', Record, 'Title #%s' % Record, True)
                         print '<td class="label">%s</td>' % (title[TITLE_TITLE])
                         print '</tr>'
                         print '<tr>'
@@ -1750,7 +1750,7 @@ def DisplayAwardDelete(submission_id):
                         InvalidSubmission(submission_id, current.error)
 
                 if current.title_id:
-                        print '<h3>This submission deletes an award for Title record <a href="http:/%s/title.cgi?%s">%s</a></h3>' % (HTFAKE, current.title_id, current.title_id)
+                        print '<h3>This submission deletes an award for Title record #%s</h3>' % ISFDBLinkNoName('title.cgi', current.title_id, current.title_id)
                 else:
                         print '<h3>This award is not associated with an ISFDB title</h3>'
                 print '<p>'
@@ -1790,7 +1790,6 @@ def DisplayLinkReview(submission_id):
                 print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
                 print '<td class="label"><b>Review [Record #%s]</b></td>' % ISFDBLink('title.cgi', Record, Record)
-                # <a href="http:/%s/title.cgi?%d">%d</a>
 
                 theReview = titles(db)
                 theReview.load(int(Record))
@@ -1917,11 +1916,11 @@ def DisplayPublisherMerge(submission_id):
 
 		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b><a href="http:/%s/publisher.cgi?%d">KeepId [%d]</a></b></td>' % (HTFAKE, KeepId, KeepId)
+		print '<td class="label"><b>KeepId %s</b></td>' % ISFDBLinkNoName('publisher.cgi', KeepId, KeepId, True)
 	
 		index = 1
 		while RecordIds[index]:
-			print '<td class="label"><b><a href="http:/%s/publisher.cgi?%d">DropId [%d]</a></b></td>' % (HTFAKE, RecordIds[index], RecordIds[index])
+			print '<td class="label"><b>DropId %s</b></td>' % ISFDBLinkNoName('publisher.cgi', RecordIds[index], RecordIds[index], True)
 			index += 1
 		print '</tr>'
 
@@ -2003,11 +2002,11 @@ def DisplayMakePseudonym(submission_id):
 
                 print '<table border="2" class="generic_table">'
                 print '<tr>'
-                print '<td class="label"><b>Alternate Name [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE,Record,Record)	
+                print '<td class="label"><b>Alternate Name Record %s</b></td>' % ISFDBLinkNoName('ea.cgi', Record, Record, True)
 
                 if TagPresent(merge, 'Parent'):
                         parent = GetElementValue(merge, 'Parent')
-                        print '<td class="label"><b>Parent Author [Record <a href="http:/%s/ea.cgi?%s">#%s</a>]</b></td>' % (HTFAKE,parent,parent)
+                        print '<td class="label"><b>Parent Author Record %s</b></td>' % ISFDBLinkNoName('ea.cgi', parent, parent, True)
                         print '</tr>'
 
                         print '<tr>'
@@ -2117,8 +2116,7 @@ def DisplayDeletePub(submission_id):
 
 		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
-		Publink = '<a href="http:/%s/pl.cgi?%s">#%s</a>' % (HTFAKE, Record, Record)
-		print '<td class="label"><b>Record to Delete: %s</b></td>' % (Publink)
+		print '<td class="label"><b>Record to Delete: #%s</b></td>' % ISFDBLinkNoName('pl.cgi', Record, Record)
 		print '</tr>'
 
 		current = pubs(db)
