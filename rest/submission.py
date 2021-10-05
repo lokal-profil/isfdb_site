@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
 #	 ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -27,7 +27,7 @@ class Submission:
                 self.merge = ''
                 self.submitter = ''
                 self.submitter_id = 0
-                self.valid_submitters = ('Ahasuerus', 'Fixer', 'Stoecker')
+                self.valid_submitters = ('Ahasuerus', 'Fixer', 'Stoecker', 'Lokal Profil')
                 self.XMLdata = ''
 
         def process_submission(self):
