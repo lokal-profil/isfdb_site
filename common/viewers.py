@@ -82,6 +82,14 @@ def CheckPrice(value):
                 warning = 'JP is not a valid currency code. Use the Yen sign instead.'
         if '&#20870;' in value:
                 warning = '&#20870; is not a valid currency code. Use the Yen sign instead.'
+        if value.count(' ') > 1:
+                warning = 'More than one space character is not allowed in the price field'
+        if ' $' in value:
+                warning = 'Dollar sign cannot follow the space character in the price field'
+        if '+' in value:
+                warning = 'Plus signs are not allowed in the price field'
+        if re.search('[0-9]{1,} ', value):
+                warning = 'A space cannot follow a digit in the price field'
         return (value, warning)
 
 def CheckISBN(value, XmlData):

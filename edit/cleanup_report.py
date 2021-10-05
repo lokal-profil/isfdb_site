@@ -4206,6 +4206,10 @@ def function100():
                 or p.pub_price like 'http%'
                 or p.pub_price like '%&#20870;%'
                 or p.pub_price like '%JP%'
+                or p.pub_price like '% % %'
+                or p.pub_price like '% $%'
+                or p.pub_price like '%+%'
+                or p.pub_price regexp '[[:digit:]]{1,} '
             )
                 order by p.pub_title
                 """

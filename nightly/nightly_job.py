@@ -1209,6 +1209,10 @@ def nightly_cleanup_reports():
                 or pub_price like 'http%'
                 or pub_price like '%&#20870;%'
                 or pub_price like '%JP%'
+                or pub_price like '% % %'
+                or pub_price like '% $%'
+                or pub_price like '%+%'
+                or pub_price regexp '[[:digit:]]{1,} '
                 """
         standardReport(query, 100)
 
