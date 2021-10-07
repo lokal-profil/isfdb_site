@@ -179,7 +179,7 @@ class ExcludedTitleTypes():
                         print '<tr align=left class="table2">'
 
                 print '<td>%d</td>' % self.count
-                print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, self.pub_id, self.pub_title)
+                print '<td>%s</td>' % ISFDBLink('pl.cgi', self.pub_id, self.pub_title)
                 invalid_titles = SQLloadTitlesXBT(self.pub_id)
                 print '<td>'
                 first_title = True
@@ -193,8 +193,9 @@ class ExcludedTitleTypes():
                 print '</td>'
                 if self.ignore and user.moderator:
                         message = {0: 'Resolve', 1: 'Ignore'}
-                        print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                                %s this publication</a></td>""" % (HTFAKE, int(self.cleanup_id), self.mode, self.report_id, message[mode])
+                        print '<td>%s</td>' % ISFDBLinkNoName('mod/resolve_cleanup.cgi',
+                                                              '%d+%d+%d' % (int(self.cleanup_id), self.mode, self.report_id),
+                                                              '%s this publication' % message[self.mode])
                 print '</tr>'
 
 def PrintTableColumns(columns):
@@ -626,10 +627,14 @@ def function10():
 
 def function11():
         # Ignore the following authors: unknown, Anonymous, various, uncredited, The Readers, The Editors
-        query = """select c.author_id,count(c.author_id),a.author_canonical from canonical_author as c, authors as a, cleanup 
-                where c.author_id=a.author_id and a.author_language IS NULL 
-                and cleanup.report_type=11 and cleanup.record_id=a.author_id 
-                group by c.author_id order by count(c.author_id) desc"""
+        query = """select c.author_id, a.author_canonical, count(c.author_id)
+                from canonical_author as c, authors as a, cleanup 
+                where c.author_id=a.author_id
+                and a.author_language IS NULL 
+                and cleanup.report_type=11
+                and cleanup.record_id=a.author_id 
+                group by c.author_id
+                order by count(c.author_id) desc"""
 
 	db.query(query)
 	result = db.store_result()
@@ -647,15 +652,15 @@ def function11():
                                 print '<tr align=left class="table2">'
 
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, record[0][0], record[0][2])
-                        print '<td>%s</td>' % record[0][1]
+                        print '<td>%s</td>' % ISFDBLink('ea.cgi', record[0][0], record[0][1])
+                        print '<td>%s</td>' % record[0][2]
                         print '</tr>'
                         record = result.fetch_row()
                         bgcolor ^= 1
                         count += 1
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No authors without a defined language found</h2>"
+		print '<h2>No authors without a defined language found</h2>'
 
 def function12():
 	query = """select titles.* from titles, cleanup
