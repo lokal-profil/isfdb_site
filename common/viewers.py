@@ -2177,7 +2177,7 @@ def DisplayRemoveTitle(submission_id):
                         InvalidSubmission(submission_id, pub.error)
 
 		# Add a link to existing Publication
-		print 'Removing titles from <a href="http:/%s/pl.cgi?%d">%s</a><p>' % (HTFAKE, pub_id, subject)
+		print 'Removing titles from %s<p>' % ISFDBLinkNoName('pl.cgi', pub_id, subject)
 
                 DisplayVerifications(pub_id, 0)
 
@@ -2324,18 +2324,18 @@ def PrintTitleRemoveOneRow(contents_item, removalList, type):
                 print '<td class="keep">'
         	if page:
         		print '%s - ' % (str(page))
-                line = '<b><i><a href="http:/%s/title.cgi?%d">%s</a></i></b>, %s' % (HTFAKE, title[TITLE_PUBID], title[TITLE_TITLE], title[TITLE_TTYPE])
+                line = '%s %s' % (ISFDBLink('title.cgi', title[TITLE_PUBID], title[TITLE_TITLE]), title[TITLE_TTYPE])
         	for author in authors:
-        		line += ', <a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+        		line += ', %s' % ISFDBLink('ea.cgi', author[0], author[1])
         	print line
                 print "</td>"
         else:
                 print '<td class="keep">'
         	if page:
         		print '%s - ' % (str(page))
-                line = '<b><i><a href="http:/%s/title.cgi?%d">%s</a></i></b>, %s' % (HTFAKE, title[TITLE_PUBID], title[TITLE_TITLE], title[TITLE_TTYPE])
+                line = '%s, %s' % (ISFDBLink('title.cgi', title[TITLE_PUBID], title[TITLE_TITLE]), title[TITLE_TTYPE])
         	for author in authors:
-        		line += ', <a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+        		line += ', %s' % ISFDBLink('ea.cgi', author[0], author[1])
         	print line
         	print "</td>"
                 print '<td class="drop">'
@@ -2359,7 +2359,7 @@ def DisplayAddVariant(submission_id):
 
 		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Current [Parent #<a href="http:/%s/title.cgi?%d">%d</a>]</b></td>' % (HTFAKE, int(Parent), int(Parent))
+		print '<td class="label"><b>Current Parent #%s</b></td>' % ISFDBLinkNoName('title.cgi', Parent, Parent, True)
 		print '<td class="label"><b>Proposed Variant Title</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
 		print '</tr>'
