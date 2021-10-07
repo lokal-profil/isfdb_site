@@ -2405,7 +2405,7 @@ def DisplayUnmergeTitle(submission_id):
 		if not title:
                         InvalidSubmission(submission_id, 'Title record no longer valid')
 		authors = SQLTitleAuthors(int(Record))
-		print '<br><b>Title:</b> <a href="http:/%s/title.cgi?%s">%s</a>' % (HTFAKE, title[TITLE_PUBID], title[TITLE_TITLE])
+		print '<br><b>Title:</b> %s' % ISFDBLink('title.cgi', title[TITLE_PUBID], title[TITLE_TITLE])
 		print '<br><b>Authors:</b>'
 		for author in authors:
 			print author
@@ -2438,7 +2438,7 @@ def DisplayUnmergeTitle(submission_id):
 					print '<tr>'
 					#print '<td class="drop"><b>%s</b></td>' % pub[PUB_TITLE]
 					# Make a link to existing Publication
-					print '<td class="drop"><a href="http:/%s/pl.cgi?%s"><b>%s</b></a></td>' % (HTFAKE, pub[PUB_PUBID], pub[PUB_TITLE])
+					print '<td class="drop">%s</td>' % ISFDBLink('pl.cgi', pub[PUB_PUBID], pub[PUB_TITLE])
 					if (title[TITLE_TTYPE] == 'SHORTFICTION') or (title[TITLE_TTYPE] == 'COVERART'):
                                                 newtitle = title[TITLE_TITLE]
 					else:
@@ -2488,10 +2488,10 @@ def DisplayMergeTitles(submission_id):
 
 		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b><a href="http:/%s/title.cgi?%d">KeepId [%d]</a></b></td>' % (HTFAKE, KeepId, KeepId)
+		print '<td class="label"><b>KeepId %s</b></td>' % ISFDBLinkNoName('title.cgi', KeepId, KeepId, True)
 		for title_id in sorted(Records.keys()):
                         if title_id != KeepId:
-                                print '<td class="label"><b><a href="http:/%s/title.cgi?%d">DropId [%d]</a></b></td>' % (HTFAKE, title_id, title_id)
+                                print '<td class="label"><b>DropId %s</b></td>' % ISFDBLinkNoName('title.cgi', title_id, title_id, True)
 		print '</tr>'
 
 		PrintMergeField('Title',     Document, KeepId, Records, submission_id)
@@ -2569,7 +2569,7 @@ def PrintMergeField(Label, XmlData, KeepId, Records, submission_id):
                                                         if cover_pub[PUB_IMAGE]:
                                                                 if output == '-':
                                                                         output = ''
-                                                                output += '<br><a href="http:/%s/pl.cgi?%s">%s</a><br>' % (HTFAKE, cover_pub[PUB_PUBID], FormatImage(cover_pub[PUB_IMAGE], 200))
+                                                                output += '<br>%s<br>' % ISFDBLinkNoName('pl.cgi', cover_pub[PUB_PUBID], FormatImage(cover_pub[PUB_IMAGE], 200))
                                 else:
                                         output = Records[title_id].title_ttype
 			if Records[keep_id].used_ttype:
@@ -2660,7 +2660,7 @@ def DisplayMakeVariant(submission_id):
 
                 print '<tr>'
                 print '<td class="label"><b>Column</b></td>'
-                print '<td class="label"><b>Make Variant [Record #<a href="http:/%s/title.cgi?%s">%s</a></b>]</td>' % (HTFAKE, Record, Record)	
+                print '<td class="label"><b>Make Variant Record #%s</b>]</td>' % ISFDBLinkNoName('title.cgi', Record, Record, True)
                 theVariant = titles(db)
                 theVariant.load(int(Record))
                 if theVariant.error:
@@ -2668,7 +2668,7 @@ def DisplayMakeVariant(submission_id):
                 if TagPresent(merge, 'Parent'):
                         parent = GetElementValue(merge, 'Parent')
                         if int(parent) != 0:
-                                print '<td class="label"><b>Variant of [Existing Record #<a href="http:/%s/title.cgi?%s">%s</a>]</b></td>' % (HTFAKE, parent, parent)
+                                print '<td class="label"><b>Variant of Existing Record #%s</b></td>' % ISFDBLinkNoName('title.cgi', parent, parent, True)
                         else:
                                 print '<td class="label"><b>Variant of Nothing</b></td>'
                         print '<td class="label"><b>Warnings</b></td>'
@@ -2688,7 +2688,7 @@ def DisplayMakeVariant(submission_id):
                                 cover_pubs = SQLGetCoverPubsByTitle(int(Record))
                                 for cover_pub in cover_pubs:
                                         if cover_pub[PUB_IMAGE]:
-                                                print '<br><a href="http:/%s/pl.cgi?%s">%s</a><br>' % (HTFAKE, cover_pub[PUB_PUBID], FormatImage(cover_pub[PUB_IMAGE]))
+                                                print '<br>%s<br>' % ISFDBLinkNoName('pl.cgi', cover_pub[PUB_PUBID], FormatImage(cover_pub[PUB_IMAGE]))
                                 print '</td>'
 
                                 # Display the right column for the "Variant of" title
@@ -2696,7 +2696,7 @@ def DisplayMakeVariant(submission_id):
                                 cover_pubs = SQLGetCoverPubsByTitle(int(parent))
                                 for cover_pub in cover_pubs:
                                         if cover_pub[PUB_IMAGE]:
-                                                print '<br><a href="http:/%s/pl.cgi?%s">%s</a><br>' % (HTFAKE, cover_pub[PUB_PUBID], FormatImage(cover_pub[PUB_IMAGE]))
+                                                print '<br>%s<br>' % ISFDBLinkNoName('pl.cgi', cover_pub[PUB_PUBID], FormatImage(cover_pub[PUB_IMAGE]))
                                 print '</td>'
                                 print '<td class="blankwarning">&nbsp;</td>'
                                 print '</tr>'
@@ -2806,12 +2806,12 @@ def DisplayEditPub(submission_id):
 		pub_id = int(Record)
         	submitter = GetElementValue(merge, 'Submitter')
 		
-		print "<tr>"
+		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
-		print '<td class="label"><b>Current [Record #<a href="http:/%s/pl.cgi?%s">%s</a>]</b></td>' % (HTFAKE, Record, Record) 
+		print '<td class="label"><b>Current Record #%s</b></td>' % ISFDBLinkNoName('pl.cgi', Record, Record, True)
 		print '<td class="label"><b>Proposed Changes</b></td>'
                 print '<td class="label"><b>Warnings</b></td>'
-		print "</tr>"
+		print '</tr>'
 
 		current = pubs(db)
 		current.load(int(Record))
@@ -3228,13 +3228,13 @@ def DisplayClonePublication(submission_id):
                         InvalidSubmission(submission_id, 'Title %d is no longer in the database' % int(value))
                 else:	
                         if cloningContent:
-                                print 'Import/Export -- automerging content from title <a href="http:/%s/title.cgi?%s">%s</a>' % (HTFAKE, value, title_data[TITLE_TITLE])
+                                print 'Import/Export -- automerging content from title %s' % ISFDBLink('title.cgi', value, title_data[TITLE_TITLE])
                         else:
-                                print 'Clone Publication -- will be automerged with title <a href="http:/%s/title.cgi?%s">%s</a>' % (HTFAKE, value, title_data[TITLE_TITLE])
+                                print 'Clone Publication -- will be automerged with title %s' % ISFDBLink('title.cgi', value, title_data[TITLE_TITLE])
         else:
                 if cloningContent:
                         pub = SQLGetPubById(cloningContent)
-                        print 'Importing content into publication record <a href="http:/%s/pl.cgi?%s">%s</a>' % (HTFAKE, pub[PUB_PUBID], pub[PUB_TITLE])
+                        print 'Importing content into publication record %s' % ISFDBLink('pl.cgi', pub[PUB_PUBID], pub[PUB_TITLE])
 
 
         print '<h2>Publication data</h2>'
@@ -3521,7 +3521,7 @@ def DisplayNewPub(submission_id):
                 if title_data == []:
                         InvalidSubmission(submission_id, 'Automerge specified, but target title record %s is missing' % value)
                 else:
-                        print 'Automerge with title <a href="http:/%s/title.cgi?%s">%s</a>' % (HTFAKE, value, title_data[TITLE_TITLE])
+                        print 'Automerge with title %s' % ISFDBLink('title.cgi', value, title_data[TITLE_TITLE])
 
         ##########################################################
         # Title data
