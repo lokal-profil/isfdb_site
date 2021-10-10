@@ -115,10 +115,8 @@ def SelectionError():
         DisplayError('You need to select at least two records to merge')
 
 def DisplayError(message):
-	print '<h1>Error: %s.</h1>' % (message)
-	print '</body>\n'
-	print '</html>\n'
-	PrintPostSearch(0, 0, 0, 0, 0)
+	print '<h2>Error: %s.</h2>' % (message)
+	PrintPostSearch(0, 0, 0, 0, 0, 0)
 	sys.exit(1)
 
 def checkPubDups(title1, title2):
@@ -127,17 +125,13 @@ def checkPubDups(title1, title2):
 	for pub1 in pubs1:
 		for pub2 in pubs2:
 			if pub1[PUB_PUBID] == pub2[PUB_PUBID]:
-				print '<div id="WarningBox">'
-				print "<h3>WARNING: records %s and %s both appear in the publication <i>%s</i></h3>" % (title1, title2, pub1[PUB_TITLE])
-				print "<p>Merging titles causes the title names to be commonized, AND causes"
-				print "that new title to show up in the publications those titles point to."
-				print "If you merge two titles that appear in the same publication, you will"
-				print "cause that title to show up twice in that pub. This is probably not what you want."
-				print "<p>If you are trying to remove a duplicate title from a publication, edit"
-				print "that publication, and click on <b>Remove Titles From This Pub</b>."
-				print "Then select the title you wish to remove."
-				print '</div>'
-				return
+				message = """Records %s and %s both appear in the publication <i>%s</i>.
+                                        Merging two titles that appear in the same publication would cause
+                                        the remaining title to appear twice in the publication, which is not allowed.
+                                        If you are trying to remove a duplicate title from a publication, edit
+                                        that publication, click on <b>Remove Titles From This Pub</b>, then select
+                                        the title that you wish to remove""" % (title1, title2, pub1[PUB_TITLE])
+				DisplayError(message)
 
 def checkTitleTypes(list):
         total = len(list)
