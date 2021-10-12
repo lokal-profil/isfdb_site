@@ -373,9 +373,9 @@ if __name__ == '__main__':
 		submitter = GetElementValue(merge, 'Submitter')
 		markIntegrated(db, submission, Record)
 
-	print ISFDBLinkNoName('edit/edittitle.cgi', Record, 'Edit This Title')
-	print ISFDBLinkNoName('title.cgi', Record, 'View This Title')
-	print ISFDBLinkNoName('edit/find_title_dups.cgi', Record, 'Check for Duplicate Titles')
+	print ISFDBLinkNoName('edit/edittitle.cgi', Record, 'Edit This Title', True)
+	print ISFDBLinkNoName('title.cgi', Record, 'View This Title', True)
+	print ISFDBLinkNoName('edit/find_title_dups.cgi', Record, 'Check for Duplicate Titles', True)
 
 	print '<p>'
 

@@ -368,8 +368,8 @@ if __name__ == '__main__':
 			if debug == 0:
         			markIntegrated(db, submission, MergedTitle)
 
-        print ISFDBLinkNoName('edit/edittitle.cgi', MergedTitle, 'Edit This Title')
-        print ISFDBLinkNoName('title.cgi', MergedTitle, 'View This Title')
+        print ISFDBLinkNoName('edit/edittitle.cgi', MergedTitle, 'Edit This Title', True)
+        print ISFDBLinkNoName('title.cgi', MergedTitle, 'View This Title', True)
 	print '<hr>'
 
 	PrintPostMod(0)
