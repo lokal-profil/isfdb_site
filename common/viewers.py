@@ -2465,7 +2465,6 @@ def DisplayMergeTitles(submission_id):
                 KeepId    = 0
                 Records   = {}
                 Parent    = 0
-                print '<table border="2" class="generic_table">'
 		try:
 			Document = doc.getElementsByTagName('TitleMerge')
         		KeepId = int(GetElementValue(Document, 'KeepId'))
@@ -2486,6 +2485,24 @@ def DisplayMergeTitles(submission_id):
                         if Records[title_id].error:
 				InvalidSubmission(submission_id, "Can't load title: %s" % title_id)
 
+		for title_id_1 in Records:
+                        for title_id_2 in Records:
+                                if title_id_1 == title_id_2:
+                                        continue
+                                pubs1 = SQLGetPubsByTitleNoParent(int(title_id_1))
+                                pubs2 = SQLGetPubsByTitleNoParent(int(title_id_2))
+                                for pub1 in pubs1:
+                                        for pub2 in pubs2:
+                                                if pub1[PUB_PUBID] == pub2[PUB_PUBID]:
+                                                        message = """Records %s and %s both appear in the publication <i>%s</i>.
+                                                                Merging two titles that appear in the same publication would cause
+                                                                the remaining title to appear twice in the publication, which is not allowed.
+                                                                If the submission is trying to remove a duplicate title from a publication, edit
+                                                                that publication, click on <b>Remove Titles From This Pub</b>, then select
+                                                                the title that you wish to remove""" % (title_id_1, title_id_1, pub1[PUB_TITLE])
+                                                        InvalidSubmission(submission_id, message)
+
+                print '<table border="2" class="generic_table">'
 		print '<tr>'
 		print '<td class="label"><b>Column</b></td>'
 		print '<td class="label"><b>KeepId %s</b></td>' % ISFDBLinkNoName('title.cgi', KeepId, KeepId, True)
