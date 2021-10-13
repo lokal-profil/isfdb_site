@@ -451,6 +451,7 @@ def normalizeInput(retval):
         replace_dict[chr(147)] = '"'
         replace_dict[chr(148)] = '"'
         replace_dict[chr(160)] = ' '
+        replace_dict[chr(173)] = '' # Soft hyphen
 
         retval = replaceDict(retval, replace_dict)
 
