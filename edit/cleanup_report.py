@@ -36,7 +36,7 @@ class Cleanup():
 
                 if num > 0:
                         if self.note:
-                                print '<h3>%s</h3>' % self.note
+                                print '<div class="bolded_line">%s</div>' % self.note
                         record = result.fetch_row()
                         bgcolor = 1
                         if self.ignore:
@@ -453,19 +453,19 @@ def function6():
 		print '<h2>No invalid directory names found</h2>'
 
 def function7():
-        print 'This report identifies author names with:'
-        print '<ul>'
-        print '<li>Double spaces, leading spaces or trailing spaces'
-        print '<li>Double quotes (should be changed to single quotes)'
-        print """<li>Unrecognized suffixes or other cases where a period is adjacent to a letter.
+        cleanup.note = """This report identifies author names with:
+                <ul>
+                <li>Double spaces, leading spaces or trailing spaces
+                <li>Double quotes (should be changed to single quotes)
+                <li>Unrecognized suffixes or other cases where a period is adjacent to a letter.
                 The list of currently recognized suffixes includes
                 .com, .co.uk, B.A., B.Sc., D.D., D.Sc., Ed.D., Lit.D., Litt.D., M.A., M.B.I.S.,
-                M.B.I.F., M.D., M.E., M.S., Ph.D., P.J.F., R.I., U.S.A."""
-        print '</ul>'
-        print """If you would like to add another suffix to the list of recognized
+                M.B.I.F., M.D., M.E., M.S., Ph.D., P.J.F., R.I., U.S.A.
+                </ul>
+                If you would like to add another suffix to the list of recognized
                 suffixes, please post your request on the Community Portal."""
         
-	query = """select cleanup.cleanup_id, authors.author_id, authors.author_canonical
+	cleanup.query = """select authors.author_id, authors.author_canonical, cleanup.cleanup_id
                    from cleanup, authors
                    where cleanup.record_id = authors.author_id
                    and cleanup.report_type = 7
@@ -496,26 +496,9 @@ def function7():
                    and author_canonical NOT LIKE '%, R.I.%'
                    and author_canonical NOT LIKE '%, U.S.A.%')"""
 
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		count = 1
-		PrintTableColumns(('', 'Author', ''))
-		while record:
-                        cleanup_id = record[0][0]
-                        author_id = record[0][1]
-                        author_name = record[0][2]
-			PrintAuthorRecord(author_id, author_name, bgcolor, count, cleanup_id, 7)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No records found</h2>"
+        cleanup.ignore = 1
+        cleanup.none = 'No records found'
+        cleanup.print_author_table()
 
 def function8():
 	query = """select t.title_id, t.title_title
@@ -2396,7 +2379,7 @@ def function57():
 		print '<h2>No invalid SFE3 image links found</h2>'
 
 def function58():
-	query = """select a.author_id, a.author_canonical
+	cleanup.query = """select a.author_id, a.author_canonical
                 from authors a, cleanup c
                 where a.author_language is null
                 and (
@@ -2410,28 +2393,11 @@ def function58():
                 and c.report_type=58
                 order by a.author_lastname"""
 
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		count = 1
-		PrintTableColumns(('', 'Author',))
-		while record:
-                        author_id = record[0][0]
-                        author_name = record[0][1]
-			PrintAuthorRecord(author_id, author_name, bgcolor, count)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No matching records found</h2>"
+        cleanup.none = 'No matching records found'
+        cleanup.print_author_table()
 
 def function59():
-	query = """select a.author_id, a.author_canonical
+	cleanup.query = """select a.author_id, a.author_canonical
                 from authors a, cleanup c
                 where a.author_language is null
                 and (
@@ -2445,28 +2411,11 @@ def function59():
                 and c.report_type=59
                 order by a.author_lastname"""
 
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		count = 1
-		PrintTableColumns(('', 'Author',))
-		while record:
-                        author_id = record[0][0]
-                        author_name = record[0][1]
-			PrintAuthorRecord(author_id, author_name, bgcolor, count)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No matching records found</h2>"
+        cleanup.none = 'No matching records found'
+        cleanup.print_author_table()
 
 def function60():
-	query = """select a.author_id, a.author_canonical
+	cleanup.query = """select a.author_id, a.author_canonical
                 from authors a, cleanup c
                 where a.author_language is null
                 and (
@@ -2480,28 +2429,11 @@ def function60():
                 and c.report_type=60
                 order by a.author_lastname"""
 
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		count = 1
-		PrintTableColumns(('', 'Author',))
-		while record:
-                        author_id = record[0][0]
-                        author_name = record[0][1]
-			PrintAuthorRecord(author_id, author_name, bgcolor, count)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No matching records found</h2>"
+        cleanup.none = 'No matching records found'
+        cleanup.print_author_table()
 
 def function61():
-	query = """select a.author_id, a.author_canonical
+	cleanup.query = """select a.author_id, a.author_canonical
                 from authors a, cleanup c
                 where a.author_language is null
                 and (
@@ -2515,25 +2447,8 @@ def function61():
                 and c.report_type=61
                 order by a.author_lastname"""
 
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		count = 1
-		PrintTableColumns(('', 'Author',))
-		while record:
-                        author_id = record[0][0]
-                        author_name = record[0][1]
-			PrintAuthorRecord(author_id, author_name, bgcolor, count)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No matching records found</h2>"
+        cleanup.none = 'No matching records found'
+        cleanup.print_author_table()
 
 def function62():
         query = """select t.title_id,t.title_title
@@ -2706,29 +2621,13 @@ def function67():
 
 def function68():
         pattern_match = badUnicodePatternMatch('author_canonical')
-        query = """select author_id, author_canonical
+        cleanup.query = """select author_id, author_canonical
                 from authors a, cleanup c where (%s)
                 and a.author_id=c.record_id and c.report_type=68
                 order by a.author_lastname""" % pattern_match
-	db.query(query)
-	result = db.store_result()
 
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Author'))
-		while record:
-                        id = record[0][0]
-                        name = record[0][1]
-                        PrintAuthorRecord(id, name, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No Authors with Invalid Unicode Characters Found</h2>"
-	return
+        cleanup.none = 'No Authors with Invalid Unicode Characters Found'
+        cleanup.print_author_table()
 
 def function69():
         pattern_match = badUnicodePatternMatch('title_title')
@@ -2975,31 +2874,15 @@ def function77():
 
 def function78():
         pattern_match = suspectUnicodePatternMatch('author_canonical')
-        query = """select author_id, author_canonical, c.cleanup_id
+        cleanup.query = """select author_id, author_canonical, c.cleanup_id
                 from authors a, cleanup c where (%s)
                 and a.author_id=c.record_id and c.report_type=78
                 and c.resolved IS NULL
                 order by a.author_canonical""" % pattern_match
-	db.query(query)
-	result = db.store_result()
+        cleanup.ignore = 1
+        cleanup.none = 'No Authors with Suspect Unicode Characters Found'
+        cleanup.print_author_table()
 
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Author', 'Ignore'))
-		while record:
-                        id = record[0][0]
-                        name = record[0][1]
-                        cleanup_id = record[0][2]
-                        PrintAuthorRecord(id, name, bgcolor, count, cleanup_id, 78)
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No Authors with Suspect Unicode Characters Found</h2>"
-	return
 
 def function79():
         query = """select p.pub_id, p.pub_title, c.cleanup_id from pubs p, cleanup c
