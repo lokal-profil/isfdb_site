@@ -118,17 +118,19 @@ class Cleanup():
                 else:
                         print '<h2>%s</h2>' % self.none
 
-        def PrintAuthorRecord(self, author_id, author_name, bgcolor, count, cleanup_id = 0, report_id = 0):
+        def PrintAuthorRecord(self, author_id, author_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
                 if bgcolor:
                         print '<tr align=left class="table1">'
                 else:
                         print '<tr align=left class="table2">'
 
                 print '<td>%d</td>' % int(count)
-                print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_name)
+                print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id, author_name)
                 if cleanup_id and user.moderator:
-                        print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                                %s this author</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), 'Ignore')
+                        message = {0: 'Resolve', 1: 'Ignore'}
+                        print '<td>%s</td>' % ISFDBLinkNoName('mod/resolve_cleanup.cgi',
+                                                              '%d+%d+%d' % (int(cleanup_id), int(mode), int(report_id)),
+                                                              '%s this author' % message[mode])
                 print '</tr>'
 
 class ExcludedTitleTypes():
