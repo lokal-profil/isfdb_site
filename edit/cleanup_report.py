@@ -70,7 +70,7 @@ class Cleanup():
                 self.print_generic_table()
 
         def print_author_table(self):
-                self.print_record_function = PrintAuthorRecord
+                self.print_record_function = self.PrintAuthorRecord
                 self.record_name = 'Author'
                 self.print_generic_table()
 
@@ -117,6 +117,19 @@ class Cleanup():
                         print '</table>'
                 else:
                         print '<h2>%s</h2>' % self.none
+
+        def PrintAuthorRecord(self, author_id, author_name, bgcolor, count, cleanup_id = 0, report_id = 0):
+                if bgcolor:
+                        print '<tr align=left class="table1">'
+                else:
+                        print '<tr align=left class="table2">'
+
+                print '<td>%d</td>' % int(count)
+                print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_name)
+                if cleanup_id and user.moderator:
+                        print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
+                                %s this author</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), 'Ignore')
+                print '</tr>'
 
 class ExcludedTitleTypes():
         def __init__(self):
@@ -3876,66 +3889,32 @@ def function93():
 	return
 
 def function94():
-	query = """select a.author_id, a.author_canonical from authors a, cleanup c
+	cleanup.query = """select a.author_id, a.author_canonical
+                 from authors a, cleanup c
                  where
                  not exists (select 1 from canonical_author ca
                     where ca.author_id = a.author_id)
                  and not exists (select 1 from pub_authors pa
                     where pa.author_id = a.author_id)
-                 and a.author_id = c.record_id and c.report_type=94
-                 order by a.author_lastname
-                 """
-
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		count = 1
-		PrintTableColumns(('', 'Author'))
-		while record:
-                        author_id = record[0][0]
-                        author_name = record[0][1]
-			PrintAuthorRecord(author_id, author_name, bgcolor, count)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No records found</h2>"
+                 and a.author_id = c.record_id
+                 and c.report_type=94
+                 order by a.author_lastname"""
+        cleanup.none = 'No records found'
+        cleanup.print_author_table()
 
 def function95():
-	query = """select a.author_id, a.author_canonical from authors a, cleanup c
+	cleanup.query = """select a.author_id, a.author_canonical
+                 from authors a, cleanup c
                  where
                  not exists (select 1 from canonical_author ca
                     where ca.author_id = a.author_id)
                  and exists (select 1 from pub_authors pa
                     where pa.author_id = a.author_id)
-                 and a.author_id = c.record_id and c.report_type=95
-                 order by a.author_lastname
-                 """
-
-	db.query(query)
-	result = db.store_result()
-	num = result.num_rows()
-
-	if num > 0:
-		record = result.fetch_row()
-		bgcolor = 1
-		count = 1
-		PrintTableColumns(('', 'Author'))
-		while record:
-                        author_id = record[0][0]
-                        author_name = record[0][1]
-			PrintAuthorRecord(author_id, author_name, bgcolor, count)
-			bgcolor ^= 1
-			count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No records found</h2>"
+                 and a.author_id = c.record_id
+                 and c.report_type=95
+                 order by a.author_lastname"""
+        cleanup.none = 'No records found'
+        cleanup.print_author_table()
 
 def function96():
         query = """select t.title_id, t.title_title
@@ -5081,25 +5060,9 @@ def transliteratedAuthors(report_id):
         transliteratedAuthorsDisplay(query, language)
 
 def transliteratedAuthorsDisplay(query, language):
-	db.query(query)
-	result = db.store_result()
-
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Author'))
-		while record:
-                        author_id = record[0][0]
-                        author_name = record[0][1]
-                        PrintAuthorRecord(author_id, author_name, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-                print "<h2>No %s Authors without Transliterated Names.</h2>" % language
-	return
+        cleanup.query = query
+        cleanup.none = 'No %s Authors without Transliterated Names' % language
+        cleanup.print_author_table()
 
 def function183():
         nonLatinAuthors(183)
@@ -5328,34 +5291,15 @@ def function191():
 
 def function192():
         # Authors without a Working Language
-        print """<h2>This report is currently limited to authors whose names
-                     start with the letters W-Z</h2>"""
-        query = """select a.author_id, a.author_canonical
+        cleanup.note = 'This report is currently limited to authors whose names start with the letters W-Z'
+        cleanup.query = """select a.author_id, a.author_canonical
                    from authors a, cleanup c
                    where a.author_language is null
                    and c.record_id = a.author_id
                    and c.report_type = 192
                    order by a.author_lastname, a.author_canonical"""
-
-	db.query(query)
-	result = db.store_result()
-
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Author'))
-		while record:
-                        author_id = record[0][0]
-                        author_name = record[0][1]
-                        PrintAuthorRecord(author_id, author_name, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No eligible authors without a working language.</h2>"
-	return
+        cleanup.none = 'No eligible authors without a working language'
+        cleanup.print_author_table()
 
 def function193():
         # Multilingual Publications
@@ -7158,20 +7102,6 @@ def PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id = 0, repo
                 message = {0: 'Resolve', 1: 'Ignore'}
                 print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
                         %s this title</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
-	print '</tr>'
-
-def PrintAuthorRecord(author_id, author_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
-        if bgcolor:
-                print '<tr align=left class="table1">'
-        else:
-                print '<tr align=left class="table2">'
-
-        print '<td>%d</td>' % int(count)
-        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_name)
-        if cleanup_id and user.moderator:
-                message = {0: 'Resolve', 1: 'Ignore'}
-                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                        %s this author</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
 	print '</tr>'
 
 def PrintPublisherRecord(pub_id, pub_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
