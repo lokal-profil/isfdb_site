@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2019   Ahasuerus 
+#     (C) COPYRIGHT 2014-2021   Ahasuerus 
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,7 +17,7 @@ from library import *
 from sfe3 import Sfe3
 
 if __name__ == '__main__':
-	PrintPreSearch('SFE3 Author Articles without a matching SFE3 URL in ISFDB Author Records')
+	PrintPreSearch('SFE Author Articles without a matching SFE URL in ISFDB Author Records')
         PrintNavBar('edit/sfe3_authors.cgi', 0)
 
         sfe3 = Sfe3()

@@ -161,7 +161,7 @@ def CheckImage(value, XmlData):
         if not valid_domain:
                 warning = 'Image hosted by a site which we do not have permission to link to'
         if 'sf-encyclopedia.uk' in value and '/clute/' not in value and '/langford/' not in value and '/robinson/' not in value:
-                warning += 'For SFE3-hosted images, only links to /clute/, /langford/ and /robinson/ sub-directories are allowed.'
+                warning += 'For SFE-hosted images, only links to /clute/, /langford/ and /robinson/ sub-directories are allowed.'
         
         # For Amazon images, only cropping ("_CR") suffixes are allowed
         if (not warning

@@ -2363,7 +2363,7 @@ def function56():
 		print "<h2>No Publications with HTML in Titles.</h2>"
 
 def function57():
-        print '<h3>For SFE3-hosted images, only links to /clute/, /langford/ and /robinson/ sub-directories are allowed.</h3>'
+        print '<h3>For SFE-hosted images, only links to /clute/, /langford/ and /robinson/ sub-directories are allowed.</h3>'
         
         query = """select pub_id, pub_title from pubs, cleanup c
                    where c.report_type=57
@@ -2391,7 +2391,7 @@ def function57():
 			record = result.fetch_row()
 		print '</table>'
 	else:
-		print '<h2>No invalid SFE3 image links found</h2>'
+		print '<h2>No invalid SFE image links found</h2>'
 
 def function58():
 	cleanup.query = """select a.author_id, a.author_canonical

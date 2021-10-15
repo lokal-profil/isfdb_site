@@ -23,7 +23,7 @@ if __name__ == '__main__':
 	user.load()
 	user.load_moderator_flag()
 	if not user.moderator:
-                SESSION.DisplayError('Only Moderators Can Resolve SFE3 URLs')
+                SESSION.DisplayError('Only Moderators Can Resolve SFE URLs')
 
         update = "update sfe3_authors set resolved=1 where url='%s'" % db.escape_string(url)
 	db.query(update)

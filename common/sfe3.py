@@ -25,9 +25,9 @@ class Sfe3:
                 self.urls_to_delete_from_sfe3_authors = []
                 #
                 self.host = 'sf-encyclopedia.com'
-                self.protocol = 'http'
-                self.base_category_url = '%s://www.%s/category/authors/' % (self.protocol, self.host)
-                self.categories = ['art', 'author', 'critic', 'editor', 'house-name', 'people']
+                self.protocol = 'https'
+                self.base_category_url = '%s://www.%s/category/' % (self.protocol, self.host)
+                self.categories = ['art', 'author', 'critic', 'editor', 'house name', 'people']
                 self.sleep_seconds = 1
                 self.user = None
 
@@ -93,7 +93,7 @@ class Sfe3:
                         delete = "delete from sfe3_authors where url = '%s'" % db.escape_string(url)
                         db.query(delete)
                         count += 1
-                print 'Removed %d newly entered SFE3 linkes' % count
+                print 'Removed %d newly entered SFE linkes' % count
 
         def download_URLs_from_SFE3(self):
                 fragment_separator = "a href='/entry/"
@@ -101,7 +101,10 @@ class Sfe3:
                 author_separator2 = "'>"
                 for category in self.categories:
                         category_url = self.base_category_url + category
-                        page_contents = urllib2.urlopen(category_url).read()
+                        try:
+                                page_contents = urllib2.urlopen(category_url).read()
+                        except:
+                                continue
                         fragments = page_contents.split(fragment_separator)
                         count = 0
                         for fragment in fragments:
@@ -146,10 +149,10 @@ class Sfe3:
                 self.reconcile_newly_entered_URLs()
                 self.print_header()
                 if not self.unresolved_URLs:
-                        print '<h2>No unresolved SFE3 author Web pages found found</h2>'
+                        print '<h2>No unresolved SFE author Web pages found found</h2>'
                         return
                 self.load_moderator_flag()
-                self.print_table_columns(('#', 'SFE3 URL', 'SFE3 Author Name', 'Possible ISFDB Name', 'Ignore'))
+                self.print_table_columns(('#', 'SFE URL', 'SFE Author Name', 'Possible ISFDB Name', 'Ignore'))
                 self.bgcolor = 1
                 self.count = 1
                 for unresolved_url in sorted(self.unresolved_URLs.keys(), key=lambda x: x.lower()):
@@ -166,11 +169,11 @@ class Sfe3:
 
         def print_header(self):
                 print """<h3>This cleanup report lists all  
-                        <a href="%s://sf-encyclopedia.com/category/authors">SFE3 author/editor/etc articles</a>
-                        without a matching author URL in the ISFDB database. Note that some SFE3 authors may not
+                        <a href="%s://sf-encyclopedia.com/category/everyone">SFE author/editor/etc articles</a>
+                        without a matching author URL in the ISFDB database. Note that some SFE authors may not
                         be eligible on the ISFDB side, e.g. if their only SF works are comics.
-                        Also, the SFE3 spelling or canonical name may not match what's used in
-                        the ISFDB database. For these reasons, this report lets moderators ignore SFE3 author
+                        Also, the SFE spelling or canonical name may not match what's used in
+                        the ISFDB database. For these reasons, this report lets moderators ignore SFE author
                         URLs.</h3>""" % self.protocol
 
         def print_table_columns(self, columns):

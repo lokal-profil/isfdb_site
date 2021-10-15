@@ -101,7 +101,7 @@ if __name__ == '__main__':
         print '<h3 class="centered">Reconciliation with Other Sources</h3>'
         sfe3 = Sfe3()
         print ISFDBLink('edit/sfe3_authors.cgi', '',
-                        '<button type="button">SFE3 Author Articles without Matching ISFDB Author Records (%d)</button>' % sfe3.count_of_unresolved())
+                        '<button type="button">SFE Author Articles without Matching ISFDB Author Records (%d)</button>' % sfe3.count_of_unresolved())
         print '<p>'
         print '<hr>'
 

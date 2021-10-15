@@ -67,7 +67,7 @@ def reportsDict():
         reports[54] = ("Container Titles in Publications with no Contents")
         reports[55] = ("Title records with HTML in Titles")
         reports[56] = ("Publications with HTML in Titles")
-        reports[57] = ("Invalid SFE3 Image Links")
+        reports[57] = ("Invalid SFE Image Links")
         reports[58] = ("Suspected Dutch Authors without a Language Code")
         reports[59] = ("Suspected French Authors without a Language Code")
         reports[60] = ("Suspected German Authors without a Language Code")

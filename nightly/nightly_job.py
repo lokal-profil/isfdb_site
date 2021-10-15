@@ -651,7 +651,7 @@ def nightly_cleanup_reports():
                 	and t2.title_ttype in ('SHORTFICTION','POEM','SERIAL')))"""
         standardReport(query, 54)
 
-        #   Report 57: Invalid SFE3 image links
+        #   Report 57: Invalid SFE image links
         query = """select pub_id from pubs where
                    pub_frontimage like '%sf-encyclopedia.uk%'
                    and pub_frontimage not like '%/clute/%'
