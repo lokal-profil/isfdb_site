@@ -79,6 +79,21 @@ class Cleanup():
                 self.record_name = 'Award'
                 self.print_generic_table()
 
+        def print_publisher_table(self):
+                self.print_record_function = PrintPublisherRecord
+                self.record_name = 'Publisher'
+                self.print_generic_table()
+
+        def print_pub_series_table(self):
+                self.print_record_function = PrintPubSeriesRecord
+                self.record_name = 'Publication Series'
+                self.print_generic_table()
+
+        def print_series_table(self):
+                self.print_record_function = PrintSeriesRecord
+                self.record_name = 'Series'
+                self.print_generic_table()
+
         def invalid_title_types(self, pub_type, excluded_title_types):
                 excluded = ExcludedTitleTypes()
                 excluded.report_id = self.report_id
@@ -2557,145 +2572,65 @@ def function64():
         print "</table>"
 
 def function65():
-        pattern_match = badUnicodePatternMatch('publisher_name')
-        query = """select publisher_id, publisher_name
+        pattern_match = ISFDBBadUnicodePatternMatch('publisher_name')
+        cleanup.query = """select publisher_id, publisher_name
                 from publishers p, cleanup c where (%s)
-                and p.publisher_id=c.record_id and c.report_type=65
+                and p.publisher_id=c.record_id
+                and c.report_type=65
                 order by p.publisher_name""" % pattern_match
-	db.query(query)
-	result = db.store_result()
 
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Publisher'))
-		while record:
-                        id = record[0][0]
-                        name = record[0][1]
-                        PrintPublisherRecord(id, name, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No Publishers with Invalid Unicode Characters Found</h2>"
-	return
+        cleanup.none = 'No Publishers with Invalid Unicode Characters Found'
+        cleanup.print_publisher_table()
 
 def function66():
-        pattern_match = badUnicodePatternMatch('pub_series_name')
-        query = """select pub_series_id, pub_series_name
+        pattern_match = ISFDBBadUnicodePatternMatch('pub_series_name')
+        cleanup.query = """select pub_series_id, pub_series_name
                 from pub_series p, cleanup c where (%s)
-                and p.pub_series_id=c.record_id and c.report_type=66
+                and p.pub_series_id=c.record_id
+                and c.report_type=66
                 order by p.pub_series_name""" % pattern_match
-	db.query(query)
-	result = db.store_result()
-
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Publication Series'))
-		while record:
-                        id = record[0][0]
-                        title = record[0][1]
-                        PrintPubSeriesRecord(id, title, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No Publication Series with Invalid Unicode Characters Found</h2>"
-	return
+        cleanup.none = 'No Publication Series with Invalid Unicode Characters Found'
+        cleanup.print_pub_series_table()
 
 def function67():
-        pattern_match = badUnicodePatternMatch('series_title')
-        query = """select series_id, series_title
+        pattern_match = ISFDBBadUnicodePatternMatch('series_title')
+        cleanup.query = """select series_id, series_title
                 from series s, cleanup c where (%s)
-                and s.series_id=c.record_id and c.report_type=67
+                and s.series_id=c.record_id
+                and c.report_type=67
                 order by s.series_title""" % pattern_match
-	db.query(query)
-	result = db.store_result()
-
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Series'))
-		while record:
-                        id = record[0][0]
-                        name = record[0][1]
-                        PrintSeriesRecord(id, name, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No Series with Invalid Unicode Characters Found</h2>"
-	return
+        cleanup.none = 'No Series with Invalid Unicode Characters Found'
+        cleanup.print_series_table()
 
 def function68():
-        pattern_match = badUnicodePatternMatch('author_canonical')
+        pattern_match = ISFDBBadUnicodePatternMatch('author_canonical')
         cleanup.query = """select author_id, author_canonical
                 from authors a, cleanup c where (%s)
-                and a.author_id=c.record_id and c.report_type=68
+                and a.author_id=c.record_id
+                and c.report_type=68
                 order by a.author_lastname""" % pattern_match
-
         cleanup.none = 'No Authors with Invalid Unicode Characters Found'
         cleanup.print_author_table()
 
 def function69():
-        pattern_match = badUnicodePatternMatch('title_title')
-        query = """select title_id, title_title
+        pattern_match = ISFDBBadUnicodePatternMatch('title_title')
+        cleanup.query = """select title_id, title_title
                 from titles t, cleanup c where (%s)
-                and t.title_id=c.record_id and c.report_type=69
+                and t.title_id=c.record_id
+                and c.report_type=69
                 order by t.title_title""" % pattern_match
-	db.query(query)
-	result = db.store_result()
-
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Title'))
-		while record:
-                        id = record[0][0]
-                        title = record[0][1]
-                        PrintTitleRecord(id, title, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No Titles with Invalid Unicode Characters Found</h2>"
-	return
+        cleanup.none = 'No Titles with Invalid Unicode Characters Found'
+        cleanup.print_title_table()
 
 def function70():
-        pattern_match = badUnicodePatternMatch('pub_title')
-        query = """select pub_id, pub_title
+        pattern_match = ISFDBBadUnicodePatternMatch('pub_title')
+        cleanup.query = """select pub_id, pub_title
                 from pubs p, cleanup c where (%s)
-                and p.pub_id=c.record_id and c.report_type=70
+                and p.pub_id=c.record_id
+                and c.report_type=70
                 order by p.pub_title""" % pattern_match
-	db.query(query)
-	result = db.store_result()
-
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Publication'))
-		while record:
-                        id = record[0][0]
-                        title = record[0][1]
-                        PrintPublicationRecord(id, title, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print "</table>"
-	else:
-		print "<h2>No Publications with Invalid Unicode Characters Found</h2>"
-	return
-
+        cleanup.none = 'No Publications with Invalid Unicode Characters Found'
+        cleanup.print_pub_table()
 
 def function71():
         print """<h3>This report lists all 9999-00-00 titles and titles expected

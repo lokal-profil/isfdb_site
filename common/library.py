@@ -458,7 +458,7 @@ def normalizeInput(retval):
         # Next replace characters followed by invalid Unicode characters,
         # including "combining diacritics", with Latin-1 equivalents where
         # available, otherwise decimally HTML-encoded Unicode equivalents
-        replace_dict = unicode_translation()
+        replace_dict = ISFDBUnicodeTranslation()
         retval = replaceDict(retval, replace_dict)
 	return retval
 
@@ -1197,7 +1197,7 @@ def FormatImage(value, height = 250):
                         pass
         return value
 
-def unicode_translation():
+def ISFDBUnicodeTranslation():
 ##      Possible candidates:
 ##        '&#699;' : "'",      # Modifier letter turned comma
 ##        '&#700;' : "'",      # Modified letter apostrophe
@@ -1458,8 +1458,9 @@ def unicode_translation():
                    }
         return replace
 
-def badUnicodePatternMatch(field_name):
-        unicode_map = unicode_translation()
+def ISFDBBadUnicodePatternMatch(field_name):
+        unicode_map = ISFDBUnicodeTranslation()
+        # Assumes unicode_map will have at least one entry
         pattern_match = ''
         for key in unicode_map:
                 if pattern_match:

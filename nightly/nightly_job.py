@@ -2054,15 +2054,9 @@ def emptyContainers(report_id, container_types):
         elapsed.print_elapsed(report_id)
 
 def badUnicodeReport(table, record_title, record_id, report_number):
-        unicode_map = unicode_translation()
-        # Assumes unicode_map will have at least one entry
-        pattern_match = ''
-        for key in unicode_map:
-                if pattern_match:
-                    pattern_match += ' or '
-                pattern_match += "%s like binary '%%%s%%'" % (record_title, key)
-        pattern_match = "%s like '%%&#%%' and (%s)" % (record_title, pattern_match)
-        query = """select %s from %s where %s""" % (record_id, table, pattern_match)
+        pattern_match = ISFDBBadUnicodePatternMatch(record_title)
+        where_clause = "%s like '%%&#%%' and (%s)" % (record_title, pattern_match)
+        query = """select %s from %s where %s""" % (record_id, table, where_clause)
         standardReport(query, report_number)
 
 
