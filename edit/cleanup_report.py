@@ -4001,8 +4001,9 @@ def function100():
                 or p.pub_price like concat('%',CHAR(0x80),'%',',','%')
                 or p.pub_price like '%CDN%'
                 or p.pub_price like '%EUR%'
-                or (p.pub_price like '%$%,%' and p.pub_price not like '%$%.%')
-                or (p.pub_price like concat('%',CHAR(0xA3),'%',',','%') and p.pub_price not like concat('%',CHAR(0xA3),'%',".",'%'))
+                or (p.pub_price like '$%,%' and p.pub_price not like '$%.%')
+                or (p.pub_price like 'C$%,%' and p.pub_price not like 'C$%.%')
+                or (p.pub_price like concat(CHAR(0xA3),'%',',','%') and p.pub_price not like concat(CHAR(0xA3),'%',".",'%'))
                 or p.pub_price regexp '^[[:digit:]]{1,}[,.]{0,}[[:digit:]]{0,}$'
                 or p.pub_price regexp '[.]{1}[[:digit:]]{3,}'
                 or (p.pub_price regexp '^[[:digit:]]{1,}' and p.pub_price not like '%/%')

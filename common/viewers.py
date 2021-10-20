@@ -64,8 +64,8 @@ def CheckPrice(value):
                 warning = 'Euro sign must be at the beginning of the price value.'
         if EURO_SIGN in value and ',' in value:
                 warning = 'Euro prices must not include commas.'
-        for currency_sign in ('$', POUND_SIGN):
-                if currency_sign in value and ',' in value and '.' not in value:
+        for currency_sign in ('$', 'C$', POUND_SIGN):
+                if value.startswith(currency_sign) and ',' in value and '.' not in value:
                         warning = 'For %s prices, a period must be used as the decimal separator.' % currency_sign
                         break
         if value.lower().startswith('http'):
