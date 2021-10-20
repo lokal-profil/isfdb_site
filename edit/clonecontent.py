@@ -51,7 +51,7 @@ def printpubrecord(record):
 	printfield("Catalog ID", "pub_catalog", help, pub.pub_catalog, 1)
 	printfield("Price", "pub_price", help, pub.pub_price, 1)
 	printfield("Image URL", "pub_image", help, pub.pub_image, 1)
-
+        printWebPages(pub.pub_webpages, 'pub', help, '', 1)
         printtextarea('Pub Note', 'pub_note', help, pub.pub_note, readonly=True)
 	printExternalIDs(pub.identifiers, 'External ID', 'external_id', help, 1)
 

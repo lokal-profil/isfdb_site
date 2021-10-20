@@ -886,11 +886,11 @@ def createaddbutton(field_name):
         button_span += ' class="addbutton" type="button" value="+" tabindex="1"></span>'
         return button_span
 
-def printWebPages(webpages, web_page_type, help, display_name = ''):
+def printWebPages(webpages, web_page_type, help, display_name = '', readonly = 0):
         if display_name:
-                printmultiple(webpages, "%s Web Page" % display_name, "%s_webpages" % web_page_type, help)
+                printmultiple(webpages, "%s Web Page" % display_name, "%s_webpages" % web_page_type, help, readonly)
         else:
-                printmultiple(webpages, "Web Page", "%s_webpages" % web_page_type, help)
+                printmultiple(webpages, "Web Page", "%s_webpages" % web_page_type, help, readonly)
 
 def printHelpBox(record_type, helplink, new_flag = 0):
 	print '<div id="HelpBox">'
