@@ -74,8 +74,10 @@ def CheckPrice(value):
                 warning = 'Prices should contain a currency symbol or abbreviation.'
         if re.search('^[0-9]{1,}', value) and '/' not in value:
                 warning = 'Prices cannot start with a digit. The only exception is pre-decimilisation UK prices which must contain a slash.'
-        if re.search('\.[0-9]{3,}$', value):
-                warning = '4 or more consecutive digits must be separated with a comma, not a period.'
+        if re.search('\.[0-9]{3,}$', value) and not value.startswith('BD '):
+                warning = """4 or more consecutive digits must be separated with a comma,
+                             not a period. The only exception is currencies which allow
+                             3 digits after the decimal separator, e.g. BD (Bahraini dinars)."""
         if re.search('[0-9]{4,}$', value):
                 warning = '4 or more consecutive digits must be separated with a comma.'
         if 'jp' in value.lower():
