@@ -311,6 +311,7 @@ def reportsDict():
         reports[298] = ("Title-Based Awards with a Different Stored Author Name")
         reports[299] = ("Publications with Swedish Titles with no Libris XL ID")
         reports[300] = ("Publications with Swedish Titles with a Libris ID and no Libris XL ID")
+        reports[301] = ("Reviews Whose Language Doesn't Match the Language of the Reviewed Title")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
@@ -337,7 +338,7 @@ def reportsDict():
                                             212, 213, 214, 215, 218, 219, 220, 221, 222,
                                             223, 224, 225, 237, 226, 229, 230, 234, 254,
                                             255, 256, 273, 274, 296)), )
-        sections.append(('Reviews', (40, 41, 42)), )
+        sections.append(('Reviews', (40, 41, 42, 301)), )
         sections.append(('Publishers', (43, 44, 65, 73)), )
         sections.append(('Publication Series', (66, 77, 98, 189)), )
         sections.append(('Author Languages', (192, 11, 58, 59, 60, 61, 168, 183, 184, 185,

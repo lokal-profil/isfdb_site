@@ -6732,6 +6732,26 @@ def function300():
         cleanup.ignore = 1
         cleanup.print_pub_table()
 
+def function301():
+        cleanup.query = """select r.title_id, r.title_title, c.cleanup_id
+                from titles r, title_relationships tr, titles t, cleanup c
+                where r.title_ttype = 'REVIEW'
+                and r.title_id = tr.review_id
+                and tr.title_id = t.title_id
+                and r.title_language != t.title_language
+                and c.record_id = r.title_id
+                and c.report_type = 301
+                and c.resolved IS NULL
+                order by r.title_title"""
+        cleanup.note = """Reviews are typically written in the same language as the title
+                        that they review. As such, they should be linked to the correct translated
+                        variant title. If a review record reviews a title written in a different
+                        language, a Note should be added to the review record. It should then be
+                        'Ignored' in the body of the report below."""
+        cleanup.none = "No Reviews Whose Language Doesn't Match the Language of the Reviewed Title"
+        cleanup.ignore = 1
+        cleanup.print_title_table()
+
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:

@@ -1990,6 +1990,15 @@ def nightly_cleanup_reports():
             and it.identifier_type_name = 'Libris XL')"""
         standardReport(query, 300)
 
+        #   Report 301: Reviews Whose Language Doesn't Match the Language of the Reviewed Title
+        query = """select r.title_id
+                   from titles r, title_relationships tr, titles t
+                   where r.title_ttype = 'REVIEW'
+                   and r.title_id = tr.review_id
+                   and tr.title_id = t.title_id
+                   and r.title_language != t.title_language"""
+        standardReport(query, 301)
+
 
 def requiredLowerCase():
         clause = ''
