@@ -29,11 +29,11 @@ if __name__ == '__main__':
         count = 0
         for pub in pubs:
                 if pub[PUB_IMAGE]:
-                        print ISFDBLink("pl.cgi", pub[PUB_PUBID], '<img src="%s" alt="Coverart" class="scans">' % pub[PUB_IMAGE].split("|")[0])
+                        print ISFDBLinkNoName("pl.cgi", pub[PUB_PUBID], '<img src="%s" alt="Coverart" class="scans">' % pub[PUB_IMAGE].split("|")[0])
                         count += 1
         if not count:
                 print '<h3>No covers for %s</h3>' % title
 
-        print '<p>%s' % ISFDBLink('title.cgi', title_id, '<b>Back to the Title page for %s</b>' % title, True)
+        print '<p>%s' % ISFDBLinkNoName('title.cgi', title_id, '<b>Back to the Title page for %s</b>' % title, True)
 
 	PrintTrailer('titlecovers', title_id, title_id)

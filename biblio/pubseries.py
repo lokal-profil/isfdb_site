@@ -74,7 +74,7 @@ if __name__ == '__main__':
                 count = 0
                 for pub in pubs:
                         if pub[PUB_IMAGE]:
-                                print ISFDBLink("pl.cgi", pub[PUB_PUBID],
+                                print ISFDBLinkNoName("pl.cgi", pub[PUB_PUBID],
                                                 '<img src="%s" alt="Coverart" class="scans">' % pub[PUB_IMAGE].split("|")[0])
                                 count += 1
                 if not count:
