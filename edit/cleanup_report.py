@@ -6743,11 +6743,12 @@ def function301():
                 and c.report_type = 301
                 and c.resolved IS NULL
                 order by r.title_title"""
-        cleanup.note = """Reviews are typically written in the same language as the title
-                        that they review. As such, they should be linked to the correct translated
-                        variant title. If a review record reviews a title written in a different
-                        language, a Note should be added to the review record. It should then be
-                        'Ignored' in the body of the report below."""
+        cleanup.note = """REVIEWs are typically written in the same language as the title
+                        that they review and should be linked to the correct translated
+                        variant title. If a REVIEW title reviews a title written in a
+                        different language, a Note should be added to the review record.
+                        Moderators should then 'Ignore' the REVIEW in the body of the
+                        report below."""
         cleanup.none = "No Reviews Whose Language Doesn't Match the Language of the Reviewed Title"
         cleanup.ignore = 1
         cleanup.print_title_table()
