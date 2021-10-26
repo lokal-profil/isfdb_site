@@ -483,48 +483,53 @@ def function6():
 		print '<h2>No invalid directory names found</h2>'
 
 def function7():
+	suffixes = []
+	displayed_suffixes = ''
+	for suffix in RECOGNIZED_SUFFIXES:
+                if suffix.count('.') < 2:
+                        continue
+                period_letter = 0
+                for fragment in suffix.split('.'):
+                        if not fragment.startswith(' '):
+                                period_letter = 1
+                                break
+                if period_letter:
+                        suffixes.append(suffix)
+                        displayed_suffixes += ' %s,' % suffix
+
         cleanup.note = """This report identifies author names with:
                 <ul>
                 <li>Double spaces, leading spaces or trailing spaces
                 <li>Double quotes (should be changed to single quotes)
-                <li>Unrecognized suffixes or other cases where a period is adjacent to a letter.
-                The list of currently recognized suffixes includes
-                .com, .co.uk, B.A., B.Sc., D.D., D.Sc., Ed.D., Lit.D., Litt.D., M.A., M.B.I.S.,
-                M.B.I.F., M.D., M.E., M.S., Ph.D., P.J.F., R.I., U.S.A.
-                </ul>
-                If you would like to add another suffix to the list of recognized
-                suffixes, please post your request on the Community Portal."""
+                <li>Names with a period before a letter except for .com and .co.uk
+                <li>Suffixes which are not on the following list: %s.
+                If you would like to propose adding another suffix to the list, please post your request on the Community Portal.
+                </ul>""" % displayed_suffixes[:-1]
         
-	cleanup.query = """select authors.author_id, authors.author_canonical, cleanup.cleanup_id
-                   from cleanup, authors
-                   where cleanup.record_id = authors.author_id
-                   and cleanup.report_type = 7
-                   and cleanup.resolved IS NULL
-                   and authors.author_id in (
-                   select author_id from authors where author_canonical like ' %' UNION
-                   select author_id from authors where author_canonical like '% ' UNION
-                   select author_id from authors where author_canonical like '%  %' UNION
-                   select author_id from authors where author_canonical like '%\"%' UNION
-                   select author_id from authors where author_canonical REGEXP '[\\.|,][a-z]' = 1
-                   and author_canonical NOT LIKE '%.com'
+	cleanup.query = """select a.author_id, a.author_canonical, c.cleanup_id
+                   from cleanup c, authors a
+                   where c.record_id = a.author_id
+                   and c.report_type = 7
+                   and c.resolved IS NULL
+                   and a.author_id in (
+                   select author_id from authors where author_canonical like ' %'
+                   or author_canonical like '% '
+                   or author_canonical like '%  %'
+                   or author_canonical like '%\"%'
+                   or (
+                   author_canonical NOT LIKE '%.com'
                    and author_canonical NOT LIKE '%.co.uk'
-                   and author_canonical NOT LIKE '%, B.A.%'
-                   and author_canonical NOT LIKE '%, B.Sc.%'
-                   and author_canonical NOT LIKE '%, D.D.%'
-                   and author_canonical NOT LIKE '%, D.Sc.%'
-                   and author_canonical NOT LIKE '%, Ed.D.%'
-                   and author_canonical NOT LIKE '%, Lit.D.%'
-                   and author_canonical NOT LIKE '%, Litt.D.%'
-                   and author_canonical NOT LIKE '%, M.A.%'
-                   and author_canonical NOT LIKE '%, M.B.I.S.%'
-                   and author_canonical NOT LIKE '%, M.B.I.F.%'
-                   and author_canonical NOT LIKE '%, M.D.%'
-                   and author_canonical NOT LIKE '%, M.E.%'
-                   and author_canonical NOT LIKE '%, M.S.%'
-                   and author_canonical NOT LIKE '%, Ph.D.%'
-                   and author_canonical NOT LIKE '%, P.J.F.%'
-                   and author_canonical NOT LIKE '%, R.I.%'
-                   and author_canonical NOT LIKE '%, U.S.A.%')"""
+                   and """
+
+        subquery = ''
+        for suffix in suffixes:
+                if not subquery:
+                        subquery = """replace(author_canonical, ', %s', '')""" % suffix
+                else:
+                        subquery = """replace(%s, ', %s', '')""" % (subquery, suffix)
+
+        cleanup.query += subquery
+        cleanup.query += """ REGEXP '\\\\.[a-z]' = 1))"""
 
         cleanup.ignore = 1
         cleanup.none = 'No records found'

@@ -430,7 +430,8 @@ def insertAuthorCanonical(author):
 	fields = string.split(author, " ")
 	lastname = fields[-1]
 	# If the last segment is a recognized suffix, skip it and get the previous segment
-	if len(fields) > 1 and lastname in ('Jr.', 'Sr.', 'M.D.', 'Ph.D.', 'II', 'III', 'IV', 'D.D.', 'B.Sc.', 'B.A.', 'M.A.'):
+	# ('Jr.', 'Sr.', 'M.D.', 'Ph.D.', 'II', 'III', 'IV', 'D.D.', 'B.Sc.', 'B.A.', 'M.A.')
+	if len(fields) > 1 and lastname in RECOGNIZED_SUFFIXES:
 		lastname = fields[-2]
 	# Strip trailing comma
         if lastname[-1] == ',':

@@ -634,3 +634,27 @@ POUND_SIGN = chr(163)
 YEN_SIGN = chr(165)
 
 BULLET = '&#8226;'
+
+RECOGNIZED_SUFFIXES = ('B.A.',
+                       'B.Sc.',
+                       'D.D.',
+                       'D.Sc.',
+                       'Ed.D.',
+                       'II',
+                       'III',
+                       'IV',
+                       'J.D.',
+                       'Jr.',
+                       'Lit.D.',
+                       'Litt.D.',
+                       'M.B.I.F.',
+                       'M.B.I.S.',
+                       'M.A.',
+                       'M.D.',
+                       'M.E.',
+                       'M.S.',
+                       'Ph.D.',
+                       'P.J.F.',
+                       'R.I.',
+                       'Sr.',
+                       'U.S.A.')

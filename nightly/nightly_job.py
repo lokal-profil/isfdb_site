@@ -12,6 +12,7 @@
 import os
 import sys
 import string
+import re
 from SQLparsing import *
 from library import *
 from nightly_html import *
@@ -89,30 +90,37 @@ def nightly_cleanup_reports():
         standardReport(query, 6)
 
         #   Report 7: Authors with invalid spaces
-	query = """select author_id from authors where author_canonical like ' %' UNION
-                select author_id from authors where author_canonical like '% ' UNION
-                select author_id from authors where author_canonical like '%  %' UNION
-                select author_id from authors where author_canonical like '%\"%' UNION
-                select author_id from authors where author_canonical REGEXP '[\\.|,][a-z]' = 1
-                and author_canonical NOT LIKE '%.com'
+	query = """select author_id from authors
+                where author_canonical like ' %'
+                or author_canonical like '% '
+                or author_canonical like '%  %'
+                or author_canonical like '%\"%'
+                or (
+                author_canonical NOT LIKE '%.com'
                 and author_canonical NOT LIKE '%.co.uk'
-                and author_canonical NOT LIKE '%, D.D.%'
-                and author_canonical NOT LIKE '%, D.Sc.%'
-                and author_canonical NOT LIKE '%, Ed.D.%'
-                and author_canonical NOT LIKE '%, B.Sc.%'
-                and author_canonical NOT LIKE '%, B.A.%'
-                and author_canonical NOT LIKE '%, Lit.D.%'
-                and author_canonical NOT LIKE '%, Litt.D.%'
-                and author_canonical NOT LIKE '%, M.A.%'
-                and author_canonical NOT LIKE '%, M.B.I.S.%'
-                and author_canonical NOT LIKE '%, M.B.I.F.%'
-                and author_canonical NOT LIKE '%, M.D.%'
-                and author_canonical NOT LIKE '%, M.E.%'
-                and author_canonical NOT LIKE '%, M.S.%'
-                and author_canonical NOT LIKE '%, Ph.D.%'
-                and author_canonical NOT LIKE '%, P.J.F.%'
-                and author_canonical NOT LIKE '%, R.I.%'
-                and author_canonical NOT LIKE '%, U.S.A.%'"""
+                and """
+
+	suffixes = []
+	for suffix in RECOGNIZED_SUFFIXES:
+                if suffix.count('.') < 2:
+                        continue
+                period_letter = 0
+                for fragment in suffix.split('.'):
+                        if not fragment.startswith(' '):
+                                period_letter = 1
+                                break
+                if period_letter:
+                        suffixes.append(suffix)
+
+        subquery = ''
+        for suffix in suffixes:
+                if not subquery:
+                        subquery = """replace(author_canonical, ', %s', '')""" % suffix
+                else:
+                        subquery = """replace(%s, ', %s', '')""" % (subquery, suffix)
+
+        query += subquery
+        query += """ REGEXP '\\\\.[a-z]' = 1)"""
         standardReport(query, 7)
 
         #   Report 8: Authors that exist only due to reviews
