@@ -501,9 +501,8 @@ def function7():
                 <ul>
                 <li>Double spaces, leading spaces or trailing spaces
                 <li>Double quotes (should be changed to single quotes)
-                <li>Names with a period before a letter except for .com and .co.uk
-                <li>Suffixes which are not on the following list: %s.
-                If you would like to propose adding another suffix to the list, please post your request on the Community Portal.
+                <li>Names with a period before a letter except for .com, .co.uk and
+                recognized suffixes which include a period
                 </ul>""" % displayed_suffixes[:-1]
         
 	cleanup.query = """select a.author_id, a.author_canonical, c.cleanup_id
@@ -6757,6 +6756,33 @@ def function301():
         cleanup.none = "No Reviews Whose Language Doesn't Match the Language of the Reviewed Title"
         cleanup.ignore = 1
         cleanup.print_title_table()
+
+def function302():
+        cleanup.note = """This report identifies author names with unrecognized suffixes.
+                          Curently recognized suffixes are: %s If you would like
+                          to propose adding another suffix to the list, please post
+                          your request on the Community Portal.""" % ', '.join(RECOGNIZED_SUFFIXES)
+        
+	cleanup.query = """select a.author_id, a.author_canonical, c.cleanup_id
+                   from cleanup c, authors a
+                   where c.record_id = a.author_id
+                   and c.report_type = 302
+                   and c.resolved IS NULL
+                   and """
+
+        subquery = ''
+        for suffix in RECOGNIZED_SUFFIXES:
+                if not subquery:
+                        subquery = """replace(author_canonical, ', %s', '')""" % suffix
+                else:
+                        subquery = """replace(%s, ', %s', '')""" % (subquery, suffix)
+
+        cleanup.query += subquery
+        cleanup.query += """ like '%,%'"""
+
+        cleanup.ignore = 1
+        cleanup.none = 'No Author Names with an Unrecognized Suffix found'
+        cleanup.print_author_table()
 
 def requiredLowerCase():
         clause = ''

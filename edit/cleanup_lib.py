@@ -17,7 +17,7 @@ def reportsDict():
         reports[4] = ("Mismatched Double Quotes")
         reports[5] = ("Mismatched Angle Brackets")
         reports[6] = ("Authors with Invalid Directory Entries")
-        reports[7] = ("Author Names with Invalid Data or an Unrecognized Suffix")
+        reports[7] = ("Author Names with Invalid or Suspect Data")
         reports[8] = ("Authors That Exist Only Due to Reviews")
         reports[9] = ("Variant Titles in Series")
         reports[10] = ("Alternate Names with Canonical Titles")
@@ -312,9 +312,10 @@ def reportsDict():
         reports[299] = ("Publications with Swedish Titles with no Libris XL ID")
         reports[300] = ("Publications with Swedish Titles with a Libris ID and no Libris XL ID")
         reports[301] = ("Reviews Whose Language Doesn't Match the Language of the Reviewed Title")
+        reports[302] = ("Author Names with an Unrecognized Suffix")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
-        sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 9999)), ]
+        sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 302, 9999)), ]
         sections.append(('Magazines', (12, 13, 14, 15, 46)), )
         sections.append(('Containers', (29, 37, 54, 92, 240, 241)), )
         sections.append(('Publications', (32, 33, 31, 34, 35, 36, 38, 39, 49, 50,
@@ -380,6 +381,6 @@ def reportsDict():
                          268, 269, 270, 271, 272, 273, 274, 275, 276, 277,
                          278, 279, 280, 281, 282, 283, 284, 285, 286, 287,
                          288, 289, 291, 292, 293, 294, 295, 296, 297, 298,
-                         299, 300, 301, 9999)
+                         299, 300, 301, 302, 9999)
         
         return (reports, sections, non_moderator)

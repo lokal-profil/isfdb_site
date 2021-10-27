@@ -2007,6 +2007,21 @@ def nightly_cleanup_reports():
                    and r.title_language != t.title_language"""
         standardReport(query, 301)
 
+        #   Report 302: Author Names with an Unrecognized Suffix
+	query = """select author_id from authors
+                where """
+
+        subquery = ''
+        for suffix in RECOGNIZED_SUFFIXES:
+                if not subquery:
+                        subquery = """replace(author_canonical, ', %s', '')""" % suffix
+                else:
+                        subquery = """replace(%s, ', %s', '')""" % (subquery, suffix)
+
+        query += subquery
+        query += """ like '%,%'"""
+        standardReport(query, 302)
+
 
 def requiredLowerCase():
         clause = ''
