@@ -484,7 +484,6 @@ def function6():
 
 def function7():
 	suffixes = []
-	displayed_suffixes = ''
 	for suffix in RECOGNIZED_SUFFIXES:
                 if suffix.count('.') < 2:
                         continue
@@ -495,7 +494,6 @@ def function7():
                                 break
                 if period_letter:
                         suffixes.append(suffix)
-                        displayed_suffixes += ' %s,' % suffix
 
         cleanup.note = """This report identifies author names with:
                 <ul>
@@ -503,7 +501,7 @@ def function7():
                 <li>Double quotes (should be changed to single quotes)
                 <li>Names with a period before a letter except for .com, .co.uk and
                 recognized suffixes which include a period
-                </ul>""" % displayed_suffixes[:-1]
+                </ul>"""
         
 	cleanup.query = """select a.author_id, a.author_canonical, c.cleanup_id
                    from cleanup c, authors a
