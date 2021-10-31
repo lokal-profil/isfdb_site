@@ -85,7 +85,7 @@ if __name__ == '__main__':
                         print '<td>%s</td>' % reference_name
                         print '<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, verifier_name, verifier_name)
                         print '<td>%s</td>' % verification_time
-                        print '<td><a href="://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, deleter_name, deleter_name)
+                        print '<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, deleter_name, deleter_name)
                         print '<td>%s</td>' % deletion_time
                         print '</tr>'
                         record = result.fetch_row()
