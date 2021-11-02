@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2006-2018   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -257,19 +257,19 @@ class authors:
                         self.used_canonical = 1
 			if not self.author_canonical:
                                 raise
-                        # Unescape the canonical name so that the lookup would find it in the database
-                        unescaped_name = XMLunescape(self.author_canonical)
-                        current_name = SQLgetAuthorData(unescaped_name)
-                        if current_name:
-                                if (int(self.author_id) != current_name[AUTHOR_ID]) and \
-                                   (current_name[AUTHOR_CANONICAL].lower() == unescaped_name.lower()):
-                                        self.error = "Canonical name '%s' already exists, duplicates are not allowed" % self.author_canonical
-                                        return
-                        if unescaped_name.find('"') > -1:
-                                self.error = 'Double quotes are not allowed in canonical names, use single quotes instead'
-                                return
         	except:
                         self.error = 'Canonical name is required'
+                        return
+
+                # Unescape the canonical name so that the lookup would find it in the database
+                unescaped_name = XMLunescape(self.author_canonical)
+                current_name = SQLgetAuthorData(unescaped_name)
+                if current_name:
+                        if int(self.author_id) != current_name[AUTHOR_ID]:
+                                self.error = "Canonical name '%s' already exists, duplicates are not allowed" % current_name[AUTHOR_CANONICAL]
+                                return
+                if unescaped_name.find('"') > -1:
+                        self.error = 'Double quotes are not allowed in canonical names, use single quotes instead'
                         return
                 
                 # Limit the ability to edit canonical names to moderators
