@@ -108,8 +108,8 @@ class award_type(awardShared):
                         # Unescape the award type name to ensure that the lookup finds it in the database
                         current_award_type = SQLGetAwardTypeByName(XMLunescape(self.award_type_name))
                         if current_award_type:
-                                if (self.award_type_id != int(current_award_type[AWARD_TYPE_ID])) and (current_award_type[AWARD_TYPE_NAME] == XMLunescape(self.award_type_name)):
-                                        self.error = "Entered full name of this award type is aready associated with another award"
+                                if self.award_type_id != int(current_award_type[AWARD_TYPE_ID]):
+                                        self.error = "Award type with full name '%s' already exists" % current_award_type[AWARD_TYPE_NAME]
                                         return
 		except:
                         self.error = "Full name is required for Award types"
@@ -123,8 +123,8 @@ class award_type(awardShared):
                         # Unescape the award type name to ensure that the lookup finds it in the database
                         current_award_type = SQLGetAwardTypeByShortName(XMLunescape(self.award_type_short_name))
                         if current_award_type:
-                                if (self.award_type_id != int(current_award_type[AWARD_TYPE_ID])) and (current_award_type[AWARD_TYPE_SHORT_NAME] == XMLunescape(self.award_type_short_name)):
-                                        self.error = "Entered short name of this award type is aready associated with another award"
+                                if self.award_type_id != int(current_award_type[AWARD_TYPE_ID]):
+                                        self.error = "Award type with short name '%s' already exists" % current_award_type[AWARD_TYPE_SHORT_NAME]
                                         return
 		except:
                         self.error = "Short name is required for Award types"

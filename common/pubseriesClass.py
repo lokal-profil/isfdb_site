@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2010-2018   Ahasuerus
+#     (C) COPYRIGHT 2010-2021   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -122,12 +122,11 @@ class pub_series:
                         self.error = 'Publication Series name is required'
                         return
 
-                # Unescape the pub. series name to ensure that the lookup finds it in the database
+                # Unescape the pub series name to ensure that the lookup finds it in the database
                 current_pub_series = SQLGetPubSeriesByName(XMLunescape(self.pub_series_name))
                 if current_pub_series:
-                        if (int(self.pub_series_id) != int(current_pub_series[PUB_SERIES_ID])) and \
-                           (current_pub_series[PUB_SERIES_NAME] == XMLunescape(self.pub_series_name)):
-                                self.error = "A publication series with this name already exists"
+                        if int(self.pub_series_id) != int(current_pub_series[PUB_SERIES_ID]):
+                                self.error = "Publication series '%s' already exists" % current_pub_series[PUB_SERIES_NAME]
                                 return
 
       		for key in self.form:

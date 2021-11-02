@@ -94,8 +94,8 @@ class award_cat(awardShared):
                         # Unescape the award category name to ensure that the lookup finds it in the database
                         current_award_cat = SQLGetAwardCatByName(XMLunescape(self.award_cat_name), self.award_cat_type_id)
                         if current_award_cat:
-                                if (self.award_cat_type_id == int(current_award_cat[AWARD_CAT_TYPE_ID])) and (self.award_cat_id != int(current_award_cat[AWARD_CAT_ID])) and (current_award_cat[AWARD_CAT_NAME] == XMLunescape(self.award_cat_name)):
-                                        self.error = 'Entered award category name is aready associated with another category for this award type'
+                                if (self.award_cat_type_id == int(current_award_cat[AWARD_CAT_TYPE_ID])) and (self.award_cat_id != int(current_award_cat[AWARD_CAT_ID])):
+                                        self.error = "Entered award category name is aready associated with category '%s' for this award type" % current_award_cat[AWARD_CAT_NAME]
                                         return
 		except:
                         self.error = 'Award category name is required'

@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2019   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -138,9 +138,8 @@ class publishers:
                 # already exists in the database
                 current_publisher = SQLFindPublisher(unescaped_name, 'exact')
                 if current_publisher:
-                        if (int(self.publisher_id) != int(current_publisher[0][PUBLISHER_ID])) and \
-                           (current_publisher[0][PUBLISHER_NAME] == unescaped_name):
-                                self.error = "A publisher with this name already exists"
+                        if int(self.publisher_id) != int(current_publisher[0][PUBLISHER_ID]):
+                                self.error = "Publisher '%s' already exists" % current_publisher[0][PUBLISHER_NAME]
                                 return
 
       		for key in self.form:

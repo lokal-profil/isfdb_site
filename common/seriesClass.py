@@ -117,9 +117,8 @@ class series:
                         # Unescape the series name to ensure that the lookup finds it in the database
                         current_series = SQLGetSeriesByName(XMLunescape(self.series_name))
                         if current_series:
-                                if (int(self.series_id) != int(current_series[SERIES_PUBID])) and \
-                                   (current_series[SERIES_NAME] == XMLunescape(self.series_name)):
-                                        self.error = "A series with this name already exists"
+                                if int(self.series_id) != int(current_series[SERIES_PUBID]):
+                                        self.error = "Series '%s' already exists" % current_series[SERIES_NAME]
                                         return
 		except:
                         self.error = "Series name is required"
