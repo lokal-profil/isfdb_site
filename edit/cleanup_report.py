@@ -6782,6 +6782,20 @@ def function302():
         cleanup.none = 'No Author Names with an Unrecognized Suffix found'
         cleanup.print_author_table()
 
+def function303():
+        cleanup.query = """select t.title_id, t.title_title
+                        from titles t, authors a, canonical_author ca, cleanup c
+                        where t.title_id = ca.title_id
+                        and t.title_ttype = 'COVERART'
+                        and ca.author_id = a.author_id
+                        and ca.ca_status = 1
+                        and a.author_canonical = 'uncredited'
+                        and c.record_id = t.title_id
+                        and c.report_type = 303
+                        order by t.title_title"""
+        cleanup.none = "No COVERART titles with 'uncredited' Authors"
+        cleanup.print_title_table()
+
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:

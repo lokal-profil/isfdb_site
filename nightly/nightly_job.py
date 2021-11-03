@@ -2022,6 +2022,16 @@ def nightly_cleanup_reports():
         query += """ like '%,%'"""
         standardReport(query, 302)
 
+        #   Report 303: 
+        query = """select t.title_id
+                from titles t, authors a, canonical_author ca
+                where t.title_id = ca.title_id
+                and t.title_ttype = 'COVERART'
+                and ca.author_id = a.author_id
+                and ca.ca_status = 1
+                and a.author_canonical = 'uncredited'"""
+        standardReport(query, 303)
+
 
 def requiredLowerCase():
         clause = ''
