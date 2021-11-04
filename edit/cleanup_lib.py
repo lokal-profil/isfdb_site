@@ -314,6 +314,8 @@ def reportsDict():
         reports[301] = ("Reviews Whose Language Doesn't Match the Language of the Reviewed Title")
         reports[302] = ("Author Names with an Unrecognized Suffix")
         reports[303] = ("COVERART titles with 'uncredited' Author")
+        reports[304] = ("Publications with COBISS references in notes and no template/External ID")
+        reports[305] = ("Publications with Biblioman references in notes and no template/External ID")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 302, 9999)), ]
@@ -339,7 +341,7 @@ def reportsDict():
         sections.append(('Notes/Synopses', (4, 5, 82, 191, 217, 208, 209, 216, 210, 211,
                                             212, 213, 214, 215, 218, 219, 220, 221, 222,
                                             223, 224, 225, 237, 226, 229, 230, 234, 254,
-                                            255, 256, 273, 274, 296)), )
+                                            255, 256, 273, 274, 296, 304, 305)), )
         sections.append(('Reviews', (40, 41, 42, 301)), )
         sections.append(('Publishers', (43, 44, 65, 73)), )
         sections.append(('Publication Series', (66, 77, 98, 189)), )
@@ -382,6 +384,6 @@ def reportsDict():
                          268, 269, 270, 271, 272, 273, 274, 275, 276, 277,
                          278, 279, 280, 281, 282, 283, 284, 285, 286, 287,
                          288, 289, 291, 292, 293, 294, 295, 296, 297, 298,
-                         299, 300, 301, 302, 303, 9999)
+                         299, 300, 301, 302, 303, 304, 305, 9999)
         
         return (reports, sections, non_moderator)

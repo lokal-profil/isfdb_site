@@ -6796,6 +6796,42 @@ def function303():
         cleanup.none = "No COVERART titles with 'uncredited' Authors"
         cleanup.print_title_table()
 
+def function304():
+        cleanup.query = """select p.pub_id, p.pub_title
+                        from pubs p, notes n, cleanup c
+                        where p.note_id = n.note_id 
+                        and n.note_note like '%COBISS%' 
+                        and n.note_note not like '%{{COBISS%' 
+                        and not exists
+                        (select 1 from identifiers i, identifier_types it 
+                        where p.pub_id = i.pub_id 
+                        and i.identifier_type_id = it.identifier_type_id 
+                        and it.identifier_type_name like '%COBISS%')
+                        and c.record_id = p.pub_id
+                        and c.report_type = 304
+                        order by p.pub_title
+                        """
+        cleanup.none = "No publications with COBISS references in notes without a template/External ID"
+        cleanup.print_pub_table()
+
+def function305():
+        cleanup.query = """select p.pub_id, p.pub_title
+                        from pubs p, notes n, cleanup c
+                        where p.note_id = n.note_id 
+                        and n.note_note like '%Biblioman%' 
+                        and n.note_note not like '%{{Biblioman|%' 
+                        and not exists
+                        (select 1 from identifiers i, identifier_types it 
+                        where p.pub_id = i.pub_id 
+                        and i.identifier_type_id = it.identifier_type_id 
+                        and it.identifier_type_name = 'Biblioman')
+                        and c.record_id = p.pub_id
+                        and c.report_type = 305
+                        order by p.pub_title
+                        """
+        cleanup.none = "No publications with Biblioman references in notes without a template/External ID"
+        cleanup.print_pub_table()
+
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:

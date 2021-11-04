@@ -2022,7 +2022,7 @@ def nightly_cleanup_reports():
         query += """ like '%,%'"""
         standardReport(query, 302)
 
-        #   Report 303: 
+        #   Report 303: COVERART titles with 'uncredited' Author
         query = """select t.title_id
                 from titles t, authors a, canonical_author ca
                 where t.title_id = ca.title_id
@@ -2031,6 +2031,32 @@ def nightly_cleanup_reports():
                 and ca.ca_status = 1
                 and a.author_canonical = 'uncredited'"""
         standardReport(query, 303)
+
+        #   Report 304: Publications with COBISS references in notes and no template/External ID
+        query = """select p.pub_id
+                from pubs p, notes n 
+                where p.note_id = n.note_id 
+                and n.note_note like '%COBISS%' 
+                and n.note_note not like '%{{COBISS%' 
+                and not exists
+                (select 1 from identifiers i, identifier_types it 
+                where p.pub_id = i.pub_id 
+                and i.identifier_type_id = it.identifier_type_id 
+                and it.identifier_type_name like '%COBISS%')"""
+        standardReport(query, 304)
+
+        #   Report 305: Publications with Biblioman references in notes and no template/External ID
+        query = """select p.pub_id
+                from pubs p, notes n 
+                where p.note_id = n.note_id 
+                and n.note_note like '%Biblioman%' 
+                and n.note_note not like '%{{Biblioman|%' 
+                and not exists 
+                (select 1 from identifiers i, identifier_types it 
+                where p.pub_id = i.pub_id 
+                and i.identifier_type_id = it.identifier_type_id 
+                and it.identifier_type_name = 'Biblioman')"""
+        standardReport(query, 305)
 
 
 def requiredLowerCase():
