@@ -6000,10 +6000,12 @@ def function244():
         cleanup.note = """This cleanup report finds publications with non-numeric
                         External IDs for the following External ID Types:
                         <ul>
-                        <li>BL, all Bleilers, COPAC, FantLab, Goodreads, JNB/JPNO, KBR, LTF, NDL, NILF, OCLC/WorldCat
+                        <li>Biblioman, BL, Bleiler Early Years, Bleiler Gernsback,
+                        all COBISSes, COPAC (defunct), FantLab, Goodreads, JNB/JPNO,
+                        KBR, Libris, LTF, NDL, NILF, NLA, OCLC/WorldCat, PORBASE, SF-Leihbuch
                         <li>NooSFere (optional leading hyphen allowed)
                         <li>DNB and PPN (optional trailing 'x'/'X' allowed)
-                        <li>Reginald-1 and Reginald-3 (one optional trailing letter allowed)
+                        <li>Reginald-1, Reginald-3 and Bleiler Supernatural (one optional trailing letter allowed)
                         <li>NDL (optional leading 'b' allowed)
                         </ul>"""
         cleanup.query = """select distinct p.pub_id, p.pub_title
@@ -6013,9 +6015,11 @@ def function244():
                 and p.pub_id = i.pub_id
                 and i.identifier_type_id = it.identifier_type_id
                 and (
-                ((it.identifier_type_name in ('BL', 'COPAC (defunct)', 'FantLab', 'Goodreads',
-                'JNB/JPNO', 'KBR', 'LTF', 'NILF', 'OCLC/WorldCat')
-                or it.identifier_type_name like '%Bleiler%')
+                (it.identifier_type_name in
+                ('Biblioman', 'BL', 'Bleiler Early Years', 'Bleiler Gernsback',
+                'COBISS.BG', 'COBISS.SR', 'COPAC (defunct)', 'FantLab',
+                'Goodreads', 'JNB/JPNO', 'KBR', 'Libris', 'LTF', 'NILF', 'NLA',
+                'OCLC/WorldCat', 'PORBASE', 'SF-Leihbuch')
                 and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
                 or
                 (it.identifier_type_name in ('DNB', 'PPN')
@@ -6024,7 +6028,7 @@ def function244():
                 (it.identifier_type_name = 'NDL'
                 and i.identifier_value not regexp '^[b]{0,1}[[:digit:]]{1,30}$')
                 or
-                (it.identifier_type_name in ('Reginald-1', 'Reginald-3')
+                (it.identifier_type_name in ('Reginald-1', 'Reginald-3', 'Bleiler Supernatural')
                 and i.identifier_value not regexp '^[[:digit:]]{1,6}[[:alpha:]]{0,1}$')
                 or
                 (it.identifier_type_name = 'NooSFere'

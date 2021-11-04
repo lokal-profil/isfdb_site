@@ -1541,9 +1541,11 @@ def nightly_cleanup_reports():
                 and i.identifier_type_id = it.identifier_type_id
                 and
                 (
-                ((it.identifier_type_name in ('BL', 'COPAC (defunct)', 'FantLab', 'Goodreads',
-                'JNB/JPNO', 'KBR', 'LTF', 'NILF', 'OCLC/WorldCat')
-                or it.identifier_type_name like '%Bleiler%')
+                (it.identifier_type_name in
+                ('Biblioman', 'BL', 'Bleiler Early Years', 'Bleiler Gernsback',
+                'COBISS.BG', 'COBISS.SR', 'COPAC (defunct)', 'FantLab',
+                'Goodreads', 'JNB/JPNO', 'KBR', 'Libris', 'LTF', 'NILF', 'NLA',
+                'OCLC/WorldCat', 'PORBASE', 'SF-Leihbuch')
                 and i.identifier_value not regexp '^[[:digit:]]{1,30}$')
                 or
                 (it.identifier_type_name in ('DNB', 'PPN')
@@ -1552,7 +1554,7 @@ def nightly_cleanup_reports():
                 (it.identifier_type_name = 'NDL'
                 and i.identifier_value not regexp '^[b]{0,1}[[:digit:]]{1,30}$')
                 or
-                (it.identifier_type_name in ('Reginald-1', 'Reginald-3')
+                (it.identifier_type_name in ('Reginald-1', 'Reginald-3', 'Bleiler Supernatural')
                 and i.identifier_value not regexp '^[[:digit:]]{1,6}[[:alpha:]]{0,1}$')
                 or
                 (it.identifier_type_name = 'NooSFere'
