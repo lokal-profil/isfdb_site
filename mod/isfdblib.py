@@ -73,6 +73,7 @@ def PrintNavBar():
 	print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+P', 'Errored Out Submissions')
 	print '<li>%s' % ISFDBLink('mod/tag_status_changes.cgi', '', 'Tag Status Changes')
 	print '<li>%s' % ISFDBLink('mod/private_tags.cgi', '', 'Private Tags')
+	print '<li>%s' % ISFDBLink('mod/submission_search.cgi', '', 'Submission Search')
 	print '</ul>'
         print '</div>'
         print '<div id="main2">'

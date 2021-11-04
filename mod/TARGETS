@@ -49,6 +49,8 @@ TARGETS = DIR/aa_merge.cgi \
 	  DIR/self_approvers.cgi \
 	  DIR/self_approver_file.cgi \
 	  DIR/submission_review.cgi \
+	  DIR/submission_search.cgi \
+	  DIR/submission_search_results.cgi \
 	  DIR/submitcpanel.cgi \
 	  DIR/submitref.cgi \
 	  DIR/ta_delete.cgi \
