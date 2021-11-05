@@ -208,7 +208,7 @@ def insertReview(title, reviewees, reviewers, date, page, referral_lang):
 	setReviewees(record, NewReviewees)
 
 	for reviewee in revieweelist:
-		parent = SQLFindReviewParent(title, reviewee)
+		parent = SQLFindReviewParent(title, reviewee, referral_lang)
 		if parent:
 			update = "insert into title_relationships(title_id, review_id) values(%d, %d);" % (parent, record)
         		print "<li>", update

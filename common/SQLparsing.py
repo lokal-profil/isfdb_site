@@ -2454,38 +2454,27 @@ def SQLDeteleOrphanTags():
 	update = 'delete from tags where NOT EXISTS (select 1 from tag_mapping where tags.tag_id = tag_mapping.tag_id)'
         db.query(update)
 
-def SQLFindReviewParent(title, author):
-	# Attempt to find Book-Length Works first:
-	query =  "select titles.* "
-	query += "from titles,canonical_author,authors "
-	query += "where titles.title_ttype IN ('ANTHOLOGY','COLLECTION','NOVEL','NONFICTION','OMNIBUS') "
-	query += "and titles.title_title='%s' "  % (db.escape_string(title))
-	query += "and canonical_author.title_id=titles.title_id "
-	query += "and canonical_author.author_id=authors.author_id "
-	query += "and authors.author_canonical='%s'" % (db.escape_string(author))
-	db.query(query)
-	result = db.store_result()
-	title2 = result.fetch_row()
-	results = []
-	if title2:
-		return(title2[0][0])
-	else:
-		# Attempt to find Shortfiction second
-		query =  "select titles.* "
-		query += "from titles,canonical_author,authors "
-		query += "where titles.title_ttype = 'SHORTFICTION' "
-		query += "and titles.title_title='%s' "  % (db.escape_string(title))
-		query += "and canonical_author.title_id=titles.title_id "
-		query += "and canonical_author.author_id=authors.author_id "
-		query += "and authors.author_canonical='%s'" % (db.escape_string(author))
-		db.query(query)
-		result = db.store_result()
-		title2 = result.fetch_row()
-		results = []
-		if title2:
-			return(title2[0][0])
-		else:
-			return(0)
+def SQLFindReviewParent(title, author, referral_lang):
+        # If the language of the referral title is not defined, do not auto-link the review
+        if not referral_lang:
+                return(0)
+	# Attempt to find matching book-length works first, then short fiction
+	for title_types in ("'ANTHOLOGY','COLLECTION','NOVEL','NONFICTION','OMNIBUS'", "'SHORTFICTION'"):
+                query = """select t.*
+                        from titles t, canonical_author ca, authors a
+                        where t.title_ttype in (%s)
+                        and t.title_title = '%s'
+                        and t.title_language = %d
+                        and ca.title_id = t.title_id
+                        and ca.author_id = a.author_id
+                        and a.author_canonical = '%s'""" % (title_types, db.escape_string(title), int(referral_lang), db.escape_string(author))
+                db.query(query)
+                result = db.store_result()
+                # Auto-link reviews if there is one and only one title/author/language match
+                if result.num_rows() == 1:
+                        title = result.fetch_row()
+                        return(title[0][0])
+        return(0)
 
 def SQLloadTitleReviews(title_id):
 	# 0 has special meaning as value of the title_parent field

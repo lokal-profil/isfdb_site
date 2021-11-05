@@ -250,7 +250,7 @@ def integrateReview(title, authors, reviewers, date, page, pub_id, title_id, ref
 		# STEP 4 - Generate title relationship entries
 		####################################################
 		for author in authorlist:
-			parent = SQLFindReviewParent(title, author)
+			parent = SQLFindReviewParent(title, author, referral_lang)
 			if parent:
 				update = "insert into title_relationships(title_id, review_id) values(%d, %d);" % (parent, title_id)
 				print "<li>", update
