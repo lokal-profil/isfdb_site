@@ -1002,10 +1002,14 @@ def function22():
 def function23():
         from awardClass import awards
         records = []
-	query = """select awards.* from awards, title_awards, cleanup where 
-                awards.award_id=title_awards.award_id and not exists
-                (select 1 from titles where titles.title_id=title_awards.title_id) 
-                and cleanup.record_id=awards.award_id and cleanup.report_type=23 
+	query = """select awards.*
+                from awards, title_awards, cleanup where 
+                awards.award_id = title_awards.award_id
+                and not exists
+                        (select 1 from titles
+                        where titles.title_id = title_awards.title_id) 
+                and cleanup.record_id = awards.award_id
+                and cleanup.report_type = 23 
                 order by award_type_id, award_year, award_level"""
 
 	db.query(query)
@@ -1027,9 +1031,9 @@ def function23():
                 award = awards(db)
                 award.load(record[0][AWARD_ID])
 
-                print '<td><a href="http:/%s/award_details.cgi?%s">%s</a></td>' % (HTFAKE, award.award_id, award.award_title)
-                print '<td><a href="http:/%s/awardtype.cgi?%s">%s</a></td>' % (HTFAKE, award.award_type_id, award.award_type_name)
-                print '<td><a href="http:/%s/ay.cgi?%s+%s">%s</a></td>' % (HTFAKE, award.award_type_id, award.award_year[:4], award.award_year[:4])
+                print '<td>%s</td>' % ISFDBLink('award_details.cgi', award.award_id, award.award_title)
+                print '<td>%s</td>' % ISFDBLink('awardtype.cgi', award.award_type_id, award.award_type_name)
+                print '<td>%s</td>' % ISFDBLink('ay.cgi', '%s+%s' % (award.award_type_id, award.award_year[:4]), award.award_year[:4])
                 print '<td>%s</td>' % award.award_cat_name
                 print '<td>%s</td>' % award.award_displayed_level
                 print '</tr>'
@@ -1040,9 +1044,12 @@ def function23():
 def function24():
         from awardClass import awards
         records = []
-	query = """select cleanup.cleanup_id, a.award_id from awards as a, cleanup where 
-                 a.award_id=cleanup.record_id and cleanup.report_type=24 and cleanup.resolved IS NULL 
-                 order by a.award_type_id, a.award_year, a.award_level"""
+	query = """select cleanup.cleanup_id, a.award_id
+                from awards a, cleanup
+                where a.award_id = cleanup.record_id
+                and cleanup.report_type = 24
+                and cleanup.resolved IS NULL 
+                order by a.award_type_id, a.award_year, a.award_level"""
 
 	db.query(query)
 	result = db.store_result()
@@ -1063,12 +1070,12 @@ def function24():
                 award = awards(db)
                 award.load(record[0][1])
 
-                print '<td><a href="http:/%s/award_details.cgi?%s">%s</a></td>' % (HTFAKE, award.award_id, award.award_title)
-                print '<td><a href="http:/%s/awardtype.cgi?%s">%s</a></td>' % (HTFAKE, award.award_type_id, award.award_type_short_name)
-                print '<td><a href="http:/%s/ay.cgi?%s+%s">%s</a></td>' % (HTFAKE, award.award_type_id, award.award_year[:4], award.award_year[:4])
-                print '<td><a href="http:/%s/award_category.cgi?%s+0">%s</td>' % (HTFAKE, award.award_cat_id, award.award_cat_name)
+                print '<td>%s</td>' % ISFDBLink('award_details.cgi', award.award_id, award.award_title)
+                print '<td>%s</td>' % ISFDBLink('awardtype.cgi', award.award_type_id, award.award_type_short_name)
+                print '<td>%s</td>' % ISFDBLink('ay.cgi', '%s+%s' % (award.award_type_id, award.award_year[:4]), award.award_year[:4])
+                print '<td>%s</td>' % ISFDBLink('award_category.cgi', '%s+0' % award.award_cat_id, award.award_cat_name)
                 print '<td>%s</td>' % award.award_displayed_level
-                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+24">Ignore this award</a></td>' % (HTFAKE, record[0][0])
+                print '<td>%s</td>' % ISFDBLinkNoName('mod/resolve_cleanup.cgi', '%s+1+24' % record[0][0], 'Ignore this award')
                 print '</tr>'
                 bgcolor ^= 1
         	record = result.fetch_row()
