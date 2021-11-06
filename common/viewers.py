@@ -1808,88 +1808,24 @@ def DisplayLinkReview(submission_id):
                 if TagPresent(merge, 'Parent'):
                         parent = GetElementValue(merge, 'Parent')
                         print '<td class="label"><b>Link Review to [Title #%s]</b></td>' % ISFDBLink('title.cgi', parent, parent)
+                        print '<td class="label"><b>Warning</b></td>'
                         print '</tr>'
                         reviewedTitle = titles(db)
                         reviewedTitle.load(int(parent))
                         if reviewedTitle.error:
                                 InvalidSubmission(submission_id, reviewedTitle.error)
 
-                        PrintField2('Title', reviewedTitle.title_title, 1, 1, theReview.title_title)
-                        PrintField2('Year', reviewedTitle.title_year, 1, 1, theReview.title_year)
-                        PrintField2('TitleType', reviewedTitle.title_ttype, 1, 1, theReview.title_ttype)
-
-                        ###################################
-                        # Book Authors
-                        ###################################
-                        print '<tr>'
-                        print '<td class="label"><b>Book Authors</b></td>'
-                        print '<td class="drop">'
-                        notfirst = 0
-                        multfield = ''
-                        for author in theReview.title_subjauthors:
-                                if author:
-                                        if notfirst:
-                                                multfield += '+'
-                                        multfield += author
-                                else:
-                                        break
-                                notfirst = 1
-                        print multfield
-                        print '</td>'
-                        print '<td class="keep">'
-                        notfirst = 0
-                        multfield = ''
-                        for author in reviewedTitle.title_authors:
-                                if author:
-                                        if notfirst:
-                                                multfield += '+'
-                                        multfield += author
-                                else:
-                                        break
-                                notfirst = 1
-                        print multfield
-                        print '</td>'
-
-                        ###################################
-                        # Reviewer
-                        ###################################
-                        print '<tr>'
-                        print '<td class="label"><b>Reviewers</b></td>'
-                        print '<td class="drop">'
-                        notfirst = 0
-                        multfield = ''
-                        for author in theReview.title_authors:
-                                if author:
-                                        if notfirst:
-                                                multfield += '+'
-                                        multfield += author
-                                else:
-                                        break
-                                notfirst = 1
-                        print multfield
-                        print '</td>'
-                        print '<td class="keep">'
-                        print ' - '
-                        print '</td>'
-
-                        print '<tr>'
-                        print '<td class="label"><b>Language</b></td>'
-                        print '<td class="drop">'
-                        if theReview.title_language:
-                                print theReview.title_language
+                        PrintField2('Title', reviewedTitle.title_title, 1, 1, theReview.title_title, '', 1)
+                        PrintField2('Year', reviewedTitle.title_year, 1, 1, theReview.title_year, '', 1)
+                        PrintField2('TitleType', reviewedTitle.title_ttype, 1, 1, theReview.title_ttype, '', 1)
+                        #(Label, value, Changed, ExistsNow, Current, warning = '', warning_column = 0, warning_class = 'warn')
+                        PrintField2('Book Authors', '+'.join(reviewedTitle.title_authors), 1, 1, '+'.join(theReview.title_subjauthors), '', 1)
+                        PrintField2('Reviewers', '', 0, 1, '+'.join(theReview.title_authors), '', 1)
+                        if reviewedTitle.title_language != theReview.title_language:
+                                warning = 'The language of the review differes from the language of the reviewed title. Please double-check.'
                         else:
-                                print ' - '
-                        print '</td>'
-
-                        print '<td class="keep">'
-                        if reviewedTitle.title_language:
-                                print reviewedTitle.title_language
-                        else:
-                                print ' - '
-                        print '</td>'
-                        print '</tr>'
-                else:
-                        pass
+                                warning = ''
+                        PrintField2('Language', reviewedTitle.title_language, 1, 1, theReview.title_language, warning, 1)
                 print '</table>'
                 mod_note = GetElementValue(merge, 'ModNote')
                 if mod_note: 
