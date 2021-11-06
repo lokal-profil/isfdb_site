@@ -1822,7 +1822,7 @@ def DisplayLinkReview(submission_id):
                         PrintField2('Book Authors', '+'.join(reviewedTitle.title_authors), 1, 1, '+'.join(theReview.title_subjauthors), '', 1)
                         PrintField2('Reviewers', '', 0, 1, '+'.join(theReview.title_authors), '', 1)
                         if reviewedTitle.title_language != theReview.title_language:
-                                warning = 'The language of the review differes from the language of the reviewed title. Please double-check.'
+                                warning = 'The language of the review differs from the language of the reviewed title. Please double-check.'
                         else:
                                 warning = ''
                         PrintField2('Language', reviewedTitle.title_language, 1, 1, theReview.title_language, warning, 1)
