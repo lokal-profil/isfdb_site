@@ -1087,9 +1087,12 @@ def function24():
         print "</table>"
 
 def function25():
-        query = """select * from award_types, cleanup where NOT EXISTS 
-                (select 1 from awards where awards.award_type_id=award_types.award_type_id) 
-                and cleanup.record_id=award_types.award_type_id and cleanup.report_type=25"""
+        query = """select * from award_types, cleanup
+                where NOT EXISTS 
+                (select 1 from awards
+                where awards.award_type_id=award_types.award_type_id) 
+                and cleanup.record_id=award_types.award_type_id
+                and cleanup.report_type=25"""
 
 	db.query(query)
 	result = db.store_result()
@@ -1106,19 +1109,23 @@ def function25():
                                 print '<tr align=left class="table2">'
                         award_type_id = record[0][AWARD_TYPE_ID]
                         award_type_name = record[0][AWARD_TYPE_NAME]
-                        print '<td><a href="http:/%s/awardtype.cgi?%s">%s</a></td>' % (HTFAKE, award_type_id, award_type_name)
+                        print '<td>%s</td>' % ISFDBLink('awardtype.cgi', award_type_id, award_type_name)
                         print '</tr>'
                         record = result.fetch_row()
                         bgcolor ^= 1
 
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h3>No empty Award Types found</h3>"
+		print '<h3>No empty Award Types found</h3>'
 
 def function26():
-        query = """select award_cats.* from award_cats, cleanup where NOT EXISTS 
-                (select 1 from awards where awards.award_cat_id=award_cats.award_cat_id) 
-                and cleanup.record_id=award_cats.award_cat_id and cleanup.report_type=26"""
+        query = """select award_cats.*
+                from award_cats, cleanup
+                where NOT EXISTS 
+                (select 1 from awards
+                where awards.award_cat_id=award_cats.award_cat_id) 
+                and cleanup.record_id=award_cats.award_cat_id
+                and cleanup.report_type=26"""
 
 	db.query(query)
 	result = db.store_result()
@@ -1135,13 +1142,13 @@ def function26():
                                 print '<tr align=left class="table2">'
                         award_cat_id = record[0][AWARD_CAT_ID]
                         award_cat_name = record[0][AWARD_CAT_NAME]
-                        print '<td><a href="http:/%s/award_category.cgi?%s">%s</a></td>' % (HTFAKE, award_cat_id, award_cat_name)
+                        print '<td>%s</td>' % ISFDBLink('award_category.cgi', award_cat_id, award_cat_name)
                         print '</tr>'
                         record = result.fetch_row()
                         bgcolor ^= 1
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h3>No empty Award Categories found</h3>"
+		print '<h3>No empty Award Categories found</h3>'
 
 def function27():
 	query = """select s.series_id, s.series_title from series s, cleanup c where 
@@ -1810,7 +1817,7 @@ def function45():
                         variant_title = title[1]
                         parent_type = title[3]
                         print '<td>%d</td>' % count
-                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, variant_id, variant_title)
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', variant_id, variant_title)
                         print '<td>%s</td>' % parent_type
                         print '</tr>'
                         color = color ^ 1
@@ -3357,7 +3364,8 @@ def function87():
                 and t.title_language IS NOT NULL
                 and a.author_language IS NOT NULL
                 and t.title_language != a.author_language
-                and c.report_type=87 and c.resolved IS NULL
+                and c.report_type=87
+                and c.resolved IS NULL
                 and c.record_id=t.title_id
                 order by t.title_ttype, a.author_lastname, a.author_canonical, t.title_title
                  """
@@ -3385,21 +3393,20 @@ def function87():
                         author_counter = 0
                         for author in authors:
                                 if author_counter:
-                                        print " <b>and</b> "
-                                print '<a href="http:/%s/ea.cgi?%s" dir="ltr">%s</a>' % (HTFAKE, author[0], author[1])
+                                        print ' <b>and</b> '
+                                print ISFDBLink('ea.cgi', author[0], author[1])
                                 author_counter += 1
                         print '</td>'
-                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_title)
                         if user.moderator:
-                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                                        Ignore this title</a></td>""" % (HTFAKE, int(cleanup_id), 1, 87)
+                                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%d+1+87' % int(cleanup_id), 'Ignore this title')
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No Author/Title Language Mismatches Found.</h2>"
+		print '<h2>No Author/Title Language Mismatches Found.</h2>'
 
 def function88():
         # Pubs with multiple COVERART titles
@@ -4579,11 +4586,12 @@ def function144():
                                 print '<tr align=left class="table2">'
 
                         print '<td>%d</td>' % count
-                        print '<td>%s</td>' % ISFDBLink("pe.cgi", series_id, series_title)
+                        print '<td>%s</td>' % ISFDBLink('pe.cgi', series_id, series_title)
 
                         print '<td>'
-                        query2 = """select series_id, series_title from series where series_title like '%s (%%'
-                        """ % db.escape_string(series_title)
+                        query2 = """select series_id, series_title
+                                    from series
+                                    where series_title like '%s (%%'""" % db.escape_string(series_title)
                         db.query(query2)
                         result2 = db.store_result()
                         record2 = result2.fetch_row()
@@ -4593,20 +4601,21 @@ def function144():
                                 parenthetical_title = record2[0][1]
                                 if count2 > 1:
                                         print '<br>'
-                                print ISFDBLink("pe.cgi", parenthetical_id, parenthetical_title)
+                                print ISFDBLink('pe.cgi', parenthetical_id, parenthetical_title)
                                 count2 += 1
                                 record2 = result2.fetch_row()
                         
                         if user.moderator:
-                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                                        %s this series</a></td>""" % (HTFAKE, int(cleanup_id), 1, 144, 'Ignore')
+                                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                                '%d+%d+%d' % (int(cleanup_id), 1, 144),
+                                                                'Ignore this series')
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No Series Names That May Need Disambiguation Found</h2>"
+		print '<h2>No Series Names That May Need Disambiguation Found</h2>'
 	return
 
 def function145():
@@ -7150,12 +7159,13 @@ def PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id = 0, repo
                 print '<tr align=left class="table2">'
 
         print '<td>%d</td>' % int(count)
-        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+        print '<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_title)
         if cleanup_id and user.moderator:
                 message = {0: 'Resolve', 1: 'Ignore'}
-                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                        %s this title</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
-	print '</tr>'
+                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                '%d+%d+%d' % (int(cleanup_id), int(mode), int(report_id)),
+                                                '%s this title' % message[mode])
+        print '</tr>'
 
 def PrintPublisherRecord(pub_id, pub_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
         if bgcolor:
@@ -7236,11 +7246,12 @@ def PrintAwardRecord(award_id, award_title, bgcolor, count, cleanup_id = 0, repo
                 print '<tr align=left class="table2">'
 
         print '<td>%d</td>' % count
-        print '<td><a href="http:/%s/award_details.cgi?%s">%s</a></td>' % (HTFAKE, award_id, award_title)
+        print '<td>%s</td>' % ISFDBLink('award_details.cgi', award_id, award_title)
         if cleanup_id and user.moderator:
                 message = {0: 'Resolve', 1: 'Ignore'}
-                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                        %s this award</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                '%d+%d+%d' % (int(cleanup_id), int(mode), int(report_id)),
+                                                '%s this award' % message[mode])
         print '</tr>'
 
 def PrintTitlesWithoutLanguage(result):
