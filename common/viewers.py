@@ -1796,36 +1796,65 @@ def DisplayLinkReview(submission_id):
                 Record = GetElementValue(merge, 'Record')
                 submitter = GetElementValue(merge, 'Submitter')
 
-                print '<table border="2" class="generic_table">'
-                print '<tr>'
-                print '<td class="label"><b>Column</b></td>'
-                print '<td class="label"><b>Review [Record #%s]</b></td>' % ISFDBLink('title.cgi', Record, Record)
-
                 theReview = titles(db)
                 theReview.load(int(Record))
                 if theReview.error:
                         InvalidSubmission(submission_id, theReview.error)
-                if TagPresent(merge, 'Parent'):
-                        parent = GetElementValue(merge, 'Parent')
+                parent = GetElementValue(merge, 'Parent')
+                if not parent:
+                        InvalidSubmission(submission_id, theReview.error)
+                reviewedTitle = titles(db)
+                reviewedTitle.load(int(parent))
+                if reviewedTitle.error:
+                        InvalidSubmission(submission_id, reviewedTitle.error)
+
+                print '<table border="2" class="generic_table">'
+                print '<tr>'
+                print '<td class="label"><b>Column</b></td>'
+                print '<td class="label"><b>Review [Record #%s]</b></td>' % ISFDBLink('title.cgi', Record, Record)
+                if parent != '0':
                         print '<td class="label"><b>Link Review to [Title #%s]</b></td>' % ISFDBLink('title.cgi', parent, parent)
                         print '<td class="label"><b>Warning</b></td>'
-                        print '</tr>'
-                        reviewedTitle = titles(db)
-                        reviewedTitle.load(int(parent))
-                        if reviewedTitle.error:
-                                InvalidSubmission(submission_id, reviewedTitle.error)
+                else:
+                        print '<td class="label"><b>Unlink the Review</b></td>'
+                print '</tr>'
 
-                        PrintField2('Title', reviewedTitle.title_title, 1, 1, theReview.title_title, '', 1)
-                        PrintField2('Year', reviewedTitle.title_year, 1, 1, theReview.title_year, '', 1)
-                        PrintField2('TitleType', reviewedTitle.title_ttype, 1, 1, theReview.title_ttype, '', 1)
-                        #(Label, value, Changed, ExistsNow, Current, warning = '', warning_column = 0, warning_class = 'warn')
-                        PrintField2('Book Authors', '+'.join(reviewedTitle.title_authors), 1, 1, '+'.join(theReview.title_subjauthors), '', 1)
+                if parent == '0':
+                        PrintField2('Title', '', 0, 1, theReview.title_title)
+                        PrintField2('Year', '', 0, 1, theReview.title_year)
+                        PrintField2('TitleType', '', 0, 1, theReview.title_ttype)
+                        PrintField2('Book Authors', '', 0, 1, '+'.join(theReview.title_subjauthors))
+                        PrintField2('Reviewers', '', 0, 1, '+'.join(theReview.title_authors))
+                        PrintField2('Language', '', 0, 1, theReview.title_language)
+
+                else:
+                        if reviewedTitle.title_title != theReview.title_title:
+                                warning = 'Title mismatch. Please double-check.'
+                        else:
+                                warning = ''
+                        PrintField2('Title', reviewedTitle.title_title, 1, 1, theReview.title_title, warning, 1)
+                        if Compare2Dates(theReview.title_year, reviewedTitle.title_year) == 1:
+                                warning = 'Review date prior to title date. Please double-check.'
+                        else:
+                                warning = ''
+                        PrintField2('Year', reviewedTitle.title_year, 1, 1, theReview.title_year, warning, 1)
+                        if reviewedTitle.title_ttype not in ('ANTHOLOGY','COLLECTION','NOVEL','NONFICTION','OMNIBUS','SHORTFICTION'):
+                                warning = 'Uncommon title type. Please double-check.'
+                        else:
+                                warning = ''
+                        PrintField2('TitleType', reviewedTitle.title_ttype, 1, 1, theReview.title_ttype, warning, 1)
+                        if set(reviewedTitle.title_authors) != set(theReview.title_subjauthors):
+                                warning = 'Author mismatch. Please double-check.'
+                        else:
+                                warning = ''
+                        PrintField2('Book Authors', '+'.join(reviewedTitle.title_authors), 1, 1, '+'.join(theReview.title_subjauthors), warning, 1)
                         PrintField2('Reviewers', '', 0, 1, '+'.join(theReview.title_authors), '', 1)
                         if reviewedTitle.title_language != theReview.title_language:
-                                warning = 'The language of the review differs from the language of the reviewed title. Please double-check.'
+                                warning = 'Language mismatch. Please double-check.'
                         else:
                                 warning = ''
                         PrintField2('Language', reviewedTitle.title_language, 1, 1, theReview.title_language, warning, 1)
+
                 print '</table>'
                 mod_note = GetElementValue(merge, 'ModNote')
                 if mod_note: 
