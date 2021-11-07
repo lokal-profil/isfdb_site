@@ -705,18 +705,18 @@ def function12():
                                 print '<tr align=left class="table2">'
 
                         print '<td>%s</td>' % record[0][TITLE_YEAR][:4]
-                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, record[0][TITLE_PUBID], record[0][TITLE_TITLE])
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', record[0][TITLE_PUBID], record[0][TITLE_TITLE])
                         authors = SQLTitleBriefAuthorRecords(record[0][TITLE_PUBID])
                         print '<td>'
                         for author in authors:
-                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                                print ISFDBLink('ea.cgi', author[0], author[1])
                         print '</td>'
                         print '</tr>'
 			bgcolor ^= 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No records found</h2>"
+		print '<h2>No records found</h2>'
 
 def function13():
 	query = """select t.* from titles as t, cleanup where t.title_ttype = 'EDITOR' 
@@ -1472,19 +1472,15 @@ def function37():
         nonModeratorMessage()
         query = """select p.pub_id, p.pub_title, c.cleanup_id
                 from pubs p, cleanup c
-                where p.pub_ctype='OMNIBUS' and 
-                p.pub_id=c.record_id
+                where p.pub_ctype='OMNIBUS'
+                and p.pub_id=c.record_id
                 and c.report_type=37
                 and c.resolved is NULL
                 and NOT EXISTS 
                 (select 1 from pub_content pc, titles t
                  where p.pub_id=pc.pub_id 
                  and pc.title_id=t.title_id
-                 and (t.title_ttype='NOVEL' 
-                  or t.title_ttype='COLLECTION' 
-                  or t.title_ttype='ANTHOLOGY'
-                  or t.title_ttype='NONFICTION'
-                  )
+                 and t.title_ttype in ('NOVEL', 'COLLECTION', 'ANTHOLOGY', 'NONFICTION')
                 ) 
                 order by p.pub_title"""
 
@@ -1505,9 +1501,9 @@ def function37():
 			bgcolor ^= 1
 			count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No records found</h2>"
+		print '<h2>No records found</h2>'
 
 def function38():
         query = 'select pc.pub_id, pc.title_id, count(*) as cnt \
@@ -2323,14 +2319,14 @@ def function54():
                         else:
                                 print '<tr align=left class="table2">'
                         print '<td>%d</td>' % count
-                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_title)
                         print '<td>'
                         for pub in titles[title_title][title_id]:
                                 if pub[0] in empty_pubs:
                                         suffix = ' [EMPTY]'
                                 else:
                                         suffix = ''
-                                print '<a href="http:/%s/pl.cgi?%s">%s</a> (%s)%s<br>' % (HTFAKE, pub[0], pub[1], pub[2], suffix)
+                                print '%s (%s)%s<br>' % (ISFDBLink('pl.cgi', pub[0], pub[1]), pub[2], suffix)
                         print '</td>'
                         print '</tr>'
                         color = color ^ 1
@@ -3747,7 +3743,7 @@ def function92():
                                 if verifier_count > 0:
                                         print ', '
                                 user_name = verifier[1]
-                                print '<a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, user_name, user_name)
+                                print WikiLink(user_name)
                                 verifier_count += 1
                         if not verifier_count:
                                 print '&nbsp;'
@@ -3755,18 +3751,18 @@ def function92():
                         authors = SQLPubBriefAuthorRecords(pub_id)
                         print '<td>'
                         for author in authors:
-                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                                print ISFDBLink('ea.cgi', author[0], author[1])
                         print '</td>'
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
                         if user.moderator:
-                                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+92">Ignore this pub</a></td>' % (HTFAKE, cleanup_id)
+                                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%s+1+92' % cleanup_id, 'Ignore this pub')
                         print '</tr>'
 			bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No Primary-Verified Anthologies/Collections without Contents Titles found</h2>"
+		print '<h2>No Primary-Verified Anthologies/Collections without Contents Titles found</h2>'
 	return
 
 def function93():
@@ -6950,13 +6946,15 @@ def nonLatinSeriesDisplay(report_id, query, language):
 	return
 
 def containers_grid(report_id, script = 'empty_containers'):
-        anchor = '<a href="http:/%s/edit/%s.cgi' % (HTFAKE, script)
+        anchor = '<a href="%s:/%s/edit/%s.cgi' % (PROTOCOL, HTFAKE, script)
         years = {}
         decades = {}
         months = {}
         unknown = 0
-        query = """select count(*), record_id_2 from cleanup
-                   where report_type = %d and resolved IS NULL
+        query = """select count(*), record_id_2
+                   from cleanup
+                   where report_type = %d
+                   and resolved IS NULL
                    group by record_id_2""" % report_id
         db.query(query)
         result = db.store_result()
@@ -7137,11 +7135,12 @@ def PrintPublicationRecord(pub_id, pub_title, bgcolor, count, cleanup_id = 0, re
                 print '<tr align=left class="table2">'
 
         print '<td>%d</td>' % int(count)
-        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
         if cleanup_id and user.moderator:
                 message = {0: 'Resolve', 1: 'Ignore'}
-                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                        %s this publication</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                '%d+%d+%d' % (int(cleanup_id), int(mode), int(report_id)),
+                                                '%s this publication' % message[mode])
 	print '</tr>'
 
 def PrintTitleRecord(title_id, title_title, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
