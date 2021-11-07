@@ -430,15 +430,15 @@ def OneType(record_id, record_title, table, record_name, cgi_script, note_id, te
                         else:
                                 print '<tr align=left class="table2">'
 
-                        print "<td>%d</td>" % count
-                        print '<td><a href="http:/%s/%s.cgi?%s">%s</a></td>' % (HTFAKE, cgi_script, record[0][0], record[0][1])
-                        print "</tr>"
+                        print '<td>%d</td>' % count
+                        print '<td>%s</td>' % ISFDBLink('%s.cgi' % cgi_script, record[0][0], record[0][1])
+                        print '</tr>'
 			bgcolor ^= 1
 			count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-                print "<h3>No %s with %s in %s</h3>" % (record_name, header, term)
+                print '<h3>No %s with %s in %s</h3>' % (record_name, header, term)
 	print '<p>'
 
 def function6():
@@ -535,12 +535,17 @@ def function7():
 def function8():
 	query = """select t.title_id, t.title_title
                 from canonical_author ca, authors a, titles t, cleanup c
-                where ca.ca_status = 3 and ca.author_id = a.author_id
-                and ca.title_id = t.title_id and not exists
+                where ca.ca_status = 3
+                and ca.author_id = a.author_id
+                and ca.title_id = t.title_id
+                and not exists
                  (SELECT 1 from canonical_author ca2, titles t
                   where ca.author_id = ca2.author_id and ca2.title_id = t.title_id
                   and t.title_ttype != 'REVIEW' and ca2.ca_status = 1)
-                and c.report_type=8 and c.record_id=t.title_id and c.resolved IS NULL"""
+                and c.report_type=8
+                and c.record_id=t.title_id
+                and c.resolved IS NULL
+                order by t.title_title"""
 
 	db.query(query)
 	result = db.store_result()
@@ -558,23 +563,23 @@ def function8():
                 else:
                         print '<tr align=left class="table2">'
 
-                print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, record[0][0], record[0][1])
+                print '<td>%s</td>' % ISFDBLink('title.cgi', record[0][0], record[0][1])
                 
                 reviewees = SQLReviewBriefAuthorRecords(record[0][0])
                 print '<td>'
                 for reviewee in reviewees:
-                        print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, reviewee[0], reviewee[1])
+                        print ISFDBLink('ea.cgi', reviewee[0], reviewee[1])
                 print '</td>'
                 
                 authors = SQLTitleBriefAuthorRecords(record[0][0])
                 print '<td>'
                 for author in authors:
-                        print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                        print ISFDBLink('ea.cgi', author[0], author[1])
                 print '</td>'
                 print '</tr>'
                 bgcolor ^= 1
                 record = result.fetch_row()
-        print "</table>"
+        print '</table>'
 
 def function9():
         query = """select titles.title_id, titles.title_title
@@ -3577,8 +3582,8 @@ def function89():
         db.query(query)
         result = db.store_result()
 
-        print """<h3>See <a href="http://%s/index.php?title=Template:AuthorFields:BirthPlace">
-                        this template</a> for formatting information.</h3>""" % WIKILOC
+        print """<h3>See <a href="%s://%s/index.php?title=Template:AuthorFields:BirthPlace">
+                        this template</a> for formatting information.</h3>""" % (PROTOCOL, WIKILOC)
         if result.num_rows() > 0:
                 record = result.fetch_row()
                 bgcolor = 1
@@ -3594,7 +3599,7 @@ def function89():
                         else:
                                 print '<tr align=left class="table2">'
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/ea.cgi?%s" dir="ltr">%s</a></td>' % (HTFAKE, author_id, name)
+                        print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id, name)
                         print '<td>%s</td>' % birthplace
                         print '<td>%s</td>' % birthdate
                         bgcolor ^= 1
@@ -5479,16 +5484,16 @@ def function199():
                                 print '<tr align=left class="table2">'
 
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_name)
+                        print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id, author_name)
                         print '<td>%s</td>' % old_note
                         print '<td>%s</td>' % new_note
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No author/alternate name language mismatches found.</h2>"
+		print '<h2>No author/alternate name language mismatches found.</h2>'
 	return
 
 def function200():
@@ -7061,15 +7066,15 @@ def function9999():
                 else:
                         print '<tr align=left class="table2">'
                 print '<td>%d</td>' % count
-                print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id_1, author_name_1)
-                print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id_2, author_name_2)
+                print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id_1, author_name_1)
+                print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id_2, author_name_2)
                 if cleanup_id and user.moderator:
-                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+9999">Ignore</a></td>' % (HTFAKE, int(cleanup_id))
+                        print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%d+1+9999' % int(cleanup_id), 'Ignore')
                 print '</tr>'
                 bgcolor ^= 1
                 count += 1
                 record = result.fetch_row()
-        print "</table>"
+        print '</table>'
 
 def Nightly_html(report_id, table, note_field, record_id_field, record_title_field, cgi_script):
         import cgi
