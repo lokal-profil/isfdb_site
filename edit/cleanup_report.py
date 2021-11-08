@@ -1650,24 +1650,27 @@ def function41():
                 bgcolor ^= 1
                 count += 1
                 record = result.fetch_row()
-        print "</table>"
+        print '</table>'
 
 def function42():
         print '<h3>This report finds reviews of CHAPBOOK, COVERART, INTERIORART, INTERVIEW and REVIEW records.</h3>'
 
         query = """select c.cleanup_id, t1.title_id, t1.title_title, t2.title_ttype 
                 from titles t1, titles t2, cleanup c, title_relationships tr 
-                where t1.title_ttype='REVIEW' and t1.title_id=tr.review_id 
-                and t2.title_id=tr.title_id and t2.title_ttype in 
-                ('CHAPBOOK', 'COVERART', 'INTERIORART', 'INTERVIEW', 'REVIEW') 
-                and c.report_type=42 and c.record_id=t1.title_id 
-                and c.resolved IS NULL order by t2.title_ttype, t2.title_title"""
+                where t1.title_ttype='REVIEW'
+                and t1.title_id=tr.review_id 
+                and t2.title_id=tr.title_id
+                and t2.title_ttype in ('CHAPBOOK', 'COVERART', 'INTERIORART', 'INTERVIEW', 'REVIEW') 
+                and c.report_type=42
+                and c.record_id=t1.title_id 
+                and c.resolved IS NULL
+                order by t2.title_ttype, t2.title_title"""
 	db.query(query)
 	result = db.store_result()
 	num = result.num_rows()
 
         if not num:
-                print "<h2>No Reviews of Uncommon Title Types.</h2>"
+                print '<h2>No Reviews of Uncommon Title Types.</h2>'
                 return
 
         record = result.fetch_row()
@@ -1684,7 +1687,7 @@ def function42():
 
         for title_type in titles.keys():
                 if not titles[title_type]:
-                        print "<h3>No reviews of %ss.</h3>" % title_type
+                        print '<h3>No reviews of %ss.</h3>' % title_type
                         continue
                 PrintTableColumns(('', 'Reviews of %s records' % title_type, ''))
                 color = 0
@@ -1698,8 +1701,8 @@ def function42():
                         title_id = title[1]
                         title_title = title[2]
                         print '<td>%d</td>' % count
-                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
-                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+42">Ignore this title</a></td>' % (HTFAKE, cleanup_id)
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_title)
+                        print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%s+1+42' % cleanup_id, 'Ignore this title')
                         print '</tr>'
                         color = color ^ 1
                         count += 1
@@ -1747,7 +1750,7 @@ def function44():
 	result = db.store_result()
 
 	if not result.num_rows():
-		print "<h2>No similar publisher records found</h2>"
+		print '<h2>No similar publisher records found</h2>'
 		return
 
         PrintTableColumns(('', 'Publisher 1', 'Publisher 2', 'Ignore'))
@@ -1765,14 +1768,14 @@ def function44():
                 else:
                         print '<tr align=left class="table2">'
                 print '<td>%d</td>' % count
-                print '<td><a href="http:/%s/publisher.cgi?%s">%s</a></td>' % (HTFAKE, publisher_id_1, publisher_name_1)
-                print '<td><a href="http:/%s/publisher.cgi?%s">%s</a></td>' % (HTFAKE, publisher_id_2, publisher_name_2)
-                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+44">Ignore</a></td>' % (HTFAKE, int(cleanup_id))
+                print '<td>%s</td>' % ISFDBLink('publisher.cgi', publisher_id_1, publisher_name_1)
+                print '<td>%s</td>' % ISFDBLink('publisher.cgi', publisher_id_2, publisher_name_2)
+                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%d+1+44' % int(cleanup_id), 'Ignore')
                 print '</tr>'
                 bgcolor ^= 1
                 count += 1
                 record = result.fetch_row()
-        print "</table>"
+        print '</table>'
 
 def function45():
         query = """select v.title_id, v.title_title, v.title_ttype, p.title_ttype
@@ -2680,15 +2683,15 @@ def function71():
                                 print '<tr align=left class="table2">'
 
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_title)
                         print '<td>%s</td>' % title_date
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No Forthcoming Titles Found</h2>"
+		print '<h2>No Forthcoming Titles Found</h2>'
 	return
 
 def function72():
@@ -3296,16 +3299,16 @@ def function85():
                                 print '<tr align=left class="table2">'
 
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_name)
+                        print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id, author_name)
                         print '<td>%s</td>' % author_legalname
                         print '<td>%s</td>' % lang_name
                         print '</tr>'
 			bgcolor ^= 1
 			count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No records found</h2>"
+		print '<h2>No records found</h2>'
 
 def function86():
         query = """select distinct p.pub_id, p.pub_title
@@ -3974,7 +3977,8 @@ def function99():
                 from publishers p, cleanup c
                 where p.publisher_name regexp'[[:alpha:]]'
                 and p.publisher_id = c.record_id
-                and c.report_type=99 and c.resolved IS NULL
+                and c.report_type=99
+                and c.resolved IS NULL
                 order by p.publisher_name"""
 
 	db.query(query)
@@ -3995,18 +3999,17 @@ def function99():
                                 print '<tr align=left class="table2">'
 
                         print '<td>%d</td>' % count
-                        print '<td><a href="http:/%s/publisher.cgi?%d">%s</a></td>' % (HTFAKE, publisher_id, publisher_name)
-                        print '<td><a href="http:/%s/edit/publisher_exceptions.cgi?%s">Link</a></td>' % (HTFAKE, publisher_id)
+                        print '<td>%s</td>' % ISFDBLink('publisher.cgi', publisher_id, publisher_name)
+                        print '<td>%s</td>' % ISFDBLink('edit/publisher_exceptions.cgi', publisher_id, 'Link')
                         if user.moderator:
-                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                                        %s this publisher</a></td>""" % (HTFAKE, int(cleanup_id), 1, 99, 'Ignore')
+                                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%d+1+99' % int(cleanup_id), 'Ignore this publisher')
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No Publishers with Latin Characters and non-Latin Title Records Found</h2>"
+		print '<h2>No Publishers with Latin Characters and non-Latin Title Records Found</h2>'
 	return
 
 def function100():
@@ -4317,9 +4320,9 @@ def function122():
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No Publishers with Latin Characters and no Transliterated Names.</h2>"
+		print '<h2>No Publishers with Latin Characters and no Transliterated Names.</h2>'
 	return
 
 def function123():
@@ -4463,18 +4466,18 @@ def transliteratedTitlesDisplay(query, language):
                                 print '<tr align=left class="table2">'
 
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_title)
                         print '<td>'
                         for author in authors:
-                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                                print ISFDBLink('ea.cgi', author[0], author[1])
                         print '</td>'
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-                print "<h2>No %s Titles with no Transliterated Names.</h2>" % language
+                print '<h2>No %s Titles with no Transliterated Names.</h2>' % language
 	return
 
 def function138():
@@ -5083,22 +5086,21 @@ def nonLatinAuthorsDisplay(report_id, query, language):
                         else:
                                 print '<tr align=left class="table2">'
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_title)
                         print '<td>%s</td>' % title_ttype
                         print '<td>'
                         for author in authors:
-                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                                print ISFDBLink('ea.cgi', author[0], author[1])
                         print '</td>'
                         if cleanup_id and user.moderator:
-                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+%d">
-                                        Ignore this title</a></td>""" % (HTFAKE, int(cleanup_id), int(report_id))
+                                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%d+1+%d' % (int(cleanup_id), int(report_id)), 'Ignore this title')
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-                print "<h2>No %s Titles with a Latin author name.</h2>" % language
+                print '<h2>No %s Titles with a Latin author name.</h2>' % language
 	return
                   
 def nonLatinAuthors(report_id):
@@ -5174,15 +5176,14 @@ def function189():
                                 record2 = result2.fetch_row()
                         
                         if user.moderator:
-                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                                        %s this series</a></td>""" % (HTFAKE, int(cleanup_id), 1, 189, 'Ignore')
+                                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%d+1+189' % int(cleanup_id), 'Ignore this series')
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No Publication Series Names That May Need Disambiguation Found</h2>"
+		print '<h2>No Publication Series Names That May Need Disambiguation Found</h2>'
 	return
 
 def function190():
@@ -7131,7 +7132,7 @@ def Nightly_html(report_id, table, note_field, record_id_field, record_title_fie
                 else:
                         print '<tr align=left class="table2">'
                 print '<td>%d</td>' % count
-                print '<td><a href="http:/%s/%s.cgi?%s">%s</a></td>' % (HTFAKE, cgi_script, record_id, record_name)
+                print '<td>%s</td>' % ISFDBLink('%s.cgi' % cgi_script, record_id, record_name)
                 print '<td>&lt;%s</td>' % problem_part
                 print '</tr>'
                 bgcolor ^= 1
@@ -7177,11 +7178,12 @@ def PrintPublisherRecord(pub_id, pub_name, bgcolor, count, cleanup_id = 0, repor
                 print '<tr align=left class="table2">'
 
         print '<td>%d</td>' % count
-        print '<td><a href="http:/%s/publisher.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_name)
+        print '<td>%s</td>' % ISFDBLink('publisher.cgi', pub_id, pub_name)
         if cleanup_id and user.moderator:
                 message = {0: 'Resolve', 1: 'Ignore'}
-                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                        %s this publisher</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                '%d+%d+%d' % (int(cleanup_id), int(mode), int(report_id)),
+                                                '%s this publisher ' % message[mode])
         print '</tr>'
         print '<p>'
 
@@ -7192,11 +7194,12 @@ def PrintPubSeriesRecord(pub_series_id, pub_series_name, bgcolor, count, cleanup
                 print '<tr align=left class="table2">'
 
         print '<td>%d</td>' % count
-        print '<td><a href="http:/%s/pubseries.cgi?%s">%s</a></td>' % (HTFAKE, pub_series_id, pub_series_name)
+        print '<td>%s</td>' % ISFDBLink('pubseries.cgi', pub_series_id, pub_series_name)
         if cleanup_id and user.moderator:
                 message = {0: 'Resolve', 1: 'Ignore'}
-                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                        %s this publication series</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                '%d+%d+%d' % (int(cleanup_id), int(mode), int(report_id)),
+                                                '%s this publication series' % message[mode])
         print '</tr>'
         print '<p>'
 
