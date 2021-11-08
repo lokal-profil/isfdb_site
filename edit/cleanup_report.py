@@ -1281,15 +1281,17 @@ def function31():
 
                         print '<td>%d</td>' % count
                         print '<td>%s</td>' % record[0][3]
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, record[0][1], record[0][2])
-                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+31">Ignore this ISBN</a></td>' % (HTFAKE, record[0][0])
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', record[0][1], record[0][2])
+                        print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                        '%s+1+31' % record[0][0],
+                                                        'Ignore this ISBN')
                         print '</tr>'
 			bgcolor ^= 1
 			count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No records found</h2>"
+		print '<h2>No records found</h2>'
 
 def function32():
 	query = """select p1.pub_id, p1.pub_tag, p1.pub_title from pubs p1, 
@@ -1365,15 +1367,15 @@ def function33():
                         else:
                                 print '<tr align=left class="table2">'
                         print '<td>%d</td>' % count
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, record[0][0], record[0][1])
-                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, record[0][2], record[0][3])
-                        print "</tr>"
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', record[0][0], record[0][1])
+                        print '<td>%s</td>' % ISFDBLink('ea.cgi', record[0][2], record[0][3])
+                        print '</tr>'
 			bgcolor ^= 1
 			count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No records found</h2>"
+		print '<h2>No records found</h2>'
 
 def function34():
 	query =  """select pub_id, pub_title from pubs, cleanup
@@ -2089,8 +2091,10 @@ def function50():
 
                 print '<td>%d</td>' % count
                 print '<td>%s</td>' % pub_isbn
-                print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
-                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+50">Ignore this pub</a></td>' % (HTFAKE, cleanup_id)
+                print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
+                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                '%s+1+50' % cleanup_id,
+                                                'Ignore this pub')
                 print '</tr>'
                 bgcolor ^= 1
                 count += 1
@@ -2143,11 +2147,11 @@ def function51():
                 for pub in isbns[isbn]:
                         print '<tr>'
                         print '<td>'
-                        print '<a href="http:/%s/pl.cgi?%s">%s</a>' % (HTFAKE, pub[0], pub[1])
+                        print ISFDBLink('pl.cgi', pub[0], pub[1])
                         print '</td>'
                         print '<td>%s</td>' % pub[3]
                         print '<td>'
-                        print '<a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+51">Ignore this pub</a>' % (HTFAKE, pub[4])
+                        print ISFDBLink('mod/resolve_cleanup.cgi', '%s+1+51' % pub[4], 'Ignore this pub')
                         print '</td>'
                         print '</tr>'
                 print '</table>'
@@ -3334,19 +3338,19 @@ def function86():
                                 user_name = verifier[1]
                                 if verifier_count > 0:
                                         print ', '
-                                print '<a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, user_name, user_name)
+                                print WikiLink(user_name)
                                 verifier_count += 1
                         if not verifier_count:
                                 print '&nbsp;'
                         print '</td>'
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No Primary-Verified Publications with Unknown Format</h2>"
+		print '<h2>No Primary-Verified Publications with Unknown Format</h2>'
 	return
 
 def function87():
@@ -3450,7 +3454,7 @@ def function88():
                 authors = SQLPubBriefAuthorRecords(pub_id)
                 print '<td>'
                 for author in authors:
-                        print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                        print ISFDBLink('ea.cgi', author[0], author[1])
                 print '</td>'
                 
                 verifiers = SQLPrimaryVerifiers(pub_id)
@@ -3461,20 +3465,20 @@ def function88():
                         user_name = verifier[1]
                         if ver_count > 0:
                                 print '<br>'
-                        print '<a href="http://%s/index.php/User:%s">%s</a>' % (WIKILOC, user_name, user_name)
+                        print WikiLink(user_name)
                         ver_count += 1
                 if not verifiers:
                         print '&nbsp;'
                 print '</td>'
                                 
                 if user.moderator:
-                        print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+88">Ignore this pub</a></td>' % (HTFAKE, cleanup_id)
+                        print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%s+1+88"' % cleanup_id, 'Ignore this pub')
                 print '</tr>'
 
                 bgcolor ^= 1
                 count += 1
                 record = result.fetch_row()
-        print "</table>"
+        print '</table>'
 	return
 
 def function89():
@@ -3828,18 +3832,18 @@ def function93():
                         authors = SQLPubBriefAuthorRecords(pub_id)
                         print '<td>'
                         for author in authors:
-                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                                print ISFDBLink('ea.cgi', author[0], author[1])
                         print '</td>'
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
                         if user.moderator:
-                                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%s+1+93">Ignore this pub</a></td>' % (HTFAKE, cleanup_id)
+                                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%s+1+93' % cleanup_id, 'Ignore this pub')
                         print '</tr>'
 			bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No Publication Title-Reference Title Mismatches found</h2>"
+		print '<h2>No Publication Title-Reference Title Mismatches found</h2>'
 	return
 
 def function94():
@@ -4058,7 +4062,7 @@ def function100():
                                 print '<tr align=left class="table2">'
 
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
                         print '<td>%s</td>' % pub_price
                         print '</tr>'
                         bgcolor ^= 1
@@ -5295,18 +5299,18 @@ def function193():
 
                         print '<td>%d</td>' % int(count)
                         print '<td>%s</td>' % pub_ctype
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
                         if cleanup_id and user.moderator:
-                                message = {0: 'Resolve', 1: 'Ignore'}
-                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                                        %s this publication</a></td>""" % (HTFAKE, int(cleanup_id), 1, 193, 'Ignore')
+                                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                                '%d+1+193' % int(cleanup_id),
+                                                                'Ignore this publication')
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No outstanding multilingual publications found</h2>"
+		print '<h2>No outstanding multilingual publications found</h2>'
 
 def function194():
 	query = """select title_id, t.title_title, t.title_ttype
@@ -5840,18 +5844,17 @@ def function233():
                                 print '<tr align=left class="table2">'
 
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id1, pub_title1)
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id2, pub_title2)
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id1, pub_title1)
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id2, pub_title2)
                         if user.moderator:
-                                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+233">
-                                        Ignore</a></td>""" % (HTFAKE, int(cleanup_id))
+                                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%d+1+233' % int(cleanup_id), 'Ignore')
                         print '</tr>'
 			bgcolor ^= 1
 			count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No potential duplicate e-book publications found.</h2>"
+		print '<h2>No potential duplicate e-book publications found.</h2>'
 
 def function234():
         cleanup.query = """select p.pub_id, p.pub_title
@@ -6214,8 +6217,8 @@ def function252():
                         else:
                                 print '<tr align=left class="table2">'
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
-                        print '<td><a href="http://www.worldcat.org/isbn/%s">%s</a></td>' % (pub_isbn, pub_isbn)
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
+                        print '<td><a href="https://www.worldcat.org/isbn/%s">%s</a></td>' % (pub_isbn, pub_isbn)
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
