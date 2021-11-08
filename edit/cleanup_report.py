@@ -738,12 +738,12 @@ def function13():
                                 print '<tr align=left class="table2">'
 
                         print "<td>%s</td>" % record[0][TITLE_YEAR][:4]
-                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, record[0][TITLE_PUBID], record[0][TITLE_TITLE])
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', record[0][TITLE_PUBID], record[0][TITLE_TITLE])
 
                         authors = SQLTitleBriefAuthorRecords(record[0][TITLE_PUBID])
                         print "<td>"
                         for author in authors:
-                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                                print ISFDBLink('ea.cgi', author[0], author[1])
                         print "</td>"
 
                         print "</tr>"
@@ -1313,9 +1313,9 @@ def function32():
                         else:
                                 print '<tr align=left class="table2">'
 
-                        print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, record[0][0], record[0][2])
-                        print "<td>%s</td>" % record[0][1]
-                        print "</tr>"
+                        print '<td>%s</td>' % ISFDBLink('pl.cgi', record[0][0], record[0][2])
+                        print '<td>%s</td>' % record[0][1]
+                        print '</tr>'
 			bgcolor ^= 1
 			record = result.fetch_row()
 		print "</table>"
@@ -1435,7 +1435,7 @@ def function35():
 
                 print '<td>%s</td>' % format
                 print '<td>'
-                print '<a href="http:/%s/pl.cgi?%s">%s</a>' % (HTFAKE, pub_id, pub_title)
+                print ISFDBLink('pl.cgi', pub_id, pub_title)
                 print '</td>'
                 print '</tr>'
                 bgcolor ^= 1
@@ -1470,7 +1470,7 @@ def function36():
                 else:
                         print '<tr align=left class="table2">'
 
-                print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, record[0][0], record[0][1])
+                print '<td>%s</td>' % ISFDBLink('pl.cgi', record[0][0], record[0][1])
                 print '<td><a href="%s">%s</a></td>' % (record[0][2], record[0][2])
                 print '</tr>'
                 bgcolor ^= 1
@@ -1558,7 +1558,7 @@ def function38():
                 else:
                         print '<tr align=left class="table2">'
 
-                print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
                 print '<td>'
                 first = 1
                 for title in titles:
@@ -1569,11 +1569,11 @@ def function38():
                                 first = 0
                         else:
                                 print '<br>'
-                        print '<a href="http:/%s/title.cgi?%s">%s</a> (%s)' % (HTFAKE, title_id, title_title, count)
+                        print '%s (%s)' % (ISFDBLink('title.cgi', title_id, title_title), count)
                 print '</td>'
-                print "</tr>"
+                print '</tr>'
                 bgcolor ^= 1
-        print "</table>"
+        print '</table>'
 
 def function39():
         query = """select p.pub_id, p.pub_title from pubs p, cleanup c 
@@ -1830,10 +1830,14 @@ def function45():
                 print '</table><p>'
 
 def function46():
-	query = """select DISTINCT t.* from titles t, pubs p, pub_content pc, cleanup c 
-                where t.title_ttype='EDITOR' and t.title_id=pc.title_id and 
-                p.pub_id=pc.pub_id and p.pub_ctype not in ('MAGAZINE','FANZINE') 
-                and t.title_id=c.record_id and c.report_type=46"""
+	query = """select DISTINCT t.*
+                from titles t, pubs p, pub_content pc, cleanup c 
+                where t.title_ttype='EDITOR'
+                and t.title_id=pc.title_id
+                and p.pub_id=pc.pub_id
+                and p.pub_ctype not in ('MAGAZINE','FANZINE') 
+                and t.title_id=c.record_id
+                and c.report_type=46"""
 
 	db.query(query)
 	result = db.store_result()
@@ -1850,19 +1854,19 @@ def function46():
                                 print '<tr align=left class="table2">'
 
                         print '<td>%s</td>' % record[0][TITLE_YEAR][:4]
-                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, record[0][TITLE_PUBID], record[0][TITLE_TITLE])
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', record[0][TITLE_PUBID], record[0][TITLE_TITLE])
 
                         authors = SQLTitleBriefAuthorRecords(record[0][TITLE_PUBID])
                         print '<td>'
                         for author in authors:
-                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                                print ISFDBLink('ea.cgi', author[0], author[1])
                         print '</td>'
                         print '</tr>'
 			bgcolor ^= 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No records found</h2>"
+		print '<h2>No records found</h2>'
 
 def function47():
         query = """select distinct t.title_id, t.title_title, t.title_ttype 
@@ -2023,7 +2027,7 @@ def function49():
                 print '<td>%d</td>' % count
                 print '<td>%s</td>' % pub_isbn
                 print '<td>'
-                print '<a href="http:/%s/pl.cgi?%s">%s</a>' % (HTFAKE, pub_id, pub_title)
+                print ISFDBLink('pl.cgi', pub_id, pub_title)
                 print '</td>'
                 print '</tr>'
                 bgcolor ^= 1
@@ -7213,8 +7217,9 @@ def PrintSeriesRecord(series_id, series_name, bgcolor, count, cleanup_id = 0, re
         print '<td>%s</td>' % ISFDBLink("pe.cgi", series_id, series_name)
         if cleanup_id and user.moderator:
                 message = {0: 'Resolve', 1: 'Ignore'}
-                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                        %s this series</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                '%d+%d+%d' % (int(cleanup_id), int(mode), int(report_id)),
+                                                '%s this series' % message[mode])
         print '</tr>'
 
 def PrintAwardTypeRecord(award_type_id, award_type_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
@@ -7224,11 +7229,12 @@ def PrintAwardTypeRecord(award_type_id, award_type_name, bgcolor, count, cleanup
                 print '<tr align=left class="table2">'
 
         print '<td>%d</td>' % count
-        print '<td><a href="http:/%s/awardtype.cgi?%s">%s</a></td>' % (HTFAKE, award_type_id, award_type_name)
-        if cleanup_id:
+        print '<td>%s</td>' % ISFDBLink('awardtype.cgi', award_type_id, award_type_name)
+        if cleanup_id and user.moderator:
                 message = {0: 'Resolve', 1: 'Ignore'}
-                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                        %s this award type</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                '%d+%d+%d' % (int(cleanup_id), int(mode), int(report_id)),
+                                                '%s this award type' % message[mode])
         print '</tr>'
 
 def PrintAwardCatRecord(award_cat_id, award_cat_name, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
@@ -7238,11 +7244,12 @@ def PrintAwardCatRecord(award_cat_id, award_cat_name, bgcolor, count, cleanup_id
                 print '<tr align=left class="table2">'
 
         print '<td>%d</td>' % count
-        print '<td><a href="http:/%s/award_category.cgi?%s">%s</a></td>' % (HTFAKE, award_cat_id, award_cat_name)
-        if cleanup_id:
+        print '<td>%s</td>' % ISFDBLink('award_category.cgi', award_cat_id, award_cat_name)
+        if cleanup_id and user.moderator:
                 message = {0: 'Resolve', 1: 'Ignore'}
-                print """<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+%d+%d">
-                        %s this award category</a></td>""" % (HTFAKE, int(cleanup_id), int(mode), int(report_id), message[mode])
+                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi',
+                                                '%d+%d+%d' % (int(cleanup_id), int(mode), int(report_id)),
+                                                '%s this award category' % message[mode])
         print '</tr>'
 
 def PrintAwardRecord(award_id, award_title, bgcolor, count, cleanup_id = 0, report_id = 0, mode = 1):
