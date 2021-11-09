@@ -1399,7 +1399,7 @@ def nightly_cleanup_reports():
         #   Report 230: Mismatched OCLC URLs in Publication Notes
         query = """select p.pub_id, n.note_note from notes n, pubs p
                 where p.note_id = n.note_id and n.note_note regexp
-                '<a href=\"http:\/\/www.worldcat.org\/oclc\/[[:digit:]]{1,11}"\>[[:digit:]]{1,11}\<\/a>'"""
+                '<a href=\"https:\/\/www.worldcat.org\/oclc\/[[:digit:]]{1,11}"\>[[:digit:]]{1,11}\<\/a>'"""
         db.query(query)
         result = db.store_result()
         record = result.fetch_row()
@@ -1451,7 +1451,7 @@ def nightly_cleanup_reports():
         #   Report 234: Publications with direct De Nederlandse Bibliografie links in Notes
         query = """select p.pub_id from notes n, pubs p
                  where p.note_id = n.note_id
-                 and n.note_note like '%http://picarta.pica.nl/%'"""
+                 and n.note_note like '%picarta.pica.nl/%'"""
         standardReport(query, 234)
 
         #   Report 235: Publications with invalid BNF identifiers

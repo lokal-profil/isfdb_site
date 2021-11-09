@@ -2902,9 +2902,13 @@ def function80():
                 from pubs p, pub_content pc, titles t, cleanup c
                 where pc.pub_id = p.pub_id
                 and (p.pub_ctype = 'MAGAZINE' or p.pub_ctype = 'FANZINE')
-                and pc.title_id = t.title_id and t.title_ttype = 'SHORTFICTION'
-                and p.pub_id=c.record_id and c.report_type=80 and c.resolved is NULL
-                GROUP BY p.pub_id, p.pub_title, t.title_title HAVING count(*) > 1"""
+                and pc.title_id = t.title_id
+                and t.title_ttype = 'SHORTFICTION'
+                and p.pub_id=c.record_id
+                and c.report_type=80
+                and c.resolved is NULL
+                GROUP BY p.pub_id, p.pub_title, t.title_title
+                HAVING count(*) > 1"""
 
 	db.query(query)
 	result = db.store_result()
@@ -2922,7 +2926,7 @@ def function80():
                 data[pub_id].append(record[0])
                 record = result.fetch_row()
 
-        PrintTableColumns(('', 'Publication', 'Title(s)', ''))
+        PrintTableColumns(('', 'Publication', 'Title(s)', 'Ignore'))
         bgcolor = 1
         count = 1
         for pub_id in data:
@@ -2932,18 +2936,19 @@ def function80():
                         print '<tr align=left class="table2">'
                 print '<td>%d</td>' % count
                 pub_title = data[pub_id][0][1]
-                print '<td><a href="http:/%s/pl.cgi?%s">%s</a></td>' % (HTFAKE, pub_id, pub_title)
+                print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, pub_title)
                 print '<td>'
                 for pub_data in data[pub_id]:
                         title_id = pub_data[2]
                         title_title = pub_data[3]
-                        print '<a href="http:/%s/title.cgi?%s">%s</a><br>' % (HTFAKE, title_id, title_title)
+                        print ISFDBLink('title.cgi', title_id, title_title)
+                        print '<br>'
                 print '</td>'
-                print '<td><a href="http:/%s/mod/resolve_cleanup.cgi?%d+1+80">Ignore</a></td>' % (HTFAKE, int(data[pub_id][0][4]))
+                print '<td>%s</td>' % ISFDBLink('mod/resolve_cleanup.cgi', '%d+1+80' % int(data[pub_id][0][4]), 'Ignore')
                 print '</tr>'
                 bgcolor ^= 1
                 count += 1
-        print "</table>"
+        print '</table>'
 
 def function81():
         query = """select s.series_id, s.series_title, c.cleanup_id
@@ -4225,13 +4230,13 @@ def WikiPages(report_number, namespace_number, namespace_name, record_name,
                         print '<tr align=left class="table2">'
 
                 print '<td>%d</td>' % int(count)
-                print '<td><a href="http:/%s/%s.cgi?%s">%s</a></td>' % (HTFAKE, script, record_id, record_title)
-                print '<td><a href="http://%s/index.php/%s:%s">%s</a></td>' % (WIKILOC, namespace_name, urllib.quote(wiki_title), wiki_title)
+                print '<td>%s</td>' % ISFDBLink('%s.cgi' % script, record_id, record_title)
+                print '<td><a href="%s://%s/index.php/%s:%s">%s</a></td>' % (PROTOCOL, WIKILOC, namespace_name, urllib.quote(wiki_title), wiki_title)
                 print '</tr>'
                 bgcolor ^= 1
                 count += 1
                 record = result.fetch_row()
-        print "</table>"
+        print '</table>'
 
 def StrandedWikiPages(report_number, namespace_number, namespace_name):
         import urllib
@@ -4263,14 +4268,14 @@ def StrandedWikiPages(report_number, namespace_number, namespace_name):
                                 print '<tr align=left class="table2">'
 
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http://%s/index.php/%s:%s">%s</a></td>' % (WIKILOC, namespace_name, urllib.quote(page_title), page_title)
+                        print '<td><a href="%s://%s/index.php/%s:%s">%s</a></td>' % (PROTOCOL, WIKILOC, namespace_name, urllib.quote(page_title), page_title)
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No records found</h2>"
+		print '<h2>No records found</h2>'
 
 def function121():
 	query = """select distinct ps.pub_series_id, ps.pub_series_name, c.cleanup_id
@@ -4363,16 +4368,16 @@ def function123():
                                 print '<tr align=left class="table2">'
 
                         print '<td>%d</td>' % int(count)
-                        print '<td><a href="http:/%s/ea.cgi?%s">%s</a></td>' % (HTFAKE, author_id, author_name)
+                        print '<td>%s</td>' % ISFDBLink('ea.cgi', author_id, author_name)
                         print '<td>%s</td>' % author_legalname
                         print '<td>%s</td>' % lang_name
                         print '</tr>'
 			bgcolor ^= 1
 			count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No records found</h2>"
+		print '<h2>No records found</h2>'
 
 def function124():
         transliteratedTitles(124)
@@ -5344,19 +5349,19 @@ def function194():
 
                         print '<td>%s</td>' % count
                         print '<td>%s</td>' % title_type
-                        print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_title)
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_title)
                         authors = SQLTitleBriefAuthorRecords(title_id)
                         print '<td>'
                         for author in authors:
-                                print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                                print ISFDBLink('ea.cgi', author[0], author[1])
                         print '</td>'
                         print '</tr>'
                         bgcolor ^= 1
                         count += 1
 			record = result.fetch_row()
-		print "</table>"
+		print '</table>'
 	else:
-		print "<h2>No titles without a language found.</h2>"
+		print '<h2>No titles without a language found.</h2>'
 	return
 
 def function195():
@@ -5737,7 +5742,7 @@ def function230():
                 from notes n, pubs p, cleanup c
                 where p.note_id = n.note_id
                 and n.note_note regexp
-                '<a href=\"http:\/\/www.worldcat.org\/oclc\/[[:digit:]]{1,11}"\>[[:digit:]]{1,11}\<\/a>'
+                '<a href=\"https:\/\/www.worldcat.org\/oclc\/[[:digit:]]{1,11}"\>[[:digit:]]{1,11}\<\/a>'
                 and p.pub_id = c.record_id
                 and c.report_type = 230"""
         db.query(query)
@@ -5865,7 +5870,7 @@ def function234():
         cleanup.query = """select p.pub_id, p.pub_title
                    from notes n, pubs p, cleanup c
                    where p.note_id = n.note_id
-                   and n.note_note like '%http://picarta.pica.nl/%'
+                   and n.note_note like '%picarta.pica.nl/%'
                    and c.report_type = 234
                    and p.pub_id = c.record_id
                    order by pub_title"""
@@ -7286,14 +7291,14 @@ def PrintTitlesWithoutLanguage(result):
                 authors = SQLTitleBriefAuthorRecords(title_id)
                 print '<td>'
                 for author in authors:
-                        print '<a href="http:/%s/ea.cgi?%s">%s</a>' % (HTFAKE, author[0], author[1])
+                        print ISFDBLink('ea.cgi', author[0], author[1])
                 print '</td>'
-                print '<td><a href="http:/%s/title.cgi?%s">%s</a></td>' % (HTFAKE, title_id, title_name)
+                print '<td>%s</td>' % ISFDBLink('title.cgi', title_id, title_name)
                 print '</tr>'
                 bgcolor ^= 1
                 count += 1
                 record = result.fetch_row()
-        print "</table>"
+        print '</table>'
 
 	
 if __name__ == '__main__':
