@@ -316,6 +316,7 @@ def reportsDict():
         reports[303] = ("COVERART titles with 'uncredited' Author")
         reports[304] = ("Publications with COBISS references in notes and no template/External ID")
         reports[305] = ("Publications with Biblioman references in notes and no template/External ID")
+        reports[306] = ("Publications with Duplicate Authors")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 302, 9999)), ]
@@ -327,7 +328,7 @@ def reportsDict():
                                           244, 245, 246, 247, 248, 249, 250, 251,
                                           252, 253, 272, 277, 278, 279, 280, 281,
                                           282, 283, 284, 285, 287, 288, 291, 292,
-                                          294, 295, 299, 300)), )
+                                          294, 295, 299, 300, 306)), )
         sections.append(('Series', (16, 17, 48, 64, 67, 76, 81, 90, 144)), )
         sections.append(('Titles', (19, 1, 3, 18, 47, 55, 62, 63, 69, 74, 80, 87,
                                     91, 96, 194, 195, 196, 197, 227, 275, 276, 290,
@@ -384,6 +385,6 @@ def reportsDict():
                          268, 269, 270, 271, 272, 273, 274, 275, 276, 277,
                          278, 279, 280, 281, 282, 283, 284, 285, 286, 287,
                          288, 289, 291, 292, 293, 294, 295, 296, 297, 298,
-                         299, 300, 301, 302, 303, 304, 305, 9999)
+                         299, 300, 301, 302, 303, 304, 305, 306, 9999)
         
         return (reports, sections, non_moderator)

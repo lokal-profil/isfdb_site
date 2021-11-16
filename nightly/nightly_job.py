@@ -2060,6 +2060,13 @@ def nightly_cleanup_reports():
                 and it.identifier_type_name = 'Biblioman')"""
         standardReport(query, 305)
 
+        #   Report 306: Publications with Duplicate Authors
+        query = """select pub_id
+                from pub_authors
+                group by author_id, pub_id
+                having count(pub_id) > 1"""
+        standardReport(query, 306)
+
 
 def requiredLowerCase():
         clause = ''

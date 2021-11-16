@@ -6866,6 +6866,19 @@ def function305():
         cleanup.none = "No publications with Biblioman references in notes without a template/External ID"
         cleanup.print_pub_table()
 
+def function306():
+        cleanup.query = """select p.pub_id, p.pub_title
+                        from pub_authors pa, pubs p, cleanup c
+                        where p.pub_id = pa.pub_id
+                        and c.record_id = pa.pub_id
+                        and c.report_type = 306
+                        group by pa.author_id, pa.pub_id
+                        having count(pa.pub_id) > 1
+                        order by p.pub_title
+                        """
+        cleanup.none = "No publications with Duplicate Authors"
+        cleanup.print_pub_table()
+
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:
