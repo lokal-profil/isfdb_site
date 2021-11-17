@@ -20,9 +20,6 @@ import cgi
 
 if __name__ == '__main__':
 
-        submitter_name = SESSION.Parameter(0, 'str')
-        start = SESSION.Parameter(1, 'int', 0)
-
         form = cgi.FieldStorage()
         try:
                 submitter_name = form['submitter_name'].value
@@ -31,7 +28,7 @@ if __name__ == '__main__':
 
         submitter_id = SQLgetSubmitterID(submitter_name)
         if not submitter_id:
-                SESSION.DisplayError('A user with this name does not exist. Note that user names are case sensitive and the first letter is always capitalized.')
+                SESSION.DisplayError('An ISFDB user with this name does not exist. Note that user names are case sensitive and the first letter is always capitalized.')
 
         try:
                 start = int(form['start'].value)
