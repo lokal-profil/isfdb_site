@@ -926,14 +926,21 @@ class pubs:
                         if value:
                                 currency_map = {'B' : BAHT_SIGN,
                                               'E' : EURO_SIGN,
+                                              'Kc ': '%s ' % CZECH_KORUNA_SIGN,
+                                              'Kcs ': '%s ' % CZECHOSLOVAK_KORUNA_SIGN,
                                               'L' : POUND_SIGN,
                                               'P' : PESO_SIGN,
-                                              'Y' : YEN_SIGN
+                                              'Y' : YEN_SIGN,
+                                              'zl ': '%s ' % ZLOTY_SIGN
                                               }
-                                for letter in currency_map:
-                                        if re.match('^%s[0-9]{1}' % letter, value):
-                                                    value = XMLescape(currency_map[letter]) + value[1:]
-                                                    break
+                                for abbrev in currency_map:
+                                        if re.match('^%s[0-9]{1}' % abbrev, value):
+                                                currency_sign = currency_map[abbrev]
+                                                padding_space = ''
+                                                if currency_sign.endswith(' '):
+                                                        padding_space = ' '
+                                                value = '%s%s%s' % (XMLescape(currency_sign), padding_space, value[len(abbrev):])
+                                                break
         			self.used_price = 1
         			self.pub_price = value
 
