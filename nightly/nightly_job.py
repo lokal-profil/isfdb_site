@@ -2067,6 +2067,12 @@ def nightly_cleanup_reports():
                 having count(pub_id) > 1"""
         standardReport(query, 306)
 
+        #   Report 307: Awards Linked to Uncommon Title Types (currently limited to CHAPBOOK titles)
+        query = """select ta.award_id
+                from titles t, title_awards ta
+                where ta.title_id = t.title_id
+                and t.title_ttype in ('CHAPBOOK')"""
+        standardReport(query, 307)
 
 def requiredLowerCase():
         clause = ''

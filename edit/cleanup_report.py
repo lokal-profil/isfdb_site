@@ -6879,6 +6879,22 @@ def function306():
         cleanup.none = "No publications with Duplicate Authors"
         cleanup.print_pub_table()
 
+def function307():
+        cleanup.query = """select a.award_id, a.award_title, c.cleanup_id
+                        from awards a, titles t, title_awards ta, cleanup c
+                        where a.award_id = ta.award_id
+                        and ta.title_id = t.title_id
+                        and t.title_ttype in ('CHAPBOOK')
+                        and c.record_id = a.award_id
+                        and c.report_type = 307
+                        and c.resolved IS NULL
+                        order by a.award_title
+                        """
+        cleanup.none = 'No Awards Linked to to Uncommon Title Types'
+        cleanup.note = 'This report is currently limited to CHAPBOOK titles'
+        cleanup.ignore = 1
+        cleanup.print_award_table()
+
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:
