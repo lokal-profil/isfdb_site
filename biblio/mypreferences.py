@@ -75,8 +75,8 @@ if __name__ == '__main__':
                                                                                                "Display cover scan indicators on Title and search pages")
         print '</ul>'
 
+        print '<li><b>Searching</b>'
         print '<ul>'
-        print '<li><b>Searching</b></li>'
         
 	keep_spaces_in_searches = ''
 	if user.keep_spaces_in_searches:
@@ -85,8 +85,8 @@ if __name__ == '__main__':
                                                                                                    "Keep leading and trailing spaces when searching")
         print '</ul>'
 
+        print '<li><b>Editing</b>'
         print '<ul>'
-        print '<li><b>Editing</b></li>'
         
         suppress_help_bubbles = ''
 	if user.suppress_help_bubbles:
