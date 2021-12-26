@@ -1,5 +1,5 @@
 /*     Version: $Revision$
-      (C) COPYRIGHT 2015-2019   Ahasuerus
+      (C) COPYRIGHT 2015-2021   Ahasuerus
          ALL RIGHTS RESERVED
       Date: $Date$ */
 
@@ -286,7 +286,7 @@ function validateURL(field_name) {
 		return true;
 	}
 	// Retrieve the value of the field
-	var element_value = element_name.value;
+	var element_value = element_name.value.trim();
 	// If the value is empty, then validation passes
 	if (element_value == "") {
 		return true;
