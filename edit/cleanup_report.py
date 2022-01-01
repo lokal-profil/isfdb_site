@@ -148,6 +148,33 @@ class Cleanup():
                                                               '%s this author' % message[mode])
                 print '</tr>'
 
+        def books_with_trans_and_no_pubs(self, lang_name):
+                self.query = """select t1.title_id, t1.title_title 
+                        from titles t1, languages l, cleanup c
+                        where t1.title_id = c.record_id
+                        and c.report_type = %d
+                        and exists
+                                (select 1 from titles t2
+                                where t2.title_parent = t1.title_id
+                                and t2.title_language != t1.title_language)
+                        and not exists
+                                (select 1 from pub_content pc
+                                where pc.title_id = t1.title_id)
+                        and not exists
+                                (select 1 from titles t3
+                                where t3.title_parent = t1.title_id
+                                and t3.title_language = t1.title_language)
+                        and t1.title_language = l.lang_id
+                        and l.lang_name = '%s'
+                        and t1.title_copyright not in ('8888-00-00', '0000-00-00')
+                        and t1.title_ttype in ('NOVEL', 'COLLECTION', 'ANTHOLOGY', 'NONFICTION', 'OMNIBUS')
+                        order by t1.title_title""" % (self.report_id, lang_name)
+                self.none = 'No %s book-length titles with no publications and with a translation' % lang_name
+                self.note = """For the purposes of this report, "book" title types are defined as
+                                NOVEL, COLLECTION, ANTHOLOGY, NONFICTION, and OMNIBUS.
+                                Titles with 0000-00-00 and 8888-00-00 dates are not included."""
+                self.print_title_table()
+
 class ExcludedTitleTypes():
         def __init__(self):
                 self.query = ''
@@ -6894,6 +6921,84 @@ def function307():
         cleanup.note = 'This report is currently limited to CHAPBOOK titles'
         cleanup.ignore = 1
         cleanup.print_award_table()
+
+def function308():
+        cleanup.books_with_trans_and_no_pubs('English')
+
+def function309():
+        cleanup.books_with_trans_and_no_pubs('French')
+
+def function310():
+        cleanup.books_with_trans_and_no_pubs('German')
+
+def function311():
+        cleanup.books_with_trans_and_no_pubs('Italian')
+
+def function312():
+        cleanup.books_with_trans_and_no_pubs('Japanese')
+
+def function313():
+        cleanup.books_with_trans_and_no_pubs('Russian')
+
+def function314():
+        cleanup.books_with_trans_and_no_pubs('Spanish')
+
+def function315():
+        cleanup.query = """select t1.title_id, t1.title_title, l.lang_name
+                from titles t1, languages l, cleanup c
+                where t1.title_id = c.record_id
+                and c.report_type = 315
+                and exists
+                        (select 1 from titles t2
+                        where t2.title_parent = t1.title_id
+                        and t2.title_language != t1.title_language)
+                and not exists
+                        (select 1 from pub_content pc
+                        where pc.title_id = t1.title_id)
+                and not exists
+                        (select 1 from titles t3
+                        where t3.title_parent = t1.title_id
+                        and t3.title_language = t1.title_language)
+                and t1.title_language = l.lang_id
+                and l.lang_name not in ('English', 'French', 'German', 'Italian', 'Japanese', 'Russian', 'Spanish')
+                and t1.title_copyright not in ('8888-00-00', '0000-00-00')
+                and t1.title_ttype in ('NOVEL', 'COLLECTION', 'ANTHOLOGY', 'NONFICTION', 'OMNIBUS')
+                order by l.lang_name, t1.title_title"""
+        cleanup.none = 'No book-length titles with no publications and with a translation in other languages'
+        cleanup.note = """For the purposes of this report, "book" title types are defined as
+                        NOVEL, COLLECTION, ANTHOLOGY, NONFICTION, and OMNIBUS.
+                        Titles with 0000-00-00 and 8888-00-00 dates are not included."""
+
+        db.query(cleanup.query)
+        result = db.store_result()
+        num = result.num_rows()
+
+        if num > 0:
+                if cleanup.note:
+                        print '<div class="bolded_line">%s</div>' % cleanup.note
+                record = result.fetch_row()
+                bgcolor = 1
+                PrintTableColumns(('#', 'Language', cleanup.record_name))
+                count = 1
+                while record:
+                        record_id = record[0][0]
+                        record_title = record[0][1]
+                        record_language = record[0][2]
+                        if bgcolor:
+                                print '<tr align=left class="table1">'
+                        else:
+                                print '<tr align=left class="table2">'
+
+                        print '<td>%d</td>' % count
+                        print '<td>%s</td>' % record_language
+                        print '<td>%s</td>' % ISFDBLink('title.cgi', record_id, record_title)
+                        print '</tr>'
+                        bgcolor ^= 1
+                        count += 1
+                        record = result.fetch_row()
+                print '</table>'
+        else:
+                print '<h2>%s.</h2>' % cleanup.none
 
 def requiredLowerCase():
         clause = ''

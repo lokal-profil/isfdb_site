@@ -318,6 +318,14 @@ def reportsDict():
         reports[305] = ("Publications with Biblioman references in notes and no template/External ID")
         reports[306] = ("Publications with Duplicate Authors")
         reports[307] = ("Awards linked to Uncommon Title Types")
+        reports[308] = ("English book-length titles with no publications and with a translation")
+        reports[309] = ("French book-length titles with no publications and with a translation")
+        reports[310] = ("German book-length titles with no publications and with a translation")
+        reports[311] = ("Italian book-length titles with no publications and with a translation")
+        reports[312] = ("Japanese book-length titles with no publications and with a translation")
+        reports[313] = ("Russian book-length titles with no publications and with a translation")
+        reports[314] = ("Spanish book-length titles with no publications and with a translation")
+        reports[315] = ("Book-length titles with no publications and with a translation in other languages")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 302, 9999)), ]
@@ -357,6 +365,7 @@ def reportsDict():
                                               164, 165, 166, 167, 169, 170, 171, 172, 173,
                                               174, 175, 176, 177, 178, 179, 180, 181, 182,
                                               257, 258, 259, 260, 261, 262, 263)), )
+        sections.append(('Translations', (308, 309, 310, 311, 312, 313, 314, 315)), )
         sections.append(('Wiki Cleanup', (101, 102, 103, 104, 105, 106, 107, 108, 109,
                                           110, 111, 112, 113, 114, 115, 116, 117, 118,
                                           119, 120, 200, 201, 202, 203, 204, 205, 206, 207)), )
@@ -386,6 +395,7 @@ def reportsDict():
                          268, 269, 270, 271, 272, 273, 274, 275, 276, 277,
                          278, 279, 280, 281, 282, 283, 284, 285, 286, 287,
                          288, 289, 291, 292, 293, 294, 295, 296, 297, 298,
-                         299, 300, 301, 302, 303, 304, 305, 306, 307, 9999)
+                         299, 300, 301, 302, 303, 304, 305, 306, 307, 308,
+                         309, 310, 311, 312, 313, 314, 315, 9999)
         
         return (reports, sections, non_moderator)

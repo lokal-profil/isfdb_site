@@ -2074,6 +2074,67 @@ def nightly_cleanup_reports():
                 and t.title_ttype in ('CHAPBOOK')"""
         standardReport(query, 307)
 
+        #   Report 308: English book-length titles with no publications and with a translation
+        translationsWithoutOriginalPubs(308, 'English')
+
+        #   Report 309: French book-length titles with no publications and with a translation
+        translationsWithoutOriginalPubs(309, 'French')
+
+        #   Report 310: German book-length titles with no publications and with a translation
+        translationsWithoutOriginalPubs(310, 'German')
+
+        #   Report 311: Italian book-length titles with no publications and with a translation
+        translationsWithoutOriginalPubs(311, 'Italian')
+
+        #   Report 312: Japanese book-length titles with no publications and with a translation
+        translationsWithoutOriginalPubs(312, 'Japanese')
+
+        #   Report 313: Russian book-length titles with no publications and with a translation
+        translationsWithoutOriginalPubs(313, 'Russian')
+
+        #   Report 314: Spanish book-length titles with no publications and with a translation
+        translationsWithoutOriginalPubs(314, 'Spanish')
+
+        #   Report 315: Other book-length titles with no publications and with a translation
+        query = """select t1.title_id
+                from titles t1, languages l
+                where exists
+                        (select 1 from titles t2
+                        where t2.title_parent = t1.title_id
+                        and t2.title_language != t1.title_language)
+                and not exists
+                        (select 1 from pub_content pc
+                        where pc.title_id = t1.title_id)
+                and not exists
+                        (select 1 from titles t3
+                        where t3.title_parent = t1.title_id
+                        and t3.title_language = t1.title_language)
+                and t1.title_language = l.lang_id
+                and l.lang_name not in ('English', 'French', 'German', 'Italian', 'Japanese', 'Russian', 'Spanish')
+                and t1.title_copyright not in ('8888-00-00', '0000-00-00')
+                and t1.title_ttype in ('NOVEL', 'COLLECTION', 'ANTHOLOGY', 'NONFICTION', 'OMNIBUS')"""
+        standardReport(query, 315)
+
+def translationsWithoutOriginalPubs(report_id, lang_name):
+        query = """select t1.title_id
+                from titles t1, languages l
+                where exists
+                        (select 1 from titles t2
+                        where t2.title_parent = t1.title_id
+                        and t2.title_language != t1.title_language)
+                and not exists
+                        (select 1 from pub_content pc
+                        where pc.title_id = t1.title_id)
+                and not exists
+                        (select 1 from titles t3
+                        where t3.title_parent = t1.title_id
+                        and t3.title_language = t1.title_language)
+                and t1.title_language = l.lang_id
+                and l.lang_name = '%s'
+                and t1.title_copyright not in ('8888-00-00', '0000-00-00')
+                and t1.title_ttype in ('NOVEL', 'COLLECTION', 'ANTHOLOGY', 'NONFICTION', 'OMNIBUS')""" % lang_name
+        standardReport(query, report_id)
+        
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:
