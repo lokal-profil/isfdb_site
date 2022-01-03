@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2022   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -115,12 +115,12 @@ def AuthorMerge(db, recno, doc):
 	print "<li> ", update
 	db.query(update)
 
+        # Re-point the deleted author's alternate names to the kept author ID
+        update = "update pseudonyms set author_id = %d where author_id = %d" % (int(KeepId), int(DropId))
+	print "<li> ", update
+	db.query(update)
 
-	##########################################
-	# Check the 2 mapping tables to see if 
-	# there are any references left to the 
-	# dropped author
-	##########################################
+	# Check if there are any references left to the dropped author
         for i in ['canonical_author', 'pub_authors']:
                 query = 'select COUNT(author_id) from %s where author_id=%d' % (i, int(DropId))
                 db.query(query)
