@@ -2096,26 +2096,37 @@ def nightly_cleanup_reports():
         translationsWithoutOriginalPubs(314, 'Spanish')
 
         #   Report 315: Other book-length titles with no publications and with a translation
-        query = """select t1.title_id
-                from titles t1, languages l
-                where exists
-                        (select 1 from titles t2
-                        where t2.title_parent = t1.title_id
-                        and t2.title_language != t1.title_language)
-                and not exists
-                        (select 1 from pub_content pc
-                        where pc.title_id = t1.title_id)
-                and not exists
-                        (select 1 from titles t3
-                        where t3.title_parent = t1.title_id
-                        and t3.title_language = t1.title_language)
-                and t1.title_language = l.lang_id
-                and l.lang_name not in ('English', 'French', 'German', 'Italian', 'Japanese', 'Russian', 'Spanish')
-                and t1.title_copyright not in ('8888-00-00', '0000-00-00')
-                and t1.title_ttype in ('NOVEL', 'COLLECTION', 'ANTHOLOGY', 'NONFICTION', 'OMNIBUS')"""
-        standardReport(query, 315)
+        otherTranslationsWithoutOriginalPubs(315, 'long')
+        
+        #   Report 316: English short titles with no publications and with a translation
+        translationsWithoutOriginalPubs(316, 'English', 'short')
 
-def translationsWithoutOriginalPubs(report_id, lang_name):
+        #   Report 317: French short titles with no publications and with a translation
+        translationsWithoutOriginalPubs(317, 'French', 'short')
+
+        #   Report 318: German short titles with no publications and with a translation
+        translationsWithoutOriginalPubs(318, 'German', 'short')
+
+        #   Report 319: Italian short titles with no publications and with a translation
+        translationsWithoutOriginalPubs(319, 'Italian', 'short')
+
+        #   Report 320: Japanese short titles with no publications and with a translation
+        translationsWithoutOriginalPubs(320, 'Japanese', 'short')
+
+        #   Report 321: Russian short titles with no publications and with a translation
+        translationsWithoutOriginalPubs(321, 'Russian', 'short')
+
+        #   Report 322: Spanish short titles with no publications and with a translation
+        translationsWithoutOriginalPubs(322, 'Spanish', 'short')
+
+        #   Report 323: Other short titles with no publications and with a translation
+        otherTranslationsWithoutOriginalPubs(323, 'short')
+
+def translationsWithoutOriginalPubs(report_id, lang_name, length = 'long'):
+        if length == 'short':
+                in_clause = 'not in'
+        else:
+                in_clause = 'in'
         query = """select t1.title_id
                 from titles t1, languages l
                 where exists
@@ -2132,9 +2143,33 @@ def translationsWithoutOriginalPubs(report_id, lang_name):
                 and t1.title_language = l.lang_id
                 and l.lang_name = '%s'
                 and t1.title_copyright not in ('8888-00-00', '0000-00-00')
-                and t1.title_ttype in ('NOVEL', 'COLLECTION', 'ANTHOLOGY', 'NONFICTION', 'OMNIBUS')""" % lang_name
+                and t1.title_ttype %s ('NOVEL', 'COLLECTION', 'ANTHOLOGY', 'NONFICTION', 'OMNIBUS')""" % (lang_name, in_clause)
         standardReport(query, report_id)
-        
+
+def otherTranslationsWithoutOriginalPubs(report_id, length = 'long'):
+        if length == 'short':
+                in_clause = 'not in'
+        else:
+                in_clause = 'in'
+        query = """select t1.title_id
+                from titles t1, languages l
+                where exists
+                        (select 1 from titles t2
+                        where t2.title_parent = t1.title_id
+                        and t2.title_language != t1.title_language)
+                and not exists
+                        (select 1 from pub_content pc
+                        where pc.title_id = t1.title_id)
+                and not exists
+                        (select 1 from titles t3
+                        where t3.title_parent = t1.title_id
+                        and t3.title_language = t1.title_language)
+                and t1.title_language = l.lang_id
+                and l.lang_name not in ('English', 'French', 'German', 'Italian', 'Japanese', 'Russian', 'Spanish')
+                and t1.title_copyright not in ('8888-00-00', '0000-00-00')
+                and t1.title_ttype %s ('NOVEL', 'COLLECTION', 'ANTHOLOGY', 'NONFICTION', 'OMNIBUS')""" % in_clause
+        standardReport(query, report_id)
+
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:

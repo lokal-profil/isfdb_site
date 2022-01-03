@@ -326,6 +326,14 @@ def reportsDict():
         reports[313] = ("Russian book-length titles with no publications and with a translation")
         reports[314] = ("Spanish book-length titles with no publications and with a translation")
         reports[315] = ("Book-length titles with no publications and with a translation in other languages")
+        reports[316] = ("English short titles with no publications and with a translation")
+        reports[317] = ("French short titles with no publications and with a translation")
+        reports[318] = ("German short titles with no publications and with a translation")
+        reports[319] = ("Italian short titles with no publications and with a translation")
+        reports[320] = ("Japanese short titles with no publications and with a translation")
+        reports[321] = ("Russian short titles with no publications and with a translation")
+        reports[322] = ("Spanish short titles with no publications and with a translation")
+        reports[323] = ("Short titles with no publications and with a translation in other languages")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 302, 9999)), ]
@@ -365,7 +373,8 @@ def reportsDict():
                                               164, 165, 166, 167, 169, 170, 171, 172, 173,
                                               174, 175, 176, 177, 178, 179, 180, 181, 182,
                                               257, 258, 259, 260, 261, 262, 263)), )
-        sections.append(('Translations', (308, 309, 310, 311, 312, 313, 314, 315)), )
+        sections.append(('Translations', (308, 309, 310, 311, 312, 313, 314, 315, 316, 317,
+                                          318, 319, 320, 321, 322, 323)), )
         sections.append(('Wiki Cleanup', (101, 102, 103, 104, 105, 106, 107, 108, 109,
                                           110, 111, 112, 113, 114, 115, 116, 117, 118,
                                           119, 120, 200, 201, 202, 203, 204, 205, 206, 207)), )
@@ -396,6 +405,7 @@ def reportsDict():
                          278, 279, 280, 281, 282, 283, 284, 285, 286, 287,
                          288, 289, 291, 292, 293, 294, 295, 296, 297, 298,
                          299, 300, 301, 302, 303, 304, 305, 306, 307, 308,
-                         309, 310, 311, 312, 313, 314, 315, 9999)
+                         309, 310, 311, 312, 313, 314, 315, 316, 317, 318,
+                         319, 320, 321, 322, 323, 9999)
         
         return (reports, sections, non_moderator)
