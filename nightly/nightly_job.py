@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2022   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1974,6 +1974,8 @@ def nightly_cleanup_reports():
             and pc.title_id = t.title_id
             and t.title_language = l.lang_id
             and l.lang_name = 'Swedish'
+            and p.pub_ctype not in ('MAGAZINE', 'FANZINE')
+            and t.title_ttype not in ('INTERIORART')
             and not exists
             (select 1 from identifiers i, identifier_types it
             where p.pub_id = i.pub_id
@@ -1988,6 +1990,8 @@ def nightly_cleanup_reports():
             and pc.title_id = t.title_id
             and t.title_language = l.lang_id
             and l.lang_name = 'Swedish'
+            and p.pub_ctype not in ('MAGAZINE', 'FANZINE')
+            and t.title_ttype not in ('INTERIORART')
             and exists
             (select 1 from identifiers i, identifier_types it
             where p.pub_id = i.pub_id

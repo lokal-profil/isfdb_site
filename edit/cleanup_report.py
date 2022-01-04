@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2011-2021   Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2011-2022   Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -6826,6 +6826,8 @@ def function299():
                 and pc.title_id = t.title_id
                 and t.title_language = l.lang_id
                 and l.lang_name = 'Swedish'
+                and p.pub_ctype not in ('MAGAZINE', 'FANZINE')
+                and t.title_ttype not in ('INTERIORART')
                 and not exists
                 (select 1 from identifiers i, identifier_types it
                 where p.pub_id = i.pub_id
@@ -6836,6 +6838,7 @@ def function299():
                 and c.resolved IS NULL
                 order by p.pub_title"""
         cleanup.none = 'No Publications with Swedish Titles with no Libris XL ID'
+        cleanup.note = 'This reports excludes INTERIORART titles and MAGAZINE/FANZINE publications'
         cleanup.ignore = 1
         cleanup.print_pub_table()
 
@@ -6846,6 +6849,8 @@ def function300():
                 and pc.title_id = t.title_id
                 and t.title_language = l.lang_id
                 and l.lang_name = 'Swedish'
+                and p.pub_ctype not in ('MAGAZINE', 'FANZINE')
+                and t.title_ttype not in ('INTERIORART')
                 and exists
                 (select 1 from identifiers i, identifier_types it
                 where p.pub_id = i.pub_id
@@ -6861,6 +6866,7 @@ def function300():
                 and c.resolved IS NULL
                 order by p.pub_title"""
         cleanup.none = 'No Publications with Swedish Titles with a Libris ID and no Libris XL ID'
+        cleanup.note = 'This reports excludes INTERIORART titles and MAGAZINE/FANZINE publications'
         cleanup.ignore = 1
         cleanup.print_pub_table()
 
