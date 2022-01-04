@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2022   Al von Ruff, Ahasuerus and Dirk Stoecker
 #	 ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -27,6 +27,7 @@ class Submission:
                 self.merge = ''
                 self.submitter = ''
                 self.submitter_id = 0
+                self.submission_id = ''
                 self.valid_submitters = ('Ahasuerus', 'Fixer', 'Stoecker', 'Lokal Profil')
                 self.XMLdata = ''
 
@@ -126,6 +127,7 @@ class Submission:
                                         submission = """insert into submissions(sub_state, sub_type, sub_data, sub_time, sub_submitter)
                                                         values('N', %d, '%s', NOW(), %d)""" % (sub_type, db.escape_string(self.XMLdata), self.submitter_id)
                                 db.query(submission)
+                                self.submission_id = db.insert_id()
                                 self.send_success()
                 self.send_error('Unknown Submission Type.')
 
@@ -138,6 +140,7 @@ class Submission:
         def send_success(self):
                 self.response_headers()
                 print '<Status>OK</Status>'
+                print '<SubmissionID>%s</SubmissionID>' % self.submission_id
                 self.response_footers()
 
         def response_headers(self):
