@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2021 	Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2022 	Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Ahasuerus, Bill Longley and Dirk Stoecker
 #		ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1088,8 +1088,7 @@ def PrintOnePub(pub, pub_authors, pub_publishers, pub_series, cover_artists, bgc
 
         # Price
 	if pub[PUB_PRICE]:
-		price = pub[PUB_PRICE]
-		print '<td dir="ltr">%s</td>' % (pub[PUB_PRICE])
+		print '<td dir="ltr">%s</td>' % ISFDBPrice(pub[PUB_PRICE])
         else:
                 print '<td>&nbsp;</td>'
 

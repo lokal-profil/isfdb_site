@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2021   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2022   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -402,7 +402,7 @@ if __name__ == '__main__':
 
 	if pub.pub_price:
 		print '<li>'
-		print '  <b>Price:</b>', pub.pub_price
+		print '  <b>Price:</b>', ISFDBPrice(pub.pub_price)
 	if pub.pub_pages:
 		print '<li>'
 		print '  <b>Pages:</b>', pub.pub_pages

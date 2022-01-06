@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 #
-#     (C) COPYRIGHT 2007-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2007-2022   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -609,6 +610,74 @@ def ISFDBPubFormat(format_code, position = 'right'):
                 display_value = ISFDBMouseover((mouseover_text,), format_code, '', QUESTION_MARK, position)
         else:
                 display_value = format_code
+        return display_value
+
+def ISFDBPrice(price):
+        if price == '':
+                return ''
+        mouseover_text = ''
+        symbols = {'A$': 'Australian dollar',
+                   'Ar$': 'Argentinian peso',
+                   BAHT_SIGN: 'Thai baht',
+                   'Bfr ': 'Belgian franc',
+                   'C$': 'Canadian dollar',
+                   'Din ': 'Serbian and Yugoslavian dinar',
+                   'dkr ': 'Danish krone (crown)',
+                   '$': 'US dollar',
+                   'DM ': 'German (Deutsche) mark',
+                   EURO_SIGN: 'Euro',
+                   'Ft ': 'Hungarian forint',
+                   'F': 'French frank',
+                   GUILDER_SIGN: 'Dutch guilder',
+                   'hrn ': 'Ukrainian hryvnia',
+                   '%s ' % CZECH_KORUNA_SIGN: 'Czech koruna (crown)',
+                   '%s ' % CZECHOSLOVAK_KORUNA_SIGN: 'Czechoslovak koruna (crown)',
+                   'kn ': 'Croatian kuna',
+                   'Lei ': 'Romanian leu',
+                   'Lev ': 'Bulgarian lev',
+                   'Lit ': 'Italian lira',
+                   GERMAN_GOLD_MARK: 'German gold mark',
+                   'Mx$': 'Mexican dollars',
+                   'M ': 'East German mark',
+                   'nkr ': 'Norwegian krone',
+                   PESO_SIGN: 'Philippine peso',
+                   'Pta ': 'Spanish peseta',
+                   POUND_SIGN: 'UK pound',
+                   'R ': 'South African rand',
+                   'Rub ': 'Russian or Soviet ruble',
+                   INDIAN_RUPEE: 'Indian rupee',
+                   PAKISTANI_RUPEE: 'Pakistani rupee',
+                   'skr ': 'Swedish krona (crown)',
+                   'Tk ': 'Bangladesh Taka',
+                   'TL ': 'Turkish lira',
+                   WON_SIGN: 'South Korean won',
+                   YEN_SIGN: 'Japanese yen',
+                   YUAN_SIGN: 'Chinese yuan',
+                   '%s ' % ZLOTY_SIGN: 'Polish zloty'
+                   }
+        if '/' in price:
+                mouseover_text = """Prior to decimilisation (1968-1971), UK books were priced
+                                in shillings, or shillings and pence, where 20 shillings
+                                equals one pound and 12 old pence equals one shilling.
+                                Shillings were indicated with a variety of suffixes, e.g.
+                                3s, 3', 3", 3/ all mean 3 shillings. Any number after that
+                                is additional pence, usually 6 (half a shilling) but
+                                sometimes 3 or 9 (a quarter of a shilling or three-quarters
+                                of a shilling)."""
+        else:
+                found = 0
+                for symbol in symbols:
+                        if price == symbol:
+                                found = 1
+                        elif price.lower().startswith(symbol.lower()) and price[len(symbol)].isdigit():
+                                found = 1
+                        if found:
+                                mouseover_text = '%s: %s' % (symbol.strip(), symbols[symbol])
+                                break
+        if mouseover_text:
+                display_value = ISFDBMouseover((mouseover_text,), price, '', QUESTION_MARK, 'right')
+        else:
+                display_value = price
         return display_value
 
 class ISFDBTable():

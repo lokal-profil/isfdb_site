@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2022   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -386,7 +386,10 @@ class PublicationMonth:
                 print '</td>'
 
                 print '<td>'
-                print pub[PUB_CTYPE].capitalize()
+                if pub[PUB_CTYPE]:
+                        print pub[PUB_CTYPE].capitalize()
+                else:
+                        print "&nbsp;"
                 print '</td>'
                 
                 print '<td>'
@@ -406,17 +409,23 @@ class PublicationMonth:
 
                 print '<td>'
                 if pub[PUB_PRICE]:
-                        print pub[PUB_PRICE]
+                        print ISFDBPrice(pub[PUB_PRICE])
+                else:
+                        print "&nbsp;"
                 print '</td>'
 
                 print '<td>'
                 if pub[PUB_PAGES]:
                         print pub[PUB_PAGES]
+                else:
+                        print "&nbsp;"
                 print '</td>'
 
                 print '<td>'
                 if pub[PUB_PTYPE]:
                         print ISFDBPubFormat(pub[PUB_PTYPE], 'left')
+                else:
+                        print "&nbsp;"
                 print '</td>'
                 print '</tr>'
                 return

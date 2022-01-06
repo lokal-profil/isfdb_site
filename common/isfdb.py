@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2022   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -631,9 +631,15 @@ BAHT_SIGN = '&#3647;'
 CZECH_KORUNA_SIGN = 'K&#269;'
 CZECHOSLOVAK_KORUNA_SIGN = 'K&#269;s'
 EURO_SIGN = chr(128)
+GERMAN_GOLD_MARK = '&#8499;'
+GUILDER_SIGN = chr(131)
+INDIAN_RUPEE = '&#8377;'
+PAKISTANI_RUPEE = '&#8360;'
 PESO_SIGN = '&#8369;'
 POUND_SIGN = chr(163)
+WON_SIGN = '&#8361;'
 YEN_SIGN = chr(165)
+YUAN_SIGN = '&#20803;'
 ZLOTY_SIGN = 'z&#322;'
 
 BULLET = '&#8226;'
