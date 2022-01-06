@@ -409,7 +409,7 @@ class PublicationMonth:
 
                 print '<td>'
                 if pub[PUB_PRICE]:
-                        print ISFDBPrice(pub[PUB_PRICE])
+                        print ISFDBPrice(pub[PUB_PRICE], 'left')
                 else:
                         print "&nbsp;"
                 print '</td>'

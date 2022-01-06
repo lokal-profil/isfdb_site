@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus, Uzume and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2022   Al von Ruff, Ahasuerus, Uzume and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -11,7 +11,7 @@
 
 
 from SQLparsing import *
-from library import ISFDBLink, ISFDBText, ISFDBPubFormat, ISFDBDate
+from library import ISFDBLink, ISFDBText, ISFDBPubFormat, ISFDBDate, ISFDBPrice
 from time import gmtime
 from common import displayAuthorList, PrintHeader, PrintNavbar, PrintTrailer
 from calendarClass import CalendarDay
@@ -100,10 +100,10 @@ if __name__ == '__main__':
 					outstr += ISFDBLink('publisher.cgi', publisher[PUBLISHER_ID], publisher[PUBLISHER_NAME])
 
 				if result[PUB_ISBN]:
-					outstr += ", " +convertISBN(result[PUB_ISBN])
+					outstr += ", " + convertISBN(result[PUB_ISBN])
 
 				if result[PUB_PRICE]:
-					outstr += ", "+result[PUB_PRICE]
+					outstr += ", " + ISFDBPrice(result[PUB_PRICE], 'left')
 
 				if result[PUB_PAGES]:
                                         outstr += ", %spp" % result[PUB_PAGES]

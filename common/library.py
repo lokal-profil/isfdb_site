@@ -612,7 +612,7 @@ def ISFDBPubFormat(format_code, position = 'right'):
                 display_value = format_code
         return display_value
 
-def ISFDBPrice(price):
+def ISFDBPrice(price, location = 'right'):
         if price == '':
                 return ''
         mouseover_text = ''
@@ -675,7 +675,7 @@ def ISFDBPrice(price):
                                 mouseover_text = '%s: %s' % (symbol.strip(), symbols[symbol])
                                 break
         if mouseover_text:
-                display_value = ISFDBMouseover((mouseover_text,), price, '', QUESTION_MARK, 'right')
+                display_value = ISFDBMouseover((mouseover_text,), price, '', QUESTION_MARK, location)
         else:
                 display_value = price
         return display_value
