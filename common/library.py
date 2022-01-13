@@ -1277,7 +1277,7 @@ def ISFDBUnicodeTranslation():
 ##        '&#699;' : "'",      # Modifier letter turned comma
 ##        '&#700;' : "'",      # Modified letter apostrophe
         replace = {
-                   '&#165;':  chr(165), # Unicode yen changed to Latin-1 yen
+                   '&#165;': YEN_SIGN,  # Unicode yen changed to regular yen
                    '&#847;': '',        # Combining Grapheme Joiner, which we replace with "no character"
                    '&#8192;': ' ',      # En quad space
                    '&#8193;': ' ',      # Em quad space
@@ -1309,7 +1309,10 @@ def ISFDBUnicodeTranslation():
                    '&#8287;': ' ',      # Medium mathematical space
                    '&#12288;':' ',      # Ideographic space
                    '&#65279;':'',       # Zero width no-break space, which we replace with "no character"
-                   '&#65509;':chr(165), # Fullwidth Unicode yen changed to Latin-1 yen
+                   '&#65284;':'$',      # Fullwidth Unicode dollar sign changed to regular dollar sign
+                   '&#65505;':POUND_SIGN, # Fullwidth Unicode pound sign changed to regular pound sign
+                   '&#65509;':YEN_SIGN, # Fullwidth Unicode yen changed to regular yen
+                   '&#65510;':WON_SIGN, # Fullwidth Unicode won changed to regular won
                    'A&#768;': chr(192), # A grave accent
                    'A&#769;': chr(193), # A acute accent
                    'A&#770;': chr(194), # A cirmuflex accent
