@@ -1,6 +1,6 @@
 # -*- coding: cp1252 -*-
 #
-#     (C) COPYRIGHT 2007-2021   Al von Ruff, Ahasuerus, Bill Longley and Klaus Elsbernd
+#     (C) COPYRIGHT 2007-2022   Al von Ruff, Ahasuerus, Bill Longley and Klaus Elsbernd
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -199,6 +199,22 @@ def CheckImage(value, XmlData):
 
         return warning
 
+def CheckNotes(ui, value):
+        warning = ''
+        warnings = []
+        warnings.append(ui.invalidHtmlInNotes(value))
+        warnings.append(ui.mismatchedBraces(value))
+        warnings.append(ui.unrecognizedTemplate(value))
+        warnings.append(ui.mismatchedDoubleQuote(value))
+        for match in warnings:
+                if not match:
+                        continue
+                if warning:
+                        warning += '. %s' % match
+                else:
+                        warning = match
+        return warning
+
 #################################################################
 # The following functions are used to show a single field of data
 # with no side-by-side changes.
@@ -289,17 +305,7 @@ def PrintField1XML(Label, XmlData, title = 0):
                                         warning = 'Pre-2000 e-book submitted'
 
                 elif Label in ('TitleNote', 'Note', 'Synopsis'):
-                        warnings = []
-                        warnings.append(ui.invalidHtmlInNotes(value))
-                        warnings.append(ui.mismatchedBraces(value))
-                        warnings.append(ui.unrecognizedTemplate(value))
-                        for match in warnings:
-                                if not match:
-                                        continue
-                                if warning:
-                                        warning += '. %s' % match
-                                else:
-                                        warning = match
+                        warning = CheckNotes(ui, value)
                         value = FormatNote(value, '', 'edit')
 
                 elif Label == 'Series':
@@ -395,7 +401,7 @@ def PrintField2XML(Label, XmlData, ExistsNow, Current, pub_id = None, suppress_d
                 value = FormatImage(value)
                 value2 = FormatImage(Current)
         elif Label in ('TitleNote', 'Note', 'Synopsis'):
-                warning = ui.invalidHtmlInNotes(value)
+                warning = CheckNotes(ui, value)
                 # If an existing note is being modified, display differences in the Warnings column
                 # without using the yellow background reserved for warnings
                 if not warning and not suppress_diff and value and value2:

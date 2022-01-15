@@ -2013,6 +2013,11 @@ class isfdbUI:
                         return 'Mismatched braces'
                 return ''
 
+        def mismatchedDoubleQuote(self, value):
+                if value.count('"') % 2 != 0:
+                        return 'Mismatched double quotes'
+                return ''
+
         def unrecognizedTemplate(self, value):
                 new_value = value.lower()
                 templates = ISFDBTemplates().keys()
