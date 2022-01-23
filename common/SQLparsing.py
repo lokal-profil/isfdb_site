@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2004-2021   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2004-2022   Al von Ruff, Ahasuerus, Bill Longley, Dirk Stoecker and Lokal_Profil
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -1772,14 +1772,7 @@ def SQLLoadTransAuthorNamesList(author_ids):
 
 def SQLloadTransPubTitles(pub_id):
 	query = "select trans_pub_title from trans_pubs where pub_id=%d" % int(pub_id)
-	db.query(query)
-	result = db.store_result()
-	row = result.fetch_row()
-	results = []
-	while row:
-		results.append(row[0][0])
-		row = result.fetch_row()
-	return results
+	return _OneField(query)
 
 def SQLLoadTransPubTitlesList(pub_ids):
         from library import list_to_in_clause

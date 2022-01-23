@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2022   Al von Ruff, Ahasuerus and Lokal_Profil
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -565,15 +565,6 @@ class pubs:
 				self.pub_series_num = record[0][PUB_SERIES_NUM]
 				self.used_series_num = 1
 
-                        self.pub_webpages = SQLloadPubWebpages(record[0][PUB_PUBID])
-                        if self.pub_webpages:
-                                self.used_webpages = 1
-
-                        res2 = SQLloadTransPubTitles(record[0][PUB_PUBID])
-                        if res2:
-                                self.pub_trans_titles = res2
-                                self.used_trans_titles = 1
-
                         query = """select authors.author_canonical from authors, pub_authors
                                    where pub_authors.author_id=authors.author_id and
                                    pub_authors.pub_id=%d""" % record[0][PUB_PUBID]
@@ -626,11 +617,23 @@ class pubs:
 					self.used_note = 1
 					self.pub_note = rec2[0][0]
 
+                        self.loadTransTitles()
+                        self.loadPubWebpages()
 			self.loadExternalIDs()
 
 		else:
 			self.error = 'Pub record not found'
 			return
+
+        def loadTransTitles(self):
+                self.pub_trans_titles = SQLloadTransPubTitles(self.pub_id)
+                if self.pub_trans_titles:
+                        self.used_trans_titles = 1
+
+        def loadPubWebpages(self):
+                self.pub_webpages = SQLloadPubWebpages(self.pub_id)
+                if self.pub_webpages:
+                        self.used_webpages = 1
 
         def loadExternalIDs(self):
                 # Build a dictionary of external IDs for this pub. The dictionary structure is:
