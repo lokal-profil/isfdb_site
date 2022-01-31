@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2008-2021   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2008-2022   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -52,6 +52,7 @@ TARGETS = DIR/adv_identifier_search.cgi \
 	  DIR/most_reviewed_table.cgi \
 	  DIR/my_removed_secondary_verifications.cgi \
 	  DIR/my_secondary_verifications.cgi \
+	  DIR/my_unstable_verifications.cgi \
 	  DIR/my_verifications_menu.cgi \
 	  DIR/mylanguages.cgi \
 	  DIR/mypreferences.cgi \

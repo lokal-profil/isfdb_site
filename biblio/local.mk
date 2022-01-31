@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2022   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -19,6 +19,7 @@ MYLIBS	= advSearchClass.py \
 	  calendarClass.py \
 	  common.py \
 	  isfdblib.py \
+	  myverificationsClass.py \
 	  utils.py
 
 LIBS	= authorClass.py \
