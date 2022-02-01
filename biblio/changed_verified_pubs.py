@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2016-2021  Ahasuerus
+#     (C) COPYRIGHT 2016-2022  Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -60,7 +60,7 @@ def PrintPubRecord(count, record, previous_last_viewed, bgcolor):
                               'PubSeries', 'PubSeriesNum', 'Pages', 'Binding', 'PubType',
                               'Isbn', 'Price', 'Image', 'Note', 'ContentTitle',
                               'ContentReview', 'ContentInterview', 'Cover', 'External_ID',
-                              'Catalog')):
+                              'Catalog', 'Webpage')):
                         if doc.getElementsByTagName(field):
                                 if fields:
                                         fields += ', '
