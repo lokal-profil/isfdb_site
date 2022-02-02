@@ -621,6 +621,7 @@ def ISFDBPrice(price, location = 'right'):
                    BAHT_SIGN: 'Thai baht',
                    'Bfr ': 'Belgian franc',
                    'C$': 'Canadian dollar',
+                   'CHF ': 'Swiss franc',
                    'CLP$': 'Chilean peso',
                    'COL$': 'Colombian peso',
                    'Din ': 'Serbian and Yugoslavian dinar',
