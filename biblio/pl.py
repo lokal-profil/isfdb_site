@@ -515,10 +515,13 @@ if __name__ == '__main__':
                 print 'Cover art supplied by <a href="http://%s" target="_blank">%s</a>' % (home_page, credit)
                 if linked_page:
                         print ' on <a href="%s" target="_blank">this Web page</a>' % linked_page
-                if 'amazon.com' in pub.pub_image and '/images/I/' not in pub.pub_image:
-                        print """<br>The displayed Amazon image URL does
-                                not start with 'images/I/'. It may not be stable and may no
-                                longer reflect the actual cover of this particular edition."""
+                if 'amazon.com' in pub.pub_image:
+                        if '/images/P/' in pub.pub_image:
+                                print """<br>The displayed Amazon image is based on the publication's ISBN. It may no
+                                        longer reflect the actual cover of this particular edition."""
+                        elif '/images/G/' in pub.pub_image:
+                                print """<br>The displayed Amazon image is possibly unstable and may no
+                                        longer reflect the actual cover of this particular edition."""
 
        	print '</div>'
 

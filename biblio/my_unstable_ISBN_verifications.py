@@ -20,14 +20,14 @@ if __name__ == '__main__':
 
         start = SESSION.Parameter(0, 'int', 0)
 
-	PrintHeader('My Primary Verifications with Possibly Unstable "/G/" Amazon URLs')
-	PrintNavbar('my_unstable_verifications', 0, 0, 'my_unstable_verifications.cgi', 0)
+	PrintHeader('My Primary Verifications with Unstable ISBN-based Amazon URLs')
+	PrintNavbar('my_unstable_ISBN_verifications', 0, 0, 'my_unstable_ISBN_verifications.cgi', 0)
 
-        print """<h3>Amazon URLs which start with "/images/G/" are not guaranteed to
-                remain the same over time, although it doesn't seem to happen very often</h3>"""
+        print """<h3>Amazon URLs which start with "/images/P/" are based on an ISBN
+                and may no longer reflect the actual cover of the publication</h3>"""
 
         my_verifications = MyVerifications()
         my_verifications.display()
 
-	PrintTrailer('my_unstable_verifications', 0, 0)
+	PrintTrailer('my_unstable_ISBN_verifications', 0, 0)
 

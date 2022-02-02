@@ -20,6 +20,7 @@ class MyVerifications:
                 self.user = User()
                 self.user.load()
                 self.per_page = 200
+                self.pub_id = ''
 
         def display(self):
                 start = SESSION.Parameter(0, 'int', 0)
@@ -34,6 +35,18 @@ class MyVerifications:
                                 order by date desc, pv.verification_id desc
                                 limit %d,%d""" % (int(self.user.id), start, self.per_page)
                         none_found = 'No primary verifications'
+                elif script == 'my_unstable_ISBN_verifications':
+                        query = """select p.pub_id, p.pub_title, p.pub_ctype, 
+                                date_format(pv.ver_time,'%%Y-%%m-%%d') date,
+                                pv.ver_transient, p.pub_frontimage
+                                from pubs p, primary_verifications pv
+                                where pv.pub_id = p.pub_id
+                                and pv.user_id = %d
+                                and p.pub_frontimage like '%%amazon.com%%'
+                                and p.pub_frontimage like '%%amazon.com/images/P/%%'
+                                order by date desc, pv.verification_id desc
+                                limit %d,%d""" % (int(self.user.id), start, self.per_page)
+                        none_found = 'No primary verifications with unstable ISBN-based Amazon URLs'
                 elif script == 'my_unstable_verifications':
                         query = """select p.pub_id, p.pub_title, p.pub_ctype, 
                                 date_format(pv.ver_time,'%%Y-%%m-%%d') date,
@@ -42,10 +55,10 @@ class MyVerifications:
                                 where pv.pub_id = p.pub_id
                                 and pv.user_id = %d
                                 and p.pub_frontimage like '%%amazon.com%%'
-                                and p.pub_frontimage not like '%%amazon.com/images/I/%%'
+                                and p.pub_frontimage like '%%amazon.com/images/G/%%'
                                 order by date desc, pv.verification_id desc
                                 limit %d,%d""" % (int(self.user.id), start, self.per_page)
-                        none_found = 'No primary verifications with unstable Amazon URLs'
+                        none_found = 'No primary verifications with unstable "/G/" Amazon URLs'
                 else:
                         print '<h2>A software error has occurred. Please post this URL on the ISFDB Community Portal.</h2>'
                         return
@@ -89,7 +102,7 @@ class MyVerifications:
                 print '</tr>'
 
         def printPubRecord(self, record, bgcolor, count):
-                pub_id = record[0]
+                self.pub_id = record[0]
                 if bgcolor:
                         print '<tr align=left class="table1">'
                 else:
@@ -98,11 +111,11 @@ class MyVerifications:
                 print '<td>%d</td>' % count
                 print '<td>%s</td>' % record[2]
                 print '<td>%s</td>' % record[3]
-                print '<td>%s</td>' % ISFDBLink('pl.cgi', pub_id, record[1])
+                print '<td>%s</td>' % ISFDBLink('pl.cgi', self.pub_id, record[1])
                 output = '' 
                 if record[2] in ('MAGAZINE', 'ANTHOLOGY', 'FANZINE', 'NONFICTION'):
                         output = "Ed. "
-                output += self.pubAuthors(pub_id)
+                output += self.pubAuthors()
                 print '<td>%s</td>' % output
 
                 if record[4]:
@@ -110,10 +123,10 @@ class MyVerifications:
                 else:
                         print '<td>&nbsp;</td>'
 
-                cover_artists = self.pubArtists(pub_id)
+                cover_artists = self.pubArtists()
                 print '<td>'
-                if pub_id in cover_artists:
-                        displayAuthorList(cover_artists[pub_id])
+                if self.pub_id in cover_artists:
+                        displayAuthorList(cover_artists[self.pub_id])
                 else:
                         print '&nbsp;'
                 print '</td>'
@@ -125,19 +138,17 @@ class MyVerifications:
 
                 print '</tr>'
 
-        def pubAuthors(self, pub_id):
+        def pubAuthors(self):
                 retval = ''
-                authors = SQLPubBriefAuthorRecords(pub_id)
-                counter = 0
-                for author in authors:
+                authors = SQLPubBriefAuthorRecords(self.pub_id)
+                for counter, author in enumerate(authors):
                         if counter:
                                 retval += ', '
                         retval += ISFDBLink('ea.cgi', author[0], author[1])
-                        counter += 1
                 return retval
 
-        def pubArtists(self, pub_id):
+        def pubArtists(self):
                 list_of_pub_ids = []
-                list_of_pub_ids.append(str(pub_id))
+                list_of_pub_ids.append(str(self.pub_id))
                 cover_artists = SQLGetCoverAuthorsForPubs(list_of_pub_ids)
                 return cover_artists

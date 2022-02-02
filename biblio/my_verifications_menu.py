@@ -32,7 +32,8 @@ if __name__ == '__main__':
         print '<li>%s' % ISFDBLink('changed_verified_pubs.cgi', '', 'My Changed Primary Verifications')
         if SQLChangedVerifications(userid):
                 print ' <span class="inverted">New!</span>'
-        print '<li>%s' % ISFDBLink('my_unstable_verifications.cgi', '', 'My Primary Verifications with Unstable Amazon URLs')
+        print '<li>%s' % ISFDBLink('my_unstable_ISBN_verifications.cgi', '', 'My Primary Verifications with Unstable ISBN-based Amazon URLs')
+        print '<li>%s' % ISFDBLink('my_unstable_verifications.cgi', '', 'My Primary Verifications with Possibly Unstable "/G/" Amazon URLs')
         print '<li>%s' % ISFDBLink('my_secondary_verifications.cgi', '', 'My Secondary Verifications')
         print '<li>%s' % ISFDBLink('my_removed_secondary_verifications.cgi', '', 'My Removed Secondary Verifications')
 	print '</ul>'
