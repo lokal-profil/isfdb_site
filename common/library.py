@@ -1190,7 +1190,7 @@ def RecognizedDomains():
                 ('riversofwar.com', '1632, Inc.', 'www.1632.org', 1),
                 ('rusf.ru', 'Russian SF&F', 'rusf.ru', 0),
                 ('scifiinc.net', 'Fan Gallery', 'scifiinc.net', 0),
-                ('sf-encyclopedia.com', 'SFE', 'www.sf-encyclopedia.com', 1),
+                ('sf-encyclopedia.com', 'SFE', 'www.sf-encyclopedia.com', 1, 'gal/', 1),
                 ('sf-encyclopedia.uk', 'SFE', 'www.sf-encyclopedia.com', 1, 'gal/', 1),
                 ('sf-encyclopedia.uk', 'Encyclopedia of Fantasy', 'sf-encyclopedia.uk/fe/', 1, 'fe.php'),
                 ('sf-leihbuch.de', 'SF-Leihbuch', 'www.sf-leihbuch.de/index.cfm?page=home', 1, '', 1),
