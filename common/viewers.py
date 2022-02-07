@@ -608,6 +608,19 @@ def PrintAuthorNames(names, Separator):
         print displayed_names
         return (unknown, pseudonym, disambig)
 
+def PrintAutoMergeWarning(title_id, pub_date, title_date, referral_language):
+        title_language = SQLGetLangIdByTitle(title_id)
+        # Do not display author warnings for auto-merged titles
+        warning = GetDateWarning('', pub_date, title_date)
+        if title_language and referral_language and title_language != referral_language:
+                if warning:
+                        warning += ', '
+                warning += 'Language mismatch'
+        if warning:
+                print '<td class="warn">%s</td>' % warning
+        else:
+                print '<td class="blankwarning">&nbsp;</td>'
+
 def PrintWarning(Label, unknown, pseudonym, disambig, title_date = '', pub_date = ''):
         output = ''
         if unknown:
@@ -627,11 +640,8 @@ def PrintWarning(Label, unknown, pseudonym, disambig, title_date = '', pub_date 
                 if pseudonym > 1:
                         output += 's'
                 output += ' submitted'
-        # Display a warning if the title date is after the publication date
-        if title_date and pub_date and (Compare2Dates(pub_date, title_date) == 1):
-                if output:
-                        output += ", "
-                output += 'Title date after publication date'
+
+        output += GetDateWarning(output, pub_date, title_date)
 
         if ISFDBdaysFromToday(title_date) > MAX_FUTURE_DAYS:
                 if output:
@@ -643,6 +653,15 @@ def PrintWarning(Label, unknown, pseudonym, disambig, title_date = '', pub_date 
         else:
                 print '<td class="blankwarning">&nbsp;</td>'
         return
+
+def GetDateWarning(output, pub_date, title_date):
+        warning = ''
+        # Display a warning if the title date is after the publication date
+        if title_date and pub_date and (Compare2Dates(pub_date, title_date) == 1):
+                if output:
+                        warning += ", "
+                warning += 'Title date after publication date'
+        return warning
 
 def BuildMultiLine(lines, newline, ParentLabel, Separator):
         if lines:
@@ -3210,6 +3229,7 @@ def DisplayClonePublication(submission_id):
         submitter = GetElementValue(merge, 'Submitter')
         cloningContent = cloningFlag(merge)
 
+        referral_language = ''
         value = GetElementValue(merge, 'Parent')
         if TagPresent(merge, 'Parent'):
                 title_data = SQLloadTitle(int(value))
@@ -3225,6 +3245,10 @@ def DisplayClonePublication(submission_id):
                 if cloningContent:
                         pub = SQLGetPubById(cloningContent)
                         print 'Importing content into publication record %s' % ISFDBLink('pl.cgi', pub[PUB_PUBID], pub[PUB_TITLE])
+                        referral_title_id = SQLgetTitleReferral(pub[PUB_PUBID], pub[PUB_CTYPE], 1)
+                        if referral_title_id:
+                                referral_title = SQLloadTitle(referral_title_id)
+                                referral_language = referral_title[TITLE_LANGUAGE]
 
 
         print '<h2>Publication data</h2>'
@@ -3275,7 +3299,7 @@ def DisplayClonePublication(submission_id):
                         print '<td class="label"><b>Warnings</b></td>'
                         print '</tr>'
                         for child in children:
-                                displayCoverClone(pub_date, child, submission_id)
+                                displayCoverClone(pub_date, child, submission_id, referral_language)
                         print '</table>'
 
                 ##########################################################
@@ -3296,7 +3320,7 @@ def DisplayClonePublication(submission_id):
                         print '<td class="label"><b>Warnings</b></td>'
                         print '</tr>'
                         for child in children:
-                                displayTitleContentClone(pub_date, child, submission_id)
+                                displayTitleContentClone(pub_date, child, submission_id, referral_language)
                         print '</table>'
                         
                 ##########################################################
@@ -3316,7 +3340,7 @@ def DisplayClonePublication(submission_id):
                         print '<td class="label"><b>Warnings</b></td>'
                         print '</tr>'
                         for child in children:
-                                displayOtherContentClone(pub_date, child, submission_id, 'review')
+                                displayOtherContentClone(pub_date, child, submission_id, 'review', referral_language)
                         print '</table>'
 
                 ##########################################################
@@ -3336,7 +3360,7 @@ def DisplayClonePublication(submission_id):
                         print '<td class="label"><b>Warnings</b></td>'
                         print '</tr>'
                         for child in children:
-                                displayOtherContentClone(pub_date, child, submission_id, 'interview')
+                                displayOtherContentClone(pub_date, child, submission_id, 'interview', referral_language)
                         print '</table>'
 
         DisplaySource(merge)
@@ -3378,7 +3402,7 @@ def checkTitleExistence(title_id, submission_id):
         if not title_data:
                 InvalidSubmission(submission_id, 'Title %d is no longer in the database' % int(title_id))
 
-def displayCoverClone(pub_date, child, submission_id):
+def displayCoverClone(pub_date, child, submission_id, referral_language):
         cover_id = GetChildValue(child, 'Record')
         title   = GetChildValue(child, 'cTitle')
         artists = GetChildValue(child, 'cArtists')
@@ -3398,14 +3422,13 @@ def displayCoverClone(pub_date, child, submission_id):
 	print '<td class="keep">%s</td>' % title_date
 	if int(cover_id):
 		print '<td class="keep">Auto Merge</td>'
-		# Do not display moderator warnings for autho-merged titles
-                PrintWarning('Artist', 0, 0, 0, title_date, pub_date)
+		PrintAutoMergeWarning(cover_id, pub_date, title_date, referral_language)
 	else:
 		print '<td class="drop">Manual Merge</td>'
                 PrintWarning('Artist', unknown, pseudonym, disambig, title_date, pub_date)
 	print '</tr>'
 
-def displayTitleContentClone(pub_date, child, submission_id):
+def displayTitleContentClone(pub_date, child, submission_id, referral_language):
         title_id = GetChildValue(child, 'Record')
         title   = GetChildValue(child, 'cTitle')
         authors = GetChildValue(child, 'cAuthors')
@@ -3414,7 +3437,7 @@ def displayTitleContentClone(pub_date, child, submission_id):
         title_type    = GetChildValue(child, 'cType')
         length  = GetChildValue(child, 'cLength')
         checkTitleExistence(title_id, submission_id)
-	print "<tr>"
+	print '<tr>'
 	print '<td class="keep">%s</td>' % (page)
 	if int(title_id):
                 print '<td class="keep">%s</td>' % ISFDBLink('title.cgi', title_id, title)
@@ -3431,14 +3454,13 @@ def displayTitleContentClone(pub_date, child, submission_id):
 	print '<td class="keep">%s</td>' % (length)
 	if int(title_id):
 		print '<td class="keep">Auto Merge</td>'
-		# Do not display moderator warnings for auto-merged titles
-                PrintWarning('Author', 0, 0, 0, title_date, pub_date)
+		PrintAutoMergeWarning(title_id, pub_date, title_date, referral_language)
 	else:
 		print '<td class="drop">Manual Merge</td>'
                 PrintWarning('Author', unknown, pseudonym, disambig, title_date, pub_date)
-	print "</tr>"
+	print '</tr>'
 
-def displayOtherContentClone(pub_date, child, submission_id, record_type):
+def displayOtherContentClone(pub_date, child, submission_id, record_type, referral_language):
         from operator import add
 	(unknown, pseudonym, disambig, unknown2, pseudonym2, disambig2) = 0, 0, 0, 0, 0, 0
         title_id  = GetChildValue(child, 'Record')
@@ -3452,7 +3474,7 @@ def displayOtherContentClone(pub_date, child, submission_id, record_type):
         title_date = GetChildValue(child, 'cDate')
         page      = GetChildValue(child, 'cPage')
         checkTitleExistence(title_id, submission_id)
-	print "<tr>"
+	print '<tr>'
 	if not page:
 		print '<td class="drop">-</td>'
 	else:
@@ -3487,12 +3509,11 @@ def displayOtherContentClone(pub_date, child, submission_id, record_type):
 	(unknown, pseudonym, disambig) = map(add, (unknown, pseudonym, disambig), (unknown2, pseudonym2, disambig2))
 	if int(title_id):
 		print '<td class="keep">Auto Merge</td>'
-		# Do not display moderator warnings for autho-merged titles
-                PrintWarning('Author', 0, 0, 0, title_date, pub_date)
+		PrintAutoMergeWarning(title_id, pub_date, title_date, referral_language)
 	else:
 		print '<td class="drop">Manual Merge</td>'
                 PrintWarning('Author', unknown, pseudonym, disambig, title_date, pub_date)
-	print "</tr>"
+	print '</tr>'
 
 def DisplayNewPub(submission_id):
         xml = SQLloadXML(submission_id)
