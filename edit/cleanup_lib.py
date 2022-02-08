@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2012-2021 Ahasuerus
+#     (C) COPYRIGHT 2012-2022 Ahasuerus
 #     ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -14,7 +14,6 @@ def reportsDict():
         reports[1] = ("Titles without Authors")
         reports[2] = ("Variant Title-Alternate Name Mismatches")
         reports[3] = ("Titles without Pubs")
-        reports[4] = ("Mismatched Double Quotes")
         reports[5] = ("Mismatched Angle Brackets")
         reports[6] = ("Authors with Invalid Directory Entries")
         reports[7] = ("Author Names with Invalid or Suspect Data")
@@ -201,7 +200,7 @@ def reportsDict():
         reports[188] = ("Other Non-Latin Language Titles with a Latin Author Name")
         reports[189] = ("Publication Series Names That May Need Disambiguation")
         reports[190] = ("Awards with Invalid IMDB Links")
-        reports[191] = ("Invalid HREFs in Publication Notes")
+        reports[191] = ("Invalid HREFs in Notes")
         reports[192] = ("Authors without a Working Language")
         reports[193] = ("Multilingual Publications")
         reports[194] = ("Titles without a Language")
@@ -356,7 +355,7 @@ def reportsDict():
         sections.append(('Chapbooks', (27, 28, 30, 242, 289)), )
         sections.append(('Serials', (22, 83, 84)), )
         sections.append(('Awards', (23, 24, 25, 26, 190, 232, 298, 307)), )
-        sections.append(('Notes/Synopses', (4, 5, 82, 191, 217, 208, 209, 216, 210, 211,
+        sections.append(('Notes/Synopses', (5, 82, 191, 217, 208, 209, 216, 210, 211,
                                             212, 213, 214, 215, 218, 219, 220, 221, 222,
                                             223, 224, 225, 237, 226, 229, 230, 234, 254,
                                             255, 256, 273, 274, 296, 304, 305)), )
@@ -381,7 +380,7 @@ def reportsDict():
         sections.append(('Forthcoming Books', (71, 72)), )
 
         # A tuple of report IDs which non-moderators are allowed to view
-        non_moderator = (1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 14, 15, 16, 19,
+        non_moderator = (1, 2, 3, 5, 6, 8, 9, 10, 11, 12, 14, 15, 16, 19,
                          20, 22, 29, 33, 34, 37, 38, 41, 45, 46, 48, 49, 54,
                          58, 59, 60, 61, 71, 72, 82, 83, 84, 85, 86, 87, 88,
                          91, 92, 93, 95, 97, 99,

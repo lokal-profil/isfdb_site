@@ -72,11 +72,6 @@ def nightly_cleanup_reports():
                 and not exists (select 1 from titles t2 where t1.title_id=t2.title_parent)"""
         standardReport(query, 3)
 
-        #   Report 4: Notes with an odd number of double quotes
-        query = "select note_id, LENGTH(note_note) - LENGTH(REPLACE(note_note, '\"', '')) as count \
-                        from notes where note_note like '%http%' having count%2=1"
-        standardReport(query, 4)
-
         #   Report 5: Notes with an odd number of angle brackets
         query = "select note_id, LENGTH(note_note) - LENGTH(REPLACE(note_note, '<', '')) openquote, \
                 LENGTH(note_note) - LENGTH(REPLACE(note_note, '>', '')) closequote \
@@ -1253,13 +1248,12 @@ def nightly_cleanup_reports():
                    """
         standardReport(query, 190)
 
-        #   Report 191: Invalid hrefs in publication notes
-        query = """select p.pub_id
-                from pubs p, notes n
-                where p.note_id = n.note_id
-                and
-                (lower(REPLACE(n.note_note, ' ', '')) like '%<ahref=""%'
-                or n.note_note regexp 'a href=http')"""
+        #   Report 191: Invalid hrefs in notes
+        query = """select note_id from notes
+                where REPLACE(note_note, ' ', '') like '%<ahref=""%'
+                or REPLACE(note_note, ' ', '') regexp 'ahref=http'
+                or REPLACE(note_note, ' ', '') regexp 'ahref="http{1}[^\"\>]{1,}>'
+                or REPLACE(note_note, ' ', '') regexp 'ahref="http{1}[^\"\>]{1,}"">'"""
         standardReport(query, 191)
 
         #   Report 192: Authors without a Working Language

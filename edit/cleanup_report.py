@@ -466,13 +466,6 @@ def function3():
                         count += 1
                 print '</table><p>'
 
-def function4():
-        query = """select cleanup.record_id,
-                LENGTH(notes.note_note) - LENGTH(REPLACE(notes.note_note, '\"', '')) as count 
-                from cleanup, notes where cleanup.record_id=notes.note_id
-                and cleanup.report_type=4 and notes.note_note like '%http%' having count%2=1"""
-        MismatchesInNotes(query, 'Mismatched Double Quotes')
-
 def function5():
         query = """select cleanup.record_id, notes.note_id,
                 LENGTH(notes.note_note) - LENGTH(REPLACE(notes.note_note, '<', '')) openquote, 
@@ -5327,34 +5320,17 @@ def function190():
 		print "<h2>No invalid award records found</h2>"
 
 def function191():
-	query = """select p.pub_id, p.pub_title
-                from pubs p, notes n, cleanup c
-                where p.note_id = n.note_id
-                and c.record_id=p.pub_id and c.report_type=191
-                and
-                (lower(REPLACE(n.note_note, ' ', '')) like '%<ahref=""%'
-                or n.note_note regexp 'a href=http')
-                order by p.pub_title"""
-
-	db.query(query)
-	result = db.store_result()
-
-	if result.num_rows() > 0:
-		record = result.fetch_row()
-                bgcolor = 1
-                count = 1
-                PrintTableColumns(('', 'Publication'))
-		while record:
-                        pub_id = record[0][0]
-                        pub_title = record[0][1]
-                        PrintPublicationRecord(pub_id, pub_title, bgcolor, count)
-                        bgcolor ^= 1
-                        count += 1
-			record = result.fetch_row()
-		print '</table>'
-	else:
-		print '<h2>No publications with invalid HREFs.</h2>'
-	return
+        query = """select c.record_id, n.note_id
+                from cleanup c, notes n
+                where c.record_id = n.note_id
+                and c.report_type=191
+                and (
+                REPLACE(n.note_note, ' ', '') like '%<ahref=""%'
+                or REPLACE(n.note_note, ' ', '') regexp 'ahref=http'
+                or REPLACE(n.note_note, ' ', '') regexp 'ahref="http{1}[^\"\>]{1,}>'
+                or REPLACE(note_note, ' ', '') regexp 'ahref="http{1}[^\"\>]{1,}"">'
+                )"""
+        MismatchesInNotes(query, 'Invalid URLs')
 
 def function192():
         # Authors without a Working Language
