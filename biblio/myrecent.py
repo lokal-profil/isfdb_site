@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2006-2022   Al von Ruff, Ahasuerus and Dirk Stoecker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -44,8 +44,10 @@ if __name__ == '__main__':
                 queuesize = SQLQueueSize()
                 print "The current number of pending edits by all editors (not held by a moderator) is %d." % queuesize
 
-        query = """select * from submissions where sub_state='%s'
-                and sub_submitter='%d' order by sub_reviewed desc
+        query = """select * from submissions
+                where sub_state='%s'
+                and sub_submitter=%d
+                order by sub_reviewed desc, sub_id desc
                 limit %d,%d""" % (db.escape_string(sub_type), int(myID), start, results_per_page+1)
 	db.query(query)
 	result = db.store_result()

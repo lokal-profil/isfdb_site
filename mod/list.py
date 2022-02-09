@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff, Ahasuerus and Dirk Stoeker
+#     (C) COPYRIGHT 2005-2022   Al von Ruff, Ahasuerus and Dirk Stoeker
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -110,7 +110,7 @@ if __name__ == '__main__':
 
         ISFDBprintTime()
         
-	query = "select * from submissions where sub_state='%s' order by sub_reviewed;" % (arg)
+	query = "select * from submissions where sub_state='%s' order by sub_reviewed, sub_id" % db.escape_string(arg)
 	db.query(query)
 	result = db.store_result()
 	if result.num_rows() == 0:
