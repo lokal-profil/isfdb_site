@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2020   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2022   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -961,27 +961,35 @@ class Output():
 
         def oldestLivingAuthors(self):
                 query = """select YEAR(NOW())-YEAR(author_birthdate) as age,
-                           author_canonical, author_birthdate, author_id from authors
+                           author_canonical, author_birthdate, author_id
+                           from authors
                            where author_birthdate is not null
-                           and author_birthdate !='0000-00-00'
+                           and YEAR(author_birthdate) != '0000'
                            and author_deathdate is null
-                           and YEAR(NOW())-YEAR(author_birthdate) > 79
+                           and YEAR(NOW())-YEAR(author_birthdate) > 84
                            and YEAR(NOW())-YEAR(author_birthdate) < 117
                            order by author_birthdate"""
                 headers = ('Age', 'Date of Birth', 'Author')
                 note = """The following list includes authors whose year of birth
-                          is between 80 and 116 years in the past and who do not
+                          is between 85 and 116 years in the past and who do not
                           have a year of death on file"""
                 self.authorDisplay(query, headers, 16, note)
 
         def oldestNonLivingAuthors(self):
-                query = "select YEAR(author_deathdate)-YEAR(author_birthdate) as age, author_canonical, author_birthdate, "
-                query += "author_id from authors where author_birthdate is not null and author_deathdate is not null "
-                query += "and author_birthdate != '0000-00-00' and author_deathdate !='0000-00-00' "
-                query += "and YEAR(author_deathdate)-YEAR(author_birthdate) > 79 "
-                query += "order by YEAR(author_deathdate)-YEAR(author_birthdate) desc"
+                query = """select YEAR(author_deathdate)-YEAR(author_birthdate) as age,
+                        author_canonical, author_birthdate, author_id
+                        from authors
+                        where author_birthdate is not null
+                        and author_deathdate is not null
+                        and YEAR(author_birthdate) != '0000'
+                        and YEAR(author_deathdate) != '0000'
+                        and YEAR(author_deathdate)-YEAR(author_birthdate) > 84
+                        order by YEAR(author_deathdate)-YEAR(author_birthdate) desc"""
                 headers = ('Age', 'Date of Birth', 'Author')
-                self.authorDisplay(query, headers, 17)
+                note = """The following list includes authors whose year of birth
+                          is between 85 and 116 years in the past and who
+                          have a known year of death on file"""
+                self.authorDisplay(query, headers, 17, note)
 
         def youngestLivingAuthors(self):
                 query = "select YEAR(NOW())-YEAR(author_birthdate) as age, author_canonical, author_birthdate, "
