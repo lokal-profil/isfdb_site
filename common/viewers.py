@@ -2762,18 +2762,27 @@ def DisplayMakeVariant(submission_id):
                         PrintField2XML('Title',     merge, theVariant.used_title,     theVariant.title_title)
                         PrintMultField('TransTitles',   'TransTitle',   '<br>', doc, merge,
                                         theVariant.used_trans_titles,   theVariant.title_trans_titles)
+                        PrintMultField('Authors', 'Author', '+', doc, merge, theVariant.num_authors, theVariant.title_authors)
                         PrintField2XML('Year',      merge, theVariant.used_year,      theVariant.title_year)
-                        # For title types we pre-check for type mismatch, so we use PrintField2 instead of PrintField2XML
+
+                        parent_series = GetElementValue(merge, 'Series')
+                        PrintField2XML('Series',  merge, theVariant.used_series,  theVariant.title_series)
+                        parent_series_num = GetElementValue(merge, 'Seriesnum')
+                        PrintField2('Seriesnum', parent_series_num, 1, 1, theVariant.title_seriesnum, '', 1)
+
+                        PrintField2XML('Language',  merge, theVariant.used_language,  theVariant.title_language)
+
+                        # For title types we pre-check for type mismatch and use PrintField2 instead of PrintField2XML
                         parent_title_type = GetElementValue(merge, 'TitleType')
                         warning = TitleTypeMismatch(parent_title_type, theVariant.title_ttype)
                         PrintField2('TitleType', parent_title_type, 1, 1, theVariant.title_ttype, warning, 1)
+
                         PrintField2('Length', theVariant.title_storylen, 1, 1, theVariant.title_storylen, '', 1)
-                        PrintField2('Non-Genre', theVariant.title_non_genre, 1, 1, theVariant.title_non_genre, warning, 1)
-                        PrintField2('Juvenile', theVariant.title_jvn, 1, 1, theVariant.title_jvn, warning, 1)
-                        PrintField2('Novelization', theVariant.title_nvz, 1, 1, theVariant.title_nvz, warning, 1)
-                        PrintField2('Graphic', theVariant.title_graphic, 1, 1, theVariant.title_graphic, warning, 1)
-                        PrintField2XML('Language',  merge, theVariant.used_language,  theVariant.title_language)
-                        PrintMultField('Authors', 'Author', '+', doc, merge, theVariant.num_authors, theVariant.title_authors)
+                        PrintField2('Non-Genre', theVariant.title_non_genre, 1, 1, theVariant.title_non_genre, '', 1)
+                        PrintField2('Juvenile', theVariant.title_jvn, 1, 1, theVariant.title_jvn, '', 1)
+                        PrintField2('Novelization', theVariant.title_nvz, 1, 1, theVariant.title_nvz, '', 1)
+                        PrintField2('Graphic', theVariant.title_graphic, 1, 1, theVariant.title_graphic, '', 1)
+
                         PrintField2XML('Note',  merge, theVariant.used_note,  theVariant.title_note, None, 1)
 
 	print '</table>'

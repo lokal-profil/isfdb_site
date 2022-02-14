@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2004-2021   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2004-2022   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -53,8 +53,12 @@ if __name__ == '__main__':
                         update_string += "      <TransTitle>%s</TransTitle>\n" % (db.escape_string(trans_title))
                 update_string += "    </TransTitles>\n"
 	update_string += "    <Year>%s</Year>\n" % (db.escape_string(new.title_year))
-	update_string += "    <TitleType>%s</TitleType>\n" % (db.escape_string(new.title_ttype))
+	if new.title_series:
+                update_string += "    <Series>%s</Series>\n" % (db.escape_string(new.title_series))
+	if new.title_seriesnum:
+                update_string += "    <Seriesnum>%s</Seriesnum>\n" % (db.escape_string(new.title_seriesnum))
 	update_string += "    <Language>%s</Language>\n" % (db.escape_string(new.title_language))
+	update_string += "    <TitleType>%s</TitleType>\n" % (db.escape_string(new.title_ttype))
 	if new.title_note:
 		update_string += "    <Note>%s</Note>\n" % db.escape_string(new.title_note)
 	if new.form.has_key('mod_note'):

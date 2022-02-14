@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2006-2022   Al von Ruff, Bill Longley and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -15,13 +15,15 @@ from isfdblib import *
 from isfdblib_help import *
 from isfdblib_print import *
 from library import *
+from titleClass import titles
 
 
 if __name__ == '__main__':
 
         title_id = SESSION.Parameter(0, 'int')
-        title = SQLloadTitle(title_id)
-        if not title:
+        title = titles(db)
+        title.load(title_id)
+        if not title.title_title:
                 SESSION.DisplayError('Record Does Not Exist')
 
 	PrintPreSearch('Make Variant Title')
@@ -36,23 +38,16 @@ if __name__ == '__main__':
 
 	print 'Current Title:<br>'
 
-	print "<b>Title:</b>", escape_string(title[TITLE_TITLE])
-	print "<br>"
+	print '<b>Title:</b>', ISFDBLink('title.cgi', title.title_id, title.title_title)
+	print '<br>'
 
-	authors = SQLTitleAuthors(title_id)
-	print "<b>Author:</b>"
-	counter = 0
-	for author in authors:
-		if counter:
-			print " <b>and</b> "
-		print escape_string(author)
-		counter += 1
-	print "<br>"
+	print '<b>Author:</b>', FormatAuthors(title.title_author_tuples)
+	print '<br>'
 
-	print "<b>Date:</b>", title[TITLE_YEAR]
-	print "<br>"
-	print "<b>Type:</b>", title[TITLE_TTYPE]
-	print "<p>"
+	print '<b>Date:</b>', title.title_year
+	print '<br>'
+	print '<b>Type:</b>', title.title_ttype
+	print '<p>'
 
 	##################################################################
 	# Data Entry Form 1
@@ -60,17 +55,17 @@ if __name__ == '__main__':
 	print '<hr class="divider">'
 	print '<p>'
 	print '<h2>Option 1</h2>'
-	print "<p>"
+	print '<p>'
 
-	print "If the parent title already exists, enter its record number below."
-	print "To BREAK an existing Variant link, enter 0."
-	print "<p>"
+	print 'If the parent title already exists, enter its record number below.'
+	print 'To BREAK an existing Variant link, enter 0.'
+	print '<p>'
 
 	print '<form id="data" METHOD="POST" ACTION="/cgi-bin/edit/submitmkvar1.cgi">'
-	print "<table border=\"0\">"
+	print '<table border="0">'
         print '<tbody>'
-	if title[TITLE_PARENT] > 0:
-		printfield("Parent #", "Parent", help, title[TITLE_PARENT])
+	if title.title_parent > 0:
+		printfield("Parent #", "Parent", help, title.title_parent)
 	else:
 		printfield("Parent #", "Parent", help)
 
@@ -92,33 +87,40 @@ if __name__ == '__main__':
 	print '<hr class="divider">'
 	print '<p>'
 	print '<h2>Option 2</h2>'
-	print "If the parent title does not exist, enter the title information below to create it."
-	print "<p>"
+	print 'If the parent title does not exist, enter the title information below to create it.'
+	print '<p>'
 
 	print '<form id="data2" METHOD="POST" ACTION="/cgi-bin/edit/submitmkvar2.cgi">'
-	print "<table border=\"0\">"
+	print '<table border="0">'
         print '<tbody id="titleBody">'
 
-        printfield("Title", "title_title", help, title[TITLE_TITLE])
-        trans_titles = SQLloadTransTitles(title[TITLE_PUBID])
-        printmultiple(trans_titles, "Transliterated Title", "trans_titles", help)
+        printfield('Title', 'title_title', help, title.title_title)
 
-        printmultiple(authors, "Author", "title_author", help)
+        printmultiple(title.title_trans_titles, 'Transliterated Title', 'trans_titles', help)
 
-        printfield("Date", "title_copyright", help, title[TITLE_YEAR])
+        printmultiple(title.title_authors, 'Author', 'title_author', help)
+
+        printfield('Date', 'title_copyright', help, title.title_year)
+
+        if (title.title_ttype == 'CHAPBOOK') or title.title_series:
+                readonly = 1
+        else:
+                readonly = 0
+        printfield('Series', 'title_series', help, title.title_series, readonly)
+        printfield('Series Num', 'title_seriesnum',  help, title.title_seriesnum, readonly)
+
+        printlanguage(title.title_language_id, 'language', 'Language', help)
 
 	print '<tr>'
 	printfieldlabel('Title Type', help)
         print '<td><select name="title_ttype" tabindex="1">'
-	for ttype in ['ANTHOLOGY','CHAPBOOK','COLLECTION','COVERART', 'EDITOR', 'ESSAY', 'INTERIORART', 'INTERVIEW', 'NONFICTION', 'NOVEL','OMNIBUS','POEM','REVIEW','SERIAL','SHORTFICTION']:
-		if ttype ==  title[TITLE_TTYPE]:
-			print '<option selected="selected">' +ttype+ '</option>'
+	for ttype in ALL_TITLE_TYPES:
+		if ttype == title.title_ttype:
+			print '<option selected="selected">%s</option>' % ttype
 		else:
-        		print '<option>' +ttype+ '</option>'
+        		print '<option>%s</option>' % ttype
         print '</select></td>'
         print '</tr>'
-
-        printlanguage(title[TITLE_LANGUAGE], 'language', 'Language', help)
 
         printtextarea('Title Note', 'title_note', help)
 	
@@ -128,7 +130,7 @@ if __name__ == '__main__':
         print '</table>'
 	print '<p>'
 
-        print '<input NAME="title_id" VALUE="%d" TYPE="HIDDEN">' % (title_id)
+        print '<input NAME="title_id" VALUE="%d" TYPE="HIDDEN">' % title.title_id
 	print '<input TYPE="SUBMIT" VALUE="Create New Parent Title" tabindex="1">'
 	print '</form>'
 

@@ -1,5 +1,5 @@
 /*     Version: $Revision$
-      (C) COPYRIGHT 2015-2018   Ahasuerus
+      (C) COPYRIGHT 2015-2022   Ahasuerus
          ALL RIGHTS RESERVED
       Date: $Date$ */
 
@@ -154,6 +154,10 @@ function validateVariantTitleForm() {
 	}
 	// Validate this title's authors
 	if (validateAuthors("title_author", "author/editor") == false) {
+		return false;
+	}
+	// Validate the Series Number field
+	if (validateSeriesNumber() == false) {
 		return false;
 	}
 	// Validate the date of the title

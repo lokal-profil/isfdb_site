@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2019   Al von Ruff, Bill Longley and Ahasuerus
+#     (C) COPYRIGHT 2005-2022   Al von Ruff, Bill Longley and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -52,6 +52,7 @@ class titles:
 
 		self.num_authors      = 0
 		self.title_authors    = []
+		self.title_author_tuples = []
 		self.num_subjauthors  = 0
 		self.title_subjauthors= []
 		self.title_id         = ''
@@ -67,6 +68,7 @@ class titles:
 		self.title_storylen   = ''
 		self.title_webpages   = []
 		self.title_language   = ''
+		self.title_language_id= ''
 		self.title_note_id    = ''
 		self.title_note       = ''
 		self.title_parent     = ''
@@ -125,7 +127,8 @@ class titles:
 				self.title_parent = record[TITLE_PARENT]
 				self.used_parent = 1
 			if record[TITLE_LANGUAGE]:
-                                self.title_language = LANGUAGES[int(record[TITLE_LANGUAGE])]
+                                self.title_language_id = int(record[TITLE_LANGUAGE])
+                                self.title_language = LANGUAGES[self.title_language_id]
                                 self.used_language = 1
 			if record[TITLE_SERIES]:
                                 self.title_series = SQLgetSeriesName(record[TITLE_SERIES])
@@ -146,48 +149,20 @@ class titles:
 				self.title_content = record[TITLE_CONTENT]
 				self.used_content = 1
 			
-			if (record[TITLE_TTYPE] == 'REVIEW') or (record[TITLE_TTYPE] == 'INTERVIEW'):
-				query = "select authors.author_canonical from authors,canonical_author where authors.author_id=canonical_author.author_id and canonical_author.ca_status=1 and canonical_author.title_id='%d';" % (record[TITLE_PUBID])
-			else:
-                        	query = "select authors.author_canonical from authors,canonical_author where canonical_author.author_id = authors.author_id and canonical_author.title_id='%d'" % (record[TITLE_PUBID])
-                        self.db.query(query)
-                        res2 = self.db.store_result()
-                        rec2 = res2.fetch_row()
-			while rec2:
-				try:
-					self.title_authors.append(rec2[0][0])
-					self.num_authors += 1
-				except:
-					pass
-				rec2 = res2.fetch_row()
+			author_tuples = SQLTitleBriefAuthorRecords(record[TITLE_PUBID])
+			for author_tuple in author_tuples:
+                                self.title_authors.append(author_tuple[1])
+                                self.title_author_tuples.append((author_tuple[0], author_tuple[1]))
+                                self.num_authors += 1
 
+                        subj_authors = []
 			if record[TITLE_TTYPE] == 'REVIEW':
-				query = "select authors.author_canonical from authors,canonical_author where authors.author_id=canonical_author.author_id and canonical_author.ca_status=3 and canonical_author.title_id='%d';" % (record[TITLE_PUBID])
-
-                        	self.db.query(query)
-                        	res2 = self.db.store_result()
-                        	rec2 = res2.fetch_row()
-				while rec2:
-					try:
-						self.title_subjauthors.append(rec2[0][0])
-						self.num_subjauthors += 1
-					except:
-						pass
-					rec2 = res2.fetch_row()
-
-			if record[TITLE_TTYPE] == 'INTERVIEW':
-				query = "select authors.author_canonical from authors,canonical_author where authors.author_id=canonical_author.author_id and canonical_author.ca_status=2 and canonical_author.title_id='%d';" % (record[TITLE_PUBID])
-
-                        	self.db.query(query)
-                        	res2 = self.db.store_result()
-                        	rec2 = res2.fetch_row()
-				while rec2:
-					try:
-						self.title_subjauthors.append(rec2[0][0])
-						self.num_subjauthors += 1
-					except:
-						pass
-					rec2 = res2.fetch_row()
+                                subj_authors = SQLReviewedAuthors(record[TITLE_PUBID])
+                        elif record[TITLE_TTYPE] == 'INTERVIEW':
+                                subj_authors = SQLIntervieweeAuthors(record[TITLE_PUBID])
+                        for subj_author in subj_authors:
+                                self.title_subjauthors.append(subj_author[1])
+                                self.num_subjauthors += 1
 
 			if record[TITLE_SYNOP]:
                                 self.title_synop_id = record[TITLE_SYNOP]

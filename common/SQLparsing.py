@@ -1304,14 +1304,7 @@ def SQLReviewedAuthors(title_id):
                    where canonical_author.title_id = %d
                    and canonical_author.author_id = authors.author_id
                    and canonical_author.ca_status = 3""" % int(title_id)
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
-	results = []
-	while title:
-		results.append(title[0])
-		title = result.fetch_row()
-	return results
+	return _StandardQuery(query)
 
 def SQLIntervieweeAuthors(title_id, author_id = 0):
 	query = """select authors.author_id, authors.author_canonical
@@ -1320,14 +1313,7 @@ def SQLIntervieweeAuthors(title_id, author_id = 0):
                    and canonical_author.author_id <> %d
                    and canonical_author.author_id = authors.author_id
                    and canonical_author.ca_status = 2""" % (int(title_id), int(author_id))
-	db.query(query)
-	result = db.store_result()
-	title = result.fetch_row()
-	results = []
-	while title:
-		results.append(title[0])
-		title = result.fetch_row()
-	return results
+	return _StandardQuery(query)
 
 def SQLTitleBriefAuthorRecords(title_id):
 	query = """select a.author_id, a.author_canonical

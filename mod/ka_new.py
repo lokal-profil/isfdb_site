@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2021   Al von Ruff, Bill Longley, Ahasuerus and Klaus Elsbernd
+#     (C) COPYRIGHT 2006-2022   Al von Ruff, Bill Longley, Ahasuerus and Klaus Elsbernd
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -183,13 +183,54 @@ def DoSubmission(db, submission):
                                 if debug == 0:
                                         db.query(update)
 
-                        #Move the Series name from the child record to the new parent record
+                        # Series name:
+                        #  If the child record has a series value, move it to the new parent record
                         if child_data[TITLE_SERIES]:
                                 UpdateSeries(ChildRecord, child_data, ParentRecord)
+                        #  Otherwise, if the submission has a series name, process it
+                        elif TagPresent(merge, 'Series'):
+                                series_name = GetElementValue(merge, 'Series')
+                                series_data = SQLFindSeries(series_name, 'exact')
+                                if series_data:
+                                        update = "update titles set series_id=%d where title_id=%d" % (int(series_data[0][SERIES_PUBID]), int(ParentRecord))
+                                        print "<li> ", update
+                                        if debug == 0:
+                                                db.query(update)
+                                else:
+					insert = "insert into series(series_title) values('%s')" % (db.escape_string(series_name))
+					print "<li> ", insert
+					if debug == 0:
+                                                db.query(insert)
+					new_series_id = db.insert_id()
+                                        update = "update titles set series_id=%d where title_id=%d" % (int(new_series_id), int(ParentRecord))
+                                        print "<li> ", update
+                                        if debug == 0:
+                                                db.query(update)
                         
-                        #Move the Series number from the child record to the new parent record
+                        # Series number:
+                        #  If the child record has a series number, move it to the new parent record
                         if child_data[TITLE_SERIESNUM] is not None:
                                 UpdateSeriesNum(ChildRecord, child_data, ParentRecord)
+                        #  Otherwise, if the submission has a series number, process it
+                        elif TagPresent(merge, 'Seriesnum'):
+                                series_num = GetElementValue(merge, 'Seriesnum')
+                                series_list = series_num.split('.')
+                                if len(series_list):
+                                        update = "update titles set title_seriesnum=%d where title_id=%d" % (int(series_list[0]), int(ParentRecord))
+                                else:
+                                        update = "update titles set title_seriesnum=NULL where title_id=%d" % int(ParentRecord)
+                                print "<li> ", update
+                                if debug == 0:
+                                        db.query(update)
+                                        
+                                if len(series_list) >1:
+                                        # The secondary series number is not necessarily an integer, e.g. "05" is allowed
+                                        update = "update titles set title_seriesnum_2='%s' where title_id=%d" % (db.escape_string(series_list[1]), int(ParentRecord))
+                                else:
+                                        update = "update titles set title_seriesnum_2=NULL where title_id=%d" % int(ParentRecord)
+                                print "<li> ", update
+                                if debug == 0:
+                                        db.query(update)
 
 			# Move any Tags to Parent
 			UpdateTags(ChildRecord, ParentRecord)
