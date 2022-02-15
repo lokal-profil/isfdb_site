@@ -7021,6 +7021,65 @@ def function322():
 def function323():
         cleanup.other_books_with_trans_and_no_pubs('short')
 
+def function324():
+        cleanup.query = """select p.pub_id, p.pub_title
+                from pubs p, cleanup c
+                where (p.pub_isbn is NULL or p.pub_isbn = '')
+                and c.record_id = p.pub_id
+                and c.report_type = 324
+                and exists
+                        (select 1
+                        from identifiers i, identifier_types it
+                        where p.pub_id = i.pub_id
+                        and i.identifier_type_id = it.identifier_type_id
+                        and it.identifier_type_name = 'Audible-ASIN'
+                        and i.identifier_value regexp '^[[:digit:]]{9}[0-9Xx]{1}$'
+                        )
+                order by p.pub_title
+                """
+        cleanup.none = "No publications without an ISBN and with an Audible ASIN which is an ISBN-10"
+        cleanup.print_pub_table()
+
+def function325():
+        cleanup.query = """select p.pub_id, p.pub_title
+                from pubs p, cleanup c
+                where p.pub_ptype = 'digital audio download'
+                and (p.pub_price like '$%' or p.pub_price is NULL or p.pub_price = '')
+                and c.record_id = p.pub_id
+                and c.report_type = 325
+                and exists
+                        (select 1
+                        from identifiers i, identifier_types it
+                        where p.pub_id = i.pub_id
+                        and i.identifier_type_id = it.identifier_type_id
+                        and it.identifier_type_name = 'ASIN'
+                        )
+                and not exists
+                        (select 1
+                        from identifiers i, identifier_types it
+                        where p.pub_id = i.pub_id
+                        and i.identifier_type_id = it.identifier_type_id
+                        and it.identifier_type_name = 'Audible-ASIN'
+                        )
+                order by p.pub_title
+                """
+        cleanup.none = "No digital audio download pubs with a regular ASIN and no Audible ASIN"
+        cleanup.note = "This report is currently limited to publications with a US price or no specified price"
+        cleanup.print_pub_table()
+
+def function326():
+        cleanup.query = """select p.pub_id, p.pub_title
+                from pubs p, identifiers i, identifier_types it, cleanup c
+                where p.pub_ptype != 'digital audio download'
+                and p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'Audible-ASIN'
+                and c.record_id = p.pub_id
+                and c.report_type = 326
+                order by p.pub_title"""
+        cleanup.none = "No pubs with an Audible ASIN and a non-Audible format"
+        cleanup.print_pub_table()
+
 def requiredLowerCase():
         clause = ''
         for word in ENGLISH_LOWER_CASE:

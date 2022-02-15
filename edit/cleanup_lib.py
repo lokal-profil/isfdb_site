@@ -333,6 +333,9 @@ def reportsDict():
         reports[321] = ("Russian short titles with no publications and with a translation")
         reports[322] = ("Spanish short titles with no publications and with a translation")
         reports[323] = ("Short titles with no publications and with a translation in other languages")
+        reports[324] = ("Pubs without an ISBN and with an Audible ASIN which is an ISBN-10")
+        reports[325] = ("Digital audio download pubs with a regular ASIN and no Audible ASIN")
+        reports[326] = ("Pubs with an Audible ASIN and a non-Audible format")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 302, 9999)), ]
@@ -344,7 +347,7 @@ def reportsDict():
                                           244, 245, 246, 247, 248, 249, 250, 251,
                                           252, 253, 272, 277, 278, 279, 280, 281,
                                           282, 283, 284, 285, 287, 288, 291, 292,
-                                          294, 295, 299, 300, 306)), )
+                                          294, 295, 299, 300, 306, 324, 325, 326)), )
         sections.append(('Series', (16, 17, 48, 64, 67, 76, 81, 90, 144)), )
         sections.append(('Titles', (19, 1, 3, 18, 47, 55, 62, 63, 69, 74, 80, 87,
                                     91, 96, 194, 195, 196, 197, 227, 275, 276, 290,
@@ -405,6 +408,6 @@ def reportsDict():
                          288, 289, 291, 292, 293, 294, 295, 296, 297, 298,
                          299, 300, 301, 302, 303, 304, 305, 306, 307, 308,
                          309, 310, 311, 312, 313, 314, 315, 316, 317, 318,
-                         319, 320, 321, 322, 323, 9999)
+                         319, 320, 321, 322, 323, 324, 325, 226, 9999)
         
         return (reports, sections, non_moderator)

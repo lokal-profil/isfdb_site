@@ -2120,6 +2120,53 @@ def nightly_cleanup_reports():
         #   Report 323: Other short titles with no publications and with a translation
         otherTranslationsWithoutOriginalPubs(323, 'short')
 
+        #   Report 324: Pubs without an ISBN and with an Audible ASIN which is an ISBN-10
+        query = """select p.pub_id
+                from pubs p
+                where (p.pub_isbn is NULL or p.pub_isbn = '')
+                and exists
+                        (select 1
+                        from identifiers i, identifier_types it
+                        where p.pub_id = i.pub_id
+                        and i.identifier_type_id = it.identifier_type_id
+                        and it.identifier_type_name = 'Audible-ASIN'
+                        and i.identifier_value regexp '^[[:digit:]]{9}[0-9Xx]{1}$'
+                        )
+                """
+        standardReport(query, 324)
+
+        #   Report 325: Digital audio download pubs with regular ASINs and no Audible ASINs
+        query = """select p.pub_id
+                from pubs p
+                where p.pub_ptype = 'digital audio download'
+                and (p.pub_price like '$%' or p.pub_price is NULL or p.pub_price = '')
+                and exists
+                        (select 1
+                        from identifiers i, identifier_types it
+                        where p.pub_id = i.pub_id
+                        and i.identifier_type_id = it.identifier_type_id
+                        and it.identifier_type_name = 'ASIN'
+                        )
+                and not exists
+                        (select 1
+                        from identifiers i, identifier_types it
+                        where p.pub_id = i.pub_id
+                        and i.identifier_type_id = it.identifier_type_id
+                        and it.identifier_type_name = 'Audible-ASIN'
+                        )
+                """
+        standardReport(query, 325)
+
+        #   Report 326: Pubs with an Audible ASIN and a non-Audible format
+        query = """select p.pub_id
+                from pubs p, identifiers i, identifier_types it
+                where p.pub_ptype != 'digital audio download'
+                and p.pub_id = i.pub_id
+                and i.identifier_type_id = it.identifier_type_id
+                and it.identifier_type_name = 'Audible-ASIN'
+                """
+        standardReport(query, 326)
+
 def translationsWithoutOriginalPubs(report_id, lang_name, length = 'long'):
         if length == 'short':
                 in_clause = 'not in'
