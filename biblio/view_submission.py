@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2014-2021   Ahasuerus
+#     (C) COPYRIGHT 2014-2022   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -108,6 +108,8 @@ if __name__ == '__main__':
                         print '<p>%s' % ISFDBLink('mod/unreject.cgi', submission_id, 'Unreject Submission')
                 elif sub_state == 'N':
                         print '<p>%s' % ISFDBLink('mod/%s.cgi' % approval_script, submission_id, 'Moderator View')
+        elif SQLisUserSelfApprover(userID) and sub_state == 'N':
+                print '<p>%s' % ISFDBLink('mod/%s.cgi' % approval_script, submission_id, 'Self-Approver View')
 
 	PrintTrailer('recent', 0, 0)
 
