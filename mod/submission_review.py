@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2021   Ahasuerus
+#     (C) COPYRIGHT 2021-2022   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -14,20 +14,25 @@ from isfdb import *
 from isfdblib import *
 from common import *
 from SQLparsing import SQLloadSubmission
-from library import WikiLink
+from library import *
 import viewers
 
 
 if __name__ == '__main__':
 
         submission_id = SESSION.Parameter(0, 'int')
-        submission_data = SQLloadSubmission(submission_id)
-        if not submission_data:
+        submission = SQLloadSubmission(submission_id)
+        if not submission:
                 SESSION.DisplayError('Specified Submission Does Not Exist')
-        submission_type = submission_data[SUB_TYPE]
-        submission_type_name = SUBMAP[submission_type][3]
+        submission_type = submission[SUB_TYPE]
+        xml_tag = SUBMAP[submission_type][1]
 
-	PrintPreMod('Proposed %s Submission' % submission_type_name)
+        # Parse the XML record and get the "true" submission type for display purposes
+        doc2 = ISFDBSubmissionDoc(submission[SUB_DATA], xml_tag)
+        display_tag = ISFDBSubmissionType(xml_tag, submission_type, doc2)
+        displayType = ISFDBSubmissionDisplayType(display_tag, xml_tag, submission_type)
+
+	PrintPreMod('Proposed %s Submission' % displayType)
 	PrintNavBar()
 
         submission_filer = SUBMAP[submission_type][6]

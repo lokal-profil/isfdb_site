@@ -57,7 +57,7 @@ def PrintRecord(record, eccolor, approving_moderator):
 			doc2 = doc.getElementsByTagName(recordType)
 			subject = GetElementValue(doc2, 'Subject')
 			submitter = GetElementValue(doc2, 'Submitter')
-			recordType = DetermineRecordType(recordType, subtype, doc2)
+			recordType = ISFDBSubmissionType(recordType, subtype, doc2)
 		except:
 			subject = '<b>XML PARSE ERROR</b>'
 			submitter = SQLgetUserName(user_id)

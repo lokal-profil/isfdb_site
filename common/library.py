@@ -1250,7 +1250,7 @@ def AwardLevelDescription(award_level, award_id):
                         award_level_desc = "Nomination"
         return award_level_desc
 
-def DetermineRecordType(recordType, subtype, doc2):
+def ISFDBSubmissionType(recordType, subtype, doc2):
         from xml.dom import minidom
         from xml.dom import Node
         # Since XML tag "NewPub" is used for "New Pub", "Add Pub to Title", "Import Contents", "Export Contents"
@@ -1823,7 +1823,7 @@ def ISFDBprintSubmissionRecord(record, eccolor, status, unreject):
         try:
                 doc = minidom.parseString(XMLunescape2(record[0][SUB_DATA]))
                 doc2 = doc.getElementsByTagName(subTypeName)
-                displayName = DetermineRecordType(subTypeName, subType, doc2)
+                displayName = ISFDBSubmissionType(subTypeName, subType, doc2)
                 (subjectLink, new_record) = getSubjectLink(record[0], doc2, subType)
                 submitter = GetElementValue(doc2, 'Submitter')
                 submitter = string.replace(submitter, ' ', '_')
@@ -1867,6 +1867,27 @@ def ISFDBprintSubmissionRecord(record, eccolor, status, unreject):
         if unreject:
                 print '<td>%s</td>' % ISFDBLink('mod/unreject.cgi', subId, 'Unreject')
         print '</tr>'
+
+def ISFDBSubmissionDoc(sub_data, xml_tag):
+        try:
+                doc = minidom.parseString(XMLunescape2(sub_data))
+        except:
+                SESSION.DisplayError('Submission contains invalid XML and cannot be displayed')
+
+        try:
+                doc2 = doc.getElementsByTagName(xml_tag)
+        except:
+                SESSION.DisplayError('Submission contains invalid XML and cannot be displayed')
+        return doc2
+
+def ISFDBSubmissionDisplayType(display_tag, xml_tag, sub_type):
+        # If the "corrected" display type is not the same as the XML tag, then display the former
+        if display_tag != xml_tag:
+                displayType = display_tag
+        # Otherwise display the full type name stored in SUBMAP
+        else:
+                displayType = SUBMAP[sub_type][3]
+        return displayType
 
 def getSubjectLink(record, doc2, subType):
         subject = GetElementValue(doc2, 'Subject')

@@ -37,24 +37,9 @@ if __name__ == '__main__':
         displayPage = SUBMAP[sub_type][2]
 
         # Parse the XML record and get the "true" submission type for display purposes
-        try:
-                doc = minidom.parseString(XMLunescape2(sub_data))
-        except:
-                SESSION.DisplayError('Submission contains invalid XML and cannot be displayed')
-
-        try:
-                doc2 = doc.getElementsByTagName(xml_tag)
-                subject = GetElementValue(doc2, 'Subject')
-        except:
-                SESSION.DisplayError('Submission contains invalid XML and cannot be displayed')
-
-        display_tag = DetermineRecordType(xml_tag, sub_type, doc2)
-        # If the "corrected" display type is not the same as the XML tag, then display the former
-        if display_tag != xml_tag:
-                displayType = display_tag
-        # Otherwise display the full type name stored in SUBMAP
-        else:
-                displayType = SUBMAP[sub_type][3]
+        doc2 = ISFDBSubmissionDoc(sub_data, xml_tag)
+        display_tag = ISFDBSubmissionType(xml_tag, sub_type, doc2)
+        displayType = ISFDBSubmissionDisplayType(display_tag, xml_tag, sub_type)
 
         # Compose the header, which will depend on the submission type and its approval status
         if sub_state == 'N':
