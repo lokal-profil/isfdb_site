@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2005-2022   Al von Ruff, Kevin Pulliam (kevin.pulliam@gmail.com), Bill Longley, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -61,20 +61,21 @@ def PrintNavBar():
         # Print the Other Pages section from module navbar
 	PrintOtherPages('')
 
-	print '<div class="divider">'
-	print 'Moderator Links:'
-	print '</div>'
-	print '<ul class="navbar">'
-	print '<li>%s' % ISFDBLink('mod/list.cgi', 'N', 'Moderator')
-	if bureaucrat:
-                print '<li>%s' % ISFDBLink('mod/bureaucrat.cgi', 'N', 'Bureaucrat')
-	print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+R', 'Recent Rejections')
-	print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+I', 'Recent Approvals')
-	print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+P', 'Errored Out Submissions')
-	print '<li>%s' % ISFDBLink('mod/tag_status_changes.cgi', '', 'Tag Status Changes')
-	print '<li>%s' % ISFDBLink('mod/private_tags.cgi', '', 'Private Tags')
-	print '<li>%s' % ISFDBLink('mod/submission_search.cgi', '', 'Submission Search')
-	print '</ul>'
+	if moderator:
+                print '<div class="divider">'
+                print 'Moderator Links:'
+                print '</div>'
+                print '<ul class="navbar">'
+                print '<li>%s' % ISFDBLink('mod/list.cgi', 'N', 'Moderator')
+                if bureaucrat:
+                        print '<li>%s' % ISFDBLink('mod/bureaucrat.cgi', 'N', 'Bureaucrat')
+                print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+R', 'Recent Rejections')
+                print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+I', 'Recent Approvals')
+                print '<li>%s' % ISFDBLink('mod/recent.cgi', '0+P', 'Errored Out Submissions')
+                print '<li>%s' % ISFDBLink('mod/tag_status_changes.cgi', '', 'Tag Status Changes')
+                print '<li>%s' % ISFDBLink('mod/private_tags.cgi', '', 'Private Tags')
+                print '<li>%s' % ISFDBLink('mod/submission_search.cgi', '', 'Submission Search')
+                print '</ul>'
         print '</div>'
         print '<div id="main2">'
         onlineVersion = SQLgetSchemaVersion()
