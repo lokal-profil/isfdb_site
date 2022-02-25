@@ -56,7 +56,7 @@ class Output():
                 yoffset = 10
 
                 self.append('<svgcode width="%d" height="%d" version="1.1">' % (xoffset+40+(years*xscale), height+30+yoffset))
-                self.append('<svg width="100%%" height="%dpx" version="1.1" xmlns="http://www.w3.org/2000/svg">' % (height+30+yoffset))
+                self.append('<svg width="100%%" height="%dpx" version="1.1" xmlns="https://www.w3.org/2000/svg">' % (height+30+yoffset))
 
                 ###################################################
                 # Output the grid and labels - Horizontal Lines
@@ -128,7 +128,7 @@ class Output():
                                 self.append('<tr align=left class="table1">')
                         else:
                                 self.append('<tr align=left class="table2">')
-                        self.append('<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name))
+                        self.append('<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, user_name, user_name))
                         self.append('<td>%d</td>' % (record[0][1]))
                         self.append('<td>%d</td>' % (record[0][2]))
                         self.append('<td>%d</td>' % (record[0][1] - record[0][2]))
@@ -206,7 +206,7 @@ class Output():
                                 self.append('<tr align=left class="table1">')
                         else:
                                 self.append('<tr align=left class="table2">')
-                        self.append('<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user, user))
+                        self.append('<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, user, user))
 
                         self.append('<td>%s</td>' % total.get(user, '&nbsp;'))
 
@@ -272,7 +272,7 @@ class Output():
                                 self.append('<tr align=left class="table1">')
                         else:
                                 self.append('<tr align=left class="table2">')
-                        self.append('<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name))
+                        self.append('<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, user_name, user_name))
                         self.append('<td>%d</td>' % count)
                         self.append('<td>%s</td>' % moderator)
                         last_user_activity = self.LastUserActivity(user_id)
@@ -294,7 +294,7 @@ class Output():
         def summaryStatistics(self):
                 self.start("<ul>")
 
-                self.summaryLine('author_id', 'authors', '<a href="http:/%s/directory.cgi?author">Authors</a>' % HTFAKE)
+                self.summaryLine('author_id', 'authors', ISFDBLink('directory.cgi', 'author', 'Authors'))
                 self.summaryLine('pub_id', 'pubs', 'Publications')
 
                 self.append("<ul>")
@@ -313,7 +313,7 @@ class Output():
                 record = result.fetch_row()
                 self.append("<li><b>Verified Publications:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/self.last_count))
 
-                self.summaryLine('publisher_id', 'publishers', '<a href="http:/%s/directory.cgi?publisher">Publishers</a>' % HTFAKE)
+                self.summaryLine('publisher_id', 'publishers', ISFDBLink('directory.cgi', 'publisher', 'Publishers'))
                 self.summaryLine('pub_series_id', 'pub_series', 'Publication Series')
                 self.summaryLine('title_id', 'titles', 'Titles')
 
@@ -339,7 +339,7 @@ class Output():
                 self.append("<li><b>Titles with Tags:</b> %d (%2.2f%%)" % (record[0][0], (100.0 * float(record[0][0]))/self.last_count))
 
                 self.summaryLine('series_id', 'series', 'Series')
-                self.summaryLine('award_type_id', 'award_types', '<a href="http:/%s/award_directory.cgi">Award Types</a>' % HTFAKE)
+                self.summaryLine('award_type_id', 'award_types', ISFDBLink('award_directory.cgi', '', 'Award Types'))
                 self.summaryLine('award_cat_id', 'award_cats', 'Award Categories')
                 self.summaryLine('award_id', 'awards', 'Awards')
 
@@ -360,7 +360,7 @@ class Output():
                 db.query(query)
                 result = db.store_result()
                 record = result.fetch_row()
-                self.append('<li><b><a href="http://%s/index.php/Template:PublicationFields:ExternalIDs">External Identifiers</a>:</b> %d' % (WIKILOC, int(record[0][0])))
+                self.append('<li><b><a href="%s://%s/index.php/Template:PublicationFields:ExternalIDs">External Identifiers</a>:</b> %d' % (PROTOCOL, WIKILOC, int(record[0][0])))
 
                 self.append("<ul>")
                 query = """select it.identifier_type_name, count(i.identifier_id)
@@ -1122,7 +1122,7 @@ class Output():
                                 self.append('<tr align=left class="table1">')
                         else:
                                 self.append('<tr align=left class="table2">')
-                        self.append('<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name))
+                        self.append('<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, user_name, user_name))
                         self.append('<td>%d</td>' % count)
                         self.append('<td>%s</td>' % SQLLastUserActivity(user_id))
                         self.append('</tr>')
@@ -1158,7 +1158,7 @@ class Output():
                                 self.append('<tr align=left class="table1">')
                         else:
                                 self.append('<tr align=left class="table2">')
-                        self.append('<td><a href="http://%s/index.php/User:%s">%s</a></td>' % (WIKILOC, user_name, user_name))
+                        self.append('<td><a href="%s://%s/index.php/User:%s">%s</a></td>' % (PROTOCOL, WIKILOC, user_name, user_name))
                         self.append('<td>%d</td>' % count)
                         self.append('<td>%s</td>' % SQLLastUserActivity(user_id))
                         self.append('</tr>')
