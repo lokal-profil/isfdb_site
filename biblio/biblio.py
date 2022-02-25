@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2022   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -603,7 +603,7 @@ class Bibliography:
 			print '</td>'
 			print '</table>'
                         (webpage, credit, home_page, linked_page) = BuildDisplayedURL(self.au_data[AUTHOR_IMAGE])
-                        print 'Image supplied by <a href="http://%s" target="_blank">%s</a>' % (home_page, credit)
+                        print 'Image supplied by <a href="%s" target="_blank">%s</a>' % (home_page, credit)
                         if linked_page:
                                 print ' on <a href="%s" target="_blank">this Web page</a>' % linked_page
 

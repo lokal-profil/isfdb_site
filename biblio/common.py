@@ -823,10 +823,10 @@ def BuildDisplayedURL(webpage):
         if not domain:
                 domain = webpage
         # If there is no recognized "scheme" (http, ftp, etc), pad the webpage URL
-        # with 'http'. This will ensure that the link goes to a third party site and
+        # with 'https'. This will ensure that the link goes to a third party site and
         # not to a location on the local server, which could cause a security issue.
         if not parsed_url[0]:
-                webpage = "http://%s" % webpage
+                webpage = "https://%s" % webpage
         domains = RecognizedDomains()
         display = ''
         # Extract the last 4, then 3, then 2 period-delimited parts of the domain name and evaluate them
@@ -856,7 +856,7 @@ def BuildDisplayedURL(webpage):
                 if display == 'ISFDB':
                         linked_page = "%s://%s/index.php/Image:%s" % (PROTOCOL, WIKILOC, parsed_url[2].rpartition('/')[-1])
                 break
-        # If this is not a "recognized" Web site, then display the raw domain name padded with "http://"
+        # If this is not a "recognized" Web site, then display the raw domain name
         if not display:
                 display = domain
                 home_page = domain
@@ -945,7 +945,7 @@ def CoverInfo(link, preview=False, direct=False):
         if credit == 'ISFDB':
                 site_name = 'ISFDB'
                 if not direct:
-                        finallink = "%s://%s" % (PROTOCOL, home_page)
+                        finallink = home_page
         elif 'Amazon' in credit:
                 site_name = 'Amazon'
         else:

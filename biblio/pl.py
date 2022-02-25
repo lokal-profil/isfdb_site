@@ -512,7 +512,7 @@ if __name__ == '__main__':
         	print '</td>'
         	print '</table>'
                 (webpage, credit, home_page, linked_page) = BuildDisplayedURL(pub.pub_image)
-                print 'Cover art supplied by <a href="http://%s" target="_blank">%s</a>' % (home_page, credit)
+                print 'Cover art supplied by <a href="%s" target="_blank">%s</a>' % (home_page, credit)
                 if linked_page:
                         print ' on <a href="%s" target="_blank">this Web page</a>' % linked_page
                 if 'amazon.com' in pub.pub_image:
