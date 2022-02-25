@@ -192,7 +192,7 @@ class Session:
 
 SCHEMA_VER = '0.02'
 ENGINE     = '<b>ISFDB Engine</b> - Version 4.00 (2006-04-24)'
-COPYRIGHT  = 'Copyright &copy; 1995-2021 Al von Ruff and the ISFDB team'
+COPYRIGHT  = 'Copyright &copy; 1995-2022 Al von Ruff and the ISFDB team'
 # NONCE should be uncommented if and when we need it to create CSP nonces
 # import uuid
 # NONCE = uuid.uuid4().hex
