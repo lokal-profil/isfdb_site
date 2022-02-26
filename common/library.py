@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 #     (C) COPYRIGHT 2007-2022   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED

@@ -1,4 +1,3 @@
-# -*- coding: cp1252 -*-
 #
 #     (C) COPYRIGHT 2007-2022   Al von Ruff, Ahasuerus, Bill Longley and Klaus Elsbernd
 #       ALL RIGHTS RESERVED
