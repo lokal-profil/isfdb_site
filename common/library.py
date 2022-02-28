@@ -1267,6 +1267,8 @@ def ISFDBSubmissionType(recordType, subtype, doc2):
 def FormatImage(value, height = 250):
         # If there is a delimiter, only display the part before the delimiter
         image = value.split("|")[0]
+        if not image:
+                return image
         value = '<img src="%s" height="%s" alt="Coverart"><br>[%s]' % (image, height, value)
 
         if WIKILOC in image:
