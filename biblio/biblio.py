@@ -524,7 +524,7 @@ class Bibliography:
 			print '<table>'
 			print '<tr align="left">'
 			print '<td>'
-			print '<img src="%s" width="150" alt="Author Picture">' % (self.au_data[AUTHOR_IMAGE])
+			print '<img src="%s" width="150" alt="Author Picture">' % (self.au_data[AUTHOR_IMAGE].split('|')[0])
 			print '</td>'
 			print '<td class="authorimage">'
 
