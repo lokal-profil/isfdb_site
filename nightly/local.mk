@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2013-2021   Ahasuerus
+#     (C) COPYRIGHT 2013-2022   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -17,9 +17,10 @@ INSTALL = $(INSTALL_HTML)/nightly
 MYLIBS	= dup_authors.py \
 	  nightly_3rd_parties.py \
           nightly_awards.py \
+	  nightly_cleanup.py \
 	  nightly_html.py \
 	  nightly_lib.py \
-	  nightly_stats.py \
+	  database_stats.py \
 	  nightly_transliterations.py \
 	  nightly_wiki.py
 

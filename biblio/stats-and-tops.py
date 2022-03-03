@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2013-2021   Ahasuerus
+#     (C) COPYRIGHT 2013-2022   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -29,7 +29,7 @@ print_line('verification_sources.cgi', '', 'Secondary Verification Sources')
 print '</ul>'
 print '<hr>'
 
-print 'The following lists are regenerated nightly'
+print 'The following lists are regenerated weekly'
 print '<h4>Database Statistics</h4>'
 print '<ul>'
 
