@@ -17,13 +17,18 @@ from library import *
 
 class MyVerifications:
         def __init__(self):
-                self.user = User()
-                self.user.load()
+                self.bgcolor = 1
+                self.displayed_count = 0
                 self.per_page = 200
                 self.pub_id = ''
+                self.record = []
+                self.retrieved_count = 0
+                self.user = User()
+                self.user.load()
 
         def display(self):
                 start = SESSION.Parameter(0, 'int', 0)
+                self.displayed_index = start
                 script = SESSION.cgi_script
                 if script == 'userver':
                         query = """select p.pub_id, p.pub_title, p.pub_ctype, 
@@ -33,7 +38,7 @@ class MyVerifications:
                                 where pv.pub_id = p.pub_id
                                 and pv.user_id = %d
                                 order by date desc, pv.verification_id desc
-                                limit %d,%d""" % (int(self.user.id), start, self.per_page)
+                                limit %d,%d""" % (int(self.user.id), start, self.per_page +1)
                         none_found = 'No primary verifications'
                 elif script == 'my_unstable_ISBN_verifications':
                         query = """select p.pub_id, p.pub_title, p.pub_ctype, 
@@ -45,7 +50,7 @@ class MyVerifications:
                                 and p.pub_frontimage like '%%amazon.com%%'
                                 and p.pub_frontimage like '%%amazon.com/images/P/%%'
                                 order by date desc, pv.verification_id desc
-                                limit %d,%d""" % (int(self.user.id), start, self.per_page)
+                                limit %d,%d""" % (int(self.user.id), start, self.per_page + 1)
                         none_found = 'No primary verifications with unstable ISBN-based Amazon URLs'
                 elif script == 'my_unstable_verifications':
                         query = """select p.pub_id, p.pub_title, p.pub_ctype, 
@@ -57,31 +62,30 @@ class MyVerifications:
                                 and p.pub_frontimage like '%%amazon.com%%'
                                 and p.pub_frontimage like '%%amazon.com/images/G/%%'
                                 order by date desc, pv.verification_id desc
-                                limit %d,%d""" % (int(self.user.id), start, self.per_page)
+                                limit %d,%d""" % (int(self.user.id), start, self.per_page + 1)
                         none_found = 'No primary verifications with unstable "/G/" Amazon URLs'
                 else:
                         print '<h2>A software error has occurred. Please post this URL on the ISFDB Community Portal.</h2>'
                         return
                 db.query(query)
                 result = db.store_result()
-                num = result.num_rows()
+                self.retrieved_count = result.num_rows()
 
-                count = start
-                if num > 0:
-                        last = num
-                        if last > self.per_page:
-                                last = self.per_page
-                        print '<h3>Displaying primary verifications %d - %d:</h3>' % (start+1, start+last)
-                        record = result.fetch_row()
-                        bgcolor = 1
+                if self.retrieved_count:
+                        last_displayed = self.retrieved_count
+                        if self.retrieved_count > self.per_page:
+                                last_displayed = self.per_page
+                        print '<h3>Displaying primary verifications %d - %d:</h3>' % (start + 1, start + last_displayed)
+                        self.record = result.fetch_row()
                         self.printTableColumns()
-                        while record:
-                                count += 1
-                                self.printPubRecord(record[0], bgcolor, count)
-                                bgcolor ^= 1
-                                record = result.fetch_row()
+                        while self.record:
+                                self.displayed_count += 1
+                                if self.displayed_count > self.per_page:
+                                        break
+                                self.printPubRecord()
+                                self.record = result.fetch_row()
                         print '</table>'
-                        if num > (self.per_page - 1):
+                        if self.retrieved_count > self.per_page:
                                 print ISFDBLink('%s.cgi' % script, start + self.per_page,
                                                 '%d - %d' % (start + self.per_page + 1, start + (2 * self.per_page)),
                                                 True)
@@ -101,24 +105,27 @@ class MyVerifications:
                 print '<th>Cover</th>'
                 print '</tr>'
 
-        def printPubRecord(self, record, bgcolor, count):
-                self.pub_id = record[0]
-                if bgcolor:
+        def printPubRecord(self):
+                self.displayed_index += 1
+                data = self.record[0]
+                self.pub_id = data[0]
+                if self.bgcolor:
                         print '<tr align=left class="table1">'
                 else:
                         print '<tr align=left class="table2">'
+                self.bgcolor ^= 1
 
-                print '<td>%d</td>' % count
-                print '<td>%s</td>' % record[2]
-                print '<td>%s</td>' % record[3]
-                print '<td>%s</td>' % ISFDBLink('pl.cgi', self.pub_id, record[1])
+                print '<td>%d</td>' % self.displayed_index
+                print '<td>%s</td>' % data[2]
+                print '<td>%s</td>' % data[3]
+                print '<td>%s</td>' % ISFDBLink('pl.cgi', self.pub_id, data[1])
                 output = '' 
-                if record[2] in ('MAGAZINE', 'ANTHOLOGY', 'FANZINE', 'NONFICTION'):
+                if data[2] in ('MAGAZINE', 'ANTHOLOGY', 'FANZINE', 'NONFICTION'):
                         output = "Ed. "
                 output += self.pubAuthors()
                 print '<td>%s</td>' % output
 
-                if record[4]:
+                if data[4]:
                         print '<td>Transient</td>'
                 else:
                         print '<td>&nbsp;</td>'
@@ -131,8 +138,8 @@ class MyVerifications:
                         print '&nbsp;'
                 print '</td>'
 
-                if record[5]:
-                        print '<td>%s</td>' % CoverInfo(record[5])
+                if data[5]:
+                        print '<td>%s</td>' % CoverInfo(data[5])
                 else:
                         print '<td>&nbsp;</td>'
 
