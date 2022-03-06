@@ -2128,11 +2128,11 @@ def SQLloadNextSubmission(sub_id, reviewer_id):
                 and s.sub_holdid = 0
                 and s.sub_id > %d
                 and not exists (
-                        select 1 from mw_user u, mw_user_groups groups
+                        select 1 from mw_user u, mw_user_groups g
                         where s.sub_submitter != %d
                         and s.sub_submitter = u.user_id
-                        and u.user_id = groups.ug_user
-                        and groups.ug_group = 'sysop'
+                        and u.user_id = g.ug_user
+                        and g.ug_group = 'sysop'
                         )
                 order by s.sub_reviewed
                 limit 1""" % (int(sub_id), int(reviewer_id))
