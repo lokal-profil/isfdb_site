@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2022   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -18,7 +18,7 @@ class elapsedTime:
                 # Save the system stdout
                 self.stdout = sys.stdout
                 # Only print a message if the execution time of a report exceeds this threshold
-                self.threshold = 2
+                self.threshold = 0
 
         def print_elapsed(self, report_name):
                 sys.stdout = self.stdout
@@ -27,9 +27,14 @@ class elapsedTime:
                         print '%s: Rpt %s: %.2f seconds' % (strftime('%H:%M:%S', localtime()), report_name, elapsed)
                 self.start = time()
 
+def standardDelete(report_type):
+        # Delete unresolved cleanup records for this report number/type
+        query = 'delete from cleanup where resolved IS NULL and report_type = %d' % int(report_type)
+        db.query(query)
 
 def standardReport(query, report_type):
         elapsed = elapsedTime()
+        standardDelete(report_type)
 	db.query(query)
 	result = db.store_result()
         record = result.fetch_row()
@@ -44,11 +49,12 @@ def standardReport(query, report_type):
 
 def standardReportFromList(id_list, report_type):
         elapsed = elapsedTime()
+        standardDelete(report_type)
         standardReportInsert(id_list, report_type)
         elapsed.print_elapsed(report_type)
 
 def standardReportInsert(id_list, report_type):
-        # First remove previously resolved/ignored records from the list of IDs
+        # First remove previously resolved/ignored records from the passed-in list of IDs
         query = "select record_id from cleanup where report_type=%d and resolved=1" % int(report_type)
         db.query(query)
 	result = db.store_result()

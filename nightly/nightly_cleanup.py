@@ -21,12 +21,7 @@ from nightly_transliterations import *
 from nightly_wiki import *
 from nightly_3rd_parties import *
 
-def delete_nightly():
-        # Delete unresolved records from the cleanup table EXCEPT for the monthly duplicate authors report
-        query = 'delete from cleanup where resolved IS NULL and report_type != 9999'
-        db.query(query)
-
-def nightly_cleanup():
+def nightly_cleanup_reports():
         # Regenerate nightly cleanup reports
         #
         #   Report 1: List of titles without authors
@@ -403,6 +398,8 @@ def nightly_cleanup():
         standardReport(query, 43)
 
         #   Report 44: Similar publishers
+        elapsed = elapsedTime()
+        standardDelete(44)
         suffixes = ('Inc', 'LLC', 'Books', 'Press', 'Publisher', 'Publishers', 'Publishing')
         separators = (' ', ',', ', ')
         post_suffixes = ('', '.')
@@ -449,6 +446,7 @@ def nightly_cleanup():
                         values(%d, 44, %d)""" % (publisher_id1, publisher_id2)
                         db.query(update)
                 record = result.fetch_row()
+        elapsed.print_elapsed(44)
 
         #   Report 45: Variant Title Type Mismatches
         query = """select v.title_id from titles v, titles p
@@ -1750,6 +1748,7 @@ def nightly_cleanup():
 
         #   Report 277: Publications with the 'Incomplete' Template in Notes
         elapsed = elapsedTime()
+        standardDelete(277)
         query = """select p.pub_id,
                 IF(p.pub_year='0000-00-00', 0, REPLACE(SUBSTR(p.pub_year, 1,7),'-',''))
                 from pubs p, notes n
@@ -2242,6 +2241,7 @@ def translationsWithoutNotes(report_id, language_id):
 
 def emptyContainers(report_id, container_types):
         elapsed = elapsedTime()
+        standardDelete(report_id)
         query = """select xx.pub_id, IF(xx.pub_year='0000-00-00', 0, REPLACE(SUBSTR(xx.pub_year, 1,7),'-',''))
                 from (
                 select p.pub_id, p.pub_year
@@ -2286,14 +2286,3 @@ def badUnicodeReport(table, record_title, record_id, report_number):
         where_clause = "%s like '%%&#%%' and (%s)" % (record_title, pattern_match)
         query = """select %s from %s where %s""" % (record_id, table, where_clause)
         standardReport(query, report_number)
-
-
-if __name__ == '__main__':
-        # Delete unresolved records from the cleanup table EXCEPT for the monthly duplicate authors report
-        query = 'delete from cleanup where resolved IS NULL and report_type != 9999'
-        db.query(query)
-        nightly_cleanup_reports()
-        nightly_wiki()
-        nightly_transliterations()
-        nightly_html()
-        nightly_3rd_parties()

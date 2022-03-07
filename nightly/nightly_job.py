@@ -22,8 +22,7 @@ from nightly_transliterations import *
 from nightly_wiki import *
 
 if __name__ == '__main__':
-        delete_nightly()
-        nightly_cleanup()
+        nightly_cleanup_reports()
         nightly_wiki()
         nightly_transliterations()
         nightly_html()

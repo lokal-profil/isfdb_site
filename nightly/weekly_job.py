@@ -25,8 +25,7 @@ from nightly_3rd_parties import *
 
 if __name__ == '__main__':
         database_stats()
-        delete_nightly()
-        nightly_cleanup()
+        nightly_cleanup_reports()
         nightly_wiki()
         nightly_transliterations()
         nightly_html()
