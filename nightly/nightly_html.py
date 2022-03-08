@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2017-2018   Ahasuerus
+#     (C) COPYRIGHT 2017-2022   Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -26,7 +26,7 @@ def nightly_html():
         query += ui.goodHtmlClause('pubs', 'pub_title')
         standardReport(query, 56)
 
-        #   Report 217: Records with unsupported HTML in Notes
+        #   Report 208-216: Records with unsupported HTML in Notes
         query = "select note_id from notes where "
         query += ui.badHtmlClause('notes', 'note_note')
         db.query(query)
@@ -56,7 +56,8 @@ def nightly_html():
                 query = "select %s from %s where %s in (%s)" % (record_id_field, table, note_field, in_clause)
                 standardReport(query, report_id)
 
-        # Author notes are processed separately since they are stored in the main author table
+        #   Report 217: Author Notes with unsupported HTML
+        # NB: Author notes are processed separately since they are stored in the main author table
         query = "select author_id from authors where "
         query += ui.badHtmlClause('authors', 'author_note')
         standardReport(query, 217)

@@ -21,7 +21,7 @@ MYLIBS	= dup_authors.py \
 	  nightly_html.py \
 	  nightly_lib.py \
 	  database_stats.py \
-	  nightly_transliterations.py \
+	  transliterations.py \
 	  nightly_wiki.py
 
 LIBS	= authorClass.py \

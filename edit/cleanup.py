@@ -28,9 +28,11 @@ class CleanupMenu():
                         self.all_reports = 0
                 self.counts = {}
                 self.displayed_sections = []
+                self.weeklies = ()
+                self.monthlies = ()
 
         def load_report_definitions(self):
-                (self.reports, self.sections, self.non_moderator) = reportsDict()
+                (self.reports, self.sections, self.non_moderator, self.weeklies, self.monthlies) = reportsDict()
                 for report_type in self.reports.keys():
                         self.counts[int(report_type)] = 0
                         # Report 199 is temporary and not regenerated nightly

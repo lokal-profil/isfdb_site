@@ -7518,7 +7518,7 @@ def PrintTitlesWithoutLanguage(result):
 if __name__ == '__main__':
 
         # Retrieve all supported reports
-        (reports, sections, non_moderator) = reportsDict()
+        (reports, sections, non_moderator, weeklies, monthlies) = reportsDict()
 
         type_id = SESSION.Parameter(0, 'int')
         if type_id not in reports:
@@ -7537,6 +7537,12 @@ if __name__ == '__main__':
 
         cleanup = Cleanup()
         cleanup.report_id = type_id
+        if type_id in weeklies:
+                print '<h3>This report is regenerated once a week</h3>'
+        elif type_id in monthlies:
+                print '<h3>This report is regenerated once a month</h3>'
+        else:
+                print '<h3>This report is regenerated every night</h3>'
         function()
 
         PrintPostSearch(0, 0, 0, 0, 0, 0)

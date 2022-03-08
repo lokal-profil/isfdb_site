@@ -15,11 +15,7 @@ import string
 import re
 from SQLparsing import *
 from library import *
-from nightly_html import *
 from nightly_lib import *
-from nightly_transliterations import *
-from nightly_wiki import *
-from nightly_3rd_parties import *
 
 def nightly_cleanup_reports():
         # Regenerate nightly cleanup reports

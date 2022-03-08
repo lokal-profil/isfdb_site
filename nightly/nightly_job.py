@@ -18,11 +18,9 @@ from library import *
 from nightly_cleanup import *
 from nightly_html import *
 from nightly_lib import *
-from nightly_transliterations import *
 from nightly_wiki import *
 
 if __name__ == '__main__':
         nightly_cleanup_reports()
         nightly_wiki()
-        nightly_transliterations()
         nightly_html()

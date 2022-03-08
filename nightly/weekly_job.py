@@ -19,7 +19,7 @@ from database_stats import *
 from nightly_cleanup import *
 from nightly_html import *
 from nightly_lib import *
-from nightly_transliterations import *
+from transliterations import *
 from nightly_wiki import *
 from nightly_3rd_parties import *
 
@@ -27,6 +27,6 @@ if __name__ == '__main__':
         database_stats()
         nightly_cleanup_reports()
         nightly_wiki()
-        nightly_transliterations()
+        transliterations()
         nightly_html()
         nightly_3rd_parties()
