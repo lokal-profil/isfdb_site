@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2021   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2006-2022   Al von Ruff and Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,12 +10,8 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
 from common import *
-from login import *
 from SQLparsing import *
 
 
@@ -27,7 +23,7 @@ def output_data(sub_type):
                 record = result.fetch_row()
                 print record[0][0]
         else:
-                print '<h3>This report is currently unavailable. It will be regenerated overnight.</h3>'
+                print '<h3>This report is currently unavailable. It is regenerated once a week.</h3>'
 
 if __name__ == '__main__':
 
@@ -38,9 +34,11 @@ if __name__ == '__main__':
 
 	if sub_type == 0:
 		print '<h2>Top ISFDB contributors (All Submission Types)</h2>'
+		print '<h3>This report is generated once a week</h3>'
 		output_data(0)
 	elif sub_type in SUBMAP and SUBMAP[sub_type][3]:
                 print '<h2>Top ISFDB contributors (%s)</h2>' % (SUBMAP[sub_type][3])
+                print '<h3>This report is generated once a week</h3>'
                 output_data(sub_type)
         else:
 		print '<h3>Specified submission type is currently inactive</h3>'
