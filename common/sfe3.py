@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2009-2021   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2022   Al von Ruff, Ahasuerus, Bill Longley and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -31,7 +31,7 @@ class Sfe3:
                 self.sleep_seconds = 1
                 self.user = None
 
-        def nightly_process(self):
+        def process(self):
                 self.load_URLs_in_author_records()
                 print 'Links in "webpages": ',len(self.URLs_in_author_records)
                 self.load_resolved_and_unresolved_URLs()

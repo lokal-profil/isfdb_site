@@ -15,7 +15,6 @@ include ../INSTALLDIRS
 INSTALL = $(INSTALL_HTML)/nightly
 
 MYLIBS	= dup_authors.py \
-	  nightly_3rd_parties.py \
           nightly_awards.py \
 	  nightly_cleanup.py \
 	  nightly_html.py \

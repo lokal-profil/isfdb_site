@@ -21,7 +21,8 @@ from nightly_html import *
 from nightly_lib import *
 from transliterations import *
 from nightly_wiki import *
-from nightly_3rd_parties import *
+from sfe3 import Sfe3
+
 
 if __name__ == '__main__':
         database_stats()
@@ -29,4 +30,5 @@ if __name__ == '__main__':
         nightly_wiki()
         transliterations()
         nightly_html()
-        nightly_3rd_parties()
+        sfe3 = Sfe3()
+        sfe3.process()
