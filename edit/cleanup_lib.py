@@ -338,6 +338,11 @@ def reportsDict():
         reports[326] = ("Pubs with an Audible ASIN and a non-Audible format")
         reports[9999] = ("Suspected Duplicate Authors (monthly)")
 
+        wiki_cleanup = (101, 102, 103, 104, 105, 106, 107, 108, 109,
+                        110, 111, 112, 113, 114, 115, 116, 117, 118,
+                        119, 120, 200, 201, 202, 203, 204, 205, 206,
+                        207)
+
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 302, 9999)), ]
         sections.append(('Magazines', (12, 13, 14, 15, 46)), )
         sections.append(('Containers', (29, 37, 54, 92, 240, 241)), )
@@ -368,7 +373,7 @@ def reportsDict():
         sections.append(('Publication Series', (66, 77, 98, 189)), )
         sections.append(('Author Languages', (192, 11, 58, 59, 60, 61, 168, 183, 184, 185,
                                                 186, 187, 188)), )
-        sections.append(('Transliterations', (85, 99, 97, 121, 122, 123, 124, 125, 126,
+        sections.append(('Transliterations', (85, 97, 99, 121, 122, 123, 124, 125, 126,
                                               127, 128, 129, 130, 131, 132, 133, 134, 135,
                                               136, 137, 138, 139, 140, 141, 142, 143, 145,
                                               146, 147, 148, 149, 150, 151, 152, 153, 154,
@@ -376,9 +381,7 @@ def reportsDict():
                                               164, 165, 166, 167, 169, 170, 171, 172, 173,
                                               174, 175, 176, 177, 178, 179, 180, 181, 182,
                                               257, 258, 259, 260, 261, 262, 263)), )
-        sections.append(('Wiki Cleanup', (101, 102, 103, 104, 105, 106, 107, 108, 109,
-                                          110, 111, 112, 113, 114, 115, 116, 117, 118,
-                                          119, 120, 200, 201, 202, 203, 204, 205, 206, 207)), )
+        sections.append(('Wiki Cleanup', wiki_cleanup), )
         sections.append(('Forthcoming Books', (71, 72)), )
 
         # A tuple of report IDs which non-moderators are allowed to view
@@ -409,14 +412,15 @@ def reportsDict():
                          309, 310, 311, 312, 313, 314, 315, 316, 317, 318,
                          319, 320, 321, 322, 323, 324, 325, 226, 9999)
 
-        weeklies = (85, 97, 99, 121, 122, 123, 124, 125, 126, 127, 128, 129,
+        weeklies = [85, 97, 99, 121, 122, 123, 124, 125, 126, 127, 128, 129,
                     130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140,
                     141, 142, 143, 145, 146, 147, 148, 149, 150, 151, 152,
                     153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163,
                     164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174,
                     175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185,
-                    186, 187, 188, 257, 258, 259, 260, 261, 262, 263)
+                    186, 187, 188, 257, 258, 259, 260, 261, 262, 263]
+        weeklies.extend(wiki_cleanup)
 
         monthlies = (9999, )
         
-        return (reports, sections, non_moderator, weeklies, monthlies)
+        return (reports, sections, non_moderator, weeklies, tuple(monthlies))
