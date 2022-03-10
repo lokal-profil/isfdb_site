@@ -14,12 +14,12 @@ include ../INSTALLDIRS
 
 INSTALL = $(INSTALL_HTML)/nightly
 
-MYLIBS	= dup_authors.py \
-          nightly_awards.py \
-	  nightly_cleanup.py \
+MYLIBS	= awards.py \
+	  database_stats.py \
+	  dup_authors.py \
+          nightly_cleanup.py \
 	  nightly_html.py \
 	  nightly_lib.py \
-	  database_stats.py \
 	  transliterations.py \
 	  wiki.py
 

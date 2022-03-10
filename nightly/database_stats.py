@@ -1286,8 +1286,8 @@ class Output():
                 db.commit()
 
         def awardTitles(self):
-                import nightly_awards
-                award_titles = nightly_awards.awardTitles()
+                import awards
+                award_titles = awards.awardTitles()
                 award_titles.buildAwardTitles()
 
 def database_stats():
