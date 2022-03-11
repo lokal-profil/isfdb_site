@@ -20,11 +20,7 @@ from xml.dom import Node
 ################################################################
 
 def ISFDBDate():
-	date = gmtime()
-	month = date[1]
-	day = date[2]
-	year  = str(date[0])
-	return '%s-%02d-%02d' % (year, int(month), int(day))
+        return datetime.datetime.today().strftime('%Y-%m-%d')
 
 monthmap = {
         1  : 'Jan',
