@@ -640,15 +640,17 @@ class Bibliography:
                         counter += 1
 
                 counter = 0
+                output = ''
                 for author in interviewed_collaborators:
                         if not counter:
-                                print "(co-interviewed with "
+                                output += "(co-interviewed with "
                         else:
-                                print " <b>and</b> "
-                        displayAuthorById(author[0], author[1])
+                                output += " <b>and</b> "
+                        output += buildAuthorById(author[0], author[1])
                         counter += 1
                 if counter:
-                        print ")"
+                        output +=  ")"
+                print output
 
 	def displayWorks(self, title_type):
                 self.first = 1
