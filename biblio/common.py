@@ -325,20 +325,22 @@ def displayAuthorsforReview(reviewer_authors, title, author_id, translit_authors
                 return
         
         counter = 0
+        output = ''
         for author in reviewer_authors:
-                # Author biblio pages display only co-reviewers
-                if author_id:
-                        if not counter:
-                                print "(co-reviewed with "
+                if not counter:
+                        # Author biblio pages display only co-reviewers
+                        if author_id:
+                                output += "(co-reviewed with "
+                        # Series pages display all reviewers
                         else:
-                                print " <b>and</b> "
-                # Series pages display all reviewers
+                                output += "(reviewed by "
                 else:
-                        print '(reviewed by '
-                displayAuthorById(author[0], author[1], translit_authors)
+                        output += " <b>and</b> "
+                output += buildAuthorById(author[0], author[1], translit_authors)
                 counter += 1
         if counter:
-                print ")"	
+                output += ")"
+        print output
 
 def displayAuthorsforInterview(interviewer_authors, title, author_id, translit_authors):
         interviewee_authors = SQLIntervieweeAuthors(title[TITLE_PUBID])
@@ -354,23 +356,25 @@ def displayAuthorsforInterview(interviewer_authors, title, author_id, translit_a
                 return
 
         counter = 0
+        output = ''
         for author in interviewer_authors:
                 if not counter:
                         # Author biblio pages display only co-interviewers
                         if author_id:
                                 if len(interviewer_authors) == 1:
-                                        print '(co-interviewer '
+                                        output += '(co-interviewer '
                                 else:
-                                        print '(co-interviewers '
+                                        output += '(co-interviewers '
                         # Series pages display all interviewers
                         else:
-                                print '(interviewed by '
+                                output += '(interviewed by '
                 else:
-                        print " <b>and</b> "
-                displayAuthorById(author[0], author[1], translit_authors)
+                        output += " <b>and</b> "
+                output += buildAuthorById(author[0], author[1], translit_authors)
                 counter += 1
         if counter:
-                print ")"	
+                output += ")"	
+        print output
 
 def displayVariantAuthors(authors, qualifier, translit_authors):
 	if len(authors) == 0:
@@ -764,7 +768,10 @@ def displayRecordList(record_type, records):
         print LIBbuildRecordList(record_type, records)
 
 def displayAuthorById(id, name, trans_authors = None):
-	print ISFDBLink('ea.cgi', id, name, False, '', trans_authors)
+	print buildAuthorById(id, name, trans_authors = None)
+
+def buildAuthorById(id, name, trans_authors = None):
+	return ISFDBLink('ea.cgi', id, name, False, '', trans_authors)
 
 def PrintAllAuthors(title_id, prefix = '', suffix = ''):
 	authors = SQLTitleBriefAuthorRecords(title_id)
