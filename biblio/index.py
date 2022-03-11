@@ -12,7 +12,7 @@
 
 from SQLparsing import *
 from library import ISFDBLink, ISFDBText, ISFDBPubFormat, ISFDBDate, ISFDBPrice
-from time import gmtime
+import datetime
 from common import displayAuthorList, PrintHeader, PrintNavbar, PrintTrailer
 from calendarClass import CalendarDay
 from isbn import convertISBN
@@ -49,10 +49,10 @@ if __name__ == '__main__':
 	print '<div id="Intro">'
 	print '<table>'
 
-        date = gmtime()
-        month = date[1]
-        day = date[2]
-        year  = str(date[0])
+        today = datetime.date.today()
+        month = today.month
+        day = today.day
+        year  = str(today.year)
 	booksPrinted = 0
 	maxmonths = 0
 	leftcolumn = 1
