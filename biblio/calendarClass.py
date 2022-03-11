@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2006-2021   Al von Ruff, Ahasuerus and Bill Longley
+#     (C) COPYRIGHT 2006-2022   Al von Ruff, Ahasuerus and Bill Longley
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -9,11 +9,8 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-import cgi
-import sys
-import string
-import MySQLdb
 from isfdb import *
+import datetime
 from common import *
 from SQLparsing import *
 from library import *
@@ -23,9 +20,9 @@ class CalendarMenu:
         def __init__(self):
                 self.month = 0
                 self.num_days = 0
-                date = gmtime()
-                self.current_month = date[1]
-                self.current_day = date[2]
+                today = datetime.date.today()
+                self.current_month = today.month
+                self.current_day = today.day
 
         def display(self):
                 PrintHeader('SF Calendar')

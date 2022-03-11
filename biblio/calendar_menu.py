@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2019   Ahasuerus
+#     (C) COPYRIGHT 2019-2022   Ahasuerus
 #         ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -10,14 +10,7 @@
 #     Date: $Date$
 
 
-import string
-import sys
-import MySQLdb
 from isfdb import *
-from common import *
-from login import *
-from library import *
-from SQLparsing import *
 from calendarClass import CalendarMenu
 
 if __name__ == '__main__':
