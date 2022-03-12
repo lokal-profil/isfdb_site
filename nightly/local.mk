@@ -18,7 +18,7 @@ MYLIBS	= awards.py \
 	  database_stats.py \
 	  dup_authors.py \
           nightly_cleanup.py \
-	  nightly_html.py \
+	  html_cleanup.py \
 	  nightly_lib.py \
 	  transliterations.py \
 	  wiki.py

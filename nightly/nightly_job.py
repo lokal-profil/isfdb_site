@@ -10,8 +10,8 @@
 #     Date: $Date$
 
 from nightly_cleanup import *
-from nightly_html import *
+from html_cleanup import *
 
 if __name__ == '__main__':
         nightly_cleanup_reports()
-        nightly_html()
+        html_cleanup()

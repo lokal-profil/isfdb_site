@@ -11,7 +11,7 @@
 
 from database_stats import *
 from nightly_cleanup import *
-from nightly_html import *
+from html_cleanup import *
 from transliterations import *
 from wiki import wiki
 from sfe3 import Sfe3
@@ -22,6 +22,6 @@ if __name__ == '__main__':
         nightly_cleanup_reports()
         wiki()
         transliterations()
-        nightly_html()
+        html_cleanup()
         sfe3 = Sfe3()
         sfe3.process()
