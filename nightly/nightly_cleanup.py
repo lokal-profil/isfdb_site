@@ -9,13 +9,9 @@
 #     Version: $Revision: 844 $
 #     Date: $Date: 2022-02-15 16:06:20 -0500 (Tue, 15 Feb 2022) $
 
-import os
-import sys
-import string
-import re
 from SQLparsing import *
 from library import *
-from nightly_lib import *
+from shared_cleanup_lib import *
 
 def nightly_cleanup_reports():
         # Regenerate nightly cleanup reports

@@ -1,6 +1,6 @@
 #!_PYTHONLOC
 #
-#     (C) COPYRIGHT 2009-2018   Al von Ruff, Ahasuerus and Dirk Stoecker
+#     (C) COPYRIGHT 2009-2022   Al von Ruff, Ahasuerus and Dirk Stoecker
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -9,13 +9,10 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-import os
-import sys
-import string
 from SQLparsing import *
 from library import *
 from dup_authors import *
-from nightly_lib import *
+from shared_cleanup_lib import *
 
 if __name__ == '__main__':
         # Delete unresolved records for the duplicate authors report from the cleanup table

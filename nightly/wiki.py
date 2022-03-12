@@ -9,10 +9,9 @@
 #     Version: $Revision: 495 $
 #     Date: $Date: 2020-01-07 21:18:11 -0500 (Tue, 07 Jan 2020) $
 
-import string
 from SQLparsing import *
 from library import *
-from nightly_lib import *
+from shared_cleanup_lib import *
 
 def wiki():
         if WikiExists():

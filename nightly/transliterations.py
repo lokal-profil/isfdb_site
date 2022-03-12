@@ -12,7 +12,7 @@
 import string
 from SQLparsing import *
 from library import *
-from nightly_lib import *
+from shared_cleanup_lib import *
 
 def transliterations():
         #   Report 85: Non-Latin authors with Latin characters in legal names
