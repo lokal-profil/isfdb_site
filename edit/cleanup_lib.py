@@ -342,10 +342,11 @@ def reportsDict():
                         110, 111, 112, 113, 114, 115, 116, 117, 118,
                         119, 120, 200, 201, 202, 203, 204, 205, 206,
                         207)
+        containers = (29, 37, 54, 92, 240, 241)
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 302, 9999)), ]
         sections.append(('Magazines', (12, 13, 14, 15, 46)), )
-        sections.append(('Containers', (29, 37, 54, 92, 240, 241)), )
+        sections.append(('Containers', containers), )
         sections.append(('Publications', (32, 33, 31, 34, 35, 36, 38, 39, 49, 50,
                                           51, 52, 56, 57, 70, 75, 79, 86, 88, 93,
                                           100, 193, 228, 231, 233, 235, 236, 243,
@@ -420,6 +421,7 @@ def reportsDict():
                     175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185,
                     186, 187, 188, 257, 258, 259, 260, 261, 262, 263]
         weeklies.extend(wiki_cleanup)
+        weeklies.extend(containers)
 
         monthlies = (9999, )
         

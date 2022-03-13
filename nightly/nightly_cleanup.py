@@ -262,13 +262,6 @@ def nightly_cleanup_reports():
 	query = "select title_id from titles where title_ttype='CHAPBOOK' and title_synopsis !=0"
         standardReport(query, 28)
 
-        #   Report 29: Chapbooks without Contents Titles
-        query = "select pub_id from pubs where pub_ctype='CHAPBOOK' and NOT EXISTS \
-                (select 1 from pub_content,titles where pubs.pub_id=pub_content.pub_id \
-                and pub_content.title_id=titles.title_id and (titles.title_ttype='SHORTFICTION' \
-                or titles.title_ttype='POEM' or titles.title_ttype='SERIAL'))"
-        standardReport(query, 29)
-
         #   Report 30: Chapbooks with Mismatched Variant Types
 	query = "select t1.title_id from titles t1, titles t2 where t1.title_ttype='CHAPBOOK' \
                 and t2.title_parent=t1.title_id and t2.title_ttype!='CHAPBOOK' \
@@ -348,14 +341,6 @@ def nightly_cleanup_reports():
                 query += "%'"
         query += " order by pub_frontimage"
         standardReport(query, 36)
-
-        #   Report 37: Omnibuses without Contents Titles
-        query = "select pub_id from pubs where pub_ctype='OMNIBUS' and NOT EXISTS \
-                (select 1 from pub_content,titles where pubs.pub_id=pub_content.pub_id \
-                and pub_content.title_id=titles.title_id and (titles.title_ttype='NOVEL' \
-                or titles.title_ttype='COLLECTION' \
-                or titles.title_ttype='ANTHOLOGY' or titles.title_ttype='NONFICTION'))"
-        standardReport(query, 37)
 
         #   Report 38: Publications with Duplicate Titles
         query = 'select pub_id from pub_content where pub_id IS NOT NULL group by pub_id, title_id having count(*)>1'
@@ -623,29 +608,6 @@ def nightly_cleanup_reports():
                 group by p.author_id, p.pseudonym \
                 having count(*) > 1"
         standardReport(query, 53)
-
-        #   Report 54: Container Titles in Publications with no Contents
-        query = """select tmp.good from 
-                (select distinct t1.title_id as good from titles t1, pub_content pc1
-                 where t1.title_ttype in ('ANTHOLOGY','COLLECTION')
-                 and t1.title_id=pc1.title_id
-                 and exists
-                	(select 1 from pub_content pc2, titles t2
-                	where pc1.pubc_id!=pc2.pubc_id
-                	and pc1.pub_id=pc2.pub_id
-                	and pc2.title_id=t2.title_id
-                	and t2.title_ttype in ('SHORTFICTION','POEM','SERIAL'))) tmp
-                where tmp.good in 
-                (select distinct t1.title_id from titles t1, pub_content pc1
-                 where t1.title_ttype in ('ANTHOLOGY','COLLECTION')
-                 and t1.title_id=pc1.title_id
-                 and not exists
-                	(select 1 from pub_content pc2, titles t2
-                	where pc1.pubc_id!=pc2.pubc_id
-                	and pc1.pub_id=pc2.pub_id
-                	and pc2.title_id=t2.title_id
-                	and t2.title_ttype in ('SHORTFICTION','POEM','SERIAL')))"""
-        standardReport(query, 54)
 
         #   Report 57: Invalid SFE image links
         query = """select pub_id from pubs where
@@ -1110,19 +1072,6 @@ def nightly_cleanup_reports():
                 """
         standardReport(query, 91)
 
-        #   Report 92: Primary-verified Anthologies/Collections without Contents Titles
-        query = """select distinct p.pub_id
-                from pubs p, primary_verifications pv
-                where p.pub_ctype in ('ANTHOLOGY', 'COLLECTION')
-                and p.pub_id = pv.pub_id
-                and NOT EXISTS
-                (select 1 from pub_content pc, titles t
-                where p.pub_id=pc.pub_id 
-                and pc.title_id=t.title_id
-                and (t.title_ttype in ('NOVEL', 'SHORTFICTION', 'POEM', 'SERIAL'))
-                )"""
-        standardReport(query, 92)
-
         #   Report 93: Publication Title/Reference Title Mismatches
         query = """select p.pub_id from pubs p
           where p.pub_ctype in ('CHAPBOOK', 'OMNIBUS', 'ANTHOLOGY', 'COLLECTION', 'NONFICTION', 'NOVEL')
@@ -1491,12 +1440,6 @@ def nightly_cleanup_reports():
                 order by t1.title_title
                 limit 500"""
         standardReport(query, 239)
-
-        #   Report 240: Anthologies and Collections without Fiction Titles
-        query = emptyContainers(240, "'ANTHOLOGY', 'COLLECTION'")
-
-        #   Report 241: Magazines without Fiction Titles
-        query = emptyContainers(241, "'MAGAZINE'")
 
         #   Report 242: CHAPBOOK/SHORTFICTION Juvenile Flag Mismatches
         query = """select distinct t1.title_id
@@ -2230,48 +2173,6 @@ def translationsWithoutNotes(report_id, language_id):
                 order by t4.title_title
                 limit 1000""" % language_id
         standardReport(query, report_id)
-
-def emptyContainers(report_id, container_types):
-        elapsed = elapsedTime()
-        standardDelete(report_id)
-        query = """select xx.pub_id, IF(xx.pub_year='0000-00-00', 0, REPLACE(SUBSTR(xx.pub_year, 1,7),'-',''))
-                from (
-                select p.pub_id, p.pub_year
-                from pubs p
-                where p.pub_ctype in (%s)
-                and p.pub_year != '8888-00-00'
-                and NOT EXISTS
-                        (select 1 from pub_content pc, titles t
-                        where p.pub_id=pc.pub_id 
-                        and pc.title_id=t.title_id
-                        and (t.title_ttype in ('NOVEL', 'SHORTFICTION', 'POEM', 'SERIAL'))
-                )) as xx""" % container_types
-        db.query(query)
-        result = db.store_result()
-        containers = {}
-        record = result.fetch_row()
-        while record:
-                pub_id = record[0][0]
-                pub_month = record[0][1]
-                containers[pub_id] = pub_month
-                record = result.fetch_row()
-
-        # Remove previously resolved/ignored records from the dictionary of IDs
-        query = "select record_id from cleanup where report_type=%d and resolved=1" % int(report_id)
-        db.query(query)
-	result = db.store_result()
-        record = result.fetch_row()
-	while record:
-		resolved_id = record[0][0]
-		if resolved_id in containers:
-                        del containers[resolved_id]
-        	record = result.fetch_row()
-
-        # Insert the new pub IDs and their months into the cleanup table
-        for record_id in containers:
-                update = "insert into cleanup (record_id, report_type, record_id_2) values(%d, %d, %d)" % (int(record_id), int(report_id), int(containers[record_id]))
-                db.query(update)
-        elapsed.print_elapsed(report_id)
 
 def badUnicodeReport(table, record_title, record_id, report_number):
         pattern_match = ISFDBBadUnicodePatternMatch(record_title)

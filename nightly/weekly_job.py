@@ -9,10 +9,11 @@
 #     Version: $Revision: 844 $
 #     Date: $Date: 2022-02-15 16:06:20 -0500 (Tue, 15 Feb 2022) $
 
-from database_stats import *
-from nightly_cleanup import *
-from html_cleanup import *
-from transliterations import *
+from database_stats import database_stats
+from nightly_cleanup import nightly_cleanup_reports
+from containers_cleanup import containers_cleanup
+from html_cleanup import html_cleanup
+from transliterations import transliterations
 from wiki import wiki
 from sfe3 import Sfe3
 
@@ -20,6 +21,7 @@ from sfe3 import Sfe3
 if __name__ == '__main__':
         database_stats()
         nightly_cleanup_reports()
+        containers_cleanup()
         wiki()
         transliterations()
         html_cleanup()
