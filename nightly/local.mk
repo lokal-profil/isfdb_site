@@ -16,6 +16,7 @@ INSTALL = $(INSTALL_HTML)/nightly
 
 MYLIBS	= awards.py \
 	  containers_cleanup.py \
+	  database_corruption.py \
 	  database_stats.py \
 	  dup_authors.py \
           nightly_cleanup.py \

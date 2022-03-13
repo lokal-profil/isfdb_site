@@ -15,6 +15,7 @@ from containers_cleanup import containers_cleanup
 from html_cleanup import html_cleanup
 from transliterations import transliterations
 from translations_cleanup import translations_cleanup
+from database_corruption import database_corruption
 from wiki import wiki
 from sfe3 import Sfe3
 
@@ -27,5 +28,6 @@ if __name__ == '__main__':
         transliterations()
         translations_cleanup()
         html_cleanup()
+        database_corruption()
         sfe3 = Sfe3()
         sfe3.process()
