@@ -343,6 +343,9 @@ def reportsDict():
                         119, 120, 200, 201, 202, 203, 204, 205, 206,
                         207)
         containers = (29, 37, 54, 92, 240, 241)
+        translations = (238, 239, 264, 265, 266, 267, 268, 269, 270,
+                        271, 308, 309, 310, 311, 312, 313, 314, 315,
+                        316, 317, 318, 319, 320, 321, 322, 323)
 
         sections = [('Authors', (6, 7, 8, 10, 53, 68, 78, 89, 94, 95, 198, 199, 302, 9999)), ]
         sections.append(('Magazines', (12, 13, 14, 15, 46)), )
@@ -359,9 +362,7 @@ def reportsDict():
                                     91, 96, 194, 195, 196, 197, 227, 275, 276, 290,
                                     293, 297, 303)), )
         sections.append(('Variant Titles', (20, 21, 9, 2, 45, 286)), )
-        sections.append(('Translations', (239, 238, 264, 265, 266, 267, 268, 269, 270,
-                                          271, 308, 309, 310, 311, 312, 313, 314, 315,
-                                          316, 317, 318, 319, 320, 321, 322, 323)), )
+        sections.append(('Translations', translations), )
         sections.append(('Chapbooks', (27, 28, 30, 242, 289)), )
         sections.append(('Serials', (22, 83, 84)), )
         sections.append(('Awards', (23, 24, 25, 26, 190, 232, 298, 307)), )
@@ -422,6 +423,7 @@ def reportsDict():
                     186, 187, 188, 257, 258, 259, 260, 261, 262, 263]
         weeklies.extend(wiki_cleanup)
         weeklies.extend(containers)
+        weeklies.extend(translations)
 
         monthlies = (9999, )
         

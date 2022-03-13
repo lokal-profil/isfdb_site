@@ -21,6 +21,7 @@ MYLIBS	= awards.py \
           nightly_cleanup.py \
 	  html_cleanup.py \
 	  shared_cleanup_lib.py \
+	  translations_cleanup.py \
 	  transliterations.py \
 	  wiki.py
 

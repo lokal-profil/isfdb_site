@@ -9,9 +9,9 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-from nightly_cleanup import *
-from html_cleanup import *
+from nightly_cleanup import nightly_cleanup
+from html_cleanup import html_cleanup
 
 if __name__ == '__main__':
-        nightly_cleanup_reports()
+        nightly_cleanup()
         html_cleanup()
