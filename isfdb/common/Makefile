@@ -8,6 +8,10 @@
 #     Version: $Revision$
 #     Date: $Date$
 
+include ../../INSTALLDIRS
+
+INSTALL = $(INSTALL_CGI)/common
+
 
 BASE_FILES = login.py \
 	SQLparsing.py \
@@ -51,6 +55,11 @@ check_dirs:
 	then echo nightly/local exists; \
 	else mkdir ../nightly/local; \
 	fi
+	if test -d $(INSTALL); \
+	then echo $(INSTALL) exists; \
+	else mkdir $(INSTALL); \
+	fi
+
 
 install: check_dirs
 	cp $(BASE_FILES) ../biblio
@@ -71,6 +80,10 @@ install: check_dirs
 	cp localdefs.py ../css
 	cp localdefs.py ../scripts
 	cp $(BASE_FILES) ../scripts
+	cp $(BASE_FILES) $(INSTALL)
+	cp $(CLASS_FILES) $(INSTALL)
+	cp localdefs.py $(INSTALL)
+	chmod 644 $(INSTALL)/*.py
 
 clean:
 	cd ../biblio && rm -rf $(BASE_FILES) $(CLASS_FILES) local
@@ -80,6 +93,7 @@ clean:
 	cd ../nightly && rm -rf $(BASE_FILES) $(CLASS_FILES) local
 	rm -f ../css/localdefs.py
 	rm -f ../scripts/localdefs.py
+	cd $(INSTALL) && rm -f $(BASE_FILES) $(CLASS_FILES) localdefs.py
 
 diff:
 	diff install.py  ../biblio
