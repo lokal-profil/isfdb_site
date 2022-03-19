@@ -9,9 +9,9 @@
 #     Version: $Revision: 669 $
 #     Date: $Date: 2021-06-29 15:17:13 -0400 (Tue, 29 Jun 2021) $
 
-from isfdb import *
-from SQLparsing import SQLGetPubById
-from pub_output import pubOutput
+from isfdb.common.isfdb import *
+from isfdb.common.SQLparsing import SQLGetPubById
+from isfdb.rest.pub_output import pubOutput
 
 
 if __name__ == '__main__':
