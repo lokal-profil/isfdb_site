@@ -1,5 +1,5 @@
 #
-#     (C) COPYRIGHT 2005-2018   Al von Ruff and Ahasuerus
+#     (C) COPYRIGHT 2005-2021   Al von Ruff and Ahasuerus
 #       ALL RIGHTS RESERVED
 #
 #     The copyright notice above does not evidence any actual or
@@ -8,22 +8,32 @@
 #     Version: $Revision$
 #     Date: $Date$
 
+
 include .TARGETS
-include ../INSTALLDIRS
+include ../../INSTALLDIRS
 
-INSTALL = $(INSTALL_CGI)/rest
+INSTALL = $(INSTALL_CGI)/mod
 
-MYLIBS	= pub_output.py
+MYLIBS	= common.py \
+	  isfdblib.py
 
-LIBS = login.py \
-	SQLparsing.py \
-	isbn.py \
-	isfdb.py \
-	library.py \
-	navbar.py \
-	install.py \
-	pubClass.py \
-	isfdblib.py
+LIBS	= authorClass.py \
+	  awardClass.py \
+	  awardcatClass.py \
+	  awardtypeClass.py \
+	  pubClass.py \
+	  seriesClass.py \
+	  publisherClass.py \
+	  pubseriesClass.py \
+	  titleClass.py \
+	  verificationsourceClass.py \
+	  isbn.py \
+	  isfdb.py \
+	  library.py \
+	  navbar.py \
+	  viewers.py \
+	  login.py \
+	  SQLparsing.py
 
 all:	$(TARGETS)
 	cp $(MYLIBS) local
@@ -50,3 +60,4 @@ clean:
 clobber:
 	rm -f $(LIBS)
 	rm -rf local
+

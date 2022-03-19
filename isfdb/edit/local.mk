@@ -10,30 +10,33 @@
 
 
 include .TARGETS
-include ../INSTALLDIRS
+include ../../INSTALLDIRS
 
-INSTALL = $(INSTALL_CGI)/mod
+INSTALL = $(INSTALL_CGI)/edit
 
-MYLIBS	= common.py \
-	  isfdblib.py
+MYLIBS	= cleanup_lib.py \
+	  isfdblib.py \
+	  isfdblib_help.py \
+	  isfdblib_print.py
 
 LIBS	= authorClass.py \
 	  awardClass.py \
 	  awardcatClass.py \
 	  awardtypeClass.py \
+	  titleClass.py \
 	  pubClass.py \
-	  seriesClass.py \
 	  publisherClass.py \
 	  pubseriesClass.py \
-	  titleClass.py \
+	  seriesClass.py \
 	  verificationsourceClass.py \
 	  isbn.py \
-	  isfdb.py \
 	  library.py \
 	  navbar.py \
 	  viewers.py \
 	  login.py \
-	  SQLparsing.py
+	  SQLparsing.py \
+	  isfdb.py \
+	  sfe3.py
 
 all:	$(TARGETS)
 	cp $(MYLIBS) local
@@ -49,6 +52,7 @@ check_dirs:
 		fi
 
 install:	all check_dirs
+		rm -f $(INSTALL)/*.pyc
 		cp local/* $(INSTALL)
 		chmod 755 $(INSTALL)/*.cgi
 		chmod 644 $(INSTALL)/*.py

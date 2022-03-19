@@ -53,7 +53,7 @@ if __name__=='__main__':
     subprocess.call(("cvs", "checkout", sys.argv[1], sys.argv[2],
                      "-d", "reference_tree", "isfdb2"))
     
-    shutil.copy("../INSTALLDIRS", "reference_tree/")
+    shutil.copy("../../INSTALLDIRS", "reference_tree/")
     shutil.copy("../common/localdefs.py", "reference_tree/common/")
 
     statusmsg('Install reference version...')

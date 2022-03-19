@@ -9,25 +9,25 @@
 #     Date: $Date$
 
 install:
-	cd common && $(MAKE) install;
-	cd biblio && $(MAKE) LOCAL;
-	cd biblio && $(MAKE) install;
-	cd edit   && $(MAKE) LOCAL;
-	cd edit   && $(MAKE) install;
-	cd mod    && $(MAKE) LOCAL;
-	cd mod    && $(MAKE) install;
-	cd nightly && $(MAKE) LOCAL;
-	cd nightly && $(MAKE) install;
-	cd css    && $(MAKE) install;
-	cd rest   && $(MAKE) LOCAL;
-	cd rest   && $(MAKE) install;
+	cd isfdb/common && $(MAKE) install;
+	cd isfdb/biblio && $(MAKE) LOCAL;
+	cd isfdb/biblio && $(MAKE) install;
+	cd isfdb/edit   && $(MAKE) LOCAL;
+	cd isfdb/edit   && $(MAKE) install;
+	cd isfdb/mod    && $(MAKE) LOCAL;
+	cd isfdb/mod    && $(MAKE) install;
+	cd isfdb/nightly && $(MAKE) LOCAL;
+	cd isfdb/nightly && $(MAKE) install;
+	cd isfdb/css    && $(MAKE) install;
+	cd isfdb/rest   && $(MAKE) LOCAL;
+	cd isfdb/rest   && $(MAKE) install;
 clean:
-	cd common && $(MAKE) clean;
-	cd biblio && $(MAKE) clean;
-	cd edit && $(MAKE) clean;
-	cd mod && $(MAKE) clean;
-	cd css && $(MAKE) clean;
-	cd rest && $(MAKE) clean;
+	cd isfdb/common && $(MAKE) clean;
+	cd isfdb/biblio && $(MAKE) clean;
+	cd isfdb/edit && $(MAKE) clean;
+	cd isfdb/mod && $(MAKE) clean;
+	cd isfdb/css && $(MAKE) clean;
+	cd isfdb/rest && $(MAKE) clean;
 export:
 		/bin/bash export.sh
 

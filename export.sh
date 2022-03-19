@@ -22,7 +22,7 @@ mkdir isfdb2
 # Copy the common files and hide data
 # in localdefs.py
 #######################################
-cp -r common isfdb2
+cp -r isfdb/common isfdb2
 echo HTMLLOC = \"xxx\" > isfdb2/common/localdefs.py
 echo HTFAKE = \"xxx\" >> isfdb2/common/localdefs.py
 echo DBASEHOST = \"xxx\" >> isfdb2/common/localdefs.py
@@ -39,28 +39,28 @@ cp INSTALLDIRS isfdb2
 #######################################
 # Copy the biblio files 
 #######################################
-cp -r biblio isfdb2
+cp -r isfdb/biblio isfdb2
 cd isfdb2/biblio && make clobber
 cd -
 
 #######################################
 # Copy the edit files 
 #######################################
-cp -r edit isfdb2
+cp -r isfdb/edit isfdb2
 cd isfdb2/edit && make clobber
 cd -
 
 #######################################
 # Copy the mod files 
 #######################################
-cp -r mod isfdb2
+cp -r isfdb/mod isfdb2
 cd isfdb2/mod && make clobber
 cd -
 
 #######################################
 # Copy the rest files 
 #######################################
-cp -r rest isfdb2
+cp -r isfdb/rest isfdb2
 cd isfdb2/rest && make clobber
 cd -
 
@@ -72,10 +72,10 @@ rm -rf isfdb2/common/CVS
 #######################################
 # Copy the CSS and script files 
 #######################################
-cp -r css isfdb2
+cp -r isfdb/css isfdb2
 cd isfdb2/css && make clobber
 cd -
-cp -r scripts isfdb2
+cp -r isfdb/scripts isfdb2
 cd isfdb2/scripts && make clobber
 cd -
 
