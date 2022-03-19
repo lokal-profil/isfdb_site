@@ -13,7 +13,8 @@ include ../../INSTALLDIRS
 
 INSTALL = $(INSTALL_CGI)/rest
 
-MYLIBS	= pub_output.py
+MYLIBS	= pub_output.py \
+	  __init__.py
 
 LIBS = isfdblib.py
 

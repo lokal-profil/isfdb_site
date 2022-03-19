@@ -20,7 +20,8 @@ BASE_FILES = login.py \
 	library.py \
 	navbar.py \
 	install.py \
-	sfe3.py
+	sfe3.py \
+	__init__.py
 
 CLASS_FILES = authorClass.py \
 	awardClass.py \
