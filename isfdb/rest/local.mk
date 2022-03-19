@@ -15,22 +15,14 @@ INSTALL = $(INSTALL_CGI)/rest
 
 MYLIBS	= pub_output.py
 
-LIBS = login.py \
-	SQLparsing.py \
-	isbn.py \
-	isfdb.py \
-	library.py \
-	navbar.py \
-	install.py \
-	pubClass.py \
-	isfdblib.py
+LIBS = isfdblib.py
 
 all:	$(TARGETS)
 	cp $(MYLIBS) local
 	cp $(LIBS) local
 
 local/%.cgi:	%.py
-		python install.py $* local /usr/bin/python
+		python ../common/install.py $* local /usr/bin/python
 
 check_dirs:
 		if test -d $(INSTALL); \
