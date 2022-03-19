@@ -11,10 +11,10 @@
 
 import sys
 import string
-from isfdb import *
-from SQLparsing import *
-from library import XMLescape, convertDate
-from pubClass import pubs
+from isfdb.common.isfdb import *
+from isfdb.common.SQLparsing import *
+from isfdb.common.library import XMLescape, convertDate
+from isfdb.common.pubClass import pubs
 
 
 def pubOutput(pub_bodies):

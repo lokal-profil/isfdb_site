@@ -20,7 +20,8 @@ BASE_FILES = login.py \
 	library.py \
 	navbar.py \
 	install.py \
-	sfe3.py
+	sfe3.py \
+	__init__.py
 
 CLASS_FILES = authorClass.py \
 	awardClass.py \
@@ -71,9 +72,6 @@ install: check_dirs
 	cp $(BASE_FILES) ../mod
 	cp $(CLASS_FILES) ../mod
 	cp localdefs.py ../mod/local
-	cp $(BASE_FILES) ../rest
-	cp $(CLASS_FILES) ../rest
-	cp localdefs.py ../rest/local
 	cp $(BASE_FILES) ../nightly
 	cp $(CLASS_FILES) ../nightly
 	cp localdefs.py ../nightly/local
@@ -89,7 +87,7 @@ clean:
 	cd ../biblio && rm -rf $(BASE_FILES) $(CLASS_FILES) local
 	cd ../edit && rm -rf $(BASE_FILES) $(CLASS_FILES) local 
 	cd ../mod && rm -rf $(BASE_FILES) $(CLASS_FILES) local
-	cd ../rest && rm -rf $(BASE_FILES) $(CLASS_FILES) local
+	cd ../rest && rm -rf local
 	cd ../nightly && rm -rf $(BASE_FILES) $(CLASS_FILES) local
 	rm -f ../css/localdefs.py
 	rm -f ../scripts/localdefs.py
@@ -152,24 +150,6 @@ diff:
 	diff library.py ../mod
 	diff navbar.py ../mod
 	diff viewers.py ../mod
-	diff install.py  ../rest
-	diff isbn.py ../rest
-	diff isfdb.py ../rest
-	diff localdefs.py ../rest/local
-	diff login.py ../rest
-	diff pubClass.py ../rest
-	diff publisherClass.py ../rest
-	diff pubseriesClass.py ../rest
-	diff verificationsourceClass.py ../rest
-	diff authorClass.py ../rest
-	diff awardClass.py ../rest
-	diff awardcatClass.py ../rest
-	diff awardtypeClass.py ../rest
-	diff seriesClass.py ../rest
-	diff SQLparsing.py ../rest
-	diff titleClass.py ../rest
-	diff library.py ../rest
-	diff navbar.py ../rest
 	diff install.py  ../nightly
 	diff isbn.py ../nightly
 	diff isfdb.py ../nightly

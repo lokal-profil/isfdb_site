@@ -9,9 +9,9 @@
 #     Version: $Revision$
 #     Date: $Date$
 
-from isfdb import *
-from SQLparsing import *
-from pub_output import pubOutput
+from isfdb.common.isfdb import *
+from isfdb.common.SQLparsing import *
+from isfdb.rest.pub_output import pubOutput
 
 
 if __name__ == '__main__':

@@ -11,10 +11,10 @@
 
 import cgi
 import sys
-from isfdb import *
-from SQLparsing import *
-from library import normalizeInput, XMLunescape, XMLescape
-from login import User
+from isfdb.common.isfdb import *
+from isfdb.common.SQLparsing import *
+from isfdb.common.library import normalizeInput, XMLunescape, XMLescape
+from isfdb.common.login import User
 from xml.dom import minidom
 from xml.dom import Node
 	
