@@ -9,7 +9,7 @@
 #     Date: $Date$
 
 include .TARGETS
-include ../INSTALLDIRS
+include ../../INSTALLDIRS
 
 INSTALL = $(INSTALL_CGI)/rest
 

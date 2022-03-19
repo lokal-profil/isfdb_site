@@ -11,7 +11,7 @@
 
 # Need to create index.html
 
-include ../INSTALLDIRS
+include ../../INSTALLDIRS
 
 INSTALL = $(INSTALL_HTML)
 
